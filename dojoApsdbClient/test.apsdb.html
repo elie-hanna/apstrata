@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+        <title>talk to apsws</title>
+        
+
+        <script type="text/javascript" src="apstrata/md5.js" ></script>
+        <script type="text/javascript" src="apstrata/xml2json.js" ></script>
+
+        <script type="text/javascript" src="dojoroot/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+        <script>
+	    dojo.require ("dijit.Declaration");
+	    dojo.require ("dojo.parser"); 
+	    dojo.require ("dojo.io.script");
+	    dojo.require ("dojox.xml.parser");
+
+	    dojo.registerModulePath ("apstrata","../../apstrata");
+	    dojo.require("apstrata.apsdb.Get");
+	    dojo.require("apstrata.apsdb.CreateStore");
+	    dojo.require("apstrata.apsdb.DeleteStore");
+	    dojo.require("apstrata.apsdb.ListStores");
+	    dojo.require("apstrata.apsdb.SaveDocument");
+	    dojo.require("apstrata.apsdb.DeleteDocument");
+	    dojo.require("apstrata.apsdb.Query");
+	    dojo.require("apstrata.apsdb.util.ExecutionQueue");
+
+
+
+dojo.addOnLoad(test);
+
+            var auth = {key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"};
+	    
+	    populateFromFlickr = {
+		response: {},
+		storeName: "",
+		
+		getData: function (apiKey, userId, store) {
+		    this.storeName = store;
+		    var url = "http://www.flickr.com/services/rest/?format=json&method=flickr.people.getPublicPhotos&api_key=" + apiKey + "&user_id=" + userId + "&per_page=10";
+		    dojo.io.script.get({ 
+			url: url,
+			error: function(response) { 
+			    console.debug("error");
+			    return response; 
+			} 
+		    }); 			    
+		},
+		
+		storeData: function() {
+		    console.dir(this.response.photos);
+		    
+		    var qq = new apstrata.apsdb.util.ExecutionQueue();
+		    
+		    var me = this;
+		    
+		    
+		    for (var i=0; i<me.response.photos.photo.length-1; i++) {
+			
+			var photo = me.response.photos.photo[i];
+			var data = {
+			    title: (photo.title+""),
+			    photoId: (photo.id+""),
+			    farm: (photo.farm+"")
+			};
+
+
+			me.sd = new apstrata.apsdb.SaveDocument(auth, me.storeName, data);
+//			me.sd.execute();
+
+
+			qq.queue(me.sd, "handleResult", function(){
+			    me.sd.execute();
+			    console.debug("storing:" + data.title);
+			});
+
+		    }
+		    
+		    dojo.connect(me.sd, "handleResult", function() {me.finished()});
+		    
+		    qq.run();
+		    
+/*
+		    var sd = new SaveDocument(auth);
+		    var response = this.response;
+		    dojo.connect(sd, "handleResult", function(){
+			console.dir(sd.response);
+			i++;
+			sd.execute("storeName", {title:response.photos.photo[i].title, photoId:response.photos.photo[i].id, farm:response.photos.photo[i].farm} );
+		    });
+			sd.execute("storeName", {title:response.photos.photo[i].title, photoId:response.photos.photo[i].id, farm:response.photos.photo[i].farm} );
+*/
+		    this.finished();
+		},
+		
+		finished: function() {}
+	    }
+
+
+	    function test() { 
+                var ls = new apstrata.apsdb.ListStores(auth);
+		dojo.connect(ls, "handleResult", function(){
+		    console.dir(ls.stores);
+		})
+
+                var ls2 = new apstrata.apsdb.ListStores(auth);
+		dojo.connect(ls2, "handleResult", function(){
+		    console.dir(ls2.stores);
+		})
+
+                var cs = new apstrata.apsdb.CreateStore(auth);
+		dojo.connect(cs, "handleResult", function(){
+		    console.dir(cs.response);
+		})
+
+                var ds = new apstrata.apsdb.DeleteStore(auth);
+		dojo.connect(ds, "handleResult", function(){
+		    console.dir(ds.response);
+		})
+
+                var dd = new apstrata.apsdb.DeleteDocument(auth);
+		dojo.connect(dd, "handleResult", function(){
+		    console.dir(dd.response);
+		})
+
+                var q = new apstrata.apsdb.Query(auth);
+		dojo.connect(q, "handleResult", function(){
+		    console.dir(q.response);
+		})
+
+		var doc = {
+		    objectClass: "form1",
+		    name: "apple",
+		    description: "A slow computer",
+		    value: "2",
+		    color: "silver"		    
+		};
+
+		var sd = new apstrata.apsdb.SaveDocument(auth, "flickr", doc);
+		dojo.connect(sd, "handleResult", function(){
+		    console.dir(sd.response);
+		    //q.execute("rabih","objectClass=\"form1\"", "name,value,description");
+		})
+
+		var eq = new apstrata.apsdb.util.ExecutionQueue();
+
+//ls.execute();
+//ls.abort();
+
+
+sd.execute(); 
+
+
+
+		
+		eq.queue(ls, "handleResult", function(){ls.execute();});
+//		eq.queue(ds, "handleResult", function(){ds.execute("flickr");});
+		eq.queue(cs, "handleResult", function(){cs.execute("caroline");});
+		eq.queue(ls, "handleResult", function(){ls.execute();});
+
+
+//		eq.queue(populateFromFlickr, "finished", function(){populateFromFlickr.getData("c493fc98bf15b496e96ce5ff4290a656","89035753@N00","flickr")});
+//		eq.queue(ls, "handleResult", function(){ls.execute();});
+//		eq.queue(q, "handleResult", function(){q.execute("flickr","x!=1", "photoId,farm,title")});
+
+		eq.run();
+		
+//		populateFromFlickr.getData("c493fc98bf15b496e96ce5ff4290a656","89035753@N00");
+
+//                ds.execute("rabih3");
+//               ls.execute();
+//		sd.execute("rabih", doc);
+//		dd.execute("rabih", "69A5E1CFAD5A48C05FE1794C55A79857");
+
+		var doc = {
+		    objectClass: "form1",
+		    name: "apple",
+//		    date: "04/12/2009",
+		    description: "A slow computer",
+		    value: "2",
+		    color: "silver"
+		    
+		    // form.apsdb.fieldType = "string",
+		    // name.apsdb.fieldType = "string",
+		    // date.apsdb.fieldType = "string",
+		    // description.apsdb.fieldType = "text",
+		    // value.apsdb.fieldType = "numeric",
+		    // color.apsdb.fieldType = "string"
+		};
+
+	    }
+	    
+	    function jsonFlickrApi(response) {
+		populateFromFlickr.response = response;
+		populateFromFlickr.storeData();
+	    }
+		
+        </script> 
+    </head> 
+    <body>
+    XX
+    </body> 
+</html>
