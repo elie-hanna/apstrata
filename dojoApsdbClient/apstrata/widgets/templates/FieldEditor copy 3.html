@@ -1,0 +1,28 @@
+<div class="fieldEditor">
+    <div class="fieldEditorRow" style="width: 99%;"><img src="images/x.png" align="right" /></div>
+    <div class="fieldEditorRow">
+	<div style="float: left; width: 50%;">
+	    <h3>Title</h3>
+	    <input type="text" name="field" size="30" width="10" />
+	</div>
+	<div style="float: left; width: 50%;">
+	    <h3>Mandatory</h3>
+	    <input checked="checked" value="on" type="checkbox" />
+	</div>
+    </div>
+    <div class="fieldEditorRow">
+	<div style="float: left; width: 50%;">
+		<h3>Type</h3>
+		<select dojoAttachPoint="fieldType">
+			<option>Text</option>
+			<option>Numeric</option>
+			<option>List</option>
+			<option>Comment</option>            
+		</select>
+	</div>
+	<div style="float: left; width: 50%; display: none;" dojoAttachPoint="listOptions">
+		<h3>Values (comma separated)</h3>
+		<input type="text" name="options" />
+	</div>
+    </div>
+</div>
