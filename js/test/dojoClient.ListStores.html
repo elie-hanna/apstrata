@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<!--
+/* Copyright (c) 2009 apstrata
+   See the file LICENSE.txt for licensing information. */
+
+/*
+ * A dojo toolkit JavaScript client to the cloud based apstrata database 
+ * Version 1.0 Copyright (C) apstrata 2009
+ * Contributors: Rabih Nassar, Caroline Farage, Abdallah Chammas
+ * Distributed under the GNU License
+ * See http://www.apstrata.com for more info.
+ */
+-->
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+        <title>Test dojo apsdb client</title>
+
+        <script type="text/javascript" src="../util/md5.js" ></script>
+        <script type="text/javascript" src="../util/xml2json.js" ></script>
+
+        <script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+        <script>
+	    dojo.registerModulePath ("apstrata","../../../apstrata");
+	    dojo.require("apstrata.dojo.client.apsdb.ListStores");
+
+	    dojo.addOnLoad(test);
+
+            var auth = {key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"};
+
+	    function test() { 
+                var ls = new apstrata.dojo.client.apsdb.ListStores(auth);
+
+		dojo.connect(ls, "handleResult", function(){
+		    console.dir(ls.stores);
+		})
+
+		ls.execute();
+		//ls.abort();
+	    }
+		
+        </script> 
+    </head> 
+    <body>
+    Check debug info in Firebug.
+    </body> 
+</html>
