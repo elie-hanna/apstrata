@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ap((strata wiki</title>
+    <style type="text/css">
+        @import "../dojo/1.2.3/dijit/themes/tundra/tundra.css";
+        @import "../dojo/1.2.3/dojo/resources/dojo.css"
+    </style>
+    <script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+    <script type="text/javascript">
+        dojo.require("dojo.parser");
+        dojo.require("dijit.layout.ContentPane");
+        dojo.require("dijit.layout.LayoutContainer");
+        dojo.require("dijit.layout.SplitContainer");
+
+        dojo.require("dojo.data.ItemFileReadStore");
+        dojo.require("dijit.Tree");
+        dojo.require("dijit.Menu");
+        dojo.require("dojo.parser");  // scan page for widgets and instantiate them
+        dojo.require("dijit.Editor");
+
+        dojo.require("dijit.InlineEditBox");
+
+	dojo.registerModulePath ("apstrata","../../../apstrata");
+	dojo.require("apstrata.widgets.wikiEditor.WikiEditor");
+        
+        
+    </script>
+
+    <style> 
+        /* NOTE: for a full screen layout, must set body size equal to the viewport. */
+        html, body { height: 100%; width: 100%; margin: 0; padding: 0; font-family: sans-serif;}
+      
+        #header {padding: 8px; background-color:#DDDDDD; font-size: 1em;}
+        #footer {padding: 10px; background-color:#DDDDDD; text-align: right; font-size: .8em;}
+        #tree {background-color: #FFFFFF; padding: 5px;font-size:1.1em; color: #222222;}
+        .title {font-weight: bold; font-size: 1.2em;}
+        .breadCrumbs {font-size: 0.8em;}
+        
+    </style>
+
+
+</head>
+<body class="tundra">
+    
+    
+<!--
+  Define the menu that will pop up
+-->
+<ul dojoType="dijit.Menu" id="tree_menu" style="display: none;">
+  <li dojoType="dijit.MenuItem" onClick="alert('Hello world');">Make Private</li>
+  <li dojoType="dijit.MenuItem" disabled="true">Disabled Item</li>
+  <li dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCut" onClick="alert('not actually cutting anything, just a test!')">Cut</li>
+  <li dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCopy" onClick="alert('not actually copying anything, just a test!')">Copy</li>
+  <li dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconPaste" onClick="alert('not actually pasting anything, just a test!')">Paste</li>
+  <li dojoType="dijit.PopupMenuItem">
+    <span>Enabled Submenu</span>
+    <ul dojoType="dijit.Menu" id="submenu2">
+      <li dojoType="dijit.MenuItem" onClick="alert('Submenu 1!')">Submenu Item One</li>
+      <li dojoType="dijit.MenuItem" onClick="alert('Submenu 2!')">Submenu Item Two</li>
+    </ul>
+  </li>
+</ul>
+    
+<div dojoType="dojo.data.ItemFileReadStore" jsId="continentStore" url="test.wiki.data.json"></div>
+  
+    
+    
+    <div dojoType="dijit.layout.LayoutContainer" style="width: 100%; height: 100%; padding: 0; margin: 0; border: 0;">
+        <div dojoType="dijit.layout.ContentPane" layoutAlign="top" id="header">
+            <table style="width: 100%;">
+                <tr>
+                    <td><img src="images/apstrata-sml.png" /></td>
+                    <td align="right"><h3>wiki</h3></td>
+                </tr>
+            </table>
+        </div>
+        <div dojoType="dijit.layout.ContentPane" layoutAlign="client">
+            <div dojoType="dijit.layout.SplitContainer" orientation="horizontal" sizerWidth="7" activeSizing="true">
+                <div dojoType="dijit.layout.ContentPane" id="tree">
+                    <!--
+                      Define the tree, tell it to populate itself from the data store 'continentStore'
+                    -->
+                    <div dojoType="dijit.Tree" id="tree2" store="continentStore" query="{type:'continent'}">
+                      <script type="dojo/connect">
+                        var menu = dijit.byId("tree_menu");
+                        // when we right-click anywhere on the tree, make sure we open the menu
+                        menu.bindDomNode(this.domNode);
+                    
+                        dojo.connect(menu, "_openMyself", this, function(e){
+                          // get a hold of, and log out, the tree node that was the source of this open event
+                          var tn = this._domElement2TreeNode(e.target);
+                          console.debug(tn);
+                    
+                          // now inspect the data store item that backs the tree node:
+                          console.debug(tn.item);
+                    
+                          // contrived condition: if this tree node doesn't have any children, disable all of the menu items
+                          // menu.getChildren().forEach(function(i){ i.setDisabled(!tn.item.children); });
+                    
+                          // IMPLEMENT CUSTOM MENU BEHAVIOR HERE
+                        });
+                      </script>
+                    </div>                                                
+                </div>
+                <div dojoType="dijit.layout.ContentPane" sizeMin="50" sizeShare="50">
+                    <table style="width: 99%; height: 40px;">
+                        <tr>
+                            <td align="right" class="breadCrumbs"><a href="#">Section</a> / <a href="#">Page 1</a> / <a href="#">Page 2</a> / <a href="#">Page 3</a></td>
+                        </tr>
+                        <tr>
+                            <td><span class="title" dojoType="dijit.InlineEditBox" dojoAttachPoint="fldTitle" onChange="console.debug(this.id);">Title</span></td>
+                        </tr>
+                        <tr>
+                            <td align="right"><input type="button" value="save" /><input type="button" value="cancel" /></td>
+                        </tr>
+                    </table>
+                    
+                    <textarea dojoType="dijit.Editor" styleSheets="dojoroot/dojo/resources/dojo.css" activeSizing="true" height="400px" >
+                        <p>
+                          This editor is created from a textarea .
+                        </p>
+                        <p>
+                          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+                          semper sagittis velit. Cras in mi. Duis porta mauris ut ligula. Proin
+                          porta rutrum lacus. Etiam consequat scelerisque quam. Nulla facilisi.
+                          Maecenas luctus venenatis nulla. In sit amet dui non mi semper iaculis.
+                          Sed molestie tortor at ipsum. Morbi dictum rutrum magna. Sed vitae
+                          risus.
+                        </p>
+                    </textarea>
+                </div>
+            </div>
+        </div>        
+        <div dojoType="dijit.layout.ContentPane" layoutAlign="bottom" id="footer">
+            (c) 2009 apstrata
+        </div>
+    </div>
+    
+    
+
+    
+</body></html>
+
+
+<!--
+            <div dojoType="dijit.layout.SplitContainer" orientation="horizontal" sizerWidth="7" activeSizing="true">
+                <div dojoType="dijit.layout.ContentPane" sizeMin="20" sizeShare="20">
+                this box has two horizontal panes
+                </div>
+                <div dojoType="dijit.layout.ContentPane" sizeMin="50" sizeShare="50">
+                without active resizing, a smaller sizer, different starting sizes and minimum sizes
+                </div>
+            </div>
+
+
+ -->
