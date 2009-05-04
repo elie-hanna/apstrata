@@ -13,6 +13,8 @@
 dojo.provide("apstrata.dojo.client.apsdb.Get");
 
 dojo.require ("dojo.io.script");
+dojo.require("dojox.encoding.digests.MD5")
+
 
 	dojo.declare("apstrata.dojo.client.apsdb.Get",
 	[],
@@ -45,7 +47,7 @@ dojo.require ("dojo.io.script");
 			var timestamp = new Date().getTime() + '';
 			
 			var valueToHash = timestamp + this.auth.key + this.apsdbOperation + this.auth.secret;
-			var signature = hex_md5(valueToHash);
+			var signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex);
 
 			var apswsReqUrl = this._APSTRATA_BASEURL
 					+ "?apsdb.action=" + this.apsdbOperation

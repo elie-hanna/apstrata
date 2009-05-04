@@ -17,7 +17,6 @@
         <title>Test dojo apsdb client</title>
 
         <script type="text/javascript" src="../util/md5.js" ></script>
-        <script type="text/javascript" src="../util/xml2json.js" ></script>
 
         <script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
         <script>
@@ -26,17 +25,28 @@
 
 	    dojo.addOnLoad(test);
 
-            var auth = {key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"};
+//            var auth = {key: "", secret: ""};
 
 	    function test() { 
-                var ls = new apstrata.dojo.client.apsdb.ListStores(auth);
 
-		dojo.connect(ls, "handleResult", function(){
-		    console.dir(ls.stores);
-		})
+		// Load credentials from auth.json
+		dojo.xhrGet( {
+		    url: "auth.json",
+		    handleAs: "json",
 
-		ls.execute();
-		//ls.abort();
+		    load: function(auth, ioArgs) {
+			console.debug("using credentials loaded from auth.json:"); 
+			console.dir(auth);
+
+			// Execute apsdb operation
+			var ls = new apstrata.dojo.client.apsdb.ListStores(auth);
+			dojo.connect(ls, "handleResult", function(){
+			    console.dir(ls.stores);
+			})
+			ls.execute();
+			//ls.abort();
+		    }
+		});
 	    }
 		
         </script> 
