@@ -20,33 +20,14 @@
 
         <script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
         <script>
-	    dojo.registerModulePath ("apstrata","../../../apstrata");
-	    dojo.require("apstrata.dojo.client.apsdb.ListStores");
+	    dojo.registerModulePath ("apstrata", "../../../apstrata");
+            dojo.require("apstrata.dojo.client.apsdb.test.ListStores");
 
 	    dojo.addOnLoad(test);
 
-//            var auth = {key: "", secret: ""};
-
 	    function test() { 
-
-		// Load credentials from auth.json
-		dojo.xhrGet( {
-		    url: "auth.json",
-		    handleAs: "json",
-
-		    load: function(auth, ioArgs) {
-			console.debug("using credentials loaded from auth.json:"); 
-			console.dir(auth);
-
-			// Execute apsdb operation
-			var ls = new apstrata.dojo.client.apsdb.ListStores(auth);
-			dojo.connect(ls, "handleResult", function(){
-			    console.dir(ls.stores);
-			})
-			ls.execute();
-			//ls.abort();
-		    }
-		});
+                var tls = new apstrata.dojo.client.apsdb.test.ListStores();
+                tls.execute();
 	    }
 		
         </script> 

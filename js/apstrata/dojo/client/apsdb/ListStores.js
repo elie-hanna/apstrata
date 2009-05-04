@@ -20,10 +20,6 @@ dojo.declare("apstrata.dojo.client.apsdb.ListStores",
     apsdbOperation: "ListStores",
     stores: {},
 
-    constructor: function() {
-	console.debug("constructed")
-    },
-
     handleResult: function() {
 	try {
 	    this.stores = this.response.result.stores;                                
