@@ -4,12 +4,11 @@ dojo.declare("apstrata.widgets.WikiEditor",
 	[dijit._Widget, dijit._Templated],
 	{
 		widgetsInTemplate: true,
-//		templatePath: dojo.moduleUrl("apstrata.widgets.wikiEditor", "templates/WikiEditor.html"),
-		templateString: "XXXXXX",
+		templatePath: dojo.moduleUrl("apstrata.widgets", "templates/WikiEditor.html"),
 		breadCrumbs: "",
 		title: "empty page",
 		contents: "",
-		tags: "",
+		tags: ""
 		
 		// implicit constructor 
 		

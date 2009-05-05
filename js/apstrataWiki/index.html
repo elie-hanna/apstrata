@@ -23,15 +23,15 @@
 
         dojo.require("dijit.InlineEditBox");
 
-	dojo.registerModulePath ("apstrata", "../../../apstrata");
-	dojo.require("apstrata.widgets.WikiEditor");
+	dojo.registerModulePath ("apstrata.wiki", "../../../apstrataWiki");
+	dojo.require("apstrata.wiki.widgets.WikiEditor");
         
         var i = 0;
         
         function openPage() {
             var cnt = dojo.byId("wikiEditorPane");
 
-            var txt1 = new apstrata.widgets.WikiEditor({
+            var txt1 = new apstrata.wiki.widgets.WikiEditor({
                                 title: selectedPage + " ",
                                 contents: "<h3>contents</h3>",
                                 tags: "tag1, tag2",
