@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-            "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -8,15 +7,17 @@
         @import "../dojo/1.2.3/dijit/themes/tundra/tundra.css";
         @import "../dojo/1.2.3/dojo/resources/dojo.css"
     </style>
-    <script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+    <script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.xd.js" djConfig="parseOnLoad: true"></script>
     <script type="text/javascript">
         dojo.require("dojo.parser");
         dojo.require("dijit.layout.ContentPane");
         dojo.require("dijit.layout.LayoutContainer");
         dojo.require("dijit.layout.SplitContainer");
 
-        dojo.require("dojo.data.ItemFileReadStore");
+        dojo.require("dojo.data.ItemFileWriteStore");
         dojo.require("dijit.Tree");
+        dojo.require("dijit._tree.dndSource");
+
         dojo.require("dijit.Menu");
         dojo.require("dojo.parser");  // scan page for widgets and instantiate them
         dojo.require("dijit.Editor");
@@ -25,28 +26,34 @@
 
 	dojo.registerModulePath ("apstrata.wiki", "../../../apstrataWiki");
 	dojo.require("apstrata.wiki.widgets.WikiEditor");
-        
+	dojo.require("apstrata.wiki.widgets.PageTree");
+
+	dojo.registerModulePath ("apstrata", "../../../apstrata");
+	dojo.require("apstrata.dojo.client.apsdb.ListStores");
+        dojo.require("apstrata.dojo.tests.Credentials");
+
         var i = 0;
+        var pageCounter=0;
         
-        function openPage() {
-            var cnt = dojo.byId("wikiEditorPane");
-
-            var txt1 = new apstrata.wiki.widgets.WikiEditor({
-                                title: selectedPage + " ",
-                                contents: "<h3>contents</h3>",
-                                tags: "tag1, tag2",
-                                breadCrumbs: "page1 / page2 / page3"
-                            });
-
-            cnt.innerHTML = txt1.domNode.innerHTML;
-        }
-
         dojo.addOnLoad(function() {
-            //openPage();
+            dojo.connect(pagesTree, "selectPage", function() {
+                /*
+                var editor = new apstrata.wiki.widgets.WikiEditor({
+                                    title: pagesTree.selectedObject.title ,
+                                    contents: pagesTree.selectedObject.contents,
+                                    tags: "",
+                                    breadCrumbs: "page1 / page2 / page3"
+                                });
+                */
+
+                var editor = new apstrata.wiki.widgets.WikiEditor(pagesTree.selectedObject);
+
+                dojo.byId("wikiEditorPane").innerHTML = ""; // how to do it dojo way?
+                
+                dojo.place(editor.domNode, "wikiEditorPane", "first");
+            })
         });
-        
-        var selectedPage = "";
-        
+
     </script>
 
     <style> 
@@ -64,23 +71,7 @@
 
 </head>
 <body class="tundra">
-    
-    
-<!--
-  Define the menu that will pop up
--->
-<ul dojoType="dijit.Menu" id="tree_menu" style="display: none;">
-  <li dojoType="dijit.MenuItem" disabled="false" onClick="openPage(this);">Open</li>
-  <li dojoType="dijit.MenuItem" disabled="false" onClick="newPage(this);">Create Child Page</li>
-  <li dojoType="dijit.MenuItem" disabled="false" onClick="alert('Hello world');">Delete Page</li>
-  <li dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCut" onClick="alert('not actually cutting anything, just a test!')">Cut</li>
-  <li dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCopy" onClick="alert('not actually copying anything, just a test!')">Copy</li>
-  <li dojoType="dijit.MenuItem" disabled="true" iconClass="dijitEditorIcon dijitEditorIconPaste" onClick="alert('not actually pasting anything, just a test!')">Paste</li>
-</ul>
-    
-<div dojoType="dojo.data.ItemFileReadStore" jsId="continentStore" url="test.wiki.data.json"></div>
-  
-    
+    <div dojoType="dojo.data.ItemFileWriteStore" jsId="pageStore" url="wikidata4.json"></div>
     
     <div dojoType="dijit.layout.LayoutContainer" style="width: 100%; height: 100%; padding: 0; margin: 0; border: 0;">
         <div dojoType="dijit.layout.ContentPane" layoutAlign="top" id="header">
@@ -93,30 +84,11 @@
         </div>
         <div dojoType="dijit.layout.ContentPane" layoutAlign="client">
             <div dojoType="dijit.layout.SplitContainer" orientation="horizontal" sizerWidth="7" activeSizing="true">
-                <div dojoType="dijit.layout.ContentPane" id="tree">
-                    <!--
-                      Define the tree, tell it to populate itself from the data store 'continentStore'
-                    -->
-                    <div dojoType="dijit.Tree" id="tree2" store="continentStore" query="{type:'section'}">
-                        <script type="dojo/connect">
-                            var menu = dijit.byId("tree_menu");
-
-                            // when we right-click anywhere on the tree, make sure we open the menu
-                            menu.bindDomNode(this.domNode);
-    
-                            dojo.connect(menu, "_openMyself", this, function(e){
-                                //console.dir(e);
-                                console.debug(e.explicitOriginalTarget.textContent);
-                                selectedPage = e.explicitOriginalTarget.textContent;
-                            });
-                        </script>
-                        <script type="dojo/method" event="onClick" args="evt">
-                            selectedPage = evt.name[0];
-                            openPage();
-                        </script>
-                    </div>                                                
+                <div dojoType="dijit.layout.ContentPane" style="border: 0px; margin: 0px;">
+                    <div dojoType="apstrata.wiki.widgets.PageTree" jsId="pagesTree" abc="abc"></div>
                 </div>
-                <div dojoType="dijit.layout.ContentPane" sizeMin="50" sizeShare="50" id="wikiEditorPane">
+                <div dojoType="dijit.layout.ContentPane" sizeMin="50" sizeShare="50">
+                    <div id="wikiEditorPane"></div>
                 </div>
             </div>
         </div>        
@@ -124,22 +96,6 @@
             (c) 2009 apstrata
         </div>
     </div>
-    
-    
 
-    
-</body></html>
-
-
-<!--
-            <div dojoType="dijit.layout.SplitContainer" orientation="horizontal" sizerWidth="7" activeSizing="true">
-                <div dojoType="dijit.layout.ContentPane" sizeMin="20" sizeShare="20">
-                this box has two horizontal panes
-                </div>
-                <div dojoType="dijit.layout.ContentPane" sizeMin="50" sizeShare="50">
-                without active resizing, a smaller sizer, different starting sizes and minimum sizes
-                </div>
-            </div>
-
-
- -->
+</body>
+</html>
