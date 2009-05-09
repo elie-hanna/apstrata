@@ -1,0 +1,17 @@
+{   identifier: 'dockey',
+    label: 'title',
+    items:
+    [
+        {   dockey: 'root',
+            title: 'apstrata',
+            children:[
+                {
+                    dockey: 'ABCDEF1234567890',
+                    title: 'empty page',
+                    contents: '<h1>page contents</h1><p>some content</p>',
+                    tags: ['wiki', 'page', 'sample']
+                }
+            ]
+        }
+    ]
+}
