@@ -5,11 +5,16 @@ dojo.declare("apstrata.wiki.widgets.WikiEditor",
 	{
 		widgetsInTemplate: true,
 		templatePath: dojo.moduleUrl("apstrata.wiki.widgets", "templates/WikiEditor.html"),
-		breadCrumbs: "",
+		dockey: "",
 		title: "empty page",
+		breadCrumbs: "",
 		contents: "",
-		tags: ""
+		tags: "",
 		
-		// implicit constructor 
+		// implicit constructor
+		constructor: function(selectedObject) {
+		},
 		
+		postCreate: function() {
+		}		
 	});

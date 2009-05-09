@@ -9,7 +9,10 @@
                     dockey: 'ABCDEF1234567890',
                     title: 'empty page',
                     contents: '<h1>page contents</h1><p>some content</p>',
-                    tags: ['wiki', 'page', 'sample']
+                    tags: ['wiki', 'page', 'sample'],
+                    path: [''],
+                    pathLabel: [''],
+                    children: []
                 }
             ]
         }
