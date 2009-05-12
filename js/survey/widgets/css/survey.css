@@ -1,0 +1,94 @@
+.roundedBox {
+
+}
+
+.survey {
+    width: 350px;
+
+    padding: 20px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    font-family: sans-serif;
+    font-size:  small;
+    background-color: #8FBC8F;
+    overflow: visible;    
+
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.survey h2 {
+    font-size: 2em;
+    color: green;
+}
+
+.survey h3 {
+    font-size: 1.3em;
+    color: #222222;
+}
+
+
+
+.surveryField {
+    width: 250px;
+    padding: 10px;
+}
+
+.survey .questionsPanel {
+    overflow: visible;
+    background-color: rgba(200, 200, 200, 0.3);
+    padding: 10px;
+
+    
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;    
+}
+
+.surveyFieldEditor {
+    background-color: rgba(255, 255, 130, .9);
+    padding: 5px;
+    width: 220px;
+    
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    border: none;
+    font-family: sans-serif;
+    font-size:  small;
+    padding-bottom: 7px;
+    padding-left: 30px;
+    overflow: visible;
+    
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
+
