@@ -157,19 +157,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 				var jsonObj = this.surveyform.getValues();
 				//var auth = {key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"};
 				var auth = {key: "apstrata", secret: "secret"};
-	
-				  var q = new apstrata.dojo.client.apsdb.Query(auth);
-					dojo.connect(q, "handleResult", function(){
-					    console.dir(q.response);
-					    console.dir("end");
-					})
 			
-				//q.execute("My_Test_Store616186","f1!=\"form1\"", "f1,f2,f3");
 				var sd = new apstrata.dojo.client.apsdb.SaveDocument(auth, "My_Test_Store616186", jsonObj);
 				dojo.connect(sd, "handleResult", function(){
-				    console.dir("handleResult start");
 				    console.dir(sd.response);
-				  q.execute("My_Test_Store616186","f1!=\"form1\"", "f1,f2,f3");
 				});
 				sd.execute();
 				this.successMessage.innerHTML = "Your survey has been successfully submitted.";
