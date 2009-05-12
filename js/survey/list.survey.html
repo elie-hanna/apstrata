@@ -1,0 +1,15 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+        <title>List Survey Results</title>
+    </head> 
+    <body>
+   		
+   		<script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+   		<script type="text/javascript" src="widgets/SurveyRunner.js" ></script>
+        <script>var schema = '{"title":"Cafet Comments","description":"For a better service please ...","questions":[{"title":"text question","type":"text","choices":"choice1, choice2, choice3","mandatory":true,"name":"f1","defaultValue":"first question"},{"title":"second text question","type":"text","choices":"choice1, choice2, choice3","mandatory":false,"name":"f2","defaultValue":"second answer"},{"title":"checkbox question","type":"checkbox","choices":"choice1, choice2, choice3","mandatory":false,"name":"f3","defaultValue":["checked"]},{"title":"list question","type":"list","choices":"op1, opter2, option3","mandatory":false,"name":"f4","defaultValue":" option3"},{"title":"radio button question","type":"radio button","choices":"test, test2","mandatory":true,"name":"f5","defaultValue":" test2"},{"title":"multiple choice","type":"multiple choice","choices":"choice1, choice2, choice3","mandatory":false,"name":"f6","defaultValue":[" choice2"," choice3"]},{"title":"Set a question title here","type":"text","choices":"choice1, choice2, choice3","mandatory":false,"name":"","defaultValue":undefined},{"title":"Set a question title here","type":"checkbox","choices":"choice1, choice2, choice3","mandatory":false,"name":"","defaultValue":undefined},{"title":"Set a question title here","type":"list","choices":"choice1, choice2, choice3","mandatory":false,"name":"","defaultValue":undefined},{"title":"Set a question title here","type":"radio button","choices":"choice1, choice2, choice3","mandatory":false,"name":"","defaultValue":undefined},{"title":"Set a question title here","type":"multiple choice","choices":"choice1, choice2, choice3","mandatory":false,"name":"","defaultValue":undefined}]}';</script>
+        <div dojoType="surveyWidget.widgets.Survey" /></div>
+        
+    </body> 
+</html> 
