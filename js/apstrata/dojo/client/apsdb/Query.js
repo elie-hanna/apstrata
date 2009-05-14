@@ -23,7 +23,7 @@ dojo.declare("apstrata.dojo.client.apsdb.Query",
 	this.request.apsdb.store = store;
 	this.request.apsdb.query = query,
 	this.request.apsdb.queryFields = queryFields,
-	this.request.apsdb.resultsPerPage = 10,
+	this.request.apsdb.resultsPerPage = 50,
 	this.request.apsdb.pageNumber = 1,
 	this.request.apsdb.ftsString = "",
 	this.request.apsdb.count = "true",
