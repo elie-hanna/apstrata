@@ -25,6 +25,7 @@ dojo.require("dojox.encoding.digests.MD5")
 		_FAILURE: "failure",
 		_SUCCESS: "success",
 		_APSTRATA_BASEURL: "http://localhost:8080/autoforms/view/proxyView", //"http://www.apstrata.com/apstrata/view/proxyView",
+		//_APSTRATA_BASEURL: "http://localhost/apstratabase/view/proxyView",
 		
 		auth: {},
 		apsdbOperation: "",
@@ -54,6 +55,7 @@ dojo.require("dojox.encoding.digests.MD5")
 					+ "&apsws.time=" + timestamp
 					+ "&apsws.authKey=" + this.auth.key
 					+ "&apsws.authSig=" + signature
+					+ "&apsws.authMode=simple"
 					+ ((params!="")?"&":"") + params
 
 			return apswsReqUrl;
