@@ -109,14 +109,22 @@ dojo.declare("surveyWidget.widgets.Survey",
 			
 			var jsonObj = this.surveyform.getValues();	
 			var data = new Array();
+			var arrFields = new Array();
 			var childModel = null;
 			var i=0;
+			var j=0;
 			var children = this.questions.getChildren();
 			dojo.forEach(this.questions.getChildren(), function(child) {
 				if (child.title != null && children[children.length - 1] != child) {
 					childModel = child.getModel();
 					childModel["defaultValue"] = jsonObj[child.fieldName];
 					data[i++] = childModel;
+				}
+			});
+			
+			dojo.forEach(this.questions.getChildren(), function(child) {
+				if (child.title != null && children[children.length - 1] != child) {
+					arrFields[j++] = child.fldName.value;
 				}
 			});
 
@@ -126,16 +134,33 @@ dojo.declare("surveyWidget.widgets.Survey",
 				questions: data
 			};
 			
+			var listSurveyData = {
+				title: this.title.value,
+				fields: arrFields 
+			};
+			
 			//console.debug(dojo.toJson(suveyData));
-			this.output.innerHTML = '<textarea style="width:400px; height:100px;">'
+			this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
+			+ '<!-- You can move the script tag to the head of your html page -->\n'
 			+ '<script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
-			+ '<script type="text/javascript" src="widgets/SurveyRunner.js" >\n'
+			+ '<script type="text/javascript" src="widgets/SurveyRunner.js" ></script>\n'
 			+ '<script>var schema = \'' + dojo.toJson(suveyData) + '\';</script>\n'
-			+ '<!-- Move this DIV anywhere in your page to add the widget -->\n'
+			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div dojoType="surveyWidget.widgets.Survey" /></div>'
 			+ '</textarea>';
 			this.output.style.display = "";
 			this.output.width = "800px";
+			
+			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:400px; height:100px;">'
+			+ '<!-- You can move the script tag to the head of your html page -->\n'
+			+ '<script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
+			+ '<script type="text/javascript" src="widgets/SurveyListingLoader.js" ></script>\n'
+			+ '<script>var schema = \'' + dojo.toJson(listSurveyData) + '\';</script>\n'
+			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
+			+ '<div dojoType="surveyWidget.widgets.SurveyListing" /></div>'
+			+ '</textarea>';
+			this.listingEmbed.style.display = "";
+			this.listingEmbed.width = "800px";
 
 			return suveyData;
 		},
@@ -154,16 +179,18 @@ dojo.declare("surveyWidget.widgets.Survey",
 		saveSurvey: function() {
 		
 			if(this.surveyform.validate()){
+				this.successMessage.innerHTML = "Your survey is being processed...";
 				var jsonObj = this.surveyform.getValues();
 				//var auth = {key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"};
 				var auth = {key: "apstrata", secret: "secret"};
-			
+				var survey = this;
+	
 				var sd = new apstrata.dojo.client.apsdb.SaveDocument(auth, "My_Test_Store616186", jsonObj);
 				dojo.connect(sd, "handleResult", function(){
-				    console.dir(sd.response);
+					survey.successMessage.innerHTML = "Your survey has been successfully submitted.";
 				});
 				sd.execute();
-				this.successMessage.innerHTML = "Your survey has been successfully submitted.";
+				
 				return true;
 			} else{
 				this.successMessage.innerHTML = "";
