@@ -32,7 +32,7 @@ dojo.require("dojox.encoding.digests.MD5")
 		//
 		_FAILURE: "failure",
 		_SUCCESS: "success",
-		_APSTRATA_BASEURL: "http://localhost:8080/autoforms/view/proxyView", //"http://www.apstrata.com/apstrata/view/proxyView",
+		_APSTRATA_BASEURL: "http://apsdb.apstrata.com/apsdb/rest", //"http://www.apstrata.com/apstrata/view/proxyView",
 		//_APSTRATA_BASEURL: "http://localhost/apstratabase/view/proxyView",
 		
 		auth: {},
@@ -64,6 +64,7 @@ dojo.require("dojox.encoding.digests.MD5")
 					+ "&apsws.authKey=" + this.auth.key
 					+ "&apsws.authSig=" + signature
 					+ "&apsws.authMode=simple"
+					+ "&apsws.responseType=json"
 					+ ((params!="")?"&":"") + params
 
 			return apswsReqUrl;
@@ -99,7 +100,7 @@ console.debug("executing:" + this.apsdbOperation);
 		    dojo.io.script.get({ 
 			    url: apsdb.url(),
 			    xx: console.debug("doing IO: "+this.url()),
-			    callbackParamName : "jc",
+			    callbackParamName : "apsws.jc",
 
 			    load: function(json) {
 console.debug("load, aborted=" + apsdb.operationAborted);
@@ -108,8 +109,8 @@ console.debug(json);
 
 				var res = dojo.fromJson(json);
 				
-				apsdb.status = res.status;
-				apsdb.message = res.message;
+				apsdb.status = res.response.status;
+				apsdb.message = res.response.message;
 				apsdb.response = res;
 
 				if (apsdb.status==apsdb._SUCCESS) {
