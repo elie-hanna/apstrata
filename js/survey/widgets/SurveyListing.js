@@ -57,7 +57,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			var listing = this;
 		    
 			dojo.connect(q, "handleResult", function(){
-				listing.resultResponse = q.response;
+				listing.resultResponse = q.response.response;
 				listing.display(listing.resultResponse,listing.arrFieldsToDisplay);
 			})
 			
@@ -86,7 +86,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			heading = heading + "</tr></thead>";
 
 			strData = "<tbody>";
-			var arrSurvey = data.result.documents.document;
+			var arrSurvey = data.result.documents;
 			for(var doc = 0; doc < arrSurvey.length; doc++){
 				if(arrSurvey[doc].field){
 				strData= strData + "<tr>";
