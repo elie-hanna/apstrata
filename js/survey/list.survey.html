@@ -6,11 +6,13 @@
    	
     </head> 
     <body>
-   		<!-- You can move the script tag to the head of your html page -->
+   	
+		<!-- You can move the script tag to the head of your html page -->
 		<script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 		<script type="text/javascript" src="widgets/SurveyListingLoader.js" ></script>
-		<script>var schema = '{"title":"Cafet Comments","fields":["f1","f2","f3","f4","f5","f6"]}';</script>
+		<script>var schema = '{"title":"First Survey","fields":["firstName","lastName","title","maritalStatus","lookingFor","hobbies"],"titleFields":["First Name","Last Name","Title","Single","Looking for","Hobbies"]}';</script>
 		<!-- Place this DIV where you want the widget to appear in your page -->
 		<div dojoType="surveyWidget.widgets.SurveyListing" /></div>
+
     </body> 
 </html> 

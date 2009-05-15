@@ -40,6 +40,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 		dataModel: null,
 		surveyTitle : "Type the survey title here",
 		surveyDescription : "You can place the survey description here.",
+		auth: {key: "apstrata", secret: "secret"}, //{key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"};
+		storeName: "myStore",
 
 		constructor: function() {
 			if(schema != null)
@@ -130,9 +132,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var jsonObj = this.surveyform.getValues();	
 			var data = new Array();
 			var arrFields = new Array();
+			var arrTitleFields = new Array();
 			var childModel = null;
 			var i=0;
 			var j=0;
+			var k=0;
 			var children = this.questions.getChildren();
 			dojo.forEach(this.questions.getChildren(), function(child) {
 				if (child.title != null && children[children.length - 1] != child) {
@@ -145,6 +149,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			dojo.forEach(this.questions.getChildren(), function(child) {
 				if (child.title != null && children[children.length - 1] != child) {
 					arrFields[j++] = child.fldName.value;
+					arrTitleFields[k++] = child.fldTitle.value;
 				}
 			});
 
@@ -156,7 +161,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 			
 			var listSurveyData = {
 				title: this.title.value,
-				fields: arrFields 
+				fields: arrFields ,
+				titleFields: arrTitleFields
 			};
 			
 			//console.debug(dojo.toJson(suveyData));
@@ -201,13 +207,14 @@ dojo.declare("surveyWidget.widgets.Survey",
 			if(this.surveyform.validate()){
 				this.successMessage.innerHTML = "Your survey is being processed...";
 				var jsonObj = this.surveyform.getValues();
-				//var auth = {key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"};
-				var auth = {key: "apstrata", secret: "secret"};
 				var survey = this;
-	
-				var sd = new apstrata.dojo.client.apsdb.SaveDocument(auth, "My_Test_Store616186", jsonObj);
+
+				var sd = new apstrata.dojo.client.apsdb.SaveDocument(this.auth, this.storeName, jsonObj);
 				dojo.connect(sd, "handleResult", function(){
 					survey.successMessage.innerHTML = "Your survey has been successfully submitted.";
+				});
+				dojo.connect(sd, "handleError", function(){
+					survey.successMessage.innerHTML = "A problem occured while submitting your survey, please try again later.";
 				});
 				sd.execute();
 				

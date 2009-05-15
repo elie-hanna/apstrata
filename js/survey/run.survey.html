@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+        <title>Edit Survey</title>
+    </head> 
+    <body>
+    
+   		<!-- You can move the script tag to the head of your html page -->
+		<script type="text/javascript" src="../dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+		<script type="text/javascript" src="widgets/SurveyRunner.js" ></script>
+		<script>var schema = '{"title":"First Survey","description":"Please fill in this survey","questions":[{"title":"First Name","type":"text","choices":"choice1, choice2, choice3","mandatory":true,"name":"firstName","defaultValue":"enter your name here"},{"title":"Last Name","type":"text","choices":"choice1, choice2, choice3","mandatory":false,"name":"lastName","defaultValue":""},{"title":"Title","type":"list","choices":"Mrs.,Mr.","mandatory":true,"name":"title","defaultValue":"Mrs."},{"title":"Single","type":"checkbox","choices":"choice1, choice2, choice3","mandatory":false,"name":"maritalStatus","defaultValue":[]},{"title":"Looking for","type":"radio button","choices":"Friends,Love,Other","mandatory":true,"name":"lookingFor","defaultValue":"Other"},{"title":"Hobbies","type":"multiple choice","choices":"reading,sport,dancing","mandatory":false,"name":"hobbies","defaultValue":["dancing"]}]}';</script>
+		<!-- Place this DIV where you want the widget to appear in your page -->
+		<div dojoType="surveyWidget.widgets.Survey" /></div>
+        
+    </body> 
+</html> 

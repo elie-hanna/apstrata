@@ -27,17 +27,21 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 	[dijit._Widget, dijit._Templated],
 	{
 		templatePath: dojo.moduleUrl("surveyWidget.widgets", "templates/SurveyListing.html"),
-		jsonDataModel: "{}",
+		jsonDataModel: {},
 		arrFieldsToDisplay: null,
+		arrTitleFieldsToDisplay: null,
 		arrData: null,
 		resultResponse: null,
 		dojoDataModel: null,
+		auth: {key: "apstrata", secret: "secret"},
+		storeName: "myStore",
 		
 		constructor: function() {
 			if(schema != null){
 				this.jsonDataModel = schema;
 				this.dojoDataModel = dojo.fromJson(this.jsonDataModel);
 				this.arrFieldsToDisplay = this.dojoDataModel.fields;
+				this.arrTitleFieldsToDisplay = this.dojoDataModel.titleFields;
 			}
 		},
 		
@@ -52,19 +56,18 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		
 		query: function() {
 
-			var auth = {key: "apstrata", secret: "secret"};
-			var q = new apstrata.dojo.client.apsdb.Query(auth);
+			var q = new apstrata.dojo.client.apsdb.Query(this.auth);
 			var listing = this;
 		    
 			dojo.connect(q, "handleResult", function(){
 				listing.resultResponse = q.response.response;
-				listing.display(listing.resultResponse,listing.arrFieldsToDisplay);
+				listing.display(listing.resultResponse,listing.arrFieldsToDisplay, listing.arrTitleFieldsToDisplay);
 			})
 			
-			q.execute("My_Test_Store616186","apsdb.documentKey!=\"-1\"", listing.arrFieldsToDisplay);
+			q.execute(this.storeName,"apsdb.documentKey!=\"-1\"", listing.arrFieldsToDisplay);
 		},
 		
-		display: function(data, columns) {
+		display: function(data, columns, columnsTitle) {
 
 			var found = false;
 			var columnClass="rounded";
@@ -73,15 +76,15 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			var heading = "";
 			
 			heading = "<thead><tr>";
-			for(var col = 0; col < columns.length; col++){
+			for(var col = 0; col < columnsTitle.length; col++){
 				if(col == 0)
 					columnClass = "rounded-first";
-				else if(col == columns.length-1)
+				else if(col == columnsTitle.length-1)
 					columnClass = "rounded-last";
 				else
 					columnClass = "rounded";
 				
-				heading = heading + '<th scope="col" class="'+ columnClass +'" >' + columns[col] + '</th>';
+				heading = heading + '<th scope="col" class="'+ columnClass +'" >' + columnsTitle[col] + '</th>';
 			}
 			heading = heading + "</tr></thead>";
 
@@ -98,13 +101,14 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 							break;
 						}
 					}
+				
 					if(doc == arrSurvey.length-1 && ncol == 0)
 						bottomCornerClass = ' class="rounded-foot-left"';
 					else if(doc == arrSurvey.length-1 && ncol == columns.length-1)
 						bottomCornerClass = ' class="rounded-foot-right"';
 					else
 						bottomCornerClass = "";
-					
+
 					if(found == true)
 						strData= strData + '<td'+ bottomCornerClass +'>' + arrSurvey[doc].field[fid].value + '</td>';
 					else
