@@ -86,7 +86,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			heading = heading + "</tr></thead>";
 
 			strData = "<tbody>";
-			var arrSurvey = data.result.documents;
+			var arrSurvey = data.result.documents.document;
 			for(var doc = 0; doc < arrSurvey.length; doc++){
 				if(arrSurvey[doc].field){
 				strData= strData + "<tr>";
