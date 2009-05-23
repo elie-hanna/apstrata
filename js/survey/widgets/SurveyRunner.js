@@ -50,5 +50,6 @@ dojo.require("dojo.parser");
 dojo.registerModulePath("surveyWidget","../../../survey");
 dojo.registerModulePath("apstrata","../../../apstrata");
 dojo.require("surveyWidget.widgets.Survey");
+dojo.require("apstrata.dojo.client.apsdb.Connection");
 dojo.require("apstrata.dojo.client.apsdb.SaveDocument");
 dojo.require("apstrata.dojo.client.apsdb.Query");

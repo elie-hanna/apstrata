@@ -22,6 +22,7 @@ dojo.provide("surveyWidget.widgets.SurveyListing");
 
 dojo.require("dijit._Templated");
 dojo.require("dijit.layout.LayoutContainer");
+dojo.require("apstrata.dojo.client.apsdb.Connection");
 
 dojo.declare("surveyWidget.widgets.SurveyListing",
 	[dijit._Widget, dijit._Templated],
@@ -33,8 +34,17 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		arrData: null,
 		resultResponse: null,
 		dojoDataModel: null,
-		auth: {key: "apstrata", secret: "secret"},
+
+		//
+		// Replace here with your apsdb account
+		//  and target store name
+		//
+		apsdbKey: "",
+		apsdbSecret: "",
 		storeName: "myStore",
+		//
+		//
+		//
 		
 		constructor: function() {
 			if(schema != null){
@@ -56,7 +66,11 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		
 		query: function() {
 
-			var q = new apstrata.dojo.client.apsdb.Query(this.auth);
+			var connection = new apstrata.dojo.client.apsdb.Connection()
+			connection.credentials.key = this.apsdbKey
+			connection.credentials.secret = this.apsdbSecret
+
+			var q = new apstrata.dojo.client.apsdb.Query(connection);
 			var listing = this;
 		    
 			dojo.connect(q, "handleResult", function(){
@@ -64,7 +78,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				listing.display(listing.resultResponse,listing.arrFieldsToDisplay, listing.arrTitleFieldsToDisplay);
 			})
 			
-			q.execute(this.storeName,"apsdb.documentKey!=\"-1\"", listing.arrFieldsToDisplay);
+			q.execute({store: this.myStore, query: "apsdb.documentKey!=\"-1\"", queryFields: listing.arrFieldsToDisplay});
 		},
 		
 		display: function(data, columns, columnsTitle) {

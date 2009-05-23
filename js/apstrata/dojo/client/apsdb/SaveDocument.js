@@ -1,20 +1,12 @@
 /*******************************************************************************
- *  Copyright 2009 Apstrata
- *  
- *  This file is part of Apstrata Database Javascript Client.
- *  
- *  Apstrata Database Javascript Client is free software: you can redistribute it
- *  and/or modify it under the terms of the GNU Lesser General Public License as
- *  published by the Free Software Foundation, either version 3 of the License,
- *  or (at your option) any later version.
- *  
- *  Apstrata Database Javascript Client is distributed in the hope that it will be
- *  useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
+ *  Copyright 2009 apstrata
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ *  You may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0.html
+ *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ *  CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  specific language governing permissions and limitations under the License.
  * *****************************************************************************
  */
 
@@ -24,19 +16,21 @@ dojo.require("apstrata.dojo.client.apsdb.Get");
 
 dojo.declare("apstrata.dojo.client.apsdb.SaveDocument",
 [apstrata.dojo.client.apsdb.Get],
-{
-    apsdbOperation: "SaveDocument",
-    
-    constructor: function(auth, store, fields) {
-	this.request.apsdb.store = store;
-
-	for (prop in fields) {
-	    this.request[prop] = fields[prop];
-	}
+{    
+    constructor: function() {
+        this.apsdbOperation= "SaveDocument"
     },
 
-    execute: function() {
-	
+    execute: function(attrs) {
+        this.request.apsdb.store = attrs.store
+
+        // set the document key properly in the request object
+        if (attrs.fields[this.connection._KEY_APSDB_ID] != undefined) this.request.apsdb.documentKey = attrs.fields[this.connection._KEY_APSDB_ID]
+
+	for (prop in attrs.fields) {
+            if (prop != this.connection._KEY_APSDB_ID) this.request[prop] = attrs.fields[prop];
+	}
+    
 	this.inherited(arguments);
     }
 });

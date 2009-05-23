@@ -1,154 +1,106 @@
 /*******************************************************************************
- *  Copyright 2009 Apstrata
- *  
- *  This file is part of Apstrata Database Javascript Client.
- *  
- *  Apstrata Database Javascript Client is free software: you can redistribute it
- *  and/or modify it under the terms of the GNU Lesser General Public License as
- *  published by the Free Software Foundation, either version 3 of the License,
- *  or (at your option) any later version.
- *  
- *  Apstrata Database Javascript Client is distributed in the hope that it will be
- *  useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
+ *  Copyright 2009 apstrata
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *
+ *  You may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0.html
+ *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ *  CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ *  specific language governing permissions and limitations under the License.
  * *****************************************************************************
  */
 
 dojo.provide("apstrata.dojo.client.apsdb.Get");
 
 dojo.require ("dojo.io.script");
-dojo.require("dojox.encoding.digests.MD5")
+dojo.require ("dojox.encoding.digests.MD5");
 
+dojo.require ("apstrata.dojo.client.apsdb.Operation");
 
 	dojo.declare("apstrata.dojo.client.apsdb.Get",
-	[],
+	[apstrata.dojo.client.apsdb.Operation],
 	{
 		//
 		// Constants
 		//
-		_FAILURE: "failure",
-		_SUCCESS: "success",
-		_APSTRATA_BASEURL: "http://apsdb.apstrata.com/apsdb/rest", //"http://www.apstrata.com/apstrata/view/proxyView",
-		//_APSTRATA_BASEURL: "http://localhost/apstratabase/view/proxyView",
+		_TYPE_STRING: "string",
+                
+                constructor: function() {
+                        this._LOGGER.setClassLabel("apstrata.dojo.client.apsdb.Get")      
+                },
 		
-		auth: {},
-		apsdbOperation: "",
-		request: {},
-		
-		// Response values
-		status: "",
-		message: "",
-		errorcode: "",
-		response: {},
-		operationAborted: false,
-	
-		constructor: function(auth) {
-			this.auth = auth;
-			this.request.apsdb = {};
-		},
-		
-		// Sign URL based on apstrata authentication requirements
-		signUrl: function (params) {
-			var timestamp = new Date().getTime() + '';
-			
-			var valueToHash = timestamp + this.auth.key + this.apsdbOperation + this.auth.secret;
-			var signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex);
-
-			var apswsReqUrl = this._APSTRATA_BASEURL
-					+ "?apsdb.action=" + this.apsdbOperation
-					+ "&apsws.time=" + timestamp
-					+ "&apsws.authKey=" + this.auth.key
-					+ "&apsws.authSig=" + signature
-					+ "&apsws.authMode=simple"
-					+ "&apsws.responseType=json"
-					+ ((params!="")?"&":"") + params
-
-			return apswsReqUrl;
-		},
-		
-		// Allows you to build the standard URL, could be overriden when necessary
-		url: function() {
-		    var params = ""; var i=0;
-
-		    if (this.request.apsdb != null) {
-			for (prop in this.request.apsdb) {
-			    if (i>0) params += "&";
-			    i++;
-			    params += "apsdb." + prop + "=" + escape(eval("this.request.apsdb."+prop)); 
-			}				
-		    }
-
-		    for (prop in this.request) {
-			if (i>0) params += "&";
-			i++;
-			if (prop != "apsdb") params += "&" + prop + "=" + escape(eval("this.request."+prop)); 
-		    }
-
-		    var urlValue = this.signUrl(params);
-//console.debug(urlValue);
-		    return urlValue;
-		},
-
 		execute: function () {
-		    var apsdb = this;
-console.debug("executing:" + this.apsdbOperation);
+			var self = this;
 
-		    dojo.io.script.get({ 
-			    url: apsdb.url(),
-			    xx: console.debug("doing IO: "+this.url()),
-			    callbackParamName : "apsws.jc",
-
-			    load: function(json) {
-console.debug("load, aborted=" + apsdb.operationAborted);
-console.debug(json);
-				if (apsdb.operationAborted) return json;
-
-				var res = dojo.fromJson(json);
-				
-				apsdb.status = res.response.status;
-				apsdb.message = res.response.message;
-				apsdb.response = res;
-
-				if (apsdb.status==apsdb._SUCCESS) {
-				    apsdb.handleResult();
-				} else {
-				    apsdb.errorcode = res.response.errorcode;
-				    apsdb.handleError();
-				}
-
-				return json; 
-			    }, 
-			    
-			    error: function(err) { 
-console.debug("transport error");
-console.debug(err);
-				if (apsdb.operationAborted) return err;
-				
-				apsdb.errorcode = "communication_error";
-				apsdb.message = err;
-				apsdb.response = null;
-
-				apsdb.handleError();
-				return xml; 
-			    } 
-		    }); 			    
-		},
+			// Send debug information to connection object, could be used later to identify problems
+			self.log("Operation", self.apsdbOperation);
 		
-		abort: function() {
-console.debug("abort received");
-			this.operationAborted = true;
-		},
-		//
-		//
-		handleResult: function() {},
-		handleError: function() {
-console.debug("application error");
-console.dir(this.response);			    
-		}
+			var timestamp = new Date().getTime();
+    
+			// Since the hack for JSONP doesn't really allow for communication errors to be caught,
+			//  we're using a timeout event to provide an error message if an operation takes too long to execute
+			self._setTimeout()
+
+                        var buildUrl = self.buildUrl();
+			self.url = buildUrl.url
+                        self.signature = buildUrl.signature
+self.log(self.signature)
+			self.log("GET", self.url);
+
+			// send out event that we are sending a request to apstrata
+			self.requestSent()
+
+			dojo.io.script.get({ 
+				url: self.url,
+				callbackParamName : "apsws.jc",
+				load: function(jsonTxt) {
+					self.log("response text", jsonTxt);
+
+					self.responseTime = (new Date().getTime()) - timestamp;
+					self.log("response time (ms)", self.responseTime);
+					// Clear the timeout since we received a response from apstrata
+					self._clearTimeout();
+					
+					// we can't do a real abort or timeout operation
+					//  we're just using a flag to artificially ignore the result if the user requests an abort
+					//  or if after a timeout, a response was received anyway
+					self.log("Aborted", self.operationAborted);
+					self.log("Timed out", self.operationTimeout);
+					if (self.operationAborted || self.operationTimeout) return jsonTxt;
+                                        var json
+                                                json = dojo.fromJson(jsonTxt);
+
+                                        if (self.response != undefined) {
+                                                self.response = json.response;
+                                                self.status = json.response.status;
+                                                self.message = (json.response.message == undefined)?self.status:json.response.message
+                                                self.log("status", self.status);
+                                                self.log("message", self.message);
+
+                                                if (self.status==self._SUCCESS) {
+                                                    self.handleResult();
+                                                } else {
+                                                    self.handleError();
+                                                }
+
+                                        } else {
+                                                self.status = "bad response";
+                                                self.message = "apsdb client: bad response from apsdb"
+                                                self.log("message", self.message);
+                                                self.handleError();                                        
+                                        }
+                                        
+
+					return json; 
+				}, 
+					
+				error: function(err) {
+					// left this here as a placeholder 
+					// the hack for invoking JSONP doesn't return any errors
+					// that's why i'm using a timeout
+				} 
+			}); 			    
+		},		
 	});
 
 

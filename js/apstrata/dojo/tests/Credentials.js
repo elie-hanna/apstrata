@@ -26,5 +26,6 @@ dojo.provide("apstrata.dojo.tests.Credentials");
 dojo.declare("apstrata.dojo.tests.Credentials",
 [],
 {
-    credentials: {key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"}
+//    credentials: {key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"} // production
+    credentials: {key: "7744293024", secret: "3B45DE19C689EDAFCA47"} // sandbox
 })

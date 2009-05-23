@@ -1,0 +1,21 @@
+<div>
+        <div dojoType="dijit.Dialog" dojoAttachPoint="dlgError" title="Error">
+          <table>
+            <tr>
+                <td valign="middle">
+                    <img src="images/apstrata-sml.png" height="20px" />
+                </td>
+                <td valign="middle">
+                    <span style="font-size:1.1em; color: #BB0000;">communication error!</span><br /><br />
+                    <div dojoAttachPoint="spnErrorUrl" style="font-size:0.6em; color: #0000BB; width: 300px; padding: 5px; background-color: #DDDDDD"></div>
+                </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center">
+                <button dojoType="dijit.form.Button" dojoAttachPoint="btnCommErrorRetry" type="submit">Retry</button>
+                <button dojoType="dijit.form.Button" dojoAttachPoint="btnCommErrorClose" type="submit">Close</button>
+              </td>
+            </tr>
+          </table>
+        </div>        
+</div>

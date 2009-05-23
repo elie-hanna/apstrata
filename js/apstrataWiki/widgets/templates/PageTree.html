@@ -3,13 +3,5 @@
 		<button dojoAttachPoint="btnAdd">Add</button>
 		<button dojoAttachPoint="btnDelete">Delete</button>	    
 	</div>
-	<div>
-		<div dojoType="dijit.Tree"
-		     store="pageStore"
-		     dojoAttachPoint="treePages"
-		     labelAttr="name"
-		     dndController="dijit._tree.dndSource"
-		     query="{atRoot: 'true'}">
-		</div>                                                
-	</div>
+	<div dojoAttachPoint="treePlaceHolder"></div>
 </div>

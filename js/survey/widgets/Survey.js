@@ -40,8 +40,17 @@ dojo.declare("surveyWidget.widgets.Survey",
 		dataModel: null,
 		surveyTitle : "Type the survey title here",
 		surveyDescription : "You can place the survey description here.",
-		auth: {key: "apstrata", secret: "secret"}, //{key: "ECA9A0BCE9", secret: "BF26CB5B40E2E64EDFEE"};
+
+		//
+		// Replace here with your apsdb account
+		//  and target store name
+		//
+		apsdbKey: "",
+		apsdbSecret: "",
 		storeName: "myStore",
+		//
+		//
+		//
 
 		constructor: function() {
 			if(schema != null)
@@ -203,20 +212,24 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		saveSurvey: function() {
-		
 			if(this.surveyform.validate()){
 				this.successMessage.innerHTML = "Your survey is being processed...";
 				var jsonObj = this.surveyform.getValues();
 				var survey = this;
 
-				var sd = new apstrata.dojo.client.apsdb.SaveDocument(this.auth, this.storeName, jsonObj);
+				var connection = new apstrata.dojo.client.apsdb.Connection()
+				connection.credentials.key = this.apsdbKey
+				connection.credentials.secret = this.apsdbSecret
+
+				var sd = new apstrata.dojo.client.apsdb.SaveDocument(connection);
 				dojo.connect(sd, "handleResult", function(){
 					survey.successMessage.innerHTML = "Your survey has been successfully submitted.";
 				});
 				dojo.connect(sd, "handleError", function(){
 					survey.successMessage.innerHTML = "A problem occured while submitting your survey, please try again later.";
 				});
-				sd.execute();
+				
+				sd.execute({store: this.storeName, fields: jsonObj})
 				
 				return true;
 			} else{
