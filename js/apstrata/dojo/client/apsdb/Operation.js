@@ -75,13 +75,13 @@ dojo.require("apstrata.dojo.client.util.Logger")
 			var self = this;
 			if (self.connection.getTimeout()>0) {
 				self._timeoutHandler = setTimeout (dojo.hitch(self, "timeout"), self.connection.getTimeout());
-this.log('timeout handler, set', self._timeoutHandler+" " + self.connection.getTimeout()+"")
+				this.log(self._LOGGER.DEBUG, 'timeout handler, set', self._timeoutHandler+" " + self.connection.getTimeout()+"")
 			}
 		},
 		
 		_clearTimeout: function() {
 			if (this._timeoutHandler) {
-this.log('timeout handler, cleared', this._timeoutHandler+"")
+				this.log(this._LOGGER.DEBUG, 'timeout handler, cleared', this._timeoutHandler+"")
 				clearTimeout (this._timeoutHandler);
 				this._timeoutHandler = 0;
 			}			

@@ -20,7 +20,7 @@ dojo.declare("apstrata.dojo.client.util._Logger",
 	WARNING: 6,
 	ERROR: 7,
 	LEVELS: ['Level 0', 'Level 1', 'Level 2', 'Debug', 'Info', 'Config', 'Warning', 'Error'],
-	DEFAULT_LOG_LEVEL: 3,
+	DEFAULT_LOG_LEVEL: 4,
 	verbose: true,
 	
 	constructor: function() {
