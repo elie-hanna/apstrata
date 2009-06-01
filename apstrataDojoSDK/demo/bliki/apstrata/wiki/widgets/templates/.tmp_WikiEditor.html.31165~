@@ -1,0 +1,19 @@
+<div style="">
+	<div> 
+		<div style="float: right;" class="breadCrumbs">${breadCrumbs}</div>
+		<br/>
+		<div style="float: left;"><span class="title" dojoType="dijit.InlineEditBox" dojoAttachPoint="fldTitle">${page.title}</span></div>
+		<div style="clear:both;"></div>
+		<br />
+	</div>                    
+	<div>
+		<textarea dojoType="dijit.Editor" dojoAttachPoint="fldContents" styleSheets="dojoroot/dojo/resources/dojo.css" activeSizing="true" height="250px">${page.contents}</textarea>
+	</div>
+	<div>
+		<br/>
+		<div style="float: left;">tags: <input type="text" size="150" dojoType="dijit.form.TextBox" dojoAttachPoint="fldTags" value="${page.tags}" /></div>
+		<div style="float: left;">&nbsp;&nbsp;&nbsp;&nbsp; private: <input type="checkbox" size="150" dojoType="dijit.form.CheckBox" dojoAttachPoint="fldPrivate" /></div>
+		<div style="float: right;"><input type="button" dojoAttachPoint="btnSave" value="save" />&nbsp;<input type="button" dojoAttachPoint="btnCancel" value="cancel" /></div>
+		<div style="clear: both"><br /></div>
+	</div>                    
+</div>
