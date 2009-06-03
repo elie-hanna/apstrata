@@ -52,17 +52,17 @@ dojo.require ("apstrata.util.logger.Logger")
 		    var params = ""; var i=0;
 
 		    if (this.request.apsdb != null) {
-			for (prop in this.request.apsdb) {
-			    if (i>0) params += "&";
-			    i++;
-			    params += "apsdb." + prop + "=" + encodeURIComponent(this.request.apsdb[prop]); 
-			}
+				for (prop in this.request.apsdb) {
+				    if (i>0) params += "&";
+				    i++;
+				    params += "apsdb." + prop + "=" + encodeURIComponent(this.request.apsdb[prop]); 
+				}
 		    }
 
 		    for (prop in this.request) {
-			if (i>0) params += "&";
-			i++;
-			if (prop != "apsdb") params +=  prop + "=" + encodeURIComponent(this.request[prop]) + "&"; 
+				if (i>0) params += "&";
+				i++;
+				if (prop != "apsdb") params +=  prop + "=" + encodeURIComponent(this.request[prop]) + "&"; 
 		    }
 
 		    var urlValue = this.connection.signUrl(this.apsdbOperation, params);

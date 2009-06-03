@@ -54,6 +54,49 @@ if (typeof apstrata == "undefined") {
 		}
 	}
 
+	// Find out where dojo.js and calculate the relative path from dojo to the current location
+	if ((this["document"]) && (this["document"]["getElementsByTagName"])) {
+		var scripts = document.getElementsByTagName("script");
+		var rePkg = /dojo\.js([\?\.]|$)/i;
+		for (var i = 0; i < scripts.length; i++) {
+			// var src = scripts[i].getAttribute("src");
+			var src = scripts[i].src; // TODO: is this portable?
+			if (!src) {
+				continue;
+			}
+			var m = src.match(rePkg);
+			if (m) {
+				// split the path into an array  
+				var p1 = src.split('/')
+				var p2 = (this.location+"").split('/')
+
+				// find out at what index the 2 arrays are not identical
+				var j=0
+				for (; j<p1.length; j++) {
+					if (p1[j] != p2[j]) break;
+				}
+
+				// reconstruct the relative path from dojo of the current location 
+				//  the page has loaded from
+				var s = ""
+				// find out the common root
+				for (var k=0; k<(p1.length-j-1); k++) {
+					s += "../"
+				}
+				
+				// add the path to the location
+				for (k=j; k<(p2.length-1); k++) {
+					s += p2[k] + "/"
+				}
+				
+				apstrata.pathFromDojo = s
+				
+				break;
+			}
+		}
+	}
+
+
     apstrata.logConfig = {
 		buffer:  new Array(),	// global array to contain the log
 		level: 0, 		// severity of log messages to display
@@ -81,6 +124,10 @@ if (typeof apstrata == "undefined") {
 			
 			dojo.extend(dijit._Widget, {
 				_apstrataRoot: apstrata.baseUrl
-			})		
+			})
+
+			dojo.registerModuleRelative = function(module, string) {
+				dojo.registerModulePath (module, apstrata.pathFromDojo + string)
+			}
 	})
 }

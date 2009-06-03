@@ -55,48 +55,45 @@ dojo.declare("apstrata.apsdb.client.ApsdbRWStore",
     },
     
     fetch: function(request) {
-	var self = this;
-
-	var _request = dojo.mixin(request, new dojo.data.api.Request());
-	var query = new apstrata.apsdb.client.Query(self.connection);
-	query.execute({store: this._storeName, query: request.query, queryFields: this._columns});
-
-//        var query = this.connection.execute("Query", {store: this._storeName, query: request.query, queryFields: this._columns})
-
-	dojo.connect(query, "handleResult", function() {
-	    //
-	    // this is to fix a dojo.json parser issue
-	    // When only one document is returned,
-	    //  query.response.result.documents.document is not created as an array
-	    //  we expect it to be an array
-	    //
-
-	    if (self._isEmptyObject(query.response.result.documents)) {
-		query.response.result.documents.document = []
-	    } else if (query.response.result.documents.document.@key!= undefined) {
-		var a = query.response.result.documents.document		
-		query.response.result.documents.document = [a]
-	    }
-	    
-	    dojo.forEach(query.response.result.documents.document, function(item) {
-		item._S = self; // Adding a reference (_S) to ItemFileWriteStore object in each item 
-		item.fields = {};
+		var self = this;
+	
+		var _request = dojo.mixin(request, new dojo.data.api.Request());
+		var query = new apstrata.apsdb.client.Query(self.connection);
+	
+		dojo.connect(query, "handleResult", function() {
+		    //
+		    // this is to fix a dojo.json parser issue
+		    // When only one document is returned,
+		    //  query.response.result.documents.document is not created as an array
+		    //  we expect it to be an array
+		    //
+	
+		    if (self._isEmptyObject(query.response.result.documents)) {
+				query.response.result.documents.document = []
+		    } else if (query.response.result.documents.document.@key!= undefined) {
+				var a = query.response.result.documents.document		
+				query.response.result.documents.document = [a]
+		    }
+		    
+		    dojo.forEach(query.response.result.documents.document, function(item) {
+				item._S = self; // Adding a reference (_S) to ItemFileWriteStore object in each item 
+				item.fields = {};
+				
+				// Rearranging the item object in a better way
+				// and adding an associative array
+				dojo.forEach(item.field, function(f) {
+				    item.fields[f["@name"]] = {type:f["@type"], value:f["value"]}
+				})
 		
-		// Rearranging the item object in a better way
-		// and adding an associative array
-		dojo.forEach(item.field, function(f) {
-		    item.fields[f["@name"]] = {type:f["@type"], value:f["value"]}
-		})
-
-		item.fields[self.connection._KEY_APSDB_ID] = {value: item[self.connection._KEY_APSDB_ID], type: apstrata.apsdb.client.Query.prototype._TYPE_STRING}
-
-		delete (item["field"]);
+				item.fields[self.connection._KEY_APSDB_ID] = {value: item[self.connection._KEY_APSDB_ID], type: apstrata.apsdb.client.Query.prototype._TYPE_STRING}
 		
-		// build associative array to retrieve item by identity later
-
-		self._itemsMap[item[self.connection._KEY_APSDB_ID]] = item;
-	    })
-            
+				delete (item["field"]);
+				
+				// build associative array to retrieve item by identity later
+		
+				self._itemsMap[item[self.connection._KEY_APSDB_ID]] = item;
+		    })
+	            
             self._itemsFetched = query.response.result.documents.document
 
             // use self._getItems() to get items because the store might be dirty from previous changes
@@ -105,8 +102,13 @@ dojo.declare("apstrata.apsdb.client.ApsdbRWStore",
             //  were updated in apsdb meanwhile
             //  the developer can save() the changes prior to a fetch
             //  if that's what he's looking for
-	    request.onComplete(self._getItems(), _request);
-	});	
+		    request.onComplete(self._getItems(), _request);
+		});	
+		query.execute({store: this._storeName, query: request.query, queryFields: this._columns});
+	
+	//        var query = this.connection.execute("Query", {store: this._storeName, query: request.query, queryFields: this._columns})
+
+
     },
     
     //
@@ -390,12 +392,12 @@ console.debug("deleted *************")
     _saveDocument: function(item, handleResult, handleError) {
         var self = this;
         var sd = new apstrata.apsdb.client.SaveDocument(connection);
-        dojo.connect(sd, "handleResult", function() {
-	    handleResult(item)
-	})
+	    dojo.connect(sd, "handleResult", function() {
+		    handleResult(item)
+		})
         dojo.connect(sd, "handleError", function() {
-	    handleError(item)
-	})
+		    handleError(item)
+		})
 
         var fields = {}
         

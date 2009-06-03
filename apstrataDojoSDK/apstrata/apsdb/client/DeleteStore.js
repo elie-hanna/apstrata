@@ -23,8 +23,8 @@ dojo.declare("apstrata.apsdb.client.DeleteStore",
     
     execute: function(attrs) {
         if ((attrs != undefined) &&
-            (attrs.name != undefined)) {   
-            this.request.apsdb.store = attrs.name;
+            (attrs.store != undefined)) {   
+            this.request.apsdb.store = attrs.store;
             this.inherited(arguments);
         } else console.debug("apstrata.apsdb.client.DeleteStore: missing store name.");
     }

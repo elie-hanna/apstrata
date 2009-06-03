@@ -41,9 +41,9 @@ dojo.require ("apstrata.apsdb.client.Operation");
 			//  we're using a timeout event to provide an error message if an operation takes too long to execute
 			self._setTimeout()
 
-                        var buildUrl = self.buildUrl();
+			var buildUrl = self.buildUrl();
 			self.url = buildUrl.url
-                        self.signature = buildUrl.signature
+			self.signature = buildUrl.signature
 
 			self.log("GET", self.url);
 
@@ -67,29 +67,27 @@ dojo.require ("apstrata.apsdb.client.Operation");
 					self.log(self._LOGGER.DEBUG, "Aborted", self.operationAborted);
 					self.log(self._LOGGER.DEBUG, "Timed out", self.operationTimeout);
 					if (self.operationAborted || self.operationTimeout) return jsonTxt;
-                                        var json
-                                                json = dojo.fromJson(jsonTxt);
+                    var json
+					json = dojo.fromJson(jsonTxt);
 
-                                        if (self.response != undefined) {
-                                                self.response = json.response;
-                                                self.status = json.response.status;
-                                                self.message = (json.response.message == undefined)?self.status:json.response.message
-                                                self.log("status", self.status);
-                                                self.log("message", self.message);
+                    if (self.response != undefined) {
+                        self.response = json.response;
+                        self.status = json.response.status;
+                        self.message = (json.response.message == undefined)?self.status:json.response.message
+                        self.log("status", self.status);
+                        self.log("message", self.message);
 
-                                                if (self.status==self._SUCCESS) {
-                                                    self.handleResult();
-                                                } else {
-                                                    self.handleError();
-                                                }
-
-                                        } else {
-                                                self.status = "bad response";
-                                                self.message = "apsdb client: bad response from apsdb"
-                                                self.log("message", self.message);
-                                                self.handleError();                                        
-                                        }
-                                        
+                        if (self.status==self._SUCCESS) {
+                            self.handleResult();
+                        } else {
+                            self.handleError();
+                        }
+                    } else {
+                        self.status = "bad response";
+                        self.message = "apsdb client: bad response from apsdb"
+                        self.log("message", self.message);
+                        self.handleError();                                        
+                    }
 
 					return json; 
 				}, 

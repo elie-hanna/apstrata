@@ -63,17 +63,17 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		
 		constructor: function() {
 			this._DEFAULT_SERVICE_URL= "http://apsdb.apstrata.com/sandbox-apsdb/rest"
-			this._TIMEOUT= 10000
+			this.timeout = 10000
 			this.serviceUrl= this._DEFAULT_SERVICE_URL;
 			this.credentials= {key: "", secret: "", un: "", pw: ""}
 			this.defaultStore = ''
 			
 			if (typeof apstrata.apConfig != undefined) {
-				this.credentials.key = apstrata.apConfig.key
-				this.credentials.secret = apstrata.apConfig.secret
-				this.defaultStore = apstrata.apConfig.defaultStore
+				if (apstrata.apConfig.key != undefined) this.credentials.key = apstrata.apConfig.key
+				if (apstrata.apConfig.secret != undefined) this.credentials.secret = apstrata.apConfig.secret
+				if (apstrata.apConfig.defaultStore != undefined) this.defaultStore = apstrata.apConfig.defaultStore
+				if (apstrata.apConfig.timeout != undefined) this.timeout =  apstrata.apConfig.timeout
 			}
-			
 			this._newKeySeed= Math.floor(Math.random()*99999999)
 			
 			this.activity= new apstrata.apsdb.client.Activity()		
@@ -106,7 +106,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		// Set here the default timeout value for all apstrata operations
 		// a value of 0 disables timeout
 		getTimeout: function() {
-			return this._TIMEOUT
+			return this.timeout
 		},
 
 		execute: function(operation, params) {
