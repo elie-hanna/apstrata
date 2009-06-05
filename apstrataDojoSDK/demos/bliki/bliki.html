@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ap((strata wiki</title>
+    <style type="text/css">
+        @import "../../lib/dojo/1.2.3-src/dijit/themes/tundra/tundra.css";
+        @import "../../lib/dojo/1.2.3-src/dojo/resources/dojo.css"
+    </style>
+	
+    <style type="text/css"> 
+        /* NOTE: for a full screen layout, must set body size equal to the viewport. */
+        html, body { height: 100%; width: 100%; margin: 0; padding: 0; font-family: sans-serif;}
+      
+        #header {padding: 8px; background-color:#DDDDDD; font-size: 1em;}
+        #footer {padding: 10px; background-color:#DDDDDD; text-align: right; font-size: .8em;}
+        #tree {background-color: #FFFFFF; padding: 5px;font-size:1.1em; color: #222222;}
+        .title {font-weight: bold; font-size: 1.2em;}
+        .breadCrumbs {font-size: 0.8em;}        
+    </style>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    
+	<script type="text/javascript" src="../../lib/dojo/1.2.3-src/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug:true"></script>
+	<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:'7744293024', secret:'3B45DE19C689EDAFCA47', defaultStore:'wiki', timeout: 10000"></script>
+
+    <script type="text/javascript">
+        dojo.require("dojo.parser");
+        dojo.require("dijit.layout.ContentPane");
+        dojo.require("dijit.layout.LayoutContainer");
+        dojo.require("dijit.layout.SplitContainer");
+        
+        dojo.require("dijit.Tree");
+        dojo.require("dijit._tree.dndSource");
+
+        var connection;
+        var connectionStatus;
+        var connectionError;
+        
+        dojo.addOnLoad(function() {
+			dojo.require ("apstrata.util.logger.Logger");
+			dojo.require ("apstrata.apsdb.client.Connection");
+			
+	        dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus");
+	        dojo.require("apstrata.apsdb.client.widgets.Login");
+	
+			dojo.registerModuleRelative ("apstrata.wiki", "apstrata/wiki");
+			dojo.require("apstrata.wiki.widgets.WikiEditor");
+			dojo.require("apstrata.wiki.widgets.PageTree");
+
+            // A connection object sets the basic params needed to communicate with apstrata
+            //  The connection object represents a pseudo session
+		    connection = new apstrata.apsdb.client.Connection()
+
+            // the ConnectionStatus and ConnectionError widgets monitor the connection object
+            //  for activity and timeout and reflect that to the user throug a dialog
+            connectionStatus = new apstrata.apsdb.client.widgets.ConnectionStatus(connection);
+//            connectionError = new apstrata.dojo.widgets.ConnectionError(connection);
+
+            if (false) {
+                var login = new apstrata.apsdb.client.widgets.Login(connection)		
+
+                dojo.connect(login, "loginSuccess", function() {
+                    initApplicationPanel()
+                });
+                dojo.connect(login, "close", function() {
+                    alert('Adieu mon ami, a bientot!')
+                });
+		
+            } else {
+				// Connection params are loaded from 'apConfig' attribute 
+				//   in the apstrata.js script loading tag
+                initApplicationPanel()
+            }
+        });
+
+        var editor = null
+
+        function initApplicationPanel() {
+            var pagesTree = new apstrata.wiki.widgets.PageTree(connection);
+            dojo.place(pagesTree.domNode, "treeContainer", "first")
+
+            dojo.connect(pagesTree, "selectPage", function() {
+                var store = pagesTree.getStore()
+
+                if (editor != null) editor.destroy()
+                editor = new apstrata.wiki.widgets.WikiEditor(store, pagesTree.getSelectedItem())
+                dojo.place(editor.domNode, "wikiEditorPane", "first")
+            })
+
+            dojo.connect(pagesTree, "selectedPageDeleted", function() {
+                if (editor != null) {
+					editor.destroy()
+					editor=null
+				}
+            })
+        }
+    </script>
+</head>
+<body class="tundra">
+    <div dojoType="dijit.layout.LayoutContainer" id="appDesktop" style="width: 100%; height: 100%; padding: 0; margin: 0; border: 0;">
+        <div dojoType="dijit.layout.ContentPane" layoutAlign="top" id="header">
+            <table style="width: 100%;">
+                <tr>
+                    <td><img src="images/apstrata-sml.png" /></td>
+                    <td align="right"><h3>wiki</h3></td>
+                </tr>
+            </table>
+        </div>
+        <div dojoType="dijit.layout.ContentPane" layoutAlign="client">
+            <div dojoType="dijit.layout.SplitContainer" orientation="horizontal" sizerWidth="7" activeSizing="true">
+                <div dojoType="dijit.layout.ContentPane" style="border: 0px; margin: 0px;">
+                    <div id="treeContainer"></div>
+                </div>
+                <div dojoType="dijit.layout.ContentPane" sizeMin="50" sizeShare="50">
+                    <div id="wikiEditorPane"></div>
+                </div>
+            </div>
+        </div>        
+        <div dojoType="dijit.layout.ContentPane" layoutAlign="bottom" id="footer">
+            (c) 2009 apstrata
+        </div>
+    </div>
+</body>
+</html>
