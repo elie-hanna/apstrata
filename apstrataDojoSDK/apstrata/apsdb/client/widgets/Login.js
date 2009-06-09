@@ -1,5 +1,8 @@
 dojo.provide("apstrata.apsdb.client.widgets.Login");
 
+dojo.require("dijit.form.TextBox")
+
+
 dojo.declare("apstrata.apsdb.client.widgets.Login",
 	[dijit._Widget, dijit._Templated, apstrata.util.logger.Logger],
 	{
