@@ -20,6 +20,7 @@ if (typeof apstrata == "undefined") {
 		patch: 0,
 		flag: "",
 		revision: "$revision$",
+		version: "$version$-$tag$",
 		toString: function(){
 			with (apstrata.version) {
 				return major + "." + minor + "." + patch + flag + " (" + revision + ")"; // String
@@ -95,7 +96,6 @@ if (typeof apstrata == "undefined") {
 			}
 		}
 	}
-
 
     apstrata.logConfig = {
 		buffer:  new Array(),	// global array to contain the log
