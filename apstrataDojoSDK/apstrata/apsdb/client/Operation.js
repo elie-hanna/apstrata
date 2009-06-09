@@ -94,10 +94,10 @@ dojo.require ("apstrata.util.logger.Logger")
 			this.operationTimeout = true;
 
 			this.errorcode = "timeout_communication_error";
-			this.message = null;
+			this.message = "Timeout or communication error";
 			this.response = null;
 	
-			this.connection.activity.timeout(this.url);
+			this.connection.activity.timeout(this);
 			this.handleError();
 		},
 		

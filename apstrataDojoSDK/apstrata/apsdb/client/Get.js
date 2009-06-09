@@ -57,6 +57,7 @@ dojo.require ("apstrata.apsdb.client.Operation");
 					self.log("response text", jsonTxt);
 
 					self.responseTime = (new Date().getTime()) - timestamp;
+					self.connection.registerConnectionTime(self.responseTime)
 					self.log("response time (ms)", self.responseTime);
 					// Clear the timeout since we received a response from apstrata
 					self._clearTimeout();
@@ -80,6 +81,8 @@ dojo.require ("apstrata.apsdb.client.Operation");
                         if (self.status==self._SUCCESS) {
                             self.handleResult();
                         } else {
+							self.error = json.response.errorCode
+                        	self.log("error", self.error);
                             self.handleError();
                         }
                     } else {

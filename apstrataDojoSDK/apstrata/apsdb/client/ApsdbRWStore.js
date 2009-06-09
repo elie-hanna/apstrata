@@ -28,18 +28,18 @@ dojo.declare("apstrata.apsdb.client.ApsdbRWStore",
         this._features= {'dojo.data.api.Read':true, 'dojo.data.api.Identity':true, 'dojo.data.api.Write': true, 'dojo.data.api.Notification': true}
 
         this.connection = connection;
-	this._storeName = queryParams.storeName;
-	this._columns = queryParams.columns;
-	        
-	this._itemsMap = {};
-	this._itemsFetched = new Array()
+		this._storeName = queryParams.storeName;
+		this._columns = queryParams.columns;
+		        
+		this._itemsMap = {};
+		this._itemsFetched = new Array()
         this._itemsDirty= new Array()
 	
 //	this._refreshNeeded = true;
     },
 
     getFeatures: function() {
-	return this._features;
+		return this._features;
     },
         
     _getItems: function() {
@@ -50,7 +50,7 @@ dojo.declare("apstrata.apsdb.client.ApsdbRWStore",
     },
     
     _isEmptyObject: function (ob){
-	for(var i in ob){ return false;}
+		for(var i in ob){ return false;}
         return true;
     },
     
@@ -70,7 +70,7 @@ dojo.declare("apstrata.apsdb.client.ApsdbRWStore",
 	
 		    if (self._isEmptyObject(query.response.result.documents)) {
 				query.response.result.documents.document = []
-		    } else if (query.response.result.documents.document.@key!= undefined) {
+		    } else if (query.response.result.documents.document["@key"]!= undefined) {
 				var a = query.response.result.documents.document		
 				query.response.result.documents.document = [a]
 		    }
@@ -105,7 +105,7 @@ dojo.declare("apstrata.apsdb.client.ApsdbRWStore",
 		    request.onComplete(self._getItems(), _request);
 		});	
 		query.execute({store: this._storeName, query: request.query, queryFields: this._columns});
-	
+	console.dir(request)
 	//        var query = this.connection.execute("Query", {store: this._storeName, query: request.query, queryFields: this._columns})
 
 

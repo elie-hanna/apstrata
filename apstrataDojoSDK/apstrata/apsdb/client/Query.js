@@ -17,24 +17,37 @@ dojo.require("apstrata.apsdb.client.Get");
 dojo.declare("apstrata.apsdb.client.Query",
 [apstrata.apsdb.client.Get],
 {
+	_DEFAULT_PAGE_NUMBER: 1,
+	_DEFAULT_RESULTS_PER_PAGE: 10,
 
     constructor: function() {
         this.apsdbOperation= "Query"
     },
 
     execute: function(attrs) {
-        this.retryAttributes = attrs
-        
-        this.request.apsdb.store = attrs.store;
-        this.request.apsdb.query = attrs.query,
-        this.request.apsdb.queryFields = attrs.queryFields,
-        this.request.apsdb.resultsPerPage = 10,
-        this.request.apsdb.pageNumber = 1,
-        this.request.apsdb.ftsString = "",
-        this.request.apsdb.count = "false",
-        this.request.apsdb.forceCurrentSnapshot = "false"            
-	
-	this.inherited(arguments);
-    }
-});
+		if ((attrs.store != undefined) && (attrs.query != undefined) && (attrs.queryFields != undefined)) {
+			this.request.apsdb.store = attrs.store			
+			this.request.apsdb.query = attrs.query
+			this.request.apsdb.queryFields = attrs.queryFields
 
+	        if (attrs.resultsPerPage != undefined) this.request.apsdb.resultsPerPage = attrs.resultsPerPage;
+				else this.request.apsdb.resultsPerPage = this._DEFAULT_RESULTS_PER_PAGE
+
+	        if (attrs.pageNumber != undefined) this.request.apsdb.pageNumber = attrs.pageNumber;
+				else this.request.apsdb.pageNumber = this._DEFAULT_PAGE_NUMBER
+
+			if (attrs.ftsString != undefined) this.request.apsdb.ftsString = attrs.ftsString;
+	        	else this.request.apsdb.ftsString = ""
+
+	        if (attrs.count != undefined) this.request.apsdb.count = attrs.count;
+				else this.request.apsdb.count = "false"
+
+	        if (attrs.forceCurrentSnapshot != undefined) this.request.apsdb.forceCurrentSnapshot = attrs.forceCurrentSnapshot
+				else this.request.apsdb.forceCurrentSnapshot = "false"
+		} else {
+			throw "Query attributes store, query and queryFields are mandatory"
+		}
+
+		this.inherited(arguments);
+    }
+})

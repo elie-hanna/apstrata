@@ -47,7 +47,9 @@ dojo.declare("apstrata.apsdb.client.Activity",
 			this.log("active operations", this.counter)
 		},
 		
-		timeout: function(url) {},
+		timeout: function(operation) {
+//			this.stop(operation)
+		},
 		
 		busy: function() {},
 		free: function() {}
@@ -60,14 +62,16 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		_KEY_APSDB_ID: "@key",
 		_COOKIE_NAME: "apstrata.apsdb.client",
 		_COOKIE_EXPIRY: 15,
+		totalConnectionTime: 0,
+		numberOfConnections: 0,
 		
-		constructor: function() {
+		constructor: function(attr) {
 			this._DEFAULT_SERVICE_URL= "http://apsdb.apstrata.com/sandbox-apsdb/rest"
 			this.timeout = 10000
 			this.serviceUrl= this._DEFAULT_SERVICE_URL;
 			this.credentials= {key: "", secret: "", un: "", pw: ""}
 			this.defaultStore = ''
-			
+
 			if (typeof apstrata.apConfig != undefined) {
 				if (apstrata.apConfig.key != undefined) this.credentials.key = apstrata.apConfig.key
 				if (apstrata.apConfig.secret != undefined) this.credentials.secret = apstrata.apConfig.secret
@@ -75,8 +79,37 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				if (apstrata.apConfig.timeout != undefined) this.timeout =  apstrata.apConfig.timeout
 			}
 			this._newKeySeed= Math.floor(Math.random()*99999999)
-			
-			this.activity= new apstrata.apsdb.client.Activity()		
+
+			this.activity= new apstrata.apsdb.client.Activity()
+
+			this.loadFromCookie()
+
+			// TODO: Investigate why this is not working: dojo.parser.instantiate
+			/*
+			if (attr!=undefined) {
+				if (attr.statusWidget!=undefined) {
+					dojo.require(attr.statusWidget)
+					var sw = dojo.parser.instantiate(this, {dojoType: attr.statusWidget});
+				}
+			}
+			*/
+
+			// TODO: this should be replaced by dynamic instantiation
+			if (attr!=undefined) {
+				if (attr.statusWidget == "apstrata.apsdb.client.widgets.ConnectionStatus") {
+					dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus")
+					var sw = new apstrata.apsdb.client.widgets.ConnectionStatus(this)
+				}
+			}
+
+		},
+
+		registerConnectionTime: function(t) {
+			this.numberOfConnections++
+			this.totalConnectionTime += t
+			this.averageConnectionTime = this.totalConnectionTime/this.numberOfConnections 
+
+			this.log("average connection time", this.averageConnectionTime)
 		},
 
 		// Generates a new apstrata document uniqu @key for use when creating new items
@@ -179,16 +212,15 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				
 				return {}
 			} else {
-			
 				var o = dojo.fromJson(json)
-
-			this.log("Loading connection from cookie", o)
-				
+	
+				this.log("Loading connection from cookie", o)
+					
 				this.credentials = o.credentials
 				this.serviceUrl = o.serviceUrl
 				this.defaultStore = o.defaultStore
-	
-				return o.saveObject
+
+				if (o.saveObject != undefined) return o.saveObject
 			}
 		},
 		
@@ -205,30 +237,10 @@ dojo.declare("apstrata.apsdb.client.Connection",
 					handlers.success()
 			})
 			dojo.connect(listStores, "handleError", function() {
+				
 					handlers.failure()
 			})
 			
 			listStores.execute();
-		},
-		
-		loginX: function(dialog, masterAccount) {
-			if (masterAccount == undefined) masterAccount = true;
-
-			var self = this;
-			
-			if (masterAccount) {
-				var listStores = new apstrata.apsdb.client.ListStores(dojo.clone(self))
-				dojo.connect(listStores, "handleResult", function() {
-//					if (listStores.status == listStores._SUCCESS) {
-						dialog.loginSuccess()
-//					}
-				})
-				dojo.connect(listStores, "handleError", function() {
-					dialog.loginFailure()
-				})
-				
-				listStores.execute();
-			}
-		}
-		
+		}		
 	});

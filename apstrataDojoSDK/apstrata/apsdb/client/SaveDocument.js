@@ -21,16 +21,32 @@ dojo.declare("apstrata.apsdb.client.SaveDocument",
         this.apsdbOperation= "SaveDocument"
     },
 
-    execute: function(attrs) {
+	// recurses inside an object and flattens it
+	//  o.property1.property2 = value ---> o["property1!property2"] = value
+	flatten: function (o) {
+		function _flatten(o, newObject, label) {
+			for (i in o) {
+				var l = ((label==undefined)?"":(label+"!"))
+				if (typeof(o[i]) == "object") _flatten(o[i], newObject, l+i);
+				else newObject[l+i] = o[i]
+			}
+		}
+		
+		var newObject = {}
+		_flatten(ob, newObject)
+		return newObject
+	},
+
+    execute: function(attrs, flatten) {
         this.request.apsdb.store = attrs.store
 
-        // set the document key properly in the request object
+        // if this object doesn't contain a document key, generate new one
         if (attrs.fields[this.connection._KEY_APSDB_ID] != undefined) this.request.apsdb.documentKey = attrs.fields[this.connection._KEY_APSDB_ID]
 
-	for (prop in attrs.fields) {
-            if (prop != this.connection._KEY_APSDB_ID) this.request[prop] = attrs.fields[prop];
-	}
-    
-	this.inherited(arguments);
+		for (prop in attrs.fields) {
+	            if (prop != this.connection._KEY_APSDB_ID) this.request[prop] = attrs.fields[prop];
+		}
+	    
+		this.inherited(arguments);
     }
 });
