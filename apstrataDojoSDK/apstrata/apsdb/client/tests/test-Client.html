@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>apstrataDojoSDK core client test suite</title>
+		
+		<style>
+			h3 {color: green;}
+			h4 {color: red;}
+
+			.label {color: black;}
+			.success {color: green;}
+			.fail {color: red;}
+			
+			.operation {
+				width: 100%;
+				margin-bottom: 2px;
+				padding: 1px;
+				background-color: #dedede
+			}
+	
+			.cell {
+				display: inline-block;
+				width: 150px;
+			}
+
+		</style>
+		
+		<script type="text/javascript" src="../../../../lib/dojo/1.2.3-src/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+
+		<!--
+			/************************************************************************
+			* Set up the test by providing the proper values into 'apConfig' for:
+			* - key/secret
+			* - serviceURL
+			* - timeout
+			*************************************************************************/
+		-->
+		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'7744293024', secret:'3B45DE19C689EDAFCA47', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest'"></script>
+	
+	    <script type="text/javascript">
+			
+			
+			function print(msg) {
+				dojo.byId("results").innerHTML = dojo.byId("results").innerHTML + "<div class='operation'>" + msg + "</div>" 				
+			}
+			
+	    	function printOperationDecorated(operation, result) {
+				var status = result?"success":"fail"
+				
+				var msg = "<span class='cell label'>" + operation.apsdbOperation + " </span>"
+					msg += "<span class='cell " + status + "'>" + status + "</span><span>" + operation.responseTime + " ms</span>"
+				
+				print(msg)
+			}
+			
+			function success(operation) {
+				printOperationDecorated(operation, true)
+			}
+			
+			function fail(operation) {
+				printOperationDecorated(operation, false)
+
+				print("<h3 class='fail'>Fail</h3>")
+			}
+			
+	    	function createStore() {
+				var operation = client.createStore(function() {
+					success(operation)
+					listStores()
+				}, function() {
+					fail(operation)
+				}, {store: storeName})
+			}
+			
+			function listStores() {
+				var operation = client.listStores(function() {
+					success(operation)
+					saveDocument()
+				}, function() {
+					fail(operation)
+				})				
+			}
+			
+			function saveDocument() {
+				var operation = client.saveDocument(
+					function() {
+						success(operation)
+						docKey = operation.result.document["@key"]
+						query()
+					}, function() {
+						fail(operation)
+					},
+					{
+						store: storeName,
+						fields: {
+							test: "true",
+							field1: "some value",
+							field2: "some other value"
+						}
+					}
+				)
+			}
+			
+			function query() {
+				var operation = client.query(
+					function() {
+						if ((operation.result.documents[0].fields[0]["@name"] == "field1")
+							&& (operation.result.documents[0].fields[0].values[0] == "some value")) success(operation);
+							else fail(operation)
+						deleteDocument()
+					}, function() {
+						fail(operation)
+					},
+					{
+						store: storeName,
+						query: "test=\"true\"",
+						queryFields: "field1, field2"
+					}
+				)
+			}
+
+			function deleteDocument() {
+				var operation = client.deleteDocument(
+					function() {
+						success(operation)
+						deleteStore()
+					}, function() {
+						fail(operation)
+					},
+					{
+						store: storeName,
+						documentKey: docKey
+					}
+				)
+			}
+			
+			function deleteStore() {
+				var operation = client.deleteStore(function() {
+					success(operation)
+					
+					print("<h3 class='success'>Success</h3>")
+				}, function() {
+					fail(operation)
+				}, {store: storeName})
+			}
+			
+			dojo.addOnLoad(function() {
+				dojo.require("apstrata.apsdb.client.Connection")
+				dojo.require("apstrata.apsdb.client.Client")
+
+				var success = function (operation) {
+					console.dir(operation)
+				}
+				
+				var failure = function(operation) {
+					console.dir(operation)
+				}
+				
+				client = new apstrata.apsdb.client.Client()
+				
+				storeName = "testStore" + Math.floor(Math.random()*10000)
+				
+				createStore()
+			})
+			
+		</script>
+	</head>
+	<body>
+		<h2>apstrataDojoSDK core client test suite</h2>
+		<div id="results"></div>
+	</body>
+</html>
