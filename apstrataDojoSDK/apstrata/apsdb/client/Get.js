@@ -25,9 +25,9 @@ dojo.require ("apstrata.apsdb.client.Operation");
 		//
 		_TYPE_STRING: "string",
                 
-                constructor: function() {
-                        this._LOGGER.setClassLabel("apstrata.apsdb.client.Get")      
-                },
+        constructor: function() {
+                this._LOGGER.setClassLabel("apstrata.apsdb.client.Get")      
+        },
 		
 		execute: function () {
 			var self = this;
@@ -53,8 +53,8 @@ dojo.require ("apstrata.apsdb.client.Operation");
 			dojo.io.script.get({ 
 				url: self.url,
 				callbackParamName : "apsws.jc",
-				load: function(jsonTxt) {
-					self.log("response text", jsonTxt);
+				load: function(json) {
+					self.log("response object", json);
 
 					self.responseTime = (new Date().getTime()) - timestamp;
 					self.connection.registerConnectionTime(self.responseTime)
@@ -69,21 +69,26 @@ dojo.require ("apstrata.apsdb.client.Operation");
 					self.log(self._LOGGER.DEBUG, "Timed out", self.operationTimeout);
 					if (self.operationAborted || self.operationTimeout) return jsonTxt;
                     var json
-					json = dojo.fromJson(jsonTxt);
 
                     if (self.response != undefined) {
-                        self.response = json.response;
-                        self.status = json.response.status;
-                        self.message = (json.response.message == undefined)?self.status:json.response.message
+						// Copy metadata fields to the Operation object
+						for (prop in json.response.metadata) {
+							self[prop] = json.response.metadata[prop]
+						}
+						
+						// Copy the result to the Operation object result field
+						self.result = json.response.result
+
+						self.log("requestId", self.requestId)
                         self.log("status", self.status);
-                        self.log("message", self.message);
 
                         if (self.status==self._SUCCESS) {
                             self.handleResult();
                         } else {
-							self.error = json.response.errorCode
-                        	self.log("error", self.error);
                             self.handleError();
+							if ((self.error == "INVALID_AUTHENTICATION_KEY") || (self.error == "INVALID_SIGNATURE")) {
+								self.connection._credentialsError()
+							}
                         }
                     } else {
                         self.status = "bad response";

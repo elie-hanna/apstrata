@@ -93,11 +93,14 @@ dojo.require ("apstrata.util.logger.Logger")
 			
 			this.operationTimeout = true;
 
-			this.errorcode = "timeout_communication_error";
-			this.message = "Timeout or communication error";
+			this.errorCode = "timeout_communication_error";
+			this.errorMessage = "Timeout or communication error";
 			this.response = null;
+			// responseTime = timeout 
+			this.responseTime = this.connection.getTimeout()
 	
 			this.connection.activity.timeout(this);
+
 			this.handleError();
 		},
 		
@@ -117,8 +120,15 @@ dojo.require ("apstrata.util.logger.Logger")
 
 		requestSent: function() {this.connection.activity.start(this)},
 
-		handleResult: function() {this.connection.activity.stop(this);},
-		handleError: function() {this.connection.activity.stop(this);}
+		handleResult: function() {
+			this.connection.activity.stop(this);
+		},
+		
+		handleError: function() {
+			this.connection.activity.stop(this);
+        	this.log("errorCode", this.errorCode);
+        	this.log("errorMessage", this.errorMessage);
+		}
 	});
 
 

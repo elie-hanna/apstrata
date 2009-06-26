@@ -19,13 +19,6 @@ dojo.declare("apstrata.apsdb.client.ListStores",
 {
     constructor: function() {
         this.apsdbOperation = "ListStores"
-		
-		dojo.connect(this, "handleResult", function() {
-			this.stores = new Array()
-			for (var i=0; i<this.response.result.stores.store.length; i++) {
-				this.stores.push(this.response.result.stores.store[i]["@name"])
-			}
-		})
     },
     
 });

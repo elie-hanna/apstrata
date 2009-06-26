@@ -36,14 +36,16 @@ dojo.declare("apstrata.apsdb.client.Query",
 	        if (attrs.pageNumber != undefined) this.request.apsdb.pageNumber = attrs.pageNumber;
 				else this.request.apsdb.pageNumber = this._DEFAULT_PAGE_NUMBER
 
-			if (attrs.ftsString != undefined) this.request.apsdb.ftsString = attrs.ftsString;
-	        	else this.request.apsdb.ftsString = ""
 
 	        if (attrs.count != undefined) this.request.apsdb.count = attrs.count;
 				else this.request.apsdb.count = "false"
+/*
+			if (attrs.ftsString != undefined) this.request.apsdb.ftsString = attrs.ftsString;
+	        	else this.request.apsdb.ftsString = ""
 
 	        if (attrs.forceCurrentSnapshot != undefined) this.request.apsdb.forceCurrentSnapshot = attrs.forceCurrentSnapshot
 				else this.request.apsdb.forceCurrentSnapshot = "false"
+*/
 		} else {
 			throw "Query attributes store, query and queryFields are mandatory"
 		}

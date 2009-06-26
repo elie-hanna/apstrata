@@ -26,7 +26,7 @@ dojo.declare("apstrata.apsdb.client.CreateStore",
             (attrs.store != undefined)) {   
             this.request.apsdb.store = attrs.store;
             this.inherited(arguments);
-        } else console.debug("apstrata.apsdb.client.CreateStore: missing store name.");
+        } else throw new Error("apstrata.apsdb.client.CreateStore: missing store name.")
     }
 });
 

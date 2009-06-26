@@ -71,18 +71,20 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			this.serviceUrl= this._DEFAULT_SERVICE_URL;
 			this.credentials= {key: "", secret: "", un: "", pw: ""}
 			this.defaultStore = ''
+			this._ongoingLogin = false
 
-			if (typeof apstrata.apConfig != undefined) {
+			if (apstrata.apConfig) {
 				if (apstrata.apConfig.key != undefined) this.credentials.key = apstrata.apConfig.key
 				if (apstrata.apConfig.secret != undefined) this.credentials.secret = apstrata.apConfig.secret
 				if (apstrata.apConfig.defaultStore != undefined) this.defaultStore = apstrata.apConfig.defaultStore
 				if (apstrata.apConfig.timeout != undefined) this.timeout =  apstrata.apConfig.timeout
+				if (apstrata.apConfig.serviceURL != undefined) this.serviceUrl = apstrata.apConfig.serviceURL
 			}
 			this._newKeySeed= Math.floor(Math.random()*99999999)
 
 			this.activity= new apstrata.apsdb.client.Activity()
 
-			this.loadFromCookie()
+			//this.loadFromCookie()
 
 			// TODO: Investigate why this is not working: dojo.parser.instantiate
 			/*
@@ -101,7 +103,6 @@ dojo.declare("apstrata.apsdb.client.Connection",
 					var sw = new apstrata.apsdb.client.widgets.ConnectionStatus(this)
 				}
 			}
-
 		},
 
 		registerConnectionTime: function(t) {
@@ -140,45 +141,6 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		// a value of 0 disables timeout
 		getTimeout: function() {
 			return this.timeout
-		},
-
-		execute: function(operation, params) {
-			function instantiateDynamic(className, attributes) {
-			    var tmp = "dojo.declare('wrapper', [], {\n"
-				tmp+= "     constructor: function(obj){"
-				tmp+= "         var o = new " + className + "(obj);"
-				tmp+= "         o._dynamicInstantiation = true;"
-				tmp+= "         this.wrapped = o;"
-				tmp+= "     }"
-				tmp+= "})"            
-		
-			    eval(tmp)
-		
-			    var o = new wrapper(attributes)
-			    return o.wrapped
-			};
-			
-			var operationClass = "apstrata.apsdb.client." + operation
-			var operation = instantiateDynamic(operationClass, this);
-			
-			var executionObject = {
-				execute: function() {
-					// substitute the operation timeout handler
-					//  install our own, so we can retry operations
-					//  without the application getting a signal
-					this.operation.execute(params)
-				}
-			}
-/*
-			executionObject.operation = operation;
-			executionObject.timeoutHandler = this.operation.timeout;
-			operation.timeout = function() {console.dir("trapped timeout")};
-
-			this.registerRetryOperation(executionObject);
-*/			
-			executionObject.execute();
-
-			return operation
 		},
 		
 		saveToCookie: function(saveObject) {
@@ -223,24 +185,84 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				if (o.saveObject != undefined) return o.saveObject
 			}
 		},
-		
-		registerRetryOperation: function(executionObject) {},	// Trapped by ConnectionError to allow for retrying latest operation
-		
+
 		login: function(handlers) {
 			var self = this
-		
-			var listStores = new apstrata.apsdb.client.ListStores(dojo.clone(self))
+			
+			self._ongoingLogin = true
+			this.log("logging in: attemting an operation to apstrata to validate credentials")
+			
+			var listStores = new apstrata.apsdb.client.ListStores(self)
 			dojo.connect(listStores, "handleResult", function() {
-//					if (listStores.status == listStores._SUCCESS) {
-//					}
+					self._ongoingLogin = false
+					this.log("logging in: saving credentials from cookie")
 					self.saveToCookie()
 					handlers.success()
 			})
 			dojo.connect(listStores, "handleError", function() {
-				
-					handlers.failure()
+					handlers.failure(listStores.error, listStores.message)
 			})
 			
 			listStores.execute();
-		}		
+		},
+		
+		logout: function() {
+			this.log("logging out: erasing credentials from cookie")
+			this.credentials.secret = ""
+			this.credentials.pw = ""
+			this.saveToCookie()
+		},
+
+		_credentialsError: function() {
+			if (!this._ongoingLogin) this.credentialsError()
+		},
+
+		credentialsError: function() {}
 	});
+	
+/*
+
+
+		execute: function(operation, params) {
+			function instantiateDynamic(className, attributes) {
+			    var tmp = "dojo.declare('wrapper', [], {\n"
+				tmp+= "     constructor: function(obj){"
+				tmp+= "         var o = new " + className + "(obj);"
+				tmp+= "         o._dynamicInstantiation = true;"
+				tmp+= "         this.wrapped = o;"
+				tmp+= "     }"
+				tmp+= "})"            
+		
+			    eval(tmp)
+		
+			    var o = new wrapper(attributes)
+			    return o.wrapped
+			};
+			
+			var operationClass = "apstrata.apsdb.client." + operation
+			var operation = instantiateDynamic(operationClass, this);
+			
+			var executionObject = {
+				execute: function() {
+					// substitute the operation timeout handler
+					//  install our own, so we can retry operations
+					//  without the application getting a signal
+					this.operation.execute(params)
+				}
+			}
+
+//			executionObject.operation = operation;
+//			executionObject.timeoutHandler = this.operation.timeout;
+//			operation.timeout = function() {console.dir("trapped timeout")};
+
+//			this.registerRetryOperation(executionObject);
+			
+			executionObject.execute();
+
+			return operation
+		},
+
+		registerRetryOperation: function(executionObject) {},	// Trapped by ConnectionError to allow for retrying latest operation
+		
+
+ */
