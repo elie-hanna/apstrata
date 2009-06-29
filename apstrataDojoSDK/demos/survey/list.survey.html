@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+        <title>List Survey Results</title>
+   	
+    </head> 
+    <body>
+   	
+		<!-- You can move the script tag to the head of your html page -->
+		<script type="text/javascript" src="../../lib/dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:'7744293024', secret:'3B45DE19C689EDAFCA47', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest'"></script>
+		<script type="text/javascript" src="widgets/SurveyListingLoader.js" ></script>
+		<script>var schema = '{"title":"First Survey","fields":["firstName","lastName","title","maritalStatus","lookingFor","hobbies"],"titleFields":["First Name","Last Name","Title","Single","Looking for","Hobbies"]}';</script>
+		<!-- Place this DIV where you want the widget to appear in your page -->
+		<div dojoType="surveyWidget.widgets.SurveyListing" /></div>
+
+    </body> 
+</html> 
