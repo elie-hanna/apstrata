@@ -91,9 +91,11 @@ dojo.require ("apstrata.apsdb.client.Operation");
 							}
                         }
                     } else {
-                        self.status = "bad response";
-                        self.message = "apsdb client: bad response from apsdb"
-                        self.log("message", self.message);
+						// TODO: test case for bad response
+                        self.status = "failure";
+                        self.errorCode = "CLIENT_BAD_RESPONSE"
+                        self.errorMessage = "apsdb client: bad response from apsdb or communication error"
+                        self.log(this._LOGGER.ERROR ,"errorMessage", self.errorMessage);
                         self.handleError();                                        
                     }
 
