@@ -21,37 +21,63 @@ dojo.require("apstrata.apsdb.client.Query");
 dojo.require("apstrata.util.logger.Logger");
 
 dojo.declare("apstrata.apsdb.client.Client", 
-	[apstrata.util.Logger], 
+	[apstrata.util.logger.Logger], 
 	{
-		constructor: function(attrs, success, failure) {
-			if (attrs != undefined) {
-				this.connection = new apstrata.apsdb.client.Connection(attrs)
-			} else {
-				this.connection = new apstrata.apsdb.client.Connection()
-			}
+		_q: [],
 
-			if (success != undefined) {
-				this.success = success
-				if (failure != undefined) this.failure = failure
+		constructor: function(connection) {
+			if (connection == undefined) {
+				this.connection = new apstrata.apsdb.client.Connection()
+			} else {
+				this.connection = connection
 			}
 		},
 
-		hookHandlers: function(operation, success, failure) {
+
+		//
+		// The queue/execute methods allow operations to be executed in synchronously and sequentially
+		//		
+		queue: function(operation, attrs) {
+			this._q.push({
+				operation: operation,
+				attrs: attrs
+			})
+		},
+		
+		execute: function(continueOnError) {
+			var self = this
+			if (continueOnError == undefined) continueOnError = false
+			
+			var o = this._q.shift()			
+
+			// make first character lower case to correspond to the proper method of this class			
+			var opName = o.operation.substring(0,1).toLowerCase() 
+					+ o.operation.substring(1, o.operation.length)
+
+			var op = this[opName](
+				function() {
+					self.execute()
+				},
+				function() {
+					self.log("failed executing queued operation", o)
+					if (continueOnError) self.execute(continueOnError)
+				},
+				o.attrs)
+		},
+
+		_operation: function(success, failure, operation, attrs) {
 			var self = this
 			if (success != undefined) {
-				dojo.connect(operation, "handleResult", function(){
+				dojo.connect(operation, "handleResult", function() {
 					success(operation)
 				})
 				if (failure != undefined) {
-					dojo.connect(operation, "handleError", function(){
+					dojo.connect(operation, "handleError", function() {
 						failure(operation)
 					})
 				}
 			}
-		},
-		
-		operation: function(success, failure, operation, attrs) {
-			this.hookHandlers(operation, success, failure)
+
 			operation.execute(attrs)
 
 			return operation
@@ -59,32 +85,32 @@ dojo.declare("apstrata.apsdb.client.Client",
 
 		createStore: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.CreateStore(this.connection)
-			return this.operation(success, failure, op, attrs)
+			return this._operation(success, failure, op, attrs)
 		},
 
 		listStores: function(success, failure) {
 			var op = new apstrata.apsdb.client.ListStores(this.connection)
-			return this.operation(success, failure, op)
+			return this._operation(success, failure, op)
 		},
 		
 		deleteStore: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.DeleteStore(this.connection)
-			return this.operation(success, failure, op, attrs)
+			return this._operation(success, failure, op, attrs)
 		},
 		
 		saveDocument: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.SaveDocument(this.connection)
-			return this.operation(success, failure, op, attrs)
+			return this._operation(success, failure, op, attrs)
 		},
 		
 		deleteDocument: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.DeleteDocument(this.connection)
-			return this.operation(success, failure, op, attrs)
+			return this._operation(success, failure, op, attrs)
 		},
 
 		query: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.Query(this.connection)
-			return this.operation(success, failure, op, attrs)
+			return this._operation(success, failure, op, attrs)
 		}
 		
 	})
