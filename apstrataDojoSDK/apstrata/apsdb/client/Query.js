@@ -30,15 +30,14 @@ dojo.declare("apstrata.apsdb.client.Query",
 			this.request.apsdb.query = attrs.query
 			this.request.apsdb.queryFields = attrs.queryFields
 
-	        if (attrs.resultsPerPage != undefined) this.request.apsdb.resultsPerPage = attrs.resultsPerPage;
-				else this.request.apsdb.resultsPerPage = this._DEFAULT_RESULTS_PER_PAGE
+	        if (attrs.resultsPerPage != undefined) this.request.apsdb.resultsPerPage = attrs.resultsPerPage
+//				else this.request.apsdb.resultsPerPage = this._DEFAULT_RESULTS_PER_PAGE
 
-	        if (attrs.pageNumber != undefined) this.request.apsdb.pageNumber = attrs.pageNumber;
-				else this.request.apsdb.pageNumber = this._DEFAULT_PAGE_NUMBER
+	        if (attrs.pageNumber != undefined) this.request.apsdb.pageNumber = attrs.pageNumber
+//				else this.request.apsdb.pageNumber = this._DEFAULT_PAGE_NUMBER
 
-
-	        if (attrs.count != undefined) this.request.apsdb.count = attrs.count;
-				else this.request.apsdb.count = "false"
+	        if (attrs.count != undefined) this.request.apsdb.count = attrs.count
+//				else this.request.apsdb.count = "false"
 /*
 			if (attrs.ftsString != undefined) this.request.apsdb.ftsString = attrs.ftsString;
 	        	else this.request.apsdb.ftsString = ""

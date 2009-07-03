@@ -62,7 +62,17 @@ dojo.require ("apstrata.util.logger.Logger")
 		    for (prop in this.request) {
 				if (i>0) params += "&";
 				i++;
-				if (prop != "apsdb") params +=  prop + "=" + encodeURIComponent(this.request[prop]) + "&"; 
+				
+				if (prop != "apsdb") {
+					var value = this.request[prop]
+					if (dojo.isArray(value)) {
+						dojo.forEach(value, function(v) {
+							params +=  prop + "=" + encodeURIComponent(v) + "&"
+						})
+					} else {
+						params +=  prop + "=" + encodeURIComponent(value) + "&"
+					}
+				}				
 		    }
 
 		    var urlValue = this.connection.signUrl(this.apsdbOperation, params);

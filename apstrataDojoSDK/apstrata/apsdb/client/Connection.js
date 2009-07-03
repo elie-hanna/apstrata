@@ -10,7 +10,8 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.apsdb.client.Connection");
+dojo.provide("apstrata.apsdb.client.Connection")
+//dojo.provide("apstrata.apsdb.client.URLSignerMD5")
 
 dojo.require("dojox.encoding.digests.MD5");
 dojo.require("dojo.cookie");
@@ -56,6 +57,27 @@ dojo.declare("apstrata.apsdb.client.Activity",
 	})
 
 
+dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {	
+	sign: function (connection, operation, params) {
+					var timestamp = new Date().getTime() + '';
+					
+					var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
+					var signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+		
+					var apswsReqUrl = connection.serviceUrl
+							+ "?apsdb.action=" + operation
+							+ "&apsws.time=" + timestamp
+							+ "&apsws.authKey=" + connection.credentials.key
+							+ "&apsws.authSig=" + signature
+							+ "&apsws.responseType=json"
+							+ "&apsws.authMode=simple"
+							+ ((params!="")?"&":"") + params
+		
+					return {url: apswsReqUrl, signature: signature};
+			}
+})
+
+
 dojo.declare("apstrata.apsdb.client.Connection",
 	[apstrata.util.logger.Logger],
 	{
@@ -73,6 +95,18 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			this.defaultStore = ''
 			this._ongoingLogin = false
 
+			if (attr != undefined) {
+				if (attr.URLSigner == undefined) {
+					this._urlSigner = new apstrata.apsdb.client.URLSignerMD5()
+				} else {
+					this._urlSigner = attr.URLSigner
+				}
+			} else {
+				this._urlSigner = new apstrata.apsdb.client.URLSignerMD5()				
+			}
+			
+			this.loadFromCookie()
+
 			if (apstrata.apConfig) {
 				if (apstrata.apConfig.key != undefined) this.credentials.key = apstrata.apConfig.key
 				if (apstrata.apConfig.secret != undefined) this.credentials.secret = apstrata.apConfig.secret
@@ -80,11 +114,8 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				if (apstrata.apConfig.timeout != undefined) this.timeout =  apstrata.apConfig.timeout
 				if (apstrata.apConfig.serviceURL != undefined) this.serviceUrl = apstrata.apConfig.serviceURL
 			}
-			this._newKeySeed= Math.floor(Math.random()*99999999)
 
 			this.activity= new apstrata.apsdb.client.Activity()
-
-			//this.loadFromCookie()
 
 			// TODO: Investigate why this is not working: dojo.parser.instantiate
 			/*
@@ -104,6 +135,11 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				}
 			}
 		},
+		
+		hasCredentials: function() {
+			// Assume that we have a session if either the secret or password are present
+			return (this.credentials.secret != "") || (this.credentials.pw != "")
+		},
 
 		registerConnectionTime: function(t) {
 			this.numberOfConnections++
@@ -113,28 +149,8 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			this.log("average connection time", this.averageConnectionTime)
 		},
 
-		// Generates a new apstrata document uniqu @key for use when creating new items
-		getNewKey: function() {
-		    return dojox.encoding.digests.MD5('' + new Date().getTime() + (this._newKeySeed++), dojox.encoding.digests.outputTypes.Hex).toUpperCase();  
-		},
-		
-		// Sign URL based on apstrata authentication requirements
-		signUrl: function (operation, params) {
-			var timestamp = new Date().getTime() + '';
-			
-			var valueToHash = timestamp + this.credentials.key + operation + this.credentials.secret;
-			var signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex);
-
-			var apswsReqUrl = this.serviceUrl
-					+ "?apsdb.action=" + operation
-					+ "&apsws.time=" + timestamp
-					+ "&apsws.authKey=" + this.credentials.key
-					+ "&apsws.authSig=" + signature
-					+ "&apsws.responseType=json"
-					+ "&apsws.authMode=simple"
-					+ ((params!="")?"&":"") + params
-
-			return {url: apswsReqUrl, signature: signature};
+		signUrl: function(operation, params) {
+			return this._urlSigner.sign(this, operation, params)
 		},
 		
 		// Set here the default timeout value for all apstrata operations
@@ -169,9 +185,16 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			
 			if ((json == undefined) || (json == "")) {
 				this.serviceUrl = this._DEFAULT_SERVICE_URL
-				this.credentials = ""
-				this.defaultStore = ""
 				
+				var o = {
+					key: "",
+					secret: "",
+					un: "",
+					pw: ""
+				}
+				
+				this.credentials = o
+				this.defaultStore = ""
 				return {}
 			} else {
 				var o = dojo.fromJson(json)
@@ -186,6 +209,15 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			}
 		},
 
+		fakelogin: function(handlers) {
+			var self = this
+			
+					self._ongoingLogin = false
+					this.log("logging in: saving credentials to cookie")
+					self.saveToCookie()
+					handlers.success()
+		},
+		
 		login: function(handlers) {
 			var self = this
 			
@@ -195,17 +227,17 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			var listStores = new apstrata.apsdb.client.ListStores(self)
 			dojo.connect(listStores, "handleResult", function() {
 					self._ongoingLogin = false
-					this.log("logging in: saving credentials from cookie")
+					this.log("logging in: saving credentials to cookie")
 					self.saveToCookie()
 					handlers.success()
 			})
 			dojo.connect(listStores, "handleError", function() {
-					handlers.failure(listStores.error, listStores.message)
+					handlers.failure(listStores.errorCode, listStores.errorMessage)
 			})
 			
 			listStores.execute();
 		},
-		
+
 		logout: function() {
 			this.log("logging out: erasing credentials from cookie")
 			this.credentials.secret = ""
@@ -214,7 +246,8 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		},
 
 		_credentialsError: function() {
-			if (!this._ongoingLogin) this.credentialsError()
+//			if (!this._ongoingLogin) this.clearCookies()
+// clear credentials from cookies
 		},
 
 		credentialsError: function() {}
