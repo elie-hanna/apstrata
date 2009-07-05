@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ap((strata query</title>
+    <style type="text/css">
+	    @import "../../lib/dojo/1.3.0-src/dijit/themes/nihilo/nihilo.css";
+	    @import "../../lib/dojo/1.3.0-src/dojox/grid/resources/nihiloGrid.css";
+
+        @import "../../lib/dojo/1.3.0-src/dojo/resources/dojo.css";
+        @import "../../apstrata/resources/css/apstrata.css";
+		
+		body {font-family: sans-serif; font-size: 10pt;}
+		.label {font-size: 1em; color: #454545;}
+		.value {font-size: 1.5em; color: #1212AA;}
+		.delete {font-size: 1em; color: grey;}
+    </style>
+
+	    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    
+	<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+	<script type="text/javascript" src="../../apstrata/apstrata.js"></script>
+
+    <script type="text/javascript">
+        dojo.require("dojo.parser")
+        dojo.require("dijit.layout.ContentPane")
+		dojo.require("dijit.form.ComboBox")
+		dojo.require("dojo.data.ItemFileReadStore")
+		dojo.require("dojox.grid.DataGrid")
+		dojo.require("dijit.form.NumberSpinner")
+
+        var connection
+		var store
+		var storeNamesData
+        var storeNamesStore
+		
+        dojo.addOnLoad(function() {
+			dojo.require ("apstrata.apsdb.client.Connection")
+			dojo.require ("apstrata.apsdb.client.ListStores")
+			dojo.require ("apstrata.apsdb.client.ItemApsdbReadStore")
+			dojo.require ("apstrata.widgets.PageNumberSpinner")
+			
+			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})			
+			
+			init()
+		})
+				
+		function init() {
+			var storeNamesData;
+			
+			var storesCookie = dojo.cookie("apstrata.admin.stores")
+			if ((storesCookie != undefined) && (storesCookie != "")) {
+				storeNamesData = dojo.fromJson(storesCookie)
+
+				setComboBox(storeNamesData)
+			} else {
+				var operation = new apstrata.apsdb.client.ListStores(connection)
+				storeNamesData = {label: 'name', items: []}
+				
+				dojo.connect(operation, "handleResult", function() {
+					dojo.forEach(operation.result.stores, function(store) {
+						storeNamesData.items.push({name: store["@name"]})						
+					})
+					
+					dojo.cookie("apstrata.admin.stores", dojo.toJson(storeNamesData))
+					storeNamesStore = new dojo.data.ItemFileReadStore({data: storeNamesData})
+					setComboBox(storeNamesData)	
+				})
+				operation.execute()
+			}
+		}
+		
+		function refresh() {
+			dojo.cookie("apstrata.admin.stores", "")
+			init()
+		}
+		
+		var comboBox
+		
+		function setComboBox(storeNamesData) {
+			storeNamesStore = new dojo.data.ItemFileReadStore({data: storeNamesData})
+			comboBox = new dijit.form.ComboBox({store: storeNamesStore, searchAttr: 'name'})
+			dojo.place(comboBox.domNode, "storeName", "only")			
+		}
+		
+	    var layout = []
+		var queryString
+		var store
+		var grid
+		var spinner
+		
+		function displayPage(page) {
+			if (grid!= undefined) grid.destroy()
+			
+	        // create a new grid:
+	        grid = new dojox.grid.DataGrid({
+	            query: {
+					query: queryString,
+					count: (page == 1),
+					pageNumber: page
+				}, //"q!=\"xx\"",
+	            store: store,
+	            rowSelector: '20px',
+	            structure: layout
+	        }, document.createElement('div'));
+	
+	        // append the new grid to the div "gridContainer4":
+//			dojo.place(grid.domNode, "gridContainer", "replace")
+	        dojo.byId("dvGrid").appendChild(grid.domNode);
+	
+	        // Call startup, in order to render the grid:
+	        grid.startup();			
+		}
+		
+		function query() {
+			if (grid!=undefined) grid.destroy()
+			
+			queryString = dojo.byId("fldQueryString").value
+			var columnsString = dojo.byId("fldColumns").value
+			
+			queryString = (queryString=="")?"q!=\"xx\"":queryString
+			
+			store = new apstrata.apsdb.client.ItemApsdbReadStore({connection:connection, 
+											resultsPerPage: 8,
+											apsdbStoreName: comboBox.value, //"countries", 
+											fields: columnsString, // "name, type, population", 
+											label: "name"})
+
+			dojo.forEach(columnsString.split(","), function(field) {
+				field = dojo.string.trim(field)
+				layout.push({ field: field, name: field, width: '200px' })
+			})
+
+			displayPage(1)
+			
+			dojo.connect(store, "totalPagesCalculated", function(pages) {
+				if (spinner == undefined) {
+					spinner = new apstrata.widgets.PageNumberSpinner({min:1, max:pages, value:1})
+			        dojo.byId("dvSpinner").appendChild(spinner.domNode);
+					
+					dojo.connect(spinner, "onChange", function() {
+						displayPage(spinner.value)
+					})
+				}
+			})
+			
+		}
+
+	</script>
+</head>
+<body class="nihilo">
+	<table style="width: 700px;">
+		<tr>
+			<td style="width: 60px;"><span class="label">Store:</span></td>
+			<td><span id="storeName"></span>
+				&nbsp;&nbsp;<button id="refresh" onclick="refresh()">refresh</button></td>
+			<td align="right"><span class="label">Columns:</span></td>
+			<td align="right"><input type="text" id="fldColumns" value="name, type" size="30"></input></td>
+		</tr>
+	</table>
+	<table style="width: 700px;">
+		<tr>
+			<td width="60"><span class="label">Query:</span></td>
+			<td><input type="text" id="fldQueryString" size="80"></input></td>
+			<td align="right"><button id="query" onclick="query()">query</button></td>
+		</tr>
+	</table>
+		
+<br>
+
+<div id="dvSpinner"></div>
+<div id="dvGrid" style="width: 100%; height: 300px;"></div>
+
+
+
+		
+</body>
+</html>
