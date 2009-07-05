@@ -1,7 +1,7 @@
 dojo.provide("apstrata.apsdb.client.widgets.Login");
 
 dojo.require("dijit.form.TextBox")
-
+dojo.require("dijit.Dialog")
 
 dojo.declare("apstrata.apsdb.client.widgets.Login",
 	[dijit._Widget, dijit._Templated, apstrata.util.logger.Logger],
@@ -16,7 +16,7 @@ dojo.declare("apstrata.apsdb.client.widgets.Login",
 		constructor: function(/* apstrata.dojo.client.apsdb.Connection */ connection) {
 			this.connection = connection;
 
-			connection.loadFromCookie()
+//			connection.loadFromCookie()
 
 			this.serviceUrl = connection.serviceUrl
 			this.store = connection.defaultStore
@@ -46,12 +46,13 @@ dojo.declare("apstrata.apsdb.client.widgets.Login",
 				
 				self.connection.login({
 					success: function() {
-						//self.dlgLogin.hide();
 						self.loginSuccess()
 					},
 					
-					failure: function() {
+					failure: function(error, message) {
+						self.spnMessage.innerHTML = error + "<br>" + message + "<br>"
 						self.loginFailure()
+						self.dlgLogin.show();
 					}
 				})				
 			})
@@ -67,8 +68,6 @@ dojo.declare("apstrata.apsdb.client.widgets.Login",
 		},
 		
 		loginFailure: function() {
-			this.dlgLogin.show();
-			this.spnMessage.innerHTML = "Invalid credendtials, please retry."
 		},
 		
 		close: function() {}
