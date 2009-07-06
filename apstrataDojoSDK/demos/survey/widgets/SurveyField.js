@@ -42,19 +42,27 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 		parentSurvey: null,
 		fieldDataModel: null,
 		editMode:false,
+		dummyField:false,
 		
 		constructor: function(dataModel,editMode) {
 			this.fieldDataModel = dataModel;
 			this.editMode = editMode;
 			
-			if (dataModel!=null) {
-				if (dataModel.title != null) this.title = dataModel.title;
-				if (dataModel.type != null) this.fieldType = dataModel.type;
-				if (dataModel.mandatory != null) this.fieldMandatory = dataModel.mandatory;
-				if (dataModel.choices != null) this.fieldChoices = dataModel.choices;
-				if (dataModel.name != null) this.fieldName = dataModel.name;
-				if (dataModel.defaultValue != null) this.defaultFieldValue = dataModel.defaultValue;	
-			}
+			if (dataModel != null) {
+				if (dataModel.title != null) 
+					this.title = dataModel.title;
+				if (dataModel.type != null) 
+					this.fieldType = dataModel.type;
+				if (dataModel.mandatory != null) 
+					this.fieldMandatory = dataModel.mandatory;
+				if (dataModel.choices != null) 
+					this.fieldChoices = dataModel.choices;
+				if (dataModel.name != null) 
+					this.fieldName = dataModel.name;
+				if (dataModel.defaultValue != null) 
+					this.defaultFieldValue = dataModel.defaultValue;
+			} else
+				this.dummyField = true;
 
 			if(!this.editMode)
 				this.templatePath = dojo.moduleUrl("surveyWidget.widgets", "templates/SurveyFieldRun.html");
@@ -113,7 +121,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 				this.editor.style.display = "";
 				/** TODO:  rgba doesn't work in IE, we need to change this in here and in the css*/
 				this.surveyField.style.backgroundColor = "rgba(255, 255, 130, .9)";
-				
+				this.handle.style.display = "none";
 				this.selected = true;				
 			}
 		},
@@ -121,6 +129,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 		unselect: function() {
 			this.editor.style.display = "none";	
 			this.surveyField.style.backgroundColor = "";
+			this.handle.style.display = "";
 
 			this.selected = false;
 		},

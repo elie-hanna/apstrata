@@ -188,3 +188,12 @@ body
 {
 	background: #d0dafd;
 }
+.dojoDndHandle
+{
+	width: 5px;
+	background: url('../images/apstrata-brackets.gif') left -1px no-repeat;
+	cursor: move; 
+}
+.dojoDndAvatarHeader {
+        display: none;
+}
