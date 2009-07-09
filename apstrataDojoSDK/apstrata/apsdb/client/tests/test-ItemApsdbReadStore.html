@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>apstrataDojoSDK core client test suite</title>
+		
+		<style>
+	    	@import "../../../util/test/resources/test.css";
+		</style>
+		
+		<script type="text/javascript" src="../../../../lib/dojo/1.2.3-src/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+
+		<!--
+			/************************************************************************
+			* Set up the test by providing the proper values into 'apConfig' for:
+			* - key/secret
+			* - serviceURL
+			* - timeout
+			*************************************************************************/
+		-->
+		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'7744293024', secret:'3B45DE19C689EDAFCA47', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest', timeout: 10000"></script>
+	
+	    <script type="text/javascript">
+
+
+						
+			dojo.addOnLoad(function() {
+				dojo.require("apstrata.apsdb.client.Connection")
+				dojo.require("apstrata.apsdb.client.Client")
+				dojo.require("apstrata.apsdb.client.ItemApsdbReadStore")
+				dojo.require("apstrata.util.test.TestRunner")
+				dojo.require("apstrata.util.test.Test")
+
+				dojo.declare("ApsdbReadStoreTest", 
+								[apstrata.util.test.Test], 
+								{
+									constructor: function() {
+										var self = this
+										
+										this.testSequence = [
+																	"createStore",
+																	"saveDocument1",
+																	"saveDocument2",
+																	"fetch",
+																	"getValue",
+																	"getAttributes",
+																	"hasAttribute",
+																	"containsValue",
+																	"deleteStore"
+																]
+										this.storeName = "testStore" + Math.floor(Math.random()*10000)
+										this.client = new apstrata.apsdb.client.Client()
+										this.store = new apstrata.apsdb.client.ItemApsdbReadStore({connection: self.client.connection, 
+																									apsdbStoreName: self.storeName, 
+																									fields:"name, label, abbreviation", 
+																									label: "label"})
+									},
+	
+							    	createStore: function() {
+										var self = this
+	
+										var operation = this.client.createStore(function() {
+											self.runner.success(operation)
+											self.executeNext()
+										}, function() {
+											self.runner.fail(operation)
+										}, {store: self.storeName})
+									},
+	
+									saveDocument: function(doc) {
+										var self = this
+	
+										var operation = this.client.saveDocument(
+											function() {
+												self.runner.success(operation)
+												self.executeNext()
+											}, function() {
+												self.runner.fail(operation)
+											},
+											{
+												store: self.storeName,
+												fields: doc
+											}
+										)
+									},
+										
+									saveDocument1: function() {
+										var doc = {name:"Alabama", label:"Alabama",abbreviation:"AL"}
+										this.saveDocument(doc)
+									},
+														
+									saveDocument2: function() {
+										var doc = {name:"Alaska", label:"Alaska",abbreviation:"AK"}
+										this.saveDocument(doc)
+									},
+	
+									fetch: function () {
+										var self = this
+	
+										self.runner.resetTime()
+										self.store.fetch ({
+														onComplete: function(items, request) {
+															self.allItems = items
+															self.runner.assert("fetch", items.length == 2)
+															self.executeNext()
+														},
+														
+														onError: function(errorData, request) {
+															self.runner.assert("fetch", false)
+														},
+														
+											            query: {
+															query: "x!=\"y\"",
+															count: true,
+															pageNumber: 1
+														}
+													})
+									},
+							
+									getValue: function () {
+										var self = this
+	
+										self.runner.resetTime()
+										var v = self.store.getValue(self.allItems[0], "abbreviation", "XXX")
+										if (self.runner.assert("getValue", (v == "AL"))) self.executeNext()
+									},
+	
+									getAttributes: function() {
+										var self = this
+	
+										self.runner.resetTime()
+										var a = self.store.getAttributes(self.allItems[0])
+										if (self.runner.assert("getAttributes", (a.length == 3))) self.executeNext()
+									},
+				
+									hasAttribute: function() {
+										var self = this
+	
+										self.runner.resetTime()
+										var t = self.store.hasAttribute(self.allItems[0], "name")
+										
+										if (self.runner.assert("hasAttribute", t)) self.executeNext()
+									},
+				
+									containsValue: function() {
+										var self = this
+	
+										self.runner.resetTime()
+										var t = self.store.containsValue(self.allItems[0], "abbreviation", "AL")
+										if (self.runner.assert("containsValue", t)) self.executeNext()
+									},
+	
+									deleteStore: function() {
+										var self = this
+										var operation = self.client.deleteStore(function() {
+											self.runner.success(operation)
+											self.executeNext()
+										}, function() {
+											self.runner.fail(operation)
+										}, {store: self.storeName})
+									}
+								})	
+				
+				testRunner = new apstrata.util.test.TestRunner({id:"results"})
+				
+				test = new ApsdbReadStoreTest()
+				testRunner.run(test)
+			})
+			
+		</script>
+	</head>
+	<body>
+		<h2>apstrataDojoSDK core client test suite</h2>
+		<div id="results"></div>
+	</body>
+</html>
