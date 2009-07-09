@@ -1,14 +1,23 @@
 /*******************************************************************************
- *  Copyright 2009 apstrata
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *
- *  You may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at: http://www.apache.org/licenses/LICENSE-2.0.html
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the
- *  specific language governing permissions and limitations under the License.
+ *  Copyright 2009 Apstrata
+ *  
+ *  This file is part of Apstrata Database Javascript Client.
+ *  
+ *  Apstrata Database Javascript Client is free software: you can redistribute it
+ *  and/or modify it under the terms of the GNU Lesser General Public License as
+ *  published by the Free Software Foundation, either version 3 of the License,
+ *  or (at your option) any later version.
+ *  
+ *  Apstrata Database Javascript Client is distributed in the hope that it will be
+ *  useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
+
 dojo.provide("apstrata.apsdb.client.ItemApsdbReadStore");
 
 dojo.require("dojo.data.api.Request")
@@ -16,6 +25,7 @@ dojo.require("dojo.data.api.Request")
 dojo.require("apstrata.apsdb.client.Connection")
 dojo.require("apstrata.util.logger.Logger")
 dojo.require("apstrata.apsdb.client.Client")
+dojo.require("apstrata.apsdb.client._Item")
 
 dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore", 
 	[],
@@ -27,6 +37,10 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 			_l = new apstrata.util.logger.Logger()
 			dojo.mixin(this, _l)
 			this._features = {'dojo.data.api.Read':true, 'dojo.data.api.Identity':true};
+
+			// Arrays that hold fetched items
+			this._items = []
+			this._itemsMap = []
 
 			// Instantiate apsdb client
 			this._client = new apstrata.apsdb.client.Client(attrs.connection)
@@ -62,6 +76,7 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 				// onItem is present, call onComplete with null
 				if (request.onComplete) request.onComplete(null, request)
 			} else {
+
 				// onItem is present, call onComplete with _items
 				if (request.onComplete) {
 					request.onComplete(self._items, request)
@@ -71,23 +86,20 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 			self.fetchSuccess() // Raise success event
 		},
 		
-		_normalizeItem: function(item) {
-			item.fieldsMap = {}
+		_addItem: function(item) {
+			this._itemsMap[item.getIdentity()] = item
+			this._items.push(item)
+		},
+		
+		_removeItem: function(item) {
+			delete this._itemsMap[item.getIdentity()]
 			
-			dojo.forEach(item.fields, function(field) {
-				item.fieldsMap[field["@name"]] = field
-			})
-			
-			// Hack needed for dojo grid (and maybe other widgets), if a column is expected and it's not found in the item
-			//  the widget breaks
-			dojo.forEach(this._fieldsArray, function(fieldName) {
-				if (item.fieldsMap[fieldName] == undefined) {
-					var value = {"@name": fieldName, "@type": "string", values: [null]}
-					
-					item.fieldsMap[fieldName] = value
-					item.fields.push(value)
+			for (var i=0; i<this._items.length; i++) {
+				if (this._items[i] === item) {
+					this._items.splice(i,1)
+					break
 				}
-			})
+			}
 		},
 		
 		fetch: function(/* Object */ keywordArgs) {
@@ -116,23 +128,17 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 			
 			var q = this._client.query(
 				function() {
-					self._items = q.result.documents
-					
+					self._items = []
 					if (q.result.count) {
 						self._pages = Math.ceil(q.result.count/self._resultsPerPage)
 						self.totalPagesCalculated(self._pages)
 					}
 
 					self._itemsMap = []
-					dojo.forEach(self._items, function(item) {
-						// create hashtable _itemsMap for fetching items by identity
-						self._itemsMap[item[self._KEY_LABEL]] = item
-						
-						// Create hashtable for accessig fields by name
-						//  add missing fields
-						self._normalizeItem(item) 
+					dojo.forEach(q.result.documents, function(item) {
+						var item = new apstrata.apsdb.client._Item({item: item, fieldNames: this._fieldsArray})
+						self._addItem(item)
 					})
-
 					self._fetchSuccess(request)
 				},
 				function() {
@@ -151,48 +157,27 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		},
 		
 		isItem: function(something) {
-			return true
+			return (something.declaredClass == "apstrata.apsdb.client._Item")
 		},
 		
-		getValues: function(/* item */ item, /* attribute-name-string */ attribute) {
-			if (!this.isItem(item)) throw new Error("getValue: this is not an item", item)
-			if (attribute == this._KEY_LABEL) {
-				return [item[attribute]]
-			} else {
-				return item.fieldsMap[attribute].values
-			}
+		getValues: function(/* item */ item, /* attribute-name-string */ attribute) {			
+			return item.getValues(attribute)
 		},
 		
 		getValue: function(/* item */ item, /* attribute-name-string */ attribute,  /* value? */ defaultValue) {
-			var v = this.getValues(item, attribute)[0]
-			if (v == undefined) {
-				if (defaultValue != undefined) return defaultValue; else return undefined;
-			} else return v
+			return item.getValue(attribute, defaultValue)
 		},
 
 		getAttributes: function(item) {
-			var attributeNames = []
-			for (var a in item.fieldsMap) {
-				attributeNames.push(a)
-			}
-			
-			return attributeNames
+			return item.getAttributes()
 		},
 		
 		hasAttribute: function(item, attribute) {
-			return (item.fieldsMap[attribute] != undefined)
+			return item.hasAttribute(attribute)
 		},
 		
 		containsValue: function(/* item */ item, /* attribute-name-string */ attribute, /* anything */ value) {
-			var values = this.getValues(item, attribute)
-			var found = false
-			dojo.forEach(values, function(v) {
-				if (v == value) {
-					found = true || found
-				}
-			})
-			
-			return found
+			return item.containsValue(attribute, value)
 		},
 		
 		isItemLoaded: function(/* anything */ something) {
@@ -201,12 +186,10 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		
 		loadItem: function(/* object */ keywordArgs) {
 			if (this.isItemLoaded(keywordArgs.item)) return 
-			//TODO: needs implemenation 	
-			
+			//TODO: needs implemenation 				
 		},
 		
 		close: function(request) {
-			
 		},
 		
 		getLabel: function(/* item */ item) {
@@ -223,7 +206,7 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		
 		getIdentity: function(/* item */ item) {
 			if (!this.isItem(item)) throw new Error("not item")
-			return this.getValue(item, this._KEY_LABEL) 
+			return item.getIdentity() 
 		},
 		
 		getIdentityAttributes: function(/* item */ item) {
