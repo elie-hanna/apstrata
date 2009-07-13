@@ -46,9 +46,12 @@
 																	"getAttributes",
 																	"hasAttribute",
 																	"containsValue",
+																	"isItemLoaded",
+																	"loadItem",
 																	"deleteStore"
 																]
 										this.storeName = "testStore" + Math.floor(Math.random()*10000)
+										
 										this.client = new apstrata.apsdb.client.Client()
 										this.store = new apstrata.apsdb.client.ItemApsdbReadStore({connection: self.client.connection, 
 																									apsdbStoreName: self.storeName, 
@@ -148,6 +151,36 @@
 										self.runner.resetTime()
 										var t = self.store.containsValue(self.allItems[0], "abbreviation", "AL")
 										if (self.runner.assert("containsValue", t)) self.executeNext()
+									},
+									
+									isItemLoaded: function() {
+										var self = this										
+										
+										self.runner.assert("isLoaded", self.store.isItemLoaded(self.allItems[0]))
+										self.executeNext()
+									},
+									
+									loadItem: function() {
+
+										var self = this
+										var store = new apstrata.apsdb.client.ItemApsdbReadStore({connection: self.client.connection, 
+																									apsdbStoreName: self.storeName, 
+																									fields:"name, label, abbreviation", 
+																									label: "label"})
+
+										var item = new apstrata.apsdb.client._Item({documentKey: self.store.getIdentity(self.allItems[0])})
+										
+										store.loadItem({
+															item: item,
+															onItem: function(parent) {
+																self.runner.assert("loadItem", true)
+																self.executeNext()
+															},
+															onError: function(error) {
+																self.runner.assert("loadItem", false)
+																self.executeNext()
+															}
+														})
 									},
 	
 									deleteStore: function() {

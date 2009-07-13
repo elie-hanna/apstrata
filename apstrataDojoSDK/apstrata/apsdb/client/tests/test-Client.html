@@ -36,64 +36,44 @@
 		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'7744293024', secret:'3B45DE19C689EDAFCA47', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest', timeout: 10000"></script>
 	
 	    <script type="text/javascript">
-			
-			
-			function print(msg) {
-				dojo.byId("results").innerHTML = dojo.byId("results").innerHTML + "<div class='operation'>" + msg + "</div>" 				
-			}
-			
-	    	function printOperationDecorated(operation, result) {
-				var status = result?"success":"fail"
-				
-				var msg = "<span class='cell label'>" + operation.apsdbOperation + " </span>"
-					msg += "<span class='cell " + status + "' id='"+operation.apsdbOperation+"'>" + status + "</span><span>" + operation.responseTime + " ms</span>"
-				
-				print(msg)
-			}
-			
-			function success(operation) {
-				printOperationDecorated(operation, true)
-			}
-			
-			function fail(operation) {
-				printOperationDecorated(operation, false)
 
-				print("<h3 class='fail' id='all'>Fail</h3>")
-			}
+			var test
 			
 	    	function createStore() {
 				var operation = client.createStore(function() {
-					success(operation)
+					test.success(operation)
 					listStores()
 				}, function() {
-					fail(operation)
+					test.fail(operation)
 				}, {store: storeName})
 			}
 			
 			function listStores() {
 				var operation = client.listStores(function() {
-					success(operation)
+					test.success(operation)
 					saveDocument()
 				}, function() {
-					fail(operation)
+					test.fail(operation)
 				})				
 			}
 			
 			function saveDocument() {
 				var operation = client.saveDocument(
 					function() {
-						success(operation)
+						test.success(operation)
 						docKey = operation.result.document["@key"]
 						query()
 					}, function() {
-						fail(operation)
+						test.fail(operation)
 					},
 					{
 						store: storeName,
+						documentKey: "myKey",
 						fields: {
 							test: "true",
 							field1: "some value",
-							field2: "some other value"
+							field2: "some other value",
+							multi: ["v1", "v2", "v3"]
 						}
 					}
 				)
@@ -103,16 +83,16 @@
 				var operation = client.query(
 					function() {
 						if ((operation.result.documents[0].fields[0]["@name"] == "field1")
-							&& (operation.result.documents[0].fields[0].values[0] == "some value")) success(operation);
-							else fail(operation)
+							&& (operation.result.documents[0].fields[0].values[0] == "some value")) test.success(operation);
+							else test.fail(operation)							
 						deleteDocument()
 					}, function() {
-						fail(operation)
+						test.fail(operation)
 					},
 					{
 						store: storeName,
 						query: "test=\"true\"",
-						queryFields: "field1, field2"
+						queryFields: "field1, field2, multi"
 					}
 				)
 			}
@@ -120,10 +100,10 @@
 			function deleteDocument() {
 				var operation = client.deleteDocument(
 					function() {
-						success(operation)
+						test.success(operation)
 						deleteStore()
 					}, function() {
-						fail(operation)
+						test.fail(operation)
 					},
 					{
 						store: storeName,
@@ -134,30 +114,25 @@
 			
 			function deleteStore() {
 				var operation = client.deleteStore(function() {
-					success(operation)
+					test.success(operation)
 					
-					print("<h3 class='success' id='all'>Success</h3>")
+					test.print("<h3 class='success' id='all'>Success</h3>")
 				}, function() {
-					fail(operation)
+					test.fail(operation)
 				}, {store: storeName})
 			}
 			
 			dojo.addOnLoad(function() {
 				dojo.require("apstrata.apsdb.client.Connection")
 				dojo.require("apstrata.apsdb.client.Client")
-
-				var success = function (operation) {
-					console.dir(operation)
-				}
-				
-				var failure = function(operation) {
-					console.dir(operation)
-				}
+				dojo.require("apstrata.util.test.TestRunner")
 				
 				client = new apstrata.apsdb.client.Client()
 				
 				storeName = "testStore" + Math.floor(Math.random()*10000)
 				
+				test = new apstrata.util.test.TestRunner({id:"results"})
+
 				createStore()
 			})
 			

@@ -30,7 +30,7 @@ dojo.require("apstrata.apsdb.client._Item")
 dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore", 
 	[],
 	{
-		_KEY_LABEL: "@key",
+		_KEY_LABEL: "documentKey",
 		
 		constructor: function(attrs) {
 			// add log capabilities to object
@@ -43,10 +43,13 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 			this._itemsMap = []
 
 			// Instantiate apsdb client
+			// TODO: throw errors when attributes are missing
+			this._connection = attrs.connection
 			this._client = new apstrata.apsdb.client.Client(attrs.connection)
 			this._store = attrs.apsdbStoreName
 
 			// remove spaces from attrs.fields
+			this._fieldsAttribute = attrs.fields 
 			this._fields = attrs.fields.split(' ').join('')
 			
 			this._fieldsArray = this._fields.split(",")
@@ -56,6 +59,9 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 
 			// this._query = "XXYY != \"true\"" // TODO: dummy condition, is this right?
 			this._label = attrs.label
+			
+			// save attrs for later use by loadItem
+			this._attrs = attrs
 		},
 		
 		getFeatures: function() {
@@ -125,7 +131,7 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 			var queryExpression = keywordArgs.query.query || this._query
 			var pageNumber = (keywordArgs.query.pageNumber!=undefined)?keywordArgs.query.pageNumber:1
 			var count = (keywordArgs.query.count!=undefined)?keywordArgs.query.count:false
-			
+
 			var q = this._client.query(
 				function() {
 					self._items = []
@@ -136,7 +142,7 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 
 					self._itemsMap = []
 					dojo.forEach(q.result.documents, function(item) {
-						var item = new apstrata.apsdb.client._Item({item: item, fieldNames: this._fieldsArray})
+						var item = new apstrata.apsdb.client._Item({item: item, fieldNames: self._fieldsArray})
 						self._addItem(item)
 					})
 					self._fetchSuccess(request)
@@ -181,12 +187,59 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		},
 		
 		isItemLoaded: function(/* anything */ something) {
-			return this.isItem(something) 
+			if (this.isItem(something)) return something.isLoaded();
+			else throw new Error("passe arguyment is not an item") 
 		},
 		
 		loadItem: function(/* object */ keywordArgs) {
+			//     keywordArgs:
+			//        An anonymous object that defines the item to load and callbacks to invoke when the
+			//        load has completed.  The format of the object is as follows:
+			//        {
+			//            item: object,
+			//            onItem: Function,
+			//            onError: Function,
+			//            scope: object
+			//        }
+			//    The *item* parameter.
+			//        The item parameter is an object that represents the item in question that should be
+			//        contained by the store.  This attribute is required.
+			//    The *onItem* parameter.
+			//        Function(item)
+			//        The onItem parameter is the callback to invoke when the item has been loaded.  It takes only one
+			//        parameter, the fully loaded item.
+			//
+			//    The *onError* parameter.
+			//        Function(error)
+			//        The onError parameter is the callback to invoke when the item load encountered an error.  It takes only one
+			//        parameter, the error object
+console.dir(keywordArgs)
+
 			if (this.isItemLoaded(keywordArgs.item)) return 
-			//TODO: needs implemenation 				
+			
+			var self = this
+			
+			var store = new apstrata.apsdb.client.ItemApsdbReadStore({resultsPerPage: 1, 
+																		connection: self._connection, 
+																		apsdbStoreName: self._store,
+																		fields: self._fieldsAttribute, 
+																		label: self._label})
+			store.fetch ({
+							onComplete: function(items, request) {
+								if (items.length > 0) keywordArgs.onItem(items[0]);
+								else keywordArgs.onError("document with dockey " + keywordArgs.item.getIdentity() + " not found.")
+							},
+							
+							onError: function(errorData, request) {
+								keywordArgs.onError(errorData)
+							},
+							
+				            query: {
+								query: "apsdb.documentKey=\"" + keywordArgs.item.getIdentity() + "\"",
+								count: false,
+								pageNumber: 1
+							}
+						})
 		},
 		
 		close: function(request) {
@@ -210,11 +263,10 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		},
 		
 		getIdentityAttributes: function(/* item */ item) {
-			return [this._KEY_LABEL]
+			return [item._KEY_LABEL]
 		},
 		
 		fetchItemByIdentity: function(/* object */keywordArgs){
-			
 			var item = this._itemsMap[keywordArgs.identity]
 			if (item!=undefined) {
 				if (keywordArgs.onItem) keywordArgs.onItem(item) 								
@@ -227,13 +279,10 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		// ItemApsdbReadStore specific events
 		//
 		fetchSuccess: function() {
-			
 		},
 		
 		totalPagesCalculated: function(pages) {
-			
 		}
-
 		
 	}) // end: ApsdbReadStore
 

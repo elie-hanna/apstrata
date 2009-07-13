@@ -26,9 +26,11 @@ dojo.declare("apstrata.apsdb.client.Query",
 
     execute: function(attrs) {
 		if ((attrs.store != undefined) && (attrs.query != undefined) && (attrs.queryFields != undefined)) {
-			this.request.apsdb.store = attrs.store			
+			this.request.apsdb.store = attrs.store	
 			this.request.apsdb.query = attrs.query
 			this.request.apsdb.queryFields = attrs.queryFields
+
+//			if (attrs.documentKey) this.request.apsdb.documentKey = attrs.documentKey 
 
 	        if (attrs.resultsPerPage != undefined) this.request.apsdb.resultsPerPage = attrs.resultsPerPage
 //				else this.request.apsdb.resultsPerPage = this._DEFAULT_RESULTS_PER_PAGE

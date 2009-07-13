@@ -30,14 +30,20 @@
 																	"deleteItem",
 																	"save",
 																	"fetch2",
+																	"newItemParent",
+																	"save",
+																	"newItemChild",
+																	"save",
+																	"fetch3",
 																	"deleteStore"
 															]
 
 										this.storeName = "testStore" + Math.floor(Math.random()*10000)
+										
 										this.client = new apstrata.apsdb.client.Client()
 										this.store = new apstrata.apsdb.client.ItemApsdbWriteStore({connection: self.client.connection, 
 																									apsdbStoreName: self.storeName, 
-																									fields:"name, label, abbreviation", 
+																									fields:"name, label, abbreviation, children", 
 																									label: "label"})
 									},
 									
@@ -52,15 +58,61 @@
 										
 										self.runner.resetTime()
 										
-										dojo.connect(self.store, "onNew", function(newItem, parentInfo) {
+										var handle = dojo.connect(self.store, "onNew", function(newItem, parentInfo) {
 											self.runner.assert("newItem/onNew", true)
 											self.executeNext()
+											dojo.disconnect(handle)
 										})
 
 										self.store.newItem(doc)
 									},
 									
 									save: function() {
+										var self = this
+										
+										this.store.save({
+											onComplete: function() {												
+												self.runner.assert("save", true)
+												self.executeNext()
+											},
+											onError: function() {
+												self.runner.assert("save", false)
+												self.executeNext()
+											} 
+										})										
+									},
+
+									save2: function() {
+										var self = this
+										
+										this.store.save({
+											onComplete: function() {												
+												self.runner.assert("save", true)
+												self.executeNext()
+											},
+											onError: function() {
+												self.runner.assert("save", false)
+												self.executeNext()
+											} 
+										})										
+									},
+
+									save3: function() {
+										var self = this
+										
+										this.store.save({
+											onComplete: function() {												
+												self.runner.assert("save", true)
+												self.executeNext()
+											},
+											onError: function() {
+												self.runner.assert("save", false)
+												self.executeNext()
+											} 
+										})										
+									},
+
+									save4: function() {
 										var self = this
 										
 										this.store.save({
@@ -109,13 +161,14 @@
 														}
 													})
 									},
-									
+
 									deleteItem: function() {
 										var self = this
 										
-										dojo.connect(self.store, "onDelete", function(deletedItem) {
+										var handle = dojo.connect(self.store, "onDelete", function(deletedItem) {
 											self.runner.assert("deleteItem/onDelete", true)
 											self.executeNext()
+											dojo.disconnect(handle)
 										})
 										
 										self.store.deleteItem(self.allItems[0])
@@ -144,7 +197,73 @@
 														}
 													})
 									},
+																		
+									newItemParent: function() {
+										var self = this
+										
+										var doc = {
+											documentKey: "USA",
+											name: "United States",
+											label: "United States",
+											abbreviation: "USA"
+										}
+										
+										self.runner.resetTime()
+										
+										var handle = dojo.connect(self.store, "onNew", function(newItem, parentInfo) {
+											self.runner.assert("newItem Parent /onNew", true)
+											self.executeNext()
+											dojo.disconnect(handle)
+										})
 
+										self.parentItem = self.store.newItem(doc)										
+									},
+
+									newItemChild: function() {
+										var self = this
+										
+										var doc = {
+											documentKey: "LA",
+											name: "Los Angeles",
+											label: "Los Angeles",
+											abbreviation: "LA"
+										}
+										
+										self.runner.resetTime()
+										
+										var handle = dojo.connect(self.store, "onNew", function(newItem, parentInfo) {
+											self.runner.assert("newItem Child /onNew", true)
+											self.executeNext()
+											dojo.disconnect(handle)
+										})
+
+										self.store.newItem(doc, {parent: self.parentItem, attribute:"children"})										
+									},
+
+									fetch3: function () {
+										var self = this
+	
+										self.runner.resetTime()
+										self.store.fetch ({
+														onComplete: function(items, request) {
+															var child = self.store.getValue(items[0], "children")
+															
+															self.runner.assert("fetch (assert parent/child)", child == "LA")
+															self.executeNext()
+														},
+														
+														onError: function(errorData, request) {
+															self.runner.assert("fetch", false)
+															self.executeNext()
+														},
+														
+											            query: {
+															query: "apsdb.documentKey=\"USA\"",
+															count: true,
+															pageNumber: 1
+														}
+													})
+									},
 
 							    	createStore: function() {
 										var self = this

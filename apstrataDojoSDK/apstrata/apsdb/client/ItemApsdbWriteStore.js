@@ -45,23 +45,76 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbWriteStore",
 		// dojo.data.api.Write
 		//		
 		newItem: function(/* Object? */ keywordArgs, /*Object?*/ parentInfo){
+			//    keywordArgs:
+			//        A javascript object defining the initial content of the item as a set of JavaScript 'property name: value' pairs.
+			// 		  if keyword args contains reserved attribute name '@key' assume this is the identity 
+			//    parentInfo:
+			//        An optional javascript object defining what item is the parent of this item (in a hierarchical store.  Not all stores do hierarchical items),
+			//        and what attribute of that parent to assign the new item to.  If this is present, and the attribute specified
+			//        is a multi-valued attribute, it will append this item into the array of values for that attribute.  The structure
+			//        of the object is as follows:
+			//        {
+			//            parent: someItem,
+			//            attribute: "attribute-name-string"
+			//        }
+			
 			var self = this
 			var item = new apstrata.apsdb.client._Item({fieldNames: this._fieldsArray})
 
-			// Assign temporary ID
-			item.setIdentity(this._key++)
-			for (var attribute in keywordArgs) {
-				item.setValue(attribute, "string", keywordArgs[attribute])
-			}
+			// if dockey is supplied
+			if (keywordArgs["documentKey"]) item.setIdentity(keywordArgs["documentKey"]);
+			// otherwise assign temporary ID
+//			else item.setIdentity(this._key++)
 
-			self._addItem(item)
-			if (parentInfo!=undefined) {
-				// update parent info to contain pointer to child
+			for (var attribute in keywordArgs) {
+				// if keyword args contains reserved attribute name '@key' assume this is the identity 
+				if (attribute != "documentKey") item.setValue(attribute, "string", keywordArgs[attribute])
 			}
 			
-			// push the item into the dirty buffer
-			this._dirty.push({type: 'n', item: item})
+			// when a new item is created it is considered loaded
+			item.loaded = true
+			self._addItem(item)
+			
+			if (parentInfo==undefined) {
+				// push the item into the dirty buffer
+				this._dirty.push({type: 'n', item: item})
+			} else {
+				// update parent info to contain pointer to child
+				if (!self.isItemLoaded(parentInfo.parent))  {
+					self.loadItem({
+						item: parentInfo.parent,
+						onItem: function(parent) {
+							self._addChildToParent(item, {parent: parent, attribute: parentInfo.attribute})
+						},
+						onError: function(error) {
+							throw new Error(error)
+						}
+					})
+				} else {
+					self._addChildToParent(item, parentInfo)
+				}				
+			} 
+			
 			this.onNew (item, parentInfo)
+
+			return item
+		},
+	
+		_addChildToParent: function(item, parentInfo) {
+			var self = this
+			
+			// get the exiting children
+			var children = self.getValues(parentInfo.parent, parentInfo.attribute)
+			if (!children) children = []
+
+			// add new Item 
+			children.push(self.getIdentity(item))
+
+			// save
+			self.setValues(parentInfo.parent, parentInfo.attribute, children)
+
+			self._dirty.push({type: 'n', item: item})
+			self._dirty.push({type: 'n', item: parentInfo.parent})
 		},
 		
 		deleteItem: function(/* item */ item) {
@@ -81,7 +134,7 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbWriteStore",
 		},
 		
 		setValues: function(/* item */ item, /* string */ attribute, /* array */ values) {
-			var oldValues = item.getValues(attribute)
+			var oldValues = dojo.clone(item.getValues(attribute))
 			item.setValues(attribute, "string", values)			
 			this._dirty.push({type: 'u', item: item})
 
@@ -115,15 +168,10 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbWriteStore",
 						docKey = dirtyWrapper.item.getIdentity()
 					}
 					
-					var fields = {}
-
-					for (fieldName in dirtyWrapper.item.fieldsMap) {
-						fields[fieldName] = dirtyWrapper.item.fieldsMap[fieldName].values
-					}
-
+					var fields = dirtyWrapper.item.getFields()
+					
 					self._client.queue("SaveDocument", {
 															store: self._store, 
-															documentKey: docKey,
 															fields: fields
 														})
 				}
@@ -149,23 +197,13 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbWriteStore",
 		},
 		
 		isDirty: function(/* item? */ item) {
-			
+			return (this._dirty.length > 0) 
 		},
 
 		//
 		// dojo.data.api.Notification
 		//
-
-		onSet: function(item, attribute, oldValue, newValue) {
-			
-		},
-		
-		onNew: function(newItem, parentInfo) {
-			
-		},
-		
-		onDelete: function(deletedItem) {
-			
-		}
-
+		onSet: function(item, attribute, oldValue, newValue) {},
+		onNew: function(newItem, parentInfo) {},
+		onDelete: function(deletedItem) {}
 	})
