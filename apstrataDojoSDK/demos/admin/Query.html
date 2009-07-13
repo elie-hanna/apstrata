@@ -90,7 +90,9 @@
 		var spinner
 		
 		function displayPage(page) {
-			if (grid!= undefined) grid.destroy()
+			if (grid) {
+				dojo.byId("dvGrid").innerHTML = ""
+			}//grid.destroy()
 			
 	        // create a new grid:
 	        grid = new dojox.grid.DataGrid({
@@ -113,6 +115,12 @@
 		}
 		
 		function query() {
+			layout = []
+			if (spinner) {
+				spinner.destroy()
+				spinner = undefined
+			}
+
 			if (grid!=undefined) grid.destroy()
 			
 			queryString = dojo.byId("fldQueryString").value
@@ -155,13 +163,13 @@
 			<td><span id="storeName"></span>
 				&nbsp;&nbsp;<button id="refresh" onclick="refresh()">refresh</button></td>
 			<td align="right"><span class="label">Columns:</span></td>
-			<td align="right"><input type="text" id="fldColumns" value="name, type" size="30"></input></td>
+			<td align="right"><input type="text" id="fldColumns" value="apsdb.documentKey, name" size="30"></input></td>
 		</tr>
 	</table>
 	<table style="width: 700px;">
 		<tr>
 			<td width="60"><span class="label">Query:</span></td>
-			<td><input type="text" id="fldQueryString" size="80"></input></td>
+			<td><input type="text" id="fldQueryString" size="80" value=""></input></td>
 			<td align="right"><button id="query" onclick="query()">query</button></td>
 		</tr>
 	</table>
