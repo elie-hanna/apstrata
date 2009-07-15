@@ -44,6 +44,14 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 
 			// Instantiate apsdb client
 			// TODO: throw errors when attributes are missing
+			/*
+			if (!((attrs.connection) 
+					&& (attrs.connection) 
+					&& (attrs.apsdbStoreName) 
+					&& (attrs.fields) 
+					&& (attrs.childrenAttrs)
+					&& (attrs.label))) throw new Error(self.declaredClass + ": Connection, storename, fields, childrenAttrs or label are missing in params")
+*/
 			this._connection = attrs.connection
 			this._client = new apstrata.apsdb.client.Client(attrs.connection)
 			this._store = attrs.apsdbStoreName
@@ -54,6 +62,13 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 			
 			this._fieldsArray = this._fields.split(",")
 			
+			if (attrs.childrenAttrs) {
+				this._childrenAttrs = attrs.childrenAttrs
+				this._childrenArray = (attrs.childrenAttrs.split(' ').join('')).split(",")
+			} else {
+				this._childrenAttrs = ""
+				this._childrenArray = []
+			}
 			if (attrs.resultsPerPage) this._resultsPerPage = attrs.resultsPerPage
 //			if (attrs.pageNumber) this._pageNumber = attrs.pageNumber
 
@@ -93,6 +108,10 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		},
 		
 		_addItem: function(item) {
+//			if (this._itemsMap(item.getIdentity())) {
+//				this._removeItem(item)
+//			}
+			
 			this._itemsMap[item.getIdentity()] = item
 			this._items.push(item)
 		},
@@ -142,7 +161,7 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 
 					self._itemsMap = []
 					dojo.forEach(q.result.documents, function(item) {
-						var item = new apstrata.apsdb.client._Item({item: item, fieldNames: self._fieldsArray})
+						var item = new apstrata.apsdb.client._Item({item: item, fieldNames: self._fieldsArray, childrenNames: self._childrenArray})
 						self._addItem(item)
 					})
 					self._fetchSuccess(request)
@@ -163,7 +182,12 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		},
 		
 		isItem: function(something) {
-			return (something.declaredClass == "apstrata.apsdb.client._Item")
+			var _v = false
+			if (something) 
+				if (something != null) 
+					if (something.declaredClass)
+						_v = (something.declaredClass == "apstrata.apsdb.client._Item")
+			return _v
 		},
 		
 		getValues: function(/* item */ item, /* attribute-name-string */ attribute) {			
@@ -188,7 +212,7 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		
 		isItemLoaded: function(/* anything */ something) {
 			if (this.isItem(something)) return something.isLoaded();
-			else throw new Error("passe arguyment is not an item") 
+			else throw new Error("passed argument is not an item") 
 		},
 		
 		loadItem: function(/* object */ keywordArgs) {
@@ -213,21 +237,29 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 			//        Function(error)
 			//        The onError parameter is the callback to invoke when the item load encountered an error.  It takes only one
 			//        parameter, the error object
-console.dir(keywordArgs)
-
 			if (this.isItemLoaded(keywordArgs.item)) return 
 			
 			var self = this
-			
-			var store = new apstrata.apsdb.client.ItemApsdbReadStore({resultsPerPage: 1, 
-																		connection: self._connection, 
-																		apsdbStoreName: self._store,
-																		fields: self._fieldsAttribute, 
-																		label: self._label})
+			var params = {resultsPerPage: 1, 
+							connection: self._connection, 
+							apsdbStoreName: self._store,
+							fields: self._fieldsAttribute, 
+							childrenAttrs: self._childrenAttrs,
+							label: self._label}
+			var store = new apstrata.apsdb.client.ItemApsdbReadStore(params)
+
 			store.fetch ({
 							onComplete: function(items, request) {
-								if (items.length > 0) keywordArgs.onItem(items[0]);
-								else keywordArgs.onError("document with dockey " + keywordArgs.item.getIdentity() + " not found.")
+								if (items.length > 0) {
+
+									// TODO: temporary, needs to be implemented into _item like _item.copy(_item)
+									keywordArgs.item.fieldsMap = items[0].fieldsMap
+									keywordArgs.item.loaded = true
+									keywordArgs.onItem(items[0])
+									
+									self._addItem(items[0])
+									
+								} else keywordArgs.onError("document with dockey " + keywordArgs.item.getIdentity() + " not found.")
 							},
 							
 							onError: function(errorData, request) {

@@ -28,6 +28,7 @@ dojo.declare("apstrata.apsdb.client._Item",
 			//        {
 			//				item: Object
 			//				fieldNames: Array
+			//				childrenNames: Array
 			//        }
 			//
 			//    The *item* parameter.
@@ -41,11 +42,12 @@ dojo.declare("apstrata.apsdb.client._Item",
 			//			Array of fieldNames
 			//
 			var self = this
-			
 			this.fieldsMap = {}
 			this.loaded = false
 			this._KEY_LABEL = "documentKey"
-			
+						
+			if (!attrs) return
+						
 			if (attrs.documentKey) self[this._KEY_LABEL] = attrs.documentKey
 			
 			// item is obtained from the raw json response to apsdb fetch
@@ -56,17 +58,39 @@ dojo.declare("apstrata.apsdb.client._Item",
 				self.fieldsMap = {}		
 	
 				dojo.forEach(attrs.item.fields, function(field) {
-					self.fieldsMap[field["@name"]] = field
+					
+					// If this is a children attribute
+					if (dojo.indexOf(attrs.childrenNames, field["@name"])>=0) {
+						var _values = []
+						dojo.forEach(field.values, function(value) {
+							
+							// instantiate _Item placeholders 
+							var _item = new apstrata.apsdb.client._Item()
+							_item.setIdentity(value)
+							_values.push(_item)
+						})
+						
+						var _field = {}
+						_field.values = _values
+						_field["@name"] = field["@name"]
+						_field["@type"] = self.declaredClass
+						
+						self.fieldsMap[field["@name"]] = _field
+					} else {
+						self.fieldsMap[field["@name"]] = field							
+					}					
 				})
+
 
 				// Hack needed for dojo grid (and maybe other widgets), if a column is expected and it's not found in the item
 				//  the widget breaks
+/*
 				dojo.forEach(attrs.fieldNames, function(fieldName) {
 					if (!self.getValues(fieldName)) {
-						self.setValues(fieldName, "string", [null])
+						self.setValues(fieldName, "string", null)
 					}
 				})
-	
+*/
 				delete attrs.item.fields 
 				// item is considered loaded if instantiated with an apsdb native return item object
 				self.loaded = true
@@ -161,6 +185,10 @@ dojo.declare("apstrata.apsdb.client._Item",
 		
 		remove: function() {
 			
+		},
+		
+		toString: function() {
+			return this.getFields()
 		}
 
 		
