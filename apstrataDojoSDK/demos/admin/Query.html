@@ -39,6 +39,7 @@
 			dojo.require ("apstrata.apsdb.client.ListStores")
 			dojo.require ("apstrata.apsdb.client.ItemApsdbReadStore")
 			dojo.require ("apstrata.widgets.PageNumberSpinner")
+			dojo.require ("apstrata.widgets.PageNumberSelector")
 			
 			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})			
 			
@@ -91,8 +92,9 @@
 		
 		function displayPage(page) {
 			if (grid) {
+				// grid.destroy() is not working!
 				dojo.byId("dvGrid").innerHTML = ""
-			}//grid.destroy()
+			}
 			
 	        // create a new grid:
 	        grid = new dojox.grid.DataGrid({
@@ -100,14 +102,13 @@
 					query: queryString,
 					count: (page == 1),
 					pageNumber: page
-				}, //"q!=\"xx\"",
+				}, 
 	            store: store,
 	            rowSelector: '20px',
 	            structure: layout
 	        }, document.createElement('div'));
 	
 	        // append the new grid to the div "gridContainer4":
-//			dojo.place(grid.domNode, "gridContainer", "replace")
 	        dojo.byId("dvGrid").appendChild(grid.domNode);
 	
 	        // Call startup, in order to render the grid:
@@ -143,7 +144,7 @@
 			
 			dojo.connect(store, "totalPagesCalculated", function(pages) {
 				if (spinner == undefined) {
-					spinner = new apstrata.widgets.PageNumberSpinner({min:1, max:pages, value:1})
+					spinner = new apstrata.widgets.PageNumberSelector({min:1, max:pages, value:1, visibleRange: 10, bigStep: 5})
 			        dojo.byId("dvSpinner").appendChild(spinner.domNode);
 					
 					dojo.connect(spinner, "onChange", function() {
@@ -153,7 +154,7 @@
 			})
 			
 		}
-
+		
 	</script>
 </head>
 <body class="nihilo">
