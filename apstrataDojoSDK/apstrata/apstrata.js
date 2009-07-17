@@ -124,18 +124,17 @@ if (typeof apstrata == "undefined") {
 		}
     }
 
-	dojo.addOnLoad(function() {
-			dojo.registerModulePath("apstrata", apstrata.baseUrl)
-			dojo.require ("apstrata.util.logger.Logger");
-			
-			dojo.require("dijit._Widget")
-			
-			dojo.extend(dijit._Widget, {
-				_apstrataRoot: apstrata.baseUrl
-			})
+	dojo.registerModulePath("apstrata", apstrata.baseUrl)
+	dojo.require ("apstrata.util.logger.Logger");
+	dojo.registerModuleRelative = function(module, string) {
+		dojo.registerModulePath (module, apstrata.pathFromDojo + string)
+	}
+	
+	dojo.require("dijit._Widget")
 
-			dojo.registerModuleRelative = function(module, string) {
-				dojo.registerModulePath (module, apstrata.pathFromDojo + string)
-			}
+	dojo.addOnLoad(function() {
+		dojo.extend(dijit._Widget, {
+			_apstrataRoot: apstrata.baseUrl
+		})
 	})
 }

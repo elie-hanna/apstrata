@@ -18,17 +18,17 @@
 
 	    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
     
-	<script type="text/javascript" src="../../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: false"></script>
+	<script type="text/javascript" src="../../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
 	<script type="text/javascript" src="../../apstrata.js"></script>
 
     <script type="text/javascript">
         dojo.require("dojo.parser")
+		dojo.require("apstrata.widgets.PageNumberSelector")
+		dojo.require("apstrata.widgets.PageNumberSpinner")
 		
 		var spinner
 		
         dojo.addOnLoad(function() {
-			dojo.require("apstrata.widgets.PageNumberSelector")
-			dojo.require("apstrata.widgets.PageNumberSpinner")
 
 			selector = new apstrata.widgets.PageNumberSelector({min:1, max:50, value:1, visibleRange:9})
 	        dojo.byId("dvSelector").appendChild(selector.domNode);
@@ -42,7 +42,7 @@
 				console.debug(value)
 			})
 			
-			dojo.parser.parse()
+			//dojo.parser.parse()
 		})
 
 	</script>
