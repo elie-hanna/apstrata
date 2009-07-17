@@ -20,6 +20,10 @@
 
 dojo.provide("apstrata.widgets.PageNumberSpinner")
 
+dojo.require ("dijit.form.Button")
+dojo.require ("dijit.form.NumberTextBox")
+
+
 dojo.declare("apstrata.widgets.PageNumberSpinner", [dijit._Widget, dijit._Templated], {
 	widgetsInTemplate: true,
 	templateString: "<div><button dojoType='dijit.form.Button' dojoAttachPoint='btnPrevious'><span style='font-size:x-small'>&lt;</span></button>" + "<input type='text' dojoType='dijit.form.NumberTextBox' dojoAttachPoint='fldValue' maxLength='3' constraints='{places:0,min:0,max:120}' style='width:3em;height:1.8em;'></input>" + "<button dojoType='dijit.form.Button' dojoAttachPoint='btnNext'><span style='font-size:x-small'>&gt;</span></button></div>",
@@ -50,11 +54,11 @@ dojo.declare("apstrata.widgets.PageNumberSpinner", [dijit._Widget, dijit._Templa
 		
 		dojo.connect(this.fldValue, "onChange", function() {
 			self.value = self.fldValue.getValue()
-			self.onChange()
+			self.onChange(self.value)
 		})
 	},
 	
-	onChange: function() {}
+	onChange: function(value) {}
 })
 
 
