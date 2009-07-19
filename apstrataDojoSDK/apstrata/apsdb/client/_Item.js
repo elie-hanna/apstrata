@@ -174,7 +174,7 @@ dojo.declare("apstrata.apsdb.client._Item",
 				fields[fieldName] = self.fieldsMap[fieldName].values
 			}
 			
-			fields["apsdb.documentKey"] = self.getIdentity()
+			if (self.getIdentity()) fields["apsdb.documentKey"] = self.getIdentity()
 			
 			return fields
 		},

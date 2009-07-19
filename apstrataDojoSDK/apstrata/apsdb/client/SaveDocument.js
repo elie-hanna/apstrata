@@ -41,6 +41,7 @@ dojo.declare("apstrata.apsdb.client.SaveDocument",
 	// TODO: save multivalue fields, 
 	// TODO: save typed values
     execute: function(attrs, flatten) {
+console.dir(attrs)		
         this.request.apsdb.store = attrs.store
 
         // if this object doesn't contain a document key, generate new one
@@ -49,7 +50,8 @@ dojo.declare("apstrata.apsdb.client.SaveDocument",
 //        if (attrs.fields[this.connection._KEY_APSDB_ID] != undefined) this.request.apsdb.documentKey = attrs.fields[this.connection._KEY_APSDB_ID]
 
 		for (prop in attrs.fields) {
-	            if (prop != this.connection._KEY_APSDB_ID) this.request[prop] = attrs.fields[prop];
+	            //if (prop != this.connection._KEY_APSDB_ID) 
+				this.request[prop] = attrs.fields[prop];
 		}
 	    
 		this.inherited(arguments);

@@ -23,6 +23,7 @@ dojo.provide("apstrata.apsdb.client.ItemApsdbWriteStore");
 
 dojo.require("dojo.data.api.Request")
 
+dojo.require("apstrata.apsdb.client.ItemApsdbReadStore")
 dojo.require("apstrata.apsdb.client.Connection")
 dojo.require("apstrata.util.logger.Logger")
 dojo.require("apstrata.apsdb.client.Client")
@@ -62,13 +63,13 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbWriteStore",
 			var item = new apstrata.apsdb.client._Item({fieldNames: this._fieldsArray})
 
 			// if dockey is supplied
-			if (keywordArgs["documentKey"]) item.setIdentity(keywordArgs["documentKey"]);
+			if (keywordArgs[item._KEY_LABEL]) item.setIdentity(keywordArgs[item._KEY_LABEL]);
 			// otherwise assign temporary ID
 //			else item.setIdentity(this._key++)
 
 			for (var attribute in keywordArgs) {
 				// if keyword args contains reserved attribute name '@key' assume this is the identity 
-				if (attribute != "documentKey") item.setValue(attribute, "string", keywordArgs[attribute])
+				if (attribute != item._KEY_LABEL) item.setValue(attribute, "string", keywordArgs[attribute])
 			}
 			
 			// when a new item is created it is considered loaded
