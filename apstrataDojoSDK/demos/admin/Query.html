@@ -22,31 +22,34 @@
 	<script type="text/javascript" src="../../apstrata/apstrata.js"></script>
 
     <script type="text/javascript">
-        dojo.require("dojo.parser")
-        dojo.require("dijit.layout.ContentPane")
-		dojo.require("dijit.form.ComboBox")
-		dojo.require("dojo.data.ItemFileReadStore")
-		dojo.require("dojox.grid.DataGrid")
-		dojo.require("dijit.form.NumberSpinner")
+        dojo.require ("dojo.parser")
+        dojo.require ("dijit.layout.ContentPane")
+		dojo.require ("dijit.form.ComboBox")
+		dojo.require ("dojo.data.ItemFileReadStore")
+
+		dojo.require ("apstrata.widgets.QueryWidget")
+		dojo.require ("apstrata.apsdb.client.Connection")
+		dojo.require ("apstrata.apsdb.client.ListStores")
+		dojo.require ("apstrata.apsdb.client.ItemApsdbReadStore")
+		dojo.require ("apstrata.widgets.PageNumberSpinner")
+		dojo.require ("apstrata.widgets.PageNumberSelector")
 
         var connection
 		var store
 		var storeNamesData
         var storeNamesStore
-		
+		var comboBox
+		var queryString
+		var store
+		var grid
+				
         dojo.addOnLoad(function() {
-			dojo.require ("apstrata.apsdb.client.Connection")
-			dojo.require ("apstrata.apsdb.client.ListStores")
-			dojo.require ("apstrata.apsdb.client.ItemApsdbReadStore")
-			dojo.require ("apstrata.widgets.PageNumberSpinner")
-			dojo.require ("apstrata.widgets.PageNumberSelector")
-			
 			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})			
 			
-			init()
+			fetchStoreNames()
 		})
 				
-		function init() {
+		function fetchStoreNames() {
 			var storeNamesData;
 			
 			var storesCookie = dojo.cookie("apstrata.admin.stores")
@@ -71,57 +74,19 @@
 			}
 		}
 		
-		function refresh() {
-			dojo.cookie("apstrata.admin.stores", "")
-			init()
-		}
-		
-		var comboBox
 		
 		function setComboBox(storeNamesData) {
 			storeNamesStore = new dojo.data.ItemFileReadStore({data: storeNamesData})
 			comboBox = new dijit.form.ComboBox({store: storeNamesStore, searchAttr: 'name'})
 			dojo.place(comboBox.domNode, "storeName", "only")			
 		}
-		
-	    var layout = []
-		var queryString
-		var store
-		var grid
-		var spinner
-		
-		function displayPage(page) {
-			if (grid) {
-				// grid.destroy() is not working!
-				dojo.byId("dvGrid").innerHTML = ""
-			}
-			
-	        // create a new grid:
-	        grid = new dojox.grid.DataGrid({
-	            query: {
-					query: queryString,
-					count: (page == 1),
-					pageNumber: page
-				}, 
-	            store: store,
-	            rowSelector: '20px',
-	            structure: layout
-	        }, document.createElement('div'));
-	
-	        // append the new grid to the div "gridContainer4":
-	        dojo.byId("dvGrid").appendChild(grid.domNode);
-	
-	        // Call startup, in order to render the grid:
-	        grid.startup();			
-		}
-		
-		function query() {
-			layout = []
-			if (spinner) {
-				spinner.destroy()
-				spinner = undefined
-			}
 
+		function refresh() {
+			dojo.cookie("apstrata.admin.stores", "")
+			fetchStoreNames()
+		}
+				
+		function query() {
 			if (grid!=undefined) grid.destroy()
 			
 			queryString = dojo.byId("fldQueryString").value
@@ -131,28 +96,18 @@
 			
 			store = new apstrata.apsdb.client.ItemApsdbReadStore({connection:connection, 
 											resultsPerPage: 8,
-											apsdbStoreName: comboBox.value, //"countries", 
-											fields: columnsString, // "name, type, population", 
+											apsdbStoreName: comboBox.value, 
+											fields: columnsString, 
 											label: "name"})
 
-			dojo.forEach(columnsString.split(","), function(field) {
-				field = dojo.string.trim(field)
-				layout.push({ field: field, name: field, width: '200px' })
-			})
-
-			displayPage(1)
+			var attrs = {
+				store: store,
+				columns: columnsString,
+				page: 1
+			}
 			
-			dojo.connect(store, "totalPagesCalculated", function(pages) {
-				if (spinner == undefined) {
-					spinner = new apstrata.widgets.PageNumberSelector({min:1, max:pages, value:1, visibleRange: 10, bigStep: 5})
-			        dojo.byId("dvSpinner").appendChild(spinner.domNode);
-					
-					dojo.connect(spinner, "onChange", function() {
-						displayPage(spinner.value)
-					})
-				}
-			})
-			
+			grid = new apstrata.widgets.QueryWidget(attrs)
+			dojo.place(grid.domNode, "dvGrid", "first")			
 		}
 		
 	</script>
