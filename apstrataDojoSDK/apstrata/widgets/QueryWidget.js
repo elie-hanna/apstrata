@@ -68,12 +68,26 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		this._refresh()
 	},
 	
-	setQuery: function(query) {
+	destroy: function() {
+		if (this._grid) {
+			this._grid.destroy()
+		}
+
+		if (this._spinner) {
+			this._spinner.destroy()
+		}		
 		
+		this.inherited(arguments)
+	},
+	
+	setQuery: function(query) {
+		this.query = query
+		this._refresh()
 	},
 	
 	setPage: function(page) {
-		
+		this.page = page
+		this._refresh()
 	},
 	
 	_refresh: function() {
