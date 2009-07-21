@@ -23,6 +23,9 @@ dojo.require("apstrata.apsdb.client.Connection");
 dojo.require("apstrata.apsdb.client.ListStores");
 dojo.require("apstrata.apsdb.client.CreateStore");
 dojo.require("apstrata.apsdb.client.DeleteStore");
+dojo.require("apstrata.apsdb.client.ListGroups");
+dojo.require("apstrata.apsdb.client.CreateGroup");
+dojo.require("apstrata.apsdb.client.DeleteGroup");
 dojo.require("apstrata.apsdb.client.DeleteDocument");
 dojo.require("apstrata.apsdb.client.SaveDocument");
 dojo.require("apstrata.apsdb.client.Query");
@@ -195,6 +198,18 @@ dojo.declare("apstrata.apsdb.client.Client",
 		
 		deleteStore: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.DeleteStore(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		createGroup: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.CreateGroup(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		listGroups: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.ListGroups(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		deleteGroup: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.DeleteGroup(this.connection)
 			return this._operation(success, failure, op, attrs)
 		},
 		
