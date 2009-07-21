@@ -80,7 +80,7 @@
 			
 			dojo.query("li.bounce").forEach(function(tag) {
 				dojo.connect(tag, "onclick", function() {
-					navigateToTag(tag.title)
+					navigateToTag(tag.id)
 				})
 				
 //				console.dir(tag)
@@ -151,14 +151,14 @@
             <div class="rounded box3 shadow" style="border: 0px; margin: 0px; width:20%; height:90%; float:left;">
 				<div id="list">
 					<ul>
-						<li class="bounce" title="ListStores"><span class="fisheyeTarget">Stores</span><br><div class="ilk">List/Create/Delete stores</div></li>
+						<li class="bounce" id="ListStores"><span class="fisheyeTarget" title="Create/Delete/List stores">Stores</span><br><div class="ilk">Create/Delete/List stores</div></li>
 						<br>
 						<li class="bounce" title="Query"><span class="fisheyeTarget">Run Query</span><br><div class="ilk">Run a query on a store</div></li>
 						<li class="bounce"><span class="fisheyeTarget">Get/Edit Document</span><br><div class="ilk">Get an object from a store</div></li>
 						<li class="bounce"><span class="fisheyeTarget">New Document</span><br><div class="ilk">Create a new Document</div></li>
 						<br>
 						<li class="bounce"><span class="fisheyeTarget">Users</span><br><div class="ilk">List/edit user accounts</div></li>
-						<li class="bounce"><span class="fisheyeTarget">Groups</span><br><div class="ilk">Add a user</div></li>
+						<li class="bounce" id="ListGroups"><span class="fisheyeTarget" title="Create/Delete/List groups">Groups</span><br><div class="ilk">Create/Delete/List groups</div></li>
 						<br>
 					</ul>
 				</div>
