@@ -128,7 +128,7 @@
 				var operation = client.deleteDocument(
 					function() {
 						test.success(operation)
-						deleteStore()
+						setSchema()
 					}, function() {
 						test.fail(operation)
 					},
@@ -137,6 +137,45 @@
 						documentKey: docKey
 					}
 				)
+			}
+			
+			function setSchema() {
+				var operation = client.setSchema(
+					function() {
+						test.success(operation)
+						getSchema()
+					}, function() {
+						test.fail(operation)
+					},
+					{
+						schema: schema,
+						schemaName: schemaName
+					}
+				)
+			}
+			
+			function getSchema() {
+				var operation = client.getSchema(
+					function() {
+						test.success(operation)
+						listSchemas()
+					}, function() {
+						test.fail(operation)
+					},
+					{
+						schemaName: schemaName,
+					}
+				)
+			}
+			
+			function listSchemas() {
+				var operation = client.listSchemas(
+					function() {
+						test.success(operation)
+						deleteStore()
+					}, function() {
+						test.fail(operation)
+					})
 			}
 			
 			function deleteStore() {
@@ -158,6 +197,9 @@
 				
 				storeName = "testStore" + Math.floor(Math.random()*10000)
 				groupName = "testGroup" + Math.floor(Math.random()*10000)
+				schemaName= "schema"    + Math.floor(Math.random()*10000)
+				
+				schema="<schema><aclGroups><aclGroup name='groupOne'><read>apstrata</read><write>nasr</write><fields><field>fieldone</field></fields></aclGroup><defaultAcl><read>nasr</read><write>youss</write><delete>abd</delete></defaultAcl></aclGroups><fields><field name='fieldone'></field></fields></schema>"
 				
 				test = new apstrata.util.test.TestRunner({id:"results"})
 

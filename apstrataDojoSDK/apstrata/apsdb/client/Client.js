@@ -30,6 +30,9 @@ dojo.require("apstrata.apsdb.client.ListSchemas");
 dojo.require("apstrata.apsdb.client.DeleteDocument");
 dojo.require("apstrata.apsdb.client.SaveDocument");
 dojo.require("apstrata.apsdb.client.Query");
+dojo.require("apstrata.apsdb.client.SetSchema");
+dojo.require("apstrata.apsdb.client.GetSchema");
+dojo.require("apstrata.apsdb.client.ListSchemas");
 dojo.require("apstrata.util.logger.Logger");
 
 dojo.declare("apstrata.apsdb.client.Client", 
@@ -226,6 +229,18 @@ dojo.declare("apstrata.apsdb.client.Client",
 
 		query: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.Query(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		setSchema: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.SetSchema(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		getSchema: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.GetSchema(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		listSchemas: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.ListSchemas(this.connection)
 			return this._operation(success, failure, op, attrs)
 		}
 		
