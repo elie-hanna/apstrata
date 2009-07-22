@@ -26,6 +26,7 @@ dojo.require("apstrata.apsdb.client.DeleteStore");
 dojo.require("apstrata.apsdb.client.ListGroups");
 dojo.require("apstrata.apsdb.client.CreateGroup");
 dojo.require("apstrata.apsdb.client.DeleteGroup");
+dojo.require("apstrata.apsdb.client.ListSchemas");
 dojo.require("apstrata.apsdb.client.DeleteDocument");
 dojo.require("apstrata.apsdb.client.SaveDocument");
 dojo.require("apstrata.apsdb.client.Query");
