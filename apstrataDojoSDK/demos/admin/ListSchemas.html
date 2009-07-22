@@ -107,7 +107,7 @@
 				dojo.require("apstrata.apsdb.client.GetSchema")
                 var operation = new apstrata.apsdb.client.GetSchema(connection)
                 dojo.connect(operation, "handleResult", function(){
-                    content = new apstrata.apsdb.client.widgets.SchemaContent(connection,operation.schemaContent)
+                    content = new apstrata.apsdb.client.widgets.SchemaContent(connection,operation.result)
                     content.show()
                 })
                 dojo.connect(operation, "handleError", function(){
