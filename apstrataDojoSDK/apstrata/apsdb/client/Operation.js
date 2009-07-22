@@ -32,6 +32,7 @@ dojo.require ("apstrata.util.logger.Logger")
 			
 			this.request= {};
 			this.request.apsdb = {};
+			this.request.apsim = {};
 			this._timeoutHandler = 0;
 			
 			this.apsdbOperation= "";
@@ -58,12 +59,20 @@ dojo.require ("apstrata.util.logger.Logger")
 				    params += "apsdb." + prop + "=" + encodeURIComponent(this.request.apsdb[prop]); 
 				}
 		    }
+			
+			if (this.request.apsim != null) {
+				for (prop in this.request.apsim) {
+				    if (i>0) params += "&";
+				    i++;
+				    params += "apsim." + prop + "=" + encodeURIComponent(this.request.apsim[prop]); 
+				}
+		    }
 
 		    for (prop in this.request) {
 				if (i>0) params += "&";
 				i++;
 				
-				if (prop != "apsdb") {
+				if (prop != "apsdb" && prop != "apsim") {
 					var value = this.request[prop]
 					if (dojo.isArray(value)) {
 						dojo.forEach(value, function(v) {
