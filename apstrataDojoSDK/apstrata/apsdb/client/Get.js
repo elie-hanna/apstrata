@@ -77,8 +77,10 @@ dojo.require ("apstrata.apsdb.client.Operation");
 						}
 						
 						// Copy the result to the Operation object result field
-						self.result = json.response.result
-
+						for (prop in json.response) {
+							self[prop] = json.response[prop];
+						}
+						
 						self.log("requestId", self.requestId)
                         self.log("status", self.status);
 
