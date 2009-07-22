@@ -9,24 +9,32 @@
  *  specific language governing permissions and limitations under the License.
  * *****************************************************************************
  */
-
 dojo.provide("apstrata.apsdb.client.SetSchema");
 
 dojo.require("apstrata.apsdb.client.Get");
 
-dojo.declare("apstrata.apsdb.client.SetSchema",
-[apstrata.apsdb.client.Get],
-{
-    constructor: function() {
-        this.apsdbOperation= "SetSchema"
+dojo.declare("apstrata.apsdb.client.SetSchema", [apstrata.apsdb.client.Get], {
+    constructor: function(){
+        this.apsdbOperation = "SetSchema"
     },
-		    
-    execute: function(attrs) {
+    
+    execute: function(attrs){
+    
         if ((attrs != undefined) &&
-            (attrs.schemaName != undefined)) {   
+        (attrs.schemaName != undefined) &&
+        (attrs.schema != undefined)) {
+            this.request.apsdb.schema = attrs.schema;
             this.request.apsdb.schemaName = attrs.schemaName;
+            this.request.apsdb.schemaName = attrs.schemaName;
+            if (attrs.newSchemaName != undefined) 
+                this.request.apsdb.newSchemaName = attrs.newSchemaName;
+            if (attrs.update != undefined) 
+                this.request.apsdb.update = attrs.update;
+            
             this.inherited(arguments);
-        } else throw new Error("apstrata.apsdb.client.SetSchema: missing schema name.")
+        }
+        else 
+            throw new Error("apstrata.apsdb.client.SetSchema: missing parameter.")
     }
 });
 

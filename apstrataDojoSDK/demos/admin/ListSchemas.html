@@ -143,7 +143,7 @@
                 dojo.byId("newSchemaName").value = ""
                 
                 operation.execute({
-                    schemaName: schemaName,
+                    schema: schema,
 					update: update,
 					schemaName: schemaName,
 					newSchemaName: newSchemaName
@@ -175,16 +175,18 @@
                 <br>
                 <input type="text" id="schemaName">
                 </input>
-                <br>
+                <br><br>
                 <span>Update:</span>
-				<span></span><input type="radio" name="update" value="true">true</input></span>
-				<span><input type="radio" name="update" value="false">false</input></span>
-                <br>
+                <select id="update">
+                    <option value="true">true</option>
+                    <option value="false" selected="true">false</option>
+                </select>
+                <br><br>
 				<span>New Schema Name:</span>
                 <br>
                 <input type="text" id="newSchemaName">
                 </input>
-                <br>
+                <br><br>
                 <span>Schema:</span>
                 <br>
                 <textarea id="schema" cols="60" rows="5">
