@@ -19,6 +19,6 @@ dojo.declare("apstrata.apsdb.client.ListStores",
 {
     constructor: function() {
         this.apsdbOperation = "ListStores"
-    },
+    }
     
 });

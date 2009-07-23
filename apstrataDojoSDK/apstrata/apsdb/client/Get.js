@@ -14,7 +14,6 @@ dojo.provide("apstrata.apsdb.client.Get");
 
 dojo.require ("dojo.io.script");
 dojo.require ("dojox.encoding.digests.MD5");
-
 dojo.require ("apstrata.apsdb.client.Operation");
 
 	dojo.declare("apstrata.apsdb.client.Get",
@@ -110,7 +109,7 @@ dojo.require ("apstrata.apsdb.client.Operation");
 					// that's why i'm using a timeout
 				} 
 			}); 			    
-		},		
+		}
 	});
 
 

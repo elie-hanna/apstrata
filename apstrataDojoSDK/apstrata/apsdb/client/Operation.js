@@ -14,7 +14,6 @@ dojo.provide("apstrata.apsdb.client.Operation")
 
 dojo.require ("dojo.io.script")
 dojo.require ("dojox.encoding.digests.MD5")
-
 dojo.require ("apstrata.util.logger.Logger")
 
 	dojo.declare("apstrata.apsdb.client.Operation",
