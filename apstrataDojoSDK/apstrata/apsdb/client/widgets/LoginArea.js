@@ -1,10 +1,13 @@
 dojo.provide("apstrata.apsdb.client.widgets.LoginArea");
 
+dojo.require("apstrata.apsdb.client.Connection")
+dojo.require("apstrata.apsdb.client.widgets.Login")
+
 dojo.declare("apstrata.apsdb.client.widgets.LoginArea", 
 	[dijit._Widget, dijit._Templated], 
 	{
 		widgetsInTemplate: true,
-		templateString: "<div><span dojoAttachPoint='spnMessage'></span> <a href='#' dojoAttachPoint='linkLogout'><span dojoAttachPoint='spnLabel'></span></a></div>",
+		templateString: "<span><span dojoAttachPoint='spnMessage'></span> <a href='#' dojoAttachPoint='linkLogout'><span dojoAttachPoint='spnLabel'></span></a></span>",
 		connection: null,
 		
 		constructor: function(attrs) {
