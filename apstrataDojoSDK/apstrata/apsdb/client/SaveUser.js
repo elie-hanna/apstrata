@@ -9,28 +9,32 @@
  *  specific language governing permissions and limitations under the License.
  * *****************************************************************************
  */
-
 dojo.provide("apstrata.apsdb.client.SaveUser");
 
 dojo.require("apstrata.apsdb.client.Get");
 
-dojo.declare("apstrata.apsdb.client.SaveUser",
-[apstrata.apsdb.client.Get],
-{    
-    constructor: function() {
-        this.apsdbOperation= "SaveUser"
+dojo.declare("apstrata.apsdb.client.SaveUser", [apstrata.apsdb.client.Get], {
+    constructor: function(){
+        this.apsdbOperation = "SaveUser"
     },
-
-    execute: function(attrs) {
-		if (attrs["apsim.user"] && attrs["apsim.password"] && attrs["apsim.name"]) {
-			for (prop in attrs) {					
-				this.request[prop] = attrs[prop];
-			}
-		    
-			this.inherited(arguments);
-		} else {
-			throw new Error("SaveUser: attribtues login and password are mandatory")
-		}
-
+    
+    execute: function(attrs){
+    
+        if ((attrs != undefined) &&
+        (attrs.login != undefined) &&
+        (attrs.password != undefined) &&
+        (attrs.name != undefined)) {
+            this.request.apsim.user = attrs.login;
+            this.request.apsim.password = attrs.password;
+            this.request.apsim.name = attrs.name;
+            if (attrs.update != undefined) 
+                this.request.apsim.update = attrs.update;
+            if (attrs.email != undefined) 
+                this.request.apsim.email = attrs.email;
+            
+            this.inherited(arguments);
+        }
+        else 
+            throw new Error("SaveUser: attribtues login and password are mandatory")
     }
 });

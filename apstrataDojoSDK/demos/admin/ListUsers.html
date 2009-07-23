@@ -32,112 +32,171 @@
         <script type="text/javascript" src="../../apstrata/apstrata.js">
         </script>
         <script type="text/javascript">
-            dojo.require("dojo.parser");
-            dojo.require("dijit.layout.ContentPane");
-            
-            var connection;
-            
-            dojo.addOnLoad(function(){
-                dojo.require("apstrata.apsdb.client.Connection")
-                dojo.require("apstrata.apsdb.client.ListUsers")
-                dojo.require("apstrata.apsdb.client.widgets.Login")
-                dojo.require("apstrata.apsdb.client.widgets.UserDetails")
-                
-                connection = new apstrata.apsdb.client.Connection({
-                    statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"
-                })
-                
-                dojo.byId("url").innerHTML = connection.serviceUrl
-                dojo.byId("account").innerHTML = connection.credentials.key
-                
-            })
-            
-            function populateUsersList(){
-                var operation = new apstrata.apsdb.client.ListUsers(connection)
-                
-                dojo.connect(operation, "handleResult", function(){
-                    var usersNode = dojo.byId("users")
-                    usersNode.innerHTML = ""
+                        dojo.require("dojo.parser");
+                        dojo.require("dijit.layout.ContentPane");
+                        
+                        var connection;
+                        
+                        dojo.addOnLoad(function(){
+                            dojo.require("apstrata.apsdb.client.Connection")
+                            dojo.require("apstrata.apsdb.client.ListUsers")
+                            dojo.require("apstrata.apsdb.client.widgets.Login")
+                            dojo.require("apstrata.apsdb.client.widgets.UserDetails")
+                            
+                            connection = new apstrata.apsdb.client.Connection({
+                                statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"
+                            })
+                            
+                            dojo.byId("url").innerHTML = connection.serviceUrl
+                            dojo.byId("account").innerHTML = connection.credentials.key
+                            
+                        })
+                        
+                        function populateUsersList(){
+                            var operation = new apstrata.apsdb.client.ListUsers(connection)
+                            
+                            dojo.connect(operation, "handleResult", function(){
+                                var usersNode = dojo.byId("users")
+                                usersNode.innerHTML = ""
+                                
+                                var s = "<table>"
+                                for (var i = 0; i < operation.result.users.length; i++) {
+                                    var userName = operation.result.users[i]["@name"]
+                                    s += "<tr><td class='delete' title='" + userName + "'></td><td class='value'>" + userName + "</td></tr>"
+                                }
+                                s += "</table>"
+                                
+                                usersNode.innerHTML = s
+                            })
+                            
+                            dojo.connect(operation, "handleError", function(){
+                                // alert(operation.errorMessage)
+                                login = new apstrata.apsdb.client.widgets.Login(connection)
+                                login.show()
+                            })
+                            var groupName = dojo.byId("groupName").value
+                            operation.execute({
+                                groupName: groupName
+                            });
+                            dojo.byId("edit").innerHTML = "edit"
+                            editMode = false
+                        }
+                        
+                        var editMode = false;
+                        function edit(){
+                            if (!editMode) {
+                                dojo.byId("edit").innerHTML = "stop edit"
+                                
+                                dojo.query(".delete").forEach(function(node, index, arr){
+                                    node.innerHTML = "<a href='#' class='get' onclick='getUser(\"" + node.title + "\")'>get</a>&nbsp;&nbsp;&nbsp;"
+                                    node.innerHTML = node.innerHTML + "<a href='#' class='delete' onclick='deleteUser(\"" + node.title + "\")'>delete</a>&nbsp;&nbsp;&nbsp;"
+                                });
+                                
+                                editMode = true
+                            }
+                            else {
+                                dojo.byId("edit").innerHTML = "edit"
+                                
+                                dojo.query(".delete").forEach(function(node, index, arr){
+                                    node.innerHTML = ""
+                                });
+                                
+                                editMode = false
+                            }
+                        }
+                        
+                        function getUser(user){
+                            dojo.require("apstrata.apsdb.client.GetUser")
+                            var operation = new apstrata.apsdb.client.GetUser(connection)
+                            dojo.connect(operation, "handleResult", function(){
+            				if(operation.result != undefined){
+								var result = "<result>";
+								if(operation.result.user != undefined){
+		            				result+= "<user name='" + operation.result.user.@name + "'>";
+		            				if( operation.result.user.attributes != undefined){
+		            					result+= "<attributes>";
+	            						for (var i = 0; i < operation.result.user.attributes.length; i++) {
+											if (operation.result.user.attributes[i] != undefined) {
+	            								result+="<attribute name='" + operation.result.user.attributes[i].@name + "'>";
+	            								if(operation.result.user.attributes[i].values != undefined){
+													result+="<values>";
+                                                    result+="<value>" + operation.result.user.attributes[i].values.value + "<value>";
+	            									result+="</values>";
+	            								}
+												result+="</attribute>";
+	            							}
+	            						}
+										result+= "</attributes>";	
+		            				}
+									result+= "</user>";
+								}
+								result+= "</result>";	
+							}
+                            content = new apstrata.apsdb.client.widgets.UserDetails(connection, result)
+                            content.show()
+                            })
+                            dojo.connect(operation, "handleError", function(){
+                                alert(operation.message)
+                            })
+                            
+                            operation.execute({
+                                user: user
+                            });
+                        }
+                        
+                        function deleteUser(userName){
+                            dojo.require("apstrata.apsdb.client.DeleteUser")
+                            var operation = new apstrata.apsdb.client.DeleteUser(connection)
+                            
+                            dojo.connect(operation, "handleResult", function(){
+                                populateUsersList()
+                                alert(userName + " Deleted!")
+                            })
+                            dojo.connect(operation, "handleError", function(){
+                                populateUsersList()
+                                alert(operation.message)
+                            })
+                            
+                            operation.execute({
+                                user: userName
+                            });
+                        }
+						
+                        function saveUser(){
+                            dojo.require("apstrata.apsdb.client.SaveUser")
+                            var operation = new apstrata.apsdb.client.SaveUser(connection)
+                            
+                            dojo.connect(operation, "handleResult", function(){
+                                populateUsersList()
+                            })
+                            dojo.connect(operation, "handleError", function(){
+                                alert(operation.message)
+                            })
+                            
+                            var login = dojo.byId("login").value
+                            dojo.byId("login").value = ""
+                            
+                            var update = dojo.byId("update").value
+                            dojo.byId("update").value = ""
+                            
+                            var password = dojo.byId("password").value
+                            dojo.byId("password").value = ""
+                            
+                            var name = dojo.byId("name").value
+                            dojo.byId("name").value = ""
+                            
+							var email = dojo.byId("email").value
+                            dojo.byId("email").value = ""
+							
+                            operation.execute({
+                                login: login,
+								update: update,
+                                password: password,
+                                name: name,
+                                email: email
+                            });
+                        }
                     
-                    var s = "<table>"
-                    for (var i = 0; i < operation.result.users.length; i++) {
-                        var userName = operation.result.users[i]["@name"]
-                        s += "<tr><td class='delete' title='" + userName + "'></td><td class='value'>" + userName + "</td></tr>"
-                    }
-                    s += "</table>"
-                    
-                    usersNode.innerHTML = s
-                })
-                
-                dojo.connect(operation, "handleError", function(){
-                    // alert(operation.errorMessage)
-                    login = new apstrata.apsdb.client.widgets.Login(connection)
-                    login.show()
-                })
-                var groupName = dojo.byId("groupName").value
-                operation.execute({
-                    groupName: groupName
-                });
-                dojo.byId("edit").innerHTML = "edit"
-                editMode = false
-            }
-            
-            var editMode = false;
-            function edit(){
-                if (!editMode) {
-                    dojo.byId("edit").innerHTML = "stop edit"
-                    
-                    dojo.query(".delete").forEach(function(node, index, arr){
-                        node.innerHTML = "<a href='#' class='get' onclick='getUser(\"" + node.title + "\")'>get</a>&nbsp;&nbsp;&nbsp;"
-                        node.innerHTML = node.innerHTML + "<a href='#' class='delete' onclick='deleteUser(\"" + node.title + "\")'>delete</a>&nbsp;&nbsp;&nbsp;"
-                    });
-                    
-                    editMode = true
-                }
-                else {
-                    dojo.byId("edit").innerHTML = "edit"
-                    
-                    dojo.query(".delete").forEach(function(node, index, arr){
-                        node.innerHTML = ""
-                    });
-                    
-                    editMode = false
-                }
-            }
-            
-            function getUser(user){
-                dojo.require("apstrata.apsdb.client.GetUser")
-                var operation = new apstrata.apsdb.client.GetUser(connection)
-                dojo.connect(operation, "handleResult", function(){
-                    content = new apstrata.apsdb.client.widgets.UserDetails(connection, operation.result)
-                    content.show()
-                })
-                dojo.connect(operation, "handleError", function(){
-                    alert(operation.message)
-                })
-                
-                operation.execute({
-                    user: user
-                });
-            }
-            
-            function deleteUser(userName){
-                dojo.require("apstrata.apsdb.client.DeleteUser")
-                var operation = new apstrata.apsdb.client.DeleteUser(connection)
-                
-                dojo.connect(operation, "handleResult", function(){
-                    populateUsersList()
-                    alert(userName + " Deleted!")
-                })
-                dojo.connect(operation, "handleError", function(){
-                    populateUsersList()
-                    alert(operation.message)
-                })
-                
-                operation.execute({
-                    user: userName
-                });
-            }
         </script>
     </head>
     <body class="nihilo">
@@ -167,9 +226,9 @@
         <br>
         <div>
             <div style="text-align: left;">
-                <span>Schema Name:</span>
+                <span>Login:</span>
                 <br>
-                <input type="text" id="schemaName">
+                <input type="text" id="login">
                 </input>
                 <br>
                 <br>
@@ -180,19 +239,26 @@
                 </select>
                 <br>
                 <br>
-                <span>New Schema Name:</span>
+                <span>Password:</span>
                 <br>
-                <input type="text" id="newSchemaName">
+                <input value="" id="password" size="20" type="password">
                 </input>
                 <br>
                 <br>
-                <span>Schema:</span>
+                <span>Name:</span>
                 <br>
-                <textarea id="schema" cols="60" rows="5">
-                </textarea>
+                <input value="" id="name">
+                </input>
+				<br>
+                <br>
+                <span>Email:</span>
+                <br>
+                <input value="" id="email">
+                </input>
             </div>
-            <button id="create" title="Set Schema" onclick="setSchema()">
-                save
+			<br>
+            <button id="create" title="Save User" onclick="saveUser()">
+                save user
             </button>
         </div>
         </body>
