@@ -36,16 +36,18 @@ function loadjscssfile(filename, filetype){
 	  document.getElementsByTagName("head")[0].appendChild(fileref)
 }
 
-loadjscssfile("../dojo/1.2.3-src/dojo/resources/dojo.css", "css");
+loadjscssfile("../dojo/1.2.3/dojo/resources/dojo.css", "css");
 loadjscssfile("widgets/css/survey.css", "css");
-//loadjscssfile("../dojo/1.2.3-src/dojo/dojo.js", "js");
+//loadjscssfile("../dojo/1.2.3/dojo/dojo.js", "js");
 
 dojo.require("dijit.Declaration");
+ //dojo.addOnLoad(function() {
 dojo.registerModulePath("surveyWidget","../../../../demos/survey");
 //dojo.registerModuleRelative ("surveyWidget", "../../survey");
 dojo.registerModulePath("apstrata","../../../../apstrata");
-//dojo.registerModuleRelative ("apstrata", "../../../apstrata");
+//dojo.registerModuleRelative ("apstrata", "../apstrata");
 dojo.require("surveyWidget.widgets.SurveyListing");
 dojo.require("apstrata.apsdb.client.Connection")
 dojo.require("apstrata.apsdb.client.Client")
+//})
 

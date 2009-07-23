@@ -27,7 +27,6 @@ dojo.require("dojo.dnd.Container");
 dojo.require("dojo.dnd.Manager");
 dojo.require("dojo.dnd.Source");
 
-
 dojo.declare("surveyWidget.widgets.Survey",
 	[dijit._Widget, dijit._Templated],
 	{
@@ -140,7 +139,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		
 		getModel: function() {
 			
-			var jsonObj = this.surveyform.getValues();	
+			var jsonObj = this.surveyform.getValues();
 			var data = new Array();
 			var arrFields = new Array();
 			var arrTitleFields = new Array();
@@ -150,15 +149,15 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var k=0;
 			var children = this.questions.getChildren();
 			dojo.forEach(this.questions.getChildren(), function(child) {
-				if (child.title != null && children[children.length - 1] != child) {
+				if (child.title != null && !child.dummyField) {
 					childModel = child.getModel();
 					childModel["defaultValue"] = jsonObj[child.fieldName];
 					data[i++] = childModel;
 				}
 			});
-			
+		
 			dojo.forEach(this.questions.getChildren(), function(child) {
-				if (child.title != null && children[children.length - 1] != child) {
+				if (child.title != null && !child.dummyField) {
 					arrFields[j++] = child.fldName.value;
 					arrTitleFields[k++] = child.fldTitle.value;
 				}
@@ -179,7 +178,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			//console.debug(dojo.toJson(suveyData));
 			this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
-			+ '<script type="text/javascript" src="../../lib/dojo/1.2.3-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
+			+ '<script type="text/javascript" src="../../lib/dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
 			+ '<script type="text/javascript" src="widgets/SurveyRunner.js" ></script>\n'
 			+ '<script>var schema = \'' + dojo.toJson(suveyData) + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
@@ -190,7 +189,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			
 			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
-			+ '<script type="text/javascript" src="../../lib/dojo/1.2.3-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
+			+ '<script type="text/javascript" src="../../lib/dojo/1.2.3/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
 			+ '<script type="text/javascript" src="widgets/SurveyListingLoader.js" ></script>\n'
 			+ '<script>var schema = \'' + dojo.toJson(listSurveyData) + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
