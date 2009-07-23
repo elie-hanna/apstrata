@@ -105,7 +105,7 @@ dojo.declare("apstrata.util.logger._Logger",
 	
 	setLoggingLevel: function(level) {
 	    this.logLevel = level
-	},
+	}
 });
 
 dojo.declare("apstrata.util.logger.Logger",
