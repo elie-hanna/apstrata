@@ -37,7 +37,7 @@
 	<target name="fix-source">
 		<replaceregexp match='src="../../' replace='src="../../../../lib/apstrata/${tag}/apstrata/' flags="gis">					
 			<fileset dir="${dest.path}-${tag}">
-				<include name="**/*.html/" />
+				<include name="**/*.html" />
 			</fileset>
 		</replaceregexp >
 	</target>
