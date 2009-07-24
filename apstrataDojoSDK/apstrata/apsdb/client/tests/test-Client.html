@@ -172,10 +172,54 @@
 				var operation = client.listSchemas(
 					function() {
 						test.success(operation)
-						deleteStore()
+						listUsers()
 					}, function() {
 						test.fail(operation)
 					})
+			}
+			
+			function listUsers() {
+				var operation = client.listUsers(
+					function() {
+						test.success(operation)
+						saveUser()
+					}, function() {
+						test.fail(operation)
+					})
+			}
+			function saveUser() {
+				var operation = client.saveUser(
+					function() {
+						test.success(operation)
+						getUser()
+					}, function() {
+						test.fail(operation)
+					},
+					{
+						login: user,
+						password: "pass",
+						name: "dummyName"
+					}
+				)	
+			}
+			function getUser() {
+				var operation = client.getUser(
+					function() {
+						test.success(operation)
+						deleteUser()
+					}, function() {
+						test.fail(operation)
+					}, {user: user})
+			}
+			
+			function deleteUser() {
+				var operation = client.deleteUser(
+					function() {
+						test.success(operation)
+						deleteStore()
+					}, function() {
+						test.fail(operation)
+					}, {user: user})
 			}
 			
 			function deleteStore() {
@@ -198,6 +242,7 @@
 				storeName = "testStore" + Math.floor(Math.random()*10000)
 				groupName = "testGroup" + Math.floor(Math.random()*10000)
 				schemaName= "schema"    + Math.floor(Math.random()*10000)
+				user= "user"    + Math.floor(Math.random()*10000)
 				
 				schema="<schema><aclGroups><aclGroup name='groupOne'><read>apstrata</read><write>nasr</write><fields><field>fieldone</field></fields></aclGroup><defaultAcl><read>nasr</read><write>youss</write><delete>abd</delete></defaultAcl></aclGroups><fields><field name='fieldone'></field></fields></schema>"
 				

@@ -26,6 +26,10 @@ dojo.require("apstrata.apsdb.client.DeleteStore");
 dojo.require("apstrata.apsdb.client.ListGroups");
 dojo.require("apstrata.apsdb.client.CreateGroup");
 dojo.require("apstrata.apsdb.client.DeleteGroup");
+dojo.require("apstrata.apsdb.client.ListUsers");
+dojo.require("apstrata.apsdb.client.DeleteUser");
+dojo.require("apstrata.apsdb.client.SaveUser");
+dojo.require("apstrata.apsdb.client.GetUser");
 dojo.require("apstrata.apsdb.client.ListSchemas");
 dojo.require("apstrata.apsdb.client.DeleteDocument");
 dojo.require("apstrata.apsdb.client.SaveDocument");
@@ -241,6 +245,23 @@ dojo.declare("apstrata.apsdb.client.Client",
 		},
 		listSchemas: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.ListSchemas(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		
+		saveUser: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.SaveUser(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		listUsers: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.ListUsers(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		getUser: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.GetUser(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		deleteUser: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.DeleteUser(this.connection)
 			return this._operation(success, failure, op, attrs)
 		}
 		
