@@ -13,7 +13,7 @@
 		<echo message="Checking out 'demos' folder" />
 		<svn>
 			<checkout url="${svn.repository}apstrataDojoSDK/demos"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/demos" />
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/resources" />
 		</svn>
 
 		<echo message="Checking out 'resources' folder" />
@@ -31,6 +31,15 @@
 				<include name="**/.svn/" />
 			</fileset>
 		</delete>
+	</target>
+
+	<!-- Fix the src path -->
+	<target name="fix-source">
+		<replaceregexp match='src="../../' replace='src="../../../../lib/apstrata/${tag}/apstrata/' flags="gis">					
+			<fileset dir="${dest.path}-${tag}">
+				<include name="**/*.html/" />
+			</fileset>
+		</replaceregexp >
 	</target>
 
 	<!-- Package application -->
