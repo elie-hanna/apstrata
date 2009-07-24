@@ -35,9 +35,8 @@
 
 	<!-- Package application -->
 	<target name="pack" depends="clean,checkout">
-		<zip destfile="${deploy.dir}/${context.name}.zip">
-			<zipfileset dir="${autoforms.dist.location}/webapp"
-				prefix="${context.name}" />
+		<zip destfile="${dest.path}-${tag}.zip">
+			<zipfileset dir="${dest.path}-${tag}" />
 		</zip>
 	</target>
 </project>
