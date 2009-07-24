@@ -1,0 +1,42 @@
+<project name="apsdb" basedir=".">
+	<property file="${basedir}/build.properties" />
+	<!-- Checkout application from svn -->
+	<target name="checkout">
+		<taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask" />
+
+		<echo message="Checking out 'apstrata' folder" />
+		<svn>
+			<checkout url="${svn.repository}apstrataDojoSDK/apstrata"
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/apstrata" />
+		</svn>
+
+		<echo message="Checking out 'demos' folder" />
+		<svn>
+			<checkout url="${svn.repository}apstrataDojoSDK/demos"
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/resources" />
+		</svn>
+
+		<echo message="Checking out 'resources' folder" />
+		<svn>
+			<checkout url="${svn.repository}apstrataDojoSDK/resources"
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/resources" />
+		</svn>
+
+	</target>
+
+	<!-- Remove '.svn' folders -->
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${dest.path}-${tag}" includes="**/.svn"
+				defaultexcludes="false" />
+		</delete>
+	</target>
+
+	<!-- Package application -->
+	<target name="pack" depends="clean,checkout">
+		<zip destfile="${deploy.dir}/${context.name}.zip">
+			<zipfileset dir="${autoforms.dist.location}/webapp"
+				prefix="${context.name}" />
+		</zip>
+	</target>
+</project>
