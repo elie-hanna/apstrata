@@ -13,7 +13,7 @@
 		<echo message="Checking out 'demos' folder" />
 		<svn>
 			<checkout url="${svn.repository}apstrataDojoSDK/demos"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/resources" />
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/demos" />
 		</svn>
 
 		<echo message="Checking out 'resources' folder" />
