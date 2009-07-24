@@ -27,8 +27,9 @@
 	<!-- Remove '.svn' folders -->
 	<target name="clean">
 		<delete includeemptydirs="true">
-			<fileset dir="${dest.path}-${tag}" includes="**/.svn"
-				defaultexcludes="false" />
+			<fileset dir="${dest.path}-${tag}" defaultexcludes="false">
+				<include name="**/.svn/" />
+			</fileset>
 		</delete>
 	</target>
 
