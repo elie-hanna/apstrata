@@ -31,7 +31,12 @@ dojo.declare("apstrata.apsdb.client.SaveUser", [apstrata.apsdb.client.Get], {
                 this.request.apsim.update = attrs.update;
             if (attrs.email != undefined) 
                 this.request.apsim.email = attrs.email;
-            
+            for (prop in attrs) {					
+				if(prop != "login" && prop != "email" && prop != "password" && prop != "update" && prop != "name"){
+					this.request[prop] = attrs[prop];
+				}
+			}
+			
             this.inherited(arguments);
         }
         else 
