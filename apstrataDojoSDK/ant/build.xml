@@ -13,13 +13,37 @@
 		<echo message="Checking out 'demos' folder" />
 		<svn>
 			<checkout url="${svn.repository}apstrataDojoSDK/demos"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/resources" />
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/demos" />
 		</svn>
 
 		<echo message="Checking out 'resources' folder" />
 		<svn>
 			<checkout url="${svn.repository}apstrataDojoSDK/resources"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/resources" />
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/resources" />
+		</svn>
+		
+		<echo message="Checking out 'gpl.txt'" />
+		<svn>
+			<checkout url="${svn.repository}apstrataDojoSDK/gpl.txt"
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/" />
+		</svn>
+		
+		<echo message="Checking out 'index.html'" />
+		<svn>
+			<checkout url="${svn.repository}apstrataDojoSDK/index.html"
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/" />
+		</svn>
+		
+		<echo message="Checking out 'lgpl.txt'" />
+		<svn>
+			<checkout url="${svn.repository}apstrataDojoSDK/lgpl.txt"
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/" />
+		</svn>
+		
+		<echo message="Checking out 'license.txt'" />
+		<svn>
+			<checkout url="${svn.repository}apstrataDojoSDK/license.txt"
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/" />
 		</svn>
 
 	</target>
@@ -43,7 +67,7 @@
 	</target>
 
 	<!-- Package application -->
-	<target name="pack" depends="clean,checkout">
+	<target name="pack" depends="checkout,clean">
 		<zip destfile="${dest.path}-${tag}.zip">
 			<zipfileset dir="${dest.path}-${tag}" />
 		</zip>
