@@ -6,37 +6,37 @@
         
         <echo message="Exporting out 'apstrata' folder"/>
         <svn>
-            <export srcUrl="${svn.repository}apstrataDojoSDK/apstrata"
+            <export srcUrl="${svn.repository}${context.name}/apstrata"
              revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/apstrata"/>
         </svn>
         
         <echo message="Exporting out 'demos' folder"/>
         <svn>
-            <export srcUrl="${svn.repository}apstrataDojoSDK/demos"
+            <export srcUrl="${svn.repository}${context.name}/demos"
              revision="${svn.revision}" destPath="${dest.path}-${tag}/demos"/>
         </svn>
         
         <echo message="Exporting out 'gpl.txt'"/>
         <svn>
-            <export srcUrl="${svn.repository}apstrataDojoSDK/gpl.txt"
+            <export srcUrl="${svn.repository}${context.name}/gpl.txt"
              revision="${svn.revision}" destPath="${dest.path}-${tag}/"/>
         </svn>
         
         <echo message="Exporting out 'index.html'"/>
         <svn>
-            <export srcUrl="${svn.repository}apstrataDojoSDK/index.html"
+            <export srcUrl="${svn.repository}${context.name}/index.html"
              revision="${svn.revision}" destPath="${dest.path}-${tag}/"/>
         </svn>
         
         <echo message="Exporting out 'lgpl.txt'"/>
         <svn>
-            <export srcUrl="${svn.repository}apstrataDojoSDK/lgpl.txt"
+            <export srcUrl="${svn.repository}${context.name}/lgpl.txt"
              revision="${svn.revision}" destPath="${dest.path}-${tag}/"/>
         </svn>
         
         <echo message="Exporting out 'license.txt'"/>
         <svn>
-            <export srcUrl="${svn.repository}apstrataDojoSDK/license.txt"
+            <export srcUrl="${svn.repository}${context.name}/license.txt"
              revision="${svn.revision}" destPath="${dest.path}-${tag}/"/>
         </svn>
         
@@ -55,29 +55,27 @@
     
     <!-- Fix path -->
     <target name="fix-path">
-        <echo message="***********  Fixing dojo global path        ******************"/>
-		<replaceregexp match="dojo/(.).(.).(.)" replace="dojo/${dojo.revision}" byline="true">
+        <replaceregexp file="${dest.path}-${tag}/index.html" match='src="apstrata/' replace='src="lib/apstrata/${tag}/apstrata/' byline="true">
+        </replaceregexp>
+        
+        <replaceregexp match="dojo/(.).(.).(.)" replace="dojo/${dojo.revision}" byline="true">
             <fileset dir="${dest.path}-${tag}">
                 <include name="**"/>
             </fileset>
         </replaceregexp>
-		
-        <echo message="***********  Fixing javascript source paths ******************"/>
+        
         <replaceregexp match="lib/dojo" replace="../../dojo" byline="true">
-            <fileset dir="${dest.path}-${tag}/apstrata">
+            <fileset dir="${dest.path}-${tag}/lib/apstrata/${tag}/apstrata">
                 <include name="**"/>
             </fileset>
         </replaceregexp>
         
-        <echo message="Fixing paths in index.html"/>
-        <replaceregexp file="${dest.path}-${tag}/index.html" match='src="apstrata/' replace='src="lib/apstrata/${tag}/apstrata/' byline="true">
-        </replaceregexp>
     </target>
     
     <!-- Package application -->
     <target name="pack" depends="export,get-dojo,fix-path">
         <zip destfile="${dest.path}-${tag}.zip">
-            <zipfileset dir="${dest.path}-${tag}"/>
+            <zipfileset dir="${dest.path}-${tag}" prefix="${context.name}"/>
         </zip>
     </target>
 </project>
