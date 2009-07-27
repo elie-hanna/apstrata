@@ -69,6 +69,12 @@
                 <include name="**"/>
             </fileset>
         </replaceregexp>
+		
+		 <replaceregexp match="/apstrata/" replace="/lib/apstrata/${tag}/apstrata/" byline="true">
+            <fileset dir="${dest.path}-${tag}/demos">
+                <include name="**"/>
+            </fileset>
+        </replaceregexp>
         
     </target>
     
