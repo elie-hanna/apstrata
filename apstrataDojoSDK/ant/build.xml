@@ -48,9 +48,23 @@
 
 	</target>
 
-	<!-- Fix the src path -->
-	<target name="fix-source">
+	<!-- Fix path -->
+	<target name="fix-path">
+		<echo message="Fixing javascript source paths" />
 		<replaceregexp match='src="../../apstrata' replace='src="../../../lib/apstrata/${tag}/apstrata' flags="gis">					
+			<fileset dir="${dest.path}-${tag}">
+				<include name="**/*.html" />
+			</fileset>
+		</replaceregexp >
+		
+		<echo message="Fixing imports" />
+		<replaceregexp match='@import "../../apstrata' replace='@import "../../../lib/apstrata/${tag}/apstrata' flags="gis">					
+			<fileset dir="${dest.path}-${tag}">
+				<include name="**/*.html" />
+			</fileset>
+		</replaceregexp >
+		
+		<replaceregexp match='@import "../../resources' replace='@import "../../../lib/apstrata/${tag}/resources' flags="gis">					
 			<fileset dir="${dest.path}-${tag}">
 				<include name="**/*.html" />
 			</fileset>
@@ -58,7 +72,7 @@
 	</target>
 
 	<!-- Package application -->
-	<target name="pack" depends="export,fix-source">
+	<target name="pack" depends="export,fix-path">
 		<zip destfile="${dest.path}-${tag}.zip">
 			<zipfileset dir="${dest.path}-${tag}" />
 		</zip>
