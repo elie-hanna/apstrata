@@ -50,7 +50,7 @@
 
 	<!-- Fix the src path -->
 	<target name="fix-source">
-		<replaceregexp match='src="../../' replace='src="../../../../lib/apstrata/${tag}/apstrata/' flags="gis">					
+		<replaceregexp match='src="../../apstrata' replace='src="../../../lib/apstrata/${tag}/apstrata' flags="gis">					
 			<fileset dir="${dest.path}-${tag}">
 				<include name="**/*.html" />
 			</fileset>
@@ -58,7 +58,7 @@
 	</target>
 
 	<!-- Package application -->
-	<target name="pack" depends="export">
+	<target name="pack" depends="export,fix-source">
 		<zip destfile="${dest.path}-${tag}.zip">
 			<zipfileset dir="${dest.path}-${tag}" />
 		</zip>
