@@ -1,80 +1,86 @@
 <project name="apsdb" basedir=".">
-	<property file="${basedir}/build.properties" />
-	<!-- Export application from svn -->
-	<target name="export">
-		<taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask" />
-
-		<echo message="Exporting out 'apstrata' folder" />
-		<svn>
-			<export srcUrl="${svn.repository}apstrataDojoSDK/apstrata"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/apstrata" />
-		</svn>
-
-		<echo message="Exporting out 'demos' folder" />
-		<svn>
-			<export srcUrl="${svn.repository}apstrataDojoSDK/demos"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/demos" />
-		</svn>
-
-		<echo message="Exporting out 'resources' folder" />
-		<svn>
-			<export srcUrl="${svn.repository}apstrataDojoSDK/resources"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/resources" />
-		</svn>
-		
-		<echo message="Exporting out 'gpl.txt'" />
-		<svn>
-			<export srcUrl="${svn.repository}apstrataDojoSDK/gpl.txt"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/" />
-		</svn>
-		
-		<echo message="Exporting out 'index.html'" />
-		<svn>
-			<export srcUrl="${svn.repository}apstrataDojoSDK/index.html"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/" />
-		</svn>
-		
-		<echo message="Exporting out 'lgpl.txt'" />
-		<svn>
-			<export srcUrl="${svn.repository}apstrataDojoSDK/lgpl.txt"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/" />
-		</svn>
-		
-		<echo message="Exporting out 'license.txt'" />
-		<svn>
-			<export srcUrl="${svn.repository}apstrataDojoSDK/license.txt"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/" />
-		</svn>
-
-	</target>
-
-	<!-- Fix path -->
-	<target name="fix-path">
-		<echo message="Fixing javascript source paths" />
-		<replaceregexp match='src="../../apstrata' replace='src="../../../lib/apstrata/${tag}/apstrata' flags="gis">					
-			<fileset dir="${dest.path}-${tag}">
-				<include name="**/*.html" />
-			</fileset>
-		</replaceregexp >
-		
-		<echo message="Fixing imports" />
-		<replaceregexp match='@import "../../apstrata' replace='@import "../../../lib/apstrata/${tag}/apstrata' flags="gis">					
-			<fileset dir="${dest.path}-${tag}">
-				<include name="**/*.html" />
-			</fileset>
-		</replaceregexp >
-		
-		<replaceregexp match='@import "../../resources' replace='@import "../../../lib/apstrata/${tag}/resources' flags="gis">					
-			<fileset dir="${dest.path}-${tag}">
-				<include name="**/*.html" />
-			</fileset>
-		</replaceregexp >
-	</target>
-
-	<!-- Package application -->
-	<target name="pack" depends="export,fix-path">
-		<zip destfile="${dest.path}-${tag}.zip">
-			<zipfileset dir="${dest.path}-${tag}" />
-		</zip>
-	</target>
+    <property file="${basedir}/build.properties"/>
+    <!-- Export application from svn -->
+    <target name="export">
+        <taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask"/>
+        
+        <echo message="Exporting out 'apstrata' folder"/>
+        <svn>
+            <export srcUrl="${svn.repository}apstrataDojoSDK/apstrata"
+             revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/apstrata"/>
+        </svn>
+        
+        <echo message="Exporting out 'demos' folder"/>
+        <svn>
+            <export srcUrl="${svn.repository}apstrataDojoSDK/demos"
+             revision="${svn.revision}" destPath="${dest.path}-${tag}/demos"/>
+        </svn>
+        
+        <echo message="Exporting out 'gpl.txt'"/>
+        <svn>
+            <export srcUrl="${svn.repository}apstrataDojoSDK/gpl.txt"
+             revision="${svn.revision}" destPath="${dest.path}-${tag}/"/>
+        </svn>
+        
+        <echo message="Exporting out 'index.html'"/>
+        <svn>
+            <export srcUrl="${svn.repository}apstrataDojoSDK/index.html"
+             revision="${svn.revision}" destPath="${dest.path}-${tag}/"/>
+        </svn>
+        
+        <echo message="Exporting out 'lgpl.txt'"/>
+        <svn>
+            <export srcUrl="${svn.repository}apstrataDojoSDK/lgpl.txt"
+             revision="${svn.revision}" destPath="${dest.path}-${tag}/"/>
+        </svn>
+        
+        <echo message="Exporting out 'license.txt'"/>
+        <svn>
+            <export srcUrl="${svn.repository}apstrataDojoSDK/license.txt"
+             revision="${svn.revision}" destPath="${dest.path}-${tag}/"/>
+        </svn>
+        
+    </target>
+    
+    <!-- Get and unzip dojo,then copy to application -->
+    <target name="dojo">
+        <echo message="Get dojo source"/>
+        <mkdir dir="${dest.path}-${tag}/lib"/>
+        <get src="http://download.dojotoolkit.org/release-${dojo.revision}/dojo-release-${dojo.revision}-src.tar.gz" dest="${dest.path}-${tag}/lib/dojo.tar.gz" verbose="true"/>
+        <gunzip src="${dest.path}-${tag}/lib/dojo.tar.gz" dest="${dest.path}-${tag}/lib/dojo.tar"/>
+        <untar src="${dest.path}-${tag}/lib/dojo.tar" dest="${dest.path}-${tag}/lib/"/>
+		<move file="${dest.path}-${tag}/lib/dojo-release-${dojo.revision}-src" tofile="${dest.path}-${tag}/lib/dojo/${dojo.revision}-src"/>
+        <delete file="${dest.path}-${tag}/lib/dojo.tar"/>
+        <delete file="${dest.path}-${tag}/lib/dojo.tar.gz"/>
+    </target>
+    
+    <!-- Fix path -->
+    <target name="fix-path">
+        <echo message="Fixing javascript source paths"/>
+        <replaceregexp match='src="../../apstrata' replace='src="../../../lib/apstrata/${tag}/apstrata' flags="gis">
+            <fileset dir="${dest.path}-${tag}">
+                <include name="**/*.html"/>
+            </fileset>
+        </replaceregexp>
+        
+        <echo message="Fixing imports"/>
+        <replaceregexp match='@import "../../apstrata' replace='@import "../../../lib/apstrata/${tag}/apstrata' flags="gis">
+            <fileset dir="${dest.path}-${tag}">
+                <include name="**/*.html"/>
+            </fileset>
+        </replaceregexp>
+        
+        <replaceregexp match='@import "../../resources' replace='@import "../../../lib/apstrata/${tag}/resources' flags="gis">
+            <fileset dir="${dest.path}-${tag}">
+                <include name="**/*.html"/>
+            </fileset>
+        </replaceregexp>
+    </target>
+    
+    <!-- Package application -->
+    <target name="pack" depends="export,fix-path">
+        <zip destfile="${dest.path}-${tag}.zip">
+            <zipfileset dir="${dest.path}-${tag}"/>
+        </zip>
+    </target>
 </project>
