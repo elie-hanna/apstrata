@@ -1,60 +1,51 @@
 <project name="apsdb" basedir=".">
 	<property file="${basedir}/build.properties" />
-	<!-- Checkout application from svn -->
-	<target name="checkout">
+	<!-- Export application from svn -->
+	<target name="export">
 		<taskdef name="svn" classname="org.tigris.subversion.svnant.SvnTask" />
 
-		<echo message="Checking out 'apstrata' folder" />
+		<echo message="Exporting out 'apstrata' folder" />
 		<svn>
-			<checkout url="${svn.repository}apstrataDojoSDK/apstrata"
+			<export srcUrl="${svn.repository}apstrataDojoSDK/apstrata"
 				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/apstrata" />
 		</svn>
 
-		<echo message="Checking out 'demos' folder" />
+		<echo message="Exporting out 'demos' folder" />
 		<svn>
-			<checkout url="${svn.repository}apstrataDojoSDK/demos"
+			<export srcUrl="${svn.repository}apstrataDojoSDK/demos"
 				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/demos" />
 		</svn>
 
-		<echo message="Checking out 'resources' folder" />
+		<echo message="Exporting out 'resources' folder" />
 		<svn>
-			<checkout url="${svn.repository}apstrataDojoSDK/resources"
-				revision="${svn.revision}" destPath="${dest.path}-${tag}/apstrata/${tag}/resources" />
+			<export srcUrl="${svn.repository}apstrataDojoSDK/resources"
+				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/resources" />
 		</svn>
 		
-		<echo message="Checking out 'gpl.txt'" />
+		<echo message="Exporting out 'gpl.txt'" />
 		<svn>
-			<checkout url="${svn.repository}apstrataDojoSDK/gpl.txt"
+			<export srcUrl="${svn.repository}apstrataDojoSDK/gpl.txt"
 				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/" />
 		</svn>
 		
-		<echo message="Checking out 'index.html'" />
+		<echo message="Exporting out 'index.html'" />
 		<svn>
-			<checkout url="${svn.repository}apstrataDojoSDK/index.html"
+			<export srcUrl="${svn.repository}apstrataDojoSDK/index.html"
 				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/" />
 		</svn>
 		
-		<echo message="Checking out 'lgpl.txt'" />
+		<echo message="Exporting out 'lgpl.txt'" />
 		<svn>
-			<checkout url="${svn.repository}apstrataDojoSDK/lgpl.txt"
+			<export srcUrl="${svn.repository}apstrataDojoSDK/lgpl.txt"
 				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/" />
 		</svn>
 		
-		<echo message="Checking out 'license.txt'" />
+		<echo message="Exporting out 'license.txt'" />
 		<svn>
-			<checkout url="${svn.repository}apstrataDojoSDK/license.txt"
+			<export srcUrl="${svn.repository}apstrataDojoSDK/license.txt"
 				revision="${svn.revision}" destPath="${dest.path}-${tag}/lib/apstrata/${tag}/" />
 		</svn>
 
-	</target>
-
-	<!-- Remove '.svn' folders -->
-	<target name="clean">
-		<delete includeemptydirs="true">
-			<fileset dir="${dest.path}-${tag}" defaultexcludes="false">
-				<include name="**/.svn/" />
-			</fileset>
-		</delete>
 	</target>
 
 	<!-- Fix the src path -->
@@ -67,7 +58,7 @@
 	</target>
 
 	<!-- Package application -->
-	<target name="pack" depends="checkout,clean">
+	<target name="pack" depends="export">
 		<zip destfile="${dest.path}-${tag}.zip">
 			<zipfileset dir="${dest.path}-${tag}" />
 		</zip>
