@@ -63,27 +63,14 @@
         </replaceregexp>
 		
         <echo message="***********  Fixing javascript source paths ******************"/>
-        <replaceregexp match='src="../../apstrata' replace='src="../../../lib/apstrata/${tag}/apstrata' byline="true">
-            <fileset dir="${dest.path}-${tag}">
+        <replaceregexp match="lib/dojo" replace="../../dojo" byline="true">
+            <fileset dir="${dest.path}-${tag}/apstrata">
                 <include name="**"/>
             </fileset>
         </replaceregexp>
         
         <echo message="Fixing paths in index.html"/>
         <replaceregexp file="${dest.path}-${tag}/index.html" match='src="apstrata/' replace='src="lib/apstrata/${tag}/apstrata/' byline="true">
-        </replaceregexp>
-        
-        <echo message="***********  Fixing imports ******************"/>
-        <replaceregexp match='@import "../../apstrata' replace='@import "../../../lib/apstrata/${tag}/apstrata' byline="true">
-            <fileset dir="${dest.path}-${tag}">
-                <include name="**/*.html"/>
-            </fileset>
-        </replaceregexp>
-        
-        <replaceregexp match='@import "../../resources' replace='@import "../../../lib/apstrata/${tag}/resources' byline="true">
-            <fileset dir="${dest.path}-${tag}">
-                <include name="**/*.html"/>
-            </fileset>
         </replaceregexp>
     </target>
     
