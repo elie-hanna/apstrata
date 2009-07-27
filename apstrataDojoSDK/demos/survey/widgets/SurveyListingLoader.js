@@ -36,9 +36,9 @@ function loadjscssfile(filename, filetype){
 	  document.getElementsByTagName("head")[0].appendChild(fileref)
 }
 
-loadjscssfile("../dojo/1.2.3/dojo/resources/dojo.css", "css");
+loadjscssfile("../dojo/1.3.0/dojo/resources/dojo.css", "css");
 loadjscssfile("widgets/css/survey.css", "css");
-//loadjscssfile("../dojo/1.2.3/dojo/dojo.js", "js");
+//loadjscssfile("../dojo/1.3.0/dojo/dojo.js", "js");
 
 dojo.require("dijit.Declaration");
  //dojo.addOnLoad(function() {
