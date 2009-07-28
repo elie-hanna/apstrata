@@ -79,7 +79,7 @@
     </target>
     
     <!-- Package application -->
-    <target name="pack" depends="export,get-dojo,fix-path">
+    <target name="pack" depends="export,fix-path,get-dojo">
         <zip destfile="${dest.path}-${tag}.zip">
             <zipfileset dir="${dest.path}-${tag}" prefix="${context.name}"/>
         </zip>
