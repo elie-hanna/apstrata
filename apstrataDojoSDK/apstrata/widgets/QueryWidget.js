@@ -40,14 +40,17 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		if (attrs.query) this.query = attrs.query
 		if (attrs.page) this.page = attrs.page
 		if (attrs.columns) this.columns = attrs.columns
+		if (attrs.layout) {
+			this._layout=layout; 
+		} else {
+				this._layout = []
 		
-		this._layout = []
-
-		// compute layout
-		dojo.forEach(self.columns.split(","), function(field) {
-			field = dojo.string.trim(field)
-			self._layout.push({ field: field, name: field, width: '200px' })
-		})		
+				// compute layout
+				dojo.forEach(self.columns.split(","), function(field) {
+					field = dojo.string.trim(field)
+					self._layout.push({ field: field, name: field, width: '200px' })
+				})		
+			}
 	},
 	
 	postCreate: function() {
