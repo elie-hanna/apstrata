@@ -38,7 +38,6 @@ dojo.declare("apstrata.apsdb.client.SaveDocument",
 		return newObject
 	},
 
-	// TODO: save multivalue fields, 
 	// TODO: save typed values
     execute: function(attrs, flatten) {
 console.dir(attrs)		
