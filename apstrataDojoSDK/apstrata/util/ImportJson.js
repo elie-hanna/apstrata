@@ -20,7 +20,7 @@ dojo.declare("apstrata.util.ImportJson",
 	constructor: function(attrs) {
 		var client
 		
-		if (attrs.connection) {
+		if (attrs && attrs.connection) {
 			client = new apstrata.apsdb.client.Client(attrs.connection)
 		} else {
 			client = new apstrata.apsdb.client.Client()
@@ -28,14 +28,14 @@ dojo.declare("apstrata.util.ImportJson",
 		
 		var store = attrs.store?attrs.store:client.connection.defaultStore
 		
-		if (attrs.data) {
+		if (attrs && attrs.data) {
 			dojo.forEach(attrs.data, function(item) {
 				var doc = {store: store, fields: item}
-				if (attrs.documentKey) if (item[attrs.documentKey]) doc.documentKey = item[attrs.documentKey]
+				if (attrs.documentKey) if (item[attrs.documentKey]) doc.fields["apsdb.documentKey"] = item[attrs.documentKey]
 				client.queue("SaveDocument", doc)
 			})
 		}
 
-		client.execute()
+		client.execute({iterationSuccess: attrs.onItemAdded})
 	}
 })
