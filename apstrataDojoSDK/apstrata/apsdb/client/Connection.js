@@ -86,24 +86,36 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		_COOKIE_EXPIRY: 15,
 		totalConnectionTime: 0,
 		numberOfConnections: 0,
+		statusWidget: null,
 		
 		constructor: function(attr) {
+			var self = this
+			
 			this._DEFAULT_SERVICE_URL= "http://apsdb.apstrata.com/sandbox-apsdb/rest"
 			this.timeout = 10000
 			this.serviceUrl= this._DEFAULT_SERVICE_URL;
 			this.credentials= {key: "", secret: "", un: "", pw: ""}
 			this.defaultStore = ''
 			this._ongoingLogin = false
+			this._urlSigner = new apstrata.apsdb.client.URLSignerMD5()				
 
-			if (attr != undefined) {
-				if (attr.URLSigner == undefined) {
-					this._urlSigner = new apstrata.apsdb.client.URLSignerMD5()
-				} else {
+			this.activity= new apstrata.apsdb.client.Activity()
+
+			if (attr) {
+			/*
+				if (attr.URLSigner) {
 					this._urlSigner = attr.URLSigner
 				}
-			} else {
-				this._urlSigner = new apstrata.apsdb.client.URLSignerMD5()				
-			}
+			*/
+
+				if (attr.statusWidget) {
+					// TODO: this should be replaced by dynamic instantiation
+					if (attr.statusWidget == "apstrata.apsdb.client.widgets.ConnectionStatus") {
+						dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus")
+						var sw = new apstrata.apsdb.client.widgets.ConnectionStatus(self)
+					}
+				}
+			} 
 			
 			this.loadFromCookie()
 
@@ -115,7 +127,6 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				if (apstrata.apConfig.serviceURL != undefined) this.serviceUrl = apstrata.apConfig.serviceURL
 			}
 
-			this.activity= new apstrata.apsdb.client.Activity()
 
 			// TODO: Investigate why this is not working: dojo.parser.instantiate
 			/*
@@ -127,13 +138,6 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			}
 			*/
 
-			// TODO: this should be replaced by dynamic instantiation
-			if (attr!=undefined) {
-				if (attr.statusWidget == "apstrata.apsdb.client.widgets.ConnectionStatus") {
-					dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus")
-					var sw = new apstrata.apsdb.client.widgets.ConnectionStatus(this)
-				}
-			}
 		},
 		
 		hasCredentials: function() {

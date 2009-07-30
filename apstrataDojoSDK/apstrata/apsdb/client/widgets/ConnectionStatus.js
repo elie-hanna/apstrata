@@ -24,11 +24,9 @@ dojo.declare("apstrata.apsdb.client.widgets.ConnectionStatus",
 		constructor: function(/* apstrata.apsdb.client.Connection */ connection) {			
 			var self = this;
 			self.connection = connection
-			
+
 			dojo.connect(connection.activity, "busy", function() { self.dlgWait.show() })
-			dojo.connect(connection.activity, "free", function() {
-				self.dlgWait.hide();
-			})			
+			dojo.connect(connection.activity, "free", function() { self.dlgWait.hide() })			
 		}
 		
 	});
