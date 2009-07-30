@@ -124,8 +124,8 @@ dojo.declare("apstrata.apsdb.client.Client",
 			var self = this
 			
 			var continueOnError = false
-			if (attrs.continueOnError != undefined) continueOnError = attrs.continueOnError
-			
+			if (attrs && attrs.continueOnError) continueOnError = attrs.continueOnError
+
 			if (self._q.length == 0) {
 				self.log(self._LOGGER.ERROR, "Queue empty.")
 				return
@@ -140,15 +140,15 @@ dojo.declare("apstrata.apsdb.client.Client",
 			// invoke method
 			var op = this[opName](
 				function() {
-					if (attrs.iterationSuccess) attrs.iterationSuccess(op)
+					if (attrs && attrs.iterationSuccess) attrs.iterationSuccess(op)
 
 					// If it's the end of the queue, invoke callback
 					//	else continue through queue
 					if (self._q.length == 0) {
 						if (attrs._error) {
-							if (attrs.failure) attrs.failure()
+							if (attrs && attrs.failure) attrs.failure()
 						} else {
-							if (attrs.success) attrs.success(); 														
+							if (attrs && attrs.success) attrs.success(); 														
 						}					
 					} else {
 						 self.execute(attrs)
@@ -157,17 +157,17 @@ dojo.declare("apstrata.apsdb.client.Client",
 				function() {
 					self.log("failed executing queued operation", o)
 
-					if (attrs.iterationFailure) attrs.iterationFailure(op)
+					if (attrs && attrs.iterationFailure) attrs.iterationFailure(op)
 
 					if (self._q.length == 0) {
 						// If it's the end of the queue, invoke callback
-						if (attrs.failure) attrs.failure()
+						if (attrs && attrs.failure) attrs.failure()
 						// if it's not the end of the queue
 					} if (continueOnError) {
 						//	if continueOnError is requested, continue the execution
 						attrs._error = true
 						self.execute(attrs)
-					} else if (attrs.failure) {
+					} else if (attrs && attrs.failure) {
 						//  invoke the failure callback and stop execution
 						attrs.failure(op)							
 					}
@@ -182,11 +182,12 @@ dojo.declare("apstrata.apsdb.client.Client",
 				dojo.connect(operation, "handleResult", function() {
 					success(operation)
 				})
-				if (failure != undefined) {
-					dojo.connect(operation, "handleError", function() {
-						failure(operation)
-					})
-				}
+			}
+
+			if (failure != undefined) {
+				dojo.connect(operation, "handleError", function() {
+					failure(operation)
+				})
 			}
 
 			operation.execute(attrs)
