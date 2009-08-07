@@ -19,10 +19,30 @@
  */
 
 dojo.provide("apstrata.apsdb.client._Item");
-
+/**
+ * Represents a data tuple/row/field that is used by item apsdb read/write stores
+ * @class apstrata.apsdb.client._Item
+*/
 dojo.declare("apstrata.apsdb.client._Item", 
 	[], 
-	{		
+	{
+    /**
+     * @constructor _Item
+     *     attrs:
+     *        {
+     *				item: Object
+     *				fieldNames: Array
+     *				childrenNames: Array
+     *        }
+     *
+     *    The *item* parameter.
+     *			Object
+     *
+     *			Name value pairs
+     *
+     *    The *fieldNames* parameter.
+     *			Array of fieldNames
+     */
 		constructor: function(attrs) {
 			//    attrs:
 			//        {
@@ -96,11 +116,22 @@ dojo.declare("apstrata.apsdb.client._Item",
 				self.loaded = true
 			}
 		},
-		
+    
+    /**
+     * @function getValues Get all values of the passed attribute
+     * @param attribute An Object whose values are to be fetched from the fields of this item
+     * @returns The values of the field whose key is the passed attribute
+		 */
 		getValues: function(attribute) {
 			if (this.fieldsMap[attribute]) return this.fieldsMap[attribute].values
 		},
-		
+    
+		/**
+     * @function getValue Get the first value of the passed attribute
+     * @param attribute An Object whose value is to be fetched from the fields of this item
+     * @param defaultValue The defaultValue to be returned if the passed attribute does not exist
+     * @returns The value of the field whose key is the passed attribute or the passed defaultValue if the attribute does not have a value
+		 */
 		getValue: function(/* attribute-name-string */ attribute,  /* value? */ defaultValue) {
 			var value = defaultValue
 			var values = this.getValues(attribute)
@@ -113,6 +144,12 @@ dojo.declare("apstrata.apsdb.client._Item",
 			return value
 		},
 
+    /**
+     * @function setValues Set multiple values for the specific attribute
+     * @param attribute An Object whose value is to be set in the fields of this item
+     * @param type The type of the field to be set
+     * @param values The values of the attribute to be set
+		 */
 		setValues: function(attribute, type, values) {
 			var value = {}
 			value["@type"] = type
@@ -120,10 +157,20 @@ dojo.declare("apstrata.apsdb.client._Item",
 			this.fieldsMap[attribute] = value	
 		},
 		
+    /**
+     * @function setValue Set a single value for the specific attribute
+     * @param attribute An Object whose value is to be set in the fields of this item
+     * @param type The type of the field to be set
+     * @param value The value of the attribute to be set
+		 */
 		setValue: function(attribute, type, value) {
 			this.setValues(attribute, type, [value])
 		},
 		
+    /**
+     * @function getAttributes Get all the attributes of this item
+     * @returns An array containing all the attributes of this item
+		 */
 		getAttributes: function() {
 			var attributeNames = []
 			for (var a in this.fieldsMap) {
@@ -133,14 +180,29 @@ dojo.declare("apstrata.apsdb.client._Item",
 			return attributeNames
 		},
 
+    /**
+     * @function hasAttribute Check if this item has the passed attribute
+     * @param attribute The Object to be searched for
+     * @returns true if the passed attribute is one of the attributes of this item, false otherwise
+		 */
 		hasAttribute: function(attribute) {
 			return (this.fieldsMap[attribute] != undefined)
 		},
-		
+
+    /**
+     * @function unsetAttribute Delete the passed attribute from this item
+     * @param attribute The attribute to be deleted
+		 */
 		unsetAttribute: function(attribute) {
 			delete this.fieldsMap[attribute]
 		},
-		
+
+    /**
+     * @function containsValue Check if the passed attribute has the passed value
+     * @param attribute The attribute whose values are to be searched
+     * @param value The value to be searched for
+     * @returns true if the value is one of the values of this attribute, false otherwise
+		 */
 		containsValue: function(/* attribute-name-string */ attribute, /* anything */ value) {
 			var values = this.getValues(attribute)
 
@@ -153,19 +215,35 @@ dojo.declare("apstrata.apsdb.client._Item",
 			
 			return found
 		},
-		
+
+    /**
+     * @function setIdentity Set the key label of this item
+     * @param key The key Object to be set as the label
+		 */
 		setIdentity: function(key) {
 			this[this._KEY_LABEL] = key
 		},
-		
+
+    /**
+     * @function getIdentity Get the key label of this item
+     * @returns The key label of this item
+		 */
 		getIdentity: function() {
 			return this[this._KEY_LABEL]
 		},
-		
+
+    /**
+     * @function isLoaded Check if this item is loaded
+     * @returns true if this item is loaded, false otherwise
+		 */
 		isLoaded: function() {
 			return this.loaded
 		},
-		
+
+    /**
+     * @function getFields Get all the fields if this item. It also sets the 'apsdb.documentKey' field to this item's identity
+     * @returns An array containing the all the fields of this item
+		 */
 		getFields: function() {
 			var self = this
 			var fields = {}
@@ -174,19 +252,30 @@ dojo.declare("apstrata.apsdb.client._Item",
 				fields[fieldName] = self.fieldsMap[fieldName].values
 			}
 			
+      // TODO: What is this for? And why is it done in this function only?
 			if (self.getIdentity()) fields["apsdb.documentKey"] = self.getIdentity()
 			
 			return fields
 		},
-		
+
+    /**
+     * @function save Not implimented
+		 */
 		save: function() {
 			
 		},
-		
+
+    /**
+     * @function remove Not implimented
+		 */
 		remove: function() {
 			
 		},
-		
+
+    /**
+     * @function toString Returns a String representation of the fields of this item
+     * @returns A String listing all the fields of this item
+		 */
 		toString: function() {
 			return this.getFields()
 		}
