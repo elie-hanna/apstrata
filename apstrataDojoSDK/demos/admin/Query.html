@@ -65,7 +65,7 @@
 					dojo.forEach(operation.result.stores, function(store) {
 						storeNamesData.items.push({name: store["@name"]})						
 					})
-					
+
 					dojo.cookie("apstrata.admin.stores", dojo.toJson(storeNamesData))
 					storeNamesStore = new dojo.data.ItemFileReadStore({data: storeNamesData})
 					setComboBox(storeNamesData)	
@@ -93,7 +93,7 @@
 			var columnsString = dojo.byId("fldColumns").value
 			
 			queryString = (queryString=="")?"q!=\"xx\"":queryString
-			
+console.debug(queryString)
 			store = new apstrata.apsdb.client.ItemApsdbReadStore({connection:connection, 
 											resultsPerPage: 8,
 											apsdbStoreName: comboBox.value, 
@@ -102,6 +102,7 @@
 
 			var attrs = {
 				store: store,
+				query: queryString,
 				columns: columnsString,
 				page: 1
 			}
