@@ -13,11 +13,25 @@ dojo.provide("apstrata.apsdb.client.SetSchema");
 
 dojo.require("apstrata.apsdb.client.Get");
 
-dojo.declare("apstrata.apsdb.client.SetSchema", [apstrata.apsdb.client.Get], {
+/**
+ * Allows the creation of an apstrata database schema
+ * @class apstrata.apsdb.client.SetSchema
+ * @extends apstrata.apsdb.client.Get
+*/
+dojo.declare("apstrata.apsdb.client.SetSchema",
+[apstrata.apsdb.client.Get],
+{
+    /**
+     * @constructor SetSchema Does not require any parameters
+    */
     constructor: function(){
         this.apsdbOperation = "SetSchema"
     },
-    
+
+    /**
+     * @function execute Creates or updates a schema in apstrata database
+     * @param attrs An array of parameters that must contain these parameters: 'schema', 'schemaName'. These parameters are optional: 'newSchemaName', 'update'
+     */
     execute: function(attrs){
     
         if ((attrs != undefined) &&
@@ -25,7 +39,7 @@ dojo.declare("apstrata.apsdb.client.SetSchema", [apstrata.apsdb.client.Get], {
         (attrs.schema != undefined)) {
             this.request.apsdb.schema = attrs.schema;
             this.request.apsdb.schemaName = attrs.schemaName;
-            this.request.apsdb.schemaName = attrs.schemaName;
+            this.request.apsdb.schemaName = attrs.schemaName; // TODO: Should be removed!
             if (attrs.newSchemaName != undefined) 
                 this.request.apsdb.newSchemaName = attrs.newSchemaName;
             if (attrs.update != undefined) 

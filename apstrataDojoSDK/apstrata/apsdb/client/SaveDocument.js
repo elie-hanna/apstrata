@@ -14,16 +14,27 @@ dojo.provide("apstrata.apsdb.client.SaveDocument");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows the creation of an apstrata database document
+ * @class apstrata.apsdb.client.SaveDocument
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.SaveDocument",
 [apstrata.apsdb.client.Get],
-{    
+{
+    /**
+     * @constructor SaveDocument Does not require any parameters
+     */
     constructor: function() {
         this.apsdbOperation= "SaveDocument"
     },
 
-	// recurses inside an object and flattens it
-	//  o.property1.property2 = value ---> o["property1!property2"] = value
 	// TODO: still to implement the reverse operation
+  /**
+   * @function flatten Recurses inside an object and flattens it
+   * Example: o.property1.property2 = value ---> o["property1!property2"] = value
+   * @param o The Object to be flattened
+   */
 	flatten: function (o) {
 		function _flatten(o, newObject, label) {
 			for (i in o) {
@@ -39,6 +50,10 @@ dojo.declare("apstrata.apsdb.client.SaveDocument",
 	},
 
 	// TODO: save typed values
+    /**
+     * @function execute Creates or updates an apstrata database document
+     * @param attrs An array of parameters that must contain the parameter 'store'
+     */
     execute: function(attrs, flatten) {
 console.dir(attrs)		
         this.request.apsdb.store = attrs.store

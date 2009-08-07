@@ -13,11 +13,25 @@ dojo.provide("apstrata.apsdb.client.SaveUser");
 
 dojo.require("apstrata.apsdb.client.Get");
 
-dojo.declare("apstrata.apsdb.client.SaveUser", [apstrata.apsdb.client.Get], {
+/**
+ * Allows the creation of an apstrata database user
+ * @class apstrata.apsdb.client.SaveUser
+ * @extends apstrata.apsdb.client.Get
+*/
+dojo.declare("apstrata.apsdb.client.SaveUser",
+[apstrata.apsdb.client.Get],
+{
+    /**
+     * @constructor SaveUser Does not require any parameters
+    */
     constructor: function(){
         this.apsdbOperation = "SaveUser"
     },
-    
+
+    /**
+     * @function execute Creates or updates a user in apstrata database
+     * @param attrs An array of parameters that must contain these parameters: 'login', 'password', 'name'. These parameters are optional: 'update', 'email'
+     */
     execute: function(attrs){
     
         if ((attrs != undefined) &&
@@ -40,6 +54,6 @@ dojo.declare("apstrata.apsdb.client.SaveUser", [apstrata.apsdb.client.Get], {
             this.inherited(arguments);
         }
         else 
-            throw new Error("SaveUser: attribtues login and password are mandatory")
+            throw new Error("apstrata.apsdb.client.SaveUser: attribtues login and password are mandatory")
     }
 });
