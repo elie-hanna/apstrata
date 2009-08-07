@@ -34,9 +34,6 @@
 			
 			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
 			
-			dojo.byId("url").innerHTML = connection.serviceUrl
-			dojo.byId("account").innerHTML = connection.credentials.key
-			
 			populateGroupsList()
 		})
 
@@ -124,15 +121,7 @@
 	</script>
 </head>
 <body class="nihilo">
-	<span class="label">apstrata Service porvider URL:</span><br>
-		<span id="url" class="value"></span>
-		<br><br>
-
-	<span class="label">account id:</span><br>
-		<span id="account" class="value"></span>
-		<br><br>
-
-	<span class="label">Existing Groups:</span>&nbsp;&nbsp;<button id="edit" onclick="edit()">edit</button> 
+	<span class="label">Groups:</span>&nbsp;&nbsp;<button id="edit" onclick="edit()">edit</button> 
 		<span id="groups"></span>
 		<br>
 				
