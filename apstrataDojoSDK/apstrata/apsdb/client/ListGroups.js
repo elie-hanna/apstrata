@@ -19,6 +19,6 @@ dojo.declare("apstrata.apsdb.client.ListGroups",
 {
     constructor: function() {
         this.apsdbOperation = "ListGroups"
-    },
+    }
     
 });

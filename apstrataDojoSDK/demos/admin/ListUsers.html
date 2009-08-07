@@ -113,12 +113,12 @@
             				if(operation.result != undefined){
 								var result = "<result>";
 								if(operation.result.user != undefined){
-		            				result+= "<user name='" + operation.result.user.@name + "'>";
+		            				result+= "<user name='" + operation.result.user["@name"] + "'>";
 		            				if( operation.result.user.attributes != undefined){
 		            					result+= "<attributes>";
 	            						for (var i = 0; i < operation.result.user.attributes.length; i++) {
 											if (operation.result.user.attributes[i] != undefined) {
-	            								result+="<attribute name='" + operation.result.user.attributes[i].@name + "'>";
+	            								result+="<attribute name='" + operation.result.user.attributes[i]["@name"] + "'>";
 	            								if(operation.result.user.attributes[i].values != undefined){
 													result+="<values>";
                                                     result+="<value>" + operation.result.user.attributes[i].values.value + "<value>";
@@ -194,7 +194,7 @@
 							for(var i = 0 ; i <=customAttributeCounter ; i++){
 								var customName  = dojo.byId("customName" + i).value;
 								var customValue = dojo.byId("customValue" + i).value;
-								if(customName.trim() != ""){
+								if(trim(customName) != ""){
 									requestAttribs[customName] = customValue
 								}
 							}
@@ -219,6 +219,19 @@
 							attributesDiv.appendChild(br);
 							customAttributeCounter++;
                         }
+						function trim(str, chars) {
+							return ltrim(rtrim(str, chars), chars);
+						}
+						 
+						function ltrim(str, chars) {
+							chars = chars || "\\s";
+							return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
+						}
+						 
+						function rtrim(str, chars) {
+							chars = chars || "\\s";
+							return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
+						}
                     
         </script>
     </head>

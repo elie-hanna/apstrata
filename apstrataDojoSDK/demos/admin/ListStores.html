@@ -59,7 +59,7 @@
 
 			dojo.connect(operation, "handleError", function() {
 				// alert(operation.errorMessage)
-				login = new apstrata.apsdb.client.widgets.Login(connection)
+				var login = new apstrata.apsdb.client.widgets.Login(connection)
 				login.show()
 			})			
 

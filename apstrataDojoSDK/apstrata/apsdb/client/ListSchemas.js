@@ -19,6 +19,6 @@ dojo.declare("apstrata.apsdb.client.ListSchemas",
 {
     constructor: function() {
         this.apsdbOperation = "ListSchemas"
-    },
+    }
     
 });

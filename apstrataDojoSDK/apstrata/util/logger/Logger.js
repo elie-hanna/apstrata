@@ -139,6 +139,4 @@ dojo.declare("apstrata.util.logger.Logger",
 		}
 	}
 
-})
-
-
+});

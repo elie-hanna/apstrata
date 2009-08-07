@@ -17,7 +17,6 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-
 if (typeof apstrata == "undefined") {
 	apstrata = {}
 	apstrata.baseUrl = ""
@@ -48,10 +47,17 @@ if (typeof apstrata == "undefined") {
 			if (!src) {
 				continue;
 			}
+			
 			var m = src.match(rePkg);
 			if (m) {
 				apstrata.baseUrl = src.substring(0, m.index-1);
 				
+				// Making sure to get the full path to apstrata.js
+			   	var el= document.createElement('div');
+				var escapedUrl = apstrata.baseUrl.split('&').join('&amp;').split('<').join('&lt;').split('"').join('&quot;');
+		        el.innerHTML= '<a href="'+escapedUrl+'">x</a>';
+		        apstrata.baseUrl = el.childNodes[0].href;
+					
 				if (scripts[i].getAttribute("apConfig")) {
 					var s = "{" + scripts[i].getAttribute("apConfig") + "}"
 					var o = dojo.fromJson(s)
@@ -75,6 +81,13 @@ if (typeof apstrata == "undefined") {
 			}
 			var m = src.match(rePkg);
 			if (m) {
+				
+				// Making sure to get the full path to dojo.js
+			   	var el= document.createElement('div');
+				var escapedUrl = src.split('&').join('&amp;').split('<').join('&lt;').split('"').join('&quot;');
+		        el.innerHTML= '<a href="'+escapedUrl+'">x</a>';
+		        src = el.childNodes[0].href;
+			
 				// split the path into an array  
 				var p1 = src.split('/')
 				var p2 = (this.location+"").split('/')
@@ -97,7 +110,7 @@ if (typeof apstrata == "undefined") {
 				for (k=j; k<(p2.length-1); k++) {
 					s += p2[k] + "/"
 				}
-				
+								
 				apstrata.pathFromDojo = s
 				
 				break;
@@ -137,4 +150,5 @@ if (typeof apstrata == "undefined") {
 			_apstrataRoot: apstrata.baseUrl
 		})
 	})
+
 }
