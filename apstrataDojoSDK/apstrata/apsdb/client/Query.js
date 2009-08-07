@@ -14,16 +14,28 @@ dojo.provide("apstrata.apsdb.client.Query");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows querying the apstrata database documents of an account
+ * @class apstrata.apsdb.client.Query
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.Query",
 [apstrata.apsdb.client.Get],
 {
-	_DEFAULT_PAGE_NUMBER: 1,
-	_DEFAULT_RESULTS_PER_PAGE: 10,
+	_DEFAULT_PAGE_NUMBER: 1, // TODO: Not in use, should b removed
+	_DEFAULT_RESULTS_PER_PAGE: 10, // TODO: Not in use, should b removed
 
+    /**
+     * @constructor Query Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation= "Query"
     },
 
+    /**
+     * @function execute Queries the apstrata database documents of an account
+     * @param attrs An array of parameters that must contain these parameters: 'store', 'query', 'queryFields'. These parameters are optional: 'resultsPerPage', 'pageNumber', 'count', 'sort'
+     */
     execute: function(attrs) {
 		if ((attrs.store) && (attrs.query) && (attrs.queryFields)) {
 			this.request.apsdb.store = attrs.store	

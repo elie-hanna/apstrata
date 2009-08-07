@@ -13,11 +13,25 @@ dojo.provide("apstrata.apsdb.client.ListUsers");
 
 dojo.require("apstrata.apsdb.client.Get");
 
-dojo.declare("apstrata.apsdb.client.ListUsers", [apstrata.apsdb.client.Get], {
+/**
+ * Allows listing all the users in an apstrata database account
+ * @class apstrata.apsdb.client.ListUsers
+ * @extends apstrata.apsdb.client.Get
+*/
+dojo.declare("apstrata.apsdb.client.ListUsers",
+[apstrata.apsdb.client.Get],
+{
+    /**
+     * @constructor ListUsers Does not require any parameters
+    */
     constructor: function(){
         this.apsdbOperation = "ListUsers"
     },
-    
+
+    /**
+     * @function execute Lists all the users that belong to the passed group
+     * @param attrs An array of parameters that must contain the 'groupName' parameter
+     */
     execute: function(attrs){
         if (attrs != undefined && attrs.groupName != undefined) 
             this.request.apsdb.groupName = attrs.groupName;
