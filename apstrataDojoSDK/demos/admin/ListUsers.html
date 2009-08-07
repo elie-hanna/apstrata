@@ -27,283 +27,174 @@
             }
         </style>
         <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
-        <script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true">
-        </script>
-        <script type="text/javascript" src="../../apstrata/apstrata.js">
-        </script>
+
+        <script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
+        <script type="text/javascript" src="../../apstrata/apstrata.js"></script>
+
         <script type="text/javascript">
-                        var customAttributeCounter = 0;
-						dojo.require("dojo.parser");
-                        dojo.require("dijit.layout.ContentPane");
-                        
-                        var connection;
-                        
-                        dojo.addOnLoad(function(){
-                            dojo.require("apstrata.apsdb.client.Connection")
-                            dojo.require("apstrata.apsdb.client.ListUsers")
-                            dojo.require("apstrata.apsdb.client.widgets.Login")
-                            dojo.require("apstrata.apsdb.client.widgets.UserDetails")
-                            
-                            connection = new apstrata.apsdb.client.Connection({
-                                statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"
-                            })
-                            
-                            dojo.byId("url").innerHTML = connection.serviceUrl
-                            dojo.byId("account").innerHTML = connection.credentials.key
-                            
-                        })
-                        
-                        function populateUsersList(){
-                            var operation = new apstrata.apsdb.client.ListUsers(connection)
-                            
-                            dojo.connect(operation, "handleResult", function(){
-                                var usersNode = dojo.byId("users")
-                                usersNode.innerHTML = ""
-                                
-                                var s = "<table>"
-                                for (var i = 0; i < operation.result.users.length; i++) {
-                                    var userName = operation.result.users[i]["@name"]
-                                    s += "<tr><td class='delete' title='" + userName + "'></td><td class='value'>" + userName + "</td></tr>"
-                                }
-                                s += "</table>"
-                                
-                                usersNode.innerHTML = s
-                            })
-                            
-                            dojo.connect(operation, "handleError", function(){
-                                // alert(operation.errorMessage)
-                                login = new apstrata.apsdb.client.widgets.Login(connection)
-                                login.show()
-                            })
-                            var groupName = dojo.byId("groupName").value
-                            operation.execute({
-                                groupName: groupName
-                            });
-                            dojo.byId("edit").innerHTML = "edit"
-                            editMode = false
-                        }
-                        
-                        var editMode = false;
-                        function edit(){
-                            if (!editMode) {
-                                dojo.byId("edit").innerHTML = "stop edit"
-                                
-                                dojo.query(".delete").forEach(function(node, index, arr){
-                                    node.innerHTML = "<a href='#' class='get' onclick='getUser(\"" + node.title + "\")'>get</a>&nbsp;&nbsp;&nbsp;"
-                                    node.innerHTML = node.innerHTML + "<a href='#' class='delete' onclick='deleteUser(\"" + node.title + "\")'>delete</a>&nbsp;&nbsp;&nbsp;"
-                                });
-                                
-                                editMode = true
-                            }
-                            else {
-                                dojo.byId("edit").innerHTML = "edit"
-                                
-                                dojo.query(".delete").forEach(function(node, index, arr){
-                                    node.innerHTML = ""
-                                });
-                                
-                                editMode = false
-                            }
-                        }
-                        
-                        function getUser(user){
-                            dojo.require("apstrata.apsdb.client.GetUser")
-                            var operation = new apstrata.apsdb.client.GetUser(connection)
-                            dojo.connect(operation, "handleResult", function(){
-            				if(operation.result != undefined){
-								var result = "<result>";
-								if(operation.result.user != undefined){
-		            				result+= "<user name='" + operation.result.user["@name"] + "'>";
-		            				if( operation.result.user.attributes != undefined){
-		            					result+= "<attributes>";
-	            						for (var i = 0; i < operation.result.user.attributes.length; i++) {
-											if (operation.result.user.attributes[i] != undefined) {
-	            								result+="<attribute name='" + operation.result.user.attributes[i]["@name"] + "'>";
-	            								if(operation.result.user.attributes[i].values != undefined){
-													result+="<values>";
-                                                    result+="<value>" + operation.result.user.attributes[i].values.value + "<value>";
-	            									result+="</values>";
-	            								}
-												result+="</attribute>";
-	            							}
-	            						}
-										result+= "</attributes>";	
-		            				}
-									result+= "</user>";
-								}
-								result+= "</result>";	
-							}
-                            content = new apstrata.apsdb.client.widgets.UserDetails(connection, result)
-                            content.show()
-                            })
-                            dojo.connect(operation, "handleError", function(){
-                                alert(operation.message)
-                            })
-                            
-                            operation.execute({
-                                user: user
-                            });
-                        }
-                        
-                        function deleteUser(userName){
-                            dojo.require("apstrata.apsdb.client.DeleteUser")
-                            var operation = new apstrata.apsdb.client.DeleteUser(connection)
-                            
-                            dojo.connect(operation, "handleResult", function(){
-                                populateUsersList()
-                                alert(userName + " Deleted!")
-                            })
-                            dojo.connect(operation, "handleError", function(){
-                                populateUsersList()
-                                alert(operation.message)
-                            })
-                            
-                            operation.execute({
-                                user: userName
-                            });
-                        }
+			dojo.require("dojo.parser");
+			dojo.require("dojo.data.ItemFileReadStore")
+
+			dojo.require("dijit.form.Button")
+			dojo.require("dijit.form.ComboBox")
+			dojo.require("dijit.form.CheckBox")
+			dojo.require("dijit.form.Form")
+			dojo.require("dijit.form.ValidationTextBox");
+
+            dojo.require("apstrata.apsdb.client.Connection")
+            dojo.require("apstrata.apsdb.client.ListUsers")
+            dojo.require("apstrata.apsdb.client.widgets.Login")
+            dojo.require("apstrata.apsdb.client.widgets.UserDetails")
+			dojo.require("apstrata.apsdb.client.ItemApsdbReadStore")
+			dojo.require("apstrata.widgets.ListEditor")
+
+            var connection;
+			var store
+			var comboBox
+            
+			function refreshComboBox(data) {
+				store = new dojo.data.ItemFileReadStore({data: data})
+				comboBox = new dijit.form.ComboBox({store: store, searchAttr: 'name'})
+				dojo.place(comboBox.domNode, "spnGroupNames", "only")
+				
+				dojo.connect(comboBox, "onChange", function(groupName) {
+					displayUsersList(groupName)
+				})
+			}
+			
+			function displayUsersList(groupName) {
+				hideUserForm()
+
+				var operation = new apstrata.apsdb.client.ListUsers(connection)
+				dojo.connect(operation, "handleResult", function(){
+					var users = []
+
+					dojo.forEach(operation.result.users, function(group) {
+						users.push(group["@name"])						
+					})
+
+					var listEditor = new apstrata.widgets.ListEditor({
+							label: "Items:",
+							lockedActions: ['delete'], 
+							actions: ['view'], 
+							list: users
+						})
+					dojo.place(listEditor.domNode, "spnUsers", "only")
+					
+					dojo.connect(listEditor, "action", function(item, actionName) {
 						
-                        function saveUser(){
-                            dojo.require("apstrata.apsdb.client.SaveUser")
-                            var operation = new apstrata.apsdb.client.SaveUser(connection)
-                            
-                            dojo.connect(operation, "handleResult", function(){
-                                populateUsersList()
-                            })
-                            dojo.connect(operation, "handleError", function(){
-                                alert(operation.message)
-                            })
-                            
-                            var login = dojo.byId("login").value
-                            dojo.byId("login").value = ""
-                            
-                            var update = dojo.byId("update").value
-                            dojo.byId("update").value = ""
-                            
-                            var password = dojo.byId("password").value
-                            dojo.byId("password").value = ""
-                            
-                            var name = dojo.byId("name").value
-                            dojo.byId("name").value = ""
-                            
-							var email = dojo.byId("email").value
-                            dojo.byId("email").value = ""
-							
-							var requestAttribs = {login: login,update: update, password: password, name: name, email: email};
-							
-							for(var i = 0 ; i <=customAttributeCounter ; i++){
-								var customName  = dojo.byId("customName" + i).value;
-								var customValue = dojo.byId("customValue" + i).value;
-								if(trim(customName) != ""){
-									requestAttribs[customName] = customValue
-								}
-							}
-							operation.execute(requestAttribs);
-							
-                        }
-                        function addAttribute(){
-                            var attributesDiv = dojo.byId("attributes");
-							var br = document.createElement("br");
-							attributesDiv.appendChild(br);
-                            var newAttribName = document.createElement("input");
-                            var id = customAttributeCounter + 1;
-                            newAttribName.setAttribute("id", "customName" + id);
-							newAttribName.setAttribute("style", "width:95px");
-                            attributesDiv.appendChild(newAttribName);
-                            
-                            var newAttribValue = document.createElement("input");
-                            var id = customAttributeCounter + 1;
-                            newAttribValue.setAttribute("id", "customValue" + id);
-							newAttribValue.setAttribute("style", "width:100px");
-                            attributesDiv.appendChild(newAttribValue);
-							attributesDiv.appendChild(br);
-							customAttributeCounter++;
-                        }
-						function trim(str, chars) {
-							return ltrim(rtrim(str, chars), chars);
-						}
-						 
-						function ltrim(str, chars) {
-							chars = chars || "\\s";
-							return str.replace(new RegExp("^[" + chars + "]+", "g"), "");
-						}
-						 
-						function rtrim(str, chars) {
-							chars = chars || "\\s";
-							return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
-						}
-                    
+					})
+				})
+
+				operation.execute({groupName: groupName})
+			}
+			
+			function fetchGroupNames() {
+				var data;
+				
+				var groupsCookie = dojo.cookie("apstrata.admin.groups")
+				if ((groupsCookie != undefined) && (groupsCookie != "")) {
+					data = dojo.fromJson(groupsCookie)
+					
+					refreshComboBox(data)
+				} else {
+					var operation = new apstrata.apsdb.client.ListGroups(connection)
+					data = {label: 'name', items: []}
+					
+					dojo.connect(operation, "handleResult", function() {
+						dojo.forEach(operation.result.groups, function(group) {
+							data.items.push({name: group["@name"]})						
+						})
+	
+						dojo.cookie("apstrata.admin.groups", dojo.toJson(data))
+
+						refreshComboBox(data)
+					})
+
+					operation.execute()
+				}
+			}
+	
+			function refresh() {
+				dojo.cookie("apstrata.admin.groups", "")
+				fetchGroupNames()
+			}
+			
+			function saveUser() {
+                dojo.require("apstrata.apsdb.client.SaveUser")
+                var operation = new apstrata.apsdb.client.SaveUser(connection)
+                dojo.connect(operation, "handleResult", function() {
+					displayUsersList(comboBox.value)
+                })
+                dojo.connect(operation, "handleError", function() {
+                    alert(operation.message)
+                })
+
+				if (frmUser.validate()) {
+					var values = frmUser.getValues()
+					if (values.update[0]) values.update = values.update[0]; else values.update = "false" 
+					console.dir(values)
+
+					operation.execute(values)
+				} else {
+					
+				}
+			}
+			
+			function displayUserForm() {
+				dojo.byId('btnAdd').style.display = 'none'
+				dojo.byId('frmUser').style.display = ''
+			}
+			
+			function hideUserForm() {
+				dojo.byId('btnAdd').style.display = ''
+				dojo.byId('frmUser').style.display = 'none'
+			}
+
+            dojo.addOnLoad(function(){
+				connection = new apstrata.apsdb.client.Connection({ statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus" })
+				fetchGroupNames()
+            })                        
         </script>
     </head>
     <body class="nihilo">
-        <span class="label">apstrata Service porvider URL:</span>
-        <br>
-        <span id="url" class="value"></span>
-        <br>
-        <br>
-        <span class="label">account id:</span>
-        <br>
-        <span id="account" class="value"></span>
-        <br>
-        <br>
-        Group Name <input type="text" id="groupName">
-        </input>
-        <button id="populate" onclick="populateUsersList()">
-            ListUsers
-        </button>
-        <br>
-        <br>
-        <span class="label">Existing Users:</span>&nbsp;&nbsp;
-        <button id="edit" onclick="edit()">
-            edit
-        </button>
-        <span id="users"></span>
-        <br>
-        <br>
-        <div>
-            <div style="text-align: left;">
-                <span>Login:</span>
-                <br>
-                <input type="text" id="login">
-                </input>
-                <br>
-                <br>
-                <span>Update:</span>
-                <select id="update">
-                    <option value="true">true</option>
-                    <option value="false" selected="true">false</option>
-                </select>
-                <br>
-                <br>
-                <span>Password:</span>
-                <br>
-                <input value="" id="password" size="20" type="password">
-                </input>
-                <br>
-                <br>
-                <span>Name:</span>
-                <br>
-                <input value="" id="name">
-                </input>
-				<br>
-                <br>
-                <span>Email:</span>
-                <br>
-                <input value="" id="email">
-                </input>
-				<br>
-				<br>
-				<img style="cursor:pointer" onclick="addAttribute()" alt="Add attribute" title="Add attribute" src="../../lib/dojo/1.3.0-src/dijit/themes/tundra/images/treeExpand_plus.gif" />
-				<br>
-				<span style="width:95px">Custom Attribute</span><span style="width:100px">Value</span>
-				<div id="attributes"><input style="width:95px" type="text" id="customName0"></input><input style="width:100px" type="text" id="customValue0"></input><br></div>
-				<br>
-            </div>
+    	<span>Group Name:</span><span id="spnGroupNames"></span><button dojoType="dijit.form.Button" onClick="refresh()">refresh</button>
+		<br>
+		<span id="spnUsers"></span>
+		<br>
+		
+		<br>
+		<button id="btnAdd" dojoType="dijit.form.Button" onClick="displayUserForm()" style="display:;">Add User</button>
+		<br>
+		
+		<div id="frmUser" class="rounded box shadow" style="display: none; background-color: #CDCDCD;width: 310px;" dojoType="dijit.form.Form" jsId="frmUser">
+			<table>
+				<tr>
+					<td>Login:</td>
+					<td><input type="text" name="login" required="true" dojoType="dijit.form.ValidationTextBox"/></td>
+				</tr>
+				<tr>
+					<td>Update:</td>
+					<td><div name="update" value="true" dojoType="dijit.form.CheckBox"></div></td>
+				</tr>
+				<tr>
+					<td>Password:</td>
+					<td><input type="text" name="password" required="true" dojoType="dijit.form.ValidationTextBox"/></td>
+				</tr>
+				<tr>
+					<td>Name:</td>
+					<td><input type="text" name="name" required="true" dojoType="dijit.form.ValidationTextBox"/></td>
+				</tr>
+				<tr>
+					<td>Email:</td>
+					<td><input type="text" name="email" required="true" dojoType="dijit.form.ValidationTextBox"/></td>
+				</tr>
+			</table>
 			<br>
-            <button id="create" title="Save User" onclick="saveUser()">
-                save user
-            </button>
-        </div>
-		<div style="display:none" id="sample"><input type="text" id="customName"></input> Value <input type="text" id="customValue"></input></div>
-        </body>
-    </html>
+			<div>
+				<button dojoType="dijit.form.Button" onClick="saveUser()">Save</button>
+				<button dojoType="dijit.form.Button" onClick="hideUserForm()">Cancel</button>
+			</div>
+		</div>
+    </body>
+</html>
