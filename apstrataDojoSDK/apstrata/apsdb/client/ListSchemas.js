@@ -14,11 +14,19 @@ dojo.provide("apstrata.apsdb.client.ListSchemas");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows listing all the schemas in an apstrata database account
+ * @class apstrata.apsdb.client.ListSchemas
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.ListSchemas",
 [apstrata.apsdb.client.Get],
 {
+    /**
+     * @constructor ListSchemas Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation = "ListSchemas"
-    }
+    },
     
 });
