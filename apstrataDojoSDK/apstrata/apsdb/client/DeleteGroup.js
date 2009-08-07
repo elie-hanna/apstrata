@@ -14,13 +14,25 @@ dojo.provide("apstrata.apsdb.client.DeleteGroup");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows the deletion of an apstrata database group
+ * @class apstrata.apsdb.client.DeleteGroup
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.DeleteGroup",
 [apstrata.apsdb.client.Get],
 {
+    /**
+     * @constructor DeleteGroup Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation= "DeleteGroup"
     },
-    
+
+    /**
+     * @function execute Deletes a group with the passed group name
+     * @param attrs An array of parameters that must contain the 'groupName' parameter
+     */
     execute: function(attrs) {
         if ((attrs != undefined) &&
             (attrs.groupName != undefined)) {   

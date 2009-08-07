@@ -14,13 +14,26 @@ dojo.provide("apstrata.apsdb.client.CreateStore");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows the creation of an apstrata database store
+ * @class apstrata.apsdb.client.CreateStore
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.CreateStore",
 [apstrata.apsdb.client.Get],
 {
+    /**
+     * @constructor CreateStore Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation= "CreateStore"
     },
-		    
+
+		/**
+     * @function execute Creates a store with the passed store name
+     * @param attrs An array of parameters that must contain the 'store' parameter
+     * @throws Error
+     */
     execute: function(attrs) {
         if ((attrs != undefined) &&
             (attrs.store != undefined)) {   

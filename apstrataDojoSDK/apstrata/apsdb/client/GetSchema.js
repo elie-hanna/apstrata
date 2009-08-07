@@ -14,13 +14,25 @@ dojo.provide("apstrata.apsdb.client.GetSchema");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows getting the description of a schema in apstrata database
+ * @class apstrata.apsdb.client.GetSchema
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.GetSchema",
 [apstrata.apsdb.client.Get],
 {
+    /**
+     * @constructor GetSchema Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation= "GetSchema"
     },
-		    
+
+    /**
+     * @function execute Gets the schema with the passed schema name
+     * @param attrs An array of parameters that must contain the 'schemaName' parameter
+     */
     execute: function(attrs) {
         if ((attrs != undefined) &&
             (attrs.schemaName != undefined)) {  

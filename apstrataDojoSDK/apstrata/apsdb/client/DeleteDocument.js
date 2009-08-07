@@ -14,13 +14,25 @@ dojo.provide("apstrata.apsdb.client.DeleteDocument");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows the deletion of an apstrata database document
+ * @class apstrata.apsdb.client.DeleteDocument
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.DeleteDocument",
 [apstrata.apsdb.client.Get],
 {
+    /**
+     * @constructor DeleteDocument Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation= "DeleteDocument"
     },
 
+    /**
+     * @function execute Deletes a document from the passed store with the passed document key
+     * @param attrs An array of parameters that must contain the 'store' and 'documentKey' parameters
+     */
     execute: function(attrs) {
 		this.request.apsdb.store = attrs.store;
 		this.request.apsdb.documentKey = attrs.documentKey;

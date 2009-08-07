@@ -13,11 +13,25 @@ dojo.provide("apstrata.apsdb.client.DeleteUser");
 
 dojo.require("apstrata.apsdb.client.Get");
 
-dojo.declare("apstrata.apsdb.client.DeleteUser", [apstrata.apsdb.client.Get], {
+/**
+ * Allows the deletion of an apstrata database user
+ * @class apstrata.apsdb.client.DeleteUser
+ * @extends apstrata.apsdb.client.Get
+*/
+dojo.declare("apstrata.apsdb.client.DeleteUser",
+[apstrata.apsdb.client.Get],
+{
+    /**
+     * @constructor DeleteUser Does not require any parameters
+    */
     constructor: function(){
         this.apsdbOperation = "DeleteUser"
     },
-    
+
+    /**
+     * @function execute Deletes a user with the passed username
+     * @param attrs An array of parameters that must contain the 'user' parameter
+     */
     execute: function(attrs){
         if ((attrs != undefined) &&
         (attrs.user != undefined)) {

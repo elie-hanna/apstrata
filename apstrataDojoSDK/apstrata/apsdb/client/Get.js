@@ -16,18 +16,26 @@ dojo.require ("dojo.io.script");
 dojo.require ("dojox.encoding.digests.MD5");
 dojo.require ("apstrata.apsdb.client.Operation");
 
-	dojo.declare("apstrata.apsdb.client.Get",
-	[apstrata.apsdb.client.Operation],
+/**
+ * Base class used as an abstract class for all other APIs
+ * @class apstrata.apsdb.client.Get
+*/
+dojo.declare("apstrata.apsdb.client.Get",
+[apstrata.apsdb.client.Operation],
 	{
 		//
 		// Constants
 		//
 		_TYPE_STRING: "string",
-                
+        /**
+         * @constructor Get Sets the logger
+         */
         constructor: function() {
                 this._LOGGER.setClassLabel("apstrata.apsdb.client.Get")      
         },
-		
+		/**
+     * @function execute Creates an apsdb operation and sends an AJAX request to apstrata database
+     */
 		execute: function () {
 			var self = this;
 

@@ -14,13 +14,25 @@ dojo.provide("apstrata.apsdb.client.DeleteStore");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows the deletion of an apstrata database store
+ * @class apstrata.apsdb.client.DeleteStore
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.DeleteStore",
 [apstrata.apsdb.client.Get],
 {
+    /**
+     * @constructor DeleteStore Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation= "DeleteStore"
     },
-    
+
+    /**
+     * @function execute Deletes a store with the passed store name
+     * @param attrs An array of parameters that must contain the 'store' parameter
+     */
     execute: function(attrs) {
         if ((attrs != undefined) &&
             (attrs.store != undefined)) {   

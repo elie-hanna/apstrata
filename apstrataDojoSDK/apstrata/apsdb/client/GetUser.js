@@ -13,11 +13,25 @@ dojo.provide("apstrata.apsdb.client.GetUser");
 
 dojo.require("apstrata.apsdb.client.Get");
 
-dojo.declare("apstrata.apsdb.client.GetUser", [apstrata.apsdb.client.Get], {
+/**
+ * Allows getting the description of a user in apstrata database
+ * @class apstrata.apsdb.client.GetUser
+ * @extends apstrata.apsdb.client.Get
+*/
+dojo.declare("apstrata.apsdb.client.GetUser",
+[apstrata.apsdb.client.Get],
+{
+    /**
+     * @constructor GetUser Does not require any parameters
+    */
     constructor: function(){
         this.apsdbOperation = "GetUser"
     },
-    
+
+    /**
+     * @function execute Gets the user with the passed username
+     * @param attrs An array of parameters that must contain the 'user' parameter
+     */
     execute: function(attrs){
         if ((attrs != undefined) &&
         (attrs.user != undefined)) {
