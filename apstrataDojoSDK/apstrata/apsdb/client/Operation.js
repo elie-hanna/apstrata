@@ -16,15 +16,24 @@ dojo.require ("dojo.io.script")
 dojo.require ("dojox.encoding.digests.MD5")
 dojo.require ("apstrata.util.logger.Logger")
 
-	dojo.declare("apstrata.apsdb.client.Operation",
-	[apstrata.util.logger.Logger],
-	{
+/**
+ * Extends the apstrata database logger to include request and response features
+ * @class apstrata.apsdb.client.Operation
+ * @extends apstrata.util.logger.Logger
+*/
+dojo.declare("apstrata.apsdb.client.Operation",
+[apstrata.util.logger.Logger],
+{
 		//
 		// Constants
 		//
 		_FAILURE: "failure",
 		_SUCCESS: "success",
 
+    /**
+     * @constructor Operation Initializes request attributes and instance variables
+     * @param connection The underlying connection to be used when this operation calls the apstrata database server
+     */
 		constructor: function(connection) {
 			if (typeof connection != "object") new Error("apstrata.apsdb.client.Operation requires a connection object")
 			this.connection = connection
@@ -46,8 +55,11 @@ dojo.require ("apstrata.util.logger.Logger")
 			this.operationTimeout= false;
 			
 		},
-		
-		// Allows you to build the standard URL, could be overriden when necessary
+
+    /**
+     * @function buildUrl Allows you to build the standard URL, could be overriden when necessary
+     * @returns The URL to be called
+     */
 		buildUrl: function() {
 		    var params = ""; var i=0;
 
@@ -88,8 +100,12 @@ dojo.require ("apstrata.util.logger.Logger")
 		    return urlValue;
 		},
 
+    /**
+     * @function execute Not implimented
+     */
 		execute: function () {},
-		
+
+    // Sets the timeout of the operation to the timeout of the connection
 		_setTimeout: function() {
 			var self = this;
 			if (self.connection.getTimeout()>0) {
@@ -97,7 +113,8 @@ dojo.require ("apstrata.util.logger.Logger")
 				this.log(self._LOGGER.DEBUG, 'timeout handler, set', self._timeoutHandler+" " + self.connection.getTimeout()+"")
 			}
 		},
-		
+
+    // Removes the timeout of the operation
 		_clearTimeout: function() {
 			if (this._timeoutHandler) {
 				this.log(this._LOGGER.DEBUG, 'timeout handler, cleared', this._timeoutHandler+"")
@@ -105,7 +122,10 @@ dojo.require ("apstrata.util.logger.Logger")
 				this._timeoutHandler = 0;
 			}			
 		},
-		
+
+    /**
+     * @function timeout Force the operation to timeout
+     */
 		timeout: function() {
 			this.log("Timeout or communication error")
 			
@@ -121,7 +141,10 @@ dojo.require ("apstrata.util.logger.Logger")
 
 			this.handleError();
 		},
-		
+
+    /**
+     * @function abort Abort the operation
+     */
 		abort: function() {
 			this.log("Abort received");
 
@@ -136,12 +159,21 @@ dojo.require ("apstrata.util.logger.Logger")
 		//
 		//
 
+    /**
+     * @function requestSent Initiate making the request
+     */
 		requestSent: function() {this.connection.activity.start(this)},
 
+    /**
+     * @function handleResult Stop receiving the response and handle what was collected
+     */
 		handleResult: function() {
 			this.connection.activity.stop(this);
 		},
-		
+
+    /**
+     * @function handleError Stop receiving the response and log the error that occurred
+     */
 		handleError: function() {
 			this.connection.activity.stop(this);
         	this.log("errorCode", this.errorCode);

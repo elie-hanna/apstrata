@@ -14,11 +14,19 @@ dojo.provide("apstrata.apsdb.client.ListStores");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows listing all the stores in an apstrata database account
+ * @class apstrata.apsdb.client.ListStores
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.ListStores",
 [apstrata.apsdb.client.Get],
 {
+    /**
+     * @constructor ListStores Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation = "ListStores"
     }
-    
+
 });
