@@ -14,11 +14,19 @@ dojo.provide("apstrata.apsdb.client.ListGroups");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows listing all the groups in an apstrata database account
+ * @class apstrata.apsdb.client.ListGroups
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.ListGroups",
 [apstrata.apsdb.client.Get],
 {
+    /**
+     * @constructor ListGroups Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation = "ListGroups"
-    }
-    
+    },
+
 });
