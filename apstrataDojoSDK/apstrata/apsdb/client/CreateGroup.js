@@ -14,13 +14,26 @@ dojo.provide("apstrata.apsdb.client.CreateGroup");
 
 dojo.require("apstrata.apsdb.client.Get");
 
+/**
+ * Allows the creation of an apstrata database group
+ * @class apstrata.apsdb.client.CreateGroup
+ * @extends apstrata.apsdb.client.Get
+*/
 dojo.declare("apstrata.apsdb.client.CreateGroup",
 [apstrata.apsdb.client.Get],
 {
+    /**
+     * @constructor CreateGroup Does not require any parameters
+    */
     constructor: function() {
         this.apsdbOperation= "CreateGroup"
     },
-		    
+
+    /**
+     * @function execute Creates a group with the passed group name
+     * @param attrs An array of parameters that must contain the 'groupName' parameter
+     * @throws Error
+     */
     execute: function(attrs) {
         if ((attrs != undefined) &&
             (attrs.groupName != undefined)) {   
