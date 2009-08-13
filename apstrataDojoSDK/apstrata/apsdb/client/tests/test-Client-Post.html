@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>apstrataDojoSDK core client test suite</title>
+		
+		<style>
+	    	@import "../../../util/test/resources/test.css";
+		</style>
+		
+		<script type="text/javascript" src="../../../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+
+		<!--
+			/************************************************************************
+			* Set up the test by providing the proper values into 'apConfig' for:
+			* - key/secret
+			* - serviceURL
+			* - timeout
+			*************************************************************************/
+		-->
+		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'68CA69E0CE', secret:'8099BF56799BFA67C945', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest', timeout: 10000"></script>
+	
+	    <script type="text/javascript">
+
+
+						
+			dojo.addOnLoad(function() {
+				dojo.require("apstrata.apsdb.client.Connection")
+				dojo.require("apstrata.apsdb.client.Client")
+				dojo.require("apstrata.apsdb.client.ListStoresPost")
+				dojo.require("apstrata.apsdb.client.SaveDocumentPost")
+				dojo.require("apstrata.apsdb.client.GetFile")
+				dojo.require("apstrata.util.test.TestRunner")
+				dojo.require("apstrata.util.test.Test")
+				dojo.require("apstrata.apsdb.client.widgets.Img")
+
+				dojo.declare("ClientPostTest", 
+								[apstrata.util.test.Test], 
+								{
+									constructor: function() {
+										var self = this
+										
+										this.testSequence = [
+//																	"createStore",
+//																	"saveDocument1",
+//																	"saveDocument2",
+																	"listStoresPost",
+//																	"query",
+//																	"deleteStore"
+																]
+										this.storeName = "testStore" + Math.floor(Math.random()*10000)
+										this.storeName = "wiki4"
+										
+										this.client = new apstrata.apsdb.client.Client()
+										this.connection = this.client.connection
+									},
+	
+							    	createStore: function() {
+										var self = this
+	
+										var operation = this.client.createStore(function() {
+											self.runner.success(operation)
+											self.executeNext()
+										}, function() {
+											self.runner.fail(operation)
+										}, {store: self.storeName})
+									},
+	
+									saveDocument: function(doc) {
+										var self = this
+	
+										var operation = this.client.saveDocument(
+											function() {
+												self.runner.success(operation)
+												self.executeNext()
+											}, function() {
+												self.runner.fail(operation)
+											},
+											{
+												store: self.storeName,
+												fields: doc
+											}
+										)
+									},
+										
+									saveDocument1: function() {
+										var doc = {test: "post", name:"Alabama", label:"Alabama",abbreviation:"AL"}
+										this.saveDocument(doc)
+									},
+														
+									saveDocument2: function() {
+										var doc = {test: "post", name:"Alaska", label:"Alaska",abbreviation:"AK"}
+										this.saveDocument(doc)
+									},
+									
+									saveDocumentWFile: function() {
+										var self = this
+										
+										var sd = new apstrata.apsdb.client.SaveDocumentPost(this.connection)
+										dojo.connect(sd, "handleResult", function() {
+console.debug("success")
+										})
+										dojo.connect(sd, "handleError", function() {
+console.debug("fail")						
+										})
+										
+										var attrs = {
+												store: self.storeName,
+												formId: "uploadForm"
+											}
+
+										sd.execute(attrs)
+									},
+	
+									getFile: function() {
+										var self = this
+										
+										var sd = new apstrata.apsdb.client.GetFile(this.connection)
+
+										var attrs = {
+												store: self.storeName,
+												documentKey: "D604B25BAC790B4ABF6830329A5DA381",
+												fieldName: "apsdb_attachments",
+												fileName: "Chile.gif",
+												setContentDisposition: "false"
+											}
+
+console.debug(sd.getUrl(attrs))
+									},
+
+									query: function () {
+										var self = this
+	
+										self.runner.resetTime()
+										
+										var operation = this.client.query(
+											function() {
+console.dir(operation)
+												self.runner.success(operation)
+												self.executeNext()
+											}, function() {
+												self.runner.fail(operation)
+												self.executeNext()
+											},
+											{
+												store: self.storeName,
+												query: "test=\"post\"",
+												queryFields: "name, label, abbreviation"
+											}
+										)
+									},
+									
+									listStoresPost: function() {
+										var self = this
+										var lsp = new apstrata.apsdb.client.ListStoresPost(this.connection)
+										dojo.connect(lsp, "handleResult", function() {})
+										dojo.connect(lsp, "handleError", function() {})
+										
+										lsp.execute()
+									}
+								})	
+				
+				testRunner = new apstrata.util.test.TestRunner({id:"results"})
+				
+				test = new ClientPostTest()
+				test.getFile()
+//				testRunner.run(test)
+			})
+			
+		</script>
+	</head>
+	<body>
+		<h2>apstrataDojoSDK core client test suite</h2>
+		<div id="results"></div>
+		<form name="mydoc" id="uploadForm" method="POST" enctype="multipart/form-data">
+			<input type="text" name="name" /><br>
+			<input type ="file" name="apsdb_attachments" /><br>
+		</form>
+			<button onclick="test.saveDocumentWFile()">Save</button>
+
+
+	<div dojoType="apstrata.apsdb.client.Connection"
+		jsId="connection"
+		statusWidget="'apstrata.apsdb.client.widgets.ConnectionStatus'"></div>
+
+	<span dojoType="apstrata.apsdb.client.widgets.Img" connection= "connection"
+		src="wiki4/D604B25BAC790B4ABF6830329A5DA381/apsdb_attachments/Chile.gif"></span>
+
+	<!-- img apstrataSrc="key/store/documentKey/field/fileNAme" -->
+
+	</body>
+</html>

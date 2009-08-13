@@ -58,9 +58,11 @@ dojo.declare("apstrata.apsdb.client.Activity",
 
 
 dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {	
-	sign: function (connection, operation, params) {
+	sign: function (connection, operation, params, responseType) {
 					var timestamp = new Date().getTime() + '';
 					
+					responseType = responseType || "json"
+
 					var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
 					var signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 		
@@ -69,7 +71,7 @@ dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {
 							+ "&apsws.time=" + timestamp
 							+ "&apsws.authKey=" + connection.credentials.key
 							+ "&apsws.authSig=" + signature
-							+ "&apsws.responseType=json"
+							+ "&apsws.responseType=" + responseType
 							+ "&apsws.authMode=simple"
 							+ ((params!="")?"&":"") + params
 		
@@ -153,8 +155,8 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			this.log("average connection time", this.averageConnectionTime)
 		},
 
-		signUrl: function(operation, params) {
-			return this._urlSigner.sign(this, operation, params)
+		signUrl: function(operation, params, responseType) {
+			return this._urlSigner.sign(this, operation, params, responseType)
 		},
 		
 		// Set here the default timeout value for all apstrata operations

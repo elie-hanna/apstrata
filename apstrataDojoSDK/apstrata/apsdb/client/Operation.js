@@ -55,11 +55,41 @@ dojo.declare("apstrata.apsdb.client.Operation",
 			this.operationTimeout= false;
 			
 		},
+		
+		buildRequestObject: function() {
+		    var params = ""; var i=0;
+			var request = {}
 
-    /**
-     * @function buildUrl Allows you to build the standard URL, could be overriden when necessary
-     * @returns The URL to be called
-     */
+		    if (this.request.apsdb != null) {
+				for (prop in this.request.apsdb) {
+					request["apsdb."+prop] = this.request.apsdb[prop]
+				}
+		    }
+			
+			if (this.request.apsim != null) {
+				for (prop in this.request.apsim) {
+					request["apsim."+prop] = this.request.apsim[prop]
+				}
+		    }
+
+		    for (prop in this.request) {
+				if (prop != "apsdb" && prop != "apsim") {
+					request[prop] = this.request[prop]
+				}				
+		    }
+			
+			return request
+		},
+		
+		buildActionUrl: function() {
+			params = ""
+		    return this.connection.signUrl(this.apsdbOperation, params, "xml").url;
+		},
+
+	    /**
+	     * @function buildUrl Allows you to build the standard URL, could be overriden when necessary
+	     * @returns The URL to be called
+	     */
 		buildUrl: function() {
 		    var params = ""; var i=0;
 
@@ -101,7 +131,7 @@ dojo.declare("apstrata.apsdb.client.Operation",
 		},
 
     /**
-     * @function execute Not implimented
+     * @function abstrata function
      */
 		execute: function () {},
 
