@@ -57,7 +57,7 @@ if (typeof apstrata == "undefined") {
 				var escapedUrl = apstrata.baseUrl.split('&').join('&amp;').split('<').join('&lt;').split('"').join('&quot;');
 		        el.innerHTML= '<a href="'+escapedUrl+'">x</a>';
 		        apstrata.baseUrl = el.childNodes[0].href;
-					
+				
 				if (scripts[i].getAttribute("apConfig")) {
 					var s = "{" + scripts[i].getAttribute("apConfig") + "}"
 					var o = dojo.fromJson(s)
@@ -144,8 +144,26 @@ if (typeof apstrata == "undefined") {
 	}
 	
 	dojo.require("dijit._Widget")
+	
 
 	dojo.addOnLoad(function() {
+		if (apstrata.apConfig) {
+console.dir(apstrata.apConfig)
+			var xhrArgs = {
+				url: apstrata.baseUrl + "/apstrata.json",
+				handleAs: "json",
+				load: function(json) {
+					apstrata.apConfig = json
+console.dir(apstrata.apConfig)
+				},
+				error: function(error) {
+				}
+			}
+			
+			dojo.xhrGet(xhrArgs)
+		}
+
+
 		dojo.extend(dijit._Widget, {
 			_apstrataRoot: apstrata.baseUrl
 		})
