@@ -144,17 +144,14 @@ if (typeof apstrata == "undefined") {
 	}
 	
 	dojo.require("dijit._Widget")
-	
 
 	dojo.addOnLoad(function() {
-		if (apstrata.apConfig) {
-console.dir(apstrata.apConfig)
+		if (!apstrata.apConfig) {
 			var xhrArgs = {
 				url: apstrata.baseUrl + "/apstrata.json",
 				handleAs: "json",
 				load: function(json) {
 					apstrata.apConfig = json
-console.dir(apstrata.apConfig)
 				},
 				error: function(error) {
 				}
@@ -162,11 +159,9 @@ console.dir(apstrata.apConfig)
 			
 			dojo.xhrGet(xhrArgs)
 		}
-
-
+		
 		dojo.extend(dijit._Widget, {
 			_apstrataRoot: apstrata.baseUrl
 		})
 	})
-
 }
