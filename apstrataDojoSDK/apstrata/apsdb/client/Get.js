@@ -90,7 +90,7 @@ dojo.declare("apstrata.apsdb.client.Get",
 					if (self.operationAborted || self.operationTimeout) return jsonTxt;
                     var json
 
-                    if (self.response != undefined) {
+                    if (json.response) {
 						// Copy metadata fields to the Operation object
 						for (prop in json.response.metadata) {
 							self[prop] = json.response.metadata[prop]

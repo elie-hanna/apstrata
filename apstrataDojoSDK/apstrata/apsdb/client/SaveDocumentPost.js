@@ -36,21 +36,15 @@ dojo.declare("apstrata.apsdb.client.SaveDocumentPost",
      * @param attrs An array of parameters that must contain the parameter 'store'
      */
     execute: function(attrs) {
-console.dir(attrs)
+		var self = this
+		
         this.request.apsdb.store = attrs.store
 		
-		this.request.apsdb.formId = attrs.formId
+		//this.request.apsdb.formId = attrs.formId
+		this.request.apsws = {}
+		if (attrs.redirectHref) this.request.apsws.redirectHref = attrs.redirectHref;
+		else this.request.apsws.redirectHref = apstrata.baseUrl + "/apsdb/client/PostIframeHandler.html"
 
-        // if this object doesn't contain a document key, generate new one
-//		if (attrs.documentKey) this.request.apsdb.documentKey = attrs.documentKey
-		
-//        if (attrs.fields[this.connection._KEY_APSDB_ID] != undefined) this.request.apsdb.documentKey = attrs.fields[this.connection._KEY_APSDB_ID]
-/*
-		for (prop in attrs.fields) {
-	            //if (prop != this.connection._KEY_APSDB_ID) 
-				this.request[prop] = attrs.fields[prop];
-		}
-*/	    
 		this.inherited(arguments);
     }
 });

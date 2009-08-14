@@ -1,0 +1,11 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<script>
+		var callback = (location.href).substring((location.href).indexOf("callback") + 9)
+		eval ("window.parent."+ callback + "('"+ window.name +"')")
+	</script>
+</head>
+<body>
+</body>
+</html>

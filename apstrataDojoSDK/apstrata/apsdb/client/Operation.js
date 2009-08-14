@@ -72,8 +72,14 @@ dojo.declare("apstrata.apsdb.client.Operation",
 				}
 		    }
 
+			if (this.request.apsws != null) {
+				for (prop in this.request.apsws) {
+					request["apsws."+prop] = this.request.apsws[prop]
+				}
+			}
+
 		    for (prop in this.request) {
-				if (prop != "apsdb" && prop != "apsim") {
+				if (prop != "apsdb" && prop != "apsim" && prop != "apsws") {
 					request[prop] = this.request[prop]
 				}				
 		    }
@@ -81,9 +87,9 @@ dojo.declare("apstrata.apsdb.client.Operation",
 			return request
 		},
 		
-		buildActionUrl: function() {
+		buildActionUrl: function(responseType) {
 			params = ""
-		    return this.connection.signUrl(this.apsdbOperation, params, "xml").url;
+		    return this.connection.signUrl(this.apsdbOperation, params, responseType).url;
 		},
 
 	    /**
@@ -109,11 +115,19 @@ dojo.declare("apstrata.apsdb.client.Operation",
 				}
 		    }
 
+			if (this.request.apsws != null) {
+				for (prop in this.request.apsws) {
+				    if (i>0) params += "&";
+				    i++;
+				    params += "apsws." + prop + "=" + encodeURIComponent(this.request.apsws[prop]); 
+				}
+			}
+			
 		    for (prop in this.request) {
 				if (i>0) params += "&";
 				i++;
 				
-				if (prop != "apsdb" && prop != "apsim") {
+				if (prop != "apsdb" && prop != "apsim" && prop != "apsws") {
 					var value = this.request[prop]
 					if (dojo.isArray(value)) {
 						dojo.forEach(value, function(v) {
