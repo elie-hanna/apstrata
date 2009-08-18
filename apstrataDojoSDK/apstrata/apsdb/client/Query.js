@@ -54,7 +54,13 @@ dojo.declare("apstrata.apsdb.client.Query",
 //				else this.request.apsdb.count = "false"
 
 			if (attrs.sort) this.request.apsdb.sort = attrs.sort
+      if (attrs.runAs) this.request.apsim.runAs = attrs.runAs
+      if (attrs.aggregates) {
+        this.request.apsdb.aggregateExpression = attrs.aggregates
+        this.request.apsdb.aggregateGlobal = 'true'; // Add the aggregateGlobal parameter because the aggregate is only allowed globally for now
+      }
 
+      if (attrs.ftsQuery) this.request.apsdb.ftsQuery = attrs.ftsQuery
 /*
 			if (attrs.ftsString != undefined) this.request.apsdb.ftsString = attrs.ftsString;
 	        	else this.request.apsdb.ftsString = ""

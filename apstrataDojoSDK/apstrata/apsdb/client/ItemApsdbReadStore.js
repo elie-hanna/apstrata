@@ -152,12 +152,19 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 			var count = (keywordArgs.query.count!=undefined)?keywordArgs.query.count:false
 
 			var q = this._client.query(
+      // Success function
 				function() {
+
 					self._items = []
 					if (q.result.count) {
 						self._pages = Math.ceil(q.result.count/self._resultsPerPage)
-						self.totalPagesCalculated(self._pages)
+						self.totalPagesCalculated(self._pages, q.result.count)
 					}
+
+          // Throw an event with the page and global values of the aggregate if they are in the response
+          if (q.result.aggregate) {
+            self.aggregateCalculated(q.result.aggregate['@pageValue'], q.result.aggregate['@globalValue']);
+          }
 
 					self._itemsMap = []
 					dojo.forEach(q.result.documents, function(item) {
@@ -175,9 +182,13 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 					pageNumber: pageNumber,
 					resultsPerPage: self._resultsPerPage,
 					count: count,
-					query: queryExpression
+					query: queryExpression,
+          runAs: keywordArgs.query.runAs,
+          aggregates: keywordArgs.query.aggregates,
+          sort: keywordArgs.query.sort,
+          ftsQuery: keywordArgs.query.ftsQuery
 				})
-			
+
 			return request
 		},
 		
@@ -313,9 +324,11 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 		fetchSuccess: function() {
 		},
 		
-		totalPagesCalculated: function(pages) {
-		}
+		totalPagesCalculated: function(pages, itemsCount) {
+		},
 		
+    aggregateCalculated: function(pageValue, globalValue) {
+    }
 	}) // end: ApsdbReadStore
 
 
