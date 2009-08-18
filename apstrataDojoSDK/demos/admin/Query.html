@@ -22,36 +22,44 @@
 	<script type="text/javascript" src="../../apstrata/apstrata.js"></script>
 
     <script type="text/javascript">
-        dojo.require ("dojo.parser")
-        dojo.require ("dijit.layout.ContentPane")
+    dojo.require ("dojo.parser")
+    dojo.require ("dijit.layout.ContentPane")
 		dojo.require ("dijit.form.ComboBox")
 		dojo.require ("dojo.data.ItemFileReadStore")
 
 		dojo.require ("apstrata.widgets.QueryWidget")
 		dojo.require ("apstrata.apsdb.client.Connection")
 		dojo.require ("apstrata.apsdb.client.ListStores")
+		dojo.require ("apstrata.apsdb.client.ListUsers")
 		dojo.require ("apstrata.apsdb.client.ItemApsdbReadStore")
 		dojo.require ("apstrata.widgets.PageNumberSpinner")
 		dojo.require ("apstrata.widgets.PageNumberSelector")
 
-        var connection
+    var connection
 		var store
 		var storeNamesData
-        var storeNamesStore
+    var storeNamesStore
+    var user
+		var userNamesData
+    var userNamesStore
 		var comboBox
+		var usersComboBox
 		var queryString
-		var store
 		var grid
-				
-        dojo.addOnLoad(function() {
+    var dvPageValue
+    var dvGlobalValue
+    var dvCount
+
+    dojo.addOnLoad(function() {
 			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})			
-			
+
 			fetchStoreNames()
+      fetchUserNames()
 		})
-				
+
 		function fetchStoreNames() {
 			var storeNamesData;
-			
+
 			var storesCookie = dojo.cookie("apstrata.admin.stores")
 			if ((storesCookie != undefined) && (storesCookie != "")) {
 				storeNamesData = dojo.fromJson(storesCookie)
@@ -60,7 +68,7 @@
 			} else {
 				var operation = new apstrata.apsdb.client.ListStores(connection)
 				storeNamesData = {label: 'name', items: []}
-				
+
 				dojo.connect(operation, "handleResult", function() {
 					dojo.forEach(operation.result.stores, function(store) {
 						storeNamesData.items.push({name: store["@name"]})						
@@ -73,8 +81,7 @@
 				operation.execute()
 			}
 		}
-		
-		
+
 		function setComboBox(storeNamesData) {
 			storeNamesStore = new dojo.data.ItemFileReadStore({data: storeNamesData})
 			comboBox = new dijit.form.ComboBox({store: storeNamesStore, searchAttr: 'name'})
@@ -85,55 +92,169 @@
 			dojo.cookie("apstrata.admin.stores", "")
 			fetchStoreNames()
 		}
-				
+
+    function fetchUserNames() {
+			var userNamesData;
+
+			var usersCookie = dojo.cookie("apstrata.admin.users")
+			if ((usersCookie != undefined) && (usersCookie != "")) {
+				userNamesData = dojo.fromJson(usersCookie)
+
+				setUsersComboBox(userNamesData)
+			} else {
+				var operation = new apstrata.apsdb.client.ListUsers(connection)
+				userNamesData = {label: 'name', items: []}
+
+				dojo.connect(operation, "handleResult", function() {
+					dojo.forEach(operation.result.users, function(user) {
+						userNamesData.items.push({name: user["@name"]})						
+					})
+
+					dojo.cookie("apstrata.admin.users", dojo.toJson(userNamesData))
+					userNamesStore = new dojo.data.ItemFileReadStore({data: userNamesData})
+					setUsersComboBox(userNamesData)	
+				})
+				operation.execute()
+			}
+		}
+
+		function setUsersComboBox(userNamesData) {
+			userNamesStore = new dojo.data.ItemFileReadStore({data: userNamesData})
+			usersComboBox = new dijit.form.ComboBox({store: userNamesStore, searchAttr: 'name'})
+			dojo.place(usersComboBox.domNode, "userName", "only")			
+		}
+
+		function refreshUsers() {
+			dojo.cookie("apstrata.admin.users", "")
+			fetchUserNames()
+		}
+
 		function query() {
-			if (grid!=undefined) grid.destroy()
-			
-			queryString = dojo.byId("fldQueryString").value
-			var columnsString = dojo.byId("fldColumns").value
-			
+			if (grid!=undefined) {
+        grid.destroy()
+        if (dvPageValue && dvGlobalValue && dvCount) { // Hide the aggregate values and the count
+          dvPageValue.style.display = 'none';
+          dvGlobalValue.style.display = 'none';
+          dvCount.style.display = 'none';
+        }
+      }
+
+			queryString = dojo.byId("fldQueryString").value;
+			var columnsString = dojo.byId("fldColumns").value;
+			var runAsString = usersComboBox.value;
+      var aggregatesString = dojo.byId("fldAggregatesString").value;
+      var sortingString = dojo.byId("fldSortingString").value;
+      var FTSString = dojo.byId("fldFTSString").value;
+
 			queryString = (queryString=="")?"q!=\"xx\"":queryString
-console.debug(queryString)
+
 			store = new apstrata.apsdb.client.ItemApsdbReadStore({connection:connection, 
 											resultsPerPage: 8,
-											apsdbStoreName: comboBox.value, 
+											apsdbStoreName: comboBox.value,
 											fields: columnsString, 
 											label: "name"})
+
+      // Listen on the aggregateCalculated event of the store and embed the page and global aggregate values in the page
+      dojo.connect(store, 'aggregateCalculated', function(pageValue, globalValue) {
+        // Get the aggregate name
+        var firstAggregate = aggregatesString.substring(0, aggregatesString.indexOf(')')); // Only show the results of the first aggregate
+        var aggregateSentence = firstAggregate.replace('(', ' ');
+        var aggregateSentence = aggregateSentence.replace(')', ' ');
+        var aggregateSentence = aggregateSentence.replace('$', '');
+
+
+        if (!dvPageValue && !dvGlobalValue) { // Create the elements if they don't exist
+          dvPageValue = document.createElement('DIV');
+          dvGlobalValue = document.createElement('DIV');
+
+          dvPageValue.setAttribute('id', 'dvPageAggregate');
+          dvGlobalValue.setAttribute('id', 'dvGlobalAggregate');
+
+          dvPageValue.setAttribute('class', 'label');
+          dvGlobalValue.setAttribute('class', 'label');
+
+          dojo.place(dvPageValue, "dvGrid", "second");
+          dojo.place(dvGlobalValue, "dvGrid", "third");
+        }
+
+        dvPageValue.innerHTML = aggregateSentence + ' on this page: <span style="font-weight: bold;">' + pageValue + '</span>';
+        dvGlobalValue.innerHTML = aggregateSentence + ' total: <span style="font-weight: bold;">' + globalValue + '</span>';
+      });
+
+      // Listen on the totalPagesCalculated event of the store and embed the count of results in the page
+      dojo.connect(store, 'totalPagesCalculated', function (pages, itemsCount) {
+        if (!dvCount) {
+          dvCount = dojo.byId('dvCount');
+        }
+        dvCount.innerHTML = 'Total results: <span style="font-weight: bold;">' + itemsCount + '</span>';
+      });
 
 			var attrs = {
 				store: store,
 				query: queryString,
+        runAs: runAsString,
+        aggregates: aggregatesString,
+        sort: sortingString,
+        ftsQuery: FTSString,
 				columns: columnsString,
 				page: 1
 			}
-			
-			grid = new apstrata.widgets.QueryWidget(attrs)
-			dojo.place(grid.domNode, "dvGrid", "first")			
+
+			grid = new apstrata.widgets.QueryWidget(attrs);
+
+      // Show the grid, count, and the aggregates
+			dojo.place(grid.domNode, "dvGrid", "first");
+      if (dvPageValue && dvGlobalValue && dvCount) {
+        dvPageValue.style.display = '';
+        dvGlobalValue.style.display = '';
+        dvCount.style.display = '';
+      }
 		}
 		
 	</script>
 </head>
 <body class="nihilo">
-	<table style="width: 700px;">
+	<table style="width: 800px;">
 		<tr>
-			<td style="width: 60px;"><span class="label">Store:</span></td>
+			<td style="width: 70px;"><span class="label">Store:</span></td>
 			<td><span id="storeName"></span>
 				&nbsp;&nbsp;<button id="refresh" onclick="refresh()">refresh</button></td>
-			<td align="right"><span class="label">Columns:</span></td>
-			<td align="right"><input type="text" id="fldColumns" value="apsdb.documentKey, name" size="30"></input></td>
+			<td style="width: 70px;"><span class="label">Run As:</span></td>
+			<td><span id="userName"></span>
+				&nbsp;&nbsp;<button id="refreshUsers" onclick="refreshUsers()">refresh</button></td>
 		</tr>
 	</table>
-	<table style="width: 700px;">
+	<table style="width: 800px;">
 		<tr>
-			<td width="60"><span class="label">Query:</span></td>
-			<td><input type="text" id="fldQueryString" size="80" value=""></input></td>
-			<td align="right"><button id="query" onclick="query()">query</button></td>
+			<td style="width: 70px;"><span class="label">Query:</span></td>
+			<td><input type="text" id="fldQueryString" size="116" value=""></input></td>
 		</tr>
 	</table>
-		
+	<table style="width: 800px;">
+		<tr>
+			<td style="width:70px;"><span class="label">Columns:</span></td>
+			<td style="width: 350px;"><input type="text" id="fldColumns" value="apsdb.documentKey, name" size="55"></input></td>
+			<td align="right" style="width: 90px;"><span class="label">Aggregates:</span></td>
+			<td align="right"><input type="text" id="fldAggregatesString" value="" size="41"></input></td>
+		</tr>
+	</table>
+	<table style="width: 800px;">
+		<tr>
+			<td style="width: 70px;"><span class="label">Sorting:</span></td>
+			<td style="width: 350px;"><input type="text" id="fldSortingString" size="55" value=""></input></td>
+			<td align="right" style="width: 90px;"><span class="label">FTS:</span></td>
+			<td align="right"><input type="text" id="fldFTSString" size="41" value=""></input></td>
+		</tr>
+	</table>
+	<table style="width: 800px;">
+		<tr>
+			<td><button id="query" onclick="query()">query</button></td>
+		</tr>
+	</table>
+
 <br>
 
-<div id="dvSpinner"></div>
+<div id="dvSpinner"></div><div id="dvCount" class="label"></div>
 <div id="dvGrid" style="width: 100%; height: 300px;"></div>
 
 
