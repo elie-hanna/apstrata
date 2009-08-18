@@ -18,7 +18,7 @@
 			* - timeout
 			*************************************************************************/
 		-->
-		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'[my key]', secret:'[my secret]', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest', timeout: 10000"></script>
+		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'7744293024', secret:'3B45DE19C689EDAFCA47', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest', timeout: 10000"></script>
 	
 	    <script type="text/javascript">
 
@@ -42,6 +42,7 @@
 																	"saveDocument1",
 																	"saveDocument2",
 																	"fetch",
+																	"fetchExtended",
 																	"getValue",
 																	"getAttributes",
 																	"hasAttribute",
@@ -120,6 +121,33 @@
 													})
 									},
 							
+									fetchExtended: function () {
+										var self = this
+	
+										self.runner.resetTime()
+										self.store.fetch ({
+														onComplete: function(items, request) {
+															self.allItems = items
+															self.runner.assert("fetchExtended", items.length == 2)
+															self.executeNext()
+														},
+														
+														onError: function(errorData, request) {
+															self.runner.assert("fetchExtended", false)
+														},
+														
+											      query: {
+															query: "field1=\"a1_field1\"",
+															count: true,
+															pageNumber: 1,
+                              sort: "apsdb.documentKey:desc",
+//                              aggregates: "SUM($field1)",
+//                              ftsQuery: "field*",
+                              runAs: "myUser"
+														}
+													})
+									},
+
 									getValue: function () {
 										var self = this
 	
