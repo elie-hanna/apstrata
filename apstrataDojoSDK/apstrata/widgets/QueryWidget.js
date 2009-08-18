@@ -31,6 +31,10 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 	store: null,
 	query: "X!=\"Y\"",
 	columns: "apsdb.documentKey",
+  runAs: "",
+  aggregates: "",
+  sort: "",
+  ftsQuery: "",
 	page: 1,
 	rows: 10,
 
@@ -40,6 +44,10 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		if (attrs.query) this.query = attrs.query
 		if (attrs.page) this.page = attrs.page
 		if (attrs.columns) this.columns = attrs.columns
+    if (attrs.runAs) this.runAs = attrs.runAs
+    if (attrs.aggregates) this.aggregates = attrs.aggregates
+    if (attrs.sort) this.sort = attrs.sort
+    if (attrs.ftsQuery) this.ftsQuery = attrs.ftsQuery
 		if (attrs.layout) {
 			this._layout=layout; 
 		} else {
@@ -56,7 +64,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 	postCreate: function() {
 		var self = this
 
-		dojo.connect(self.store, "totalPagesCalculated", function(pages) {
+		dojo.connect(self.store, "totalPagesCalculated", function(pages, itemsCount) {
 			if (self._spinner == undefined) {
 				self._spinner = new apstrata.widgets.PageNumberSelector({min:1, max:pages, value:1, visibleRange: 10, bigStep: 5})
 		        self.dvSpinner.appendChild(self._spinner.domNode);
@@ -107,7 +115,11 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
             query: {
 				query: self.query,
 				count: (self.page == 1),
-				pageNumber: self.page
+				pageNumber: self.page,
+        runAs: self.runAs,
+        aggregates: self.aggregates,
+        sort: self.sort,
+        ftsQuery: self.ftsQuery
 			}, 
             store: self.store,
             rowSelector: '20px',
