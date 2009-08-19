@@ -27,7 +27,7 @@ dojo.require ("apstrata.apsdb.client.widgets.ConnectionStatus")
 
 dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], {
 	widgetsInTemplate: true,
-	templateString: "<div><div dojoAttachPoint='dvSpinner'></div><div dojoAttachPoint='dvGrid' style='width: 100%; height: 300px;'></div></div>",
+	templateString: "<div><div dojoAttachPoint='dvSpinner'></div><div dojoAttachPoint='dvGrid' style='width: 100%; height: 210px;'></div></div>",
 	store: null,
 	query: "X!=\"Y\"",
 	columns: "apsdb.documentKey",
