@@ -43,7 +43,7 @@ dojo.declare("apstrata.util.logger.Loggable",
 	},
 
 	log: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
-		dojo.deprecated("use Logger.info, Logger.warn. Logger.debug. Logger.error instead")
+		dojo.deprecated("Logger.log is deprecated, use more specific Logger.info, Logger.warn. Logger.debug. Logger.error instead")
 		this.debug(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
 	},
 	
