@@ -106,7 +106,7 @@ dojo.declare("apstrata.util.logger.BasicLogger",
 						
 						// If I have to output a complex object, display contents of bfr first
 						if (bfr.length>1) {
-							window._firebug.notifyFirebug(bfr, method, "firebugAppendConsole")
+							if (window._firebug) window._firebug.notifyFirebug(bfr, method, "firebugAppendConsole")
 							bfr = []
 							bfr.push(msg)
 						} 
@@ -124,7 +124,7 @@ dojo.declare("apstrata.util.logger.BasicLogger",
 			}
 	
 			if (bfr.length>1) {
-				window._firebug.notifyFirebug(bfr, method, "firebugAppendConsole")
+				if (window._firebug) window._firebug.notifyFirebug(bfr, method, "firebugAppendConsole")
 			} 
 		}
 		
