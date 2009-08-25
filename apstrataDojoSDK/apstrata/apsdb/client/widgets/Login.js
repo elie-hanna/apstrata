@@ -4,7 +4,7 @@ dojo.require("dijit.form.TextBox")
 dojo.require("dijit.Dialog")
 
 dojo.declare("apstrata.apsdb.client.widgets.Login",
-	[dijit._Widget, dijit._Templated, apstrata.util.logger.Logger],
+	[dijit._Widget, dijit._Templated, apstrata.util.logger.Loggable],
 	{
 		widgetsInTemplate: true,
 		templatePath: dojo.moduleUrl("apstrata.apsdb.client.widgets", "templates/Login.html"),

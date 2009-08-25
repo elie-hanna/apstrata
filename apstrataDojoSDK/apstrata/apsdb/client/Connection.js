@@ -17,14 +17,14 @@ dojo.require("dojox.encoding.digests.MD5");
 dojo.require("dojo.cookie");
 
 dojo.require("apstrata.apsdb.client.ListStores");
-dojo.require("apstrata.util.logger.Logger")
+dojo.require("apstrata.util.logger.Loggable")
 
 // An activity object is used by operations to register the sending of requests and
 //  receipt of responses.
 //  Activity will keep track of the first request and the last response to generate proper events
 //  that can be trapped by the UI to indicate communication activity (start, stop) or errors (timeout)
 dojo.declare("apstrata.apsdb.client.Activity",
-	[apstrata.util.logger.Logger],
+	[apstrata.util.logger.Loggable],
 	{
 		constructor: function() {
 			this.counter = 0;
@@ -35,7 +35,7 @@ dojo.declare("apstrata.apsdb.client.Activity",
 			this.activity[operation.url] = operation
 			this.counter++
 			this.busy();
-			this.log("active operations", this.counter)
+//			this.debug("active operations:", this.counter)
 		},
 		
 		stop: function(operation) {
@@ -45,7 +45,7 @@ dojo.declare("apstrata.apsdb.client.Activity",
 			}
 			
 			if (this.counter==0) this.free() //setTimeout (dojo.hitch(this, "free"), 3000)  
-			this.log("active operations", this.counter)
+//			this.debug("active operations:", this.counter)
 		},
 		
 		timeout: function(operation) {
@@ -81,7 +81,7 @@ dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {
 
 
 dojo.declare("apstrata.apsdb.client.Connection",
-	[apstrata.util.logger.Logger],
+	[apstrata.util.logger.Loggable],
 	{
 		_KEY_APSDB_ID: "@key",
 		_COOKIE_NAME: "apstrata.apsdb.client",
@@ -152,7 +152,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			this.totalConnectionTime += t
 			this.averageConnectionTime = this.totalConnectionTime/this.numberOfConnections 
 
-			this.log("average connection time", this.averageConnectionTime)
+			this.debug("average connection time", this.averageConnectionTime)
 		},
 
 		signUrl: function(operation, params, responseType) {
@@ -179,7 +179,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				saveObject: saveObject
 			}
 			
-			this.log("saving connection to cookie", dojo.toJson(o))
+			this.debug("saving connection to cookie:", dojo.toJson(o))
 			
 			dojo.cookie(self._COOKIE_NAME, dojo.toJson(o), {expires: self._COOKIE_EXPIRY})			
 		},
@@ -187,7 +187,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		loadFromCookie: function() {
 			var json = dojo.cookie(this._COOKIE_NAME)
 
-			this.log("Loading connection from cookie", json)
+			this.debug("Loading connection from cookie:", json)
 			
 			if ((json == undefined) || (json == "")) {
 				this.serviceUrl = this._DEFAULT_SERVICE_URL
@@ -205,7 +205,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			} else {
 				var o = dojo.fromJson(json)
 	
-				this.log("Loading connection from cookie", o)
+				this.debug("Loading connection from cookie", o)
 					
 				this.credentials = o.credentials
 				this.serviceUrl = o.serviceUrl
@@ -219,7 +219,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			var self = this
 			
 					self._ongoingLogin = false
-					this.log("logging in: saving credentials to cookie")
+					this.debug("logging in: saving credentials to cookie")
 					self.saveToCookie()
 					handlers.success()
 		},
@@ -228,12 +228,12 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			var self = this
 			
 			self._ongoingLogin = true
-			this.log("logging in: attemting an operation to apstrata to validate credentials")
+			this.debug("logging in: attemting an operation to apstrata to validate credentials")
 			
 			var listStores = new apstrata.apsdb.client.ListStores(self)
 			dojo.connect(listStores, "handleResult", function() {
 					self._ongoingLogin = false
-					this.log("logging in: saving credentials to cookie")
+					self.debug("logging in: saving credentials to cookie")
 					self.saveToCookie()
 					handlers.success()
 			})
@@ -245,7 +245,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		},
 
 		logout: function() {
-			this.log("logging out: erasing credentials from cookie")
+			this.debug("logging out: erasing credentials from cookie")
 			this.credentials.secret = ""
 			this.credentials.pw = ""
 			this.saveToCookie()

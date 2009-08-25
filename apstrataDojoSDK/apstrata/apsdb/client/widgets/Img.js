@@ -5,7 +5,7 @@ dojo.require("dijit.Dialog")
 dojo.require("dojox.dtl._Templated")
 
 dojo.declare("apstrata.apsdb.client.widgets.Img",
-	[dijit._Widget, dojox.dtl._Templated, apstrata.util.logger.Logger],
+	[dijit._Widget, dojox.dtl._Templated, apstrata.util.logger.Loggable],
 	{
 		widgetsInTemplate: true,
 		templateString: '<span><img src="{{ url }}"></span>',

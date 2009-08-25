@@ -23,7 +23,7 @@ dojo.provide("apstrata.apsdb.client.ItemApsdbReadStore");
 dojo.require("dojo.data.api.Request")
 
 dojo.require("apstrata.apsdb.client.Connection")
-dojo.require("apstrata.util.logger.Logger")
+dojo.require("apstrata.util.logger.Loggable")
 dojo.require("apstrata.apsdb.client.Client")
 dojo.require("apstrata.apsdb.client._Item")
 
@@ -31,10 +31,15 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 	[],
 	{
 		_KEY_LABEL: "documentKey",
+		connection: null,
+		apsdbStoreName: "",
+		fields: "", 
+		label: "",
+		childrenAttrs: "",
 		
 		constructor: function(attrs) {
 			// add log capabilities to object
-			_l = new apstrata.util.logger.Logger()
+			_l = new apstrata.util.logger.Loggable()
 			dojo.mixin(this, _l)
 			this._features = {'dojo.data.api.Read':true, 'dojo.data.api.Identity':true};
 

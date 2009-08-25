@@ -11,11 +11,11 @@
  */
 dojo.provide("apstrata.util.ImportJson");
 
-dojo.require("apstrata.util.logger.Logger");
+dojo.require("apstrata.util.logger.Loggable");
 dojo.require("apstrata.apsdb.client.Client")
 
 dojo.declare("apstrata.util.ImportJson",
-[apstrata.util.logger.Logger],
+[apstrata.util.logger.Loggable],
 {
 	constructor: function(attrs) {
 		var client

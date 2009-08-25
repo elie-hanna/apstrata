@@ -37,10 +37,10 @@ dojo.require("apstrata.apsdb.client.Query");
 dojo.require("apstrata.apsdb.client.SetSchema");
 dojo.require("apstrata.apsdb.client.GetSchema");
 dojo.require("apstrata.apsdb.client.ListSchemas");
-dojo.require("apstrata.util.logger.Logger");
+dojo.require("apstrata.util.logger.Loggable");
 
 dojo.declare("apstrata.apsdb.client.Client", 
-	[apstrata.util.logger.Logger], 
+	[apstrata.util.logger.Loggable], 
 	{
 
 		constructor: function(connection) {
@@ -127,7 +127,7 @@ dojo.declare("apstrata.apsdb.client.Client",
 			if (attrs && attrs.continueOnError) continueOnError = attrs.continueOnError
 
 			if (self._q.length == 0) {
-				self.log(self._LOGGER.ERROR, "Queue empty.")
+				self.error("Queue empty.")
 				return
 			}
 			

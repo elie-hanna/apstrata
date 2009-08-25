@@ -118,34 +118,22 @@ if (typeof apstrata == "undefined") {
 		}
 	}
 
-    apstrata.logConfig = {
-		buffer:  new Array(),	// global array to contain the log
-		level: 0, 		// severity of log messages to display
-		verbose: true, 		// show log messages on console
-		logGarbageCollection: 10 	// minutes to clear the log messages buffer		
-    }
-    
-    apstrata.log = function(origin, attr1, attr2, attr3) {
-		if (this.logger == undefined) this.logger = new apstrata.util.logger.Logger()
-		
-		if (attr1 == undefined) {
-			this.logger._LOGGER.className = ""
-			this.logger.log(origin)			
-		} else {
-			this.logger._LOGGER.className = origin
-			this.logger.log(attr1, attr2, attr3)			
-		}
-    }
-
 	dojo.registerModulePath("apstrata", apstrata.baseUrl)
-	dojo.require ("apstrata.util.logger.Logger");
+//	dojo.require ("apstrata.util.logger.Logger")
+	dojo.require ("apstrata.util.logger.BasicLogger")
 	dojo.registerModuleRelative = function(module, string) {
 		dojo.registerModulePath (module, apstrata.pathFromDojo + string)
 	}
 	
 	dojo.require("dijit._Widget")
-
+	
 	dojo.addOnLoad(function() {
+		// Init default logger
+		apstrata.logger = new apstrata.util.logger.BasicLogger()
+	    apstrata.log = function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+			apstrata.logger.log("info", "", arguments)		
+	    }
+
 		if (!apstrata.apConfig) {
 			var xhrArgs = {
 				url: apstrata.baseUrl + "/apstrata.json",
@@ -164,4 +152,6 @@ if (typeof apstrata == "undefined") {
 			_apstrataRoot: apstrata.baseUrl
 		})
 	})
+	
+	
 }

@@ -39,7 +39,7 @@ dojo.declare("apstrata.apsdb.client.Get",
          * @constructor Get Sets the logger
          */
         constructor: function() {
-                this._LOGGER.setClassLabel("apstrata.apsdb.client.Get")      
+//                this._LOGGER.setClassLabel("apstrata.apsdb.client.Get")      
         },
 		
 		getUrl: function() {
@@ -51,21 +51,24 @@ dojo.declare("apstrata.apsdb.client.Get",
      */
 		execute: function () {
 			var self = this;
-
-			// Send debug information to connection object, could be used later to identify problems
-			self.log("Operation", self.apsdbOperation);
-		
+			
 			var timestamp = new Date().getTime();
     
-			// Since the hack for JSONP doesn't really allow for communication errors to be caught,
-			//  we're using a timeout event to provide an error message if an operation takes too long to execute
-			self._setTimeout()
-
 			var buildUrl = self.buildUrl();
 			self.url = buildUrl.url
 			self.signature = buildUrl.signature
 
-			self.log("GET", self.url);
+
+
+			self.groupMessages("GET request sent")
+				self.log("Operation", self.apsdbOperation);
+				self.log("GET", self.url);
+
+			// Since the hack for JSONP doesn't really allow for communication errors to be caught,
+			//  we're using a timeout event to provide an error message if an operation takes too long to execute
+			self._setTimeout()
+
+			self.endGroupMessages()
 
 			// send out event that we are sending a request to apstrata
 			self.requestSent()
@@ -74,21 +77,33 @@ dojo.declare("apstrata.apsdb.client.Get",
 				url: self.url,
 				callbackParamName : "apsws.jc",
 				load: function(json) {
-					self.log("response object", json);
+
+					self.groupMessages("GET response received")
 
 					self.responseTime = (new Date().getTime()) - timestamp;
 					self.connection.registerConnectionTime(self.responseTime)
-					self.log("response time (ms)", self.responseTime);
+	
+						self.info("response object", json);
+						self.info("response time (ms)", self.responseTime);
+						self.debug("Aborted", self.operationAborted);
+						if (self.operationTimeout) self.warn("Timed out", self.operationTimeout);
+	
 					// Clear the timeout since we received a response from apstrata
 					self._clearTimeout();
 					
 					// we can't do a real abort or timeout operation
 					//  we're just using a flag to artificially ignore the result if the user requests an abort
 					//  or if after a timeout, a response was received anyway
-					self.log(self._LOGGER.DEBUG, "Aborted", self.operationAborted);
-					self.log(self._LOGGER.DEBUG, "Timed out", self.operationTimeout);
-					if (self.operationAborted || self.operationTimeout) return jsonTxt;
+					if (self.operationAborted || self.operationTimeout) {
+						// End the debug messages group since we're not loggin any more stuff
+						self.endGroupMessages()
+						return
+					}
+
                     var json
+
+					// No need to issue self.endGroupMessages() beyond this point because it's called by
+					//  self.handleResult() or self.handleError()
 
                     if (json.response) {
 						// Copy metadata fields to the Operation object
@@ -101,8 +116,8 @@ dojo.declare("apstrata.apsdb.client.Get",
 							self[prop] = json.response[prop];
 						}
 						
-						self.log("requestId", self.requestId)
-                        self.log("status", self.status);
+						self.info("requestId:", self.requestId)
+                        self.info("status:", self.status);
 
                         if (self.status==self._SUCCESS) {
                             self.handleResult();
@@ -117,7 +132,7 @@ dojo.declare("apstrata.apsdb.client.Get",
                         self.status = "failure";
                         self.errorCode = "CLIENT_BAD_RESPONSE"
                         self.errorMessage = "apsdb client: bad response from apsdb or communication error"
-                        self.log(this._LOGGER.ERROR ,"errorMessage", self.errorMessage);
+                        self.debug("errorMessage", self.errorMessage);
                         self.handleError();                                        
                     }
 

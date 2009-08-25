@@ -14,15 +14,15 @@ dojo.provide("apstrata.apsdb.client.Operation")
 
 dojo.require ("dojo.io.script")
 dojo.require ("dojox.encoding.digests.MD5")
-dojo.require ("apstrata.util.logger.Logger")
+dojo.require ("apstrata.util.logger.Loggable")
 
 /**
  * Extends the apstrata database logger to include request and response features
  * @class apstrata.apsdb.client.Operation
- * @extends apstrata.util.logger.Logger
+ * @extends apstrata.util.logger.Loggable
 */
 dojo.declare("apstrata.apsdb.client.Operation",
-[apstrata.util.logger.Logger],
+[apstrata.util.logger.Loggable],
 {
 		//
 		// Constants
@@ -154,17 +154,17 @@ dojo.declare("apstrata.apsdb.client.Operation",
 			var self = this;
 			if (self.connection.getTimeout()>0) {
 				self._timeoutHandler = setTimeout (dojo.hitch(self, "timeout"), self.connection.getTimeout());
-				this.log(self._LOGGER.DEBUG, 'timeout handler, set', self._timeoutHandler+" " + self.connection.getTimeout()+"")
+				this.info('timeout handler set:', self.connection.getTimeout()+"")
 			}
 		},
 
     // Removes the timeout of the operation
 		_clearTimeout: function() {
 			if (this._timeoutHandler) {
-				this.log(this._LOGGER.DEBUG, 'timeout handler, cleared', this._timeoutHandler+"")
+				this.info('timeout handler cleared:', this._timeoutHandler+"")
 				clearTimeout (this._timeoutHandler);
 				this._timeoutHandler = 0;
-			}			
+			}
 		},
 
     /**
@@ -195,10 +195,11 @@ dojo.declare("apstrata.apsdb.client.Operation",
 			// Clear the timeout if the operation is aborted
 			if (this._timeoutHandler) {
 				clearTimeout (this._timeoutHandler);
-				this.log('abort: timeout handler, unset', this._timeoutHandler)
+				this.debug('abort: timeout handler, unset', this._timeoutHandler)
 			}
 			
 			this.operationAborted = true;
+			this.endGroupMessages()
 		},
 		//
 		//
@@ -213,15 +214,17 @@ dojo.declare("apstrata.apsdb.client.Operation",
      */
 		handleResult: function() {
 			this.connection.activity.stop(this);
+			this.endGroupMessages()
 		},
 
     /**
      * @function handleError Stop receiving the response and log the error that occurred
      */
 		handleError: function() {
-			this.connection.activity.stop(this);
-        	this.log("errorCode", this.errorCode);
-        	this.log("errorMessage", this.errorMessage);
+			this.connection.activity.stop(this)
+        	this.warn("errorCode", this.errorCode)
+        	this.warn("errorMessage", this.errorMessage)
+			this.endGroupMessages()
 		}
 	});
 

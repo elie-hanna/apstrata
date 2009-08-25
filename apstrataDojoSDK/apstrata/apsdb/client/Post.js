@@ -78,7 +78,7 @@ console.debug(">>>>"+jsonTxt)
                     self.status = "failure";
                     self.errorCode = "CLIENT_BAD_RESPONSE"
                     self.errorMessage = "apsdb client: bad response from apsdb or communication error"
-                    self.log(this._LOGGER.ERROR ,"errorMessage", self.errorMessage);
+                    self.error("errorMessage", self.errorMessage);
                     self.handleError();                                        
                 }
 				
@@ -93,8 +93,8 @@ console.debug(">>>>"+jsonTxt)
 
 			self.url = self.buildActionUrl("jsoncdp")
 			
-			this.log(self._LOGGER.DEBUG, "action url", self.url)
-			this.log(self._LOGGER.DEBUG, "request object", self.buildRequestObject())
+			this.debug("action url", self.url)
+			this.debug("request object", self.buildRequestObject())
 
 			// pass in all of the parameters manually:
 			dojo.io.iframe.send({
@@ -124,8 +124,8 @@ console.debug(">>>>"+jsonTxt)
 					// we can't do a real abort or timeout operation
 					//  we're just using a flag to artificially ignore the result if the user requests an abort
 					//  or if after a timeout, a response was received anyway
-					self.log(self._LOGGER.DEBUG, "Aborted", self.operationAborted);
-					self.log(self._LOGGER.DEBUG, "Timed out", self.operationTimeout);
+					self.info("Aborted", self.operationAborted);
+					self.warn("Timed out", self.operationTimeout);
 					
 					// Here we know that apstrata has responded
 					// The callback will handle parsing the response and calling proper handlers 

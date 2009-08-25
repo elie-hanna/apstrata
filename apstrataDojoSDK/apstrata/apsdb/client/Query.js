@@ -37,37 +37,24 @@ dojo.declare("apstrata.apsdb.client.Query",
      * @param attrs An array of parameters that must contain these parameters: 'store', 'query', 'queryFields'. These parameters are optional: 'resultsPerPage', 'pageNumber', 'count', 'sort'
      */
     execute: function(attrs) {
+		var self = this
 		if ((attrs.store) && (attrs.query) && (attrs.queryFields)) {
 			this.request.apsdb.store = attrs.store	
 			this.request.apsdb.query = attrs.query
 			this.request.apsdb.queryFields = attrs.queryFields
 
-//			if (attrs.documentKey) this.request.apsdb.documentKey = attrs.documentKey 
-
 	        if (attrs.resultsPerPage) this.request.apsdb.resultsPerPage = attrs.resultsPerPage
-//				else this.request.apsdb.resultsPerPage = this._DEFAULT_RESULTS_PER_PAGE
-
 	        if (attrs.pageNumber) this.request.apsdb.pageNumber = attrs.pageNumber
-//				else this.request.apsdb.pageNumber = this._DEFAULT_PAGE_NUMBER
-
 	        if (attrs.count) this.request.apsdb.count = attrs.count
-//				else this.request.apsdb.count = "false"
-
 			if (attrs.sort) this.request.apsdb.sort = attrs.sort
-      if (attrs.runAs) this.request.apsim.runAs = attrs.runAs
-      if (attrs.aggregates) {
-        this.request.apsdb.aggregateExpression = attrs.aggregates
-        this.request.apsdb.aggregateGlobal = 'true'; // Add the aggregateGlobal parameter because the aggregate is only allowed globally for now
-      }
+			if (attrs.runAs) this.request.apsim.runAs = attrs.runAs
 
-      if (attrs.ftsQuery) this.request.apsdb.ftsQuery = attrs.ftsQuery
-/*
-			if (attrs.ftsString != undefined) this.request.apsdb.ftsString = attrs.ftsString;
-	        	else this.request.apsdb.ftsString = ""
+			if (attrs.aggregates) {
+				this.request.apsdb.aggregateExpression = attrs.aggregates
+				this.request.apsdb.aggregateGlobal = 'true'; // Add the aggregateGlobal parameter because the aggregate is only allowed globally for now
+			}
 
-	        if (attrs.forceCurrentSnapshot != undefined) this.request.apsdb.forceCurrentSnapshot = attrs.forceCurrentSnapshot
-				else this.request.apsdb.forceCurrentSnapshot = "false"
-*/
+	      if (attrs.ftsQuery) this.request.apsdb.ftsQuery = attrs.ftsQuery
 		} else {
 			throw "Query attributes store, query and queryFields are mandatory"
 		}
