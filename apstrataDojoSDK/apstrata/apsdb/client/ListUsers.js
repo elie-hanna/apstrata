@@ -34,7 +34,7 @@ dojo.declare("apstrata.apsdb.client.ListUsers",
      */
     execute: function(attrs){
         if (attrs != undefined && attrs.groupName != undefined) 
-            this.request.apsdb.groupName = attrs.groupName;
+            this.request.apsim.group = attrs.groupName;
         this.inherited(arguments);
     }
 });

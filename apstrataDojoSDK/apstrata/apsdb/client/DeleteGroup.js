@@ -36,7 +36,7 @@ dojo.declare("apstrata.apsdb.client.DeleteGroup",
     execute: function(attrs) {
         if ((attrs != undefined) &&
             (attrs.groupName != undefined)) {   
-            this.request.apsdb.groupName = attrs.groupName;
+            this.request.apsim.group = attrs.groupName;
             this.inherited(arguments);
         } else console.debug("apstrata.apsdb.client.DeleteGroup: missing group name.");
     }

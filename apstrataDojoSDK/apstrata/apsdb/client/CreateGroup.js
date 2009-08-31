@@ -37,7 +37,7 @@ dojo.declare("apstrata.apsdb.client.CreateGroup",
     execute: function(attrs) {
         if ((attrs != undefined) &&
             (attrs.groupName != undefined)) {   
-            this.request.apsdb.groupName = attrs.groupName;
+            this.request.apsim.group = attrs.groupName;
             this.inherited(arguments);
         } else throw new Error("apstrata.apsdb.client.CreateGroup: missing group name.")
     }
