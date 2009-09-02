@@ -36,8 +36,8 @@ function loadjscssfile(filename, filetype){
 	  document.getElementsByTagName("head")[0].appendChild(fileref)
 }
 
-loadjscssfile("../../lib/dojo/1.3.0/dojo/resources/dojo.css", "css");
-loadjscssfile("../../lib/dojo/1.3.0/dijit/themes/tundra/tundra.css", "css");
+loadjscssfile("../../lib/dojo/1.3.0-src/dojo/resources/dojo.css", "css");
+loadjscssfile("../../lib/dojo/1.3.0-src/dijit/themes/tundra/tundra.css", "css");
 loadjscssfile("widgets/css/survey.css", "css");
 //loadjscssfile("../dojo/1.3.0/dojo/dojo.js", "js");
 
