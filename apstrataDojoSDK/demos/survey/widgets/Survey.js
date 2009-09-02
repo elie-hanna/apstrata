@@ -27,6 +27,8 @@ dojo.require("dojo.dnd.Container");
 dojo.require("dojo.dnd.Manager");
 dojo.require("dojo.dnd.Source");
 
+var ABD = null;
+
 dojo.declare("surveyWidget.widgets.Survey",
 	[dijit._Widget, dijit._Templated],
 	{
@@ -44,9 +46,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 		// Replace here with your apsdb account
 		//  and target store name
 		//
-		apsdbKey: "apstrata",
-		apsdbSecret: "secret",
-		apsdbServiceUrl: "http://apsdb.apstrata.com/apsdb/rest", //"http://localhost/apstratabase/rest",
+		apsdbKey: "7744293024",
+		apsdbSecret: "3B45DE19C689EDAFCA47",
+		apsdbServiceUrl: "http://apsdb.apstrata.com/sandbox-apsdb/rest"
 		storeName: "myStore",
 
 		constructor: function() {
@@ -77,11 +79,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var survey = this;
 			
 			dojo.forEach(dataModel.questions, function(fieldDataModel) {
-				var newField = survey.createField(fieldDataModel);
-				});
+				var isVisible = (fieldDataModel.name != 'apstrataSurveyID'); // Do not show the 'apstrataSurveyID' field
+				var newField = survey.createField(fieldDataModel, isVisible);
+			});
 			
 			if(this.editMode)
-				var newField = this.createField(null);
+				var newField = this.createField(null, true);
 		},
 		
 		initDnd: function() {
@@ -92,8 +95,13 @@ dojo.declare("surveyWidget.widgets.Survey",
 		deselectFields: function() {
 		},
 		
-		createField: function(dataModel) {
+		createField: function(dataModel, isVisible) {
 			var newField = new surveyWidget.widgets.SurveyField(dataModel,this.editMode);
+
+			// Do not display the field that should be invisible
+			if (!isVisible) {
+				newField.surveyField.style.display = 'none';
+			}
 
 			this.questions.addChild(newField);
 
@@ -105,7 +113,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					if (this.editMode) {
 						var children = this.questions.getChildren();
 						if (newField.dummyField) {
-							this.createField(null);
+							this.createField(null, true);
 							newField.dummyField = false;
 						}
 					}
@@ -155,7 +163,18 @@ dojo.declare("surveyWidget.widgets.Survey",
 					data[i++] = childModel;
 				}
 			});
-		
+
+			// Create a new object to act as the randomly generated survey identifier (named 'apstrataSurveyID') and insert it as a survey field
+			var strSurveyID = dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase();
+			var apstrataSurveyID = new Object();
+			apstrataSurveyID.choices = '';
+			apstrataSurveyID.defaultValue = strApstrataSurveyID;
+			apstrataSurveyID.mandatory = false;
+			apstrataSurveyID.name = 'apstrataSurveyID';
+			apstrataSurveyID.title = 'Apstrata Survey ID';
+			apstrataSurveyID.type = 'text';
+			data[i++] = apstrataSurveyID;
+
 			dojo.forEach(this.questions.getChildren(), function(child) {
 				if (child.title != null && !child.dummyField) {
 					arrFields[j++] = child.fldName.value;
@@ -163,7 +182,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			});
 
-			var suveyData = {
+			var surveyData = {
 				title: this.title.value,
 				description: this.description.value,
 				questions: data
@@ -171,16 +190,17 @@ dojo.declare("surveyWidget.widgets.Survey",
 			
 			var listSurveyData = {
 				title: this.title.value,
-				fields: arrFields ,
-				titleFields: arrTitleFields
+				fields: arrFields,
+				titleFields: arrTitleFields,
+				apstrataSurveyID: strApstrataSurveyID
 			};
 			
-			//console.debug(dojo.toJson(suveyData));
+			//console.debug(dojo.toJson(surveyData));
 			this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
 			+ '<script type="text/javascript" src="../lib/dojo/1.3.0/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
 			+ '<script type="text/javascript" src="widgets/SurveyRunner.js" ></script>\n'
-			+ '<script>var schema = \'' + dojo.toJson(suveyData) + '\';</script>\n'
+			+ '<script>var schema = \'' + dojo.toJson(surveyData) + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div dojoType="surveyWidget.widgets.Survey" /></div>'
 			+ '</textarea>';
@@ -198,7 +218,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			this.listingEmbed.style.display = "";
 			this.listingEmbed.width = "800px";
 
-			return suveyData;
+			return surveyData;
 		},
 		
 		getUrlParam: function(name) {
