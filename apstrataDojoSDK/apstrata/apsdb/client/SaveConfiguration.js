@@ -37,7 +37,7 @@ dojo.declare("apstrata.apsdb.client.SaveConfiguration",
     execute: function(attrs) {
         if ((attrs != undefined) &&
             (attrs.createschemaACL != undefined)) {   
-            this.request.createschemaACL = attrs.createschemaACL;
+            this.request.createSchemaACL = attrs.createSchemaACL;
             this.inherited(arguments);
         } else throw new Error("apstrata.apsdb.client.SaveConfiguration: missing createschemaACL parameter.")
     }
