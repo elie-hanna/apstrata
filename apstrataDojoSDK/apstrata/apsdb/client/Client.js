@@ -37,8 +37,8 @@ dojo.require("apstrata.apsdb.client.Query");
 dojo.require("apstrata.apsdb.client.SetSchema");
 dojo.require("apstrata.apsdb.client.GetSchema");
 dojo.require("apstrata.apsdb.client.ListSchemas");
-dojo.require("apstrata.util.logger.Loggable");
 dojo.require("apstrata.apsdb.client.SaveConfiguration");
+dojo.require("apstrata.util.logger.Loggable");
 
 
 dojo.declare("apstrata.apsdb.client.Client", 
