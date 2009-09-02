@@ -30,8 +30,8 @@ dojo.declare("apstrata.apsdb.client.SaveConfiguration",
     },
 
     /**
-     * @function execute Saves the createschemaACL attributes in user's profile
-     * @param attrs An array of parameters that must contain the 'createschemaACL' parameter
+     * @function execute Saves the createSchemaACL attributes in user's profile
+     * @param attrs An array of parameters that must contain the 'createSchemaACL' parameter
      * @throws Error
      */
     execute: function(attrs) {
