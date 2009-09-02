@@ -27,8 +27,6 @@ dojo.require("dojo.dnd.Container");
 dojo.require("dojo.dnd.Manager");
 dojo.require("dojo.dnd.Source");
 
-var ABD = null;
-
 dojo.declare("surveyWidget.widgets.Survey",
 	[dijit._Widget, dijit._Templated],
 	{
@@ -48,7 +46,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		//
 		apsdbKey: "7744293024",
 		apsdbSecret: "3B45DE19C689EDAFCA47",
-		apsdbServiceUrl: "http://apsdb.apstrata.com/sandbox-apsdb/rest"
+		apsdbServiceUrl: "http://apsdb.apstrata.com/sandbox-apsdb/rest",
 		storeName: "myStore",
 
 		constructor: function() {
@@ -77,12 +75,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 			this.questionContainer = this.initDnd();
 			var survey = this;
-			
+
 			dojo.forEach(dataModel.questions, function(fieldDataModel) {
 				var isVisible = (fieldDataModel.name != 'apstrataSurveyID'); // Do not show the 'apstrataSurveyID' field
 				var newField = survey.createField(fieldDataModel, isVisible);
 			});
-			
+
 			if(this.editMode)
 				var newField = this.createField(null, true);
 		},
@@ -165,7 +163,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			});
 
 			// Create a new object to act as the randomly generated survey identifier (named 'apstrataSurveyID') and insert it as a survey field
-			var strSurveyID = dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase();
+			var strApstrataSurveyID = dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase();
 			var apstrataSurveyID = new Object();
 			apstrataSurveyID.choices = '';
 			apstrataSurveyID.defaultValue = strApstrataSurveyID;
