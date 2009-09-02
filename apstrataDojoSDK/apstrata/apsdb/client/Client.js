@@ -38,6 +38,8 @@ dojo.require("apstrata.apsdb.client.SetSchema");
 dojo.require("apstrata.apsdb.client.GetSchema");
 dojo.require("apstrata.apsdb.client.ListSchemas");
 dojo.require("apstrata.util.logger.Loggable");
+dojo.require("apstrata.apsdb.client.SaveConfiguration");
+
 
 dojo.declare("apstrata.apsdb.client.Client", 
 	[apstrata.util.logger.Loggable], 
@@ -263,6 +265,10 @@ dojo.declare("apstrata.apsdb.client.Client",
 		},
 		deleteUser: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.DeleteUser(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		saveConfiguration: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.SaveConfiguration(this.connection)
 			return this._operation(success, failure, op, attrs)
 		}
 		
