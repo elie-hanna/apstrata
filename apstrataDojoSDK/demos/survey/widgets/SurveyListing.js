@@ -127,7 +127,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				for(var ncol = 0; ncol < columns.length; ncol++){
 					found = false;
 					for(var fid = 0; fid < arrSurvey[doc].fields.length; fid++){
-						if(columns[ncol] == arrSurvey[doc].fields[fid].@name){
+						if(columns[ncol] == arrSurvey[doc].fields[fid]["@name"]){
 							found = true;
 							break;
 						}
