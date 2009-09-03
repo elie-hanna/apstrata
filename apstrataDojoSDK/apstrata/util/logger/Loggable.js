@@ -27,18 +27,22 @@ dojo.declare("apstrata.util.logger.Loggable",
 [],
 {
 	warn: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+    checkAndSetLogger();
 		apstrata.logger.warn(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
 	},
 
 	info: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+    checkAndSetLogger();
 		apstrata.logger.info(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
 	},
 	
 	debug: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+    checkAndSetLogger();
 		apstrata.logger.debug(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
 	},
 	
 	error: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+    checkAndSetLogger();
 		apstrata.logger.error(this, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
 	},
 
@@ -48,11 +52,21 @@ dojo.declare("apstrata.util.logger.Loggable",
 	},
 	
 	groupMessages: function(title) {
+    checkAndSetLogger();
 		var className = (this.className)?this.className:this.declaredClass
 		apstrata.logger.group(className + ": " + title)
 	},
 	
 	endGroupMessages: function() {
+    checkAndSetLogger();
 		apstrata.logger.endGroup()
 	}
 });
+
+/**
+ * Used to check if the apstrata.logger object has been set or not, so that it instantiates a BasicLogger object if it doesn't
+ */
+function checkAndSetLogger() {
+  if (apstrata.logger == null)
+    apstrata.logger = new apstrata.util.logger.BasicLogger();
+}
