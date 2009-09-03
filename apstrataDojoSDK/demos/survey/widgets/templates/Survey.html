@@ -5,6 +5,17 @@
 		<form id="survey_form" dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
 		<div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer"  withHandles="true" class="questionsPanel" id="dndContainer"></div>
 		</form>
+		<br/>
+		<div>
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" id="viewResultsId"  name="allowViewingResults"/> Show results to users
+		</div>
+		<br/>
+		<div dojoAttachPoint="successMsgDiv" >
+			Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
+		</div>
+		<div dojoAttachPoint="resultsUrlDiv" style="display: none;" >
+			Results URL: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="resultsUrl" value="">
+		</div>
 	</div>
 
 	<br/><br/>
