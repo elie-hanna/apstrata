@@ -34,14 +34,15 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		arrData: null,
 		resultResponse: null,
 		dojoDataModel: null,
+		apstrataSurveyID: null,
 
 		//
 		// Replace here with your apsdb account
 		//  and target store name
 		//
-		apsdbKey: "apstrata",
-		apsdbSecret: "secret",
-		apsdbServiceUrl: "http://apsdb.apstrata.com/apsdb/rest", //"http://localhost/apstratabase/rest",
+		apsdbKey: "7744293024",
+		apsdbSecret: "3B45DE19C689EDAFCA47",
+		apsdbServiceUrl: "http://apsdb.apstrata.com/sandbox-apsdb/rest",
 		storeName: "myStore",
 		
 		constructor: function() {
@@ -50,6 +51,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				this.dojoDataModel = dojo.fromJson(this.jsonDataModel);
 				this.arrFieldsToDisplay = this.dojoDataModel.fields;
 				this.arrTitleFieldsToDisplay = this.dojoDataModel.titleFields;
+				this.apstrataSurveyID = this.dojoDataModel.apstrataSurveyID;
 			}
 		},
 		
@@ -80,7 +82,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 					},
 					{
 						store: listing.storeName,
-						query: "apsdb.documentKey!=\"-1\"",
+						query: "apstrataSurveyID=\"" + listing.apstrataSurveyID + "\"",
 						queryFields: listing.arrFieldsToDisplay
 					}
 				)
