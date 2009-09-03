@@ -259,10 +259,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 				var client = new apstrata.apsdb.client.Client();
 				var sd = client.saveDocument(
 					function() {
-						if(dataModel.viewResults)
+						if (dataModel.viewResults) 
 							window.location = dataModel.resultsUrl;
-						else
+						else {
+							survey.surveyDiv.style.display="none";
 							survey.successMessage.innerHTML = dataModel.successMessage;
+						}
 						
 					}, function() {
 						survey.successMessage.innerHTML = "A problem occured while submitting your survey, please try again later.";

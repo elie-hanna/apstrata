@@ -1,5 +1,6 @@
 <div class="tundra">
 	<div dojoAttachPoint="roundedBox survey" class="survey">
+		<div dojoAttachPoint="surveyDiv">
 		<h2 dojoAttachPoint="title" >${surveyTitle}</h2>
 		<h3 dojoAttachPoint="description" >${surveyDescription}</h3>
 		<form id="survey_form" dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
@@ -8,6 +9,7 @@
 		<input dojoAttachPoint="btnSubmit" type="button" value="Submit" />
 		</form>
 		<br/>
+		</div>
 		<div dojoAttachPoint="successMessage"></div>
 	</div>
 </div>
