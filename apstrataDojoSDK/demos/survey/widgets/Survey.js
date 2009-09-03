@@ -196,7 +196,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 			//console.debug(dojo.toJson(surveyData));
 			this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
-			+ '<script type="text/javascript" src="../lib/dojo/1.3.0/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
+			+ '<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
+			+ '<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:\'7744293024\', secret:\'3B45DE19C689EDAFCA47\', serviceURL: \'http://apsdb.apstrata.com/sandbox-apsdb/rest\'"></script>'
 			+ '<script type="text/javascript" src="widgets/SurveyRunner.js" ></script>\n'
 			+ '<script>var schema = \'' + dojo.toJson(surveyData) + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
@@ -207,11 +208,17 @@ dojo.declare("surveyWidget.widgets.Survey",
 			
 			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
-			+ '<script type="text/javascript" src="../lib/dojo/1.3.0/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
+			+ '<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
+			+ '<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:\'7744293024\', secret:\'3B45DE19C689EDAFCA47\', serviceURL: \'http://apsdb.apstrata.com/sandbox-apsdb/rest\'"></script>'
 			+ '<script type="text/javascript" src="widgets/SurveyListingLoader.js" ></script>\n'
-			+ '<script>var schema = \'' + dojo.toJson(listSurveyData) + '\';</script>\n'
+			+ '<script type="text/javascript" src="widgets/SurveyChartingLoader.js" ></script>\n'
+			+ '<script>var schema = \'' + dojo.toJson(listSurveyData) + '\'; var chartingSchema = \'' + dojo.toJson(surveyData) + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
+			+ '<div>'
 			+ '<div dojoType="surveyWidget.widgets.SurveyListing" /></div>'
+			+ '<div dojoType="surveyWidget.widgets.SurveyCharting" style="display:none;" /></div>'
+			+ '<a href="#" class="rounded-corner" onClick="javascript:dojo.byId(\'surveyWidget_widgets_SurveyCharting_0\').style.display = \'\'; dojo.byId(\'surveyWidget_widgets_SurveyListing_0\').style.display = \'none\';">view aggregate results</a>'
+			+ '</div>'
 			+ '</textarea>';
 			this.listingEmbed.style.display = "";
 			this.listingEmbed.width = "800px";
