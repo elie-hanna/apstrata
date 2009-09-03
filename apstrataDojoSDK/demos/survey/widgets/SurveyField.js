@@ -119,8 +119,9 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 				this.editor.style.top = (this.surveyField.offsetTop - 20) + "px";
 				this.editor.style.left = (this.spnValue.offsetLeft + 255) + "px";
 				this.editor.style.display = "";
-				/** TODO:  rgba doesn't work in IE, we need to change this in here and in the css*/
-				this.surveyField.style.backgroundColor = "rgba(255, 255, 130, .9)";
+				//rgba doesn't work in IE
+				//this.surveyField.style.backgroundColor = "rgba(255, 255, 130, .9)";
+				this.surveyField.style.backgroundColor = "#FFFF8E";
 				this.handle.style.display = "none";
 				this.selected = true;				
 			}
