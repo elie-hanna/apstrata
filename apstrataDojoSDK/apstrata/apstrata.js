@@ -119,7 +119,6 @@ if (typeof apstrata == "undefined") {
 	}
 
 	dojo.registerModulePath("apstrata", apstrata.baseUrl)
-//	dojo.require ("apstrata.util.logger.Logger")
 	dojo.require ("apstrata.util.logger.BasicLogger")
 	dojo.registerModuleRelative = function(module, string) {
 		dojo.registerModulePath (module, apstrata.pathFromDojo + string)
@@ -127,31 +126,22 @@ if (typeof apstrata == "undefined") {
 	
 	dojo.require("dijit._Widget")
 	
+	try {
+		dojo.require("apstrata.ApConfig")		
+	} catch (error) {
+		
+	}
+	
 	dojo.addOnLoad(function() {
 		// Init default logger
 		apstrata.logger = new apstrata.util.logger.BasicLogger()
-	    apstrata.log = function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
-			apstrata.logger.log("info", "", arguments)		
+	    apstrata.log = function(level, className, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
+			apstrata.logger.log(level, className, [arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10])
 	    }
 
-		if (!apstrata.apConfig) {
-			var xhrArgs = {
-				url: apstrata.baseUrl + "/apstrata.json",
-				handleAs: "json",
-				load: function(json) {
-					apstrata.apConfig = json
-				},
-				error: function(error) {
-				}
-			}
-			
-			dojo.xhrGet(xhrArgs)
-		}
-		
 		dojo.extend(dijit._Widget, {
 			_apstrataRoot: apstrata.baseUrl
 		})
 	})
-	
 	
 }
