@@ -216,10 +216,20 @@
 				var operation = client.deleteUser(
 					function() {
 						test.success(operation)
-						deleteStore()
+						saveConfiguration()
 					}, function() {
 						test.fail(operation)
 					}, {user: user})
+			}
+			
+			function saveConfiguration() {
+				var operation = client.saveConfiguration(
+					function() {
+						test.success(operation)
+						deleteStore()
+					}, function() {
+						test.fail(operation)
+					}, {createSchemaACL: createSchemaACL})
 			}
 			
 			function deleteStore() {
@@ -243,6 +253,7 @@
 				groupName = "testGroup" + Math.floor(Math.random()*10000)
 				schemaName= "schema"    + Math.floor(Math.random()*10000)
 				user= "user"    + Math.floor(Math.random()*10000)
+				createSchemaACL = "user1;user2;user3"
 				
 				schema="<schema><aclGroups><aclGroup name='groupOne'><read>apstrata</read><write>nasr</write><fields><field>fieldone</field></fields></aclGroup><defaultAcl><read>nasr</read><write>youss</write><delete>abd</delete></defaultAcl></aclGroups><fields><field name='fieldone'></field></fields></schema>"
 				
