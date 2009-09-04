@@ -22,6 +22,9 @@ dojo.provide("surveyWidget.widgets.SurveyCharting");
 
 dojo.require("dijit._Templated");
 dojo.require("dijit.layout.LayoutContainer");
+dojo.require("dojox.charting.Chart2D");
+dojo.require("dojox.charting.themes.PlotKit.red");
+
 //dojo.require("apstrata.dojo.client.apsdb.Connection");
 
 dojo.declare("surveyWidget.widgets.SurveyCharting",
@@ -33,19 +36,17 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		questions: null,
 		resultResponse: null,
 		apstrataSurveyID: '',
+		surveysTakenCount: 0,
 
 		//
 		// Replace here with your apsdb account
 		//  and target store name
 		//
-		apsdbKey: "7744293024",
-		apsdbSecret: "3B45DE19C689EDAFCA47",
-		apsdbServiceUrl: "http://apsdb.apstrata.com/apsdb/rest",
 		storeName: "myStore",
 		
 		constructor: function() {
-			if(chartingSchema != null){
-				this.jsonDataModel = chartingSchema;
+			if(schema != null){
+				this.jsonDataModel = schema;
 				this.dojoDataModel = dojo.fromJson(this.jsonDataModel);
 				this.questions = this.dojoDataModel.questions;
 
@@ -64,7 +65,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		},
 
 		postCreate: function(){
-			if(chartingSchema != null){
+			if(schema != null){
 				this.title.innerHTML = this.dojoDataModel.title;
 				this.query();
 			}
@@ -79,12 +80,13 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			// Query to get the total number of surveys taken
 			var surveysTakenCountQuery = client.query(
 					function() {
-						var surveysTakenCount = surveysTakenCountQuery.result.count;
+						charting.surveysTakenCount = surveysTakenCountQuery.result.count;
 						var fieldResponses = new Array();
+						var isNewLine = true;
 
 						// Now we can query each field in the survey and aggregate the results
 						for (var i=0; i<charting.questions.length; i++) {
-							var fieldDataModel = charting.questions[i];//alert(fieldDataModel.name + '||' + fieldDataModel.type);
+							var fieldDataModel = charting.questions[i];
 							if (   fieldDataModel.name != 'apstrataSurveyID'
 									&& fieldDataModel.type != 'text') {
 								fieldResponses[i] = new Array();
@@ -93,12 +95,14 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 									for (var j=0; j<choices.length; j++) {
 										// call a query to count using the fieldName = this choice
 										// surveysTakenCount - [this count] is the number of people who did not check this box
-										charting.queryAndSetFieldAggregate(fieldDataModel.name, choices[j], fieldResponses[i][j]);
+										charting.queryAndSetFieldAggregate(fieldDataModel.name, choices[j], fieldResponses[i][j], isNewLine);
+										isNewLine = (isNewLine) ? false : true;
 									}
 								} else { // Handles this type of field: checkbox
 								  // call a query to count using the fieldName = 'checked'
 									// surveysTakenCount - [this count] is the number of people who did not check this box
-									charting.queryAndSetFieldAggregate(fieldDataModel.name, 'checked', fieldResponses[i][j]);
+									charting.queryAndSetFieldAggregate(fieldDataModel.name, 'checked', fieldResponses[i][j], isNewLine);
+									isNewLine = (isNewLine) ? false : true;
 								}
 							}
 						}
@@ -139,7 +143,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		/**
 		 * Queries apstrata database for the count of fields that have the passed field name and value
 		 */
-		queryAndSetFieldAggregate: function (fieldName, fieldValue, callbackResult) {
+		queryAndSetFieldAggregate: function (fieldName, fieldValue, callbackResult, isNewLine) {
 			var client = new apstrata.apsdb.client.Client();
 			var charting = this;
 
@@ -148,7 +152,49 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					var valueCount = callbackResult.result.count;
 					// TODO: display
 					// charting.display(charting.resultResponse, charting.arrFieldsToDisplay, charting.arrTitleFieldsToDisplay);
-					alert(fieldName + '/' + fieldValue + ': ' + valueCount);
+
+					var chartLine = charting.displayTable;
+					// TODO: To b used for the two column display
+					/*if (isNewLine) {
+						chartLine = document.createElement('DIV');
+						chartLine.setAttribute('style', 'width: 400px; height: 200px; border: 5px solid red;');
+						charting.displayTable.appendChild(chartLine);
+					} else {
+						chartLine = charting.displayTable.children.item(charting.displayTable.children.length);
+						chartLine.setAttribute('style', 'width: 400px; height: 200px; border: 5px solid green;');
+					}*/
+
+					// 1- Add the chart title to the SurveyCharting DOM node
+					var chartTitle = document.createElement('DIV');
+					chartTitle.innerHTML = fieldName + ': ' + fieldValue;
+					chartLine.appendChild(chartTitle);
+
+					// 2- Add the chart placeholder
+					var chartDIV = document.createElement('DIV');
+					chartDIV.setAttribute('id', fieldName + '_' + fieldValue);
+					chartDIV.setAttribute('style', 'width: 200px; height: 200px; float: left;');
+					chartLine.appendChild(chartDIV);
+
+					// 3- Create and render the chart
+					var chart = new dojox.charting.Chart2D(fieldName + '_' + fieldValue);
+					chart.setTheme(dojox.charting.themes.PlotKit.red);
+					chart.addPlot('default', {
+						type: 'Pie',
+						font: 'normal normal bold 14pt Tahoma',
+						fontColor: 'white',
+						labelOffset: 40
+					});
+					var inverseCount = charting.surveysTakenCount - valueCount;
+					chart.addSeries('Series A', [
+						{y: valueCount, text: valueCount + ' Yes', color: 'blue'},
+						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
+					]);
+					chart.render();
+
+					// 4- Add the chart separation just to make the charts look apart from each other
+					var chartSeparation = document.createElement('DIV');
+					chartSeparation.innerHTML = '&nbsp;';
+					chartLine.appendChild(chartSeparation);
 				}, function() {
 					//fail(operation)
 				},
