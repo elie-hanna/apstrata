@@ -205,7 +205,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						// 1- Add the chart title to the chart cell
 						var chartTitle = document.createElement('DIV');
 						chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
-						chartTitle.innerHTML = fieldName;
+						var fieldTitle = charting.getTitleOf(fieldName);
+						chartTitle.innerHTML = fieldTitle;
 						chartCell.appendChild(chartTitle);
 
 						// 2- Add the chart placeholder in the chart cell
@@ -289,7 +290,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					// 1- Add the chart title to the chart cell
 					var chartTitle = document.createElement('DIV');
 					chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
-					chartTitle.innerHTML = fieldName + ': ' + fieldValue;
+					var fieldTitle = charting.getTitleOf(fieldName);
+					chartTitle.innerHTML = fieldTitle + ' : ' + fieldValue;
 					chartCell.appendChild(chartTitle);
 
 					// 2- Add the chart placeholder in the chart cell
@@ -363,7 +365,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					// 1- Add the chart title to the chart cell
 					var chartTitle = document.createElement('DIV');
 					chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
-					chartTitle.innerHTML = fieldName + ': ' + fieldValue;
+					var fieldTitle = charting.getTitleOf(fieldName);
+					chartTitle.innerHTML = fieldTitle;
 					chartCell.appendChild(chartTitle);
 
 					// 2- Add the chart placeholder in the chart cell
@@ -448,7 +451,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						// 1- Add the chart title to the chart cell
 						var chartTitle = document.createElement('DIV');
 						chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
-						chartTitle.innerHTML = fieldName;
+						var fieldTitle = charting.getTitleOf(fieldName);
+						chartTitle.innerHTML = fieldTitle;
 						chartCell.appendChild(chartTitle);
 
 						// 2- Add the chart placeholder in the chart cell
@@ -492,5 +496,20 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					count: true
 				})
 		},
+
+		/**
+		 * Get the title of the field whose name is passed by searching for it in the schema.
+		 *
+		 * @param fieldName in the schema
+		 *
+		 * @return The title of the field in the schema
+		 */
+		getTitleOf: function (fieldName) {
+			var charting = this;
+
+			for (var k=0; k<charting.questions.length; k++)
+				if (charting.questions[k].name == fieldName)
+					return charting.questions[k].title;
+		}
 	});
 
