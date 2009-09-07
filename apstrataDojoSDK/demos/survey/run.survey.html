@@ -5,17 +5,11 @@
         <title>Edit Survey</title>
     </head>
     <body>
-    <!-- You can move the script tag to the head of your html page -->
-    <script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true">
-    </script>
-    <script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:'[my key]', secret:'[my secret]', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest'">
-    </script>
-    <script type="text/javascript" src="widgets/SurveyRunner.js">
-    </script>
-    <script>
-        var schema = '{"title":"First Survey","description":"Please fill in this survey","questions":[{"title":"First Name","type":"text","choices":"choice1, choice2, choice3","mandatory":true,"name":"firstName","defaultValue":"enter your name here"},{"title":"Last Name","type":"text","choices":"choice1, choice2, choice3","mandatory":false,"name":"lastName","defaultValue":""},{"title":"Title","type":"list","choices":"Mrs.,Mr.","mandatory":true,"name":"title","defaultValue":"Mrs."},{"title":"Single","type":"checkbox","choices":"choice1, choice2, choice3","mandatory":false,"name":"maritalStatus","defaultValue":[]},{"title":"Looking for","type":"radio button","choices":"Friends,Love,Other","mandatory":true,"name":"lookingFor","defaultValue":"Other"},{"title":"Hobbies","type":"multiple choice","choices":"reading,sport,dancing","mandatory":false,"name":"hobbies","defaultValue":["dancing"]}]}';
-    </script>
-    <!-- Place this DIV where you want the widget to appear in your page --><div dojoType="surveyWidget.widgets.Survey" />
-    </div>
+<!-- You can move the script tag to the head of your html page -->
+<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:'[key]', secret:'[secret]', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest'"></script><script type="text/javascript" src="widgets/SurveyRunner.js" ></script>
+<script>var schema = '{"title":"Profile Survey","description":"Profile Survey Description","viewResults":false,"successMessage":"Happy","resultsUrl":"","questions":[{"title":"First Name","type":"text","choices":"choice1, choice2, choice3","mandatory":false,"name":"firstName","defaultValue":""},{"title":"Last Name","type":"text","choices":"choice1, choice2, choice3","mandatory":false,"name":"lastName","defaultValue":""},{"title":"Hair Color","type":"radio button","choices":"black, brown, gray, blonde, red","mandatory":false,"name":"hairColor","defaultValue":"black"},{"title":"Hobbies","type":"multiple choice","choices":"basketball, reading, soccer","mandatory":false,"name":"hobbies","defaultValue":[]},{"title":"Do you think you are tall?","type":"checkbox","choices":"choice1, choice2, choice3","mandatory":false,"name":"tall","defaultValue":[]},{"title":"Country?","type":"list","choices":"Lebanon, USA, Canada, France","mandatory":false,"name":"country","defaultValue":"Lebanon"},{"choices":"","defaultValue":"97259D60343D40646FC42D408E2B8FD9","mandatory":false,"name":"apstrataSurveyID","title":"Apstrata Survey ID","type":"text"}]}';</script>
+<!-- Place this DIV where you want the widget to appear in your page -->
+<div dojoType="surveyWidget.widgets.Survey" /></div>
 </body>
 </html>
