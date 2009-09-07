@@ -136,11 +136,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 										var choices = fieldDataModel.choices.split(',');
 										fieldValueCounts[i] = new Array(choices.length);
 										for (var j=0; j<choices.length; j++) {
-											fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = 0;
+											fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = null;
 											charting.queryAndDisplayList(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
-
-											// Alternate the isNewLine variable to show the charts in two columns
-											charting.isNewLine = (charting.isNewLine) ? false : true;
 										}
 										break;
 								}
@@ -222,7 +219,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						chart.setTheme(dojox.charting.themes.PlotKit.red);
 						chart.addPlot('default', {
 							type: 'Pie',
-							font: 'normal normal bold 14pt Tahoma',
+							font: 'normal normal bold 8pt Tahoma',
 							fontColor: 'white',
 							labelOffset: 40
 						});
@@ -306,7 +303,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					chart.setTheme(dojox.charting.themes.PlotKit.red);
 					chart.addPlot('default', {
 						type: 'Pie',
-						font: 'normal normal bold 14pt Tahoma',
+						font: 'normal normal bold 8pt Tahoma',
 						fontColor: 'white',
 						labelOffset: 40
 					});
@@ -380,7 +377,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					chart.setTheme(dojox.charting.themes.PlotKit.red);
 					chart.addPlot('default', {
 						type: 'Pie',
-						font: 'normal normal bold 14pt Tahoma',
+						font: 'normal normal bold 8pt Tahoma',
 						fontColor: 'white',
 						labelOffset: 40
 					});
@@ -420,50 +417,71 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					var valueCount = callbackResult.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
 
-					var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
-					var chartCell = null;
-					if (chartLine == null || charting.isNewLine) {
-						chartLine = document.createElement('DIV');
-						chartCell = document.createElement('DIV');
-						chartLine.setAttribute('style', 'width: 460px; height: 230px;');
-						chartLine.appendChild(chartCell);
-						chartCell.setAttribute('style', 'float: left;');
-
-						charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
-					} else {
-						var chartCell = document.createElement('DIV');
-						chartCell.setAttribute('style', 'float: left;');
-
-						chartLine.appendChild(chartCell); // Just add the new cell to the existing line
+					// Loop over the existing field value counts and if all values have been accounted for, then display the chart
+					var areAllValuesPresent = true;
+					for (fieldValue in fieldValueCounts) {
+						if (fieldValueCounts[fieldValue] == null) {
+							areAllValuesPresent = false;
+							break;
+						}
 					}
 
-					// 1- Add the chart title to the chart cell
-					var chartTitle = document.createElement('DIV');
-					chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
-					chartTitle.innerHTML = fieldName + ': ' + fieldValue;
-					chartCell.appendChild(chartTitle);
+					// If all radio button values have returned their count, then display this field's chart
+					if (areAllValuesPresent) {
+						var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
+						var chartCell = null;
+						if (chartLine == null || charting.isNewLine) {
+							chartLine = document.createElement('DIV');
+							chartCell = document.createElement('DIV');
+							chartLine.setAttribute('style', 'width: 460px; height: 230px;');
+							chartLine.appendChild(chartCell);
+							chartCell.setAttribute('style', 'float: left;');
 
-					// 2- Add the chart placeholder in the chart cell
-					var chartDIV = document.createElement('DIV');
-					chartDIV.setAttribute('id', fieldName + '_' + fieldValue);
-					chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
-					chartCell.appendChild(chartDIV);
+							charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
+						} else {
+							var chartCell = document.createElement('DIV');
+							chartCell.setAttribute('style', 'float: left;');
 
-					// 3- Create and render the chart
-					var chart = new dojox.charting.Chart2D(fieldName + '_' + fieldValue);
-					chart.setTheme(dojox.charting.themes.PlotKit.red);
-					chart.addPlot('default', {
-						type: 'Pie',
-						font: 'normal normal bold 14pt Tahoma',
-						fontColor: 'white',
-						labelOffset: 40
-					});
-					var inverseCount = charting.surveysTakenCount - valueCount;
-					chart.addSeries('Series A', [
-						{y: valueCount, text: valueCount + ' Yes', color: 'blue'},
-						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
-					]);
-					chart.render();
+							chartLine.appendChild(chartCell); // Just add the new cell to the existing line
+						}
+
+						// 1- Add the chart title to the chart cell
+						var chartTitle = document.createElement('DIV');
+						chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
+						chartTitle.innerHTML = fieldName;
+						chartCell.appendChild(chartTitle);
+
+						// 2- Add the chart placeholder in the chart cell
+						var chartDIV = document.createElement('DIV');
+						chartDIV.setAttribute('id', fieldName);
+						chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
+						chartCell.appendChild(chartDIV);
+
+						// 3- Create and render the chart
+						var chart = new dojox.charting.Chart2D(fieldName);
+						chart.setTheme(dojox.charting.themes.PlotKit.red);
+						chart.addPlot('default', {
+							type: 'Pie',
+							font: 'normal normal bold 8pt Tahoma',
+							fontColor: 'white',
+							labelOffset: 40
+						});
+
+						var valuesArr = new Array(fieldValueCounts.length);
+						var k = 0;
+						for (fieldValue in fieldValueCounts) {
+							var chartlabel = fieldValue.substring(fieldValue.lastIndexOf('_') + 1, fieldValue.length);
+							valuesArr[k] = {y: fieldValueCounts[fieldValue], text: fieldValueCounts[fieldValue] + ' ' + chartlabel};
+							k++;
+						}
+
+						var inverseCount = charting.surveysTakenCount - valueCount;
+						chart.addSeries('Series A', valuesArr);
+						chart.render();
+
+						// Alternate the isNewLine variable to show the charts in two columns
+						charting.isNewLine = (charting.isNewLine) ? false : true;
+					}
 				}, function() {
 					//fail(operation)
 				},
