@@ -25,8 +25,6 @@ dojo.require("dijit.layout.LayoutContainer");
 dojo.require("dojox.charting.Chart2D");
 dojo.require("dojox.charting.themes.PlotKit.red");
 
-//dojo.require("apstrata.dojo.client.apsdb.Connection");
-
 dojo.declare("surveyWidget.widgets.SurveyCharting",
 	[dijit._Widget, dijit._Templated],
 	{
@@ -37,6 +35,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		resultResponse: null,
 		apstrataSurveyID: '',
 		surveysTakenCount: 0,
+		isNewLine: true,
 
 		//
 		// Replace here with your apsdb account
@@ -64,8 +63,11 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			}
 		},
 
-		postCreate: function(){
-			if(schema != null){
+		/**
+		 * After creation of this widget: Set the title and call the query
+		 */
+		postCreate: function() {
+			if (schema != null) {
 				this.title.innerHTML = this.dojoDataModel.title;
 				this.query();
 			}
@@ -73,16 +75,22 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				this.title.innerHTML = "The survey charting schema is missing";
 		},
 
+		/**
+		 * This is the main worker method of this widget:
+		 * 1- Queries apstrata database to count the number of survey takers
+		 * 2- Queries apstrata database for the count of answers that have been made per field
+		 * 3- Generates and displays the charts representing the collected data
+		 */
 		query: function() {
 			var client = new apstrata.apsdb.client.Client();
 			var charting = this;
+			var fieldValueCounts = new Array(); // Holds the counts of every value of every field
 
 			// Query to get the total number of surveys taken
 			var surveysTakenCountQuery = client.query(
 					function() {
 						charting.surveysTakenCount = surveysTakenCountQuery.result.count;
 						var fieldResponses = new Array();
-						var isNewLine = true;
 
 						// Now we can query each field in the survey and aggregate the results
 						for (var i=0; i<charting.questions.length; i++) {
@@ -90,44 +98,54 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 							if (   fieldDataModel.name != 'apstrataSurveyID'
 									&& fieldDataModel.type != 'text') {
 								fieldResponses[i] = new Array();
-								if (fieldDataModel.type != 'checkbox') { // Handles these types of fields: list, radio button, multiple choice
-									var choices = fieldDataModel.choices.split(',');
-									for (var j=0; j<choices.length; j++) {
-										// call a query to count using the fieldName = this choice
-										// surveysTakenCount - [this count] is the number of people who did not check this box
-										charting.queryAndSetFieldAggregate(fieldDataModel.name, choices[j], fieldResponses[i][j], isNewLine);
-										isNewLine = (isNewLine) ? false : true;
-									}
-								} else { // Handles this type of field: checkbox
-								  // call a query to count using the fieldName = 'checked'
-									// surveysTakenCount - [this count] is the number of people who did not check this box
-									charting.queryAndSetFieldAggregate(fieldDataModel.name, 'checked', fieldResponses[i][j], isNewLine);
-									isNewLine = (isNewLine) ? false : true;
+
+								// Handle each field type separately
+								switch (fieldDataModel.type) {
+									case 'multiple choice':
+										// Count and display the number of people who checked each of these checkboxes
+										var choices = fieldDataModel.choices.split(',');
+										fieldValueCounts[i] = new Array(choices.length);
+										for (var j=0; j<choices.length; j++) {
+											fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = 0;
+											charting.queryAndDisplayMultipleChoice(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
+
+											// Alternate the isNewLine variable to show the charts in two columns
+											charting.isNewLine = (charting.isNewLine) ? false : true;
+										}
+										break;
+									case 'radio button':
+										// Count and display the number of people who checked this radio button
+										var choices = fieldDataModel.choices.split(',');
+										fieldValueCounts[i] = new Array(choices.length);
+										for (var j=0; j<choices.length; j++) {
+											fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = null;
+											charting.queryAndDisplayRadioButton(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
+										}
+										break;
+									case 'checkbox':
+										// Count and display the number of people who checked this checkbox
+										fieldValueCounts[i] = new Array(choices.length);
+										fieldValueCounts[i][fieldDataModel.name + '_checked'] = 0;
+										charting.queryAndDisplayCheckbox(fieldDataModel.name, 'checked', fieldResponses[i][0], fieldValueCounts[i]);
+
+										// Alternate the isNewLine variable to show the charts in two columns
+										charting.isNewLine = (charting.isNewLine) ? false : true;
+										break;
+									case 'list':
+										// Count and display the number of people chose each of these list items
+										var choices = fieldDataModel.choices.split(',');
+										fieldValueCounts[i] = new Array(choices.length);
+										for (var j=0; j<choices.length; j++) {
+											fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = 0;
+											charting.queryAndDisplayList(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
+
+											// Alternate the isNewLine variable to show the charts in two columns
+											charting.isNewLine = (charting.isNewLine) ? false : true;
+										}
+										break;
 								}
 							}
 						}
-
-						/*dojo.forEach(charting.questions, function(fieldDataModel) {
-								if (   fieldDataModel.name != 'apstrataSurveyID'
-								    && fieldDataModel.type != 'text') {
-									charting.queryField();
-
-									q[i] = client.query (
-										function() {
-											charting.resultResponse = q[i];
-											// TODO: display
-											// charting.display(charting.resultResponse, charting.arrFieldsToDisplay, charting.arrTitleFieldsToDisplay);
-										}, function() {
-											//fail(operation)
-										},
-										{
-											store: charting.storeName,
-											query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\"",
-											queryFields: charting.arrFieldsToDisplay,
-											aggregates: 
-										})
-								}
-							});*/
 					}, function() {
 						//fail(operation)
 					},
@@ -141,39 +159,147 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		},
 
 		/**
-		 * Queries apstrata database for the count of fields that have the passed field name and value
+		 * Queries apstrata database for the count of fields that have the passed field name and value.
+		 * Call a query to count the survey takers using the ([fieldName] = [each of the passed choices]) value for the query expression.
+		 * The (surveysTakenCount - [this count]) is the number of people who did not check this radio button.
+		 *
+		 * @param fieldName The name of the field to use in the query expression
+		 * @param fieldValue The value of the field to use in the query expression
+		 * @param callbackResult The callback result container, it is only used to differentiate the callback of every XHR when it returns
+		 * @param fieldValueCounts The array location to store the field value counts
 		 */
-		queryAndSetFieldAggregate: function (fieldName, fieldValue, callbackResult, isNewLine) {
+		queryAndDisplayRadioButton: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
 			var client = new apstrata.apsdb.client.Client();
 			var charting = this;
 
 			callbackResult = client.query (
 				function() {
 					var valueCount = callbackResult.result.count;
-					// TODO: display
-					// charting.display(charting.resultResponse, charting.arrFieldsToDisplay, charting.arrTitleFieldsToDisplay);
+					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
 
-					var chartLine = charting.displayTable;
-					// TODO: To b used for the two column display
-					/*if (isNewLine) {
+					// Loop over the existing field value counts and if all values have been accounted for, then display the chart
+					var areAllValuesPresent = true;
+					for (fieldValue in fieldValueCounts) {
+						if (fieldValueCounts[fieldValue] == null) {
+							areAllValuesPresent = false;
+							break;
+						}
+					}
+
+					// If all radio button values have returned their count, then display this field's chart
+					if (areAllValuesPresent) {
+						var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
+						var chartCell = null;
+						if (chartLine == null || charting.isNewLine) {
+							chartLine = document.createElement('DIV');
+							chartCell = document.createElement('DIV');
+							chartLine.setAttribute('style', 'width: 460px; height: 230px;');
+							chartLine.appendChild(chartCell);
+							chartCell.setAttribute('style', 'float: left;');
+
+							charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
+						} else {
+							var chartCell = document.createElement('DIV');
+							chartCell.setAttribute('style', 'float: left;');
+
+							chartLine.appendChild(chartCell); // Just add the new cell to the existing line
+						}
+
+						// 1- Add the chart title to the chart cell
+						var chartTitle = document.createElement('DIV');
+						chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
+						chartTitle.innerHTML = fieldName;
+						chartCell.appendChild(chartTitle);
+
+						// 2- Add the chart placeholder in the chart cell
+						var chartDIV = document.createElement('DIV');
+						chartDIV.setAttribute('id', fieldName);
+						chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
+						chartCell.appendChild(chartDIV);
+
+						// 3- Create and render the chart
+						var chart = new dojox.charting.Chart2D(fieldName);
+						chart.setTheme(dojox.charting.themes.PlotKit.red);
+						chart.addPlot('default', {
+							type: 'Pie',
+							font: 'normal normal bold 14pt Tahoma',
+							fontColor: 'white',
+							labelOffset: 40
+						});
+						
+						var valuesArr = new Array(fieldValueCounts.length);
+						var k = 0;
+						for (fieldValue in fieldValueCounts) {
+							var chartlabel = fieldValue.substring(fieldValue.lastIndexOf('_') + 1, fieldValue.length);
+							valuesArr[k] = {y: fieldValueCounts[fieldValue], text: fieldValueCounts[fieldValue] + ' ' + chartlabel};
+							k++;
+						}
+
+						var inverseCount = charting.surveysTakenCount - valueCount;
+						chart.addSeries('Series A', valuesArr);
+						chart.render();
+
+						// Alternate the isNewLine variable to show the charts in two columns
+						charting.isNewLine = (charting.isNewLine) ? false : true;
+					}
+				}, function() {
+					//fail(operation)
+				},
+				{
+					store: charting.storeName,
+					query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					queryFields: "apstrataSurveyID",
+					count: true
+				})
+		},
+
+		/**
+		 * Queries apstrata database for the count of fields that have the passed field name and value.
+		 * Call a query to count the survey takers using the ([fieldName] = [each of the passed choices]) value for the query expression.
+		 * The (surveysTakenCount - [this count]) is the number of people who did not check this box.
+		 *
+		 * @param fieldName The name of the field to use in the query expression
+		 * @param fieldValue The value of the field to use in the query expression
+		 * @param callbackResult The callback result container, it is only used to differentiate the callback of every XHR when it returns
+		 * @param fieldValueCounts The array location to store the field value counts
+		 */
+		queryAndDisplayMultipleChoice: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
+			var client = new apstrata.apsdb.client.Client();
+			var charting = this;
+
+			callbackResult = client.query (
+				function() {
+					var valueCount = callbackResult.result.count;
+					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
+
+					var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
+					var chartCell = null;
+					if (chartLine == null || charting.isNewLine) {
 						chartLine = document.createElement('DIV');
-						chartLine.setAttribute('style', 'width: 400px; height: 200px; border: 5px solid red;');
-						charting.displayTable.appendChild(chartLine);
+						chartCell = document.createElement('DIV');
+						chartLine.setAttribute('style', 'width: 460px; height: 230px;');
+						chartLine.appendChild(chartCell);
+						chartCell.setAttribute('style', 'float: left;');
+
+						charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
 					} else {
-						chartLine = charting.displayTable.children.item(charting.displayTable.children.length);
-						chartLine.setAttribute('style', 'width: 400px; height: 200px; border: 5px solid green;');
-					}*/
+						var chartCell = document.createElement('DIV');
+						chartCell.setAttribute('style', 'float: left;');
 
-					// 1- Add the chart title to the SurveyCharting DOM node
+						chartLine.appendChild(chartCell); // Just add the new cell to the existing line
+					}
+
+					// 1- Add the chart title to the chart cell
 					var chartTitle = document.createElement('DIV');
+					chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
 					chartTitle.innerHTML = fieldName + ': ' + fieldValue;
-					chartLine.appendChild(chartTitle);
+					chartCell.appendChild(chartTitle);
 
-					// 2- Add the chart placeholder
+					// 2- Add the chart placeholder in the chart cell
 					var chartDIV = document.createElement('DIV');
 					chartDIV.setAttribute('id', fieldName + '_' + fieldValue);
-					chartDIV.setAttribute('style', 'width: 200px; height: 200px; float: left;');
-					chartLine.appendChild(chartDIV);
+					chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
+					chartCell.appendChild(chartDIV);
 
 					// 3- Create and render the chart
 					var chart = new dojox.charting.Chart2D(fieldName + '_' + fieldValue);
@@ -190,11 +316,6 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
 					]);
 					chart.render();
-
-					// 4- Add the chart separation just to make the charts look apart from each other
-					var chartSeparation = document.createElement('DIV');
-					chartSeparation.innerHTML = '&nbsp;';
-					chartLine.appendChild(chartSeparation);
 				}, function() {
 					//fail(operation)
 				},
@@ -206,70 +327,152 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				})
 		},
 
-		display: function(data, columns, columnsTitle) {
+		/**
+		 * Queries apstrata database for the count of fields that have the passed field name and value.
+		 * Call a query to count the survey takers using the ([fieldName] = [the passed value]) value for the query expression.
+		 * The (surveysTakenCount - [this count]) is the number of people who did not check this checkbox.
+		 *
+		 * @param fieldName The name of the field to use in the query expression
+		 * @param fieldValue The value of the field to use in the query expression
+		 * @param callbackResult The callback result container, it is only used to differentiate the callback of every XHR when it returns
+		 * @param fieldValueCounts The array location to store the field value counts
+		 */
+		queryAndDisplayCheckbox: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
+			var client = new apstrata.apsdb.client.Client();
+			var charting = this;
 
-			var found = false;
-			var columnClass="rounded";
-			var bottomCornerClass = "";
-			var strData = "";
-			var heading = "";
-			
-			heading = "<thead><tr>";
-			for(var col = 0; col < columnsTitle.length; col++){
-				if(col == 0)
-					columnClass = "rounded-first";
-				else if(col == columnsTitle.length-1)
-					columnClass = "rounded-last";
-				else
-					columnClass = "rounded";
-				
-				heading = heading + '<th scope="col" class="'+ columnClass +'" >' + columnsTitle[col] + '</th>';
-			}
-			heading = heading + "</tr></thead>";
+			callbackResult = client.query (
+				function() {
+					var valueCount = callbackResult.result.count;
+					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
 
-			strData = "<tbody>";
+					var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
+					var chartCell = null;
+					if (chartLine == null || charting.isNewLine) {
+						chartLine = document.createElement('DIV');
+						chartCell = document.createElement('DIV');
+						chartLine.setAttribute('style', 'width: 460px; height: 230px;');
+						chartLine.appendChild(chartCell);
+						chartCell.setAttribute('style', 'float: left;');
 
-			var arrSurvey = data.result.documents;
- 
-			for(var doc = 0; doc < arrSurvey.length; doc++){
-				if(arrSurvey[doc].fields){
-				strData= strData + "<tr>";
-				for(var ncol = 0; ncol < columns.length; ncol++){
-					found = false;
-					for(var fid = 0; fid < arrSurvey[doc].fields.length; fid++){
-						if(columns[ncol] == arrSurvey[doc].fields[fid].@name){
-							found = true;
-							break;
-						}
+						charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
+					} else {
+						var chartCell = document.createElement('DIV');
+						chartCell.setAttribute('style', 'float: left;');
+
+						chartLine.appendChild(chartCell); // Just add the new cell to the existing line
 					}
-				
-					if(doc == arrSurvey.length-1 && ncol == 0)
-						bottomCornerClass = ' class="rounded-foot-left"';
-					else if(doc == arrSurvey.length-1 && ncol == columns.length-1)
-						bottomCornerClass = ' class="rounded-foot-right"';
-					else
-						bottomCornerClass = "";
 
-					if(found == true){
-						strData= strData + '<td'+ bottomCornerClass +'>';
-						for(var ival = 0; ival < arrSurvey[doc].fields[fid].values.length; ival++){
-							strData= strData + arrSurvey[doc].fields[fid].values[ival];
-							if(ival < arrSurvey[doc].fields[fid].values.length-1)
-								strData= strData + ',';
-						}
-						strData= strData + '</td>';
-					} else
-						strData= strData + '<td'+ bottomCornerClass +'></td>';
-				}
-				strData= strData + "</tr>";
-				}
-			}
+					// 1- Add the chart title to the chart cell
+					var chartTitle = document.createElement('DIV');
+					chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
+					chartTitle.innerHTML = fieldName + ': ' + fieldValue;
+					chartCell.appendChild(chartTitle);
 
-			strData = strData + "<tbody>";
-			
-			this.displayTable.innerHTML = heading + strData;
-			
-		}	
-		
+					// 2- Add the chart placeholder in the chart cell
+					var chartDIV = document.createElement('DIV');
+					chartDIV.setAttribute('id', fieldName + '_' + fieldValue);
+					chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
+					chartCell.appendChild(chartDIV);
+
+					// 3- Create and render the chart
+					var chart = new dojox.charting.Chart2D(fieldName + '_' + fieldValue);
+					chart.setTheme(dojox.charting.themes.PlotKit.red);
+					chart.addPlot('default', {
+						type: 'Pie',
+						font: 'normal normal bold 14pt Tahoma',
+						fontColor: 'white',
+						labelOffset: 40
+					});
+					var inverseCount = charting.surveysTakenCount - valueCount;
+					chart.addSeries('Series A', [
+						{y: valueCount, text: valueCount + ' Yes', color: 'blue'},
+						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
+					]);
+					chart.render();
+				}, function() {
+					//fail(operation)
+				},
+				{
+					store: charting.storeName,
+					query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					queryFields: "apstrataSurveyID",
+					count: true
+				})
+		},
+
+		/**
+		 * Queries apstrata database for the count of fields that have the passed field name and value.
+		 * Call a query to count the survey takers using the ([fieldName] = [each of the passed choices]) value for the query expression.
+		 * The (surveysTakenCount - [this count]) is the number of people who did not choose this list item.
+		 *
+		 * @param fieldName The name of the field to use in the query expression
+		 * @param fieldValue The value of the field to use in the query expression
+		 * @param callbackResult The callback result container, it is only used to differentiate the callback of every XHR when it returns
+		 * @param fieldValueCounts The array location to store the field value counts
+		 */
+		queryAndDisplayList: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
+			var client = new apstrata.apsdb.client.Client();
+			var charting = this;
+
+			callbackResult = client.query (
+				function() {
+					var valueCount = callbackResult.result.count;
+					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
+
+					var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
+					var chartCell = null;
+					if (chartLine == null || charting.isNewLine) {
+						chartLine = document.createElement('DIV');
+						chartCell = document.createElement('DIV');
+						chartLine.setAttribute('style', 'width: 460px; height: 230px;');
+						chartLine.appendChild(chartCell);
+						chartCell.setAttribute('style', 'float: left;');
+
+						charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
+					} else {
+						var chartCell = document.createElement('DIV');
+						chartCell.setAttribute('style', 'float: left;');
+
+						chartLine.appendChild(chartCell); // Just add the new cell to the existing line
+					}
+
+					// 1- Add the chart title to the chart cell
+					var chartTitle = document.createElement('DIV');
+					chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
+					chartTitle.innerHTML = fieldName + ': ' + fieldValue;
+					chartCell.appendChild(chartTitle);
+
+					// 2- Add the chart placeholder in the chart cell
+					var chartDIV = document.createElement('DIV');
+					chartDIV.setAttribute('id', fieldName + '_' + fieldValue);
+					chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
+					chartCell.appendChild(chartDIV);
+
+					// 3- Create and render the chart
+					var chart = new dojox.charting.Chart2D(fieldName + '_' + fieldValue);
+					chart.setTheme(dojox.charting.themes.PlotKit.red);
+					chart.addPlot('default', {
+						type: 'Pie',
+						font: 'normal normal bold 14pt Tahoma',
+						fontColor: 'white',
+						labelOffset: 40
+					});
+					var inverseCount = charting.surveysTakenCount - valueCount;
+					chart.addSeries('Series A', [
+						{y: valueCount, text: valueCount + ' Yes', color: 'blue'},
+						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
+					]);
+					chart.render();
+				}, function() {
+					//fail(operation)
+				},
+				{
+					store: charting.storeName,
+					query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					queryFields: "apstrataSurveyID",
+					count: true
+				})
+		},
 	});
 
