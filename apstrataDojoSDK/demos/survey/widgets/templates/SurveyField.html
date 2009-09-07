@@ -1,8 +1,9 @@
 <div class="dojoDndItem">
 	<div dojoAttachPoint="surveyField" class="roundedBox surveryField">
 		<span title="Drag and drop your question" dojoAttachPoint="handle"  class="dojoDndHandle" >&nbsp;&nbsp;</span>
-		<span dojoType="dijit.InlineEditBox" dojoAttachPoint="fldTitle" onChange="console.debug(this.id);">${title}</span><br/>
-		<span dojoAttachPoint="spnValue" style="display: none;"><input dojoType="dijit.form.ValidationTextBox" trim=true required="false" invalidMessage="Required." dojoAttachPoint="fldValue"  value="" name=""></span>
+		<span dojoAttachPoint="checkBoxValue" style="display: none;"></span>
+		<span dojoType="dijit.InlineEditBox" dojoAttachPoint="fldTitle" onChange="console.debug(this.id);">${title}</span>
+		<span dojoAttachPoint="spnValue" style="display: none;"><br/><input dojoType="dijit.form.ValidationTextBox" trim=true required="false" invalidMessage="Required." dojoAttachPoint="fldValue"  value="" name=""></span>
 
 		<div dojoAttachPoint="editor" class="surveyFieldEditor" style="display: none;">
 			<div>Mandatory:&nbsp;</div><input type="checkbox" dojoAttachPoint="chkMandatory" /><br />

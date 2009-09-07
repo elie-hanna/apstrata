@@ -80,6 +80,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			if(this.editMode){
 				this.connect(this.btnDelete, "onclick", "deleteField");
 				this.connect(this.spnValue, "onclick", "selectedEvent");
+				this.connect(this.checkBoxValue, "onclick", "selectedEvent");
 				this.connect(this.btnCancel, "onclick", function() {if (this.title == null) this.deleteField(); else this.unselect();});
 				this.connect(this.lstType, "onchange", "changeType");
 				this.connect(this.fldTitle, "onClick", function() {if (this.title != null){ this.fieldModified();}});
@@ -118,6 +119,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 				this.editor.style.position = "absolute";
 				this.editor.style.top = (this.surveyField.offsetTop - 20) + "px";
 				this.editor.style.left = (this.spnValue.offsetLeft + 255) + "px";
+				this.editor.style.left = (this.checkBoxValue.offsetLeft + 255) + "px";
 				this.editor.style.display = "";
 				//rgba doesn't work in IE
 				//this.surveyField.style.backgroundColor = "rgba(255, 255, 130, .9)";
@@ -149,11 +151,15 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			{	
 				case 'checkbox':
 					if(this.editMode){
-						this.divChoices.style.display = "none";		
+						this.divChoices.style.display = "none";	
+						this.spnValue.style.display = "none";
+						this.checkBoxValue.style.display = "";			
 						this.fieldName = this.fldName.value;
 					}
 					
 					newField = '<input dojoType="dijit.form.CheckBox" value="checked" dojoAttachPoint="fldValue"  name="'+this.fieldName+'" '+ this.defaultFieldValue +'/>';	
+					this.checkBoxValue.innerHTML = newField;
+					dojo.parser.parse(this.checkBoxValue);
 					break;
 				case 'list':
 					if(this.editMode){
@@ -161,7 +167,9 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 						this.fieldName = this.fldName.value;
 					}
 
-					newField = this.createSelectTag();
+					newField = this.createSelectTag();	
+					this.spnValue.innerHTML = newField;
+					dojo.parser.parse(this.spnValue);
 					break;
 				case 'radio button':
 					if(this.editMode){
@@ -169,7 +177,9 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 						this.fieldName = this.fldName.value;
 					}
 
-					newField = this.createRadioButtonsTag();
+					newField = this.createRadioButtonsTag();	
+					this.spnValue.innerHTML = newField;
+					dojo.parser.parse(this.spnValue);
 					break;
 				case 'multiple choice':
 					if(this.editMode){
@@ -177,7 +187,9 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 						this.fieldName = this.fldName.value;
 					}
 
-					newField = this.createMultipleChoiceTag();
+					newField = this.createMultipleChoiceTag();	
+					this.spnValue.innerHTML = newField;
+					dojo.parser.parse(this.spnValue);
 					break;
 				default:
 					if(this.editMode){
@@ -187,12 +199,11 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					} else
 						var required = this.fieldMandatory;						
 
-						newField = '<input dojoType="dijit.form.ValidationTextBox" trim=true required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue"  value="'+this.defaultFieldValue+'" name="'+this.fieldName+'">';
+					newField = '<br/><input dojoType="dijit.form.ValidationTextBox" trim=true required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue"  value="'+this.defaultFieldValue+'" name="'+this.fieldName+'">';	
+					this.spnValue.innerHTML = newField;
+					dojo.parser.parse(this.spnValue);
 					break;
 			}
-
-			this.spnValue.innerHTML = newField;
-			dojo.parser.parse(this.spnValue);
 		},
 		
 		createSelectTag: function() {
@@ -208,12 +219,12 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					optionsTags = optionsTags + '<option value="' + choice + '">' + choice + '</option>';
 				});
 			
-			newField = '<select value="' + this.defaultFieldValue + '" required="'+ this.fieldMandatory +'" invalidMessage="Required." dojoType="dijit.form.FilteringSelect" dojoAttachPoint="fldValue" name="'+this.fieldName+'">'+optionsTags+'</select>';
+			newField = '<br/><select value="' + this.defaultFieldValue + '" required="'+ this.fieldMandatory +'" invalidMessage="Required." dojoType="dijit.form.FilteringSelect" dojoAttachPoint="fldValue" name="'+this.fieldName+'">'+optionsTags+'</select>';
 			return newField;
 		},
 		
 		createRadioButtonsTag: function() {
-			var newField = "";
+			var newField = "<br/>";
 			var checked = "";
 			var survey = this;
 			if(this.editMode)
@@ -234,7 +245,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 		},
 
 		createMultipleChoiceTag: function() {
-			var newField = "";
+			var newField = "<br/>";
 			var checked = "";
 			var survey = this;
 			var i;
@@ -262,7 +273,14 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 
 		fieldModified: function() {
 				this.surveyField.style.backgroundColor = "";
-				this.spnValue.style.display = "";
+				if (this.lstType.value == "checkbox") {
+					this.spnValue.style.display = "none";
+					this.checkBoxValue.style.display = "";
+				}
+				else {
+					this.checkBoxValue.style.display = "none";
+					this.spnValue.style.display = "";
+				}
 				this.selectedEvent();
 		},
 		
