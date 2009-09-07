@@ -219,7 +219,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<div dojoType="surveyWidget.widgets.Survey" /></div>'
 			+ '</textarea>';*/
 			this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
-			+ '<iframe src="'+ viewUrl +'/view/generateEmbed?key=7744293024&secret=3B45DE19C689EDAFCA47&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + this.addslashes(dojo.toJson(surveyData)) + '" ></iframe>'
+			+ '<iframe src="'+ viewUrl +'/view/generateEmbed?key=7744293024&secret=3B45DE19C689EDAFCA47&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + encode(dojo.toJson(surveyData)) + '" ></iframe>'
 			+ '</textarea>';
 			this.output.style.display = "";
 			this.output.width = "800px";
@@ -236,7 +236,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '</div>'
 			+ '</textarea>';*/
 			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
-			+ '<iframe src="'+ viewUrl +'/view/generateEmbed?key=7744293024&secret=3B45DE19C689EDAFCA47&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + this.addslashes(dojo.toJson(listSurveyData)) + '" ></iframe>'
+			+ '<iframe src="'+ viewUrl +'/view/generateEmbed?AF_deliveryChannel=listing&key=7744293024&secret=3B45DE19C689EDAFCA47&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + encode(dojo.toJson(listSurveyData)) + '" ></iframe>'
 			+ '</textarea>';
 			this.listingEmbed.style.display = "";
 			this.listingEmbed.width = "800px";
@@ -253,7 +253,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '</div>'
 			+ '</textarea>';*/
 			this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
-			+ '<iframe src="'+ viewUrl +'/view/generateEmbed?key=7744293024&secret=3B45DE19C689EDAFCA47&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + this.addslashes(dojo.toJson(surveyData)) + '" ></iframe>';
+			+ '<iframe src="'+ viewUrl +'/view/generateEmbed?AF_deliveryChannel=aggregates&key=7744293024&secret=3B45DE19C689EDAFCA47&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + encode(dojo.toJson(surveyData)) + '" ></iframe>';
 			+ '</textarea>';
 			this.chartingEmbed.style.display = "";
 			this.chartingEmbed.width = "800px";
