@@ -205,3 +205,45 @@ body
 .dojoDndAvatarHeader {
         display: none;
 }
+
+.embedCodeDiv {
+    background: #FFFF8E;
+    background: rgba(255, 255, 130, .9);
+    padding: 5px;
+    width: 465px;
+    
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    border: none;
+    font-family: sans-serif;
+    font-size:  small;
+	color:blue;
+    padding-bottom: 7px;
+    padding-left: 30px;
+    overflow: visible;
+    
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#pageFooter {
+color:#7C7C7C;
+font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
+font-size:11px;
+padding-top:3px;
+}
+
+#pageFooter a {
+outline-color:-moz-use-text-color;
+outline-style:none;
+outline-width:medium;
+}
