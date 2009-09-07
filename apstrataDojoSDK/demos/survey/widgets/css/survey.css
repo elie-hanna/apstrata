@@ -46,6 +46,12 @@
     padding: 10px;
 }
 
+.surveyButton {
+    color: #F67400;
+    font-weight: bold;
+    margin-left: 85px;
+}
+
 .survey .questionsPanel {
     overflow: visible; 
     background: #DEE1EE;
