@@ -81,7 +81,18 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 				this.connect(this.btnDelete, "onclick", "deleteField");
 				this.connect(this.spnValue, "onclick", "selectedEvent");
 				this.connect(this.checkBoxValue, "onclick", "selectedEvent");
-				this.connect(this.btnCancel, "onclick", function() {if (this.title == null) this.deleteField(); else this.unselect();});
+				this.connect(this.btnCancel, "onclick",
+					function() {
+						if (this.title == null)
+							this.deleteField();
+						else {
+							var constructedFieldName = this.constructFieldName();
+
+							this.fldName.value = constructedFieldName;
+
+							this.unselect();
+						}
+					});
 				this.connect(this.lstType, "onchange", "changeType");
 				this.connect(this.fldTitle, "onClick", function() {if (this.title != null){ this.fieldModified();}});
 				this.connect(this.fldTitle, "onChange", function() {this.title = this.fldTitle.value; this.fieldModified()});
@@ -300,13 +311,32 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			var survey = this;
 			var fieldValue = "";
 			var type = survey.lstType.value;
+
+			var constructedFieldName = survey.constructFieldName();
+
 			var model = {
 				title: survey.title,
 				type: survey.lstType.value,
 				choices: survey.txtChoices.value,
 				mandatory: survey.chkMandatory.checked,
-				name: survey.fldName.value
+				name: constructedFieldName//survey.fldName.value
 			}
 			return model;
+		},
+
+		/**
+		 * Construct the field name from the field title by removing any spaces and using the first 15 characters
+		 *
+		 * @return The constructed field name
+		 */
+		constructFieldName: function () {
+			var survey = this;
+
+			// Construct the field name from the question title by removing the any spaces and using the first 15 characters
+			var constructedFieldName = survey.fldTitle.value;
+			constructedFieldName = constructedFieldName.replace(/ /g, '');
+			constructedFieldName = constructedFieldName.substring(0, (constructedFieldName.length > 15) ? 15 : constructedFieldName.length);
+
+			return constructedFieldName;
 		}
 	});
