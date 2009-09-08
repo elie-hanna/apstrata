@@ -2,7 +2,7 @@
 	<div dojoAttachPoint="surveyField" class="roundedBox surveryField">
 		<span title="Drag and drop your question" dojoAttachPoint="handle"  class="dojoDndHandle" >&nbsp;&nbsp;</span>
 		<span dojoAttachPoint="checkBoxValue" style="display: none;"></span>
-		<span dojoType="dijit.InlineEditBox" dojoAttachPoint="fldTitle" onChange="console.debug(this.id);">${title}</span>
+		<span dojoType="dijit.InlineEditBox" editor="dijit.form.ValidationTextBox" editorParams="{trim:'true',required:'true',invalidMessage:'Required'}" dojoAttachPoint="fldTitle" onChange="console.debug(this.id);" >${title}</span>
 		<span dojoAttachPoint="spnValue" style="display: none;"><br/><input dojoType="dijit.form.ValidationTextBox" trim=true required="false" invalidMessage="Required." dojoAttachPoint="fldValue"  value="" name=""></span>
 
 		<div dojoAttachPoint="editor" class="surveyFieldEditor" style="display: none;">

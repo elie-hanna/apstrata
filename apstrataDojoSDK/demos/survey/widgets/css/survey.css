@@ -6,6 +6,8 @@
     width: 350px;
 
     padding: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
     margin-top: 5px;
     margin-left: 5px;
     margin-right: 5px;
@@ -238,12 +240,14 @@ body
 #pageFooter {
 color:#7C7C7C;
 font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
-font-size:11px;
-padding-top:3px;
+font-size:10px;
+padding-top:10px;
+text-align: right;
 }
 
 #pageFooter a {
-outline-color:-moz-use-text-color;
-outline-style:none;
-outline-width:medium;
+color:#7C7C7C;
+font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
+font-size:10px;
+text-decoration: none;
 }

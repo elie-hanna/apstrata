@@ -156,10 +156,9 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				strData= strData + "</tr>";
 				}
 			}
-
 			strData = strData + "<tbody>";
 			
-			this.displayTable.innerHTML = heading + strData;
+			this.displayTable.innerHTML = heading + strData + this.displayTable.innerHTML;
 			
 		}	
 		
