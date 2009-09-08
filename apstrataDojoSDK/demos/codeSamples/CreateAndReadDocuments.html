@@ -37,6 +37,7 @@
 		// QueryWidget used to display the saved values
 		var qw
 		
+		//onload, query for data and on result display grid
 		dojo.addOnLoad(function() {
 			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
 
@@ -68,6 +69,9 @@
 		
 		var qw 
 		
+		/**
+		 * displays data
+		 */
 		function displayGrid() {
 			var myStore = new apstrata.apsdb.client.ItemApsdbWriteStore({connection: connection, 
 										resultsPerPage: 10,

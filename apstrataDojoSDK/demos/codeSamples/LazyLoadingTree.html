@@ -29,9 +29,15 @@
 			var connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
 			var client = new apstrata.apsdb.client.Client(connection)
 			
+			/**
+			 * list stores takes 2 functions, success and failure
+			 */
 			var ls = client.listStores(function() {
 					// If ListStores succeeds
 					var found = false
+					/**
+					 * Listing the stores existing in the account. Checking if store with name "countries" exist.
+					 */
 					for (var i=0; i<ls.result.stores.length; i++) {
 						if (ls.result.stores[i]["@name"] == "countries") {
 							found = true
@@ -39,6 +45,9 @@
 						}
 					}
 					
+					/**
+					 * parsing the tree
+					 */
 					if (found) {
 						dojo.parser.parse();
 					} else {

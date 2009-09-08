@@ -14,7 +14,7 @@
 		<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:'[my key]', secret:'[my secret]', defaultStore:'states'"></script>
 	
 	    <script type="text/javascript">
-			
+	
 	    	dojo.addOnLoad(function(){
 				dojo.require("apstrata.apsdb.client.Connection")
 				dojo.require("apstrata.util.logger.Logger")
@@ -69,9 +69,14 @@
 				
 				var client = new apstrata.apsdb.client.Client(connection)
 				
-				var storeName = "countries2"
+				var storeName = "countries"
 				
-				var cs = client.createStore(function(operation) {
+				/**
+				 * Creating a store with name countries.
+				 * When the store is created successfully we are creating documents for each country
+				 * success, failure, attrs
+				 */
+				var cs = client.createStore(function(operation) { //if create store is successful, this function will be called
 										var importJson = new apstrata.util.ImportJson({
 																			connection: connection, 
 																			store: storeName,
@@ -81,7 +86,7 @@
 																				dojo.byId("store").innerHTML = dojo.byId("store").innerHTML + "Added Item: " + operation.result.document["@key"] + "<br>"
 																			}
 																		})
-									}, function(operation) {
+									}, function(operation) {//this function will be called on failure of store creation
 										alert("creating store [" + storeName + "] failed, ErrorCode:" + operation.errorCode + ", ErrorMessage:" + operation.errorMessage)
 									}, {store: storeName})
 

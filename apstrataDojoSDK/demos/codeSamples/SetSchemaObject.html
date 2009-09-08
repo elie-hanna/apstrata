@@ -27,21 +27,26 @@
 				var aclGroup = new SchemaACLGroup("aclG1", "user1;user2", "user1;user2", [field1, field2]);
 				mySchema.addACLGroup(aclGroup);
 				
-				//contacting server
+				//intializing connection
 				var connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
 				connection.credentials.key = "";
 				connection.credentials.secret = "";
 				connection.serviceUrl = "";
 				
+				//instantiating set schema operation
 				var operation = new apstrata.apsdb.client.SetSchema(connection)
-	                
+	            
+				//success method
 	            dojo.connect(operation, "handleResult", function(){
 	                alert("Schema Saved");
 	            })
+				
+				//failure method
 	            dojo.connect(operation, "handleError", function(){
 	                alert(operation.message)
 	            })
 	            
+				//contacting server to store schema
 	           	operation.execute({
 	                schema: mySchema.toString(),
 					schemaName: mySchema.name
