@@ -16,6 +16,9 @@
 			dojo.require("apstrata.apsdb.client.SetSchema")
 			dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus");
 
+			/**
+			 * On load, build schema, contact server to persist it
+			 */
 			dojo.addOnLoad(function() {
 				//building schema
 				var mySchema = new Schema("mySchema");

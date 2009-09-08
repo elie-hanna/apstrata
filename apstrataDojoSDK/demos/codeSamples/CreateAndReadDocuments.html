@@ -40,7 +40,9 @@
 		//onload, query for data and on result display grid
 		dojo.addOnLoad(function() {
 			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
-
+			/**
+			 * looking up fields name and dob
+			 */
 			store = new apstrata.apsdb.client.ItemApsdbWriteStore({connection: connection, 
 										resultsPerPage: 10,
 										apsdbStoreName: "formtest", 

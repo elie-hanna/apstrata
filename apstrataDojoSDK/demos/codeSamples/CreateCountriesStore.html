@@ -14,7 +14,9 @@
 		<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:'[my key]', secret:'[my secret]', defaultStore:'states'"></script>
 	
 	    <script type="text/javascript">
-	
+			/**
+			 * On load, a store and a set of documents representing countries will be created
+			 */
 	    	dojo.addOnLoad(function(){
 				dojo.require("apstrata.apsdb.client.Connection")
 				dojo.require("apstrata.util.logger.Logger")
