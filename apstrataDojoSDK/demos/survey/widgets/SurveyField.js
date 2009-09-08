@@ -252,7 +252,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 						checked = "checked";
 					else
 						checked = "";
-					newField = newField + '<span><input dojoType="dijit.form.RadioButton" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice + '" '+ checked +'>' + choice + '</span>&nbsp';
+					newField = newField + '<span><input dojoType="dijit.form.RadioButton" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice + '" '+ checked +'>' + choice + '</span><br/>';
 				});
 			
 			return newField;
@@ -279,7 +279,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 							checked = "";
 					}
 
-					newField = newField + '<span><input dojoType="dijit.form.CheckBox" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice + '" '+ checked +'>' + choice + '</span>&nbsp';
+					newField = newField + '<span><input dojoType="dijit.form.CheckBox" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice + '" '+ checked +'>' + choice + '</span><br/>';
 				});
 			
 			return newField;
