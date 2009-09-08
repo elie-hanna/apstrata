@@ -83,15 +83,18 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 				this.connect(this.checkBoxValue, "onclick", "selectedEvent");
 				this.connect(this.btnCancel, "onclick",
 					function() {
-						if (this.title == null)
-							this.deleteField();
-						else {
-							var constructedFieldName = this.constructFieldName();
-
-							this.fldName.value = constructedFieldName;
-
-							this.unselect();
-						}
+						//alert(this.fldTitle.validate());
+						//if (this.fldTitle.value != "") {
+							if (this.title == null) 
+								this.deleteField();
+							else {
+								var constructedFieldName = this.constructFieldName();
+								
+								this.fldName.value = constructedFieldName;
+								
+								this.unselect();
+							}
+						//}
 					});
 				this.connect(this.lstType, "onchange", "changeType");
 				this.connect(this.fldTitle, "onClick", function() {if (this.title != null){ this.fieldModified();}});
@@ -162,11 +165,11 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			{	
 				case 'checkbox':
 					if(this.editMode){
-						this.divChoices.style.display = "none";	
-						this.spnValue.style.display = "none";
-						this.checkBoxValue.style.display = "";			
+						this.divChoices.style.display = "none";			
 						this.fieldName = this.fldName.value;
 					}
+					this.spnValue.style.display = "none";
+					this.checkBoxValue.style.display = "";	
 					
 					newField = '<input dojoType="dijit.form.CheckBox" value="checked" dojoAttachPoint="fldValue"  name="'+this.fieldName+'" '+ this.defaultFieldValue +'/>';	
 					this.checkBoxValue.innerHTML = newField;
