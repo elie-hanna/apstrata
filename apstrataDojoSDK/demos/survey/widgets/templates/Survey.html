@@ -1,28 +1,28 @@
 <div class="tundra">
-	<div dojoAttachPoint="roundedBox survey" class="survey" >
-		<h2 dojoAttachPoint="title" dojoType="dijit.InlineEditBox">${surveyTitle}</h2>
-		<h3 dojoAttachPoint="description" dojoType="dijit.InlineEditBox">${surveyDescription}</h3>
+	<div dojoAttachPoint="roundedBox survey" title="Survey" class="survey" >
+		<h2 dojoAttachPoint="title" title="Survey title" dojoType="dijit.InlineEditBox">${surveyTitle}</h2>
+		<h3 dojoAttachPoint="description" title="Survey description" dojoType="dijit.InlineEditBox">${surveyDescription}</h3>
 		<form id="survey_form" dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
 		<div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer"  withHandles="true" class="questionsPanel" id="dndContainer"></div>
 		</form>
 		<br/>
-		<div>
-			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" id="viewResultsId"  name="allowViewingResults"/> Show results to users
+		<div title="Show results to users">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" id="viewResultsId" name="allowViewingResults"/> Show results to users
 		</div>
 		<br/>
-		<div dojoAttachPoint="successMsgDiv" >
+		<div title="Success Message" dojoAttachPoint="successMsgDiv" >
 			Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
 		</div>
 		<div dojoAttachPoint="resultsUrlDiv" style="display: none;" >
 			Results URL: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="resultsUrl" value="">
 		</div>
-		<div id="pageFooter">
-			Running on <a target="_blank" href="http://www.apstrata.com">apstrata</a>
+		<div id="pageFooter" title="www.apstrata.com">
+			Running on <a style="cursor:pointer" target="_blank" href="http://www.apstrata.com"><b>ap<span style="color:orange">((</span>strata</b></a>
 		</div>
 	</div>
 
 	<br/><br/>
-	<input dojoAttachPoint="btnGetData" class="surveyButton" type="button" value="Generate Embed Code" />
+	<input dojoAttachPoint="btnGetData" class="surveyButton" style="cursor:pointer" title="Generate Embed Code" type="button" value="Generate Embed Code" />
 	<div dojoAttachPoint="output" class="embedCodeDiv" style="display: none;"></div>
 	<div dojoAttachPoint="listingEmbed" class="embedCodeDiv" style="display: none;"></div>
 	<div dojoAttachPoint="chartingEmbed" class="embedCodeDiv" style="display: none;"></div>

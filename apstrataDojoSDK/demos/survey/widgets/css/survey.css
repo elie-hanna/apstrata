@@ -49,9 +49,8 @@
 }
 
 .surveyButton {
-    color: #F67400;
-    font-weight: bold;
     margin-left: 85px;
+	background-color: #F0F8FF ;
 }
 
 .survey .questionsPanel {
