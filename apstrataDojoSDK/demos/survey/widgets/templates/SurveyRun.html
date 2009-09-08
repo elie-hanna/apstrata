@@ -1,13 +1,13 @@
 <div class="tundra">
-    <div dojoAttachPoint="roundedBox survey" class="survey">
+    <div dojoAttachPoint="roundedBox survey" title="Survey" class="survey">
         <div dojoAttachPoint="surveyDiv">
-            <h2 dojoAttachPoint="title">${surveyTitle}</h2>
-            <h3 dojoAttachPoint="description">${surveyDescription}</h3>
+            <h2 title="Survey title" dojoAttachPoint="title">${surveyTitle}</h2>
+            <h3 title="Survey description" dojoAttachPoint="description">${surveyDescription}</h3>
             <form id="survey_form" dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
                 <div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer" class="questionsPanel" id="dndContainer">
                 </div>
                 <br/>
-                <input dojoAttachPoint="btnSubmit" type="button" value="Submit" />
+                <input dojoAttachPoint="btnSubmit" class="surveyButton" style="cursor:pointer" title="Submit" type="button" value="Submit" />
             </form>
             <br/>
         </div>
