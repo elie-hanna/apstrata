@@ -235,7 +235,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<div dojoType="surveyWidget.widgets.SurveyListing" /></div>'
 			+ '</div>'
 			+ '</textarea>';*/
-			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
+			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?AF_deliveryChannel=listing&key=7744293024&secret=3B45DE19C689EDAFCA47&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + dojo.toJson(listSurveyData) + '\' ></iframe>'
 			+ '</textarea>';
 			this.listingEmbed.style.display = "";
@@ -252,7 +252,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<div dojoType="surveyWidget.widgets.SurveyCharting" /></div>'
 			+ '</div>'
 			+ '</textarea>';*/
-			this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
+			this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see charts of results of your survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?AF_deliveryChannel=aggregates&key=7744293024&secret=3B45DE19C689EDAFCA47&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + dojo.toJson(surveyData) + '\' ></iframe>';
 			+ '</textarea>';
 			this.chartingEmbed.style.display = "";
