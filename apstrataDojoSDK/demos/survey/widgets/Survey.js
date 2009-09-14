@@ -39,6 +39,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		dataModel: null,
 		surveyTitle : "Type the survey title here",
 		surveyDescription : "You can place the survey description here.",
+		fieldSerialNumber: 0,
 
 		//
 		// Replace here with your store name
@@ -104,7 +105,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		createField: function(dataModel, isVisible) {
-			var newField = new surveyWidget.widgets.SurveyField(dataModel,this.editMode);
+			var newField = new surveyWidget.widgets.SurveyField(dataModel, this.editMode, ++this.fieldSerialNumber);
 
 			// Do not display the field that should be invisible
 			if (!isVisible) {
