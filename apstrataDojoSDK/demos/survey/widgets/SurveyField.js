@@ -43,10 +43,12 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 		fieldDataModel: null,
 		editMode:false,
 		dummyField:false,
+		serialNumber: 0,
 		
-		constructor: function(dataModel,editMode) {
+		constructor: function(dataModel, editMode, serialNumber) {
 			this.fieldDataModel = dataModel;
 			this.editMode = editMode;
+			this.serialNumber = serialNumber;
 			
 			if (dataModel != null) {
 				if (dataModel.title != null) 
@@ -338,7 +340,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			// Construct the field name from the question title by removing the any spaces and using the first 15 characters
 			var constructedFieldName = survey.fldTitle.value;
 			constructedFieldName = constructedFieldName.replace(/ /g, '');
-			constructedFieldName = constructedFieldName.substring(0, (constructedFieldName.length > 15) ? 15 : constructedFieldName.length);
+			constructedFieldName = constructedFieldName.substring(0, (constructedFieldName.length > 15) ? 15 : constructedFieldName.length) + '_' + survey.serialNumber;
 
 			return constructedFieldName;
 		}
