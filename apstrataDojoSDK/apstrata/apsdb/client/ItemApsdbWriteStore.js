@@ -183,7 +183,7 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbWriteStore",
 										keywordArgs.onComplete()
 									},
 									iterationFailure: function(operation) {
-										keywordArgs.onError(operation.errorMessage)										
+										keywordArgs.onError(operation.errorDetail)										
 									},
 									failure: function(){
 									}

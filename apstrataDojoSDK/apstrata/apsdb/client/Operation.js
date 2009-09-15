@@ -176,7 +176,7 @@ dojo.declare("apstrata.apsdb.client.Operation",
 			this.operationTimeout = true;
 
 			this.errorCode = "timeout_communication_error";
-			this.errorMessage = "Timeout or communication error";
+			this.errorDetail = "Timeout or communication error";
 			this.response = null;
 			// responseTime = timeout 
 			this.responseTime = this.connection.getTimeout()
@@ -223,7 +223,7 @@ dojo.declare("apstrata.apsdb.client.Operation",
 		handleError: function() {
 			this.connection.activity.stop(this)
         	this.warn("errorCode", this.errorCode)
-        	this.warn("errorMessage", this.errorMessage)
+        	this.warn("errorDetail", this.errorDetail)
 			this.endGroupMessages()
 		}
 	});

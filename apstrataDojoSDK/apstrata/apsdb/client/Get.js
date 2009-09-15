@@ -131,8 +131,8 @@ dojo.declare("apstrata.apsdb.client.Get",
 						// TODO: test case for bad response
                         self.status = "failure";
                         self.errorCode = "CLIENT_BAD_RESPONSE"
-                        self.errorMessage = "apsdb client: bad response from apsdb or communication error"
-                        self.debug("errorMessage", self.errorMessage);
+                        self.errorDetail = "apsdb client: bad response from apsdb or communication error"
+                        self.debug("errorDetail", self.errorDetail);
                         self.handleError();                                        
                     }
 

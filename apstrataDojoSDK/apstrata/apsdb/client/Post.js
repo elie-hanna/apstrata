@@ -77,8 +77,8 @@ console.debug(">>>>"+jsonTxt)
 					// TODO: test case for bad response
                     self.status = "failure";
                     self.errorCode = "CLIENT_BAD_RESPONSE"
-                    self.errorMessage = "apsdb client: bad response from apsdb or communication error"
-                    self.error("errorMessage", self.errorMessage);
+                    self.errorDetail = "apsdb client: bad response from apsdb or communication error"
+                    self.error("errorDetail", self.errorDetail);
                     self.handleError();                                        
                 }
 				

@@ -179,7 +179,7 @@ dojo.declare("apstrata.apsdb.client.ItemApsdbReadStore",
 					self._fetchSuccess(request)
 				},
 				function() {
-					if (keywordArgs.onError) keywordArgs.onError({errorCode: q.errorCode, errorMessage: q.errorMessage}, request)
+					if (keywordArgs.onError) keywordArgs.onError({errorCode: q.errorCode, errorDetail: q.errorDetail}, request)
 				},							
 				{
 					store: self._store,

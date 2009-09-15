@@ -93,7 +93,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		constructor: function(attr) {
 			var self = this
 			
-			this._DEFAULT_SERVICE_URL= "http://apsdb.apstrata.com/sandbox-apsdb/rest"
+			this._DEFAULT_SERVICE_URL= "http://localhost:8080/autoforms/rest"
 			this.timeout = 10000
 			this.serviceUrl= this._DEFAULT_SERVICE_URL;
 			this.credentials= {key: "", secret: "", un: "", pw: ""}
@@ -238,7 +238,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 					handlers.success()
 			})
 			dojo.connect(listStores, "handleError", function() {
-					handlers.failure(listStores.errorCode, listStores.errorMessage)
+					handlers.failure(listStores.errorCode, listStores.errorDetail)
 			})
 			
 			listStores.execute();
