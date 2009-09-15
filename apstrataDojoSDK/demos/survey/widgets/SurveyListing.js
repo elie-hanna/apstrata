@@ -40,14 +40,14 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		// Replace here with your apsdb account
 		//  and target store name
 		//
-		apsdbKey: "7744293024",
-		apsdbSecret: "3B45DE19C689EDAFCA47",
-		apsdbServiceUrl: "http://apsdb.apstrata.com/sandbox-apsdb/rest",
+		apsdbKey: "apstrata",
+		apsdbSecret: "secret",
+		apsdbServiceUrl: "http://localhost:8080/autoforms/rest", //"http://apsdb.apstrata.com/apsdb/rest",
 		storeName: "myStore",
 		
 		constructor: function() {
 			if(schema != null){
-				this.jsonDataModel = schema;
+				this.jsonDataModel = decodeURIComponent(schema);
 				this.dojoDataModel = dojo.fromJson(this.jsonDataModel);
 				this.arrFieldsToDisplay = this.dojoDataModel.fields;
 				this.arrTitleFieldsToDisplay = this.dojoDataModel.titleFields;

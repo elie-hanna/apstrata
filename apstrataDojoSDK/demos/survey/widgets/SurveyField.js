@@ -337,10 +337,12 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 		constructFieldName: function () {
 			var survey = this;
 
-			// Construct the field name from the question title by removing the any spaces and using the first 15 characters
+			// Construct the field name from the question title by removing any non-alphanumeric characters and using the first 15 characters, then adding this field's serial number
 			var constructedFieldName = survey.fldTitle.value;
-			constructedFieldName = constructedFieldName.replace(/ /g, '');
-			constructedFieldName = constructedFieldName.substring(0, (constructedFieldName.length > 15) ? 15 : constructedFieldName.length) + '_' + survey.serialNumber;
+			constructedFieldName = constructedFieldName.replace(/&amp;/g, '');
+			constructedFieldName = constructedFieldName.replace(/[^a-zA-Z0-9]+/g, '');
+			constructedFieldName = constructedFieldName.substring(0, (constructedFieldName.length > 15) ? 15 : constructedFieldName.length);
+			constructedFieldName = constructedFieldName + '_' + survey.serialNumber;
 
 			return constructedFieldName;
 		}

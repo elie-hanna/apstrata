@@ -45,7 +45,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		
 		constructor: function() {
 			if(schema != null){
-				this.jsonDataModel = schema;
+				this.jsonDataModel = decodeURIComponent(schema);
 				this.dojoDataModel = dojo.fromJson(this.jsonDataModel);
 				this.questions = this.dojoDataModel.questions;
 
@@ -61,18 +61,6 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					// TODO: Throw an error because we use the survey ID to query for the results of the widget
 				}
 			}
-		},
-
-		/**
-		 * After creation of this widget: Set the title and call the query
-		 */
-		postCreate: function() {
-			if (schema != null) {
-				this.title.innerHTML = this.dojoDataModel.title;
-				this.query();
-			}
-			else
-				this.title.innerHTML = "The survey charting schema is missing";
 		},
 
 		/**
@@ -187,7 +175,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					if (areAllValuesPresent) {
 						var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
 						var chartCell = null;
-						if (chartLine == null || charting.isNewLine) {
+						// Create a new line if: (1) We couldn't find one, (2) We found a default text node, (3) The caller is asking for a new line
+						if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 							chartLine = document.createElement('DIV');
 							chartCell = document.createElement('DIV');
 							chartLine.setAttribute('style', 'width: 460px; height: 230px;');
@@ -272,7 +261,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 
 					var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
 					var chartCell = null;
-					if (chartLine == null || charting.isNewLine) {
+					// Create a new line if: (1) We couldn't find one, (2) We found a default text node, (3) The caller is asking for a new line
+					if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 						chartLine = document.createElement('DIV');
 						chartCell = document.createElement('DIV');
 						chartLine.setAttribute('style', 'width: 460px; height: 230px;');
@@ -320,10 +310,21 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				},
 				{
 					store: charting.storeName,
-					query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
 					queryFields: "apstrataSurveyID",
 					count: true
 				})
+		},
+
+		/**
+		 * Escapes the following special characters from the passed String:
+		 * "/"
+		 *
+		 * @param str The String to be cleaned
+		 */
+		clean: function (str) {
+			str = str.replace(/\\/g, '\\\\');
+			return str;
 		},
 
 		/**
@@ -347,7 +348,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 
 					var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
 					var chartCell = null;
-					if (chartLine == null || charting.isNewLine) {
+					// Create a new line if: (1) We couldn't find one, (2) We found a default text node, (3) The caller is asking for a new line
+					if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 						chartLine = document.createElement('DIV');
 						chartCell = document.createElement('DIV');
 						chartLine.setAttribute('style', 'width: 460px; height: 230px;');
@@ -433,7 +435,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					if (areAllValuesPresent) {
 						var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
 						var chartCell = null;
-						if (chartLine == null || charting.isNewLine) {
+						// Create a new line if: (1) We couldn't find one, (2) We found a default text node, (3) The caller is asking for a new line
+						if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 							chartLine = document.createElement('DIV');
 							chartCell = document.createElement('DIV');
 							chartLine.setAttribute('style', 'width: 460px; height: 230px;');
@@ -510,6 +513,18 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			for (var k=0; k<charting.questions.length; k++)
 				if (charting.questions[k].name == fieldName)
 					return charting.questions[k].title;
+		},
+
+		/**
+		 * After creation of this widget: Set the title and call the query
+		 */
+		postCreate: function() {
+			if (schema != null) {
+				this.title.innerHTML = this.dojoDataModel.title;
+				this.query();
+			}
+			else
+				this.title.innerHTML = "The survey charting schema is missing";
 		}
 	});
 
