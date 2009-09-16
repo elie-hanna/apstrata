@@ -21,7 +21,7 @@ dojo.provide("apstrata.Client");
 
 dojo.require("apstrata.Connection")
 dojo.require("apstrata.Get")
-//dojo.require("apstrata.apsdb.client.Post")
+dojo.require("apstrata.Post")
 
 dojo.declare("apstrata.Client", 
 	[apstrata.util.logger.Loggable], 
@@ -42,7 +42,7 @@ dojo.declare("apstrata.Client",
 			if (attrs.action != "SaveDocumentPost") {
 				var operation = new apstrata.Get(this.connection)
 			} else {
-//				var operation = new apstrata.apsdb.client.Post(this.connection)
+				var operation = new apstrata.Post(this.connection)
 			}
 
 			operation.apsdbOperation = attrs.action
