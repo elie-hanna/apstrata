@@ -133,13 +133,35 @@ dojo.declare("surveyWidget.widgets.Survey",
 			this.connect(newField , "selectedEvent", function () {
 					if (this.editMode) {
 						dojo.forEach(this.questions.getChildren(), function(child) {
+							if(child.selected)
+								child.restoreInitialState();
 							child.unselect();	
 						});
 						newField.select();
 					}
 				});
+				
+			this.connect(newField , "saveInitialState", function () {
+					if (this.editMode) {
+						this.setInitialState(newField);
+					}
+				});
 
 			return newField;
+		},
+		
+		setInitialState: function(newField) {
+			if (!newField.selected) {
+				var jsonObj = this.surveyform.getValues();
+				
+				newField.initialState = {
+					title: newField.title,
+					type: newField.lstType.value,
+					choices: newField.txtChoices.value,
+					mandatory: newField.chkMandatory.checked,
+					fieldValue: jsonObj[newField.fldName.value]
+				}
+			}
 		},
 		
 		startup: function(){
