@@ -189,7 +189,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 			self.warningMessage.style.display = 'none'; // Hide the warning message in case it was displayed before
 
 			// Create a new object to act as the randomly generated survey identifier (named 'apstrataSurveyID') and insert it as a survey field
-			var strApstrataSurveyID = dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase();
+			// The survey ID is: [user key]_[survey title]_[random hash]
+			var strTitleForID = this.title.value.replace(/ /g, ''); // Remove all spaces from the survey title
+			strTitleForID = (strTitleForID.length > 30) ? strTitleForID.substring(0, 30) : strTitleForID;
+			var strApstrataSurveyID = apstrata.apConfig.key + '_' + strTitleForID + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase();
 			var apstrataSurveyID = new Object();
 			apstrataSurveyID.choices = '';
 			apstrataSurveyID.defaultValue = strApstrataSurveyID;
