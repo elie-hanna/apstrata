@@ -156,7 +156,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		getModel: function() {
-			
+			var self = this;
 			var jsonObj = this.surveyform.getValues();
 			var data = new Array();
 			var arrFields = new Array();
@@ -165,14 +165,28 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var i=0;
 			var j=0;
 			var k=0;
+
 			var children = this.questions.getChildren();
+			var breakProcessing = false;
 			dojo.forEach(this.questions.getChildren(), function(child) {
-				if (child.title != null && !child.dummyField) {
+				if (breakProcessing) {
+					// Do nothing
+				} else if (child.title != null && child.title != '' && !child.dummyField) {
 					childModel = child.getModel();
 					childModel["defaultValue"] = jsonObj[child.fieldName];
 					data[i++] = childModel;
+				} else if ((child.title == null || child.title == '') && !child.dummyField) { // Check that all questions have titles
+					child.select(); // Select the empty question
+					self.warningMessage.style.display = ''; // Display the warning message
+					breakProcessing = true;
 				}
 			});
+
+			// Stop processing the embed codes if a warning message was displayed
+			if (breakProcessing)
+				return;
+
+			self.warningMessage.style.display = 'none'; // Hide the warning message in case it was displayed before
 
 			// Create a new object to act as the randomly generated survey identifier (named 'apstrataSurveyID') and insert it as a survey field
 			var strApstrataSurveyID = dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase();
