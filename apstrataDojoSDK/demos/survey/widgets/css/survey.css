@@ -49,8 +49,15 @@
 }
 
 .surveyButton {
+		float: left;
     margin-left: 85px;
-	background-color: #F0F8FF ;
+		background-color: #F0F8FF ;
+}
+
+.emptyQuestionTitleWrnMsg {
+		float: left;
+		margin: 2px 15px;
+		color: red;
 }
 
 .survey .questionsPanel {
