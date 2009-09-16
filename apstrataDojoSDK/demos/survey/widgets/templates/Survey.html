@@ -22,7 +22,11 @@
 	</div>
 
 	<br/><br/>
-	<input dojoAttachPoint="btnGetData" class="surveyButton" style="cursor:pointer" title="Generate Embed Code" type="button" value="Generate Embed Code" />
+	<div style="height: 30px;">
+		<input dojoAttachPoint="btnGetData" class="surveyButton" style="cursor:pointer" title="Generate Embed Code" type="button" value="Generate Embed Code" />
+		<div dojoAttachPoint="warningMessage" class="emptyQuestionTitleWrnMsg" style="display: none;">All questions must have a title!</div>
+	</div>
+
 	<div dojoAttachPoint="output" class="embedCodeDiv" style="display: none;"></div>
 	<div dojoAttachPoint="listingEmbed" class="embedCodeDiv" style="display: none;"></div>
 	<div dojoAttachPoint="chartingEmbed" class="embedCodeDiv" style="display: none;"></div>
