@@ -96,9 +96,6 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 										for (var j=0; j<choices.length; j++) {
 											fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = 0;
 											charting.queryAndDisplayMultipleChoice(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
-
-											// Alternate the isNewLine variable to show the charts in two columns
-											charting.isNewLine = (charting.isNewLine) ? false : true;
 										}
 										break;
 									case 'radio button':
@@ -115,9 +112,6 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 										fieldValueCounts[i] = new Array(choices.length);
 										fieldValueCounts[i][fieldDataModel.name + '_checked'] = 0;
 										charting.queryAndDisplayCheckbox(fieldDataModel.name, 'checked', fieldResponses[i][0], fieldValueCounts[i]);
-
-										// Alternate the isNewLine variable to show the charts in two columns
-										charting.isNewLine = (charting.isNewLine) ? false : true;
 										break;
 									case 'list':
 										// Count and display the number of people chose each of these list items
@@ -179,21 +173,23 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 							chartLine = document.createElement('DIV');
 							chartCell = document.createElement('DIV');
-							chartLine.setAttribute('style', 'width: 460px; height: 230px;');
+							chartLine.style.width = '460px';
+							chartLine.style.height = '230px';
 							chartLine.appendChild(chartCell);
-							chartCell.setAttribute('style', 'float: left;');
+							charting.floatElement(chartCell, 'left');
 
 							charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
 						} else {
 							var chartCell = document.createElement('DIV');
-							chartCell.setAttribute('style', 'float: left;');
+							charting.floatElement(chartCell, 'left');
 
 							chartLine.appendChild(chartCell); // Just add the new cell to the existing line
 						}
 
 						// 1- Add the chart title to the chart cell
 						var chartTitle = document.createElement('DIV');
-						chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
+						chartTitle.style.width = '220px';
+						chartTitle.style.paddingLeft = '10px';
 						var fieldTitle = charting.getTitleOf(fieldName);
 						chartTitle.innerHTML = fieldTitle;
 						chartCell.appendChild(chartTitle);
@@ -201,7 +197,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						// 2- Add the chart placeholder in the chart cell
 						var chartDIV = document.createElement('DIV');
 						chartDIV.setAttribute('id', fieldName);
-						chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
+						chartDIV.style.width = '200px';
+						chartDIV.style.height = '200px';
 						chartCell.appendChild(chartDIV);
 
 						// 3- Create and render the chart
@@ -265,21 +262,23 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 						chartLine = document.createElement('DIV');
 						chartCell = document.createElement('DIV');
-						chartLine.setAttribute('style', 'width: 460px; height: 230px;');
+						chartLine.style.width = '460px';
+						chartLine.style.height = '230px';
 						chartLine.appendChild(chartCell);
-						chartCell.setAttribute('style', 'float: left;');
+						charting.floatElement(chartCell, 'left');
 
 						charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
 					} else {
 						var chartCell = document.createElement('DIV');
-						chartCell.setAttribute('style', 'float: left;');
+						charting.floatElement(chartCell, 'left');
 
 						chartLine.appendChild(chartCell); // Just add the new cell to the existing line
 					}
 
 					// 1- Add the chart title to the chart cell
 					var chartTitle = document.createElement('DIV');
-					chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
+					chartTitle.style.width = '220px';
+					chartTitle.style.paddingLeft = '10px';
 					var fieldTitle = charting.getTitleOf(fieldName);
 					chartTitle.innerHTML = fieldTitle + ' : ' + fieldValue;
 					chartCell.appendChild(chartTitle);
@@ -287,7 +286,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					// 2- Add the chart placeholder in the chart cell
 					var chartDIV = document.createElement('DIV');
 					chartDIV.setAttribute('id', fieldName + '_' + fieldValue);
-					chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
+					chartDIV.style.width = '200px';
+					chartDIV.style.height = '200px';
 					chartCell.appendChild(chartDIV);
 
 					// 3- Create and render the chart
@@ -305,6 +305,9 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
 					]);
 					chart.render();
+
+					// Alternate the isNewLine variable to show the charts in two columns
+					charting.isNewLine = (charting.isNewLine) ? false : true;
 				}, function() {
 					//fail(operation)
 				},
@@ -314,17 +317,6 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					queryFields: "apstrataSurveyID",
 					count: true
 				})
-		},
-
-		/**
-		 * Escapes the following special characters from the passed String:
-		 * "/"
-		 *
-		 * @param str The String to be cleaned
-		 */
-		clean: function (str) {
-			str = str.replace(/\\/g, '\\\\');
-			return str;
 		},
 
 		/**
@@ -352,21 +344,23 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 						chartLine = document.createElement('DIV');
 						chartCell = document.createElement('DIV');
-						chartLine.setAttribute('style', 'width: 460px; height: 230px;');
+						chartLine.style.width = '460px';
+						chartLine.style.height = '230px';
 						chartLine.appendChild(chartCell);
-						chartCell.setAttribute('style', 'float: left;');
+						charting.floatElement(chartCell, 'left');
 
 						charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
 					} else {
 						var chartCell = document.createElement('DIV');
-						chartCell.setAttribute('style', 'float: left;');
+						charting.floatElement(chartCell, 'left');
 
 						chartLine.appendChild(chartCell); // Just add the new cell to the existing line
 					}
 
 					// 1- Add the chart title to the chart cell
 					var chartTitle = document.createElement('DIV');
-					chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
+					chartTitle.style.width = '220px';
+					chartTitle.style.paddingLeft = '10px';
 					var fieldTitle = charting.getTitleOf(fieldName);
 					chartTitle.innerHTML = fieldTitle;
 					chartCell.appendChild(chartTitle);
@@ -374,7 +368,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					// 2- Add the chart placeholder in the chart cell
 					var chartDIV = document.createElement('DIV');
 					chartDIV.setAttribute('id', fieldName + '_' + fieldValue);
-					chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
+					chartDIV.style.width = '200px';
+					chartDIV.style.height = '200px';
 					chartCell.appendChild(chartDIV);
 
 					// 3- Create and render the chart
@@ -392,6 +387,9 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
 					]);
 					chart.render();
+
+					// Alternate the isNewLine variable to show the charts in two columns
+					charting.isNewLine = (charting.isNewLine) ? false : true;
 				}, function() {
 					//fail(operation)
 				},
@@ -439,21 +437,23 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 							chartLine = document.createElement('DIV');
 							chartCell = document.createElement('DIV');
-							chartLine.setAttribute('style', 'width: 460px; height: 230px;');
+							chartLine.style.width = '460px';
+							chartLine.style.height = '230px';
 							chartLine.appendChild(chartCell);
-							chartCell.setAttribute('style', 'float: left;');
+							charting.floatElement(chartCell, 'left');
 
 							charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
 						} else {
 							var chartCell = document.createElement('DIV');
-							chartCell.setAttribute('style', 'float: left;');
+							charting.floatElement(chartCell, 'left');
 
 							chartLine.appendChild(chartCell); // Just add the new cell to the existing line
 						}
 
 						// 1- Add the chart title to the chart cell
 						var chartTitle = document.createElement('DIV');
-						chartTitle.setAttribute('style', 'width: 220px; padding-left: 10px;');
+						chartTitle.style.width = '220px';
+						chartTitle.style.paddingLeft = '10px';
 						var fieldTitle = charting.getTitleOf(fieldName);
 						chartTitle.innerHTML = fieldTitle;
 						chartCell.appendChild(chartTitle);
@@ -461,7 +461,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						// 2- Add the chart placeholder in the chart cell
 						var chartDIV = document.createElement('DIV');
 						chartDIV.setAttribute('id', fieldName);
-						chartDIV.setAttribute('style', 'width: 200px; height: 200px;');
+						chartDIV.style.width = '200px';
+						chartDIV.style.height = '200px';
 						chartCell.appendChild(chartDIV);
 
 						// 3- Create and render the chart
@@ -525,6 +526,30 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			}
 			else
 				this.title.innerHTML = "The survey charting schema is missing";
+		},
+
+		/**
+		 * Sets the style float attribute of the passed element to the passed direction. Used for cross-browser compatibility
+		 *
+		 * @param element The element to float
+		 * @param direction The direction of the floating
+		 */
+		floatElement: function (element, direction) {
+			if (dojo.isIE)
+			  element.style.styleFloat = direction;
+			else
+			  element.style.cssFloat = direction;
+		},
+
+		/**
+		 * Escapes the following special characters from the passed String:
+		 * "/"
+		 *
+		 * @param str The String to be cleaned
+		 */
+		clean: function (str) {
+			str = str.replace(/\\/g, '\\\\');
+			return str;
 		}
 	});
 

@@ -345,6 +345,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		saveSurvey: function() {
+			// Assemble the cookie name
+			var strTitleForCookie = this.surveyTitle.replace(/ /g, ''); // Remove all spaces from the survey title
+			strTitleForCookie = (strTitleForCookie.length > 30) ? strTitleForCookie.substring(0, 30) : strTitleForCookie;
+			var cookie = 'apstrata.' + apstrata.apConfig.key + '.' + strTitleForCookie;
+
 			if(this.surveyform.validate()){
 				this.successMessage.innerHTML = "Your survey is being processed...";
 				var jsonObj = this.surveyform.getValues();
@@ -353,6 +358,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 				var client = new apstrata.apsdb.client.Client();
 				var sd = client.saveDocument(
 					function() {
+						dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
+
 						if (dataModel.viewResults) 
 							window.location = dataModel.resultsUrl;
 						else {
