@@ -226,7 +226,7 @@
 				var operation = client.saveConfiguration(
 					function() {
 						test.success(operation)
-						deleteStore()
+						listConfigurations()
 					}, function() {
 						test.fail(operation)
 					},
@@ -236,7 +236,17 @@
 							"apsdb.DefaultStore.saveDocumentACL": "anonymosssus"
 						}
 					})
-				}
+			}
+			
+			function listConfigurations() {
+				var operation = client.listConfigurations(
+					function() {
+						test.success(operation)
+						deleteStore()
+					}, function() {
+						test.fail(operation)
+					})
+			}
 			
 			function deleteStore() {
 				var operation = client.deleteStore(function() {

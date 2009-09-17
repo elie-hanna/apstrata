@@ -38,6 +38,7 @@ dojo.require("apstrata.apsdb.client.SetSchema");
 dojo.require("apstrata.apsdb.client.GetSchema");
 dojo.require("apstrata.apsdb.client.ListSchemas");
 dojo.require("apstrata.apsdb.client.SaveConfiguration");
+dojo.require("apstrata.apsdb.client.ListConfigurations");
 dojo.require("apstrata.util.logger.Loggable");
 
 
@@ -269,6 +270,10 @@ dojo.declare("apstrata.apsdb.client.Client",
 		},
 		saveConfiguration: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.SaveConfiguration(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		listConfigurations: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.ListConfigurations(this.connection)
 			return this._operation(success, failure, op, attrs)
 		}
 		
