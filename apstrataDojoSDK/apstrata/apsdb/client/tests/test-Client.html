@@ -229,8 +229,14 @@
 						deleteStore()
 					}, function() {
 						test.fail(operation)
-					}, {createSchemaACL: createSchemaACL})
-			}
+					},
+					{
+						createSchemaACL: createSchemaACL,
+						storeACLS: {
+							"apsdb.DefaultStore.saveDocumentACL": "anonymosssus"
+						}
+					})
+				}
 			
 			function deleteStore() {
 				var operation = client.deleteStore(function() {

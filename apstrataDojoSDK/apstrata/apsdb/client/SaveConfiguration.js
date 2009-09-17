@@ -9,7 +9,6 @@
  *  specific language governing permissions and limitations under the License.
  * *****************************************************************************
  */
-
 dojo.provide("apstrata.apsdb.client.SaveConfiguration");
 
 dojo.require("apstrata.apsdb.client.Get");
@@ -18,28 +17,30 @@ dojo.require("apstrata.apsdb.client.Get");
  * Allows the creation of account configuration
  * @class apstrata.apsdb.client.SaveConfiguration
  * @extends apstrata.apsdb.client.Get
-*/
-dojo.declare("apstrata.apsdb.client.SaveConfiguration",
-[apstrata.apsdb.client.Get],
-{
+ */
+dojo.declare("apstrata.apsdb.client.SaveConfiguration", [apstrata.apsdb.client.Get], {
     /**
      * @constructor SaveConfiguration Does not require any parameters
-    */
-    constructor: function() {
-        this.apsdbOperation= "SaveConfiguration"
+     */
+    constructor: function(){
+        this.apsdbOperation = "SaveConfiguration"
     },
-
+    
     /**
      * @function execute Saves the createSchemaACL attributes in user's profile
      * @param attrs An array of parameters that must contain the 'createSchemaACL' parameter
      * @throws Error
      */
-    execute: function(attrs) {
-        if ((attrs != undefined) &&
-            (attrs.createSchemaACL != undefined)) {   
+    execute: function(attrs){
+        if (attrs != undefined) {
             this.request.apsdb.createSchemaACL = attrs.createSchemaACL;
+            for (prop in attrs.storeACLS) {
+                this.request[prop] = attrs.storeACLS[prop];
+            }
             this.inherited(arguments);
-        } else throw new Error("apstrata.apsdb.client.SaveConfiguration: missing createSchemaACL parameter.")
+        }
+        else 
+            throw new Error("apstrata.apsdb.client.SaveConfiguration: missing createSchemaACL parameter.")
     }
 });
 
