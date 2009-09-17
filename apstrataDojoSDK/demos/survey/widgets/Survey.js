@@ -64,6 +64,20 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		postCreate: function(){
+			// Assemble the cookie name
+			var strTitleForCookie = this.surveyTitle.replace(/ /g, ''); // Remove all spaces from the survey title
+			strTitleForCookie = (strTitleForCookie.length > 30) ? strTitleForCookie.substring(0, 30) : strTitleForCookie;
+			var cookie = 'apstrata.' + apstrata.apConfig.key + '.' + strTitleForCookie;
+			
+			// Make sure that this user has not already taken the survey and already a cookie
+			if (dojo.cookie(cookie) == 'taken') {
+				if (dataModel.viewResults) {
+					window.location = dataModel.resultsUrl;
+				} else {
+					this.surveyDiv.style.display = 'none';
+					this.successMessage.innerHTML = dataModel.successMessage;
+				}
+			} else {
 			this.inherited(arguments);
 			// when clicking on "get Data Model" the getModel function is called
 			if (this.editMode) {
@@ -84,6 +98,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 			if(this.editMode)
 				var newField = this.createField(null, true);
+			}
 		},
 		
 		initDnd: function() {
