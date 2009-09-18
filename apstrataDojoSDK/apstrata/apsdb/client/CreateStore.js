@@ -38,6 +38,14 @@ dojo.declare("apstrata.apsdb.client.CreateStore",
         if ((attrs != undefined) &&
             (attrs.store != undefined)) {   
             this.request.apsdb.store = attrs.store;
+			if(attrs.saveDocumentACL != undefined)
+				this.request.apsdb.saveDocumentACL = attrs.saveDocumentACL;
+			if(attrs.deleteDocumentACL != undefined)
+				this.request.apsdb.deleteDocumentACL = attrs.deleteDocumentACL;
+			if(attrs.getFileACL != undefined)
+				this.request.apsdb.getFileACL = attrs.getFileACL;
+			if(attrs.queryACL != undefined)
+				this.request.apsdb.queryACL = attrs.queryACL;
             this.inherited(arguments);
         } else throw new Error("apstrata.apsdb.client.CreateStore: missing store name.")
     }
