@@ -21,7 +21,7 @@
 dojo.provide("apstrata.util.test.Test")
 
 dojo.declare("apstrata.util.test.Test", 
-				[],
+				[apstrata.util.logger.Loggable],
 				{
 					constructor: function() {
 						this.index = 0
@@ -34,7 +34,7 @@ dojo.declare("apstrata.util.test.Test",
 							self.runner.print("<h3 class='success' id='all'>Success</h3>")
 						} else {
 							var command = this.testSequence[this.index++]
-							apstrata.log(self.declaredClass, "Running Command: " + command)
+							self.info("Running Command: ", command)
 							dojo.hitch(self, command)()
 						}
 					},
