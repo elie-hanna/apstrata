@@ -3,9 +3,12 @@ dependencies = {
         {
 	        name: "../apstrata/apstrata-lib.js",
 	        dependencies: [
+				"dijit._Widget",
+				"dijit._Templated",
+				"dojox.encoding.digests.MD5",
 				"apstrata.util.logger.BasicLogger",
-	            "apstrata.Client",
-				"dojox.encoding.digests.MD5"
+				"asptrata.BasicWidget",
+	            "apstrata.Client"
 	        ]
         }
     ],
