@@ -1,5 +1,5 @@
 <div class="tundra">
-    <div dojoAttachPoint="roundedBox survey" title="Survey" class="survey">
+    <div dojoAttachPoint="survey" title="Survey" class="survey">
         <div dojoAttachPoint="surveyDiv">
             <h2 title="Survey title" dojoAttachPoint="title">${surveyTitle}</h2>
             <h3 title="Survey description" dojoAttachPoint="description">${surveyDescription}</h3>
@@ -11,11 +11,12 @@
             </form>
             <br/>
         </div>
-				<div style="height:20px;"></div>
         <div dojoAttachPoint="successMessage">
         </div>
-        <div id="pageFooter" title="www.apstrata.com">
-            Running on <a style="cursor:pointer" target="_blank" href="http://www.apstrata.com"><b>ap<span style="color:orange">((</span>strata</b></a>
+        <div id="pageFooter" title="Powered by apstrata">
+          <a target="_blank" href="http://www.apstrata.com" title="Powered by apstrata">&nbsp;</a>
         </div>
+		<div class="clear"></div>
     </div>
+	<div dojoAttachPoint="aggregatedResults" dojoType="dijit.layout.LayoutContainer" ></div>
 </div>

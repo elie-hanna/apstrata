@@ -151,6 +151,11 @@ body
 	line-height: 1.6em;
 }
 
+.survey-listing {
+width: auto;
+display: inline-block;
+*width: 480px;
+}
 
 .survey-title {
 	
@@ -165,6 +170,7 @@ body
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;
 	margin: 45px;
+	margin-right: 0;
 	width: 480px;
 	text-align: left;
 	border-collapse: collapse;
@@ -244,16 +250,24 @@ body
     box-sizing: border-box;
 }
 #pageFooter {
-color:#7C7C7C;
-font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
-font-size:10px;
-padding-top:10px;
-text-align: right;
+	color:#7C7C7C;
+	font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
+	font-size:10px;
+	margin: 20px 0 0 0;
+	width: 15px;
+	height: 15px;
+	float: right;
+	background: url('../images/apstrata-brackets.gif') left -1px no-repeat;
 }
 
-#pageFooter a {
-color:#7C7C7C;
-font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
-font-size:10px;
-text-decoration: none;
+.clear {clear: both;}
+
+#pageFooter a:link, #pageFooter a:visited {
+	color:#7C7C7C;
+	font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
+	font-size:10px;
+	text-decoration: none;
+	width: 15px;
+	height: 15px;
+	display: block;
 }
