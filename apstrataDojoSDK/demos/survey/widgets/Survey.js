@@ -110,14 +110,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		toggleTextBox: function() {
-			if(this.viewResults.checked){
+			if(this.viewResults.checked)
 				this.successMsgDiv.style.display = "none";
-				this.resultsUrlDiv.style.display = "";
-			}
-			else{
+			else
 				this.successMsgDiv.style.display = "";
-				this.resultsUrlDiv.style.display = "none";
-			}
 		},
 		
 		createField: function(dataModel, isVisible) {
@@ -251,7 +247,6 @@ dojo.declare("surveyWidget.widgets.Survey",
 				description: this.description.value,
 				viewResults: this.viewResults.checked,
 				successMessage: this.successMsg.value,
-				resultsUrl: this.resultsUrl.value,
 				questions: data
 			};
 			
@@ -265,12 +260,16 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var viewUrl = this.getViewUrl();
 			/* 
 			//console.debug(dojo.toJson(surveyData));
-			this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
+			var generatedCode = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
 			+ '<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
 			+ '<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:\'7744293024\', secret:\'3B45DE19C689EDAFCA47\', serviceURL: \'http://apsdb.apstrata.com/sandbox-apsdb/rest\'"></script>'
-			+ '<script type="text/javascript" src="widgets/SurveyRunner.js" ></script>\n'
-			+ '<script>var schema = \'' + dojo.toJson(surveyData) + '\';</script>\n'
+			+ '<script type="text/javascript" src="widgets/SurveyRunner.js" ></script>\n';
+			
+			if(this.viewResults.checked)
+				generatedCode += '<script type="text/javascript" src="widgets/SurveyChartingLoader.js" ></script>\n';
+				
+			generatedCode += '<script>var schema = \'' + dojo.toJson(surveyData) + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div dojoType="surveyWidget.widgets.Survey" /></div>'
 			+ '</textarea>';*/
@@ -279,6 +278,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?key=7744293024&secret=3B45DE19C689EDAFCA47&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + surveyDataSchema + '\' ></iframe>'
 			+ '</textarea>';
+			//this.output.innerHTML = generatedCode;
 			this.output.style.display = "";
 			this.output.width = "800px";
 
@@ -360,8 +360,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 					function() {
 						dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
 
-						if (dataModel.viewResults) 
-							window.location = dataModel.resultsUrl;
+						if (dataModel.viewResults){
+							//window.location = dataModel.resultsUrl;
+							survey.loadAggregatedResults();
+						}
 						else {
 							survey.surveyDiv.style.display="none";
 							survey.successMessage.innerHTML = dataModel.successMessage;
@@ -381,6 +383,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 				this.successMessage.innerHTML = "";
 				return false;
 			}
+		},
+		
+		loadAggregatedResults: function() {
+			var charts = new surveyWidget.widgets.SurveyCharting();
+			dojo._destroyElement(this.survey);
+			this.aggregatedResults.addChild(charts);
 		}
 		
 	});
