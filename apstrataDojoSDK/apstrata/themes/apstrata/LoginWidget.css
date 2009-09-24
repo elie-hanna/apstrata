@@ -1,0 +1,29 @@
+.LoginWidgetSlidingPanelAlternative {
+	border-left: 1px solid #333333;
+	border-right: 1px solid #333333;
+	border-bottom: 1px solid #333333;
+	
+	background: #DEDEDE;
+	opacity: .90;
+	z-index: 99999;
+
+	font-size: 8pt;
+	padding: 5px;
+}
+
+.LoginWidgetSlidingPanel {
+	background: #DEDEDE;
+	opacity: .90;
+	z-index: 99999;
+
+	font-size: 8pt;
+	padding: 6px;
+}
+
+.loginWidgetErrorPane {
+	font-size: 8pt; 
+	color: #BB0000; 
+	background: #DEDEDE;
+	padding: 4px;
+	width: 180px;
+}
