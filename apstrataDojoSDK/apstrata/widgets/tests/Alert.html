@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Test: apstrata.widgets.SlidingPanel</title>
+    <style type="text/css">
+	    @import "../../../lib/dojo/1.3.0-src/dijit/themes/nihilo/nihilo.css";
+	    @import "../../../lib/dojo/1.3.0-src/dojox/grid/resources/nihiloGrid.css";
+
+        @import "../../../lib/dojo/1.3.0-src/dojo/resources/dojo.css";
+
+        @import "../../themes/apstrata/apstrata.css";
+        @import "../../themes/apstrata/Alert.css";
+
+		
+	    body, html { 
+			margin:0; 
+			padding:0; 
+			width:100%; 
+			height:100%;
+			overflow: hidden;
+			font-family:Arial,sans-serif;
+			font-size: 10pt;
+			background-color: white;
+		}
+		
+    </style>
+
+	<script type="text/javascript" src="../../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: false"></script>
+	<script type="text/javascript" src="../../apstrata.js"></script>
+
+    <script type="text/javascript">
+		dojo.require("apstrata.widgets.Alert")
+		dojo.require("dijit.form.Button")
+		
+		dojo.declare("Alert", 
+			[apstrata.widgets.Alert], {
+			})
+
+		dialog = null
+
+        dojo.addOnLoad(function() {
+			dojo.parser.parse()
+			dialog2 = new Alert({width: 200, height: 140, message: "do you really want to do it?", clazz: "rounded-sml", iconSrc: apstrata.baseUrl + "/resources/images/glossy-warning-icon-sml.jpg"})
+			dojo.connect(dialog2, "buttonPressed", function() {
+				dialog2.hide()
+			})
+
+			dojo.connect(dialog, "buttonPressed", function(action) {
+				if (action == "close") dialog.hide();
+				else {
+					dialog3 = new Alert({width: 350, height: 170, message: "<div style='big'>Save isn't implemented!</div>", clazz: "rounded-sml", iconSrc: apstrata.baseUrl + "/resources/images/glossy-warning-icon-sml.jpg"})
+					dialog3.show()
+					dojo.connect(dialog3, "buttonPressed", function() {
+						dialog3.hide()
+					})
+				}
+			})
+
+		})
+
+	</script>
+</head>
+<body class="nihilo">
+	<h3>apstrata.widgets.AlertDialog</h3>
+	<br>
+
+	The apstrata.widgets.alert can appear to zoom out from any node on the page, <a href="#" id="someNode" onclick='dialog.show()'>open</a>, this alert is also modal, you can't click on anything on the page when it's open.
+
+	<br><br>
+	
+	This one is instantiated programmatically, <a href="#" onclick='dialog2.show()'>open it</a>.
+	
+	
+	<div dojoType="Alert" clazz="rounded-sml" jsId="dialog" expandFrom="'someNode'" 
+		width="250" height="250" actions="save,close" modal='true'
+		iconSrc='images/apstrata-logo.png'>
+			<h4>Apstrata is dedicated to helping you get your user application online quickly and reliably.</h4>
+	</div>
+
+
+</body>
+
+</html>
