@@ -92,7 +92,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var survey = this;
 
 			dojo.forEach(dataModel.questions, function(fieldDataModel) {
-				var isVisible = (fieldDataModel.name != 'apstrataSurveyID'); // Do not show the 'apstrataSurveyID' field
+				// Do not show the 'apsdbSchema' field
+				var isVisible = (fieldDataModel.name != 'apsdbSchema');
 				var newField = survey.createField(fieldDataModel, isVisible);
 			});
 
@@ -198,6 +199,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var i=0;
 			var j=0;
 			var k=0;
+			var schemaFieldArr = new Array();
 
 			var children = this.questions.getChildren();
 			var breakProcessing = false;
@@ -207,10 +209,18 @@ dojo.declare("surveyWidget.widgets.Survey",
 				} else if (child.title != null && child.title != '' && !child.dummyField) {
 					childModel = child.getModel();
 					childModel["defaultValue"] = jsonObj[child.fieldName];
-					data[i++] = childModel;
+					data[i] = childModel;
+
+					// Create an XML schema field object
+					schemaFieldArr[i] = new SchemaField(childModel.name, "string", false);
+					if (childModel.mandatory)
+						schemaFieldArr[i].setCardinalities(1, null); // Make the field mandatory
+
+					i++;
 				} else if ((child.title == null || child.title == '') && !child.dummyField) { // Check that all questions have titles
 					child.select(); // Select the empty question
 					self.warningMessage.style.display = ''; // Display the warning message
+					self.warningMessage.innerHTML = 'All questions must have a title!';
 					breakProcessing = true;
 				}
 			});
@@ -221,19 +231,19 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 			self.warningMessage.style.display = 'none'; // Hide the warning message in case it was displayed before
 
-			// Create a new object to act as the randomly generated survey identifier (named 'apstrataSurveyID') and insert it as a survey field
-			// The survey ID is: [user key]_[survey title]_[random hash]
-			var strTitleForID = this.title.value.replace(/ /g, ''); // Remove all spaces from the survey title
-			strTitleForID = (strTitleForID.length > 30) ? strTitleForID.substring(0, 30) : strTitleForID;
-			var strApstrataSurveyID = apstrata.apConfig.key + '_' + strTitleForID + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase();
-			var apstrataSurveyID = new Object();
-			apstrataSurveyID.choices = '';
-			apstrataSurveyID.defaultValue = strApstrataSurveyID;
-			apstrataSurveyID.mandatory = false;
-			apstrataSurveyID.name = 'apstrataSurveyID';
-			apstrataSurveyID.title = 'Apstrata Survey ID';
-			apstrataSurveyID.type = 'text';
-			data[i++] = apstrataSurveyID;
+			// Create a new object for the schema name and insert it as a survey field
+			// The schema name must be between 3-32 characters long: [user key]_[survey title]_[random hash]
+			var strTitleForSchema = this.cleanTitleForSchemaName(this.title.value);
+			var schemaName = apstrata.apConfig.key + '_' + strTitleForSchema + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase().substring(0, 10);
+
+			var apstrataSurveySchemaName = new Object();
+			apstrataSurveySchemaName.choices = '';
+			apstrataSurveySchemaName.defaultValue = schemaName;
+			apstrataSurveySchemaName.mandatory = false;
+			apstrataSurveySchemaName.name = 'apsdbSchema';
+			apstrataSurveySchemaName.title = 'Apstrata Survey Schema Name';
+			apstrataSurveySchemaName.type = 'text';
+			data[i++] = apstrataSurveySchemaName;
 
 			dojo.forEach(this.questions.getChildren(), function(child) {
 				if (child.title != null && !child.dummyField) {
@@ -242,6 +252,62 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			});
 
+			// Building the schema
+			var xmlSchema = new Schema(schemaName);
+			xmlSchema.setSchemaACL("creator", "creator", "creator");
+			xmlSchema.setDefaultACL("creator", "creator", "creator");
+			var aclGroup = new SchemaACLGroup("aclG1", "all", "all", schemaFieldArr);
+			xmlSchema.addACLGroup(aclGroup);
+
+			var client = new apstrata.apsdb.client.Client();
+			var surveyData = null;
+			var ss = client.setSchema (
+				function() {
+					surveyData = self.generateAndDisplayEmbedCodes(data, arrFields, arrTitleFields, xmlSchema.name);
+				}, function () {
+					var warningMsg = '';
+					switch (ss.errorCode) {
+						case 'DUPLICATE_SCHEMA_NAME':
+							warningMsg = 'Survey already exists! Please change its name';
+							break;
+						case 'INVALID_SCHEMA_NAME':
+							warningMsg = 'The survey title must not contain any special characters! Please change its name';
+							break;
+						default:
+							warningMsg = ss.errorDetail;
+					}
+
+					self.warningMessage.style.display = ''; // Display the warning message
+					self.warningMessage.innerHTML = warningMsg;
+				},
+				{
+					schema: xmlSchema.toString(),
+					schemaName: xmlSchema.name
+				});
+
+			return surveyData;
+		},
+
+		/**
+		 * Excludes the following characters:
+		 * ', ,~,!,%
+		 * Then truncates the string to the first 10 characters
+		 *
+		 * @param title The survey title to use for the schema name
+		 */
+		cleanTitleForSchemaName: function (title) {
+			var strTitleForSchema = this.title.value.replace(/ /g, '');
+			strTitleForSchema = strTitleForSchema.replace(/'/g, '');
+			strTitleForSchema = encodeURIComponent(strTitleForSchema);
+			strTitleForSchema = strTitleForSchema.replace(/~/g, '');
+			strTitleForSchema = strTitleForSchema.replace(/!/g, '');
+			strTitleForSchema = strTitleForSchema.replace(/%/g, '');
+			strTitleForSchema = (strTitleForSchema.length > 10) ? strTitleForSchema.substring(0, 10) : strTitleForSchema;
+
+			return strTitleForSchema;
+		},
+
+		generateAndDisplayEmbedCodes: function (data, arrFields, arrTitleFields, schemaName) {
 			var surveyData = {
 				title: this.title.value,
 				description: this.description.value,
@@ -249,14 +315,14 @@ dojo.declare("surveyWidget.widgets.Survey",
 				successMessage: this.successMsg.value,
 				questions: data
 			};
-			
+
 			var listSurveyData = {
 				title: this.title.value,
 				fields: arrFields,
 				titleFields: arrTitleFields,
-				apstrataSurveyID: strApstrataSurveyID
+				apsdbSchema: schemaName
 			};
-			
+
 			var viewUrl = this.getViewUrl();
 			/* 
 			//console.debug(dojo.toJson(surveyData));
@@ -355,6 +421,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 				var jsonObj = this.surveyform.getValues();
 				var survey = this;
 
+				// Change the name of the attribute 'apsdbSchema' to 'apsdb.schema', then delete the 'apsdbSchema' attribute
+				jsonObj['apsdb.schema'] = jsonObj.apsdbSchema;
+				delete jsonObj.apsdbSchema;
+
 				var client = new apstrata.apsdb.client.Client();
 				var sd = client.saveDocument(
 					function() {
@@ -365,22 +435,21 @@ dojo.declare("surveyWidget.widgets.Survey",
 							survey.loadAggregatedResults();
 						}
 						else {
-							survey.surveyDiv.style.display="none";
+							survey.surveyDiv.style.display = 'none';
 							survey.successMessage.innerHTML = dataModel.successMessage;
 						}
-						
 					}, function() {
-						survey.successMessage.innerHTML = "A problem occured while submitting your survey, please try again later.";
+						survey.successMessage.innerHTML = sd.errorDetail;
 					},
 					{
 						store: survey.storeName,
 						fields: jsonObj
 					}
 				)
-				
+
 				return true;
 			} else{
-				this.successMessage.innerHTML = "";
+				this.successMessage.innerHTML = '';
 				return false;
 			}
 		},
@@ -390,5 +459,4 @@ dojo.declare("surveyWidget.widgets.Survey",
 			dojo._destroyElement(this.survey);
 			this.aggregatedResults.addChild(charts);
 		}
-		
 	});
