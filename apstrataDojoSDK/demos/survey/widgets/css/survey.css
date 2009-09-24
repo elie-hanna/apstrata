@@ -54,7 +54,7 @@
 		background-color: #F0F8FF ;
 }
 
-.emptyQuestionTitleWrnMsg {
+.warningMessage {
 		float: left;
 		margin: 2px 15px;
 		color: red;
