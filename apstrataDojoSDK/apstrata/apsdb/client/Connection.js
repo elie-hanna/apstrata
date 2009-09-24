@@ -83,9 +83,14 @@ dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {
 dojo.declare("apstrata.apsdb.client.Connection",
 	[apstrata.util.logger.Loggable],
 	{
+		// Private attributes
 		_KEY_APSDB_ID: "@key",
 		_COOKIE_NAME: "apstrata.apsdb.client",
 		_COOKIE_EXPIRY: 15,
+
+		// Public attributes
+		LOGIN_MASTER: 1,
+		LOGIN_USER: 2,
 		totalConnectionTime: 0,
 		numberOfConnections: 0,
 		statusWidget: null,
@@ -93,7 +98,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		constructor: function(attr) {
 			var self = this
 			
-			this._DEFAULT_SERVICE_URL= "http://localhost:8080/autoforms/rest"
+			this._DEFAULT_SERVICE_URL= "http://apsdb.apstrata.com/sandbox-apsdb/rest"
 			this.timeout = 10000
 			this.serviceUrl= this._DEFAULT_SERVICE_URL;
 			this.credentials= {key: "", secret: "", un: "", pw: ""}
@@ -124,6 +129,9 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			if (apstrata.apConfig) {
 				if (apstrata.apConfig.key != undefined) this.credentials.key = apstrata.apConfig.key
 				if (apstrata.apConfig.secret != undefined) this.credentials.secret = apstrata.apConfig.secret
+				if (apstrata.apConfig.un != undefined) this.credentials.un = apstrata.apConfig.un
+				if (apstrata.apConfig.pw != undefined) this.credentials.pw = apstrata.apConfig.pw
+
 				if (apstrata.apConfig.defaultStore != undefined) this.defaultStore = apstrata.apConfig.defaultStore
 				if (apstrata.apConfig.timeout != undefined) this.timeout =  apstrata.apConfig.timeout
 				if (apstrata.apConfig.serviceURL != undefined) this.serviceUrl = apstrata.apConfig.serviceURL
@@ -139,12 +147,29 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				}
 			}
 			*/
+			
 
 		},
 		
 		hasCredentials: function() {
 			// Assume that we have a session if either the secret or password are present
 			return (this.credentials.secret != "") || (this.credentials.pw != "")
+		},
+		
+	    /**
+	     * @function getAccountId returns the account identifier (key) for master login or (un) for user logins
+	     * 
+	     */
+		getAccountId: function() {
+			if (this.credentials.pw && this.credentials.pw!="") return this.credentials.un
+			if (this.credentials.secret && this.credentials.secret!="") return this.credentials.key
+			return ""
+		},
+		
+		getLoginType: function() {
+			if (this.credentials.pw && this.credentials.pw!="") return this.LOGIN_USER
+			if (this.credentials.secret && this.credentials.secret!="") return this.LOGIN_MASTER
+			return undefined			
 		},
 
 		registerConnectionTime: function(t) {
@@ -189,7 +214,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 
 			this.debug("Loading connection from cookie:", json)
 			
-			if ((json == undefined) || (json == "")) {
+			if ((!json) || (json == "")) {
 				this.serviceUrl = this._DEFAULT_SERVICE_URL
 				
 				var o = {
@@ -203,7 +228,13 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				this.defaultStore = ""
 				return {}
 			} else {
-				var o = dojo.fromJson(json)
+				var o = dojo.fromJson(json) 
+				
+				// In case the cookie is corrupted
+				if (!o.credentials.key) o.credentials.key=""
+				if (!o.credentials.secret) o.credentials.secret=""
+				if (!o.credentials.un) o.credentials.un=""
+				if (!o.credentials.pw) o.credentials.pw=""
 	
 				this.debug("Loading connection from cookie", o)
 					
@@ -232,13 +263,17 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			
 			var listStores = new apstrata.apsdb.client.ListStores(self)
 			dojo.connect(listStores, "handleResult", function() {
-					self._ongoingLogin = false
-					self.debug("logging in: saving credentials to cookie")
-					self.saveToCookie()
-					handlers.success()
+				self._ongoingLogin = false
+				self.debug("logging in: saving credentials to cookie")
+				self.saveToCookie()
+
+				handlers.success()
 			})
 			dojo.connect(listStores, "handleError", function() {
-					handlers.failure(listStores.errorCode, listStores.errorDetail)
+				// Clear the secret and pw so hasCredentials() functions
+				self.credentials.secret=""
+				self.credentials.pw=""
+				handlers.failure(listStores.errorCode, listStores.errorMessage)
 			})
 			
 			listStores.execute();
@@ -246,8 +281,14 @@ dojo.declare("apstrata.apsdb.client.Connection",
 
 		logout: function() {
 			this.debug("logging out: erasing credentials from cookie")
+			// Erase secret and password
 			this.credentials.secret = ""
 			this.credentials.pw = ""
+			
+			// Make sure key/un are not null/undefined
+			if (!this.credentials.key) this.credentials.key=""
+			if (!this.credentials.un) this.credentials.un=""
+
 			this.saveToCookie()
 		},
 
