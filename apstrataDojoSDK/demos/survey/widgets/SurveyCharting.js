@@ -33,7 +33,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		dojoDataModel: null,
 		questions: null,
 		resultResponse: null,
-		apstrataSurveyID: '',
+		apsdbSchema: '',
 		surveysTakenCount: 0,
 		isNewLine: true,
 
@@ -52,12 +52,12 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				// Look for and set the apstrata survey identifier
 				var self = this;
 				dojo.forEach(this.questions, function(fieldDataModel) {
-					if (fieldDataModel.name == 'apstrataSurveyID') {
-						self.apstrataSurveyID = fieldDataModel.defaultValue;
+					if (fieldDataModel.name == 'apsdbSchema') {
+						self.apsdbSchema = fieldDataModel.defaultValue;
 					}
 				});
 
-				if (this.apstrataSurveyID == null) {
+				if (this.apsdbSchema == null) {
 					// TODO: Throw an error because we use the survey ID to query for the results of the widget
 				}
 			}
@@ -83,7 +83,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						// Now we can query each field in the survey and aggregate the results
 						for (var i=0; i<charting.questions.length; i++) {
 							var fieldDataModel = charting.questions[i];
-							if (   fieldDataModel.name != 'apstrataSurveyID'
+							if (   fieldDataModel.name != 'apsdbSchema'
 									&& fieldDataModel.type != 'text') {
 								fieldResponses[i] = new Array();
 
@@ -109,7 +109,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 										break;
 									case 'checkbox':
 										// Count and display the number of people who checked this checkbox
-										fieldValueCounts[i] = new Array(choices.length);
+										fieldValueCounts[i] = new Array();
 										fieldValueCounts[i][fieldDataModel.name + '_checked'] = 0;
 										charting.queryAndDisplayCheckbox(fieldDataModel.name, 'checked', fieldResponses[i][0], fieldValueCounts[i]);
 										break;
@@ -130,8 +130,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					},
 					{
 						store: charting.storeName,
-						query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\"",
-						queryFields: 'apstrataSurveyID',
+						query: "apsdb.objectName=\"" + charting.apsdbSchema + "\"",
+						queryFields: '*',
 						count: true
 					}
 				)
@@ -231,8 +231,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				},
 				{
 					store: charting.storeName,
-					query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
-					queryFields: "apstrataSurveyID",
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					queryFields: "*",
 					count: true
 				})
 		},
@@ -313,8 +313,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				},
 				{
 					store: charting.storeName,
-					query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
-					queryFields: "apstrataSurveyID",
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
+					queryFields: "*",
 					count: true
 				})
 		},
@@ -395,8 +395,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				},
 				{
 					store: charting.storeName,
-					query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
-					queryFields: "apstrataSurveyID",
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					queryFields: "*",
 					count: true
 				})
 		},
@@ -495,8 +495,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				},
 				{
 					store: charting.storeName,
-					query: "apstrataSurveyID=\"" + charting.apstrataSurveyID + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
-					queryFields: "apstrataSurveyID",
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					queryFields: "*",
 					count: true
 				})
 		},

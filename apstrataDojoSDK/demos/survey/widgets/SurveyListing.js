@@ -34,7 +34,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		arrData: null,
 		resultResponse: null,
 		dojoDataModel: null,
-		apstrataSurveyID: null,
+		apsdbSchema: null,
 
 		//
 		// Replace here with your apsdb account
@@ -51,7 +51,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				this.dojoDataModel = dojo.fromJson(this.jsonDataModel);
 				this.arrFieldsToDisplay = this.dojoDataModel.fields;
 				this.arrTitleFieldsToDisplay = this.dojoDataModel.titleFields;
-				this.apstrataSurveyID = this.dojoDataModel.apstrataSurveyID;
+				this.apsdbSchema = this.dojoDataModel.apsdbSchema;
 			}
 		},
 		
@@ -82,7 +82,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 					},
 					{
 						store: listing.storeName,
-						query: "apstrataSurveyID=\"" + listing.apstrataSurveyID + "\"",
+						query: "apsdb.objectName=\"" + listing.apsdbSchema + "\"",
 						queryFields: listing.arrFieldsToDisplay
 					}
 				)
@@ -99,68 +99,70 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		},
 		
 		display: function(data, columns, columnsTitle) {
-
 			var found = false;
-			var columnClass="rounded";
-			var bottomCornerClass = "";
-			var strData = "";
-			var heading = "";
-			
-			heading = "<thead><tr>";
-			for(var col = 0; col < columnsTitle.length; col++){
-				if(col == 0)
+			var columnClass = 'rounded';
+			var bottomCornerClass = '';
+
+			// Add the header row
+			var headerTHead = document.createElement('THEAD');
+			var headerRow = document.createElement('TR');
+			headerTHead.appendChild(headerRow);
+			for(var col=0; col<columnsTitle.length; col++) {
+				if (col == 0)
 					columnClass = "rounded-first";
-				else if(col == columnsTitle.length-1)
+				else if (col == columnsTitle.length-1)
 					columnClass = "rounded-last";
 				else
 					columnClass = "rounded";
-				
-				heading = heading + '<th scope="col" class="'+ columnClass +'" >' + columnsTitle[col] + '</th>';
+
+				var headerCell = document.createElement('TH');
+				headerCell.setAttribute('scope', 'col');
+				headerCell.className = columnClass;
+				headerCell.innerHTML = columnsTitle[col];
+				headerRow.appendChild(headerCell);
 			}
-			heading = heading + "</tr></thead>";
+			this.displayTable.appendChild(headerTHead);
 
-			strData = "<tbody>";
-
+			// Add the survey rows
 			var arrSurvey = data.result.documents;
- 
-			for(var doc = 0; doc < arrSurvey.length; doc++){
-				if(arrSurvey[doc].fields){
-				strData= strData + "<tr>";
-				for(var ncol = 0; ncol < columns.length; ncol++){
-					found = false;
-					for(var fid = 0; fid < arrSurvey[doc].fields.length; fid++){
-						if(columns[ncol] == arrSurvey[doc].fields[fid]["@name"]){
-							found = true;
-							break;
+			var rowCount = 1;
+			for (var doc=0; doc<arrSurvey.length; doc++) {
+				if (arrSurvey[doc].fields) {
+					var tableRow = this.displayTable.insertRow(rowCount++);
+					var cellCount = 0;
+					for (var ncol=0; ncol<columns.length; ncol++) {
+						found = false;
+						for (var fid = 0; fid<arrSurvey[doc].fields.length; fid++) {
+							if (columns[ncol] == arrSurvey[doc].fields[fid]["@name"]) {
+								found = true;
+								break;
+							}
+						}
+
+						if (doc == arrSurvey.length-1 && ncol == 0)
+							bottomCornerClass = 'rounded-foot-left';
+						else if (doc == arrSurvey.length-1 && ncol == columns.length-1)
+							bottomCornerClass = 'rounded-foot-right';
+						else
+							bottomCornerClass = '';
+
+						if (found == true) {
+							var tableCell = tableRow.insertCell(cellCount++);
+							tableCell.className = bottomCornerClass;
+
+							for (var ival=0; ival<arrSurvey[doc].fields[fid].values.length; ival++) {
+								tableCell.innerHTML = arrSurvey[doc].fields[fid].values[ival];
+
+								if (ival < arrSurvey[doc].fields[fid].values.length-1)
+									tableCell.innerHTML += ',';
+							}
+						} else {
+							var tableCell = tableRow.insertCell(cellCount++);
+							tableCell.className = bottomCornerClass;
 						}
 					}
-				
-					if(doc == arrSurvey.length-1 && ncol == 0)
-						bottomCornerClass = ' class="rounded-foot-left"';
-					else if(doc == arrSurvey.length-1 && ncol == columns.length-1)
-						bottomCornerClass = ' class="rounded-foot-right"';
-					else
-						bottomCornerClass = "";
-
-					if(found == true){
-						strData= strData + '<td'+ bottomCornerClass +'>';
-						for(var ival = 0; ival < arrSurvey[doc].fields[fid].values.length; ival++){
-							strData= strData + arrSurvey[doc].fields[fid].values[ival];
-							if(ival < arrSurvey[doc].fields[fid].values.length-1)
-								strData= strData + ',';
-						}
-						strData= strData + '</td>';
-					} else
-						strData= strData + '<td'+ bottomCornerClass +'></td>';
-				}
-				strData= strData + "</tr>";
 				}
 			}
-			strData = strData + "<tbody>";
-			
-			this.displayTable.innerHTML = heading + strData + this.displayTable.innerHTML;
-			
-		}	
-		
+		}
 	});
 
