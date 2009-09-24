@@ -1,0 +1,379 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Form & Grid</title>
+
+	<style type="text/css">
+		@import "../../lib/dojo/1.3.0-src/dojo/resources/dojo.css";
+		@import "../../lib/dojo/1.3.0-src/dijit/themes/nihilo/nihilo.css";
+	    @import "../../lib/dojo/1.3.0-src/dojox/grid/resources/nihiloGrid.css";
+		
+		@import "../../lib/dojo/1.3.0-src/dojox/form/resources/FileInput.css";
+
+        @import "../../apstrata/themes/apstrata/apstrata.css";
+        @import "../../apstrata/themes/apstrata/Alert.css";
+
+		@import "../../apstrata/themes/apstrata/apstrataForms.css";
+
+		@import "css/samplePage.css"
+	</style>
+
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
+	<script type="text/javascript" src="../../apstrata/apstrata.js"></script>
+	
+
+	<script language="JavaScript" type="text/javascript">
+
+		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+
+		dojo.require("dijit.form.Form");
+		dojo.require("dijit.form.Button");
+		dojo.require("dijit.form.ValidationTextBox");
+		dojo.require("dijit.form.DateTextBox");
+		dojo.require("dijit.form.HorizontalSlider")
+		dojo.require("dijit.form.HorizontalRuleLabels")
+		dojo.require("dojox.form.FileInput")
+		
+		
+		dojo.require("apstrata.apsdb.client.GetFile")
+
+		dojo.require("dojox.widget.Dialog");
+		dojo.require("dojox.dtl._Templated")
+		dojo.require("dojo.fx.easing");
+
+		dojo.require("dijit.Editor")
+
+	    dojo.require("dijit.layout.StackContainer")
+		dojo.require("dijit.layout.ContentPane")
+
+		dojo.require("apstrata.widgets.QueryWidget")
+		dojo.require("apstrata.widgets.Alert")
+		dojo.require("apstrata.apsdb.client.ItemApsdbWriteStore")
+		dojo.require("apstrata.apsdb.client.Client")
+		dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus")
+		
+		dojo.require("apstrata.apsdb.client.SaveDocumentPost")
+
+		dojo.require("dojox.image.LightboxNano");
+		
+		var connection, client, store, query
+		
+		dojo.addOnLoad(function() {
+			// Instantiate a new connection without passing any credentials, 
+			//  loads credentials from a cookie save by the last succesful operation
+			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
+
+			store = new apstrata.apsdb.client.ItemApsdbWriteStore({connection: connection, 
+										resultsPerPage: 10,
+										apsdbStoreName: connection.defaultStore, 
+										fields:"name, dob", 
+										label: "name"})			
+			
+			// Subscribe to the stack container select event							
+			dojo.subscribe("stackContainer-selectChild","","selectPage");
+		})
+		
+		function selectPage(page) {
+			if (page.id == "jobs") {
+				displayJobsGrid()
+			} else if (page.id == "blogs") {
+				displayBlogs()
+			}
+		}
+		
+		function saveJobApplication() {
+			if (jobForm.validate()) {
+				
+				var doc = jobForm.getValues()
+				doc.formType = "job"
+				
+				store.newItem(doc)
+				store.save({
+								onComplete: function() {
+									console.debug("saved")
+									
+									var msg = "Thank you <b>" + doc.name + "</b> for submitting your application but we're extremely picky!"
+									_alert(msg, "btnSaveJob")
+
+									dijit.byId("editor2").setValue('')
+									jobForm.reset()
+								},
+								onError: function() {
+									cosole.debug("error")
+								} 
+							})
+			} 
+		} 
+		
+		function _alert(msg, expandFrom) {
+			
+			var attrs = {
+				width: 350, 
+				height: 170, 
+				message:  msg, 
+				clazz: "rounded-sml", 
+				iconSrc: apstrata.baseUrl + "/resources/images/glossy-warning-icon-sml.jpg",
+				modal: true
+			}
+			
+			if (expandFrom) attrs.expandFrom = expandFrom
+			
+			var alert = new apstrata.widgets.Alert(attrs)
+			alert.show()
+			dojo.connect(alert, "buttonPressed", function() {
+				alert.hide(function() {
+					alert.destroy()
+				})
+			})
+		}
+		
+		function saveBlog() {
+//			console.dir(blogForm.getValues())
+//			return
+			
+			if (blogForm.validate()) {
+				var save = new apstrata.apsdb.client.SaveDocumentPost(connection)
+				dojo.connect(save, "handleResult", function() {
+//					console.dir(save)
+//					blogForm.domNode.action = ""
+//					blogForm.domNode.method = ""
+blogForm.reset()
+
+				})
+				
+				dojo.connect(save, "handleError", function() {
+					
+				})
+				save.execute({
+					store: connection.defaultStore,
+					formId:"blogForm"
+				})
+			}
+		}
+		
+		var qw 
+		
+		function displayJobsGrid() {
+			
+			var myStore = new apstrata.apsdb.client.ItemApsdbWriteStore({connection: connection, 
+										resultsPerPage: 5,
+										apsdbStoreName: connection.defaultStore, 
+										fields:"name, dob, JSExperience, totalExperience", 
+										label: "name"})
+
+			// set the layout structure:
+			var layout = [{
+				field: 'name',
+				name: 'Applicant Name',
+				width: 'auto'
+			},
+			{
+				field: 'dob',
+				name: 'Date of birth',
+				width: 'auto'
+			},
+			{
+				field: 'JSExperience',
+				name: 'Total Years Experience',
+				width: 'auto'
+			},
+			{
+				field: 'totalExperience',
+				name: 'Total Years of Exp. in JS',
+				width: 'auto'
+			}];
+			
+			var attrs = {
+				store: myStore,
+				query: "formType = \"job\"",
+//				layout: layout,
+//				query: "v!=\"x\"",
+				columns: "name, dob, JSExperience, totalExperience",
+				page: 1
+			}
+			
+			if (qw) qw.destroy()
+
+			qw = new apstrata.widgets.QueryWidget(attrs)
+			dojo.place(qw.domNode, "dvQuery", "first")
+		}
+		
+		
+		dojo.declare("BlogEntries", [dijit._Widget, dojox.dtl._Templated], {
+			
+			widgetsInTemplate: true,
+			templateString: "<div>{% for blog in entries %}<div class='blogEntry rounded-top-left'> <div class='blogTitle'>{{ blog.title }}</div> {% if blog.image %} <div class='blogImage'> <img dojoType='dojox.image.LightboxNano' width='75' href='{{ blog.image }}' src='{{ blog.image }}'> </div> {% endif %} <div class='blogPost'>{{ blog.post|safe }}</div> <div style='clear: both;'></div> </div>{% endfor %}</div>",
+			
+			constructor: function(items) {
+				this.entries = []
+				
+				if (items) {
+					var get = new apstrata.apsdb.client.GetFile(connection)
+
+					for(var i=1; i<items.length; i++) {
+						var o = {}
+						o.title = items[i].getValue("title")
+						o.post = items[i].getValue("blogPost")?items[i].getValue("blogPost"):""
+
+						if (items[i].getValue("apsdb_attachments")) {
+							var attrs = {
+									store: connection.defaultStore,
+									documentKey: items[i].getIdentity(),
+									fieldName: "apsdb_attachments",
+									fileName: items[i].getValue("apsdb_attachments"),
+									setContentDisposition: "false"
+								}
+							
+							o.image = get.getUrl(attrs)
+						} 
+						
+						this.entries.push(o)
+					}					
+				}
+			},
+			
+			entries: [{title: "title 1", post: " stuff ", image: "http://localhost/~rabih/apstrataDojoSDK/demos/codeSamples/images/apstrata-logo.png"}, 
+						{title: "title 2", post: " stuff 2", image: "http://localhost/~rabih/apstrataDojoSDK/demos/codeSamples/images/screen-capture-14.png"}]
+		})
+		
+		function displayBlogs() {
+			var myStore = new apstrata.apsdb.client.ItemApsdbReadStore({connection: connection, 
+										resultsPerPage: 50,
+										apsdbStoreName: connection.defaultStore, 
+										fields:"title, blogPost, apsdb_attachments", 
+										label: "title"})
+
+			myStore.fetch({
+				onComplete: function(items, request) {
+					console.dir(items)
+					var blogEntries = new BlogEntries(items)
+					dojo.place(blogEntries.domNode, "blogEntries", "only")
+				},
+				
+				onError: function(errorData, request) {
+				},
+				
+			    query: {
+					query: "formType = \"blog\"",
+	//				count: true,
+					pageNumber: 1
+				}
+			})
+		}
+
+	</script>
+
+</head>
+<body class="nihilo">
+	
+    <span dojoType="dijit.layout.StackController" containerId="stackContainer" jsId="selector"></span><br>
+	<br>	
+    
+	<div dojoType="dijit.layout.StackContainer" id="stackContainer" jsId="stack" style="height: 100%;">
+
+		<div dojoType="dijit.layout.ContentPane" id="job" title="Apply for a job @apstrata" selected="true" style="height: 100%;">			
+			<!-- start apply for a job form -->
+			<div dojoType="dijit.form.Form" id="jobForm" jsId="jobForm" class="apstrataForm rounded-top-sml rounded-bottom-sml"
+				jsId="jobForm" encType="multipart/form-data" action="" method="">
+					<div class="title">
+						Apply for a job @apstrata
+					</div>
+						<br><br>
+			
+					<div class="column">
+			                <div class="label">Name:</div>
+			                <input class="rounded-xsml" type="text" name="name" required="true" dojoType="dijit.form.ValidationTextBox"/><br>
+			                <div class="label">Date of birth:</div>
+			                <input class="rounded-xsml" type="text" name="dob" dojoType="dijit.form.DateTextBox"/><br>
+					</div>
+					<div class="column">
+						<div class="label">Total years of experience:</div>
+				        <div dojoType="dijit.form.HorizontalSlider" value="0"
+				        minimum="0" maximum="10" discreteValues="11" intermediateChanges="true"
+				        showButtons="false" class="sliders" name="totalExperience">
+				            <ol dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration"
+				            class="sliderLabels">
+				                <li>0</li><li>1</li><li>2</li><li>3</li><li>4</li>
+				                <li>5</li><li>6</li><li>7</li><li>8</li><li>9</li>
+								<li>10+</li>
+				            </ol>
+				        </div>
+						<div class="label">Javascript experience:</div>
+				        <div dojoType="dijit.form.HorizontalSlider" value="0"
+				        minimum="0" maximum="10" discreteValues="11" intermediateChanges="true"
+				        showButtons="false" class="sliders" name="JSExperience">
+				            <ol dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration"
+				            class="sliderLabels">
+				                <li>0</li><li>1</li><li>2</li><li>3</li><li>4</li>
+				                <li>5</li><li>6</li><li>7</li><li>8</li><li>9</li>
+								<li>10+</li>
+				            </ol>
+				        </div><br>
+					</div>		
+				<div style="clear: both;"></div>
+				<div>
+					<div class="label">Provide a brief description of your latest projects:</div>
+					<div style="background: #ffffff;">
+					    <div dojoType="dijit.Editor" id="editor2" height="200" name="latestProjects"
+					    	onChange="console.log('editor2 onChange handler: ' + arguments[0])">
+					    </div>
+					</div>
+				</div>
+			    <button dojoType="dijit.form.Button" id="btnSaveJob" onClick="saveJobApplication()">Save</button>
+			</div>
+			<!-- end apply for a job form -->
+			<br>
+		</div>
+
+		<div dojoType="dijit.layout.ContentPane" id="jobs" title="Check who applied for a job" selected="false" style="height: 100%;width: 500px;overflow:hidden;">			
+			<div class="pageTitle">List of job applications</div>
+			<div id="dvQuery" style="width: 500px; height: 300px;"></div>
+		</div>
+		
+		<div dojoType="dijit.layout.ContentPane" id="blog" title="Blog about your experience" selected="false" style="height: 100%;">			
+			<!-- start blog form -->
+			<div dojoType="dijit.form.Form" id="blogForm" class="apstrataForm rounded-top-sml rounded-bottom-sml"
+				jsId="blogForm" encType="multipart/form-data" action="" method="">
+					<div class="title" style="font-size: 18pt;">
+						Blog about your experience using apstrata
+					</div>
+						<br><br>
+					<div>
+							<input type="hidden" name="formType" value= "blog">
+
+			                <div class="label">Title:</div>
+			                <input class="rounded-xsml" type="text" name="title" style="width: 100%;"
+								required="true" dojoType="dijit.form.ValidationTextBox"/><br>
+
+							<div class="label">Content:</div>
+
+							<div style="background: #ffffff;">
+							    <div dojoType="dijit.Editor" height="200"
+							    	onChange="dojo.byId('blogPost').value = arguments[0]; console.log('editor2 onChange handler: ' + arguments[0])">
+							    </div>
+							</div>
+							
+							<input type="hidden" id="blogPost" name="blogPost" value="">
+							
+			                <div class="label">Upload image:</div>
+			                <input name="apsdb_attachments" dojoType="dojox.form.FileInput" class="rounded-xsml" /><br>
+					</div>
+			
+			    <button dojoType="dijit.form.Button" onClick="saveBlog()">Save</button>
+			</div>
+			<!-- end blog form -->
+		</div>
+
+		<div dojoType="dijit.layout.ContentPane" id="blogs" title="Read what others have said" selected="false" style="height: 100%;width: 700px;overflow: visible;" >
+			<div class="pageTitle">The good vibe!</div>
+			<div dojoTypeX="BlogEntries"></div>
+			<div id="blogEntries"></div>
+		</div>
+
+    </div>
+	
+		
+</body>
+</html>
