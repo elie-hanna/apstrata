@@ -33,12 +33,12 @@
 			* - timeout
 			*************************************************************************/
 		-->
-		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'[my key]', secret:'[my secret]', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest', timeout: 10000"></script>
+		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'apstrata', secret:'secret', serviceURL: 'http://localhost:8080/autoforms/rest', timeout: 10000"></script>
 	
 	    <script type="text/javascript">
 
 			var test
-			
+			var ABD = null;
 	    	function createStore() {
 				var operation = client.createStore(function() {
 					test.success(operation)
@@ -216,13 +216,13 @@
 				var operation = client.deleteUser(
 					function() {
 						test.success(operation)
-						saveConfiguration()
+						deleteStore()
 					}, function() {
 						test.fail(operation)
 					}, {user: user})
 			}
 			
-			function saveConfiguration() {
+			/*function saveConfiguration() {
 				var operation = client.saveConfiguration(
 					function() {
 						test.success(operation)
@@ -246,16 +246,26 @@
 					}, function() {
 						test.fail(operation)
 					})
-			}
+			}*/
 			
 			function deleteStore() {
 				var operation = client.deleteStore(function() {
 					test.success(operation)
-					
-					test.print("<h3 class='success' id='all'>Success</h3>")
+					listSavedQueries()
 				}, function() {
 					test.fail(operation)
 				}, {store: storeName})
+			}
+			
+			function listSavedQueries() {
+				var operation = client.listSavedQueries(
+					function() {
+					ABD = operation;
+						test.success(operation)
+						test.print("<h3 class='success' id='all'>Success</h3>")
+					}, function() {
+						test.fail(operation)
+					})
 			}
 			
 			dojo.addOnLoad(function() {
