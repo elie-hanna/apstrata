@@ -12,4 +12,4 @@ dependencies = {
     prefixes: [
 		[ "apstrata", "../../../../apstrata" ]
     ]
-}
+};
