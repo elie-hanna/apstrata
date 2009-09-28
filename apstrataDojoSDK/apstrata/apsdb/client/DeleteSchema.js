@@ -16,7 +16,7 @@ dojo.require("apstrata.apsdb.client.Get");
 
 /**
  * Allows the deletion of an apstrata schema and its related documents
- * @class apstrata.apsdb.client.DeleteStore
+ * @class apstrata.apsdb.client.DeleteSavedQuery
  * @extends apstrata.apsdb.client.Get
 */
 dojo.declare("apstrata.apsdb.client.DeleteSchema",
