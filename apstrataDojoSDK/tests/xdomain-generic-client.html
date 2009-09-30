@@ -4,24 +4,26 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>apstrata: XDomain generic client test</title>
 		
-		<script type="text/javascript">
-			djConfig = { 
-				isDebug: true,
-				parseOnLoad: true,
-				useXDomain: true,
-				xdWaitSeconds: 10
-			};
-		</script>
-
-		<SCRIPT TYPE="text/javascript" SRC="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"></SCRIPT>
-		<!--script type="text/javascript" src="../lib/dojo/1.3.0-src/release/apstrata/dojo/dojo.xd.js" djConfig="useXDomain: true"></script-->
-		<script type="text/javascript" src="http://macbookair/~rabih/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata-lib.xd.js"></script>
 		
+
+<SCRIPT TYPE="text/javascript" SRC="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js" 
+			djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,
+          modulePaths: { apstrata: 'http://10.0.0.142/dojo/lib/dojo/1.3.0/release/apstrata/apstrata',
+		  				 dojo: 'http://o.aolcdn.com/dojo/1.3/dojo/' }"></SCRIPT>
+		<script>
+			dojo.require("apstrata.Client")
+		</script>
+		
+	
 		<script>
 			dojo.addOnLoad(function() {
 				var client = new apstrata.Client()
 				client.connection.credentials.key = "7744293024"
 				client.connection.credentials.secret = "3B45DE19C689EDAFCA47"
+			
+				//client.connection.credentials.key = "apstrata"
+				//client.connection.credentials.secret = "secret"
+				//client.connection.serviceUrl="http://localhost/apstratabase/rest"
 				
 				var attrs = {
 					action: "ListStores",
@@ -34,6 +36,7 @@
 				}
 				
 				client.call(attrs)
+				
 			})
 		</script>
 	</head>
