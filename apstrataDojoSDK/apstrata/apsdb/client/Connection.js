@@ -57,26 +57,39 @@ dojo.declare("apstrata.apsdb.client.Activity",
 	})
 
 
-dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {	
+dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {
+  /**
+	 *  Signs the request URL using the connection credentials (key and secret) that were sent. If the
+	 * credentials were not sent, then the request is not signed.
+	 *
+	 * @param connection The connection Object that will be used to send the request
+	 * @param operation The name of the operation being called
+	 * @param params The URL parameter string before signing the request
+	 * @param responseType JSON or XML
+	 */
 	sign: function (connection, operation, params, responseType) {
-					var timestamp = new Date().getTime() + '';
-					
-					responseType = responseType || "json"
+		var timestamp = new Date().getTime() + '';
 
-					var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
-					var signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-		
-					var apswsReqUrl = connection.serviceUrl
-							+ "?apsdb.action=" + operation
-							+ "&apsws.time=" + timestamp
-							+ "&apsws.authKey=" + connection.credentials.key
-							+ "&apsws.authSig=" + signature
-							+ "&apsws.responseType=" + responseType
-							+ "&apsws.authMode=simple"
-							+ ((params!="")?"&":"") + params
-		
-					return {url: apswsReqUrl, signature: signature};
-			}
+		responseType = responseType || "json"
+
+		var apswsReqUrl = connection.serviceUrl
+				+ "?apsdb.action=" + operation
+				+ "&apsws.authKey=" + connection.credentials.key
+				+ "&apsws.responseType=" + responseType
+				+ "&apsws.authMode=simple"
+				+ ((params!="")?"&":"") + params
+
+		var signature = '';
+		// Add the timestamp and signature to the request if the secret is in the credentials, otherwise, this is an anonymous call
+		if (connection.credentials.secret != '') {
+			var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
+			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+			apswsReqUrl += "&apsws.time=" + timestamp
+				+ "&apsws.authSig=" + signature
+		}
+
+		return {url: apswsReqUrl, signature: signature};
+}
 })
 
 
