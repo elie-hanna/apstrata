@@ -23,8 +23,8 @@ dojo.declare("apstrata.apsdb.client.widgets.Login",
 			
 			this.key = connection.credentials.key
 			this.secret = connection.credentials.secret
-			this.un = connection.credentials.un
-			this.pw = connection.credentials.pw
+			this.username = connection.credentials.username
+			this.password = connection.credentials.password
 		},
 		
 		postCreate: function() {
@@ -39,8 +39,8 @@ dojo.declare("apstrata.apsdb.client.widgets.Login",
 				self.credentials = {}
 				self.connection.credentials.key = self.fldKey.value;
 				self.connection.credentials.secret = self.fldSecret.value;
-				self.connection.credentials.un = self.fldUser.value;
-				self.connection.credentials.pw = self.fldPassword.value;
+				self.connection.credentials.username = self.fldUser.value;
+				self.connection.credentials.password = self.fldPassword.value;
 
 				self.dlgLogin.hide();
 				
