@@ -11,6 +11,15 @@
 {
     var data = [        
        {
+           localName : "DeleteSchema",
+           fullName : "DeleteSchema",
+           summary : "constructor DeleteSchema()",
+           ref : "logical/GLOBAL.html#___DeleteSchema",
+           parent : "GLOBAL",
+           type : "constructor",
+           elementType : "function"
+       } ,         
+       {
            localName : "GLOBAL",
            fullName : "GLOBAL",
            summary : "namespace GLOBAL",
@@ -18,6 +27,15 @@
            parent : "",
            type : "namespace",
            elementType : "logical_container"
+       } ,         
+       {
+           localName : "ListStores",
+           fullName : "ListStores",
+           summary : "constructor ListStores()",
+           ref : "logical/GLOBAL.html#___ListStores",
+           parent : "GLOBAL",
+           type : "constructor",
+           elementType : "function"
        } ,         
        {
            localName : "apstrata",
@@ -151,6 +169,33 @@
            summary : "function execute(attrs)",
            ref : "logical/apstrata/apsdb/client/DeleteGroup.html#___execute",
            parent : "apstrata.apsdb.client.DeleteGroup",
+           type : "function",
+           elementType : "function"
+       } ,         
+       {
+           localName : "DeleteSavedQuery",
+           fullName : "apstrata.apsdb.client.DeleteSavedQuery",
+           summary : "class DeleteSavedQuery",
+           ref : "logical/apstrata/apsdb/client/DeleteSavedQuery.html",
+           parent : "apstrata.apsdb.client",
+           type : "class",
+           elementType : "logical_container"
+       } ,         
+       {
+           localName : "DeleteSavedQuery",
+           fullName : "apstrata.apsdb.client.DeleteSavedQuery.DeleteSavedQuery",
+           summary : "constructor DeleteSavedQuery()",
+           ref : "logical/apstrata/apsdb/client/DeleteSavedQuery.html#___DeleteSavedQuery",
+           parent : "apstrata.apsdb.client.DeleteSavedQuery",
+           type : "constructor",
+           elementType : "function"
+       } ,         
+       {
+           localName : "execute",
+           fullName : "apstrata.apsdb.client.DeleteSavedQuery.execute",
+           summary : "function execute(attrs)",
+           ref : "logical/apstrata/apsdb/client/DeleteSavedQuery.html#___execute",
+           parent : "apstrata.apsdb.client.DeleteSavedQuery",
            type : "function",
            elementType : "function"
        } ,         
@@ -290,6 +335,24 @@
            elementType : "function"
        } ,         
        {
+           localName : "ListConfigurations",
+           fullName : "apstrata.apsdb.client.ListConfigurations",
+           summary : "class ListConfigurations",
+           ref : "logical/apstrata/apsdb/client/ListConfigurations.html",
+           parent : "apstrata.apsdb.client",
+           type : "class",
+           elementType : "logical_container"
+       } ,         
+       {
+           localName : "ListConfigurations",
+           fullName : "apstrata.apsdb.client.ListConfigurations.ListConfigurations",
+           summary : "constructor ListConfigurations()",
+           ref : "logical/apstrata/apsdb/client/ListConfigurations.html#___ListConfigurations",
+           parent : "apstrata.apsdb.client.ListConfigurations",
+           type : "constructor",
+           elementType : "function"
+       } ,         
+       {
            localName : "ListGroups",
            fullName : "apstrata.apsdb.client.ListGroups",
            summary : "class ListGroups",
@@ -304,6 +367,24 @@
            summary : "constructor ListGroups()",
            ref : "logical/apstrata/apsdb/client/ListGroups.html#___ListGroups",
            parent : "apstrata.apsdb.client.ListGroups",
+           type : "constructor",
+           elementType : "function"
+       } ,         
+       {
+           localName : "ListSavedQueries",
+           fullName : "apstrata.apsdb.client.ListSavedQueries",
+           summary : "class ListSavedQueries",
+           ref : "logical/apstrata/apsdb/client/ListSavedQueries.html",
+           parent : "apstrata.apsdb.client",
+           type : "class",
+           elementType : "logical_container"
+       } ,         
+       {
+           localName : "ListSavedQueries",
+           fullName : "apstrata.apsdb.client.ListSavedQueries.ListSavedQueries",
+           summary : "constructor ListSavedQueries()",
+           ref : "logical/apstrata/apsdb/client/ListSavedQueries.html#___ListSavedQueries",
+           parent : "apstrata.apsdb.client.ListSavedQueries",
            type : "constructor",
            elementType : "function"
        } ,         
@@ -341,6 +422,15 @@
            ref : "logical/apstrata/apsdb/client/ListStores.html#___ListStores",
            parent : "apstrata.apsdb.client.ListStores",
            type : "constructor",
+           elementType : "function"
+       } ,         
+       {
+           localName : "execute",
+           fullName : "apstrata.apsdb.client.ListStores.execute",
+           summary : "function execute(attrs)",
+           ref : "logical/apstrata/apsdb/client/ListStores.html#___execute",
+           parent : "apstrata.apsdb.client.ListStores",
+           type : "function",
            elementType : "function"
        } ,         
        {
@@ -398,19 +488,19 @@
            elementType : "function"
        } ,         
        {
-           localName : "buildUrl",
-           fullName : "apstrata.apsdb.client.Operation.buildUrl",
-           summary : "function buildUrl()",
-           ref : "logical/apstrata/apsdb/client/Operation.html#___buildUrl",
+           localName : "abstrata",
+           fullName : "apstrata.apsdb.client.Operation.abstrata",
+           summary : "function abstrata()",
+           ref : "logical/apstrata/apsdb/client/Operation.html#___abstrata",
            parent : "apstrata.apsdb.client.Operation",
            type : "function",
            elementType : "function"
        } ,         
        {
-           localName : "execute",
-           fullName : "apstrata.apsdb.client.Operation.execute",
-           summary : "function execute()",
-           ref : "logical/apstrata/apsdb/client/Operation.html#___execute",
+           localName : "buildUrl",
+           fullName : "apstrata.apsdb.client.Operation.buildUrl",
+           summary : "function buildUrl()",
+           ref : "logical/apstrata/apsdb/client/Operation.html#___buildUrl",
            parent : "apstrata.apsdb.client.Operation",
            type : "function",
            elementType : "function"
@@ -479,6 +569,33 @@
            elementType : "function"
        } ,         
        {
+           localName : "SaveConfiguration",
+           fullName : "apstrata.apsdb.client.SaveConfiguration",
+           summary : "class SaveConfiguration",
+           ref : "logical/apstrata/apsdb/client/SaveConfiguration.html",
+           parent : "apstrata.apsdb.client",
+           type : "class",
+           elementType : "logical_container"
+       } ,         
+       {
+           localName : "SaveConfiguration",
+           fullName : "apstrata.apsdb.client.SaveConfiguration.SaveConfiguration",
+           summary : "constructor SaveConfiguration()",
+           ref : "logical/apstrata/apsdb/client/SaveConfiguration.html#___SaveConfiguration",
+           parent : "apstrata.apsdb.client.SaveConfiguration",
+           type : "constructor",
+           elementType : "function"
+       } ,         
+       {
+           localName : "execute",
+           fullName : "apstrata.apsdb.client.SaveConfiguration.execute",
+           summary : "function execute(attrs)",
+           ref : "logical/apstrata/apsdb/client/SaveConfiguration.html#___execute",
+           parent : "apstrata.apsdb.client.SaveConfiguration",
+           type : "function",
+           elementType : "function"
+       } ,         
+       {
            localName : "SaveDocument",
            fullName : "apstrata.apsdb.client.SaveDocument",
            summary : "class SaveDocument",
@@ -511,6 +628,33 @@
            summary : "function flatten(o)",
            ref : "logical/apstrata/apsdb/client/SaveDocument.html#___flatten",
            parent : "apstrata.apsdb.client.SaveDocument",
+           type : "function",
+           elementType : "function"
+       } ,         
+       {
+           localName : "SaveDocumentPost",
+           fullName : "apstrata.apsdb.client.SaveDocumentPost",
+           summary : "class SaveDocumentPost",
+           ref : "logical/apstrata/apsdb/client/SaveDocumentPost.html",
+           parent : "apstrata.apsdb.client",
+           type : "class",
+           elementType : "logical_container"
+       } ,         
+       {
+           localName : "SaveDocumentPost",
+           fullName : "apstrata.apsdb.client.SaveDocumentPost.SaveDocumentPost",
+           summary : "constructor SaveDocumentPost()",
+           ref : "logical/apstrata/apsdb/client/SaveDocumentPost.html#___SaveDocumentPost",
+           parent : "apstrata.apsdb.client.SaveDocumentPost",
+           type : "constructor",
+           elementType : "function"
+       } ,         
+       {
+           localName : "execute",
+           fullName : "apstrata.apsdb.client.SaveDocumentPost.execute",
+           summary : "function execute(attrs)",
+           ref : "logical/apstrata/apsdb/client/SaveDocumentPost.html#___execute",
+           parent : "apstrata.apsdb.client.SaveDocumentPost",
            type : "function",
            elementType : "function"
        } ,         
@@ -718,6 +862,24 @@
            summary : "function unsetAttribute(attribute)",
            ref : "logical/apstrata/apsdb/client/_Item.html#___unsetAttribute",
            parent : "apstrata.apsdb.client._Item",
+           type : "function",
+           elementType : "function"
+       } ,         
+       {
+           localName : "execute",
+           fullName : "execute",
+           summary : "function execute(attrs)",
+           ref : "logical/GLOBAL.html#___execute",
+           parent : "GLOBAL",
+           type : "function",
+           elementType : "function"
+       } ,         
+       {
+           localName : "getAccountId",
+           fullName : "getAccountId",
+           summary : "function getAccountId()",
+           ref : "logical/GLOBAL.html#___getAccountId",
+           parent : "GLOBAL",
            type : "function",
            elementType : "function"
        }     ];
