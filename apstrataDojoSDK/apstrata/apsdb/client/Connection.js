@@ -80,13 +80,23 @@ dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {
 				+ ((params!="")?"&":"") + params
 
 		var signature = '';
-		// Add the timestamp and signature to the request if the secret is in the credentials, otherwise, this is an anonymous call
-		if (connection.credentials.secret != '') {
+		// Sign with the username and password if they are passed
+		if (connection.credentials.username != '' && connection.credentials.password != '') {
+			var valueToHash = timestamp + connection.credentials.username + operation
+				+ dojox.encoding.digests.MD5(connection.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
+			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+			apswsReqUrl += "&apsws.user=" + connection.credentials.username
+				+ "&apsws.time=" + timestamp
+				+ "&apsws.authSig=" + signature
+		}
+		// Otherwise, sign with the secret
+		else if (connection.credentials.secret != '') {
 			var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
 			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 			apswsReqUrl += "&apsws.time=" + timestamp
 				+ "&apsws.authSig=" + signature
 		}
+		// If no signing was made, then this is an anonymous call
 
 		return {url: apswsReqUrl, signature: signature};
 }
@@ -114,7 +124,7 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			this._DEFAULT_SERVICE_URL= "http://apsdb.apstrata.com/sandbox-apsdb/rest"
 			this.timeout = 10000
 			this.serviceUrl= this._DEFAULT_SERVICE_URL;
-			this.credentials= {key: "", secret: "", un: "", pw: ""}
+			this.credentials= {key: "", secret: "", username: "", password: ""}
 			this.defaultStore = ''
 			this._ongoingLogin = false
 			this._urlSigner = new apstrata.apsdb.client.URLSignerMD5()				
@@ -142,14 +152,19 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			if (apstrata.apConfig) {
 				if (apstrata.apConfig.key != undefined) this.credentials.key = apstrata.apConfig.key
 				if (apstrata.apConfig.secret != undefined) this.credentials.secret = apstrata.apConfig.secret
-				if (apstrata.apConfig.un != undefined) this.credentials.un = apstrata.apConfig.un
-				if (apstrata.apConfig.pw != undefined) this.credentials.pw = apstrata.apConfig.pw
+				if (apstrata.apConfig.username != undefined) this.credentials.username = apstrata.apConfig.username
+				if (apstrata.apConfig.password != undefined) this.credentials.password = apstrata.apConfig.password
+
 
 				if (apstrata.apConfig.defaultStore != undefined) this.defaultStore = apstrata.apConfig.defaultStore
 				if (apstrata.apConfig.timeout != undefined) this.timeout =  apstrata.apConfig.timeout
 				if (apstrata.apConfig.serviceURL != undefined) this.serviceUrl = apstrata.apConfig.serviceURL
 			}
 
+			// Make sure that the auth key has been loaded into the credentials or we won't be able to make requests to apstrata database
+			if (this.credentials.key == null || this.credentials.key == '') {
+				throw "The apstrata database auth key is required. Please set it in the apConfig attribute of your apstrata.js script tag";
+			}
 
 			// TODO: Investigate why this is not working: dojo.parser.instantiate
 			/*
@@ -166,21 +181,21 @@ dojo.declare("apstrata.apsdb.client.Connection",
 		
 		hasCredentials: function() {
 			// Assume that we have a session if either the secret or password are present
-			return (this.credentials.secret != "") || (this.credentials.pw != "")
+			return (this.credentials.secret != "") || (this.credentials.password != "")
 		},
 		
 	    /**
-	     * @function getAccountId returns the account identifier (key) for master login or (un) for user logins
+	     * @function getAccountId returns the account identifier (key) for master login or (username) for user logins
 	     * 
 	     */
 		getAccountId: function() {
-			if (this.credentials.pw && this.credentials.pw!="") return this.credentials.un
+			if (this.credentials.password && this.credentials.password!="") return this.credentials.username
 			if (this.credentials.secret && this.credentials.secret!="") return this.credentials.key
 			return ""
 		},
 		
 		getLoginType: function() {
-			if (this.credentials.pw && this.credentials.pw!="") return this.LOGIN_USER
+			if (this.credentials.password && this.credentials.password!="") return this.LOGIN_USER
 			if (this.credentials.secret && this.credentials.secret!="") return this.LOGIN_MASTER
 			return undefined			
 		},
@@ -233,8 +248,8 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				var o = {
 					key: "",
 					secret: "",
-					un: "",
-					pw: ""
+					username: "",
+					password: ""
 				}
 				
 				this.credentials = o
@@ -246,8 +261,8 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				// In case the cookie is corrupted
 				if (!o.credentials.key) o.credentials.key=""
 				if (!o.credentials.secret) o.credentials.secret=""
-				if (!o.credentials.un) o.credentials.un=""
-				if (!o.credentials.pw) o.credentials.pw=""
+				if (!o.credentials.username) o.credentials.username=""
+				if (!o.credentials.password) o.credentials.password=""
 	
 				this.debug("Loading connection from cookie", o)
 					
@@ -283,9 +298,9 @@ dojo.declare("apstrata.apsdb.client.Connection",
 				handlers.success()
 			})
 			dojo.connect(listStores, "handleError", function() {
-				// Clear the secret and pw so hasCredentials() functions
+				// Clear the secret and password so hasCredentials() functions
 				self.credentials.secret=""
-				self.credentials.pw=""
+				self.credentials.password=""
 				handlers.failure(listStores.errorCode, listStores.errorMessage)
 			})
 			
@@ -296,11 +311,11 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			this.debug("logging out: erasing credentials from cookie")
 			// Erase secret and password
 			this.credentials.secret = ""
-			this.credentials.pw = ""
+			this.credentials.password = ""
 			
-			// Make sure key/un are not null/undefined
+			// Make sure key/username are not null/undefined
 			if (!this.credentials.key) this.credentials.key=""
-			if (!this.credentials.un) this.credentials.un=""
+			if (!this.credentials.username) this.credentials.username=""
 
 			this.saveToCookie()
 		},
