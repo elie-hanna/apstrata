@@ -80,26 +80,38 @@ dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {
 				+ ((params!="")?"&":"") + params
 
 		var signature = '';
+		
+		var returnValue = null
+
 		// Sign with the username and password if they are passed
-		if (connection.credentials.username != '' && connection.credentials.password != '') {
-			var valueToHash = timestamp + connection.credentials.username + operation
-				+ dojox.encoding.digests.MD5(connection.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
-			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-			apswsReqUrl += "&apsws.user=" + connection.credentials.username
-				+ "&apsws.time=" + timestamp
-				+ "&apsws.authSig=" + signature
+		if (connection.credentials.username && connection.credentials.password) {
+			if (connection.credentials.username != '' && connection.credentials.password != '') {
+				var valueToHash = timestamp + connection.credentials.username + operation
+					+ dojox.encoding.digests.MD5(connection.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
+				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+				apswsReqUrl += "&apsws.user=" + connection.credentials.username
+					+ "&apsws.time=" + timestamp
+					+ "&apsws.authSig=" + signature
+					
+				returnValue = {url: apswsReqUrl, signature: signature}
+			}
 		}
+				
+		if (!returnValue) {
 		// Otherwise, sign with the secret
-		else if (connection.credentials.secret != '') {
-			var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
-			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-			apswsReqUrl += "&apsws.time=" + timestamp
-				+ "&apsws.authSig=" + signature
-		}
+			if (connection.credentials.secret != '') {
+				var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
+				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+				apswsReqUrl += "&apsws.time=" + timestamp
+					+ "&apsws.authSig=" + signature
+
+				returnValue = {url: apswsReqUrl, signature: signature}
+			}
+		}		
 		// If no signing was made, then this is an anonymous call
 
-		return {url: apswsReqUrl, signature: signature};
-}
+		return returnValue;
+	}
 })
 
 
@@ -145,10 +157,19 @@ dojo.declare("apstrata.apsdb.client.Connection",
 						var sw = new apstrata.apsdb.client.widgets.ConnectionStatus(self)
 					}
 				}
+
 			} 
 			
-			this.loadFromCookie()
+			if (attr && attr.credentials) {
+				// If the credentials are passed to the connection object constructor
+				//  use them
+					this.credentials = attr.credentials
+			} else {
+				// Otherwise try to load the credentials from the cookie
+				this.loadFromCookie()				
+			}
 
+			// if present apstrata.apConfig overrides
 			if (apstrata.apConfig) {
 				if (apstrata.apConfig.key != undefined) this.credentials.key = apstrata.apConfig.key
 				if (apstrata.apConfig.secret != undefined) this.credentials.secret = apstrata.apConfig.secret
@@ -162,9 +183,9 @@ dojo.declare("apstrata.apsdb.client.Connection",
 			}
 
 			// Make sure that the auth key has been loaded into the credentials or we won't be able to make requests to apstrata database
-			if (this.credentials.key == null || this.credentials.key == '') {
-				throw "The apstrata database auth key is required. Please set it in the apConfig attribute of your apstrata.js script tag";
-			}
+//			if (this.credentials.key == null || this.credentials.key == '') {
+//				throw "The apstrata database auth key is required. Please set it in the apConfig attribute of your apstrata.js script tag";
+//			}
 
 			// TODO: Investigate why this is not working: dojo.parser.instantiate
 			/*
