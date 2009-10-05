@@ -1,13 +1,12 @@
 		.Alert {
 			position: absolute;
 			border:  solid 1px grey;
-			background: grey;
 			padding: 5px;
 			overflow: hidden;
 			visibility: hidden;
 			font-family: serif, Georgia;
 			font-size: 15pt;
-			color: #444444;
+			color: black;
 			opacity: 0.95;
 		}
 		
