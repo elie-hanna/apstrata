@@ -55,10 +55,13 @@
         dojo.addOnLoad(function() {
 			dojo.parser.parse()
 
-			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
-			connection.credentials.key = '68CA69E0CE'
-			connection.credentials.secret = '8099BF56799BFA67C945'
-			connection.defaultStore = 'chartData'
+			var credentials = {}
+			credentials.key = '68CA69E0CE'
+			credentials.secret = '8099BF56799BFA67C945'
+			defaultStore = 'chartData'
+
+			connection = new apstrata.apsdb.client.Connection({credentials: credentials, statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
+			
 
 			// List all the URLs of the slides to be included in this presentation
 			var slides = [
