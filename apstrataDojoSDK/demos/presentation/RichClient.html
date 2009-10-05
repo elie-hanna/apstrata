@@ -48,6 +48,9 @@
 		dojo.require("dijit.form.DateTextBox")
 		dojo.require('dijit.form.HorizontalSlider')
 		dojo.require('dijit.Editor')
+		
+		dojo.require('apstrata.apsdb.client.GetFile')
+		dojo.require('apstrata.apsdb.client.ItemApsdbReadStore')
 
 		var connection
 		var presentation
@@ -58,9 +61,9 @@
 			var credentials = {}
 			credentials.key = '68CA69E0CE'
 			credentials.secret = '8099BF56799BFA67C945'
-			defaultStore = 'chartData'
 
 			connection = new apstrata.apsdb.client.Connection({credentials: credentials, statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
+			connection.defaultStore = 'presentation'
 			
 
 			// List all the URLs of the slides to be included in this presentation
@@ -71,11 +74,10 @@
 				'RichClient/04-RichCloud.html',
 				'RichClient/05-SaveDocument.html',
 				'RichClient/06-Query.html',
-				'RichClient/07-DigitalAssets.html',
-				'RichClient/08-Scripts.html',
+//				'RichClient/07-DigitalAssets.html',
+//				'RichClient/08-Scripts.html',
 				'RichClient/09-OurAPI.html',
-				'RichClient/10-Roadmap.html',
-				'RichClient/zecat.html',
+//				'RichClient/10-Roadmap.html',
 			]
 
 			var attrs = {

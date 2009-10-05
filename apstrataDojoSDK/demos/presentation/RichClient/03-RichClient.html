@@ -39,7 +39,7 @@ dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus")
 var storeAttrs = {	
 	connection: apstrata.presentation.connection, 
 	resultsPerPage: 3,
-	apsdbStoreName: "chartData", 
+	apsdbStoreName: apstrata.presentation.connection.defaultStore, 
 	fields:"name, dob, JSExperience, totalExperience", 
 	label: "name" 
 }

@@ -179,21 +179,6 @@ var attrs = {
 function saveJobApplication() {
 	var jobForm = dijit.byId('jobForm') 
 
-	// Define save success dialog
-	var msg = "Thank you <b>" + doc.name 
-		+ "</b> for submitting your application but we're extremely picky!"
-
-	var dialog = new apstrata.widgets.Alert({
-			width: 450, 
-			height: 170, 
-			actions: "close", 
-			modal: true, 
-			message: msg, 
-			clazz: "rounded-sml", 
-			iconSrc: apstrata.baseUrl 
-				+ "/resources/images/favicon.png", 
-			animation: {from: 'btnSaveJob', bounding: 'jobForm'} 
-	})
 
 	if (jobForm.validate()) {
 		var store = new apstrata.apsdb.client.ItemApsdbWriteStore(attrs)
@@ -206,6 +191,22 @@ function saveJobApplication() {
 			onComplete: function() {
 				console.debug("saved")
 		
+				// Define save success dialog
+				var msg = "Thank you <b>" + doc.name 
+					+ "</b> for submitting your application but we're extremely picky!"
+			
+				var dialog = new apstrata.widgets.Alert({
+						width: 450, 
+						height: 170, 
+						actions: "close", 
+						modal: true, 
+						message: msg, 
+						clazz: "rounded-sml", 
+						iconSrc: apstrata.baseUrl 
+							+ "/resources/images/favicon.png", 
+						animation: {from: 'btnSaveJob', bounding: 'jobForm'} 
+				})
+
 				dialog.show()
 		
 				dojo.connect(dialog,
