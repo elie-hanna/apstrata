@@ -1,0 +1,28 @@
+<div class='Slide'>
+	<script type="text/javascript">
+		function hello() {
+			console.debug('script')
+			
+		}
+		
+		dojo.connect(button, 'onClick', function() {
+			console.debug('click')
+			dojo.require('apstrata.widgets.Alert')
+			dialog3 = new apstrata.widgets.Alert({width: 350, height: 170, actions:"close", message: "<div style='big'>Save isn't implemented here!</div>", clazz: "rounded-sml", iconSrc: apstrata.baseUrl + "/resources/images/glossy-warning-icon-sml.jpg"})
+			dialog3.show()
+			dojo.connect(dialog3, "buttonPressed", function() {
+				dialog3.hide()
+			})
+		})
+	</script>
+
+	<div class='title'>
+		Rich Cloud Services
+	</div>
+	<div  class='contents'>
+		Paradigm shift for Rich Client Platforms.
+
+		<button dojoType='dijit.form.Button' jsId='button' onClick='hello()'>Hey</button>
+		Yey
+	</div>
+</div>

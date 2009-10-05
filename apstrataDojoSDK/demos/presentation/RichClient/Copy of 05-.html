@@ -1,0 +1,104 @@
+<div class='Slide'>
+	<script type="text/javascript">
+	</script>
+
+	<div class='title' style='font-size: 3em; padding-top: 15px;'>
+		What can be done in Rich Client?
+	</div>
+	<div  class='contents'>
+		<br>
+		<div class="example" style="height:180px;">
+			<p>Data entered in this form is directly persisted in apstrata.</p>
+			
+			<div dojoType="dijit.form.Form" id="jobForm" 
+				jsId="jobForm" class="apstrataForm rounded-top-sml rounded-bottom-sml"
+						jsId="jobForm" encType="multipart/form-data" action="" method=""
+							style="width: 100%;height: 150px;">			
+			
+					<div class="formTitle">
+						Job Application
+					</div>
+					<div class="column">
+			                <div class="label">Name:</div>
+			                <input class="rounded-xsml" type="text" name="name" required="true" dojoType="dijit.form.ValidationTextBox"/><br>
+			                <div class="label">Date of birth:</div>
+			                <input class="rounded-xsml" type="text" name="dob" dojoType="dijit.form.DateTextBox"/><br>
+					</div>
+					<div class="column">
+						<div class="label">Total years of experience:</div>
+				        <div dojoType="dijit.form.HorizontalSlider" value="0"
+				        minimum="0" maximum="10" discreteValues="11" intermediateChanges="true"
+				        showButtons="false" class="sliders" name="totalExperience">
+				            <ol dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration"
+				            class="sliderLabels">
+				                <li>0</li><li>1</li><li>2</li><li>3</li><li>4</li>
+				                <li>5</li><li>6</li><li>7</li><li>8</li><li>9</li>
+								<li>10+</li>
+				            </ol>
+				        </div>
+						<div class="label">Javascript experience:</div>
+				        <div dojoType="dijit.form.HorizontalSlider" value="0"
+				        minimum="0" maximum="10" discreteValues="11" intermediateChanges="true"
+				        showButtons="false" class="sliders" name="JSExperience">
+				            <ol dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration"
+				            class="sliderLabels">
+				                <li>0</li><li>1</li><li>2</li><li>3</li><li>4</li>
+				                <li>5</li><li>6</li><li>7</li><li>8</li><li>9</li>
+								<li>10+</li>
+				            </ol>
+				        </div><br>
+					</div>
+					<div class="column">
+						<div class="label">Tell us about your experience:</div>
+						<div style="background: white;width: 250px;">
+						    <div dojoType="dijit.Editor" style='width: 250px;height: 65px;' id="editor2" name="latestProjects" plugins="['cut','copy','paste','|','bold','italic','|','insertUnorderedList']">
+						    </div>
+						</div>
+						<div style='width: 100%;text-align: right;'>
+						    <button dojoType="dijit.form.Button" id="btnSaveJob" onClick="saveJobApplication()">Save</button>
+						</div>
+					</div>
+				<div style="clear: both;"></div>
+			</div>			
+			
+			
+			
+		</div>
+		<div class="example" style="height:180px;">
+			<p>apstrata is queried back for the job applications and the data is displayed in this grid widget:</p>
+			<div id="dvQuery2" class="grid"><div style='text-align: center;'><br><br>loading widget<br><img src='{{ _apstrataRoot }}/themes/apstrata/images/horizontal-wait-bar-f3f3f3back.gif'></div></div>
+		</div>
+		
+	</div>
+	<script>
+dojo.require("apstrata.widgets.QueryWidget")
+dojo.require("apstrata.apsdb.client.ItemApsdbWriteStore")
+dojo.require("apstrata.apsdb.client.Client")
+dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus")
+
+var connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
+connection.credentials.key = '68CA69E0CE'
+connection.credentials.secret = '8099BF56799BFA67C945'
+
+var myStore = new apstrata.apsdb.client.ItemApsdbWriteStore({connection: connection, 
+							resultsPerPage: 3,
+							apsdbStoreName: "chartData", 
+							fields:"name, dob, JSExperience, totalExperience", 
+							label: "name"})
+
+
+
+var attrs = {
+	store: myStore,
+	query: "formType = \"job\"",
+	columns: "name, dob, JSExperience, totalExperience",
+	page: 1
+}
+
+if (qw2) qw2.destroy()
+
+var qw2 = new apstrata.widgets.QueryWidget(attrs)
+dojo.byId('dvQuery2').innerHTML = ''
+dojo.place(qw2.domNode, "dvQuery2", "first")
+	</script>		
+</div>

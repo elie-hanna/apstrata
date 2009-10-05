@@ -1,0 +1,59 @@
+<div class='Slide'>
+	<div class='title'>
+		Rich Client<span id='title'></span>
+	</div>
+	<div  class='contents'>
+		<ul>
+			<li>
+				Today, the majority of web applications use the browser as a rich interactive application 
+				environment (Facebook, Twitter, Flickr, Google Docs etc.).
+			</li>
+			<li>
+				Great developments in client side technologies such as AJAX (JavaScript), Flash, Flex, Silverlight etc. are
+				making browser applications (or web pages) look and behave almost like standard OS desktop applications (and sometimes nicer). 
+			</li>
+			<li>
+				Although the client has been radically revolutionized, the server side architecture hasn't much! The application server 
+				stack is largely the same, and development of back-end supported rich client applications is still unnecessarily
+				complex and expensive even when deploying on cloud computing resources.
+			</li>			
+		</ul>
+		<div class="example" style="height:180px;">
+			<p>As an example, this <strong>Grid</strong> is a rich client component, the data it contains is the result of an 
+			<strong>apstrata REST API</strong> call.</p>
+			<div id="dvQuery" class="grid"><div style='text-align: center;'><br><br>loading widget<br><img src='{{ _apstrataRoot }}/themes/apstrata/images/horizontal-wait-bar-f3f3f3back.gif'></div></div>
+		</div>
+		<div id='dvMsg' style='visibility: hidden;' >
+			<div class='Callout'>
+				The apsdb API call to retrieve the contents of this grid, is QUERY. Like all apstrata calls, it is secure, and provides
+				a rich set of options. We're using the pagination option here to return only a limited amount of items per call (more in the next slides).
+			</div>
+		</div>
+	</div>
+	<script>
+dojo.require("apstrata.apsdb.client.ItemApsdbWriteStore")
+dojo.require("apstrata.widgets.QueryWidget")
+dojo.require("apstrata.apsdb.client.Connection")
+dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus")
+
+var storeAttrs = {	
+	connection: apstrata.presentation.connection, 
+	resultsPerPage: 3,
+	apsdbStoreName: "chartData", 
+	fields:"name, dob, JSExperience, totalExperience", 
+	label: "name" 
+}
+
+var myStore = new apstrata.apsdb.client.ItemApsdbWriteStore(storeAttrs)
+
+var queryAttrs = {
+	store: myStore,
+	query: "formType = \"job\"",
+	columns: "name, dob, JSExperience, totalExperience",
+	page: 1
+}
+
+var qw = new apstrata.widgets.QueryWidget(queryAttrs)
+dojo.place(qw.domNode, "dvQuery", "only")
+	</script>		
+</div>
