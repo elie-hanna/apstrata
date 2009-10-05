@@ -5,18 +5,7 @@
 	<title>Form & Grid</title>
 
 	<style type="text/css">
-		@import "../../lib/dojo/1.3.0-src/dojo/resources/dojo.css";
-		@import "../../lib/dojo/1.3.0-src/dijit/themes/nihilo/nihilo.css";
-	    @import "../../lib/dojo/1.3.0-src/dojox/grid/resources/nihiloGrid.css";
-		
-		@import "../../lib/dojo/1.3.0-src/dojox/form/resources/FileInput.css";
-
-        @import "../../apstrata/themes/apstrata/apstrata.css";
-        @import "../../apstrata/themes/apstrata/Alert.css";
-
-		@import "../../apstrata/themes/apstrata/apstrataForms.css";
-
-		@import "css/samplePage.css"
+		@import "./css/samplePage.css";
 	</style>
 
 	<!-- required: dojo.js -->
@@ -276,7 +265,7 @@ blogForm.reset()
 		<div dojoType="dijit.layout.ContentPane" id="job" title="Apply for a job @apstrata" selected="true" style="height: 100%;">			
 			<!-- start apply for a job form -->
 			<div dojoType="dijit.form.Form" id="jobForm" jsId="jobForm" class="apstrataForm rounded-top-sml rounded-bottom-sml"
-				jsId="jobForm" encType="multipart/form-data" action="" method="">
+				jsId="jobForm" encType="multipart/form-data" action="" method="" style='width: 520px'>
 					<div class="title">
 						Apply for a job @apstrata
 					</div>
@@ -335,7 +324,7 @@ blogForm.reset()
 		<div dojoType="dijit.layout.ContentPane" id="blog" title="Blog about your experience" selected="false" style="height: 100%;">			
 			<!-- start blog form -->
 			<div dojoType="dijit.form.Form" id="blogForm" class="apstrataForm rounded-top-sml rounded-bottom-sml"
-				jsId="blogForm" encType="multipart/form-data" action="" method="">
+				jsId="blogForm" encType="multipart/form-data" action="" method="" style='width: 520px'>
 					<div class="title" style="font-size: 18pt;">
 						Blog about your experience using apstrata
 					</div>
@@ -367,7 +356,7 @@ blogForm.reset()
 		</div>
 
 		<div dojoType="dijit.layout.ContentPane" id="blogs" title="Read what others have said" selected="false" style="height: 100%;width: 700px;overflow: visible;" >
-			<div class="pageTitle">The good vibe!</div>
+			<div class="pageTitle">Buzz!</div>
 			<div dojoTypeX="BlogEntries"></div>
 			<div id="blogEntries"></div>
 		</div>
