@@ -11,7 +11,7 @@ dojo.declare("apstrata.widgets.Alert",
 	templateString:"<div class='Alert'><div class='icon' dojoAttachPoint='icon'></div><div class='content' dojoAttachPoint='content' dojoAttachEvent='onmouseover: _showButtons, onmouseout: _hideButtons'>Content</div><div class='control' dojoAttachEvent='onmouseover: _showButtons' dojoAttachPoint='control'></div></div>",
 	width: 200,
 	height: 200,
-	expandFrom: null,
+	animation: null,
 	clazz: "",
 	message: "",
 	_factor: .2,
@@ -27,13 +27,15 @@ dojo.declare("apstrata.widgets.Alert",
 			if (attrs.message) this.message = attrs.message
 			if (attrs.iconSrc) this.iconSrc = attrs.iconSrc
 			
-			if (attrs.expandFrom) {
-				this.originNode = dojo.byId(attrs.expandFrom)
+			if (attrs.animation) {
+				this._animation = attrs.animation
+//				this.originNode = dojo.byId(attrs.animation.from)
+//				this.bounding = dojo.byId(attrs.animation.bounding)
 			}
 			
 			if (attrs.clazz) this._classes = attrs.clazz.split(' '); else this._classes = ['rounded']
 			
-			if (attrs.actions) this._actions = attrs.actions.split(','); else this._actions = ['close']
+			if (attrs.actions) this._actions = attrs.actions.split(',')//; else this._actions = ['close']
 		}
 		
 	},
@@ -60,8 +62,13 @@ dojo.declare("apstrata.widgets.Alert",
 	postCreate: function() {
 		var self = this
 
+			if (this._animation) {
+				this.originNode = dojo.byId(this._animation.from)
+				this.bounding = dojo.byId(this._animation.bounding)
+			}
+
+
 		var w = dijit.getViewport()
-		
 		
 		if (this.modal) {
 			this._curtain = document.createElement('div')
@@ -78,7 +85,7 @@ dojo.declare("apstrata.widgets.Alert",
 				visibility: "hidden",
 //				background: "grey",
 //				opacity: ".50",
-//				"zIndex": 1
+				"zIndex": 99998
 			})
 		}
 
@@ -105,12 +112,22 @@ dojo.declare("apstrata.widgets.Alert",
 			}
 		}
 		
-		this.destination = {
-			t: (w.h - self.height) / 2,
-			l: (w.w - self.width) / 2,
-			w: self.width,
-			h: self.height
+		if (this.bounding) {
+			this.destination = {
+				t: self.bounding.offsetTop + (self.bounding.offsetHeight - self.height) / 2,
+				l: self.bounding.offsetLeft + (self.bounding.offsetWidth - self.width) / 2,
+				w: self.width,
+				h: self.height
+			}
+		} else {
+			this.destination = {
+				t: (w.h - self.height) / 2,
+				l: (w.w - self.width) / 2,
+				w: self.width,
+				h: self.height
+			}
 		}
+
 		
 		this._buttons = []
 		dojo.forEach(this._actions, function(action) {
@@ -222,8 +239,6 @@ dojo.declare("apstrata.widgets.Alert",
 	_showButtons: function() {
 		return
 		
-		console.debug('show')
-		
 		dojo.forEach(this._buttons, function(button) {
 			dojo.style(button, {
 				visibility: 'visible'
@@ -234,7 +249,6 @@ dojo.declare("apstrata.widgets.Alert",
 	_hideButtons: function() {
 		return 
 		
-		console.debug('hide')
 		dojo.forEach(this._buttons, function(button) {
 			dojo.style(button, {
 				visibility: 'hidden'
