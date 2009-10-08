@@ -33,7 +33,7 @@
 			* - timeout
 			*************************************************************************/
 		-->
-		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'apstrata', secret:'secret', serviceURL: 'http://localhost:8080/autoforms/rest', timeout: 10000"></script>
+		<script type="text/javascript" src="../../../apstrata.js" apConfig="key:'[key]', secret:'[secret]', username:'[username]', password:'[password]', serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest', timeout: 10000"></script>
 	
 	    <script type="text/javascript">
 
@@ -261,10 +261,19 @@
 				var operation = client.listSavedQueries(
 					function() {
 						test.success(operation)
-						deleteSavedQuery()
+						getSavedQuery()
 					}, function() {
 						test.fail(operation)
 					})
+			}
+
+			function getSavedQuery() {
+				var operation = client.getSavedQuery(function() {
+					test.success(operation)
+					deleteSavedQuery()
+				}, function() {
+					test.fail(operation)
+				}, {queryName: 'queryName'})
 			}
 
 			function deleteSavedQuery() {
