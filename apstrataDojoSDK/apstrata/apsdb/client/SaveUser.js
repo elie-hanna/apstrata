@@ -35,10 +35,10 @@ dojo.declare("apstrata.apsdb.client.SaveUser",
     execute: function(attrs){
     
         if ((attrs != undefined) &&
-        (attrs.login != undefined) &&
+        (attrs.user != undefined) &&
         (attrs.password != undefined) &&
         (attrs.name != undefined)) {
-            this.request.apsim.user = attrs.login;
+            this.request.apsim.user = attrs.user;
             this.request.apsim.password = attrs.password;
             this.request.apsim.name = attrs.name;
             if (attrs.update != undefined) 
@@ -54,6 +54,6 @@ dojo.declare("apstrata.apsdb.client.SaveUser",
             this.inherited(arguments);
         }
         else 
-            throw new Error("apstrata.apsdb.client.SaveUser: attribtues login and password are mandatory")
+            throw new Error("apstrata.apsdb.client.SaveUser: attribtues 'user' and 'password' are mandatory")
     }
 });
