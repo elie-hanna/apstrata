@@ -1,0 +1,30 @@
+<div style='height: 100%; overflow-y: auto; overflow-x: hidden;'>
+
+	<div class="apstrataForm rounded-top-sml rounded-bottom-sml" style='width: 423px;'>
+
+		<div class="label">Query Expression:</div>
+		<textarea dojoAttachPoint='txtQuery' name="query"></textarea>
+	
+		<div class="label">Fields:</div>
+		<input type="text" dojoAttachPoint="fldFields" value=""></input>
+		
+		<div class="label">Aggregates:</div>
+		<input type="text" dojoAttachPoint="fldAggregates" value=""></input>
+		
+		<div class="label">Sorting:</div>
+		<input type="text" dojoAttachPoint="fldSorting" value=""></input>
+	
+		<div class="label">Full Text Search Expression:</div>
+		<input type="text" dojoAttachPoint="fldFts" value=""></input>
+		
+		<!--
+		<div class="label">Run As:</div>
+		<div id="userName"></div><button dojoAttachEvent='onclick: _refresh'>refresh</button>	
+		-->
+		<br>
+		<br>
+		<div style='width: 100%; text-align: right'>
+			<button dojoAttachEvent='onclick: _query'>query</button>
+		</div>
+	</div>
+</div>
