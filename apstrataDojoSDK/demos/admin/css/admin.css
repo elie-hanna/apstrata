@@ -1,8 +1,11 @@
 html, body {
-#	background-image: url('../images/blurry-lights-crop.jpg');
-#	background-position: 0px -110px;			
-	background-position: -120px -100px;
-	background-image: url('../images/shiney.png');
+	background-image: url('../images/blurry-lights-crop.jpg');
+	background-position: 0px -110px;			
+#	background-position: -120px -100px;
+#	background-image: url('../images/shiney.png');
+
+#	background-image: url('../images/pinstripe.png');
+
 	background-repeat: no-repeat;
 	padding: 0px;
 	margin: 0px;
