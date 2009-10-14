@@ -90,7 +90,7 @@ var tmp1 = "{% for o in data %} <div class='item' itemIndex='{{ forloop.counter0
 dojo.declare("apstrata.widgets.HStackableList", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.widgets._HStackableContainerLayoutMixin], 
 {
-	templateString: "<div class='verticalList hStackable rounded-sml'><div class='vScrollable' dojoAttachPoint='dvList'>" + tmp1 + "</div> <div style='width: 100%; text-align: center;'> {% if editable %} <div dojoType='dijit.form.ToggleButton' iconClass='dijitCheckBoxIcon' dojoAttachEvent='onClick: editItems'>edit</div><div dojoType='dijit.form.Button' dojoAttachEvent='onClick: newItem'>new</div></div></div> {% endif %}",
+	templateString: "<div class='verticalList hStackable rounded-sml'><div class='vScrollable' dojoAttachPoint='dvList'>" + tmp1 + "</div> <div style='width: 100%; text-align: center;'> {% if editable %} <div dojoType='dijit.form.ToggleButton' iconClass='dijitCheckBoxIcon' dojoAttachEvent='onClick: editItems'>delete</div><div dojoType='dijit.form.Button' dojoAttachEvent='onClick: newItem'>new</div></div></div> {% endif %}",
 	widgetsInTemplate: true,
 	parentListId: "",
 	data: null,
