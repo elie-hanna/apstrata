@@ -25,10 +25,10 @@ dojo.declare("apstrata.apsdb.client.widgets.LoginWidget",
 	
 	constructor: function(attrs) {
 		var self = this
-		
+
 		if (attrs.connection) this.connection = attrs.connection;
 		else this.connection = new apstrata.apsdb.client.Connection()
-console.dir(this.connection.credentials)
+
 		// Init all variables used in template	
 		this.errorMessage = ""
 		this.assumeLoggedIn = false

@@ -19,14 +19,29 @@ dojo.declare("apstrata.apsdb.client.widgets.ConnectionStatus",
 	[dijit._Widget, dijit._Templated],
 	{
 		widgetsInTemplate: true,
-		templatePath: dojo.moduleUrl("apstrata.apsdb.client.widgets", "templates/ConnectionStatus.html"),
-		
+//		templatePath: dojo.moduleUrl("apstrata.apsdb.client.widgets", "templates/ConnectionStatus.html"),
+		templateString: "<div></div>",
 		constructor: function(/* apstrata.apsdb.client.Connection */ connection) {			
 			var self = this;
 			self.connection = connection
 
-			dojo.connect(connection.activity, "busy", function() { self.dlgWait.show() })
-			dojo.connect(connection.activity, "free", function() { self.dlgWait.hide() })			
+			dojo.require('apstrata.widgets.Alert')
+			var dialog = new apstrata.widgets.Alert({width: 152, height: 152, message: "<div style='width: 100%; text-align: center;font-family: arial;color:#444444;'>talking to</div>", clazz: "rounded-sml"})
+
+			dojo.style(dialog.domNode, {
+				background: "url('"+apstrata.baseUrl+"/resources/images/apstrata-clouds.gif')",
+				border: "solid 1px grey"
+			})
+
+			dojo.connect(connection.activity, "busy", function() { 
+				dialog.show()
+			
+			//self.dlgWait.show() 
+			})
+			dojo.connect(connection.activity, "free", function() { 
+				dialog.hide()
+			//self.dlgWait.hide()
+			})			
 		}
 		
 	});

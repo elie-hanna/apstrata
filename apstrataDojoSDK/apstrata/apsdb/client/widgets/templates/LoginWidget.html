@@ -15,9 +15,9 @@
                 <div dojoType="dijit.layout.ContentPane" title="User" selected="false" class="rounded-bottom-sml">
 					<div dojoType="dijit.form.Form" dojoAttachPoint="frmLoginUser">
 						Key<br>
-						<input type="text" name="key" value="{{ connection.credentials.key }}" dojoType="dijit.form.ValidationTextBox"><br>
+						<input type="text" name="key" value="{{ connection.credentials.key|default_if_none:"" }}" dojoType="dijit.form.ValidationTextBox"><br>
 						User<br>
-						<input type="text" name="un" value="{{ connection.credentials.un }}" dojoType="dijit.form.ValidationTextBox"><br>
+						<input type="text" name="un" value="{{ connection.credentials.un|default_if_none:"" }}" dojoType="dijit.form.ValidationTextBox"><br>
 						Password<br>
 						<input type="password" name="pw" value="" dojoType="dijit.form.ValidationTextBox"><br><br>
 						
@@ -30,7 +30,7 @@
                 <div dojoType="dijit.layout.ContentPane" title="Admin" selected="true" class="rounded-bottom-sml">
 					<div dojoType="dijit.form.Form" class="rounded-bottom-right" dojoAttachPoint="frmLoginAdmin">
 						Key<br>
-						<input type="text" name="key" size="10" value="{{ connection.credentials.key }}" dojoType="dijit.form.ValidationTextBox"><br>
+						<input type="text" name="key" size="10" value="{{ connection.credentials.key|default_if_none:"" }}" dojoType="dijit.form.ValidationTextBox"><br>
 						Secret<br>
 						<input type="password" name="secret" size="10" value="" dojoType="dijit.form.ValidationTextBox"><br><br>
 						
@@ -54,6 +54,7 @@
 		{% endif %}
 		
 		<div dojoAttachPoint="statusLine" style="padding-top: 5px;text-align: center;">{{ accountTypeLabel }} {{ accountMessage }}<br></div>
+	</div>
 </div>
 
 
