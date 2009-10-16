@@ -251,10 +251,25 @@
 			function deleteStore() {
 				var operation = client.deleteStore(function() {
 					test.success(operation)
-					listSavedQueries()
+					saveQuery()
 				}, function() {
 					test.fail(operation)
 				}, {store: storeName})
+			}
+
+			function saveQuery() {
+				var operation = client.saveQuery(
+					function() {
+						test.success(operation)
+						listSavedQueries()
+					}, function() {
+						test.fail(operation)
+					},
+					{
+						queryName: 'queryName',
+						query: '<query><executeACL>user</executeACL><store>testStore</store><condition><![CDATA[(fieldNumeric[numeric] = -1.5) or ((fieldNumeric[numeric] != 5 and fieldNumeric[numeric] <= 10000) and (fieldNumeric[numeric] in [2.5, 3.5, 4.5]))]]></condition><ftsQuery>test</ftsQuery><returnedFields><field>age</field><field>documentKey</field></returnedFields><sort><field><name>documentKey</name><type>string</type><order>ASC</order></field></sort><count>true</count><aggregate><expression>avg($age)</expression><page>true</page><global>false</global></aggregate><resultsPerPage>10</resultsPerPage><forceCurrentSnapShot>true</forceCurrentSnapShot></query>'
+					}
+				)	
 			}
 
 			function listSavedQueries() {
