@@ -42,6 +42,7 @@ dojo.require("apstrata.apsdb.client.ListConfigurations");
 dojo.require("apstrata.apsdb.client.ListSavedQueries");
 dojo.require("apstrata.apsdb.client.DeleteSavedQuery");
 dojo.require("apstrata.apsdb.client.GetSavedQuery");
+dojo.require("apstrata.apsdb.client.SaveQuery");
 dojo.require("apstrata.util.logger.Loggable");
 
 
@@ -289,6 +290,10 @@ dojo.declare("apstrata.apsdb.client.Client",
 		},
 		getSavedQuery: function(success, failure, attrs) {
 			var op = new apstrata.apsdb.client.GetSavedQuery(this.connection)
+			return this._operation(success, failure, op, attrs)
+		},
+		saveQuery: function(success, failure, attrs) {
+			var op = new apstrata.apsdb.client.SaveQuery(this.connection)
 			return this._operation(success, failure, op, attrs)
 		}
 		
