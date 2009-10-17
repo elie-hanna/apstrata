@@ -29,9 +29,7 @@ dojo.declare("apstrata.admin.GroupsPanel",
 	postCreate: function() {
 		var self = this
 
-		var client = new apstrata.apsdb.client.Client(this.container.connection)
-
-		var operation = client.listGroups(function() {
+		var operation = this.container.client.listGroups(function() {
 			self.data = []
 			dojo.forEach(operation.result.groups, function(group) {
 				self.data.push({label: group['@name'], iconSrc: ""})

@@ -30,7 +30,6 @@ dojo.declare("apstrata.admin.UsersPanel",
 	msgDelete: "are you sure you want to delete user: ",
 
 	postCreate: function() {
-		this.client = new apstrata.apsdb.client.Client(this.container.connection)
 		this.refresh()
 		this.inherited(arguments)
 	},
@@ -38,7 +37,7 @@ dojo.declare("apstrata.admin.UsersPanel",
 	refresh: function() {
 		var self = this
 
-		var operation = this.client.listUsers(function() {
+		var operation = this.container.client.listUsers(function() {
 			self.data = []
 			dojo.forEach(operation.result.users, function(user) {
 				self.data.push({label: user['@name'], iconSrc: ""})
@@ -55,7 +54,7 @@ dojo.declare("apstrata.admin.UsersPanel",
 		var self = this
 		if (this.openWidget) this.openWidget.destroy()
 
-		var operation = this.client.getUser(function() {
+		var operation = this.container.client.getUser(function() {
 			var user = {}
 			user.name = operation.result.user['@name']
 			

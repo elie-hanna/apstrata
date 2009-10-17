@@ -36,8 +36,10 @@ dojo.declare("apstrata.admin.MainPanel",
 		var self = this
 		
 		dojo.connect(self, 'onClick', function(index, label) {
-			if (label == self._lastLabel) return
-			self._lastLabel = label
+			//  add this and open panels will not be refereshed
+			//	 if their label is clicked while they're already open
+			//	if (label == self._lastLabel) return
+			//  self._lastLabel = label
 			
 			if (self.openWidget) {
 				self.openWidget.destroy()
@@ -60,10 +62,15 @@ dojo.declare("apstrata.admin.MainPanel",
 				self.openWidget = new apstrata.admin.UsersPanel({parentList: self, container: self.container})
 				self.container.addChild(self.openWidget)
 			} else if (label == 'favourites') {
-				self.openWidget = new apstrata.admin.QueryPanel({parentList: self, container: self.container})
+//				self.openWidget = new apstrata.admin.QueryPanel({parentList: self, container: self.container})
+				self.openWidget = new apstrata.admin.SchemaEditorPanel({parentList: self, container: self.container})
 				self.container.addChild(self.openWidget)
 			} 
 		})
+	},
+	
+	startup: function() {
+		this.home()		
 	},
 	
 	home: function() {

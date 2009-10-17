@@ -29,9 +29,7 @@ dojo.declare("apstrata.admin.StoresPanel",
 	postCreate: function() {
 		var self = this
 
-		var client = new apstrata.apsdb.client.Client(this.container.connection)
-
-		var operation = client.listStores(function() {
+		var operation = this.container.client.listStores(function() {
 			// Rearrange the result to suite the template
 			self.data = []
 			dojo.forEach(operation.result.stores, function(store) {
@@ -47,7 +45,6 @@ dojo.declare("apstrata.admin.StoresPanel",
 				self.openWidget = new apstrata.admin.StoreOperations({parentList: self, container: self.container, target: label})
 				self.container.addChild(self.openWidget)
 			})
-		}, function() {
 		})				
 		
 		self.inherited(arguments)

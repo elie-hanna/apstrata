@@ -43,7 +43,7 @@
 				connection = new apstrata.apsdb.client.Connection({statusWidget: 'apstrata.apsdb.client.widgets.ConnectionStatus'})
 
 				dojo.registerModuleRelative ("apstrata.admin", "apstrata/admin");
-				dojo.require('apstrata.admin.Admin')
+				dojo.require('apstrata.admin.DevConsole')
 				dojo.require('apstrata.admin.MainPanel')
 				dojo.require('apstrata.admin.HomePanel')
 				dojo.require('apstrata.admin.StoresPanel')
@@ -55,6 +55,7 @@
 				dojo.require('apstrata.admin.StoreOperations')
 				dojo.require("apstrata.admin.QueryPanel")
 				dojo.require("apstrata.admin.QueryResultsPanel")
+				dojo.require("apstrata.admin.SchemaEditorPanel")
 				
 				dojo.parser.parse()
 			})
@@ -63,11 +64,10 @@
 	<body class='nihilo'>
 		<!-- div class="logo">ap<span style="color: #FF6600;">((</span>strata</div-->
 		<img src="../../apstrata/resources/images/apstrata-big.png" style='position: absolute; width: 250px; left: 50px; top: 25px;'>
-		<div style='position: absolute; left: 920px; top: 43px;font-family: sans-serif; font-size: 2em; color: #000099'>Developer Console</div>		
+		<div class='appTitle'>Developer Console</div>		
 
 	 	<div dojoType="apstrata.apsdb.client.widgets.LoginWidget" visibleWidth="17" offsetFromCenter="440"></div>
-		<div dojoType="apstrata.admin.Admin" connection='connection' jsId='adminWidget'></div>
+		<div dojoType="apstrata.admin.DevConsole" connection='connection' jsId='adminWidget'></div>
 		
-      	</body>
+    </body>
 </html>
-	

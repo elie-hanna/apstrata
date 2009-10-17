@@ -18,8 +18,8 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.admin.UserEditPanel")
-dojo.provide("apstrata.admin.UserEdit")
+dojo.provide("apstrata.admin.SchemaEditorPanel")
+dojo.provide("apstrata.admin.SchemaEditor")
 
 dojo.require("dijit.form.Form");
 dojo.require("dijit.form.Button");
@@ -28,69 +28,24 @@ dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.HorizontalSlider")
 dojo.require("dijit.form.HorizontalRuleLabels")
 
-
-dojo.declare("apstrata.admin.UserEdit", 
+dojo.declare("apstrata.admin.SchemaEditor", 
 [dijit._Widget, dojox.dtl._Templated], 
 {
 	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("apstrata.admin", "templates/UserEditPanel.html"),
+	templatePath: dojo.moduleUrl("apstrata.admin", "templates/SchemaEditorPanel.html"),
 	
 	constructor: function(attrs) {
-		var self = this
-		
+		this._target = attrs.target
+		this.connection = attrs.connection
+		this.container = attrs.container
 		this.panel = attrs.panel
-		this.connection = attrs.panel.connection
-		this.container = attrs.panel.container
-		this.update = false
-
-		this.user = {
-			user: '',
-			password: '',
-			password2: '',
-			name: '',
-			email: '',
-			groups: ''
-		}			
 		
-		if (attrs.panel.user) {
-			this.user.user = attrs.panel.user.login
-			this.user.name = attrs.panel.user.name
-			this.user.email = attrs.panel.user.email
-			
-			this.update = true
-		}
+		this._target = 'presentation'
+		this.connection = new apstrata.apsdb.client.Connection()
 	},
-	
-	postCreate: function() {
-	},
-	
+		
 	_save: function() {
-		var self = this
 		
-		if (this.password.value != this.password2.value) {
-			alert("passwords don't match")
-		}
-		
-		var attrs = {
-			user: self.user.value,
-			password: self.password.value,
-			name: self.name.value,
-			email: self.email.value,
-			update: self.update
-		}
-
-		var operation = this.container.client.saveUser(function() {
-			alert('success')
-			self.panel.parentList.refresh()
-		},
-		function() {
-			
-		},
-		attrs)
-	},
-	
-	_cancel: function() {
-		this.panel.destroy()
 	},
 	
 	destroy: function() {
@@ -99,18 +54,16 @@ dojo.declare("apstrata.admin.UserEdit",
 	}
 })
 
-dojo.declare("apstrata.admin.UserEditPanel", 
+dojo.declare("apstrata.admin.SchemaEditorPanel", 
 [apstrata.widgets.HStackablePanel], 
 {
 	constructor: function(attrs) {
 		this._target = attrs.target
-		this.parentList = attrs.parentList
-		this.user = attrs.user
 	},
 
 	postCreate: function() {
 		var self = this
-		this.panel = new apstrata.admin.UserEdit({panel: self}) // , target: self.target, container: self.container, connection: self.container.connection
+		this.panel = new apstrata.admin.SchemaEditor({panel: self, target: self.target, container: self.container, connection: self.container.connection})
 		this.addChild(this.panel)
 		
 		this.inherited(arguments)
