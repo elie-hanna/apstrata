@@ -50,7 +50,7 @@ dojo.declare("apstrata.apsdb.client.Client",
 	[apstrata.util.logger.Loggable], 
 	{
 
-		constructor: function(connection) {
+		constructor: function(connection, globalSuccess, globalFailure) {
 			this.clearQueue()
 			
 			if (connection == undefined) {
@@ -58,6 +58,9 @@ dojo.declare("apstrata.apsdb.client.Client",
 			} else {
 				this.connection = connection
 			}
+			
+			if (globalSuccess) this.globalSuccess = globalSuccess
+			if (globalFailure) this.globalFailure = globalFailure
 		},
 
 
@@ -194,6 +197,18 @@ dojo.declare("apstrata.apsdb.client.Client",
 			if (failure != undefined) {
 				dojo.connect(operation, "handleError", function() {
 					failure(operation)
+				})
+			}
+			
+			if (this.globalSuccess) {
+				dojo.connect(operation, "handleResult", function() {
+					self.globalSuccess(operation)
+				})
+			}
+			
+			if (this.globalFailure) {
+				dojo.connect(operation, "handleError", function() {
+					self.globalFailure(operation)
 				})
 			}
 
