@@ -176,7 +176,7 @@ dojo.declare("apstrata.apsdb.client.Operation",
 			this.operationTimeout = true;
 
 			this.errorCode = "timeout_communication_error";
-			this.errorDetail = "Timeout or communication error";
+			this.errorMessage = "Timeout or communication error";
 			this.response = null;
 			// responseTime = timeout 
 			this.responseTime = this.connection.getTimeout()
