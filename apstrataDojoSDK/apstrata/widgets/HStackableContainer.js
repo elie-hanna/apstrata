@@ -22,7 +22,18 @@ dojo.provide("apstrata.widgets.HStackablePanel")
 dojo.provide("apstrata.widgets.HStackableList")
 dojo.provide("apstrata.widgets.HStackableContainer")
 
+/*
+ * Layout widget to contain the Horizontally stackable widgets
+ */
+dojo.declare("apstrata.widgets.HStackableContainer", 
+[dijit.layout._LayoutWidget], 
+{
 
+})
+
+/*
+ * This mixin class insures that a HStackable Widget animates/opens in the appropriate position in the Stackable Container
+ */
 dojo.declare("apstrata.widgets._HStackableContainerLayoutMixin", [], 
 {
 	_animateToPosition: function() {
@@ -53,6 +64,10 @@ dojo.declare("apstrata.widgets._HStackableContainerLayoutMixin", [],
 	}
 })
 
+
+/*
+ * This is a general purpose HStackable that can be used to contain arbitrary widgets such as forms etc.
+ */
 dojo.declare("apstrata.widgets.HStackablePanel", 
 [dijit.layout._LayoutWidget, apstrata.widgets._HStackableContainerLayoutMixin], 
 {
@@ -85,12 +100,15 @@ dojo.declare("apstrata.widgets.HStackablePanel",
 	}
 })			
 
-var tmp1 = "{% for o in data %} <div class='item' itemIndex='{{ forloop.counter0 }}' itemLabel='{{ o.label }}' dojoAttachEvent='onmouseover: _onMouseover,onmouseout: _onMouseout,onclick: _onClick'> {% if o.iconSrc %}<div class='icon'><img src='{{ o.iconSrc }}'></div>{% endif %} <div class='label'> {{ o.label }} </div> <div style='clear: both;'></div></div> {% endfor %}"
-
+/*
+ * This HStackable provides a scrolling vertical list of items. It provides edit and new functionality  
+ */
 dojo.declare("apstrata.widgets.HStackableList", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.widgets._HStackableContainerLayoutMixin], 
 {
-	templateString: "<div class='verticalList hStackable rounded-sml'><div class='vScrollable' dojoAttachPoint='dvList'>" + tmp1 + "</div> <div style='width: 100%; text-align: center;'> {% if editable %} <div dojoType='dijit.form.ToggleButton' iconClass='dijitCheckBoxIcon' dojoAttachEvent='onClick: editItems'>delete</div><div dojoType='dijit.form.Button' dojoAttachEvent='onClick: newItem'>new</div></div></div> {% endif %}",
+	templateString: "<div class='verticalList hStackable rounded-sml'><div class='vScrollable' dojoAttachPoint='dvList'>"
+						+ "{% for o in data %} <div class='item' itemIndex='{{ forloop.counter0 }}' itemLabel='{{ o.label }}' dojoAttachEvent='onmouseover: _onMouseover,onmouseout: _onMouseout,onclick: _onClick'> {% if o.iconSrc %}<div class='icon'><img src='{{ o.iconSrc }}'></div>{% endif %} <div class='label'> {{ o.label }} </div> <div style='clear: both;'></div></div> {% endfor %}"
+						+ "</div> <div style='width: 100%; text-align: center;'> {% if editable %} <div dojoType='dijit.form.ToggleButton' iconClass='dijitCheckBoxIcon' dojoAttachEvent='onClick: editItems'>delete</div><div dojoType='dijit.form.Button' dojoAttachEvent='onClick: newItem'>new</div></div></div> {% endif %}",
 	widgetsInTemplate: true,
 	parentListId: "",
 	data: null,
@@ -223,11 +241,3 @@ dojo.declare("apstrata.widgets.HStackableList",
 	}
 })			
 
-/*
- * Layout widget to contain the stackable widgets
- */
-dojo.declare("apstrata.widgets.HStackableContainer", 
-[dijit.layout._LayoutWidget], 
-{
-
-})
