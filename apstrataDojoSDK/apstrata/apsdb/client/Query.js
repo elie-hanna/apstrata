@@ -22,8 +22,8 @@ dojo.require("apstrata.apsdb.client.Get");
 dojo.declare("apstrata.apsdb.client.Query",
 [apstrata.apsdb.client.Get],
 {
-	_DEFAULT_PAGE_NUMBER: 1, // TODO: Not in use, should b removed
-	_DEFAULT_RESULTS_PER_PAGE: 10, // TODO: Not in use, should b removed
+	//_DEFAULT_PAGE_NUMBER: 1, // TODO: Not in use, should b removed
+	//_DEFAULT_RESULTS_PER_PAGE: 10, // TODO: Not in use, should b removed
 
     /**
      * @constructor Query Does not require any parameters
@@ -38,27 +38,29 @@ dojo.declare("apstrata.apsdb.client.Query",
      */
     execute: function(attrs) {
 		var self = this
-		if ((attrs.store) && (attrs.query) && (attrs.queryFields)) {
-			this.request.apsdb.store = attrs.store	
-			this.request.apsdb.query = attrs.query
-			this.request.apsdb.queryFields = attrs.queryFields
-
-	        if (attrs.resultsPerPage) this.request.apsdb.resultsPerPage = attrs.resultsPerPage
-	        if (attrs.pageNumber) this.request.apsdb.pageNumber = attrs.pageNumber
-	        if (attrs.count) this.request.apsdb.count = attrs.count
-			if (attrs.sort) this.request.apsdb.sort = attrs.sort
-			if (attrs.runAs) this.request.apsim.runAs = attrs.runAs
-
-			if (attrs.aggregates) {
-				this.request.apsdb.aggregateExpression = attrs.aggregates
-				this.request.apsdb.aggregateGlobal = 'true'; // Add the aggregateGlobal parameter because the aggregate is only allowed globally for now
-			}
-
-	      if (attrs.ftsQuery) this.request.apsdb.ftsQuery = attrs.ftsQuery
-		} else {
-			throw "Query attributes store, query and queryFields are mandatory"
+		
+		if (attrs.store) this.request.apsdb.store = attrs.store	
+		if (attrs.query) this.request.apsdb.query = attrs.query
+		if (attrs.queryFields) this.request.apsdb.queryFields = attrs.queryFields
+		if (attrs.resultsPerPage) this.request.apsdb.resultsPerPage = attrs.resultsPerPage
+		if (attrs.pageNumber) this.request.apsdb.pageNumber = attrs.pageNumber
+		if (attrs.count) this.request.apsdb.count = attrs.count
+		if (attrs.sort) this.request.apsdb.sort = attrs.sort
+		if (attrs.runAs) this.request.apsim.runAs = attrs.runAs
+		
+		if (attrs.aggregates) {
+			this.request.apsdb.aggregateExpression = attrs.aggregates
+			this.request.apsdb.aggregateGlobal = 'true'; // Add the aggregateGlobal parameter because the aggregate is only allowed globally for now
 		}
-
+		
+		if (attrs.ftsQuery) this.request.apsdb.ftsQuery = attrs.ftsQuery
+		if (attrs.queryName) this.request.apsdb.queryName = attrs.queryName
+		
+		
+		for (prop in attrs.fields) {
+				this.request[prop] = attrs.fields[prop];
+		}
+		
 		this.inherited(arguments);
     }
 })

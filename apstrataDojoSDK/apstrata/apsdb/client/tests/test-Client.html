@@ -112,7 +112,7 @@
 						if ((operation.result.documents[0].fields[0]["@name"] == "field1")
 							&& (operation.result.documents[0].fields[0].values[0] == "some value")) test.success(operation);
 							else test.fail(operation)							
-						deleteDocument()
+						saveQuery()
 					}, function() {
 						test.fail(operation)
 					},
@@ -122,6 +122,66 @@
 						queryFields: "field1, field2, multi"
 					}
 				)
+			}
+			
+			function saveQuery() {
+				var operation = client.saveQuery(
+					function() {
+						test.success(operation)
+						runSaveQuery()
+					}, function() {
+						test.fail(operation)
+					},
+					{
+						queryName: 'queryName',
+						query: '<query><executeACL>user</executeACL><condition><![CDATA[test={paramTest}]]></condition><returnedFields><field>field1</field><field>documentKey</field></returnedFields><count>true</count><resultsPerPage>10</resultsPerPage></query>'
+					}
+				)	
+			}
+
+			function runSaveQuery() {
+			var operation = client.query(
+					function() {
+						test.success(operation);
+									
+						listSavedQueries()
+					}, function() {
+						test.fail(operation)
+					},
+					{
+						store: storeName,
+						queryName: 'queryName',
+						fields: {paramTest: 'true'}
+					}
+				)
+			}
+			
+			function listSavedQueries() {
+				var operation = client.listSavedQueries(
+					function() {
+						test.success(operation)
+						getSavedQuery()
+					}, function() {
+						test.fail(operation)
+					})
+			}
+
+			function getSavedQuery() {
+				var operation = client.getSavedQuery(function() {
+					test.success(operation)
+					deleteSavedQuery()
+				}, function() {
+					test.fail(operation)
+				}, {queryName: 'queryName'})
+			}
+
+			function deleteSavedQuery() {
+				var operation = client.deleteSavedQuery(function() {
+					test.success(operation)
+					deleteDocument()
+				}, function() {
+					test.fail(operation)
+				}, {queryName: 'queryName'})
 			}
 
 			function deleteDocument() {
@@ -251,55 +311,11 @@
 			function deleteStore() {
 				var operation = client.deleteStore(function() {
 					test.success(operation)
-					saveQuery()
+					test.print("<h3 class='success' id='all'>Success</h3>")
 				}, function() {
 					test.fail(operation)
 				}, {store: storeName})
 			}
-
-			function saveQuery() {
-				var operation = client.saveQuery(
-					function() {
-						test.success(operation)
-						listSavedQueries()
-					}, function() {
-						test.fail(operation)
-					},
-					{
-						queryName: 'queryName',
-						query: '<query><executeACL>user</executeACL><store>testStore</store><condition><![CDATA[(fieldNumeric[numeric] = -1.5) or ((fieldNumeric[numeric] != 5 and fieldNumeric[numeric] <= 10000) and (fieldNumeric[numeric] in [2.5, 3.5, 4.5]))]]></condition><ftsQuery>test</ftsQuery><returnedFields><field>age</field><field>documentKey</field></returnedFields><sort><field><name>documentKey</name><type>string</type><order>ASC</order></field></sort><count>true</count><aggregate><expression>avg($age)</expression><page>true</page><global>false</global></aggregate><resultsPerPage>10</resultsPerPage><forceCurrentSnapShot>true</forceCurrentSnapShot></query>'
-					}
-				)	
-			}
-
-			function listSavedQueries() {
-				var operation = client.listSavedQueries(
-					function() {
-						test.success(operation)
-						getSavedQuery()
-					}, function() {
-						test.fail(operation)
-					})
-			}
-
-			function getSavedQuery() {
-				var operation = client.getSavedQuery(function() {
-					test.success(operation)
-					deleteSavedQuery()
-				}, function() {
-					test.fail(operation)
-				}, {queryName: 'queryName'})
-			}
-
-			function deleteSavedQuery() {
-				var operation = client.deleteSavedQuery(function() {
-					test.success(operation)
-					test.print("<h3 class='success' id='all'>Success</h3>")
-				}, function() {
-					test.fail(operation)
-				}, {queryName: 'queryName'})
-			}
-
 			
 			dojo.addOnLoad(function() {
 				dojo.require("apstrata.apsdb.client.Connection")
