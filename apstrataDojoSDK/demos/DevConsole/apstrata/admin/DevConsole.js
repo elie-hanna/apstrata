@@ -68,6 +68,9 @@ dojo.declare("apstrata.admin.DevConsole",
 
 	postCreate: function() {
 		var self = this
+
+//		var loginWidget = new apstrata.widgets.client.LoginWidget({client: self.client, visibleWidth: "17", offsetFromCenter: "440"})
+//		dojo.place(loginWidget.domNode, dojo.body, "last")
 		
 		dojo.addClass(this.container.domNode, 'devConsole')
 		
@@ -75,7 +78,6 @@ dojo.declare("apstrata.admin.DevConsole",
 		this.addChild(main)
 
 		self.output = dojo.byId('consoleOutput')
-
 	},
 	
 	addChild: function(child) {

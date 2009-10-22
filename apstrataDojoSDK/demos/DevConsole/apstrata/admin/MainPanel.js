@@ -46,26 +46,30 @@ dojo.declare("apstrata.admin.MainPanel",
 				delete self.openWidget
 			}
 
-			if (label == 'home') {
-				self.openWidget = new apstrata.admin.HomePanel({parentList: self, container: self.container})
-				self.container.addChild(self.openWidget)
-			} else if (label == 'stores') {
-				self.openWidget = new apstrata.admin.StoresPanel({parentList: self, container: self.container})
-				self.container.addChild(self.openWidget)
-			} else if (label == 'schemas') {
-				self.openWidget = new apstrata.admin.SchemasPanel({parentList: self, container: self.container})
-				self.container.addChild(self.openWidget)
-			} else if (label == 'groups') {
-				self.openWidget = new apstrata.admin.GroupsPanel({parentList: self, container: self.container})
-				self.container.addChild(self.openWidget)
-			} else if (label == 'users') {
-				self.openWidget = new apstrata.admin.UsersPanel({parentList: self, container: self.container})
-				self.container.addChild(self.openWidget)
-			} else if (label == 'favourites') {
-//				self.openWidget = new apstrata.admin.QueryPanel({parentList: self, container: self.container})
-				self.openWidget = new apstrata.admin.SchemaEditorPanel({parentList: self, container: self.container})
-				self.container.addChild(self.openWidget)
-			} 
+			if (!this.container.connection.hasCredentials()) {
+				loginWidget.keepOpen(true)
+			} else {
+				if (label == 'home') {
+					self.openWidget = new apstrata.admin.HomePanel({parentList: self, container: self.container})
+					self.container.addChild(self.openWidget)
+				} else if (label == 'stores') {
+					self.openWidget = new apstrata.admin.StoresPanel({parentList: self, container: self.container})
+					self.container.addChild(self.openWidget)
+				} else if (label == 'schemas') {
+					self.openWidget = new apstrata.admin.SchemasPanel({parentList: self, container: self.container})
+					self.container.addChild(self.openWidget)
+				} else if (label == 'groups') {
+					self.openWidget = new apstrata.admin.GroupsPanel({parentList: self, container: self.container})
+					self.container.addChild(self.openWidget)
+				} else if (label == 'users') {
+					self.openWidget = new apstrata.admin.UsersPanel({parentList: self, container: self.container})
+					self.container.addChild(self.openWidget)
+				} else if (label == 'favourites') {
+	//				self.openWidget = new apstrata.admin.QueryPanel({parentList: self, container: self.container})
+	//				self.openWidget = new apstrata.admin.SchemaEditorPanel({parentList: self, container: self.container})
+	//				self.container.addChild(self.openWidget)
+				} 
+			}
 		})
 	},
 	

@@ -52,11 +52,11 @@
 .dijitToasterContainer {
 	display: block;
 	position: absolute;
-	width: 23.5em;
+	width: 25em;
 	margin: 0px;
 	font:0.75em Tahoma, Helvetica, Verdana, Arial;	
 	
-	background: #cacaca;
+	background: #81ca81;
 	color: white;
 
     -o-border-radius: 5px;

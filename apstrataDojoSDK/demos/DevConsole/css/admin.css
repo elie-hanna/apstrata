@@ -39,6 +39,8 @@ html, body {
 	background: #eeeeff;
 	opacity: .45;
 	
+	border: solid 5px #ddddee;
+	
 	overflow: hidden;
 	
 	font-family: monospace;

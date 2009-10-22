@@ -28,7 +28,6 @@
 
 			.ConsoleOutput {
 				background: #dedede;
-#				background: #111133;
 				position: absolute;
 				opacity: .95;
 				visibility: hidden;
@@ -89,31 +88,37 @@
 			dojo.require("apstrata.widgets.client.ConnectionStatus")
 			
 //			dojo.require("apstrata.apsdb.client.widgets.LoginWidget")
+			dojo.require("apstrata.widgets.client.LoginWidget")
 
 			var connection 
 			
 			dojo.require('apstrata.widgets.HStackableContainer')
 			dojo.require("apstrata.Client")
-			dojo.require("apstrata.Connection")
+			dojo.require("apstrata.StickyConnection")
 			
 			dojo.addOnLoad(function() {
-				connection = new apstrata.Connection({
+
+				connection = new apstrata.StickyConnection()
+
+/*
+				connection = new apstrata.StickyConnection({
 					credentials: {
 						key: "7744293024",
-						secret: "3B45DE19C689EDAFCA47"
+						secret: "3B45DE19C689EDAFCA47" + "x"
 					}
 				})
-				
+*/				
+
 //			connection.serviceUrl = "http://apsdb.apstrata.com/sandbox-apsdb/rest"
 //			connection.timeout = 1000
 				
-
+				
 				dojo.registerModuleRelative ("apstrata.admin", "apstrata/admin");
 				dojo.require('apstrata.admin.DevConsole')
 				dojo.require('apstrata.admin.RESTMonitor')
 				toast = dijit.byId("toast")
 				dojo.parser.parse()
-				
+								
 				dojo.subscribe("/apstrata/operation", function(data) {
 					var style
 					if (data.response) {
@@ -134,6 +139,10 @@
 						c
 					)
 		
+					dojo.connect(loginWidget, "loginSuccess", function() {
+//						adminWidget.home()
+					})
+	
 					dojo.addClass(n, 'rounded-sml')
 					c.scrollTop = c.scrollHeight - c.clientHeight
 		
@@ -145,19 +154,12 @@
 		<!-- div class="logo">ap<span style="color: #FF6600;">((</span>strata</div-->
 		<img src="../../apstrata/resources/images/apstrata-big.png" style='position: absolute; width: 250px; left: 50px; top: 25px;'>
 		<div class='appTitle'>Developer Console</div>		
-<!--
-		<div dojoType='apstrata.admin.RESTMonitor' jsId='restMonitor'></div>
-		<div dojoType='apstrata.widgets.SlidingPanel' class='ConsoleOutput rounded-top-sml' attach='bottom' visibleWidth='20'>
-				<div class='title'>Monitor REST protocol messages</div>
-				<div class='output' id='consoleOutput' class='rounded'>
-					<div style='font-family: sans-serif; font-size: 2em; padding: 30px; color: #333333; height: 380px;margin-bottom: 10px;' class='rounded-sml'>This panel will display the REST HTTP conversation between the console and apstrata</div>
-				</div>
-				<br>
-		</div>
--->
 
-
-		<div dojoType='apstrata.widgets.SlidingPanel' dojoAttachPoint='slidingPanel' class='ConsoleOutput rounded-top-sml' attach='bottom' visibleWidth='20'>
+		<div dojoType='apstrata.widgets.SlidingPanel' 
+			dojoAttachPoint='slidingPanel' 
+			class='ConsoleOutput rounded-top-sml' 
+			attach='bottom' 
+			visibleWidth='20'>
 			<div class='title rounded-top-sml'>REST Monitor</div>
 			<div class='output' id='dvMonitorOutput' class='rounded'>
 				<div style='font-family: sans-serif; font-size: 1.4em; padding: 30px; color: #888888; height: 100px;margin-bottom: 10px;' class='rounded-sml'>
@@ -166,15 +168,19 @@
 			<br>
 		</div>
 
-
 		<div dojoType='apstrata.widgets.client.ConnectionStatus'></div>
 
 		<div dojoType="dojox.widget.Toaster" id="toast" 
-			positionDirection="tr-down" duration="0" 
+			positionDirection="tr-left" duration="0" 
 			messageTopic="/apstrata/connection"></div>    
 
-	 	<!-- div dojoType="apstrata.apsdb.client.widgets.LoginWidget" visibleWidth="17" offsetFromCenter="440"></div -->
-		<div dojoType="apstrata.admin.DevConsole" connection='connection' jsId='adminWidget'></div>
-		
+<!--
+-->
+	 	<div dojoType="apstrata.widgets.client.LoginWidget"  jsId="loginWidget"
+			connection='connection' 
+			visibleWidth="17" 
+			offsetFromCenter="440"></div>
+		<div dojoType="apstrata.admin.DevConsole" jsId='adminWidget'
+			connection='connection'></div>
 	</body>
 </html>
