@@ -80,7 +80,6 @@ dojo.declare("apstrata.admin.DevConsole",
 	
 	addChild: function(child) {
 		this.container.addChild(child)
-//		this.container.autoScroll()
 	},
 	
 	alert: function(msg, origin) {
