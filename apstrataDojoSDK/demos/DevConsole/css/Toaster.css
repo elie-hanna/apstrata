@@ -1,0 +1,67 @@
+/* main classes for dojox.widget.Toaster */
+
+.dijitToasterContent {
+	padding:1em;
+	padding-top:0.25em;
+}
+
+.dijitToasterMessage{ 
+}
+
+.dijitToasterWarning{
+	background: red;
+	color: #222222
+
+    -o-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.dijitToasterError,
+.dijitToasterFatal{
+	font-weight:bold;
+}
+
+.dijitToasterWarning .dijitToasterContent{
+	background: #cc0033;
+	padding:1em;
+	padding-top:0.25em;
+	color: #222222
+
+    -o-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+} 
+
+.dijitToasterError .dijitToasterContent{
+	padding:1em;
+	padding-top:0.25em;
+}
+
+/* imported from dijit.css */
+ 
+.dijitToasterClip {
+	position: absolute;
+	z-index: 5000;
+	overflow: hidden;
+
+}
+
+.dijitToasterContainer {
+	display: block;
+	position: absolute;
+	width: 23.5em;
+	margin: 0px;
+	font:0.75em Tahoma, Helvetica, Verdana, Arial;	
+	
+	background: #cacaca;
+	color: white;
+
+    -o-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+ 
