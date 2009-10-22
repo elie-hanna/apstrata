@@ -28,6 +28,8 @@ dojo.declare("apstrata.widgets.client.LoginWidget",
 		if (attrs.connection) this.connection = attrs.connection;
 		else this.connection = new apstrata.Connection()
 
+		if (attrs.client) this.client = attrs.client
+
 		// Init all variables used in template	
 		this.errorMessage = ""
 		this.assumeLoggedIn = false
@@ -81,13 +83,14 @@ dojo.declare("apstrata.widgets.client.LoginWidget",
 			},
 			
 			failure: function(error, message) {
-				self.error(error)
-				self.error(message)
+//				self.error(error)
+//				self.error(message)
 				
 				self.errorMessage = message
 				self._render()
 
 				self.loginFailure()
+				self.keepOpen(true)
 			}
 		})
 	},
