@@ -28,7 +28,16 @@ dojo.provide("apstrata.widgets.HStackableContainer")
 dojo.declare("apstrata.widgets.HStackableContainer", 
 [dijit.layout._LayoutWidget], 
 {
+	addChild: function(child) {
+		console.dir(child.domNode)
+		child._StackableContainer = this
+		this.inherited(arguments)
 
+	},
+	
+	autoScroll: function() {
+		this.domNode.scrollLeft = this.domNode.scrollWidth - this.domNode.clientWidth
+	}
 })
 
 /*
@@ -50,6 +59,7 @@ dojo.declare("apstrata.widgets._HStackableContainerLayoutMixin", [],
 				easing: dojo.fx.easing.cubicIn,
 				duration: 200,
 				onEnd: function() {
+					self._StackableContainer.autoScroll()
 				}
 			}
 			
@@ -114,6 +124,7 @@ dojo.declare("apstrata.widgets.HStackableList",
 	data: null,
 	parentList: null,
 	editable: false,
+	noEdit: false,
 	
 	msgDelete: "are you sure you want to delete item: ",
 
@@ -140,12 +151,17 @@ dojo.declare("apstrata.widgets.HStackableList",
 		this._animateToPosition()
 	},
 	
+	refresh: function() {
+		this._editMode = false
+	},
+	
 	render: function() {
 		this.inherited(arguments)
 		this._animateToPosition()
 	},
 	
 	_onClick: function(e) {
+		if (this.noEdit) return;
 		if (this._editMode) return;
 
 		var label = e.currentTarget.getAttribute('itemLabel')
@@ -233,11 +249,6 @@ dojo.declare("apstrata.widgets.HStackableList",
 		}
 	},
 	
-	onDeleteItem: function(index, label) {},
-
-	destroy: function() {
-		if (this.openWidget) this.openWidget.destroy()
-		this.inherited(arguments)
-	}
+	onDeleteItem: function(index, label) {}
 })			
 

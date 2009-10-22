@@ -46,6 +46,7 @@ dojo.declare("apstrata.widgets.SlidingPanel", [dijit.layout._LayoutWidget], {
 	},
 	
 	startup: function() {
+		dojo.style(this.domNode, {visibility: "visible"})
 
 		this.inherited(arguments)
 	},

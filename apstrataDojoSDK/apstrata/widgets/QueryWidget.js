@@ -130,6 +130,13 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 
         // Call startup, in order to render the grid:
         this._grid.startup();			
+	},
+	
+	destroy: function() {
+		if (this._grid) this._grid.destroy()
+		if (this._spinner) this._spinner.destroy()
+		
+		this.inherited(arguments)
 	}
 })
 
