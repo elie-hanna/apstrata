@@ -63,6 +63,13 @@ dojo.declare("apstrata.Get",
 			//  we're using a timeout event to provide an error message if an operation takes too long to execute
 			self._setTimeout()
 
+			dojo.publish("/apstrata/operation", [{
+					method: 'GET',
+					type: "message", 
+					url: self.url,
+					message: self.url
+			}])
+
 			dojo.io.script.get({ 
 				url: self.url,
 				callbackParamName : "apsws.jc",
@@ -94,11 +101,11 @@ dojo.declare("apstrata.Get",
 
                     if (json.response) {
 						self.response = json.response
-												
+						
 						self.log.info("requestId:", json.response.metadata.requestId)
                         self.log.info("status:", json.response.metadata.status);
 
-                        if (self.status==self._SUCCESS) {
+                        if (json.response.metadata.status==self._SUCCESS) {
                             self.handleResult();
                         } else {
                             self.handleError();
@@ -111,6 +118,15 @@ dojo.declare("apstrata.Get",
                         self.log.debug("errorMessage:", self.response.metadata.errorMessage);
                         self.handleError();                                        
                     }
+
+					dojo.publish("/apstrata/operation", [{
+							method: 'GET',
+							type: "message",
+							success: json.response.metadata.status,
+							response: dojo.toJson(json),
+							message: dojo.toJson(json)
+					}])
+
 
 					return json; 
 				}, 

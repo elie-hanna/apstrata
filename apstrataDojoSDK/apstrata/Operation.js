@@ -196,9 +196,9 @@ dojo.declare("apstrata.Operation",
 			this.operationTimeout = true;
 
 			this.response = {}
-
-			self.response.metadata.errorCode = "timeout_communication_error";
-			self.response.metadata.errorMessage = "Timeout or communication error";
+			this.response.metadata = {}
+			this.response.metadata.errorCode = "timeout_communication_error";
+			this.response.metadata.errorMessage = "Timeout or communication error";
 
 			this.responseTime = this.connection.getTimeout()
 	
@@ -226,14 +226,14 @@ dojo.declare("apstrata.Operation",
      * @function handleResult Stop receiving the response and handle what was collected
      */
 		handleResult: function() {
-			this.connection.activity.stop(this);
+			//this.connection.activity.stop(this);
 		},
 
     /**
      * @function handleError Stop receiving the response and log the error that occurred
      */
 		handleError: function() {
-			this.connection.activity.stop(this)
+			//this.connection.activity.stop(this)
         	this.log.warn("errorCode:", this.response.metadata.errorCode)
         	this.log.warn("errorMessage:", this.response.metadata.errorMessage)
 		}

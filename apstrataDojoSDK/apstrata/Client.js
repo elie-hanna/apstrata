@@ -26,6 +26,9 @@ dojo.require("apstrata.Post")
 dojo.declare("apstrata.Client", 
 	[apstrata.util.logger.Loggable], 
 	{
+		
+		_MESSAGE_DURATION: 1000,
+		
 		constructor: function(attrs) {
 			if (attrs) {
 				if (attrs.connection) {
@@ -36,9 +39,21 @@ dojo.declare("apstrata.Client",
 			if (!this.connection) {
 				this.connection = new apstrata.Connection()
 			}
+			
+			if (attrs.handleResult) this.handleResult = attrs.handleResult
+			if (attrs.handleError) this.handleError = attrs.handleError
 		},
 		
 		call: function(attrs) {
+			var self = this
+			
+			dojo.publish("/apstrata/connection", [{
+					action: 'start',
+					message: "Calling apstrata API: <b>" + attrs.action + "</b>", 
+					type: "message", 
+					duration: self._MESSAGE_DURATION
+			}])
+			
 			if (attrs.action != "SaveDocumentPost") {
 				var operation = new apstrata.Get(this.connection)
 			} else {
@@ -50,16 +65,35 @@ dojo.declare("apstrata.Client",
 			operation.request.apsdb = attrs.apsdb
 			operation.request.apsim = attrs.apsim
 
+			operation.request = {}
 			for (prop in attrs.fields) {
-				this.request[prop] = attrs.fields[prop];
+				operation.request[prop] = attrs.fields[prop];
 			}
 			
 			dojo.connect(operation, "handleResult", function() {
+				if (self.handleResult) self.handleResult(operation)
 				attrs.load(operation)
+
+				dojo.publish("/apstrata/connection", [{
+					action: 'end',
+					success: true,
+					message: "Call to apstrata API: <b>" + attrs.action + "</b> successful", 					
+					type: "message", 
+					duration: self._MESSAGE_DURATION
+				}]);
 			})
 
 			dojo.connect(operation, "handleError", function() {
+				if (self.handleError) self.handleError(operation)
 				attrs.error(operation)
+
+				dojo.publish("/apstrata/connection", [{
+					action: 'end',
+					success: false,
+					message: "Call to apstrata API: <b>" + attrs.action + "</b> failed", 					
+					type: "warning", 
+					duration: self._MESSAGE_DURATION
+				}]);
 			})
 
 			operation.execute()				
