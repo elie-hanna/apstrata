@@ -3,18 +3,18 @@
 	border-right: 1px solid #333333;
 	border-bottom: 1px solid #333333;
 	
-	background: #DEDEDE;
-	opacity: .90;
-	z-index: 99999;
+	background: #aeaeDE;
+	opacity: .95;
+	z-index: 4990;
 
 	font-size: 8pt;
 	padding: 5px;
 }
 
 .LoginWidgetSlidingPanel {
-	background: #DEDEDE;
-	opacity: .90;
-	z-index: 99999;
+	background: #aeaeDE;
+	opacity: .95;
+	z-index: 4990;
 
 	font-family:Arial,sans-serif;
 	font-size: 8pt;
@@ -24,7 +24,7 @@
 .loginWidgetErrorPane {
 	font-size: 8pt; 
 	color: #BB0000; 
-	background: #DEDEDE;
+	background: #aeaeDE;
 	padding: 4px;
 	width: 180px;
 }
