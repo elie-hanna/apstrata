@@ -54,7 +54,8 @@ dojo.declare("apstrata.Connection",
 		constructor: function(attrs) {
 			this._DEFAULT_SERVICE_URL= "https://apsdb.apstrata.com/sandbox-apsdb/rest"
 			this.timeout = 10000
-			this.serviceUrl= this._DEFAULT_SERVICE_URL;
+			this.serviceUrl= this._DEFAULT_SERVICE_URL
+			this.defaultStore = ""
 			this.credentials= {key: "", secret: "", un: "", pw: ""}
 			this._urlSigner = new apstrata.URLSignerMD5()				
 
