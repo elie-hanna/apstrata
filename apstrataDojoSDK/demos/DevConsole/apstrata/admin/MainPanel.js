@@ -19,6 +19,25 @@
  */
 dojo.provide("apstrata.admin.MainPanel")
 
+dojo.require('apstrata.admin.HomePanel')
+
+dojo.require("apstrata.admin.LoginPanel")
+
+dojo.require('apstrata.admin.StoresPanel')
+dojo.require('apstrata.admin.StoreOperations')
+dojo.require('apstrata.admin.UsersPanel')
+dojo.require('apstrata.admin.UserEditPanel')
+dojo.require('apstrata.admin.GroupsPanel')
+dojo.require('apstrata.admin.GroupEditPanel')
+dojo.require("apstrata.admin.QueryPanel")
+dojo.require("apstrata.admin.QueryResultsPanel")
+
+/*
+dojo.require('apstrata.admin.SchemasPanel')
+dojo.require("apstrata.admin.SchemaEditorPanel")
+*/				
+
+
 dojo.declare("apstrata.admin.MainPanel", 
 [apstrata.widgets.HStackableList], 
 {
@@ -29,30 +48,58 @@ dojo.declare("apstrata.admin.MainPanel",
 		{label: "scriptlettes", iconSrc: "../../apstrata/resources/images/pencil-icons/configuration.png"},
 		{label: "groups", iconSrc: "../../apstrata/resources/images/pencil-icons/users.png"},
 		{label: "users", iconSrc: "../../apstrata/resources/images/pencil-icons/user-man.png"},
-		{label: "favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/favourites.png"}
+		{label: "favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/favourites.png"},
+//		{label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"}
 	],
 	
 	postCreate: function() {
 		var self = this
 		
-		dojo.connect(self, 'onClick', function(index, label) {
-			//  add this and open panels will not be refereshed
-			//	 if their label is clicked while they're already open
-			//	if (label == self._lastLabel) return
-			//  self._lastLabel = label
+		dojo.subscribe("/apstrata/connection/login/success", function(data) {
+			self.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"})
+			self.render()
 			
-			if (self.openWidget) {
-				self.openWidget.destroy()
-				delete self.openWidget
-			}
+			if (self.openTarget) self.open(self.openTarget)
+			delete self.openTarget
+		});
+		
+		dojo.subscribe("/apstrata/connection/logout", function(data) {
+			self.data.pop()
+			self.render()
+			self.open("home")
+		});
 
+		dojo.connect(self, 'onClick', function(index, label) {
+			if (label == 'logout') {
+				self.container.connection.logout()
+			} else self.open(label)
+		})
+	},
+	
+	open: function(label) {
+		var self = this
+
+		//  add this and open panels will not be refereshed
+		//	 if their label is clicked while they're already open
+		//	if (label == self._lastLabel) return
+		//  self._lastLabel = label
+		
+		if (self.openWidget) {
+			self.openWidget.destroy()
+			delete self.openWidget
+		}
+
+		if (label == 'home') {
+			self.openWidget = new apstrata.admin.HomePanel({parentList: self, container: self.container})
+			self.container.addChild(self.openWidget)
+		} else {
+			this.openTarget = label
+			
 			if (!this.container.connection.hasCredentials()) {
-				loginWidget.keepOpen(true)
-			} else {
-				if (label == 'home') {
-					self.openWidget = new apstrata.admin.HomePanel({parentList: self, container: self.container})
+					self.openWidget = new apstrata.admin.LoginPanel({parentList: self, container: self.container})
 					self.container.addChild(self.openWidget)
-				} else if (label == 'stores') {
+			} else {
+				if (label == 'stores') {
 					self.openWidget = new apstrata.admin.StoresPanel({parentList: self, container: self.container})
 					self.container.addChild(self.openWidget)
 				} else if (label == 'schemas') {
@@ -65,12 +112,17 @@ dojo.declare("apstrata.admin.MainPanel",
 					self.openWidget = new apstrata.admin.UsersPanel({parentList: self, container: self.container})
 					self.container.addChild(self.openWidget)
 				} else if (label == 'favourites') {
+					self.openWidget = new apstrata.admin.LoginPanel({parentList: self, container: self.container})
+					self.container.addChild(self.openWidget)
 	//				self.openWidget = new apstrata.admin.QueryPanel({parentList: self, container: self.container})
 	//				self.openWidget = new apstrata.admin.SchemaEditorPanel({parentList: self, container: self.container})
 	//				self.container.addChild(self.openWidget)
-				} 
+				} else if (label == 'logout') {
+					this.container.connection.logout()
+					self.open('home')
+				}
 			}
-		})
+		}
 	},
 	
 	startup: function() {

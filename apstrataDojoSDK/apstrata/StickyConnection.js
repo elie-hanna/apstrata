@@ -63,18 +63,28 @@ dojo.declare("apstrata.StickyConnection",
 					self.debug("logging in: saving credentials to cookie")
 //					self.saveToCookie()
 	
+					dojo.publish("/apstrata/connection/login/success", [{
+						key: self.credentials.key
+					}])
+
 					handlers.success()
 				},
 				error: function(operation) {
 					// Clear the secret and password so hasCredentials() functions
 					self.credentials.secret=""
 					self.credentials.pw=""
+
+					dojo.publish("/apstrata/connection/login/failure", [{
+						key: self.credentials.key
+					}])
+
 					handlers.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage)
 				}
 			})
 		},
 
 		logout: function() {
+			var self = this
 			this.debug("logging out: erasing credentials from cookie")
 
 			// Erase secret and password
@@ -84,6 +94,10 @@ dojo.declare("apstrata.StickyConnection",
 			// Make sure key/username are not null/undefined
 			if (!this.credentials.key) this.credentials.key=""
 			if (!this.credentials.username) this.credentials.username=""
+
+			dojo.publish("/apstrata/connection/logout", [{
+				key: self.credentials.key
+			}])
 
 //			this.saveToCookie()
 		},

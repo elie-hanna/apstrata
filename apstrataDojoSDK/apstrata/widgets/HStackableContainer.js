@@ -176,6 +176,10 @@ dojo.declare("apstrata.widgets.HStackableList",
 		this.onClick(index, label)
 	},
 	
+	_markSelected: function(e) {
+		
+	},
+	
 	onClick: function(index, label) {},
 	
 	_onMouseover: function(e) {

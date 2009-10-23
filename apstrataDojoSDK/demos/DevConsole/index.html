@@ -20,7 +20,6 @@
 	        @import "../../apstrata/themes/apstrata/apstrata.css";
 	        @import "../../apstrata/themes/apstrata/LoginWidget.css";
 	        @import "../../apstrata/themes/apstrata/Alert.css";
-	        @import "../../apstrata/themes/apstrata/CrossPagePanel.css";
 
 			@import "css/Toaster.css";
 			@import "css/forms.css";
@@ -139,9 +138,9 @@
 						c
 					)
 		
-					dojo.connect(loginWidget, "loginSuccess", function() {
+//					dojo.connect(loginWidget, "loginSuccess", function() {
 //						adminWidget.home()
-					})
+//					})
 	
 					dojo.addClass(n, 'rounded-sml')
 					c.scrollTop = c.scrollHeight - c.clientHeight
@@ -175,11 +174,11 @@
 			messageTopic="/apstrata/connection"></div>    
 
 <!--
--->
 	 	<div dojoType="apstrata.widgets.client.LoginWidget"  jsId="loginWidget"
 			connection='connection' 
 			visibleWidth="17" 
 			offsetFromCenter="440"></div>
+-->
 		<div dojoType="apstrata.admin.DevConsole" jsId='adminWidget'
 			connection='connection'></div>
 	</body>

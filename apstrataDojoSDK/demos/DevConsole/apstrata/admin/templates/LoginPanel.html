@@ -1,0 +1,102 @@
+<div style='height: 100%; overflow-y: auto; overflow-x: hidden; width: 958px;'>
+	<style>
+		.LoginForm {
+			background: #DDDDee;
+			padding: 20px;
+			font-size: 0.9em;
+			height: 260px;
+			margin: 10px;
+		}
+		
+		.LoginForm .title {
+			font-family:'Georgia','Serif';
+			font-size: 1.4em;
+			width: 100%;
+			text-align: center;
+			padding: 0px;
+			color: #0000AA
+		}
+				
+		.LoginForm .label {
+			font-size: 0.9em;
+		
+			font-family: sans-serif;
+			padding-top: 4px;
+			padding-bottom: 2px;
+			color: #0000AA;
+		}
+		
+		.LoginForm input {
+			font-family: sans-serif;
+			font-size: 0.9em;
+		
+			padding: 5px;
+			width: 97%;
+			
+			border: solid 0px #ababab;
+		
+		    -o-border-radius: 5px;
+		    -moz-border-radius: 5px;
+		    -webkit-border-radius: 5px;
+		    border-radius: 5px;
+		}
+	</style>
+	<div class='homePanel'>
+		<h3>Login to apstrata</h3>
+		<!-- img src='../../apstrata/resources/images/pencil-icons/computer.png' width='70' style='position: absolute; top:15px; left: 460px;' -->
+
+		<p>This will capture your apstrata login credentials and use them to sign all API requests that are sent by the console. 
+		You can look at how the requests are signed by opening the <span class='highlight'>REST monitor</span> panel at the bottom
+		of the page.</p>
+		<br>
+		<table width="100%">
+			<tr>
+				<td width="33%" valign="top">
+					<p>Using the <span class='highlight'>Master Credentials</span> that were provided when you created the apstrata
+					account will give you superuser control over all API calls. 
+					<br><br>
+					<span class='highlight'>User Credentials</span> provide ACL enforced access. You can login with the 
+					master account first to create an initial set of users for your applications.</p>
+				</td>
+				<td width="33%" valign="top">
+					<div class="LoginForm rounded-sml" 
+							dojoAttachPoint="dvMaster" 
+							dojoAttachEvent='onmouseover: _onMouseoverMaster,onmouseout: _onMouseoutMaster'>
+						<form action="" method="">
+							<span class="title">Master Credentials</span>
+							<br><br>
+				
+							<div class="label">Key:</div>
+							<input type="text" dojoAttachPoint="mKey" value="7744293024" />
+				
+							<div class="label">Secret:</div>
+							<input type="text" dojoAttachPoint="mSecret" value="3B45DE19C689EDAFCA47" />
+							
+							<br><br>
+						</form>
+							<button dojoAttachEvent="onclick: loginMaster">Login</button>
+					</div>
+				</td>
+				<td width="33%" valign="top">
+					<div class="LoginForm  rounded-sml" dojoAttachPoint="dvUser" dojoAttachEvent='onmouseover: _onMouseoverUser,onmouseout: _onMouseoutUser'>
+						<span class="title">User Credentials</span>
+						<br><br>
+			
+						<div class="label">Key:</div>
+						<input type="text" dojoAttachPoint="key" value="" />
+			
+						<div class="label">User Name:</div>
+						<input type="text" dojoAttachPoint="un" value="" />
+			
+						<div class="label">Password:</div>
+						<input type="text" dojoAttachPoint="pw" value="" />
+			
+						<br><br>
+						<button dojoAttachEvent="onclick: loginUser">Login</button>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</div>

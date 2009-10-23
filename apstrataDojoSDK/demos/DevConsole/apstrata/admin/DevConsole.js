@@ -22,22 +22,6 @@ dojo.provide("apstrata.admin.DevConsole")
 dojo.require("apstrata.Client")
 
 dojo.require('apstrata.admin.MainPanel')
-dojo.require('apstrata.admin.HomePanel')
-
-dojo.require('apstrata.admin.StoresPanel')
-dojo.require('apstrata.admin.StoreOperations')
-dojo.require('apstrata.admin.UsersPanel')
-dojo.require('apstrata.admin.UserEditPanel')
-dojo.require('apstrata.admin.GroupsPanel')
-dojo.require('apstrata.admin.GroupEditPanel')
-dojo.require("apstrata.admin.QueryPanel")
-dojo.require("apstrata.admin.QueryResultsPanel")
-
-/*
-dojo.require('apstrata.admin.SchemasPanel')
-dojo.require("apstrata.admin.SchemaEditorPanel")
-*/				
-
 
 /*
  * Main apstrata developer console widget. It encapsulates the HStackableContainer panels container
@@ -74,10 +58,14 @@ dojo.declare("apstrata.admin.DevConsole",
 		
 		dojo.addClass(this.container.domNode, 'devConsole')
 		
-		var main = new apstrata.admin.MainPanel({container: self})
-		this.addChild(main)
+		this.main = new apstrata.admin.MainPanel({container: self})
+		this.addChild(this.main)
 
 		self.output = dojo.byId('consoleOutput')
+	},
+	
+	open: function(label) {
+		this.main.open(label)
 	},
 	
 	addChild: function(child) {
