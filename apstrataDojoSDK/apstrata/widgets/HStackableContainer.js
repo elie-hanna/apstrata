@@ -29,7 +29,7 @@ dojo.declare("apstrata.widgets.HStackableContainer",
 [dijit.layout._LayoutWidget], 
 {
 	addChild: function(child) {
-		console.dir(child.domNode)
+//		console.dir(child.domNode)
 		child._StackableContainer = this
 		this.inherited(arguments)
 
