@@ -31,7 +31,7 @@ html, body {
 
 .devConsoleBackground {
 	position: absolute;
-	height: 472px;
+	height: 482px;
 	width: 1150px;
 	left: 50px;
 	top: 90px;
@@ -48,7 +48,7 @@ html, body {
 
 .devConsole {
 	position: absolute;
-	height: 472px;
+	height: 482px;
 	width: 1150px;
 	left: 50px;
 	top: 90px;
@@ -64,7 +64,7 @@ html, body {
 .devConsole .hStackable {
 	position: absolute;
 	overflow: hidden;
-	height: 450px;
+	height: 460px;
 	top: 5px;
 
 	margin-left: 5px;
