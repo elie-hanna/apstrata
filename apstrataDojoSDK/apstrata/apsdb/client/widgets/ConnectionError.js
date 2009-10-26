@@ -1,15 +1,15 @@
-dojo.provide("apstrata.dojo.widgets.ConnectionError");
+dojo.provide("apstrata.apsdb.client.widgets.ConnectionError");
 
 dojo.require("dijit.Dialog");
 dojo.require("dijit.form.Button");
 
-dojo.declare("apstrata.dojo.widgets.ConnectionError",
+dojo.declare("apstrata.apsdb.client.widgets.ConnectionError",
 	[dijit._Widget, dijit._Templated],
 	{
 		widgetsInTemplate: true,
-		templatePath: dojo.moduleUrl("apstrata.dojo.widgets", "templates/ConnectionError.html"),
+		templatePath: dojo.moduleUrl("apstrata.apsdb.client.widgets", "templates/ConnectionError.html"),
 		
-		constructor: function(/* apstrata.dojo.client.apsdb.Connection */ connection) {
+		constructor: function(/* apstrata.apsdb.client.client.apsdb.Connection */ connection) {
 			this.connection = connection
 		},
 		

@@ -44,7 +44,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		//
 		// Replace here with your store name
 		//
-		storeName: "myStore1",
+		storeName: "myStore",
 
 		constructor: function() {
 			if(schema != null)
@@ -78,7 +78,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			// Make sure that this user has not already taken the survey and already a cookie
 			if (dojo.cookie(cookie) == 'taken') {
 				if (dataModel.viewResults) {
-					window.location = dataModel.resultsUrl;
+					this.loadAggregatedResults();
 				} else {
 					this.surveyDiv.style.display = 'none';
 					this.successMessage.innerHTML = dataModel.successMessage;
@@ -330,62 +330,85 @@ dojo.declare("surveyWidget.widgets.Survey",
 			};
 
 			var viewUrl = this.getViewUrl();
-			/* 
+			
+			// Embed code to run the survey
 			//console.debug(dojo.toJson(surveyData));
+			var surveyDataSchema = encodeURIComponent(dojo.toJson(surveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
 			var generatedCode = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
-			+ '<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
-			+ '<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.username + '\', serviceURL: \'http://apsdb.apstrata.com/sandbox-apsdb/rest\'"></script>'
-			+ '<script type="text/javascript" src="widgets/SurveyRunner.js" ></script>\n';
+			+ '<SCRIPT TYPE="text/javascript" SRC="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"' 
+			+ 'djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,'
+          	+ 'modulePaths: { surveyWidget: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
+		  	+ '			 apstrata: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata\','
+		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
+			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.key + '\', username:\'' + apstrata.apConfig.username + '\', password:\'' + apstrata.apConfig.password + '\', serviceURL: \'http://10.0.0.215/apstratabase/rest\'"></script>\n'
+			+ '<link rel=stylesheet href="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
+			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyRunner.js" ></script>\n'
+        	+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/util/schema/Schema.js" ></script>\n';
 			
 			if(this.viewResults.checked)
-				generatedCode += '<script type="text/javascript" src="widgets/SurveyChartingLoader.js" ></script>\n';
+				generatedCode += '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyChartingLoader.js" ></script>\n';
 				
-			generatedCode += '<script>var schema = \'' + dojo.toJson(surveyData) + '\';</script>\n'
+			generatedCode += '<script>var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div dojoType="surveyWidget.widgets.Survey" /></div>'
-			+ '</textarea>';*/
-
+			+ '</textarea>';
+/*
 			var surveyDataSchema = encodeURIComponent(dojo.toJson(surveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
 			this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?key=' + apstrata.apConfig.username + '&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + surveyDataSchema + '\' ></iframe>'
-			+ '</textarea>';
-			//this.output.innerHTML = generatedCode;
+			+ '</textarea>';*/
+			this.output.innerHTML = generatedCode;
 			this.output.style.display = "";
 			this.output.width = "800px";
-
-			/*this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:400px; height:100px;">'
+			
+			// Embed code to see the results of your survey
+			var listSurveyDataSchema = encodeURIComponent(dojo.toJson(listSurveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
+			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
-			+ '<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
-			+ '<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.username + '\', serviceURL: \'http://apsdb.apstrata.com/sandbox-apsdb/rest\'"></script>'
-			+ '<script type="text/javascript" src="widgets/SurveyListingLoader.js" ></script>\n'
-			+ '<script>var schema = \'' + dojo.toJson(listSurveyData) + '\';</script>\n'
+			+ '<SCRIPT TYPE="text/javascript" SRC="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"' 
+			+ 'djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,'
+          	+ 'modulePaths: { surveyWidget: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
+		  	+ '			 apstrata: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata\','
+		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
+			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.key + '\', username:\'' + apstrata.apConfig.username + '\', password:\'' + apstrata.apConfig.password + '\', serviceURL: \'http://10.0.0.215/apstratabase/rest\'"></script>\n'
+			+ '<link rel=stylesheet href="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
+			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyListingLoader.js" ></script>\n'
+        	+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/util/schema/Schema.js" ></script>\n';
+			+ '<script>var schema = \'' + listSurveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div>'
 			+ '<div dojoType="surveyWidget.widgets.SurveyListing" /></div>'
 			+ '</div>'
-			+ '</textarea>';*/
-			var listSurveyDataSchema = encodeURIComponent(dojo.toJson(listSurveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
+			+ '</textarea>';
+			/*var listSurveyDataSchema = encodeURIComponent(dojo.toJson(listSurveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
 			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?AF_deliveryChannel=listing&key=' + apstrata.apConfig.username + '&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + listSurveyDataSchema + '\' ></iframe>'
-			+ '</textarea>';
+			+ '</textarea>';*/
 			this.listingEmbed.style.display = "";
 			this.listingEmbed.width = "800px";
 
-			/*this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see charts of results of your survey.</div><textarea style="width:400px; height:100px;">'
+			// Embed code to see charts of results of your survey
+			this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see charts of results of your survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
-			+ '<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: true"></script>\n'
-			+ '<script type="text/javascript" src="../../apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.username + '\', serviceURL: \'http://apsdb.apstrata.com/sandbox-apsdb/rest\'"></script>'
-			+ '<script type="text/javascript" src="widgets/SurveyChartingLoader.js" ></script>\n'
-			+ '<script>var schema = \'' + dojo.toJson(surveyData) + '\';</script>\n'
+			+ '<SCRIPT TYPE="text/javascript" SRC="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"' 
+			+ 'djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,'
+          	+ 'modulePaths: { surveyWidget: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
+		  	+ '			 apstrata: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata\','
+		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
+			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.key + '\', username:\'' + apstrata.apConfig.username + '\', password:\'' + apstrata.apConfig.password + '\', serviceURL: \'http://10.0.0.215/apstratabase/rest\'"></script>\n'
+			+ '<link rel=stylesheet href="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
+			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyChartingLoader.js" ></script>\n'
+        	+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/util/schema/Schema.js" ></script>\n';
+			+ '<script>var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div>'
 			+ '<div dojoType="surveyWidget.widgets.SurveyCharting" /></div>'
 			+ '</div>'
-			+ '</textarea>';*/
-			this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see charts of results of your survey.</div><textarea style="width:400px; height:100px;">'
-			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?AF_deliveryChannel=aggregates&key=' + apstrata.apConfig.username + '&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + surveyDataSchema + '\' ></iframe>'
 			+ '</textarea>';
+			/*this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see charts of results of your survey.</div><textarea style="width:400px; height:100px;">'
+			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?AF_deliveryChannel=aggregates&key=' + apstrata.apConfig.username + '&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + surveyDataSchema + '\' ></iframe>'
+			+ '</textarea>';*/
 			this.chartingEmbed.style.display = "";
 			this.chartingEmbed.width = "800px";
 

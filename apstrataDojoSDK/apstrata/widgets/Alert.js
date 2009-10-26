@@ -225,7 +225,7 @@ dojo.declare("apstrata.widgets.Alert",
 		var w = dijit.getViewport()
 
 		if (this.modal) dojo.style(this._curtain, {
-			visibility: "hidden",
+			visibility: "hidden"
 		})
 
 		this._animation = {

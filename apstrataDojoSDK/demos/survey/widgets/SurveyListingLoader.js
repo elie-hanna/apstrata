@@ -36,18 +36,13 @@ function loadjscssfile(filename, filetype){
 	  document.getElementsByTagName("head")[0].appendChild(fileref)
 }
 
-loadjscssfile("../../lib/dojo/1.3.0-src/dojo/resources/dojo.css", "css");
-loadjscssfile("widgets/css/survey.css", "css");
-//loadjscssfile("../../dojo/1.3.0-src/dojo/dojo.js", "js");
+loadjscssfile("http://o.aolcdn.com/dojo/1.3/dojo/resources/dojo.css", "css");
+//loadjscssfile("http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css", "css");
 
 dojo.require("dijit.Declaration");
- //dojo.addOnLoad(function() {
-dojo.registerModulePath("surveyWidget","../../../../demos/survey");
-//dojo.registerModuleRelative ("surveyWidget", "../../survey");
-dojo.registerModulePath("apstrata","../../../../apstrata");
-//dojo.registerModuleRelative ("apstrata", "../apstrata");
+//dojo.registerModulePath("surveyWidget","../../../../demos/survey");
+//dojo.registerModulePath("apstrata","../../../../apstrata");
 dojo.require("surveyWidget.widgets.SurveyListing");
 dojo.require("apstrata.apsdb.client.Connection")
 dojo.require("apstrata.apsdb.client.Client")
-//})
 
