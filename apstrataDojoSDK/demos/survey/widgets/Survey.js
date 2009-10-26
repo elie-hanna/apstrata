@@ -338,16 +338,16 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
 			+ '<SCRIPT TYPE="text/javascript" SRC="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"' 
 			+ 'djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,'
-          	+ 'modulePaths: { surveyWidget: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
-		  	+ '			 apstrata: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata\','
+          	+ 'modulePaths: { surveyWidget: \'https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
+		  	+ '			 apstrata: \'https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata\','
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
-			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.key + '\', username:\'' + apstrata.apConfig.username + '\', password:\'' + apstrata.apConfig.password + '\', serviceURL: \'http://10.0.0.215/apstratabase/rest\'"></script>\n'
-			+ '<link rel=stylesheet href="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
-			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyRunner.js" ></script>\n'
-        	+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/util/schema/Schema.js" ></script>\n';
+			+ '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.key + '\', username:\'' + apstrata.apConfig.username + '\', password:\'' + apstrata.apConfig.password + '\', serviceURL: \'http://apsdb.apstrata.com/sandbox-apsdb/rest\'"></script>\n'
+			+ '<link rel=stylesheet href="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
+			+ '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyRunner.js" ></script>\n'
+        	+ '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/util/schema/Schema.js" ></script>\n';
 			
 			if(this.viewResults.checked)
-				generatedCode += '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyChartingLoader.js" ></script>\n';
+				generatedCode += '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyChartingLoader.js" ></script>\n';
 				
 			generatedCode += '<script>var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
@@ -368,13 +368,13 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
 			+ '<SCRIPT TYPE="text/javascript" SRC="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"' 
 			+ 'djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,'
-          	+ 'modulePaths: { surveyWidget: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
-		  	+ '			 apstrata: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata\','
+          	+ 'modulePaths: { surveyWidget: \'https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
+		  	+ '			 apstrata: \'https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata\','
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
-			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.key + '\', username:\'' + apstrata.apConfig.username + '\', password:\'' + apstrata.apConfig.password + '\', serviceURL: \'http://10.0.0.215/apstratabase/rest\'"></script>\n'
-			+ '<link rel=stylesheet href="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
-			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyListingLoader.js" ></script>\n'
-        	+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/util/schema/Schema.js" ></script>\n';
+			+ '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.key + '\', username:\'' + apstrata.apConfig.username + '\', password:\'' + apstrata.apConfig.password + '\', serviceURL: \'http://apsdb.apstrata.com/sandbox-apsdb/rest\'"></script>\n'
+			+ '<link rel=stylesheet href="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
+			+ '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyListingLoader.js" ></script>\n'
+        	+ '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/util/schema/Schema.js" ></script>\n';
 			+ '<script>var schema = \'' + listSurveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div>'
@@ -393,13 +393,13 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
 			+ '<SCRIPT TYPE="text/javascript" SRC="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"' 
 			+ 'djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,'
-          	+ 'modulePaths: { surveyWidget: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
-		  	+ '			 apstrata: \'http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata\','
+          	+ 'modulePaths: { surveyWidget: \'https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
+		  	+ '			 apstrata: \'https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata\','
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
-			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.key + '\', username:\'' + apstrata.apConfig.username + '\', password:\'' + apstrata.apConfig.password + '\', serviceURL: \'http://10.0.0.215/apstratabase/rest\'"></script>\n'
-			+ '<link rel=stylesheet href="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
-			+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyChartingLoader.js" ></script>\n'
-        	+ '<script type="text/javascript" src="http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/util/schema/Schema.js" ></script>\n';
+			+ '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata.js" apConfig="key:\'' + apstrata.apConfig.key + '\', username:\'' + apstrata.apConfig.username + '\', password:\'' + apstrata.apConfig.password + '\', serviceURL: \'http://apsdb.apstrata.com/sandbox-apsdb/rest\'"></script>\n'
+			+ '<link rel=stylesheet href="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
+			+ '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/SurveyChartingLoader.js" ></script>\n'
+        	+ '<script type="text/javascript" src="https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/apstrata/util/schema/Schema.js" ></script>\n';
 			+ '<script>var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div>'
