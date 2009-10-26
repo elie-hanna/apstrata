@@ -1,0 +1,52 @@
+<div class='documentation rounded-sml' style='padding: 10px;'>
+	<style>
+		.documentation {
+			color: #111111;
+		}
+		
+		.documentation h1 {
+			font-family: sans-serif;
+			font-size: 2em;
+		}
+		.documentation p {
+			font-family: sans-serif;
+			line-height: 1.4em;
+		}
+		
+		.documentation ul {
+			font-family: sans-serif;			
+			line-height: 1.4em;
+		}
+	</style>
+
+	<h1>apstrata data model</h1>
+	
+	<p>
+		The apstrata database model is based on stores, documents, fields and queries. The store is a container of data represented 
+		in documents, while documents contain fields with data, and queries are used to extract these documents from the specified
+		stores.
+	</p>
+	<p>
+		For those of you who are familiar with RDBMS: Data is stored in stores that correspond to databases, while documents are 
+		similar to row entries identified by their store-unique document key. Fields are similar to columns in a table, except 
+		that they can be associated with multiple values. On the other hand, data retrieval is done by using queries equivalent 
+		to SQL queries in logic but differing in syntax.
+	</p>
+
+	<p>
+		apstrata provides 3 API calls to manipulate stores:
+		<ul>
+			<li>
+				<b>CreateStore:</b> Creates an apstrata database store which is the apstrata database equivalent of a database. 
+								Clients will create a store in order to store any documents, or files for a certain application. 
+								Only owners have the permission to use the CreateStore operation.
+			</li>
+			<li>
+				<b>DeleteStore:</b> Deletes the client‟s store and all documents and files associated with it.
+			</li>
+			<li>
+				<b>ListStores:</b> Returns a list of stores created by a client identified by their API key
+			</li>
+		</ul>
+	</p>	
+</div>

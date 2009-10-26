@@ -29,35 +29,60 @@ dojo.declare("apstrata.admin.RESTMonitor",
 	
 	postCreate: function() {
 		var self = this
-		
+
 		dojo.subscribe("/apstrata/operation", function(data) {
 			var style
+			var c = self.dvMonitorOutput
+			var target
+
 			if (data.response) {
-				if (data.success == 'success') {
-					style = {position: 'relative', left: '30px', width: '950px', background: '#99ff66', color: '#222222', fontFamily: 'monospace', padding: '10px', marginBottom: '10px'}
+				// The 'target' has been created already, find it
+				target = dojo.byId("REST-"+data.id)
+
+				// Depending of the status color the message
+				if (data.success == 'success') { //99ff66
+					style = {position: 'relative', left: '30px', top:'-5px', opacity: '.87', width: '950px', background: '#99ff66', color: '#222222', fontFamily: 'monospace', padding: '10px'}
 				} else {
-					style = {position: 'relative', left: '30px', width: '950px', background: '#ff9966', color: '#222222', fontFamily: 'monospace', padding: '10px', marginBottom: '10px'}
+					style = {position: 'relative', left: '30px', top:'-5px', opacity: '.85', width: '950px', background: '#ff9966', color: '#222222', fontFamily: 'monospace', padding: '10px'}
 				}
 			} else {
+				// Create a target DIV that will contain both request and response
+				
+				target = dojo.create(
+					"div", 
+					{innerHTML: "", id: "REST-"+data.id}, 
+					self.dvMonitorOutput
+				)
+
+				dojo.style(target, {
+					height: (target.coffsetHeight - 20) + "px"
+				})
+				
 				style = {width: '950px', background: '#a1a1a1', color: '#222222', fontFamily: 'monospace', padding: '10px', marginBottom: '1px'}
 			}
 			
+			// Insert the request or response into the 'target' DIV
 			var n = dojo.create(
 				"div", 
 				{innerHTML: data.message, style: style}, 
-				self.output
+				target
 			)
 
+			// Make the message boxes round
 			dojo.addClass(n, 'rounded-sml')
-			self.output.scrollTop = self.output.scrollHeight - self.output.clientHeight
 
+			if (false && data.response)	{
+				// Insert <img for arrow into the 'target' DIV
+				var a = dojo.create(
+					"img", 
+						{src: "images/rest-monitor-arrow.png", style: "position: relative; left: 8px; top: -"+ (n.offsetHeight+1) +"px;"}, 
+					target
+				)
+			}	
+//							{src: "images/rest-monitor-arrow.png", style: "position: absolute; left: 8px; top: "+ (n.offsetTop) +"px; left: "+ (n.offsetLeft-22) +"px;"}, 
+			
+			// Autoscroll REST monitor to the bottom
+			self.dvMonitorOutput.scrollTop = self.dvMonitorOutput.scrollHeight - self.dvMonitorOutput.clientHeight
 		})
-	},
-	
-	startup: function() {
-	},
-	
-	render: function() {
-		
 	}
 })

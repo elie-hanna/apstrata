@@ -41,7 +41,6 @@ dojo.declare("apstrata.admin.SchemaEditor",
 		this.panel = attrs.panel
 		
 		this._target = 'presentation'
-		this.connection = new apstrata.apsdb.client.Connection()
 	},
 		
 	_save: function() {

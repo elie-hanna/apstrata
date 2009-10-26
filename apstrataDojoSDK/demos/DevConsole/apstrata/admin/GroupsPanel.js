@@ -83,5 +83,11 @@ dojo.declare("apstrata.admin.GroupsPanel",
 		self.container.addChild(self.openWidget)
 
 		this.inherited(arguments)
+	},
+
+	destroy: function() {
+		if (this.openWidget) this.openWidget.destroy()
+		
+		this.inherited(arguments)
 	}
 })

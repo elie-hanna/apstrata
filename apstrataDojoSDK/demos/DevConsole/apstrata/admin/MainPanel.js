@@ -31,11 +31,9 @@ dojo.require('apstrata.admin.GroupsPanel')
 dojo.require('apstrata.admin.GroupEditPanel')
 dojo.require("apstrata.admin.QueryPanel")
 dojo.require("apstrata.admin.QueryResultsPanel")
-
-/*
 dojo.require('apstrata.admin.SchemasPanel')
 dojo.require("apstrata.admin.SchemaEditorPanel")
-*/				
+dojo.require("apstrata.admin.PreferencesPanel")
 
 
 dojo.declare("apstrata.admin.MainPanel", 
@@ -49,6 +47,7 @@ dojo.declare("apstrata.admin.MainPanel",
 		{label: "groups", iconSrc: "../../apstrata/resources/images/pencil-icons/users.png"},
 		{label: "users", iconSrc: "../../apstrata/resources/images/pencil-icons/user-man.png"},
 		{label: "favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/favourites.png"},
+		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"},
 //		{label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"}
 	],
 	
@@ -117,6 +116,9 @@ dojo.declare("apstrata.admin.MainPanel",
 	//				self.openWidget = new apstrata.admin.QueryPanel({parentList: self, container: self.container})
 	//				self.openWidget = new apstrata.admin.SchemaEditorPanel({parentList: self, container: self.container})
 	//				self.container.addChild(self.openWidget)
+				} else if (label == 'preferences') {
+					self.openWidget = new apstrata.admin.PreferencesPanel({parentList: self, container: self.container})
+					self.container.addChild(self.openWidget)
 				} else if (label == 'logout') {
 					this.container.connection.logout()
 					self.open('home')

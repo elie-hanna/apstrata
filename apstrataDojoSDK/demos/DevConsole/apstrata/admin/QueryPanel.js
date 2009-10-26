@@ -101,6 +101,12 @@ dojo.declare("apstrata.admin.QueryPanel",
 
 	postCreate: function() {
 		var self = this
+
+		dojo.publish("/apstrata/documentation/topic", [{
+			topic: "apstrata Query APIs parameters",
+			id: "QueryAPIParams"
+		}])
+
 		this.panel = new apstrata.admin.Query({panel: self, target: self.target, container: self.container, connection: self.container.connection})
 		this.addChild(this.panel)
 		

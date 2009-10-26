@@ -29,21 +29,51 @@ dojo.declare("apstrata.admin.SchemasPanel",
 	postCreate: function() {
 		var self = this
 
-		var client = new apstrata.apsdb.client.Client(this.container.connection)
+		dojo.publish("/apstrata/documentation/topic", [{
+			topic: "apstrata Schema APIs",
+			id: "SchemaAPI"
+		}])
 
-		var operation = client.listSchemas(function() {
-			console.dir(operation)
-			self.data = []
-			dojo.forEach(operation.result.schemas, function(schema) {
-				self.data.push({label: schema['@name'], iconSrc: ""})
-			})			
-			
-			self.render()
-		},
-		function() {
-			
+		this.container.client.call({
+			action: "ListSchemas",
+			load: function(operation) {
+				// Rearrange the result to suite the template
+				self.data = []
+				dojo.forEach(operation.response.result.schemas, function(schema) {
+					self.data.push({label: schema['@name'], iconSrc: ""})
+				})			
+				
+				// Cause the DTL to rerender with the fresh self.data
+				self.render()
+	
+				dojo.connect(self, 'onClick', function(index, label) {
+					if (self.openWidget) self.openWidget.destroy()
+	
+					self.openWidget = new apstrata.admin.SchemasPanel({parentList: self, container: self.container, target: label})
+					self.container.addChild(self.openWidget)
+				})
+			},
+			error: function(operation) {
+			}
 		})
 
 		self.inherited(arguments)
-	}	
+	},	
+
+	newItem: function() {
+		var self = this
+		if (this.openWidget) this.openWidget.destroy()
+		
+		self.openWidget = new apstrata.admin.SchemaEditorPanel({parentList: self, container: self.container, target: ''})
+		self.container.addChild(self.openWidget)
+
+		this.inherited(arguments)
+	},
+	
+	destroy: function() {
+		if (this.openWidget) this.openWidget.destroy()
+		
+		this.inherited(arguments)
+	}
+
 })

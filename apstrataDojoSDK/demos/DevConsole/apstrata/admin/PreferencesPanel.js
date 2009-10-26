@@ -18,8 +18,8 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.admin.HomePanel")
-dojo.provide("apstrata.admin.Home")
+dojo.provide("apstrata.admin.PreferencesPanel")
+dojo.provide("apstrata.admin.Preferences")
 
 dojo.require("dijit.form.Form");
 dojo.require("dijit.form.Button");
@@ -28,11 +28,11 @@ dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.HorizontalSlider")
 dojo.require("dijit.form.HorizontalRuleLabels")
 
-dojo.declare("apstrata.admin.Home", 
+dojo.declare("apstrata.admin.Preferences", 
 [dijit._Widget, dojox.dtl._Templated], 
 {
 	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("apstrata.admin", "templates/HomePanel.html"),
+	templatePath: dojo.moduleUrl("apstrata.admin", "templates/PreferencesPanel.html"),
 	
 	constructor: function(attrs) {
 	},
@@ -43,7 +43,7 @@ dojo.declare("apstrata.admin.Home",
 	}
 })
 
-dojo.declare("apstrata.admin.HomePanel", 
+dojo.declare("apstrata.admin.PreferencesPanel", 
 [apstrata.widgets.HStackablePanel], 
 {
 	constructor: function(attrs) {
@@ -52,20 +52,13 @@ dojo.declare("apstrata.admin.HomePanel",
 
 	postCreate: function() {
 		var self = this
-
-		dojo.publish("/apstrata/documentation/topic", [{
-			topic: "apstrata API",
-			id: "ApstrataAPI"
-		}])
-
-		this.panel = new apstrata.admin.Home({panel: self, container: self.container, connection: self.container.connection})
+		this.panel = new apstrata.admin.Preferences({panel: self, container: self.container, connection: self.container.connection})
 		this.addChild(this.panel)
 		
 		this.inherited(arguments)
 	},
 	
 	destroy: function() {
-//		this.removeChild(this.panel)
 		this.panel.destroy()
 		this.inherited(arguments)
 	}

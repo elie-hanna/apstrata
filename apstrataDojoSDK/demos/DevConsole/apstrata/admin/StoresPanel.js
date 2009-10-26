@@ -28,6 +28,11 @@ dojo.declare("apstrata.admin.StoresPanel",
 	
 	postCreate: function() {
 		var self = this
+
+		dojo.publish("/apstrata/documentation/topic", [{
+			topic: "apstrata Stores APIs",
+			id: "StoresAPI"
+		}])
 		
 		this.container.client.call({
 			action: "ListStores",

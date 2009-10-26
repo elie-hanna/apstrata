@@ -35,6 +35,11 @@ dojo.declare("apstrata.admin.StoreOperations",
 	postCreate: function() {
 		var self = this
 		
+		dojo.publish("/apstrata/documentation/topic", [{
+			topic: "apstrata Query APIs",
+			id: "QueryAPI"
+		}])
+
 		dojo.connect(self, 'onClick', function(index, label) {
 			if (label == self._lastLabel) return
 			self._lastLabel = label

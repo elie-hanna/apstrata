@@ -68,7 +68,7 @@ html, body {
 	top: 5px;
 
 	margin-left: 5px;
-	padding-top: 15px;
+	padding-top: 5px;
 	padding-bottom: 15px;
 	padding-left: 5px;
 	padding-right: 5px;
@@ -200,4 +200,21 @@ html, body {
 	font-weight: bold;
 }
 
+.documentation {
+	color: #111111;
+}
+
+.documentation h1 {
+	font-family: sans-serif;
+	font-size: 2em;
+}
+.documentation p {
+	font-family: sans-serif;
+	line-height: 1.4em;
+}
+
+.documentation ul {
+	font-family: sans-serif;			
+	line-height: 1.4em;
+}
 
