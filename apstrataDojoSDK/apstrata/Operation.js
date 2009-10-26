@@ -39,6 +39,9 @@ dojo.declare("apstrata.Operation",
 
 			this.connection = connection
 			
+			if (!apstrata.operationId) apstrata.operationId = 0
+			this.operationId = apstrata.operationId++
+			
 			this.request= {};
 			this.request.apsdb = {};
 			this.request.apsim = {};
@@ -55,7 +58,7 @@ dojo.declare("apstrata.Operation",
 			this.response.responseTime= -1;
 			this.response.operationAborted= false;
 			this.response.operationTimeout= false;
-			
+						
 			this.log = {
 				warn: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
 					if (apstrata.logger) apstrata.logger.warn(self, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
@@ -191,6 +194,7 @@ dojo.declare("apstrata.Operation",
      * @function timeout Force the operation to timeout
      */
 		timeout: function() {
+			var self=this
 			this.log.warn("Timeout or communication error")
 			
 			this.operationTimeout = true;
@@ -202,6 +206,15 @@ dojo.declare("apstrata.Operation",
 
 			this.responseTime = this.connection.getTimeout()
 	
+			dojo.publish("/apstrata/operation", [{
+					id: self.operationId,
+					method: 'GET',
+					type: "message",
+					success: false,
+					response: " ",
+					message: " "
+			}])
+
 			this.handleError();
 		},
 

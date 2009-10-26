@@ -64,6 +64,7 @@ dojo.declare("apstrata.Get",
 			self._setTimeout()
 
 			dojo.publish("/apstrata/operation", [{
+					id: self.operationId,
 					method: 'GET',
 					type: "message", 
 					url: self.url,
@@ -120,6 +121,7 @@ dojo.declare("apstrata.Get",
                     }
 
 					dojo.publish("/apstrata/operation", [{
+							id: self.operationId,
 							method: 'GET',
 							type: "message",
 							success: json.response.metadata.status,
