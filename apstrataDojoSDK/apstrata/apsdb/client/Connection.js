@@ -81,7 +81,7 @@ dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {
 
 		var signature = '';
 		
-		var returnValue = null
+		var returnValue = {url: apswsReqUrl, signature: ''};
 
 		// Sign with the username and password if they are passed
 		if (connection.credentials.username && connection.credentials.password) {
