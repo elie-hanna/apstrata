@@ -55,15 +55,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 			if (dataModel.title != null) this.surveyTitle = dataModel.title;
 			if (dataModel.description != null) this.surveyDescription = dataModel.description;
 			
-			if (this.getUrlParam("editMode") == "true") {
-				if (apstrata.apConfig.username == null || apstrata.apConfig.username == '') {
-					var missingUsernameMsg = 'Only user authentication is allowed for survey creation. Please set the username and password variables in the apConfig attribute of your apstrata.js script tag';
-					document.write('<div class="warningMessage">' + missingUsernameMsg + '</div>');
-					throw 'Only user authentication is allowed for survey creation. Please set the username and password variables in the apConfig attribute of your apstrata.js script tag';
-				}
-
+			if (this.getUrlParam("editMode") == "true")
 				this.editMode = true;
-			} else {
+			else {
 				this.editMode = false;
 				this.templatePath = dojo.moduleUrl("surveyWidget.widgets", "templates/SurveyRun.html");
 			}
