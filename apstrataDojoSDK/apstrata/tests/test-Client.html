@@ -38,12 +38,35 @@
 					action: "ListStores",
 					load: function(operation) {
 						test.printDecorated("listStores", "success", operation.responseTime)
+						saveDocument()
 					},
 					error: function(operation) {
 						test.printDecorated("listStores", "failure", operation.responseTime)						
 					}
 				}
 				
+				client.call(attrs)
+			}
+			
+			function saveDocument() {
+				var attrs = {
+					action: "SaveDocument",
+					fields: {
+						name: "rabih",
+						number: "52"
+					},
+					apsdb: {
+						store: "wiki"
+					},
+					load: function(operation) {
+						test.printDecorated("SaveDocument", "success", operation.responseTime)
+						
+					},
+					error: function(operation) {
+						test.printDecorated("SaveDocument", "failure", operation.responseTime)						
+					}
+				}
+			
 				client.call(attrs)
 			}
 			

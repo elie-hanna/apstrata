@@ -211,8 +211,8 @@ dojo.declare("apstrata.Operation",
 					method: 'GET',
 					type: "message",
 					success: false,
-					response: " ",
-					message: " "
+					response: "<span style='font-size: 2em;'>&#8734</span>",
+					message: "&#8734"
 			}])
 
 			this.handleError();

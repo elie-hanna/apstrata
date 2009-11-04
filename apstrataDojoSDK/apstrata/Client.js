@@ -62,10 +62,11 @@ dojo.declare("apstrata.Client",
 
 			operation.apsdbOperation = attrs.action
 
+			operation.request = {}
+
 			operation.request.apsdb = attrs.apsdb
 			operation.request.apsim = attrs.apsim
 
-			operation.request = {}
 			for (prop in attrs.fields) {
 				operation.request[prop] = attrs.fields[prop];
 			}
