@@ -1,0 +1,20 @@
+<div class="blogPosts" style="overflow-y: auto;">
+	{% if true %} 
+	{% endif %}
+	
+	{% for item in items %}
+	
+		<div class='title'>{{ item.title }}</div>
+		<div class='time'>{{ item.creationTime }}</div>
+		<div class='post'>{{ item.blogPost|safe }}</div>
+		
+		<br>
+		{% if item.image %}
+			<img src='{{ item.image.url }}' class='image'>
+		{% endif %}
+		<br>
+		<br>
+		<br>
+		<br>
+	{% endfor %}
+</div>

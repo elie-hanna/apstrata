@@ -1,0 +1,15 @@
+<div class="blogPosts" style="overflow-y: auto;">
+	{% if true %} 
+	{% endif %}
+	
+	{% for item in items %}
+
+		<div style='width: 160px; float: left; padding: 10px; text-align: center;'>
+			<div style='font-family: sans-serif;font-size: 1.2em;'>{{ item.title }}</div>
+			{% if item.image %}
+				<img src='{{ item.image.url }}' style='width: 120px;padding: 10px;'>
+			{% endif %}
+		</div>
+	{% endfor %}
+	<div style="clear: both;"></div>
+</div>

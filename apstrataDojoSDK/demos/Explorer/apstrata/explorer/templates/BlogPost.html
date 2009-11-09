@@ -1,0 +1,27 @@
+<div class="blogPost" style="overflow-y: auto;">
+	{% if true %} 
+	{% endif %}
+	<div dojoType="dijit.form.Form" class="apstrataForm rounded-top-sml rounded-bottom-sml"
+		dojoAttachPoint="blogForm" encType="multipart/form-data" action="" method="">
+
+			<div class="title" style="font-size: 18pt;">
+				Blog
+			</div>
+				<br>
+			<div>
+	                <div class="label">Title:</div>
+	                <input class="rounded-xsml" type="text" name="title" style="width: 100%;"
+						required="true" dojoType="dijit.form.ValidationTextBox"/><br>
+	
+					<div class="label">Content:</div>
+					<div style="background: #ffffff;">
+					    <div dojoType="dijit.Editor" height="200" dojoAttachPoint="edtrPost"></div>
+					</div>
+
+	                <div class="label">Upload image:</div>
+	                <input name="apsdb_attachments" dojoAttachPoint="upldPhoto" dojoType="dojox.form.FileInput" class="rounded-xsml" /><br>
+			</div>
+
+			<button dojoType="dijit.form.Button" dojoAttachEvent="onClick: SavePost">Save</button>
+	</div>
+</div>
