@@ -15,7 +15,9 @@
 	
 					<div class="label">Content:</div>
 					<div style="background: #ffffff;">
-					    <div dojoType="dijit.Editor" height="200" dojoAttachPoint="edtrPost"></div>
+					    <div dojoType="dijit.Editor" 
+							extraPlugins="['foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true}]" 
+							dojoAttachPoint="edtrPost"></div>
 					</div>
 
 	                <div class="label">Upload image:</div>

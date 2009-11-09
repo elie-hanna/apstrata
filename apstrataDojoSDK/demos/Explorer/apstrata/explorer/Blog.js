@@ -49,13 +49,17 @@ dojo.declare("apstrata.explorer.Blog",
 
 dojo.require("dijit.form.Form")
 dojo.require("dijit.form.ValidationTextBox")
-dojo.require("dijit.Editor")
 dojo.require("dojox.form.FileInput")
 dojo.require("dijit.form.Button")
 
 dojo.require("apstrata.widgets.PageNumberSelector")
 dojo.require("apstrata.ItemApsdbReadStore")
 dojo.require("apstrata.GetFile")
+
+dojo.require("dijit.Editor")
+dojo.require("dijit._editor.plugins.FontChoice"); // 'fontName','fontSize','formatBlock'
+dojo.require("dijit._editor.plugins.TextColor");
+
 
 dojo.declare("apstrata.explorer.BlogPost", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.widgets.layout._HStackableMixin], 
@@ -94,11 +98,12 @@ dojo.declare("apstrata.explorer.BlogPost",
 					store: "wiki",
 				},
 				load: function(operation) {
-					console.dir(operation)
+					self.blogForm.reset()
+					self.edtrPost.setValue("")
 				},
 				error: function(operation) {
-					console.dir(operation)
-					console.debug("error")
+					self.blogForm.reset()
+					self.edtrPost.setValue("")
 				}
 			}
 			
