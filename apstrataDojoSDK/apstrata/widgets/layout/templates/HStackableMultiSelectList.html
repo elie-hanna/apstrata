@@ -1,0 +1,16 @@
+<div class='verticalList hStackableMultiSelect rounded-sml'>
+	<div class='vScrollable' dojoAttachPoint='dvList'>
+		{% for o in data %} 
+			<div class='item' itemIndex='{{ forloop.counter0 }}' itemLabel='{{ o.label }}' dojoAttachEvent='onmouseover: _onMouseover,onmouseout: _onMouseout,onclick: _onClick'> 
+			<div class='icon'></div> <!-- img src='{{ _apstrataRoot }}/resources/images/pencil-icons/tick.png' -->
+			<div class='label'> {{ o.label }} </div> 
+			<div style='clear: both;'></div></div> 
+		{% endfor %}
+	</div> 
+	<div style='width: 100%; text-align: center;'> 
+		{% if editable %} 
+			<div dojoType='dijit.form.ToggleButton' iconClass='dijitCheckBoxIcon' dojoAttachEvent='onClick: editItems'>delete</div>
+			<div dojoType='dijit.form.Button' dojoAttachEvent='onClick: newItem'>new</div>
+		{% endif %}
+	</div>
+</div>
