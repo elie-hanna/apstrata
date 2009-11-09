@@ -80,8 +80,8 @@ dojo.declare("apstrata.Get",
 	
 						self.log.debug("response object", json);
 						self.log.debug("response time (ms)", self.responseTime);
-						if (self.operationAborted) self.log.debug("Aborted", self.operationAborted);
-						if (self.operationTimeout) self.log.error("Timed out", self.operationTimeout);
+						if (self.operationAborted) self.log.debug("GET Aborted");
+						if (self.operationTimeout) self.log.error("GET Timed out");
 	
 					// Clear the timeout since we received a response from apstrata
 					self._clearTimeout();

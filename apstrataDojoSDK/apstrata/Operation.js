@@ -202,7 +202,7 @@ dojo.declare("apstrata.Operation",
 			this.response = {}
 			this.response.metadata = {}
 			this.response.metadata.errorCode = "timeout_communication_error";
-			this.response.metadata.errorMessage = "Timeout or communication error";
+			this.response.metadata.errorDetail = "Timeout or communication error";
 
 			this.responseTime = this.connection.getTimeout()
 	

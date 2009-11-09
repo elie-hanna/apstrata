@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
- dojo.provide("apstrata.Post");
+dojo.provide("apstrata.Post");
 
 dojo.require ("dojo.io.iframe");
 dojo.require ("dojox.encoding.digests.MD5");
@@ -37,19 +37,30 @@ dojo.declare("apstrata.Post",
 			// Send debug information to connection object, could be used later to identify problems
 			self.log.info("Operation", self.apsdbOperation);
 		
+			this.request.apsws = {}
 			this.request.apsws.callback = "apstrataSaveDocumentCallback" + Math.floor(Math.random()*10000)
+
+			if (attrs.redirectHref) this.request.apsws.redirectHref = attrs.redirectHref;
+			else this.request.apsws.redirectHref = apstrata.baseUrl + "/resources/PostIframeHandler.html"
+
 
 			// ADD a dynamic callback that will be invoked by the code in PostIframeHandler.html
 			window[this.request.apsws.callback] = function(jsonTxt) {
-//console.debug(">>>>"+jsonTxt)				
-				if (self.operationAborted || self.operationTimeout) return;
+				self.responseTime = (new Date().getTime()) - self._timestamp
+		
+					self.log.info("raw response", jsonTxt);
+					var json = dojo.fromJson(jsonTxt)
+	
+					self.log.info("response object", json);
+
+					self.log.debug("response time (ms)", self.responseTime);
+					if (self.operationAborted) self.log.debug("POST Aborted");
+					if (self.operationTimeout) self.log.error("POST Timed out");
+		
+				// Clear the timeout since we received a response from apstrata
+				self._clearTimeout();
 
 //				var jsonTxt = dojo.byId("dojoIoIframe").contentWindow.name
-
-				self.log.info("raw response", jsonTxt);
-				var json = dojo.fromJson(jsonTxt)
-
-				self.log.info("response object", json);
 
                 if (json.response) {
 					self.response = json.response
@@ -71,29 +82,59 @@ dojo.declare("apstrata.Post",
                     self.handleError();                                        
                 }
 				
-				//self.handleResult()
+				dojo.publish("/apstrata/operation", [{
+						id: self.operationId,
+						method: 'GET',
+						type: "message",
+						success: self.response.metadata.status,
+						response: dojo.toJson(self.response),
+						message: dojo.toJson(self.response)
+				}])
 			} 
 
-			var timestamp = new Date().getTime();
+			self._timestamp = new Date().getTime();
     
 			// Since the hack for JSONP doesn't really allow for communication errors to be caught,
 			//  we're using a timeout event to provide an error message if an operation takes too long to execute
 			self._setTimeout()
 
 			self.url = self.buildActionUrl("jsoncdp")
+
+
+			var message = self.url
+			
+			dojo.forEach((dijit.byId(attrs.formNode.id).getValues()), function(val) {})
+
+			if (dijit.byId(attrs.formNode.id)) {
+				var fields = dijit.byId(attrs.formNode.id).getValues()
+				message += "<br>" 
+				for (k in fields) {
+					message += "<br>" + k + ":" + fields[k] 
+				}
+			}
+
+			dojo.publish("/apstrata/operation", [{
+					id: self.operationId,
+					method: 'GET',
+					type: "message", 
+					url: self.url,
+					message: message
+			}])
+
 			
 			self.log.debug("action url", self.url)
 			self.log.debug("request object", self.buildRequestObject())
 
-			// pass in all of the parameters manually:
-			dojo.io.iframe.send({
+			var callAttrs = {
 				// The target URL on your webserver:
 				url: self.url,
 				
 				// The HTTP method to use:
 				method: "POST",
 				
-				form: dojo.byId(attrs.formId),
+				form: attrs.formNode,
+				
+				content: attrs.fields,
 				
 				// the content to submit:
 				content: self.buildRequestObject(),
@@ -128,6 +169,9 @@ dojo.declare("apstrata.Post",
 					// return the response for succeeding callbacks
 					return response;
 				}
-			})
+			}
+
+			// pass in all of the parameters manually:
+			dojo.io.iframe.send(callAttrs)
 		}
 })
