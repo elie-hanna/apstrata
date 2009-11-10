@@ -24,15 +24,14 @@ dojo.provide("apstrata.explorer.BlogPosts")
 dojo.provide("apstrata.explorer.BlogGallery")
 
 dojo.declare("apstrata.explorer.Blog",
-[apstrata.widgets.layout.HStackableList], 
+[apstrata.horizon.HStackableList], 
 {
 	data: [
 		{label: "Posts", iconSrc: "../../apstrata/resources/images/pencil-icons/file.png"},
 		{label: "Gallery", iconSrc: "../../apstrata/resources/images/pencil-icons/picture.png"},
 		{label: "Favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/star.png"},
 		{label: "Tags", iconSrc: "../../apstrata/resources/images/pencil-icons/tag.png"},
-		{label: "New Post", iconSrc: "../../apstrata/resources/images/pencil-icons/notepad.png"},
-		
+		{label: "New Post", iconSrc: "../../apstrata/resources/images/pencil-icons/notepad.png"}
 	],
 	
 	onClick: function(index, label) {
@@ -41,9 +40,16 @@ dojo.declare("apstrata.explorer.Blog",
 		
 		this.closePanel()
 		
-		if (label=='Posts') this.openPanel(apstrata.explorer.BlogPosts)
-		if (label=='New Post') this.openPanel(apstrata.explorer.BlogPost)
-		if (label=='Gallery') this.openPanel(apstrata.explorer.BlogGallery)
+		switch (label)
+		{
+			case 'Posts': this.openPanel(apstrata.explorer.BlogPosts)
+				break;
+			case 'New Post': this.openPanel(apstrata.explorer.BlogPost)
+				break;
+			case 'Gallery': this.openPanel(apstrata.explorer.BlogGallery)
+				break;
+			default:
+		}
 	}
 })
 
@@ -62,7 +68,7 @@ dojo.require("dijit._editor.plugins.TextColor");
 
 
 dojo.declare("apstrata.explorer.BlogPost", 
-[dijit._Widget, dojox.dtl._Templated, apstrata.widgets.layout._HStackableMixin], 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
 {
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.explorer", "templates/BlogPost.html"),
@@ -87,16 +93,17 @@ dojo.declare("apstrata.explorer.BlogPost",
 		if (this.blogForm.validate()) {
 			var attrs = {
 				action: "SaveDocument",
-				formNode: self.blogForm.domNode,
-				fields: {
-					"blogPost.apsdb.fieldType": "text",
+				request: {
 					formType: "blog",
 					blogPost: self.edtrPost.getValue(),
-					hasImage: (self.upldPhoto.fileInput.value!="")
+					"blogPost.apsdb.fieldType": "text",
+					hasImage: (self.upldPhoto.fileInput.value!=""),
+
+					apsdb: {
+						store: "wiki",
+					}
 				},
-				apsdb: {
-					store: "wiki",
-				},
+				formNode: self.blogForm.domNode,
 				load: function(operation) {
 					self.blogForm.reset()
 					self.edtrPost.setValue("")
@@ -117,7 +124,7 @@ dojo.declare("apstrata.explorer.BlogPost",
 })
 
 dojo.declare("apstrata.explorer.BlogPosts", 
-[dijit._Widget, dojox.dtl._Templated, apstrata.widgets.layout._HStackableMixin], 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
 {
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.explorer", "templates/BlogPosts.html"),

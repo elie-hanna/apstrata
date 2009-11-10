@@ -23,11 +23,12 @@ dojo.provide("apstrata.explorer.MainPanel")
 dojo.require("apstrata.Client")
 dojo.require("apstrata.explorer.Blog")
 dojo.require("apstrata.explorer.Survey")
+dojo.require("apstrata.horizon.Login")
 
 dojo.require("apstrata.StickyConnection")
 
 dojo.declare("apstrata.explorer.MainPanel", 
-[apstrata.widgets.layout.HStackableList], 
+[apstrata.horizon.HStackableList], 
 {
 	data: [
 		{label: "home", iconSrc: "../../apstrata/resources/images/pencil-icons/home.png"},
@@ -39,7 +40,7 @@ dojo.declare("apstrata.explorer.MainPanel",
 	onClick: function(index, label) {
 		var self = this
 		if (label=='blog') this.openPanel(apstrata.explorer.Blog);
-		else if (label=='home') this.openPanel(apstrata.widgets.layout.TestPanel);
+		else if (label=='home') this.openPanel(apstrata.horizon.Login);
 		else if (label=='survey') this.openPanel(apstrata.explorer.Survey);
 		else this.closePanel()
 	}
@@ -47,7 +48,7 @@ dojo.declare("apstrata.explorer.MainPanel",
 
 
 dojo.declare("apstrata.explorer.Explorer", 
-[apstrata.widgets.layout.HStackableContainer], 
+[apstrata.horizon.HStackableContainer], 
 {
 	connection: null,
 	
@@ -75,6 +76,12 @@ dojo.declare("apstrata.explorer.Explorer",
 		this.margin.w = 50
 		this.margin.h = 145
 
+/*
+		this.margin.topH = 70
+		this.margin.bottomH = 40
+		this.margin.leftW = 25
+		this.margin.rightW = 25
+*/
 		this.width = 450
 		this.height = 250
 	},
@@ -82,11 +89,11 @@ dojo.declare("apstrata.explorer.Explorer",
 	postCreate: function() {
 		var self = this
 
-		dojo.addClass(this.domNode, 'blueHorizon')
+		dojo.addClass(this.domNode, 'horizon')
 
 		// Create the background transparent div
 		this.background = dojo.create("div", null, dojo.body())
-		dojo.addClass(this.background, "blueHorizonBackground")
+		dojo.addClass(this.background, "horizonBackground")
 		dojo.addClass(this.background, "rounded-sml")
 
 		// Create the leftMost Panel

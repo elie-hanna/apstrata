@@ -21,7 +21,7 @@
 dojo.provide("apstrata.explorer.Survey")
 
 dojo.declare("apstrata.explorer.Survey",
-[apstrata.widgets.layout.HStackableList], 
+[apstrata.horizon.HStackableList], 
 {
 	data: [
 		{label: "create", iconSrc: "../../apstrata/resources/images/pencil-icons/notepad.png"},
