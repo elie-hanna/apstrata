@@ -79,100 +79,89 @@ dojo.declare("apstrata.Operation",
 			
 		},
 		
-		buildRequestObject: function() {
-		    var params = ""; var i=0;
-			var request = {}
-
-		    if (this.request.apsdb != null) {
-				for (prop in this.request.apsdb) {
-					request["apsdb."+prop] = this.request.apsdb[prop]
-				}
-		    }
-			
-			if (this.request.apsim != null) {
-				for (prop in this.request.apsim) {
-					request["apsim."+prop] = this.request.apsim[prop]
-				}
-		    }
-
-			if (this.request.apsws != null) {
-				for (prop in this.request.apsws) {
-					request["apsws."+prop] = this.request.apsws[prop]
-				}
-			}
-
-		    for (prop in this.request) {
-				if (prop != "apsdb" && prop != "apsim" && prop != "apsws") {
-					request[prop] = this.request[prop]
-				}				
-		    }
-			
-			return request
-		},
-		
 		buildActionUrl: function(responseType) {
 			params = ""
 		    return this.connection.signUrl(this.apsdbOperation, params, responseType).url;
 		},
 
-	    /**
-	     * @function buildUrl Allows you to build the standard URL, could be overriden when necessary
-	     * @returns The URL to be called
-	     */
-		buildUrl: function() {
-		    var params = ""; var i=0;
+		/*
+		 * covert object to query for request.apsdb, request.apsim etc.
+		 */
+		buildUrlPart: function(label) {
+			var self = this
 
-		    if (this.request.apsdb != null) {
-				for (prop in this.request.apsdb) {
-				    if (i>0) params += "&";
-				    i++;
-				    params += "apsdb." + prop + "=" + encodeURIComponent(this.request.apsdb[prop]); 
-				}
-		    }
+			var url = ""
 			
-			if (this.request.apsim != null) {
-				for (prop in this.request.apsim) {
-				    if (i>0) params += "&";
-				    i++;
-				    params += "apsim." + prop + "=" + encodeURIComponent(this.request.apsim[prop]); 
-				}
-		    }
-
-			if (this.request.apsws != null) {
-				for (prop in this.request.apsws) {
-				    if (i>0) params += "&";
-				    i++;
-				    params += "apsws." + prop + "=" + encodeURIComponent(this.request.apsws[prop]); 
-				}
-			}
-			
-		    for (prop in this.request) {
-				if (i>0) params += "&";
-				i++;
+			if (this.request[label]) {
+				var o = {}
 				
-				if (prop != "apsdb" && prop != "apsim" && prop != "apsws") {
-					var value = this.request[prop]
-					if (dojo.isArray(value)) {
-						dojo.forEach(value, function(v) {
-							params +=  prop + "=" + encodeURIComponent(v) + "&"
-						})
-					} else {
-						params +=  prop + "=" + encodeURIComponent(value) + "&"
-					}
-				}				
-		    }
-
-		    var urlValue = this.connection.signUrl(this.apsdbOperation, params);
-
-		    return urlValue;
+				for (k in this.request[label]) {
+					o[label+"."+k] = self.request[label][k]
+				}
+				
+				url = dojo.objectToQuery(o)
+			} 
+			
+			return url
 		},
 
-    /**
-     * @function abstrata function
-     */
+		/*
+		 * covert the request object to a query string.
+		 */
+		_buildQueryString: function() {
+			var self=this
+			var url = ''
+			var o = {}
+			
+			for (k in this.request) {
+				// if this is a multi-value or single value field put in o 
+				if (dojo.isString(this.request[k]) || dojo.isArray(this.request[k]) || ((typeof this.request[k]) == 'number') || ((typeof this.request[k]) == 'boolean')) {
+					o[k] = this.request[k]
+				} else {
+					// otherwise convert the (apsim, apsws etc.) object to a query and add to url
+					url += ((url.length>0)?"&":"") + self.buildUrlPart(k)
+				}
+			}
+
+			// convert o to object and add to URL
+			url += ((url.length>0)?"&":"") + dojo.objectToQuery(o)
+
+			return url
+		},
+
+		buildUrl: function() {
+			// sign url with operation
+			return this.connection.signUrl(this.apsdbOperation, this._buildQueryString());
+		},
+		
+		/*
+		 * flattens the request object to use in dojo.io.ifram Post content field.
+		 */
+		buildRequestObject: function() {
+			/*
+			var self=this
+			var o = {}
+			
+			for (k in this.request) {
+				// if this is a multi-value or single value field put in o 
+				if (dojo.isArray(self.request[k]) || dojo.isString(self.request[k])) {
+					o[k] = self.request[k]
+				} else {
+					for (i in self.request[k]) {
+						o[k+"."+i] = self.request[k][i]
+					}
+				}
+			}
+			*/
+			return dojo.queryToObject(this._buildQueryString())
+		},
+		
+	    /**
+	     * @function abstrata function
+	     */
 		execute: function () {},
 
-    // Sets the timeout of the operation to the timeout of the connection
+	    // Sets the timeout of the operation to the timeout of the connection
 		_setTimeout: function() {
 			var self = this;
 			if (self.connection.getTimeout()>0) {
@@ -181,7 +170,7 @@ dojo.declare("apstrata.Operation",
 			}
 		},
 
-    // Removes the timeout of the operation
+    	// Removes the timeout of the operation
 		_clearTimeout: function() {
 			if (this._timeoutHandler) {
 				this.log.debug('timeout handler cleared:', this._timeoutHandler+"")
@@ -190,9 +179,9 @@ dojo.declare("apstrata.Operation",
 			}
 		},
 
-    /**
-     * @function timeout Force the operation to timeout
-     */
+	    /**
+	     * @function timeout Force the operation to timeout
+	     */
 		timeout: function() {
 			var self=this
 			this.log.warn("Timeout or communication error")
@@ -218,9 +207,9 @@ dojo.declare("apstrata.Operation",
 			this.handleError();
 		},
 
-    /**
-     * @function abort Abort the operation
-     */
+	    /**
+	     * @function abort Abort the operation
+	     */
 		abort: function() {
 			this.log("Abort received");
 
@@ -235,16 +224,16 @@ dojo.declare("apstrata.Operation",
 		//
 		//
 
-    /**
-     * @function handleResult Stop receiving the response and handle what was collected
-     */
+	    /**
+	     * @function handleResult Stop receiving the response and handle what was collected
+	     */
 		handleResult: function() {
 			//this.connection.activity.stop(this);
 		},
 
-    /**
-     * @function handleError Stop receiving the response and log the error that occurred
-     */
+	    /**
+	     * @function handleError Stop receiving the response and log the error that occurred
+	     */
 		handleError: function() {
 			//this.connection.activity.stop(this)
         	this.log.warn("errorCode:", this.response.metadata.errorCode)

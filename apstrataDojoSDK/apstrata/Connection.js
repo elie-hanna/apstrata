@@ -24,25 +24,93 @@ dojo.require("dojox.encoding.digests.MD5");
 dojo.require("apstrata.util.logger.Loggable")
 
 dojo.declare("apstrata.URLSignerMD5", [], {	
-	sign: function (connection, operation, params, responseType) {
-					var timestamp = new Date().getTime() + '';
-					
-					responseType = responseType || "json"
+	signOwner: function (connection, operation, params, responseType) {
+			var timestamp = new Date().getTime() + '';
+			
+			responseType = responseType || "json"
+			
+			var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
+			var signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+			
+			var apswsReqUrl = connection.serviceUrl
+					+ "?apsdb.action=" + operation
+					+ "&apsws.time=" + timestamp
+					+ "&apsws.authKey=" + connection.credentials.key
+					+ "&apsws.authSig=" + signature
+					+ "&apsws.responseType=" + responseType
+					+ "&apsws.authMode=simple"
+					+ ((params!="")?"&":"") + params
+			
+			return {url: apswsReqUrl, signature: signature};
+	},
+	
+	signUser: function (connection, operation, params, responseType) {
+		var timestamp = new Date().getTime() + '';
+		
+		responseType = responseType || "json"
+		
+		var valueToHash = timestamp + connection.credentials.un + operation + dojox.encoding.digests.MD5(connection.credentials.pw, dojox.encoding.digests.outputTypes.Hex)
 
-					var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
-					var signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+		var apswsReqUrl = connection.serviceUrl
+				+ "?apsdb.action=" + operation
+				+ "&apsws.time=" + timestamp
+				+ "&apsws.authKey=" + connection.credentials.key
+				+ "&apsws.password=" + connection.credentials.password
+				+ "&apsws.authSig=" + valueToHash
+				+ "&apsws.responseType=" + responseType
+				+ "&apsws.authMode=simple"
+				+ ((params!="")?"&":"") + params
 		
-					var apswsReqUrl = connection.serviceUrl
-							+ "?apsdb.action=" + operation
-							+ "&apsws.time=" + timestamp
-							+ "&apsws.authKey=" + connection.credentials.key
-							+ "&apsws.authSig=" + signature
-							+ "&apsws.responseType=" + responseType
-							+ "&apsws.authMode=simple"
-							+ ((params!="")?"&":"") + params
+		return {url: apswsReqUrl, signature: signature};
+	},
+	
+	sign: function(connection, operation, params, responseType) {
+		if (connection.credentials.secret) return this.signOwner(connection, operation, params, responseType);
+		else return this.signUser(connection, operation, params, responseType)
+	},
+
+
+
+
+	signC: function(connection, operation, params, responseType) {
+		var timestamp = new Date().getTime() + '';
+		responseType = responseType || "json"
+			
+		if (connection.credentials.secret) return this.signOwner(connection, operation, params, responseType);
+		else return this.signUser(connection, operation, params, responseType)
 		
-					return {url: apswsReqUrl, signature: signature};
-			}
+		if (connection.credentials.secret) {
+			var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
+			var signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+			
+			var apswsReqUrl = connection.serviceUrl
+					+ "?apsdb.action=" + operation
+					+ "&apsws.time=" + timestamp
+					+ "&apsws.authKey=" + connection.credentials.key
+					+ "&apsws.authSig=" + signature
+					+ "&apsws.responseType=" + responseType
+					+ "&apsws.authMode=simple"
+					+ ((params!="")?"&":"") + params
+		} else {
+			var signature = dojox.encoding.digests.MD5(connection.credentials.pw, dojox.encoding.digests.outputTypes.Hex)
+			var valueToHash = timestamp + connection.credentials.un + operation + signature
+	
+			var apswsReqUrl = connection.serviceUrl
+					+ "?apsdb.action=" + operation
+					+ "&apsws.time=" + timestamp
+					+ "&apsws.authKey=" + connection.credentials.key
+					+ "&apsws.responseType=" + responseType
+					+ "&apsws.authMode=simple"
+					+ ((params!="")?"&":"") + params
+		}
+		
+		return {url: apswsReqUrl, signature: signature};
+	}
+
+
+
+
+
 })
 
 

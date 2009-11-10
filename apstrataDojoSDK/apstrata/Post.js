@@ -34,6 +34,8 @@ dojo.declare("apstrata.Post",
 		execute: function(attrs) {
 			var self = this;
 			
+			this.request = attrs.request
+			
 			// Send debug information to connection object, could be used later to identify problems
 			self.log.info("Operation", self.apsdbOperation);
 		
@@ -100,7 +102,6 @@ dojo.declare("apstrata.Post",
 
 			self.url = self.buildActionUrl("jsoncdp")
 
-
 			var message = self.url
 			
 			dojo.forEach((dijit.byId(attrs.formNode.id).getValues()), function(val) {})
@@ -134,7 +135,7 @@ dojo.declare("apstrata.Post",
 				
 				form: attrs.formNode,
 				
-				content: attrs.fields,
+//				content: attrs.fields,
 				
 				// the content to submit:
 				content: self.buildRequestObject(),
