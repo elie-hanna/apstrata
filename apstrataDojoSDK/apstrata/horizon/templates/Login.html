@@ -1,0 +1,60 @@
+<div class='login'>
+	<div class='homePanel'>
+		<h3>Login to apstrata</h3>
+		<!-- img src='../../apstrata/resources/images/pencil-icons/computer.png' width='70' style='position: absolute; top:15px; left: 460px;' -->
+
+		<p>This will capture your login credentials and use them to sign all the apstrata API requests sent by the application. 
+		You can look at how the requests are constructed and signed by moving your mouse over the 
+		<span class='highlight'>REST monitor</span> panel at the bottom of the page.</p>
+		<br>
+		<table width="100%">
+			<tr>
+				<td width="33%" valign="top">
+					<p>The <span class='highlight'>Master Credentials</span> that were provided when you created the apstrata
+					account will give you superuser control over all API calls. 
+					<br><br>
+					<span class='highlight'>User Credentials</span> provide ACL enforced access. You can use the <a href='../DevConsole'>Developer Console</a> 
+					to create an initial set of users for your applications.</p>
+				</td>
+				<td width="33%" valign="top">
+					<div class="LoginForm rounded-sml" 
+							dojoAttachPoint="dvMaster" 
+							dojoAttachEvent='onmouseover: _onMouseoverMaster,onmouseout: _onMouseoutMaster'>
+						<form action="" method="">
+							<span class="title">Master Credentials</span>
+							<br><br>
+				
+							<div class="label">Key:</div>
+							<input type="text" dojoAttachPoint="mKey" value="7744293024" />
+				
+							<div class="label">Secret:</div>
+							<input type="password" dojoAttachPoint="mSecret" value="3B45DE19C689EDAFCA47" />
+							
+							<br><br><br><br><br>
+						</form>
+							<button dojoAttachEvent="onclick: loginMaster">Login</button>
+					</div>
+				</td>
+				<td width="33%" valign="top">
+					<div class="LoginForm  rounded-sml" dojoAttachPoint="dvUser" dojoAttachEvent='onmouseover: _onMouseoverUser,onmouseout: _onMouseoutUser'>
+						<span class="title">User Credentials</span>
+						<br><br>
+			
+						<div class="label">Key:</div>
+						<input type="text" dojoAttachPoint="key" value="" />
+			
+						<div class="label">User Name:</div>
+						<input type="text" dojoAttachPoint="un" value="" />
+			
+						<div class="label">Password:</div>
+						<input type="text" dojoAttachPoint="pw" value="" />
+			
+						<br><br>
+						<button dojoAttachEvent="onclick: loginUser">Login</button>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</div>
