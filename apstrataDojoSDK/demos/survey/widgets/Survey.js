@@ -276,7 +276,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 							isSurveyMetadata: "true"
 					},
 					apsdb: {
-							store: self.storeName
+							store: self.storeName,
+							documentKey: schemaName
 					},
 					load: function(operation) {
 					},
