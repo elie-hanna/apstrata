@@ -74,15 +74,19 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			var charting = this;
 			var fieldValueCounts = new Array(); // Holds the counts of every value of every field
 
-			// Query to get the total number of surveys taken
-			var surveysTakenCountQuery = client.call({
-				action: "Query",
+			var queryRequest = {
 				apsdb: {
 					store: charting.storeName,
 					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\"",
 					queryFields: '*',
 					count: true
-				},
+				}
+			};
+
+			// Query to get the total number of surveys taken
+			var surveysTakenCountQuery = client.call({
+				action: "Query",
+				request: queryRequest,
 				load: function(operation) {
 					charting.surveysTakenCount = operation.response.result.count;
 					var fieldResponses = new Array();
@@ -153,14 +157,18 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
-			callbackResult = client.call({
-				action: "Query",
+			var queryRequest = {
 				apsdb: {
 					store: charting.storeName,
 					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
 					queryFields: "*",
 					count: true
-				},
+				}
+			};
+
+			callbackResult = client.call({
+				action: "Query",
+				request: queryRequest,
 				load: function(operation) {
 					var valueCount = operation.response.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
@@ -256,14 +264,18 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
-			callbackResult = client.call({
-				action: "Query",
+			var queryRequest = {
 				apsdb: {
 					store: charting.storeName,
 					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
 					queryFields: "*",
 					count: true
-				},
+				}
+			};
+
+			callbackResult = client.call({
+				action: "Query",
+				request: queryRequest,
 				load: function(operation) {
 					var valueCount = operation.response.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
@@ -341,14 +353,18 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
-			callbackResult = client.call({
-				action: "Query",
+			var queryRequest = {
 				apsdb: {
 					store: charting.storeName,
-					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
 					queryFields: "*",
 					count: true
-				},
+				}
+			};
+
+			callbackResult = client.call({
+				action: "Query",
+				request: queryRequest,
 				load: function(operation) {
 					var valueCount = operation.response.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
@@ -426,14 +442,18 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
-			callbackResult = client.call({
-				action: "Query",
+			var queryRequest = {
 				apsdb: {
 					store: charting.storeName,
 					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
 					queryFields: "*",
 					count: true
-				},
+				}
+			};
+
+			callbackResult = client.call({
+				action: "Query",
+				request: queryRequest,
 				load: function(operation) {
 					var valueCount = operation.response.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count

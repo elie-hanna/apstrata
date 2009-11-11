@@ -92,7 +92,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 			dojo.forEach(dataModel.questions, function(fieldDataModel) {
 				// Do not show the 'apsdbSchema' field
-				var isVisible = (fieldDataModel.name != 'apsdbSchema');
+				var isVisible = (fieldDataModel.name != 'apsdbSchema') && (fieldDataModel.name != 'apsdbDockey');
 				if(isVisible || (!isVisible && !survey.editMode) )
 					var newField = survey.createField(fieldDataModel, isVisible);
 			});
@@ -235,15 +235,25 @@ dojo.declare("surveyWidget.widgets.Survey",
 			// The schema name must be between 3-32 characters long: [user key]_[survey title]_[random hash]
 			var strTitleForSchema = this.cleanTitleForSchemaName(this.title.value);
 			var schemaName = 's_' + apstrata.apConfig.key + '_' + strTitleForSchema + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase().substring(0, 10);
+			var dockey = schemaName;
 
 			var apstrataSurveySchemaName = new Object();
 			apstrataSurveySchemaName.choices = '';
-			apstrataSurveySchemaName.defaultValue = schemaName;
+			apstrataSurveySchemaName.defaultValue = dockey;
 			apstrataSurveySchemaName.mandatory = false;
 			apstrataSurveySchemaName.name = 'apsdbSchema';
 			apstrataSurveySchemaName.title = 'Apstrata Survey Schema Name';
 			apstrataSurveySchemaName.type = 'text';
 			data[i++] = apstrataSurveySchemaName;
+
+			var apstrataSurveyDockey = new Object();
+			apstrataSurveyDockey.choices = '';
+			apstrataSurveyDockey.defaultValue = schemaName;
+			apstrataSurveyDockey.mandatory = false;
+			apstrataSurveyDockey.name = 'apsdbDockey';
+			apstrataSurveyDockey.title = 'Apstrata Survey Dockey';
+			apstrataSurveyDockey.type = 'text';
+			data[i++] = apstrataSurveyDockey;
 
 			dojo.forEach(this.questions.getChildren(), function(child) {
 				if (child.title != null && !child.dummyField) {
@@ -262,11 +272,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var client = new apstrata.Client({connection: connection});
 			var surveyData = null;
 			var surveySchema = this.generateSurveySchema(data);
-			var listResultSchema = this.generateListResultSchema(arrFields, arrTitleFields, xmlSchema.name);
+			var listResultSchema = this.generateListResultSchema(arrFields, arrTitleFields, xmlSchema.name, dockey);
 				
-			var sd = client.call({
-					action: "SaveDocument",
-					fields: {
+			var saveDocumentRequest = dojo.mixin({
 							surveyName: self.title.value,
 							surveyDescription: self.description.value,
 							surveySchema: surveySchema,
@@ -274,11 +282,16 @@ dojo.declare("surveyWidget.widgets.Survey",
 							listResultSchema: listResultSchema,
 							"listResultSchema.apsdb.fieldType": "text",
 							isSurveyMetadata: "true"
-					},
+			}, {
 					apsdb: {
 							store: self.storeName,
-							documentKey: schemaName
-					},
+						documentKey: dockey
+				}
+			});
+
+			var sd = client.call({
+					action: "SaveDocument",
+					request: saveDocumentRequest,
 					load: function(operation) {
 					},
 					error: function(operation) {
@@ -286,12 +299,16 @@ dojo.declare("surveyWidget.widgets.Survey",
 					}
 				});
 				
-			var ss = client.call({
-					action: "SetSchema",
+			var setSchemaRequest = {
 					apsdb: {
 						schema: xmlSchema.toString(),
 						schemaName: xmlSchema.name
-					},
+				}
+			};
+
+			var ss = client.call({
+					action: "SetSchema",
+					request: setSchemaRequest,
 					load: function(operation) {
 						surveyData = self.generateAndDisplayEmbedCodes(surveySchema, listResultSchema);
 					},
@@ -350,12 +367,13 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 
 		
-		generateListResultSchema: function (arrFields, arrTitleFields, schemaName) {
+		generateListResultSchema: function (arrFields, arrTitleFields, schemaName, dockey) {
 			var listSurveyData = {
 				title: this.title.value,
 				fields: arrFields,
 				titleFields: arrTitleFields,
-				apsdbSchema: schemaName
+				apsdbSchema: schemaName,
+				dockey: dockey
 			};
 
 			var listSurveyDataSchema = encodeURIComponent(dojo.toJson(listSurveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
@@ -376,7 +394,7 @@ dojo.declare("surveyWidget.widgets.Survey",
           	+ 'modulePaths: { surveyWidget: \''+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget\',\n'
 		  	+ '			 apstrata: \''+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata\',\n'
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></script>\n'
-			+ '<script type="text/javascript" src="'+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata-lib.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \"' + apServiceURL + '\'"></script>\n'
+			+ '<script type="text/javascript" src="'+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata-lib.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + apServiceURL + '\'"></script>\n'
 			+ '<link rel=stylesheet href="'+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
 			+ '<script>var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
@@ -399,7 +417,7 @@ dojo.declare("surveyWidget.widgets.Survey",
           	+ 'modulePaths: { surveyWidget: \''+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
 		  	+ '			 apstrata: \''+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata\','
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></script>'
-			+ '<script type="text/javascript" src="'+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata-lib.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \"' + apServiceURL + '\'"></script>\n'
+			+ '<script type="text/javascript" src="'+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/list-apstrata-lib.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + apServiceURL + '\'"></script>\n'
 			+ '<link rel=stylesheet href="'+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
 			+ '<script>var schema = \'' + listSurveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
@@ -422,7 +440,7 @@ dojo.declare("surveyWidget.widgets.Survey",
           	+ 'modulePaths: { surveyWidget: \''+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
 		  	+ '			 apstrata: \''+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata\','
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
-			+ '<script type="text/javascript" src="'+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata-lib.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \"' + apServiceURL + '\'"></script>\n'
+			+ '<script type="text/javascript" src="'+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/chart-apstrata-lib.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + apServiceURL + '\'"></script>\n'
 			+ '<link rel=stylesheet href="'+apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
 			+ '<script>var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
@@ -480,12 +498,16 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 				var client = new apstrata.Client({connection: connection});
 				
-				var sd = client.call({
-					action: "SaveDocument",
-					fields: jsonObj,
+				// Save a document of the data gathered from the user
+				var saveDocumentRequest = dojo.mixin(jsonObj, {
 					apsdb: {
 							store: survey.storeName
-					},
+					}
+				});
+
+				var sd = client.call({
+					action: "SaveDocument",
+					request: saveDocumentRequest,
 					load: function(operation) {
 						dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
 
@@ -497,6 +519,26 @@ dojo.declare("surveyWidget.widgets.Survey",
 							survey.surveyDiv.style.display = 'none';
 							survey.successMessage.innerHTML = dataModel.successMessage;
 						}
+					},
+					error: function(operation) {
+						survey.successMessage.innerHTML = operation.response.metadata.errorDetail;
+					}
+				});
+
+				// Run a script after saving the document. It will probably Tweet to Twitter
+				var runScriptletRequest = dojo.mixin({
+					dockey: jsonObj.apsdbDockey
+				}, {
+					apsdb: {
+						store: survey.storeName,
+						scriptName: 'com.myScript.script'
+					}
+				});
+
+				var sd = client.call({
+					action: "RunScriptlet",
+					request: runScriptletRequest,
+					load: function(operation) {
 					},
 					error: function(operation) {
 						survey.successMessage.innerHTML = operation.response.metadata.errorDetail;

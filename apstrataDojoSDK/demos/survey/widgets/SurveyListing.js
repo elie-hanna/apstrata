@@ -68,13 +68,17 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			var client = new apstrata.Client({connection: connection});
 			var listing = this;
 
-			var q = client.call({
-				action: "Query",
+			var queryRequest = {
 				apsdb: {
 					store: listing.storeName,
 					query: "apsdb.objectName=\"" + listing.apsdbSchema + "\"",
 					queryFields: listing.arrFieldsToDisplay
-				},
+				}
+			};
+
+			var q = client.call({
+				action: "Query",
+				request: queryRequest,
 				load: function(operation) {
 					listing.resultResponse = operation.response;
 					listing.display(listing.resultResponse,listing.arrFieldsToDisplay, listing.arrTitleFieldsToDisplay);
