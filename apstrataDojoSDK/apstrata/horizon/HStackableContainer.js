@@ -39,21 +39,81 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 	autoScroll: function() {
 		this.domNode.scrollLeft = this.domNode.scrollWidth - this.domNode.clientWidth
 	},
-	
-	
-	// Call layout for each contained widget upon resize
-	layout: function() {
-		dojo.forEach(this.getChildren(), function(child) {
-			child.layout()
-		})
-	},
-	
+		
 	getRemainingFreeWidth: function() {
 		var w = 0
 		dojo.forEach(this.getChildren(), function(child) {
 			w += child.domNode.offsetWidth
 		})
 		return this.domNode.offsetWidth - w - this._marginRight * this.getChildren().length
+	},
+
+	/*
+	 * Auto calculate coordinates and size of Explorer based on 
+	 *  window size and margin
+	 */
+	_layoutMarginMode: function() {
+		var w = dijit.getViewport()
+		
+		var coord = {}
+
+		coord.top = (this.margin.h/2+5) + "px"
+		coord.left = (this.margin.w/2+5) + "px"
+		coord.width = (w.w - this.margin.w - 10) + "px"
+		coord.height = (w.h - this.margin.h - 10) + "px"
+		dojo.style(this.background, {
+			top: (this.margin.h/2) + "px",
+			left: (this.margin.w/2) + "px",
+			width: (w.w - this.margin.w) + "px",
+			height: (w.h - this.margin.h) + "px",
+			zIndex: "10"
+		})
+		dojo.style(this.domNode, {
+			top: coord.top,
+			left: coord.left,
+			width: coord.width,
+			height: coord.height,
+			zIndex: "100"
+		})
+	},
+	
+	/*
+	 * Auto calculate coordinates and size of Explorer based on 
+	 *  window size and explorer target size
+	 */
+	_layoutSizeMode: function() {
+		coord.top = ((w.h - this.height)/2)
+		coord.left = ((w.w - this.width)/2)
+		coord.width = (this.width)
+		coord.height = (this.height)
+
+
+		dojo.style(this.background, {
+			top: (this.margin.h/2) + "px",
+			left: (this.margin.w/2) + "px",
+			width: (w.w - this.margin.w) + "px",
+			height: (w.h - this.margin.h) + "px",
+			zIndex: "10"
+		})
+
+		dojo.style(this.domNode, {
+			top: coord.top + "px",
+			left: coord.left + "px",
+			width: coord.width + "px",
+			height: coord.height + "px",
+			zIndex: "100"
+		})
+	},
+	
+	layout: function() {
+		this._layoutMarginMode()
+
+		// Call layout for each contained widget upon resize
+		dojo.forEach(this.getChildren(), function(child) {
+			child.layout()
+		})
+
+		this.inherited(arguments)
 	}
 })
 
@@ -75,6 +135,7 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 			if (attrs.container) this.container = attrs.container
 			
 			if (attrs.parentList) {
+				this._parent = attrs.parentList
 				this.parentNode = attrs.parentList.domNode
 			} else if (attrs.parentListId) {
 					this.parentListId = attrs.parentListId
@@ -162,8 +223,6 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 		// Instantiate new Class 'panel'
 		this._openPanel = new panel(newArgs)
 
-		this._openPanel._parent = this
-		
 		// Add to DojoLayout container
 		this.getContainer().addChild(this._openPanel)
 	},
@@ -314,7 +373,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 	onDeleteItem: function(index, label) {},
 
 	_alert: function (msg, origin, yes, no) {
-		dialog3 = new apstrata.horizon.Alert({width: 300, 
+		dialog3 = new apstrata.widgets.Alert({width: 300, 
 												height: 250, 
 												actions: "yes,no", 
 												message: msg, 

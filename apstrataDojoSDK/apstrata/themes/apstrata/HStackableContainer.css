@@ -1,4 +1,4 @@
-.blueHorizonBackground {
+.horizonBackground {
 	position: absolute;
 
 	background: #eeeeff;
@@ -11,7 +11,7 @@
 	font-family: monospace;
 }
 
-.blueHorizon {
+.horizon {
 	position: absolute;
 
 	font-family: sans-serif;
@@ -21,7 +21,7 @@
 	overflow-y: hidden;
 }
 
-.blueHorizon .hStackable {
+.horizon .hStackable {
 	position: absolute;
 	overflow: hidden;
 	height: 100%;
@@ -29,11 +29,11 @@
 	padding-top: 5px;
 	padding-bottom: 15px;
 	padding-left: 5px;
-	padding-right: 5px;
+	padding-right: 1px;
 	opacity: 0.95;
 }
 
-.blueHorizon .hStackableMultiSelect {
+.horizon .hStackableMultiSelect {
 	position: absolute;
 	overflow: hidden;
 
@@ -47,35 +47,37 @@
 	background: #c0c0c0
 }
 
-.blueHorizon .verticalList {
+.horizon .verticalList {
 	width: 160px;
 
 	background: #f5f5f5;
 	color: #333333;
 }
 
-.blueHorizon .wide {
+.horizon .wide {
 	width: 320px;
 }
 
-.blueHorizon .panel {
+.horizon .panel {
 
 	background: #f5f5f5;
 }
 
-.blueHorizon .verticalList .vScrollable {
+.horizon .verticalList .vScrollable {
 	overflow-y: auto;
 	overflow-x: hidden;					
 	height: 95%;
 }
 
-.blueHorizon .verticalList .item {
+.horizon .verticalList .item {
 	height: 45px;
 	position: relative;
 	top: 12px;
 	padding-left: 15px;
 	border-bottom: solid 0px #aaaaaa;
 	overflow: hidden;
+	
+	width: 400px;
 	
 	cursor: pointer;
 
@@ -97,11 +99,11 @@
 
 }
 
-.blueHorizon .verticalList .itemMouseOver {
+.horizon .verticalList .itemMouseOver {
 	background: #898989;
 }
 
-.blueHorizon .verticalList .itemSelected {
+.horizon .verticalList .itemSelected {
 #				background: #ff8833;
 #				color: white;
 
@@ -112,33 +114,33 @@
 	color: white;
 }
 
-.blueHorizon .verticalList .item .icon {
+.horizon .verticalList .item .icon {
 	float: left;
 }
 
-.blueHorizon .verticalList .item .icon img {
+.horizon .verticalList .item .icon img {
 	position: relative;
 	top: 2px;
 	height: 40px;
 }
 
-.blueHorizon .verticalList .item .iconDelete {
+.horizon .verticalList .item .iconDelete {
 	float: left;
 }
 
-.blueHorizon .verticalList .item .iconDelete img {
+.horizon .verticalList .item .iconDelete img {
 	position: relative;
 	top: 15px;
 	height: 17px;
 }
 
-.blueHorizon .verticalList .item .iconSelect img {
+.horizon .verticalList .item .iconSelect img {
 	position: relative;
 	top: 15px;
 	height: 17px;
 }
 
-.blueHorizon .verticalList .item .label {
+.horizon .verticalList .item .label {
 	position: relative;
 	top: 15px;
 	width: 85px;
