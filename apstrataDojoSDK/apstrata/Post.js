@@ -79,8 +79,8 @@ dojo.declare("apstrata.Post",
 					// TODO: test case for bad response
                     self.response.metadata.status = "failure";
                     self.response.metadata.errorCode = "CLIENT_BAD_RESPONSE"
-                    self.response.metadata.errorMessage = "apsdb client: bad response from apsdb or communication error"
-                    self.log.error("errorMessage", self.errorMessage);
+                    self.response.metadata.errorDetail = "apsdb client: bad response from apsdb or communication error"
+                    self.log.error("errorDetail", self.errorMessage);
                     self.handleError();                                        
                 }
 				
@@ -103,16 +103,16 @@ dojo.declare("apstrata.Post",
 			self.url = self.buildActionUrl("jsoncdp")
 
 			var message = self.url
-			
-			dojo.forEach((dijit.byId(attrs.formNode.id).getValues()), function(val) {})
 
-			if (dijit.byId(attrs.formNode.id)) {
-				var fields = dijit.byId(attrs.formNode.id).getValues()
-				message += "<br>" 
-				for (k in fields) {
-					message += "<br>" + k + ":" + fields[k] 
+			if (attrs.formNode) {
+				if (dijit.byId(attrs.formNode.id)) {
+					var fields = dijit.byId(attrs.formNode.id).getValues()
+					message += "<br>" 
+					for (k in fields) {
+						message += "<br>" + k + ":" + fields[k] 
+					}
 				}
-			}
+			}			
 
 			dojo.publish("/apstrata/operation", [{
 					id: self.operationId,
