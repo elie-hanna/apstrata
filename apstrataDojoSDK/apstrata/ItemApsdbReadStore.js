@@ -134,7 +134,7 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 			var apsdb = {
 				store: self._store,
 				query: queryExpression,
-				queryFields: self._fields,
+				queryFields: self._fields, 
 				resultsPerPage: self._resultsPerPage,
 				pageNumber: pageNumber,
 				count: count
@@ -154,7 +154,7 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 
 			this._client.call({
 				action: "Query",
-				fields: {
+				request: {
 					apsdb: apsdb,
 					apsim: apsim
 				},
@@ -188,72 +188,7 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 
 			return request
 		},
-		
-		fetchX: function(/* Object */ keywordArgs) {
-			//
-			//    keywordArgs:
-			//        The keywordArgs parameter may either be an instance of
-			//        conforming to dojo.data.api.Request or may be a simple anonymous object
-			//        that may contain any of the following:
-			//        {
-			//            query: query-string or query-object,
-			//            queryOptions: object,
-			//            onBegin: Function,
-			//            onItem: Function,
-			//            onComplete: Function,
-			//            onError: Function,
-			//            scope: object,
-			//            start: int
-			//            count: int
-			//            sort: array
-			//        }
-			var self = this
-			var request = dojo.mixin(keywordArgs, new dojo.data.api.Request());
-			var queryExpression = keywordArgs.query.query || this._query
-			var pageNumber = (keywordArgs.query.pageNumber!=undefined)?keywordArgs.query.pageNumber:1
-			var count = (keywordArgs.query.count!=undefined)?keywordArgs.query.count:false
-
-			var q = this._client.query(
-      // Success function
-				function() {
-
-					self._items = []
-					if (q.result.count) {
-						self._pages = Math.ceil(q.result.count/self._resultsPerPage)
-						self.totalPagesCalculated(self._pages, q.result.count)
-					}
-
-          // Throw an event with the page and global values of the aggregate if they are in the response
-          if (q.result.aggregate) {
-            self.aggregateCalculated(q.result.aggregate['@pageValue'], q.result.aggregate['@globalValue']);
-          }
-
-					self._itemsMap = []
-					dojo.forEach(q.result.documents, function(item) {
-						var item = new apstrata.apsdb.client._Item({item: item, fieldNames: self._fieldsArray, childrenNames: self._childrenArray})
-						self._addItem(item)
-					})
-					self._fetchSuccess(request)
-				},
-				function() {
-					if (keywordArgs.onError) keywordArgs.onError({errorCode: q.errorCode, errorDetail: q.errorDetail}, request)
-				},							
-				{
-					store: self._store,
-					queryFields: self._fields,
-					pageNumber: pageNumber,
-					resultsPerPage: self._resultsPerPage,
-					count: count,
-					query: queryExpression,
-			          runAs: keywordArgs.query.runAs,
-			          aggregates: keywordArgs.query.aggregates,
-			          sort: keywordArgs.query.sort,
-			          ftsQuery: keywordArgs.query.ftsQuery
-				})
-
-			return request
-		},
-		
+				
 		isItem: function(something) {
 			var _v = false
 			if (something) 
