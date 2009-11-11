@@ -80,10 +80,10 @@
 						{
 							apsdb: {
 								store: 'explorerBlog',
-								saveDocumentACL: 'group: blog-users',
-								deleteDocumentACL: 'group: blog-users',
-								getFileACL: 'group: blog-users',
-								queryACL: 'group: blog-users'
+								saveDocumentACL: 'group:blog-users',
+								deleteDocumentACL: 'group:blog-users',
+								getFileACL: 'group:blog-users',
+								queryACL: 'group:blog-users'
 							}
 						}
 					],
@@ -126,14 +126,7 @@
 				}
 
 				
-				//var is = new apstrata.util.BulkUpdate({connection: connection, data: data})
-				
-			this.client = new apstrata.Client({
-				connection: attrs.connection,
-				handleResult: function(operation) {},
-				handleError: function(operation) {}
-			})
-				
+				var is = new apstrata.util.BulkUpdate({connection: connection, data: data})
 				
 			})
 		</script>
