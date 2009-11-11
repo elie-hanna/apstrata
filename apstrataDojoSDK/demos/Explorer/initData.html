@@ -28,28 +28,21 @@
 			@import "css/forms.css";
 			@import "css/explorer.css";
 
+			.title {
+				font-family: sans-serif;
+				text-align: center;
+			}
 
 	    </style>
 		
 		<script>
-			dojo.require("dijit._Widget")
-			dojo.require("dojox.dtl._Templated")
-			dojo.require("dijit.layout._LayoutWidget")
-			dojo.require("dojox.dtl._Templated")
-			dojo.require("dojo.fx.easing");
-			dojo.require("dijit.form.Button")
-			dojo.require("dijit.form.CheckBox")
 			
 			dojo.require("dojox.widget.Toaster")
-
-			dojo.require("apstrata.widgets.Alert")
-			dojo.require("apstrata.widgets.SlidingPanel")
 			dojo.require("apstrata.widgets.client.ConnectionStatus")
 			dojo.require('apstrata.widgets.client.RESTMonitor')
 			
 			var connection 
-			
-			dojo.require('apstrata.horizon.HStackableContainer')
+
 			dojo.require("apstrata.Client")
 			dojo.require("apstrata.StickyConnection")
 			dojo.require("apstrata.util.BulkUpdate")
@@ -65,9 +58,9 @@
 				connection = new apstrata.StickyConnection({
 					credentials: {
 						key: "7744293024",
-						username: "joe",
-						password: "qw3rty"
-//						secret: "3B45DE19C689EDAFCA47"
+//						un: "jobblog",
+//						pw: "12345"
+						secret: "3B45DE19C689EDAFCA47"
 					}
 				})
 
@@ -77,12 +70,71 @@
 */				
 
 				dojo.registerModuleRelative ("apstrata.explorer", "apstrata/explorer");
-				dojo.require ('apstrata.explorer.Explorer')
-				//dojo.require ('apstrata.admin.ContextualHelp')
 				
 				toast = dijit.byId("toast")
 				dojo.parser.parse()
 
+
+				var data = {
+					stores: [
+						{
+							apsdb: {
+								store: 'explorerBlog',
+								saveDocumentACL: 'group: blog-users',
+								deleteDocumentACL: 'group: blog-users',
+								getFileACL: 'group: blog-users',
+								queryACL: 'group: blog-users'
+							}
+						}
+					],
+					
+					groups: [
+						{
+							apsim: {
+								group: 'blog-users'
+							}	
+						},
+						{
+							apsim: {
+								group: 'blog-admins'
+							}	
+						}
+					],
+					
+					users: [
+						{
+							apsim:{
+								user: 'joe',
+								password: 'qw3rty',
+								name: 'Joe Blogger',
+								email: 'joe.blogger.explorer@apstrata.com',
+								group: 'blog-users',
+								update: 'false'
+							}
+						},
+						{
+							apsim:{
+								user: 'jane',
+								password: 'qw3rty',
+								name: 'Jane Blogger',
+								email: 'jane.blogger.explorer@apstrata.com',
+								group: 'blog-users',
+								update: 'false'
+							}
+						},
+					]
+				}
+
+				
+				//var is = new apstrata.util.BulkUpdate({connection: connection, data: data})
+				
+			this.client = new apstrata.Client({
+				connection: attrs.connection,
+				handleResult: function(operation) {},
+				handleError: function(operation) {}
+			})
+				
+				
 			})
 		</script>
 	</head>
@@ -91,36 +143,14 @@
 		<div class='appTitle'>Code Explorer</div>		
 		<div style='clear:both'></div>
 
-		<div dojoType='apstrata.widgets.SlidingPanel' 
-			dojoAttachPoint='slidingPanel' 
-			class='ConsoleOutput rounded-top-sml' 
-			attach='bottom' 
-			visibleWidth='20'>
-				<div dojoType='apstrata.widgets.client.RESTMonitor'></div>
+		<div class='rounded-top-sml' style='padding: 10px; background: #ededed;width: 1050px; height: 80%; overflow-x: none; overflow-y: auto; margin-left: auto; margin-right: auto;'>
+			<div dojoType='apstrata.widgets.client.RESTMonitor'></div>
 		</div>
-
-		<!-- div dojoType='apstrata.widgets.SlidingPanel' 
-			dojoAttachPoint='slidingPanel' 
-			class='ConsoleOutput rounded-bottom-sml' 
-			attach='top' 
-			visibleWidth='20'>
-				<div dojoType='apstrata.admin.ContextualHelp'></div>
-		</div -->
 
 		<div dojoType='apstrata.widgets.client.ConnectionStatus'></div>
 
 		<div dojoType="dojox.widget.Toaster" id="toast" 
 			positionDirection="br-left" duration="0" 
 			messageTopic="/apstrata/connection"></div>    
-
-		<!-- div class='devConsoleBackground rounded-sml' dojoAttachPoint='background'></div -->
-		<!-- div dojoType='apstrata.explorer.HStackableContainer' dojoAttachPoint='container'></div -->
-
-<div>
-		<div dojoType="apstrata.explorer.Explorer" jsId='adminWidget'
-			connection='connection'></div>
-</div>
 	</body>
 </html>
-
-<!-- div class="logo">ap<span style="color: #FF6600;">((</span>strata</div-->
