@@ -26,6 +26,8 @@ dojo.provide("apstrata.explorer.BlogGallery")
 dojo.declare("apstrata.explorer.Blog",
 [apstrata.horizon.HStackableList], 
 {
+	storeName: 'explorerBlog',
+		
 	data: [
 		{label: "Posts", iconSrc: "../../apstrata/resources/images/pencil-icons/file.png"},
 		{label: "Gallery", iconSrc: "../../apstrata/resources/images/pencil-icons/picture.png"},
@@ -78,15 +80,7 @@ dojo.declare("apstrata.explorer.BlogPost",
 	constructor: function() {
 		
 	},
-	
-	postCreate: function() {
-		var self = this
 		
-		dojo.addClass(this.domNode, 'blogPost')
-
-		this.inherited(arguments)
-	},
-	
 	SavePost: function() {
 		var self = this
 
@@ -100,7 +94,7 @@ dojo.declare("apstrata.explorer.BlogPost",
 					hasImage: (self.upldPhoto.fileInput.value!=""),
 
 					apsdb: {
-						store: "wiki",
+						store: self.getParent().storeName,
 					}
 				},
 				formNode: self.blogForm.domNode,
@@ -155,7 +149,7 @@ dojo.declare("apstrata.explorer.BlogPosts",
 					
 					if (item.getValue("apsdb_attachments")) {
 						var attrs = {
-								store: "wiki",
+								store: self.getParent().storeName,
 								documentKey: item.documentKey,
 								fieldName: "apsdb_attachments",
 								fileName: item.getValue("apsdb_attachments"),
@@ -188,7 +182,7 @@ dojo.declare("apstrata.explorer.BlogPosts",
 	postCreate: function() {
 		var self = this
 		
-		var args = {client: self.getContainer().client, apsdbStoreName: "wiki", fields:"apsdb.documentKey, apsdb.creationTime, formType, title, blogPost, apsdb_attachments, hasImage", label: "title", resultsPerPage: 50}
+		var args = {client: self.getContainer().client, apsdbStoreName: self.getParent().storeName, fields:"apsdb.documentKey, apsdb.creationTime, formType, title, blogPost, apsdb_attachments, hasImage", label: "title", resultsPerPage: 50}
 		this.store = new apstrata.ItemApsdbReadStore(args)
 
 		this.fetch()

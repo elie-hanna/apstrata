@@ -46,7 +46,6 @@ dojo.declare("apstrata.explorer.MainPanel",
 	}
 })
 
-
 dojo.declare("apstrata.explorer.Explorer", 
 [apstrata.horizon.HStackableContainer], 
 {
@@ -103,67 +102,6 @@ dojo.declare("apstrata.explorer.Explorer",
 		this.inherited(arguments)
 	},
 	
-	/*
-	 * Auto calculate coordinates and size of Explorer based on 
-	 *  window size and margin
-	 */
-	_layoutMarginMode: function() {
-		var w = dijit.getViewport()
-		
-		var coord = {}
-
-		coord.top = (this.margin.h/2+5) + "px"
-		coord.left = (this.margin.w/2+5) + "px"
-		coord.width = (w.w - this.margin.w - 10) + "px"
-		coord.height = (w.h - this.margin.h - 10) + "px"
-		dojo.style(this.background, {
-			top: (this.margin.h/2) + "px",
-			left: (this.margin.w/2) + "px",
-			width: (w.w - this.margin.w) + "px",
-			height: (w.h - this.margin.h) + "px",
-			zIndex: "10"
-		})
-		dojo.style(this.domNode, {
-			top: coord.top,
-			left: coord.left,
-			width: coord.width,
-			height: coord.height,
-			zIndex: "100"
-		})
-	},
-	
-	/*
-	 * Auto calculate coordinates and size of Explorer based on 
-	 *  window size and explorer target size
-	 */
-	_layoutSizeMode: function() {
-		coord.top = ((w.h - this.height)/2)
-		coord.left = ((w.w - this.width)/2)
-		coord.width = (this.width)
-		coord.height = (this.height)
-
-
-		dojo.style(this.background, {
-			top: (this.margin.h/2) + "px",
-			left: (this.margin.w/2) + "px",
-			width: (w.w - this.margin.w) + "px",
-			height: (w.h - this.margin.h) + "px",
-			zIndex: "10"
-		})
-
-		dojo.style(this.domNode, {
-			top: coord.top + "px",
-			left: coord.left + "px",
-			width: coord.width + "px",
-			height: coord.height + "px",
-			zIndex: "100"
-		})
-	},
-	
-	layout: function() {
-		this._layoutMarginMode()
-	},
-
 	alert: function(msg, origin) {
 		var dialog = new apstrata.widgets.Alert({width: 300, 
 												height: 250, 
