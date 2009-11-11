@@ -11,9 +11,6 @@ html, body {
 	overflow: hidden;
 }
 
-.Alert {
-	background: #999999;
-}
 
 .logo {
 	float: left;
@@ -31,6 +28,10 @@ html, body {
 	font-family: sans-serif; 
 	font-size: 2em;
 	color: #000099;
+}
+
+.Alert {
+	background: #999999;
 }
 
 .Alert .content {
