@@ -81,7 +81,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			// when clicking on "get Data Model" the getModel function is called
 			if (this.editMode) {
 				this.connect(this.btnGetData, "onclick", "getModel");
-				this.connect(dojo.byId("viewResultsId"), "onclick", "toggleTextBox");
+				this.connect(this.viewResults, "onclick", "toggleTextBox");
 			}
 			else {
 				this.connect(this.btnSubmit, "onclick", "saveSurvey");
@@ -103,7 +103,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		initDnd: function() {
-			src = new dojo.dnd.Source(dojo.byId("dndContainer"),{withHandles:true});
+			src = new dojo.dnd.Source(this.questions.domNode,{withHandles:true});
 			return(src);
 		},
 		

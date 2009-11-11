@@ -2,18 +2,18 @@
 	<div dojoAttachPoint="roundedBox survey" title="Survey" class="survey" >
 		<h2 dojoAttachPoint="title" title="Survey title" dojoType="dijit.InlineEditBox">${surveyTitle}</h2>
 		<h3 dojoAttachPoint="description" title="Survey description" dojoType="dijit.InlineEditBox">${surveyDescription}</h3>
-		<form id="survey_form" dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
-		<div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer"  withHandles="true" class="questionsPanel" id="dndContainer"></div>
+		<form dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
+		<div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer"  withHandles="true" class="questionsPanel"></div>
 		</form>
 		<br/>
 		<div title="Show results to users">
-			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" id="viewResultsId" name="allowViewingResults"/> Show results to users
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: toggleTextBox" name="allowViewingResults"/> Show results to users
 		</div>
 		<br/>
 		<div title="Success Message" dojoAttachPoint="successMsgDiv">
 			Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
 		</div>
-		<div id="pageFooter" title="Powered by apstrata">
+		<div class="surveyPageFooter" title="Powered by apstrata">
           <a target="_blank" href="http://www.apstrata.com" title="Powered by apstrata">&nbsp;</a>
         </div>
 		<div class="clear"></div>

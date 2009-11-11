@@ -3,8 +3,8 @@
         <div dojoAttachPoint="surveyDiv">
             <h2 title="Survey title" dojoAttachPoint="title">${surveyTitle}</h2>
             <h3 title="Survey description" dojoAttachPoint="description">${surveyDescription}</h3>
-            <form id="survey_form" dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
-                <div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer" class="questionsPanel" id="dndContainer">
+            <form dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
+                <div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer" class="questionsPanel">
                 </div>
                 <br/>
                 <input dojoAttachPoint="btnSubmit" class="surveyButton" style="cursor:pointer" title="Submit" type="button" value="Submit" />
@@ -13,7 +13,7 @@
         </div>
         <div dojoAttachPoint="successMessage">
         </div>
-        <div id="pageFooter" title="Powered by apstrata">
+        <div class="surveyPageFooter" title="Powered by apstrata">
           <a target="_blank" href="http://www.apstrata.com" title="Powered by apstrata">&nbsp;</a>
         </div>
 		<div class="clear"></div>
