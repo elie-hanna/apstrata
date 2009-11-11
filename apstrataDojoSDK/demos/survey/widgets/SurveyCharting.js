@@ -70,71 +70,73 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		 * 3- Generates and displays the charts representing the collected data
 		 */
 		query: function() {
-			var client = new apstrata.apsdb.client.Client();
+			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 			var fieldValueCounts = new Array(); // Holds the counts of every value of every field
 
 			// Query to get the total number of surveys taken
-			var surveysTakenCountQuery = client.query(
-					function() {
-						charting.surveysTakenCount = surveysTakenCountQuery.result.count;
-						var fieldResponses = new Array();
+			var surveysTakenCountQuery = client.call({
+				action: "Query",
+				apsdb: {
+					store: charting.storeName,
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\"",
+					queryFields: '*',
+					count: true
+				},
+				load: function(operation) {
+					charting.surveysTakenCount = operation.response.result.count;
+					var fieldResponses = new Array();
 
-						// Now we can query each field in the survey and aggregate the results
-						for (var i=0; i<charting.questions.length; i++) {
-							var fieldDataModel = charting.questions[i];
-							if (   fieldDataModel.name != 'apsdbSchema'
-									&& fieldDataModel.type != 'text') {
-								fieldResponses[i] = new Array();
+					// Now we can query each field in the survey and aggregate the results
+					for (var i=0; i<charting.questions.length; i++) {
+						var fieldDataModel = charting.questions[i];
+						if (   fieldDataModel.name != 'apsdbSchema'
+								&& fieldDataModel.type != 'text') {
+							fieldResponses[i] = new Array();
 
-								// Handle each field type separately
-								switch (fieldDataModel.type) {
-									case 'multiple choice':
-										// Count and display the number of people who checked each of these checkboxes
-										var choices = fieldDataModel.choices.split(',');
-										fieldValueCounts[i] = new Array(choices.length);
-										for (var j=0; j<choices.length; j++) {
-											fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = 0;
-											charting.queryAndDisplayMultipleChoice(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
-										}
-										break;
-									case 'radio button':
-										// Count and display the number of people who checked this radio button
-										var choices = fieldDataModel.choices.split(',');
-										fieldValueCounts[i] = new Array(choices.length);
-										for (var j=0; j<choices.length; j++) {
-											fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = null;
-											charting.queryAndDisplayRadioButton(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
-										}
-										break;
-									case 'checkbox':
-										// Count and display the number of people who checked this checkbox
-										fieldValueCounts[i] = new Array();
-										fieldValueCounts[i][fieldDataModel.name + '_checked'] = 0;
-										charting.queryAndDisplayCheckbox(fieldDataModel.name, 'checked', fieldResponses[i][0], fieldValueCounts[i]);
-										break;
-									case 'list':
-										// Count and display the number of people chose each of these list items
-										var choices = fieldDataModel.choices.split(',');
-										fieldValueCounts[i] = new Array(choices.length);
-										for (var j=0; j<choices.length; j++) {
-											fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = null;
-											charting.queryAndDisplayList(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
-										}
-										break;
-								}
+							// Handle each field type separately
+							switch (fieldDataModel.type) {
+								case 'multiple choice':
+									// Count and display the number of people who checked each of these checkboxes
+									var choices = fieldDataModel.choices.split(',');
+									fieldValueCounts[i] = new Array(choices.length);
+									for (var j=0; j<choices.length; j++) {
+										fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = 0;
+										charting.queryAndDisplayMultipleChoice(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
+									}
+									break;
+								case 'radio button':
+									// Count and display the number of people who checked this radio button
+									var choices = fieldDataModel.choices.split(',');
+									fieldValueCounts[i] = new Array(choices.length);
+									for (var j=0; j<choices.length; j++) {
+										fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = null;
+										charting.queryAndDisplayRadioButton(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
+									}
+									break;
+								case 'checkbox':
+									// Count and display the number of people who checked this checkbox
+									fieldValueCounts[i] = new Array();
+									fieldValueCounts[i][fieldDataModel.name + '_checked'] = 0;
+									charting.queryAndDisplayCheckbox(fieldDataModel.name, 'checked', fieldResponses[i][0], fieldValueCounts[i]);
+									break;
+								case 'list':
+									// Count and display the number of people chose each of these list items
+									var choices = fieldDataModel.choices.split(',');
+									fieldValueCounts[i] = new Array(choices.length);
+									for (var j=0; j<choices.length; j++) {
+										fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = null;
+										charting.queryAndDisplayList(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
+									}
+									break;
 							}
 						}
-					}, function() {
-						//fail(operation)
-					},
-					{
-						store: charting.storeName,
-						query: "apsdb.objectName=\"" + charting.apsdbSchema + "\"",
-						queryFields: '*',
-						count: true
 					}
-				)
+				},
+				error: function(operation) {
+					//fail(operation)
+				}
+			});
 		},
 
 		/**
@@ -148,12 +150,19 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		 * @param fieldValueCounts The array location to store the field value counts
 		 */
 		queryAndDisplayRadioButton: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
-			var client = new apstrata.apsdb.client.Client();
+			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
-			callbackResult = client.query (
-				function() {
-					var valueCount = callbackResult.result.count;
+			callbackResult = client.call({
+				action: "Query",
+				apsdb: {
+					store: charting.storeName,
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					queryFields: "*",
+					count: true
+				},
+				load: function(operation) {
+					var valueCount = operation.response.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
 
 					// Loop over the existing field value counts and if all values have been accounted for, then display the chart
@@ -226,15 +235,11 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						// Alternate the isNewLine variable to show the charts in two columns
 						charting.isNewLine = (charting.isNewLine) ? false : true;
 					}
-				}, function() {
-					//fail(operation)
 				},
-				{
-					store: charting.storeName,
-					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
-					queryFields: "*",
-					count: true
-				})
+				error: function(operation) {
+					//fail(operation)
+				}
+			});
 		},
 
 		/**
@@ -248,12 +253,19 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		 * @param fieldValueCounts The array location to store the field value counts
 		 */
 		queryAndDisplayMultipleChoice: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
-			var client = new apstrata.apsdb.client.Client();
+			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
-			callbackResult = client.query (
-				function() {
-					var valueCount = callbackResult.result.count;
+			callbackResult = client.call({
+				action: "Query",
+				apsdb: {
+					store: charting.storeName,
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
+					queryFields: "*",
+					count: true
+				},
+				load: function(operation) {
+					var valueCount = operation.response.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
 
 					var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
@@ -308,15 +320,11 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 
 					// Alternate the isNewLine variable to show the charts in two columns
 					charting.isNewLine = (charting.isNewLine) ? false : true;
-				}, function() {
-					//fail(operation)
 				},
-				{
-					store: charting.storeName,
-					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
-					queryFields: "*",
-					count: true
-				})
+				error: function(operation) {
+					//fail(operation)
+				}
+			});
 		},
 
 		/**
@@ -330,12 +338,19 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		 * @param fieldValueCounts The array location to store the field value counts
 		 */
 		queryAndDisplayCheckbox: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
-			var client = new apstrata.apsdb.client.Client();
+			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
-			callbackResult = client.query (
-				function() {
-					var valueCount = callbackResult.result.count;
+			callbackResult = client.call({
+				action: "Query",
+				apsdb: {
+					store: charting.storeName,
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					queryFields: "*",
+					count: true
+				},
+				load: function(operation) {
+					var valueCount = operation.response.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
 
 					var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
@@ -390,15 +405,11 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 
 					// Alternate the isNewLine variable to show the charts in two columns
 					charting.isNewLine = (charting.isNewLine) ? false : true;
-				}, function() {
-					//fail(operation)
 				},
-				{
-					store: charting.storeName,
-					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
-					queryFields: "*",
-					count: true
-				})
+				error: function(operation) {
+					//fail(operation)
+				}
+			});
 		},
 
 		/**
@@ -412,12 +423,19 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		 * @param fieldValueCounts The array location to store the field value counts
 		 */
 		queryAndDisplayList: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
-			var client = new apstrata.apsdb.client.Client();
+			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
-			callbackResult = client.query (
-				function() {
-					var valueCount = callbackResult.result.count;
+			callbackResult = client.call({
+				action: "Query",
+				apsdb: {
+					store: charting.storeName,
+					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
+					queryFields: "*",
+					count: true
+				},
+				load: function(operation) {
+					var valueCount = operation.response.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
 
 					// Loop over the existing field value counts and if all values have been accounted for, then display the chart
@@ -490,15 +508,11 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						// Alternate the isNewLine variable to show the charts in two columns
 						charting.isNewLine = (charting.isNewLine) ? false : true;
 					}
-				}, function() {
-					//fail(operation)
 				},
-				{
-					store: charting.storeName,
-					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + fieldValue + "\"",
-					queryFields: "*",
-					count: true
-				})
+				error: function(operation) {
+					//fail(operation)
+				}
+			});
 		},
 
 		/**

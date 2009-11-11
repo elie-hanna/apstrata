@@ -22,7 +22,6 @@ dojo.provide("surveyWidget.widgets.SurveyListing");
 
 dojo.require("dijit._Templated");
 dojo.require("dijit.layout.LayoutContainer");
-//dojo.require("apstrata.dojo.client.apsdb.Connection");
 
 dojo.declare("surveyWidget.widgets.SurveyListing",
 	[dijit._Widget, dijit._Templated],
@@ -66,36 +65,25 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		
 		query: function() {
 
-			//var connection = new apstrata.dojo.client.apsdb.Connection()
-			//connection.serviceUrl = this.apsdbServiceUrl;
-			//connection.credentials.key = this.apsdbKey
-			//connection.credentials.secret = this.apsdbSecret
-			var client = new apstrata.apsdb.client.Client();
+			var client = new apstrata.Client({connection: connection});
 			var listing = this;
 
-			var q = client.query(
-					function() {
-						listing.resultResponse = q;
-						listing.display(listing.resultResponse,listing.arrFieldsToDisplay, listing.arrTitleFieldsToDisplay);
-					}, function() {
-						//fail(operation)
-					},
-					{
-						store: listing.storeName,
-						query: "apsdb.objectName=\"" + listing.apsdbSchema + "\"",
-						queryFields: listing.arrFieldsToDisplay
-					}
-				)
+			var q = client.call({
+				action: "Query",
+				apsdb: {
+					store: listing.storeName,
+					query: "apsdb.objectName=\"" + listing.apsdbSchema + "\"",
+					queryFields: listing.arrFieldsToDisplay
+				},
+				load: function(operation) {
+					listing.resultResponse = operation.response;
+					listing.display(listing.resultResponse,listing.arrFieldsToDisplay, listing.arrTitleFieldsToDisplay);
+				},
+				error: function(operation) {
+					//fail(operation)
+				}
+			});
 			
-		//	var q = new apstrata.dojo.client.apsdb.Query(connection);
-		//	var listing = this;
-		    
-			//dojo.connect(q, "handleResult", function(){
-			//	listing.resultResponse = q.response;
-			//	listing.display(listing.resultResponse,listing.arrFieldsToDisplay, listing.arrTitleFieldsToDisplay);
-			//})
-			
-			//q.execute({store: this.storeName, query: "apsdb.documentKey!=\"-1\"", queryFields: listing.arrFieldsToDisplay});
 		},
 		
 		display: function(data, columns, columnsTitle) {

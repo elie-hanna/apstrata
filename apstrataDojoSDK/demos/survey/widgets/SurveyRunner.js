@@ -19,6 +19,7 @@
  */
 
 var schema = null
+var editingMode = false
 
 function loadjscssfile(filename, filetype){
 	 if (filetype=="js"){ //if filename is a external JavaScript file
@@ -38,7 +39,6 @@ function loadjscssfile(filename, filetype){
 
 loadjscssfile("http://o.aolcdn.com/dojo/1.3/dojo/resources/dojo.css", "css");
 loadjscssfile("http://o.aolcdn.com/dojo/1.3/dijit/themes/tundra/tundra.css", "css");
-//loadjscssfile("http://10.0.0.215:8080/apstrataDojoSDK/lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css", "css");
 
 dojo.require("dijit.Declaration");
 dojo.require("dijit.form.Form");
@@ -48,6 +48,15 @@ dojo.require("dijit.form.CheckBox");
 dojo.require("dojo.parser"); 
 //dojo.registerModulePath("surveyWidget","../../../../demos/survey");
 //dojo.registerModulePath("apstrata","../../../../apstrata");
-dojo.require("apstrata.apsdb.client.Connection")
-dojo.require("apstrata.apsdb.client.Client")
+dojo.require("apstrata.Connection")
+dojo.require("apstrata.Client")
 dojo.require("surveyWidget.widgets.Survey");
+
+var connection = new apstrata.Connection({
+		credentials: {
+			key: apstrata.apConfig.key,
+			username: apstrata.apConfig.username,
+			password: apstrata.apConfig.password
+		},
+		serviceUrl: apstrata.apConfig.serviceURL
+})

@@ -81,7 +81,7 @@ dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {
 
 		var signature = '';
 		
-		var returnValue = {url: apswsReqUrl, signature: ''};
+		var returnValue = null;
 
 		// Sign with the username and password if they are passed
 		if (connection.credentials.username && connection.credentials.password) {
@@ -96,19 +96,20 @@ dojo.declare("apstrata.apsdb.client.URLSignerMD5", [], {
 				returnValue = {url: apswsReqUrl, signature: signature}
 			}
 		}
-				
-		if (!returnValue) {
-		// Otherwise, sign with the secret
-			if (connection.credentials.secret != '') {
-				var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
-				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-				apswsReqUrl += "&apsws.time=" + timestamp
-					+ "&apsws.authSig=" + signature
 
-				returnValue = {url: apswsReqUrl, signature: signature}
-			}
-		}		
+		// Otherwise, sign with the secret		
+		if (!returnValue && connection.credentials.secret != '') {
+			var valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
+			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+			apswsReqUrl += "&apsws.time=" + timestamp
+				+ "&apsws.authSig=" + signature
+
+			returnValue = {url: apswsReqUrl, signature: signature}
+		}
 		// If no signing was made, then this is an anonymous call
+		else if (!returnValue) {
+			returnValue = {url: apswsReqUrl, signature: ''};
+		}
 
 		return returnValue;
 	}

@@ -34,14 +34,18 @@ dojo.declare("apstrata.Client",
 				if (attrs.connection) {
 					this.connection = attrs.connection
 				}
+				if (attrs.handleResult) {
+					this.handleResult = attrs.handleResult
+				}
+				if (attrs.handleError) {
+					this.handleError = attrs.handleError
+				}
 			}
 			
 			if (!this.connection) {
 				this.connection = new apstrata.Connection()
 			}
 			
-			if (attrs.handleResult) this.handleResult = attrs.handleResult
-			if (attrs.handleError) this.handleError = attrs.handleError
 		},
 		
 		call: function(attrs) {

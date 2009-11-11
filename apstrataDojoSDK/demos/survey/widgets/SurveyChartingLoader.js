@@ -43,6 +43,14 @@ dojo.require("dijit.Declaration");
 //dojo.registerModulePath("surveyWidget","../../../../demos/survey");
 //dojo.registerModulePath("apstrata","../../../../apstrata");
 dojo.require("surveyWidget.widgets.SurveyCharting");
-dojo.require("apstrata.apsdb.client.Connection")
-dojo.require("apstrata.apsdb.client.Client")
+dojo.require("apstrata.Connection")
+dojo.require("apstrata.Client")
 
+var connection = new apstrata.Connection({
+		credentials: {
+			key: apstrata.apConfig.key,
+			username: apstrata.apConfig.username,
+			password: apstrata.apConfig.password
+		},
+		serviceUrl: apstrata.apConfig.serviceURL
+})

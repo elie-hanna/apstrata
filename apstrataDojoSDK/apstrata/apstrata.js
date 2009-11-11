@@ -17,8 +17,13 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-if (typeof apstrata == "undefined") {
-	apstrata = {}
+if (typeof apstrata == "undefined" || !apstrata.configured) {
+	
+	if (typeof apstrata == "undefined")
+		apstrata = {}
+		
+	apstrata.configured = true;
+	
 	apstrata.baseUrl = ""
 		
 	apstrata.version = {
@@ -40,7 +45,7 @@ if (typeof apstrata == "undefined") {
 	//  Extract apConfig also
 	if ((this["document"]) && (this["document"]["getElementsByTagName"])) {
 		var scripts = document.getElementsByTagName("script");
-		var rePkg = /apstrata\.js([\?\.]|$)/i;
+		var rePkg = /apstrata(-lib)?\.js([\?\.]|$)/i;
 		for (var i = 0; i < scripts.length; i++) {
 			// var src = scripts[i].getAttribute("src");
 			var src = scripts[i].src; // TODO: is this portable?
