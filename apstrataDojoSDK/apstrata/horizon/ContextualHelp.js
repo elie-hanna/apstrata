@@ -29,6 +29,8 @@ dojo.declare("apstrata.horizon.ContextualHelp",
 	topic: '',
 	content: '',
 	
+	disableLoadAnimation: false,
+	
 	constructor: function() {
 		this.topic = "Read about: apstrata API"
 	},
@@ -47,7 +49,7 @@ dojo.declare("apstrata.horizon.ContextualHelp",
 	            load: function(data) {
 					self.content = data
 	    			self.render()
-					self.animateOpen()
+					if (!self.disableLoadAnimation) self.animateOpen()
 					
 					if (onLoadDocumentation) onLoadDocumentation() 
 		        },
