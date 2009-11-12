@@ -9,10 +9,13 @@ dojo.declare("apstrata.widgets.SlidingPanel", [dijit.layout._LayoutWidget], {
 							//  values include: top|left|right|bottom
 	offsetFromCenter: 0, 				// offsetFromCenter from the default left for (top|bottom) or top for (left|right)
 
+	openOnClick: false,
+
 	constructor: function() {
 		this.baseClass = "SlidingPanel" 	// base CSS class attached to the Pabel
 
 		this._isOpen = false
+		this._isOpened = false
 	},
 	
 	postCreate: function() {
@@ -27,16 +30,23 @@ dojo.declare("apstrata.widgets.SlidingPanel", [dijit.layout._LayoutWidget], {
 			}
 		}
 
-		// The panel will be opened when the mouse is over it
-		dojo.connect(this.domNode, "onmouseover", function() {
-			self._open()
-		})
+		if (this.openOnClick) {
+			// The panel will be opened/closed onclick
+			dojo.connect(this.domNode, "onclick", function() {
+				if (self._isOpened) self._close(); else self._open()
+			})
+		} else {
+			// The panel will be opened when the mouse is over it
+			dojo.connect(this.domNode, "onmouseover", function() {
+				self._open()
+			})
+	
+			// The panel will be closed when the mouse is away
+			dojo.connect(this.domNode, "onmouseout", function() {
+				self._close()
+			})
+		}
 
-		// The panel will be closed when the mouse is away
-		dojo.connect(this.domNode, "onmouseout", function() {
-			self._close()
-		})
-		
 		// This widget is always positionned in absolute coordinates around the browser window
 		dojo.style(this.domNode, {
 			position: "absolute"
@@ -109,6 +119,7 @@ dojo.declare("apstrata.widgets.SlidingPanel", [dijit.layout._LayoutWidget], {
 	// Slide panel to show its contents
 	_open: function() {
 		var self = this
+		this._isOpened = true
 		
 		// The animation coordinates top/left have already been calculated during resize
 		this._animation.properties = {
@@ -121,6 +132,7 @@ dojo.declare("apstrata.widgets.SlidingPanel", [dijit.layout._LayoutWidget], {
 	// Hide panel
 	_close: function() {
 		if (this._keepOpen) return;
+		this._isOpened = false
 		
 		var self = this
 
