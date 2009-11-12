@@ -69,7 +69,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var cookie = 'apstrata.' + apstrata.apConfig.key + '.' + strTitleForCookie;
 			
 			// Make sure that this user has not already taken the survey and already a cookie
-			if (dojo.cookie(cookie) == 'taken') {
+			if (false) { //dojo.cookie(cookie) == 'taken') { // TODO : Should reinstate this code when we want to use the cookie for making sure that users do not submit twice
 				if (dataModel.viewResults) {
 					this.loadAggregatedResults();
 				} else {
@@ -213,8 +213,14 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 					// Create an XML schema field object
 					schemaFieldArr[i] = new SchemaField(childModel.name, "string", false);
-					if (childModel.mandatory)
-						schemaFieldArr[i].setCardinalities(1, null); // Make the field mandatory
+					var minCardinality = 0;
+					var maxCardinality = null;
+					// Make the field mandatory by setting its minimum cardinality to 1
+					if (childModel.mandatory) minCardinality = 1;
+					// Make the field multiple-choice by setting its maximum cardinality to the number of allowed options
+					if (childModel['type'] == 'multiple choice') maxCardinality = childModel['choices'].split(',').length;
+
+					schemaFieldArr[i].setCardinalities(minCardinality, maxCardinality); // Set the calculated cardinalities
 
 					i++;
 				} else if ((child.title == null || child.title == '') && !child.dummyField) { // Check that all questions have titles
@@ -490,7 +496,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			if(this.surveyform.validate()){
 				this.successMessage.innerHTML = "Your survey is being processed...";
 				var jsonObj = this.surveyform.getValues();
-				var survey = this;
+				var self = this;
 
 				// Change the name of the attribute 'apsdbSchema' to 'apsdb.schema', then delete the 'apsdbSchema' attribute
 				jsonObj['apsdb.schema'] = jsonObj.apsdbSchema;
@@ -501,7 +507,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				// Save a document of the data gathered from the user
 				var saveDocumentRequest = dojo.mixin(jsonObj, {
 					apsdb: {
-							store: survey.storeName
+							store: self.storeName
 					}
 				});
 
@@ -511,37 +517,19 @@ dojo.declare("surveyWidget.widgets.Survey",
 					load: function(operation) {
 						dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
 
+						self.tweetTheSubmitting(jsonObj.apsdbDockey);
+
 						if (dataModel.viewResults){
 							//window.location = dataModel.resultsUrl;
-							survey.loadAggregatedResults();
+							self.loadAggregatedResults();
 						}
 						else {
-							survey.surveyDiv.style.display = 'none';
-							survey.successMessage.innerHTML = dataModel.successMessage;
+							self.surveyDiv.style.display = 'none';
+							self.successMessage.innerHTML = dataModel.successMessage;
 						}
 					},
 					error: function(operation) {
-						survey.successMessage.innerHTML = operation.response.metadata.errorDetail;
-					}
-				});
-
-				// Run a script after saving the document. It will probably Tweet to Twitter
-				var runScriptletRequest = dojo.mixin({
-					store: survey.storeName,
-					dockey: jsonObj.apsdbDockey
-				}, {
-					apsdb: {
-						scriptName: 'tweetSurveyTaken'
-					}
-				});
-
-				var sd = client.call({
-					action: "RunScriptlet",
-					request: runScriptletRequest,
-					load: function(operation) {
-					},
-					error: function(operation) {
-						survey.successMessage.innerHTML = operation.response.metadata.errorDetail;
+						self.successMessage.innerHTML = operation.response.metadata.errorDetail;
 					}
 				});
 
@@ -551,7 +539,32 @@ dojo.declare("surveyWidget.widgets.Survey",
 				return false;
 			}
 		},
-		
+
+		tweetTheSubmitting: function(apsdbDockey) {
+			// Run a script after saving the document. It will probably Tweet to Twitter
+			var client = new apstrata.Client({connection: connection});
+			var self = this;
+			var runScriptletRequest = dojo.mixin({
+				store: self.storeName,
+				dockey: apsdbDockey,
+				title: self.surveyTitle
+			}, {
+				apsdb: {
+					scriptName: 'tweetSurveyTaken'
+				}
+			});
+
+			var sd = client.call({
+				action: "RunScriptlet",
+				request: runScriptletRequest,
+				load: function(operation) {
+				},
+				error: function(operation) {
+					self.successMessage.innerHTML = operation.response.metadata.errorDetail;
+				}
+			});
+		},
+
 		loadAggregatedResults: function() {
 			var charts = new surveyWidget.widgets.SurveyCharting();
 			dojo._destroyElement(this.survey);
