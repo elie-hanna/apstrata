@@ -48,6 +48,8 @@ dojo.declare("apstrata.horizon.ContextualHelp",
 					self.content = data
 	    			self.render()
 					self.animateOpen()
+					
+					if (onLoadDocumentation) onLoadDocumentation() 
 		        },
 	            error: function(error) {
 					self.content = "An unexpected error occurred: " + error;
