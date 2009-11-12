@@ -71,10 +71,10 @@ dojo.declare("apstrata.explorer.Survey",
 		this.refresh()
 		this.inherited(arguments)
 		
-		/*dojo.publish("/apstrata/documentation/topic", [{
+		dojo.publish("/apstrata/documentation/topic", [{
 			topic: "Survey Code Snippet",
 			id: "Survey"
-		}])*/
+		}])
 		
 	},
 	
