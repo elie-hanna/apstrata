@@ -76,14 +76,25 @@
 
 
 				var data = {
+					configurations: [{
+						apsdb: {
+							createSchemaACL: "group:survey-users"
+						}
+					}],
+					
 					stores: [
 						{
 							apsdb: {
 								store: 'explorerBlog',
 								saveDocumentACL: 'group:blog-users',
 								deleteDocumentACL: 'group:blog-users',
-								getFileACL: 'group:blog-users',
-								queryACL: 'group:blog-users'
+								getFileACL: 'anonymous',
+								queryACL: 'anonymous'
+							}
+						},
+						{
+							apsdb: {
+								store: 'myStore'
 							}
 						}
 					],
@@ -97,6 +108,11 @@
 						{
 							apsim: {
 								group: 'blog-admins'
+							}	
+						},
+						{
+							apsim: {
+								group: 'survey-users'
 							}	
 						}
 					],
@@ -120,6 +136,26 @@
 								email: 'jane.blogger.explorer@apstrata.com',
 								group: 'blog-users',
 								update: 'false'
+							}
+						},
+						{
+							apsim:{
+								user: 'mike',
+								password: 'qw3rty',
+								name: 'Michael Liss',
+								email: 'michael.liss@apstrata.com',
+								group: 'survey-users',
+								update: 'true'
+							}
+						},
+						{
+							apsim:{
+								user: 'ryan',
+								password: 'qw3rty',
+								name: 'Ryan Murray',
+								email: 'ryan.murray@apstrata.com',
+								group: 'survey-users',
+								update: 'true'
 							}
 						},
 					]

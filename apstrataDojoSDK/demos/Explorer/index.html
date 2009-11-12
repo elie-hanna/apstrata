@@ -28,6 +28,9 @@
 			@import "css/forms.css";
 			@import "css/explorer.css";
 
+			@import "../survey/widgets/css/survey.css";
+			
+
 
 	    </style>
 		
@@ -65,7 +68,7 @@
 				connection = new apstrata.StickyConnection({
 					credentials: {
 						key: "7744293024",
-						username: "joe",
+						username: "mike",
 						password: "qw3rty"
 //						secret: "3B45DE19C689EDAFCA47"
 					}
@@ -77,6 +80,15 @@
 */				
 
 				dojo.registerModuleRelative ("apstrata.explorer", "apstrata/explorer");
+
+				dojo.registerModuleRelative ("surveyWidget.widgets", "../survey/widgets");
+
+
+//				dojo.registerModuleRelative ("surveyWidget.widgets", "surveyWidget/widgets");
+
+//				dojo.registerModulePath("apstrata.explorer", "http://localhost/~rabih/apstrataDojoSDK/demos/Explorer/apstrata/explorer")
+//				dojo.registerModulePath("surveyWidget.widgets", "http://localhost/~rabih/apstrataDojoSDK/demos/survey/widgets")
+				
 				dojo.require ('apstrata.explorer.Explorer')
 				//dojo.require ('apstrata.admin.ContextualHelp')
 				

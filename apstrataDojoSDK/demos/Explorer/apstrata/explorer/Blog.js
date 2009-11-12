@@ -85,6 +85,14 @@ dojo.declare("apstrata.explorer.BlogPost",
 		var self = this
 
 		if (this.blogForm.validate()) {
+			
+			var readACL
+			if (this.chkPrivate.checked) {
+				readACL = 'group:blog-users' 
+			} else {
+				readACL = 'anonymous'
+			}
+			
 			var attrs = {
 				action: "SaveDocument",
 				request: {
@@ -92,6 +100,8 @@ dojo.declare("apstrata.explorer.BlogPost",
 					blogPost: self.edtrPost.getValue(),
 					"blogPost.apsdb.fieldType": "text",
 					hasImage: (self.upldPhoto.fileInput.value!=""),
+					
+					"default.readACL": readACL,
 
 					apsdb: {
 						store: self.getParent().storeName,
@@ -202,3 +212,4 @@ dojo.declare("apstrata.explorer.BlogGallery",
 	query: "(formType=\"blog\") AND (hasImage=\"true\")"
 
 })
+
