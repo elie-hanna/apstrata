@@ -50,7 +50,7 @@ dojo.declare("apstrata.explorer.Survey",
 					// Rearrange the result to suite the template
 					self.data = []
 					dojo.forEach(operation.response.result.documents, function(document) {
-						self.data.push({label: document.fields[0].values[0], iconSrc: "", id: document.fields[1].values[0]})
+						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{id: document.fields[1].values[0]}})
 					})
 		
 					// Cause the DTL to rerender with the fresh self.data
@@ -70,7 +70,8 @@ dojo.declare("apstrata.explorer.Survey",
 		this.inherited(arguments)
 	},
 	
-	onClick: function(index, label) {
+	onClick: function(index, label, attrs) {
+		this.openPanel(apstrata.explorer.SurveyEditor, {id: attrs.id})
 	}
 })
 
