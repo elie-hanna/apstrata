@@ -1,0 +1,52 @@
+		
+
+	<div>
+		
+		<table width="100%">
+			<tr>
+				<td>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<img width="100" src='../../apstrata/resources/images/pencil-icons/left.png' onclick='f1()'>
+				</td>
+				<td>
+		<div id='dvCode'>
+		Code	
+		</div>
+		<div id='dvSnippet' style="visibility:hidden">
+			Snippet
+		</div>
+				</td>
+				<td>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<img width="100" src='../../apstrata/resources/images/pencil-icons/right.png' onclick='f2()'>					
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+		<script>
+				function f1() {
+					dojo.style(dojo.byId('dvSnippet'), {visibility: 'hidden'})
+					dojo.style(dojo.byId('dvCode'), {visibility: 'visible'})
+				}
+				
+				function f2() {
+					dojo.style(dojo.byId('dvSnippet'), {visibility: 'visible'})
+					dojo.style(dojo.byId('dvCode'), {visibility: 'hidden'})
+				}
+				
+		</script>
