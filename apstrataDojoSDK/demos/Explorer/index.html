@@ -113,6 +113,7 @@
 
 		<div dojoType='apstrata.widgets.SlidingPanel' 
 			dojoAttachPoint='slidingPanel' 
+			openOnClick='true'
 			class='ConsoleOutput rounded-top-sml' 
 			attach='bottom' 
 			visibleWidth='20'>
@@ -121,10 +122,11 @@
 
 		<div dojoType='apstrata.widgets.SlidingPanel' 
 			dojoAttachPoint='slidingPanel' 
+			openOnClick='true'
 			class='ConsoleOutput rounded-bottom-sml' 
 			attach='top' 
 			visibleWidth='20'>
-				<div dojoType='apstrata.horizon.ContextualHelp'></div>
+				<div dojoType='apstrata.horizon.ContextualHelp' disableLoadAnimation='true'></div>
 		</div>
 
 		<div dojoType='apstrata.widgets.client.ConnectionStatus'></div>
