@@ -34,12 +34,11 @@ dojo.declare("apstrata.explorer.MainPanel",
 		{label: "home", iconSrc: "../../apstrata/resources/images/pencil-icons/home.png"},
 		{label: "blog", iconSrc: "../../apstrata/resources/images/pencil-icons/movie.png"},
 		{label: "survey", iconSrc: "../../apstrata/resources/images/pencil-icons/comment.png"},
-		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"},
-		{label: "test survey", iconSrc: "../../apstrata/resources/images/pencil-icons/hint.png"},
+		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"}
 	],
 	
 	startup: function() {
-		this.openPanel(apstrata.explorer.SurveyEditor)
+		this.openPanel(apstrata.explorer.Survey)
 	},
 
 	onClick: function(index, label) {
@@ -47,7 +46,6 @@ dojo.declare("apstrata.explorer.MainPanel",
 		if (label=='blog') this.openPanel(apstrata.explorer.Blog);
 		else if (label=='home') this.openPanel(apstrata.horizon.Login);
 		else if (label=='survey') this.openPanel(apstrata.explorer.Survey);
-		else if (label=='test survey') this.openPanel(apstrata.explorer.SurveyEditor);
 		else this.closePanel()
 	}
 })
