@@ -1,3 +1,7 @@
+dojo.provide("apstrata.util.schema.Schema")
+
+dojo.declare("apstrata.util.schema.Schema", [], {})
+
 /**
  * Schema constructor
  * @param {string} schemaName
