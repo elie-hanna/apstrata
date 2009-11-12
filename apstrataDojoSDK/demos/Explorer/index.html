@@ -49,6 +49,7 @@
 			dojo.require("apstrata.widgets.SlidingPanel")
 			dojo.require("apstrata.widgets.client.ConnectionStatus")
 			dojo.require('apstrata.widgets.client.RESTMonitor')
+			dojo.require('apstrata.horizon.ContextualHelp')
 			
 			var connection 
 			
@@ -67,6 +68,13 @@
 
 				connection = new apstrata.StickyConnection({
 					credentials: {
+
+//						key: 'apstrata1',
+//						username: 'mike',
+//						password: '11111111'
+
+
+
 						key: "7744293024",
 						username: "mike",
 						password: "qw3rty"
@@ -75,9 +83,9 @@
 				})
 
 				connection.timeout = 60000
-/*
-				connection.serviceUrl = "http://apsdb.apstrata.com/sandbox-apsdb/rest"
-*/				
+
+//				connection.serviceUrl = "http://10.0.0.215/apstratabase/rest"
+				
 
 				dojo.registerModuleRelative ("apstrata.explorer", "apstrata/explorer");
 
@@ -111,13 +119,13 @@
 				<div dojoType='apstrata.widgets.client.RESTMonitor'></div>
 		</div>
 
-		<!-- div dojoType='apstrata.widgets.SlidingPanel' 
+		<div dojoType='apstrata.widgets.SlidingPanel' 
 			dojoAttachPoint='slidingPanel' 
 			class='ConsoleOutput rounded-bottom-sml' 
 			attach='top' 
 			visibleWidth='20'>
-				<div dojoType='apstrata.admin.ContextualHelp'></div>
-		</div -->
+				<div dojoType='apstrata.horizon.ContextualHelp'></div>
+		</div>
 
 		<div dojoType='apstrata.widgets.client.ConnectionStatus'></div>
 
