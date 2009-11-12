@@ -17,7 +17,11 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-var apServiceURL = "http://10.0.0.215/apstratabase/rest" 
+dojo.provide("surveyWidget.widgets.config")
+
+dojo.declare("surveyWidget.widgets.config", [], {})
+
+var apServiceURL = "http://10.0.0.230/apstratabase/rest" 
 //"http://apsdb.apstrata.com/sandbox-apsdb/rest"
 var apSourceURL = "http://10.0.0.215:8080/apstrataDojoSDK/" 
 //"https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/"

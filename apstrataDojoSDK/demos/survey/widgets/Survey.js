@@ -527,11 +527,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 				// Run a script after saving the document. It will probably Tweet to Twitter
 				var runScriptletRequest = dojo.mixin({
+					store: survey.storeName,
 					dockey: jsonObj.apsdbDockey
 				}, {
 					apsdb: {
-						store: survey.storeName,
-						scriptName: 'com.myScript.script'
+						scriptName: 'tweetSurveyTaken'
 					}
 				});
 

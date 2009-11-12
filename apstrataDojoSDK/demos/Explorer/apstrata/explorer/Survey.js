@@ -19,8 +19,9 @@
  */
 
 dojo.provide("apstrata.explorer.Survey")
-
 dojo.provide("apstrata.explorer.SurveyEditor")
+dojo.provide("apstrata.explorer.SurveyActions")
+dojo.provide("apstrata.explorer.SurveyResults")
 
 dojo.declare("apstrata.explorer.Survey",
 [apstrata.horizon.HStackableList], 
@@ -42,15 +43,15 @@ dojo.declare("apstrata.explorer.Survey",
 				request: {
 					apsdb: {
 						store: self.surveyStore,
-						query: "apsdb.creator=\"" + connection.credentials.username + "@" + connection.credentials.key + "\" and isSurveyMetadata=\"true\"",
-						queryFields: "surveyName,apsdb.documentKey"
+						query: "apsdb.creator=\"" + connection.credentials.username + "\" and isSurveyMetadata=\"true\"",
+						queryFields: "surveyName,apsdb.documentKey,surveySchema"
 					}
 				},
 				load: function(operation) {
 					// Rearrange the result to suite the template
 					self.data = []
 					dojo.forEach(operation.response.result.documents, function(document) {
-						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{id: document.fields[1].values[0]}})
+						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{schema: document.fields[2].values[0]}})
 					})
 		
 					// Cause the DTL to rerender with the fresh self.data
@@ -62,7 +63,7 @@ dojo.declare("apstrata.explorer.Survey",
 	},
 	
 	newItem: function() {
-		this.openPanel(apstrata.explorer.SurveyEditor)
+		this.openPanel(apstrata.explorer.SurveyEditor,{schema:null, editingMode:true})
 	},
 	
 	postCreate: function() {
@@ -70,12 +71,14 @@ dojo.declare("apstrata.explorer.Survey",
 		this.inherited(arguments)
 	},
 	
-	onClick: function(index, label, attrs) {
-		this.openPanel(apstrata.explorer.SurveyEditor, {id: attrs.id})
+	/*onClick: function(index, label, attrs) {
+		this.openPanel(apstrata.explorer.SurveyActions, {schema: attrs.schema});
+	}*/
+	
+	onClick: function(index, label) {
+		this.openPanel(apstrata.explorer.SurveyActions, {schema: '%7B%22title%22%3A%22Maher%27s%20Survey%22%2C%22description%22%3A%22Maher%27s%20Survey%20Description%22%2C%22viewResults%22%3Atrue%2C%22successMessage%22%3A%22%22%2C%22questions%22%3A%5B%7B%22title%22%3A%22How%20r%20u%3F%22%2C%22type%22%3A%22radio%20button%22%2C%22choices%22%3A%22good%2Cmaher%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22MahersSurvey_1%22%2C%22defaultValue%22%3Anull%7D%2C%7B%22choices%22%3A%22%22%2C%22defaultValue%22%3A%22s_7744293024_MahersSu_CAEB07056D%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22apsdbSchema%22%2C%22title%22%3A%22Apstrata%20Survey%20Schema%20Name%22%2C%22type%22%3A%22text%22%7D%2C%7B%22choices%22%3A%22%22%2C%22defaultValue%22%3A%22s_7744293024_MahersSu_CAEB07056D%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22apsdbDockey%22%2C%22title%22%3A%22Apstrata%20Survey%20Dockey%22%2C%22type%22%3A%22text%22%7D%5D%7D'});
 	}
 })
-
-dojo.require("surveyWidget.widgets.myWidget")
 
 dojo.require("dijit.Declaration");
 dojo.require("dijit.form.Form");
@@ -83,30 +86,73 @@ dojo.require("dijit.form.ValidationTextBox");
 dojo.require("dijit.form.FilteringSelect");
 dojo.require("dijit.form.CheckBox");
 dojo.require("surveyWidget.widgets.Survey");
-dojo.require("apstrata.util.schema.Schema")
+dojo.require("apstrata.util.schema.Schema");
+dojo.require("surveyWidget.widgets.config");
 
-var schema = null
-var editingMode = true
 
 dojo.declare("apstrata.explorer.SurveyEditor", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
 {
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.explorer", "templates/SurveyEditorPanel.html"),
+	schema: null,
+	editingMode: true,
 
 	maximizePanel: true,
 	
-	constructor: function() {
-		new apstrata.util.schema.Schema()
-		
+	constructor: function(attrs) {
+		schema = attrs.schema
+		editingMode = attrs.editingMode
 	}
+})
+
+dojo.declare("apstrata.explorer.SurveyActions",
+[apstrata.horizon.HStackableList], 
+{
+	data: [
+		{label: "Clone", iconSrc: "../../apstrata/resources/images/pencil-icons/file.png"},
+		{label: "Submit", iconSrc: "../../apstrata/resources/images/pencil-icons/picture.png"},
+		{label: "Results", iconSrc: "../../apstrata/resources/images/pencil-icons/star.png"}
+	],
 	
-//	postCreate: function() {
-//	<div dojoType="surveyWidget.widgets.myWidget"></div>
-
-//		var w = new surveyWidget.widgets.myWidget()
-
+	schema: null,
+	
+	constructor: function(attrs) {
+		schema = attrs.schema
+	},
+	
+	onClick: function(index, label) {
+		var self = this
 		
-//	}
+		this.closePanel()
+		
+		switch (label)
+		{
+			case 'Clone':
+				this.openPanel(apstrata.explorer.SurveyEditor,{schema:schema, editingMode:true})
+				break;
+			case 'Submit':
+				this.openPanel(apstrata.explorer.SurveyEditor, {schema:schema, editingMode:false})
+				break;
+			case 'Results':
+				this.openPanel(apstrata.explorer.SurveyResults, {schema:schema})
+				break;
+			default:
+		}
+	}
+})
+
+dojo.require("surveyWidget.widgets.SurveyCharting");
+
+dojo.declare("apstrata.explorer.SurveyResults", 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
+{
+	widgetsInTemplate: true,
+	templatePath: dojo.moduleUrl("apstrata.explorer", "templates/SurveyResultsPanel.html"),
+	schema: null,
+	maximizePanel: true,
 	
+	constructor: function(attrs) {
+		schema = attrs.schema
+	}
 })
