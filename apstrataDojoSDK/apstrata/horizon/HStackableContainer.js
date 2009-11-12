@@ -303,6 +303,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 
 		var label = e.currentTarget.getAttribute('itemLabel')
 		var index = e.currentTarget.getAttribute('itemIndex')
+		var attrs = this.data[index].attrs
 		
 		if (this._lastSelected) dojo.removeClass(this._lastSelected, "itemSelected")
 		
@@ -310,14 +311,14 @@ dojo.declare("apstrata.horizon.HStackableList",
 		
 		dojo.addClass(e.currentTarget, "itemSelected")
 
-		this.onClick(index, label)
+		this.onClick(index, label, attrs)
 	},
 	
 	_markSelected: function(e) {
 		
 	},
 	
-	onClick: function(index, label) {},
+	onClick: function(index, label, attrs) {},
 	
 	_onMouseover: function(e) {
 		this._saveBackground = e.currentTarget.style.background
