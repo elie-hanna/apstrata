@@ -43,7 +43,7 @@ dojo.declare("apstrata.explorer.Survey",
 				request: {
 					apsdb: {
 						store: self.surveyStore,
-						query: "apsdb.creator=\"" + connection.credentials.username + "\" and isSurveyMetadata=\"true\"",
+						query: "apsdb.creator=\"" + connection.credentials.username + "@" + connection.credentials.key + "\" and isSurveyMetadata=\"true\"",
 						queryFields: "surveyName,apsdb.documentKey,surveySchema"
 					}
 				},
@@ -71,12 +71,9 @@ dojo.declare("apstrata.explorer.Survey",
 		this.inherited(arguments)
 	},
 	
-	/*onClick: function(index, label, attrs) {
+	onClick: function(index, label, attrs) {
 		this.openPanel(apstrata.explorer.SurveyActions, {schema: attrs.schema});
-	}*/
-	
-	onClick: function(index, label) {
-		this.openPanel(apstrata.explorer.SurveyActions, {schema: '%7B%22title%22%3A%22Maher%27s%20Survey%22%2C%22description%22%3A%22Maher%27s%20Survey%20Description%22%2C%22viewResults%22%3Atrue%2C%22successMessage%22%3A%22%22%2C%22questions%22%3A%5B%7B%22title%22%3A%22How%20r%20u%3F%22%2C%22type%22%3A%22radio%20button%22%2C%22choices%22%3A%22good%2Cmaher%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22MahersSurvey_1%22%2C%22defaultValue%22%3Anull%7D%2C%7B%22choices%22%3A%22%22%2C%22defaultValue%22%3A%22s_7744293024_MahersSu_CAEB07056D%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22apsdbSchema%22%2C%22title%22%3A%22Apstrata%20Survey%20Schema%20Name%22%2C%22type%22%3A%22text%22%7D%2C%7B%22choices%22%3A%22%22%2C%22defaultValue%22%3A%22s_7744293024_MahersSu_CAEB07056D%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22apsdbDockey%22%2C%22title%22%3A%22Apstrata%20Survey%20Dockey%22%2C%22type%22%3A%22text%22%7D%5D%7D'});
+//		this.openPanel(apstrata.explorer.SurveyActions, {schema: '%7B%22title%22%3A%22Maher%27s%20Survey%22%2C%22description%22%3A%22Maher%27s%20Survey%20Description%22%2C%22viewResults%22%3Atrue%2C%22successMessage%22%3A%22%22%2C%22questions%22%3A%5B%7B%22title%22%3A%22How%20r%20u%3F%22%2C%22type%22%3A%22radio%20button%22%2C%22choices%22%3A%22good%2Cmaher%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22MahersSurvey_1%22%2C%22defaultValue%22%3Anull%7D%2C%7B%22choices%22%3A%22%22%2C%22defaultValue%22%3A%22s_7744293024_MahersSu_CAEB07056D%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22apsdbSchema%22%2C%22title%22%3A%22Apstrata%20Survey%20Schema%20Name%22%2C%22type%22%3A%22text%22%7D%2C%7B%22choices%22%3A%22%22%2C%22defaultValue%22%3A%22s_7744293024_MahersSu_CAEB07056D%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22apsdbDockey%22%2C%22title%22%3A%22Apstrata%20Survey%20Dockey%22%2C%22type%22%3A%22text%22%7D%5D%7D'});
 	}
 })
 
