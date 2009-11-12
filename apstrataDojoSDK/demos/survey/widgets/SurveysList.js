@@ -41,9 +41,11 @@ dojo.declare("surveyWidget.widgets.SurveyObj",
 		},
 		
 		cloneSurvey: function() {
-			var surveyToClone = new surveyWidget.widgets.Survey();
-			dojo._destroyElement(this.surveysList);
-			this.surveyEdit.addChild(surveyToClone);
+			
+			var editingMode = true;
+			//var surveyToClone = new surveyWidget.widgets.Survey();
+			//dojo._destroyElement(this.surveysList);
+			//this.surveyEdit.addChild(surveyToClone);
 		}
 	});
 
@@ -83,7 +85,7 @@ dojo.declare("surveyWidget.widgets.SurveysList",
 				request: {
 					apsdb: {
 						store: listing.storeName,
-						query: "apsdb.creator=\"" + listing.username + "@" + listing.key + "\" and isSurveyMetadata=\"true\"",
+						query: "apsdb.creator=\"" + listing.username+ "\" and isSurveyMetadata=\"true\"",
 						queryFields: "surveyName,surveySchema,apsdb.documentKey"
 					}
 				},
@@ -110,6 +112,5 @@ dojo.declare("surveyWidget.widgets.SurveysList",
 				});
 				this.surveys.addChild(newField);
 			}
-			//this.surveys.innerHTML = newField;
 		}
 	});
