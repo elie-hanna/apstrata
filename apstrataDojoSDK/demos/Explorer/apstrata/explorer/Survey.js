@@ -56,7 +56,7 @@ dojo.declare("apstrata.explorer.Survey",
 		
 					// Cause the DTL to rerender with the fresh self.data
 					self.render()
-					dojo.style(this.domNode,{width:'400px'})
+					//dojo.style(this.domNode,{width:'400px'})
 				},
 				error: function(operation) {
 				}
@@ -71,10 +71,10 @@ dojo.declare("apstrata.explorer.Survey",
 		this.refresh()
 		this.inherited(arguments)
 		
-		dojo.publish("/apstrata/documentation/topic", [{
+		/*dojo.publish("/apstrata/documentation/topic", [{
 			topic: "Survey Code Snippet",
 			id: "Survey"
-		}])
+		}])*/
 		
 	},
 	
