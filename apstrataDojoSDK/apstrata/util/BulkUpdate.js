@@ -79,7 +79,15 @@ dojo.declare('apstrata.util.BulkUpdate', [], {
 			}
 		}
 		
-		group()
+		var configurations = function() {
+			if (self.data.configurations) {
+				self.queue("SaveConfiguration", self.data.configurations, group)
+			} else {
+				group()
+			}
+		}
+		
+		configurations()
 	},
 
 	constructor: function(attrs) {
