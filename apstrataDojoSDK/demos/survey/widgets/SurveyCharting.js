@@ -24,6 +24,9 @@ dojo.require("dijit._Templated");
 dojo.require("dijit.layout.LayoutContainer");
 dojo.require("dojox.charting.Chart2D");
 dojo.require("dojox.charting.themes.PlotKit.red");
+dojo.require("dojox.charting.action2d.Highlight");
+dojo.require("dojox.charting.action2d.Tooltip");
+dojo.require("dojo.fx.easing");
 
 dojo.declare("surveyWidget.widgets.SurveyCharting",
 	[dijit._Widget, dijit._Templated],
@@ -190,8 +193,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 							chartLine = document.createElement('DIV');
 							chartCell = document.createElement('DIV');
-							chartLine.style.width = '460px';
-							chartLine.style.height = '230px';
+							chartLine.className = 'surveyChartLineSize';
 							chartLine.appendChild(chartCell);
 							charting.floatElement(chartCell, 'left');
 
@@ -214,12 +216,12 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						// 2- Add the chart placeholder in the chart cell
 						var chartDIV = document.createElement('DIV');
 						chartDIV.setAttribute('id', fieldName);
-						chartDIV.style.width = '200px';
-						chartDIV.style.height = '200px';
+						chartDIV.className = 'surveyChartSize';
 						chartCell.appendChild(chartDIV);
 
 						// 3- Create and render the chart
 						var chart = new dojox.charting.Chart2D(fieldName);
+/*						//TODO: Replace this code with the code below it in order to get pie charts instead of horizontal bar graphs
 						chart.setTheme(dojox.charting.themes.PlotKit.red);
 						chart.addPlot('default', {
 							type: 'Pie',
@@ -227,7 +229,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 							fontColor: 'white',
 							labelOffset: 40
 						});
-						
+
 						var valuesArr = new Array(fieldValueCounts.length);
 						var k = 0;
 						for (fieldValue in fieldValueCounts) {
@@ -235,9 +237,52 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 							valuesArr[k] = {y: fieldValueCounts[fieldValue], text: fieldValueCounts[fieldValue] + ' ' + chartlabel};
 							k++;
 						}
+						chart.addSeries('Series A', valuesArr);*/
+						chart.addAxis("x", {
+							fixLower: 'major',
+							fixUpper: 'major',
+							minorTick: {stroke: "black", length: 0},
+							minorLabels: false,
+							includeZero: true
+						});
+						// Construct the labels and values arrays
+						var lablesArr = new Array(fieldValueCounts.length + 1);
+						var valuesArr = new Array(fieldValueCounts.length);
+						var k = 0;
+						lablesArr[k] = {value: 0, text: ''};
+						for (fieldValue in fieldValueCounts) {
+							var chartlabel = fieldValue.substring(fieldValue.lastIndexOf('_') + 1, fieldValue.length);
+							lablesArr[k + 1] = {value: k + 1, text: chartlabel};
+							valuesArr[k] = fieldValueCounts[fieldValue] * 1;
+							k++;
+						}
+						chart.addAxis("y", {
+							vertical: true, 
+							fixLower: "none", 
+							fixUpper: "none", 
+							natural: true,
+							majorTick: { length: 3 },
+							labels: lablesArr
+						});
+
+						// Set the gap between the bars according to the number of bars, i.e. More bars = Smaller gap
+						var gapBetweenBars = 0;
+						if (fieldValueCounts.length < 4) gapBetweenBars = 11;
+						else if (fieldValueCounts.length < 7) gapBetweenBars = 9;
+						else if (fieldValueCounts.length > 6) gapBetweenBars = 3;
+						chart.addPlot("default", { type: "Bars", gap: gapBetweenBars });
 
 						var inverseCount = charting.surveysTakenCount - valueCount;
-						chart.addSeries('Series A', valuesArr);
+						chart.addSeries(
+							"Series A", 
+							valuesArr,
+							{ stroke: {width: 0}, fill: '#ff6600' }
+						);
+						var animA = new dojox.charting.action2d.Highlight(chart, "default", {
+							duration: 450,
+							easing:   dojo.fx.easing.bounceOut
+						});
+						var animB = new dojox.charting.action2d.Tooltip(chart, "default");
 						chart.render();
 
 						// Alternate the isNewLine variable to show the charts in two columns
@@ -286,8 +331,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 						chartLine = document.createElement('DIV');
 						chartCell = document.createElement('DIV');
-						chartLine.style.width = '460px';
-						chartLine.style.height = '230px';
+						chartLine.className = 'surveyChartLineSize';
 						chartLine.appendChild(chartCell);
 						charting.floatElement(chartCell, 'left');
 
@@ -310,12 +354,12 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					// 2- Add the chart placeholder in the chart cell
 					var chartDIV = document.createElement('DIV');
 					chartDIV.setAttribute('id', fieldName + '_' + fieldValue);
-					chartDIV.style.width = '200px';
-					chartDIV.style.height = '200px';
+					chartDIV.className = 'surveyChartSize';
 					chartCell.appendChild(chartDIV);
 
 					// 3- Create and render the chart
 					var chart = new dojox.charting.Chart2D(fieldName + '_' + fieldValue);
+/*					//TODO: Replace this code with the code below it in order to get pie charts instead of horizontal bar graphs
 					chart.setTheme(dojox.charting.themes.PlotKit.red);
 					chart.addPlot('default', {
 						type: 'Pie',
@@ -327,7 +371,38 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					chart.addSeries('Series A', [
 						{y: valueCount, text: valueCount + ' Yes', color: 'blue'},
 						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
-					]);
+					]);*/
+					chart.addAxis("x", {
+						fixLower: 'major',
+						fixUpper: 'major',
+						minorTick: {stroke: "black", length: 0},
+						minorLabels: false,
+						includeZero: true
+					});
+					chart.addAxis("y", {
+						vertical: true, 
+						fixLower: "none", 
+						fixUpper: "none", 
+						natural: true,
+						majorTick: { length: 3 },
+						labels: [
+							{value: 0, text: ''},
+							{value: 1, text: 'Yes'}, 
+							{value: 2, text: 'No'}
+						]
+					});
+					chart.addPlot("default", { type: "Bars", gap: 16 });
+					var inverseCount = charting.surveysTakenCount - valueCount;
+					chart.addSeries(
+						"Series A", 
+						[ valueCount * 1, inverseCount ],
+						{ stroke: {width: 0}, fill: '#ff6600' }
+					);
+					var animA = new dojox.charting.action2d.Highlight(chart, "default", {
+						duration: 450,
+						easing:   dojo.fx.easing.bounceOut
+					});
+					var animB = new dojox.charting.action2d.Tooltip(chart, "default");
 					chart.render();
 
 					// Alternate the isNewLine variable to show the charts in two columns
@@ -375,8 +450,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 						chartLine = document.createElement('DIV');
 						chartCell = document.createElement('DIV');
-						chartLine.style.width = '460px';
-						chartLine.style.height = '230px';
+						chartLine.className = 'surveyChartLineSize';
 						chartLine.appendChild(chartCell);
 						charting.floatElement(chartCell, 'left');
 
@@ -399,12 +473,12 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					// 2- Add the chart placeholder in the chart cell
 					var chartDIV = document.createElement('DIV');
 					chartDIV.setAttribute('id', fieldName + '_' + fieldValue);
-					chartDIV.style.width = '200px';
-					chartDIV.style.height = '200px';
+					chartDIV.className = 'surveyChartSize';
 					chartCell.appendChild(chartDIV);
 
 					// 3- Create and render the chart
 					var chart = new dojox.charting.Chart2D(fieldName + '_' + fieldValue);
+/*					//TODO: Replace this code with the code below it in order to get pie charts instead of horizontal bar graphs
 					chart.setTheme(dojox.charting.themes.PlotKit.red);
 					chart.addPlot('default', {
 						type: 'Pie',
@@ -416,7 +490,38 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					chart.addSeries('Series A', [
 						{y: valueCount, text: valueCount + ' Yes', color: 'blue'},
 						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
-					]);
+					]);*/
+					chart.addAxis("x", {
+						fixLower: 'major',
+						fixUpper: 'major',
+						minorTick: {stroke: "black", length: 0},
+						minorLabels: false,
+						includeZero: true
+					});
+					chart.addAxis("y", {
+						vertical: true, 
+						fixLower: "none", 
+						fixUpper: "none", 
+						natural: true,
+						majorTick: { length: 3 },
+						labels: [
+							{value: 0, text: ''},
+							{value: 1, text: 'Yes'}, 
+							{value: 2, text: 'No'}
+						]
+					});
+					chart.addPlot("default", { type: "Bars", gap: 16 });
+					var inverseCount = charting.surveysTakenCount - valueCount;
+					chart.addSeries(
+						"Series A", 
+						[ valueCount * 1, inverseCount ],
+						{ stroke: {width: 0}, fill: '#ff6600' }
+					);
+					var animA = new dojox.charting.action2d.Highlight(chart, "default", {
+						duration: 450,
+						easing:   dojo.fx.easing.bounceOut
+					});
+					var animB = new dojox.charting.action2d.Tooltip(chart, "default");
 					chart.render();
 
 					// Alternate the isNewLine variable to show the charts in two columns
@@ -475,8 +580,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
 							chartLine = document.createElement('DIV');
 							chartCell = document.createElement('DIV');
-							chartLine.style.width = '460px';
-							chartLine.style.height = '230px';
+							chartLine.className = 'surveyChartLineSize';
 							chartLine.appendChild(chartCell);
 							charting.floatElement(chartCell, 'left');
 
@@ -499,12 +603,12 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						// 2- Add the chart placeholder in the chart cell
 						var chartDIV = document.createElement('DIV');
 						chartDIV.setAttribute('id', fieldName);
-						chartDIV.style.width = '200px';
-						chartDIV.style.height = '200px';
+						chartDIV.className = 'surveyChartSize';
 						chartCell.appendChild(chartDIV);
 
 						// 3- Create and render the chart
 						var chart = new dojox.charting.Chart2D(fieldName);
+/*						//TODO: Replace this code with the code below it in order to get pie charts instead of horizontal bar graphs
 						chart.setTheme(dojox.charting.themes.PlotKit.red);
 						chart.addPlot('default', {
 							type: 'Pie',
@@ -520,9 +624,52 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 							valuesArr[k] = {y: fieldValueCounts[fieldValue], text: fieldValueCounts[fieldValue] + ' ' + chartlabel};
 							k++;
 						}
+						chart.addSeries('Series A', valuesArr);*/
+						chart.addAxis("x", {
+							fixLower: 'major',
+							fixUpper: 'major',
+							minorTick: {stroke: "black", length: 0},
+							minorLabels: false,
+							includeZero: true
+						});
+						// Construct the labels and values arrays
+						var lablesArr = new Array(fieldValueCounts.length + 1);
+						var valuesArr = new Array(fieldValueCounts.length);
+						var k = 0;
+						lablesArr[k] = {value: 0, text: ''};
+						for (fieldValue in fieldValueCounts) {
+							var chartlabel = fieldValue.substring(fieldValue.lastIndexOf('_') + 1, fieldValue.length);
+							lablesArr[k + 1] = {value: k + 1, text: chartlabel};
+							valuesArr[k] = fieldValueCounts[fieldValue] * 1;
+							k++;
+						}
+						chart.addAxis("y", {
+							vertical: true, 
+							fixLower: "none", 
+							fixUpper: "none", 
+							natural: true,
+							majorTick: { length: 3 },
+							labels: lablesArr
+						});
+
+						// Set the gap between the bars according to the number of bars, i.e. More bars = Smaller gap
+						var gapBetweenBars = 0;
+						if (fieldValueCounts.length < 4) gapBetweenBars = 11;
+						else if (fieldValueCounts.length < 7) gapBetweenBars = 9;
+						else if (fieldValueCounts.length > 6) gapBetweenBars = 3;
+						chart.addPlot("default", { type: "Bars", gap: gapBetweenBars });
 
 						var inverseCount = charting.surveysTakenCount - valueCount;
-						chart.addSeries('Series A', valuesArr);
+						chart.addSeries(
+							"Series A", 
+							valuesArr,
+							{ stroke: {width: 0}, fill: '#ff6600' }
+						);
+						var animA = new dojox.charting.action2d.Highlight(chart, "default", {
+							duration: 450,
+							easing:   dojo.fx.easing.bounceOut
+						});
+						var animB = new dojox.charting.action2d.Tooltip(chart, "default");
 						chart.render();
 
 						// Alternate the isNewLine variable to show the charts in two columns
