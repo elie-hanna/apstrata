@@ -43,7 +43,7 @@ dojo.declare("apstrata.explorer.Survey",
 				request: {
 					apsdb: {
 						store: self.surveyStore,
-						query: "apsdb.creator=\"" + connection.credentials.username+ "\" and isSurveyMetadata=\"true\"",
+						query: "apsdb.creator=\"" + connection.credentials.username+ "@wikidemo\" and isSurveyMetadata=\"true\"",
 						queryFields: "surveyName,apsdb.documentKey,surveySchema"
 					}
 				},
