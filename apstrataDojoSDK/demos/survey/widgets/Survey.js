@@ -301,7 +301,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					load: function(operation) {
 					},
 					error: function(operation) {
-						self.successMessage.innerHTML = operation.response.metadata.errorDetail;
+						self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
 					}
 				});
 				
@@ -529,7 +529,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 						}
 					},
 					error: function(operation) {
-						self.successMessage.innerHTML = operation.response.metadata.errorDetail;
+						self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
 					}
 				});
 
@@ -560,7 +560,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				load: function(operation) {
 				},
 				error: function(operation) {
-					self.successMessage.innerHTML = operation.response.metadata.errorDetail;
+					self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
 				}
 			});
 		},
