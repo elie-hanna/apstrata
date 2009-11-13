@@ -246,6 +246,10 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 		}
 	},
 	
+	close: function() {
+		this.getParent().closePanel()
+	},
+	
 	/*
 	 * Ensures cleanup when a panel is destroyed
 	 */
