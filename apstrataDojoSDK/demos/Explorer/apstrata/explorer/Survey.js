@@ -43,7 +43,7 @@ dojo.declare("apstrata.explorer.Survey",
 				request: {
 					apsdb: {
 						store: self.surveyStore,
-						query: "apsdb.creator=\"" + connection.credentials.username + "@" + connection.credentials.key + "\" and isSurveyMetadata=\"true\"",
+						query: "apsdb.creator=\"" + connection.credentials.username+ "\" and isSurveyMetadata=\"true\"",
 						queryFields: "surveyName,apsdb.documentKey,surveySchema"
 					}
 				},
@@ -57,6 +57,7 @@ dojo.declare("apstrata.explorer.Survey",
 	
 					// Cause the DTL to rerender with the fresh self.data
 					self.render()
+					//dojo.style(this.domNode,{width:'400px'})
 				},
 				error: function(operation) {
 				}
@@ -100,7 +101,7 @@ dojo.declare("apstrata.explorer.SurveyEditor",
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.explorer", "templates/SurveyEditorPanel.html"),
 	schema: null,
-//	editingMode: true,
+	//editingMode: true,
 
 	maximizePanel: true,
 	
