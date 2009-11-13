@@ -1,4 +1,4 @@
-/*******************************************************************************
+	/*******************************************************************************
  *  Copyright 2009 Apstrata
  *  
  *  This file is part of Apstrata Database Javascript Client.
@@ -21,7 +21,7 @@ dojo.provide("surveyWidget.widgets.config")
 
 dojo.declare("surveyWidget.widgets.config", [], {})
 
-var apServiceURL = "http://10.0.0.230/apstratabase/rest" 
+var apServiceURL = "http://apsdb.apstrata.com/sandbox-apsdb/rest" 
 //"http://apsdb.apstrata.com/sandbox-apsdb/rest"
-var apSourceURL = "http://10.0.0.215:8080/apstrataDojoSDK/" 
+var apSourceURL = "http://varick.apstrata.com/apstrataSDK/" 
 //"https://dashboard.apstrata.com/sandboxdashboard/apstrataDojoSDK/"
