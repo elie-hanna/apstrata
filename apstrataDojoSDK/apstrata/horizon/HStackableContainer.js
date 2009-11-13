@@ -114,7 +114,7 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 		})
 
 		this.inherited(arguments)
-	}
+	}	
 })
 
 /*
@@ -163,9 +163,16 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 
 	postCreate: function() {
 		this._setStyle()
-
+		
 		this.inherited(arguments)
 		this._animateToPosition()
+
+		// When rendering the domNode id and widgetid are lost, save them them reinstall them in this.render
+		this._savedId = this.domNode.id
+	},
+	
+	startup: function() {
+		this.inherited(arguments)
 	},
 	
 	/*
@@ -252,11 +259,15 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 	render: function() {
 		this.inherited(arguments)
 
+		// When rendering the domNode id and widgetid are lost, reinstall them
+		dojo.attr(this.domNode, 'id', this._savedId)
+		dojo.attr(this.domNode, 'widgetid', this._savedId)
+
 		this._setStyle()
 
 		this._animateToPosition()
 	},
-	
+
 	layout: function() {
 		console.debug('layout ->')
 	}
