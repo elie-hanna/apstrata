@@ -43,9 +43,15 @@ dojo.declare("apstrata.explorer.MainPanel",
 
 	onClick: function(index, label) {
 		var self = this
+		
+//		if (!connection.isLoggedIn()) {
+//			if (label='survey') this.openPanel(apstrata.horizon.Login, {loginSuccess: function() {s.openPanel(apstrata.explorer.Survey)}});
+//		}
+		
 		if (label=='blog') this.openPanel(apstrata.explorer.Blog);
 		else if (label=='home') this.openPanel(apstrata.horizon.Login);
 		else if (label=='survey') this.openPanel(apstrata.explorer.Survey);
+		else if (label=='preferences') this.openPanel(apstrata.explorer.SurveyEditor);
 		else this.closePanel()
 	}
 })
