@@ -52,6 +52,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 				this.jsonDataModel = decodeURIComponent(schema);
 			
 			this.editMode = editingMode;
+			
+			if(typeof(usingCookie) != "undefined")
+				this.useCookie = usingCookie;
+			else
+				this.useCookie = true;
 
 			dataModel = dojo.fromJson(this.jsonDataModel);
 
@@ -69,7 +74,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var cookie = 'apstrata.' + apstrata.apConfig.key + '.' + strTitleForCookie;
 			
 			// Make sure that this user has not already taken the survey and already a cookie
-			if (false) { //dojo.cookie(cookie) == 'taken') { // TODO : Should reinstate this code when we want to use the cookie for making sure that users do not submit twice
+			if (!this.editMode && this.useCookie && dojo.cookie(cookie) == 'taken') { 
 				if (dataModel.viewResults) {
 					this.loadAggregatedResults();
 				} else {

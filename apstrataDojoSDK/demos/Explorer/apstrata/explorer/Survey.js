@@ -72,10 +72,6 @@ dojo.declare("apstrata.explorer.Survey",
 		this.refresh()
 		this.inherited(arguments)
 		
-		dojo.publish("/apstrata/documentation/topic", [{
-			topic: "Survey Code Snippet",
-			id: "Survey"
-		}])
 		
 	},
 	
@@ -108,6 +104,7 @@ dojo.declare("apstrata.explorer.SurveyEditor",
 	constructor: function(attrs) {
 		schema = attrs.schema
 		editingMode = attrs.editingMode
+		usingCookie = false
 	}
 })
 
@@ -141,6 +138,11 @@ dojo.declare("apstrata.explorer.SurveyActions",
 				break;
 			case 'Results':
 				this.openPanel(apstrata.explorer.SurveyResults, {schema:schema})
+				
+		dojo.publish("/apstrata/documentation/topic", [{
+			topic: "Survey Code Snippet",
+			id: "Survey"
+		}])
 				break;
 			default:
 		}
