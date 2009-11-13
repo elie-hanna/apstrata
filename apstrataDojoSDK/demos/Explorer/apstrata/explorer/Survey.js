@@ -115,9 +115,9 @@ dojo.declare("apstrata.explorer.SurveyActions",
 [apstrata.horizon.HStackableList], 
 {
 	data: [
-		{label: "Clone", iconSrc: "../../apstrata/resources/images/pencil-icons/file.png"},
-		{label: "Submit", iconSrc: "../../apstrata/resources/images/pencil-icons/picture.png"},
-		{label: "Results", iconSrc: "../../apstrata/resources/images/pencil-icons/star.png"}
+		{label: "Clone", iconSrc: "../../apstrata/resources/images/pencil-icons/users.png"},
+		{label: "Submit", iconSrc: "../../apstrata/resources/images/pencil-icons/right.png"},
+		{label: "Results", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"}
 	],
 	
 	schema: null,
