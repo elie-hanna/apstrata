@@ -33,5 +33,9 @@ dojo.declare("apstrata.devConsole.PreferencesPanel",
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/PreferencesPanel.html"),
 
-	maximizePanel: true
+	maximizePanel: true,
+	
+	constructor: function() {
+		this.serviceUrl = connection.serviceUrl
+	}
 })

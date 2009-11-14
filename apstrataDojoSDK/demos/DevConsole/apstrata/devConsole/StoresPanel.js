@@ -60,14 +60,9 @@ dojo.declare("apstrata.devConsole.StoresPanel",
 	data: [],
 	editable: true,
 	
-	postCreate: function() {
+	reload: function() {
 		var self = this
 
-		dojo.publish("/apstrata/documentation/topic", [{
-			topic: "apstrata Stores APIs",
-			id: "StoresAPI"
-		}])
-		
 		this.container.client.call({
 			action: "ListStores",
 			load: function(operation) {
@@ -87,6 +82,17 @@ dojo.declare("apstrata.devConsole.StoresPanel",
 			error: function(operation) {
 			}
 		})
+	},
+	
+	postCreate: function() {
+		var self = this
+
+		dojo.publish("/apstrata/documentation/topic", [{
+			topic: "apstrata Stores APIs",
+			id: "StoresAPI"
+		}])
+
+		this.reload()		
 
 		self.inherited(arguments)
 	},

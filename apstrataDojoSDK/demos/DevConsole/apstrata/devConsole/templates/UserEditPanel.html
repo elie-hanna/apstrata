@@ -3,7 +3,7 @@
 	<div class="apstrataForm" style='width: 220px;'>
 
 		<div class="label">Username:</div>
-		<input type="text" dojoAttachPoint="user" value="{{ user.user }}" {% if update %} disabled='disabled' {% endif %}></input>
+		<input type="text" dojoAttachPoint="user" value="{{ userAttributes.user }}" {% if update %} disabled='disabled' {% endif %}></input>
 		
 		<div class="label">Password:</div>
 		<input type="password" dojoAttachPoint="password" value=""></input>
@@ -12,15 +12,15 @@
 		<input type="password" dojoAttachPoint="password2" value=""></input>
 
 		<div class="label">Full name:</div>
-		<input type="text" dojoAttachPoint="name" value="{{ user.name }}"></input>
+		<input type="text" dojoAttachPoint="name" value="{{ userAttributes.name }}"></input>
 
 		<div class="label">Email:</div>
-		<input type="text" dojoAttachPoint="email" value="{{ user.email }}"></input>
+		<input type="text" dojoAttachPoint="email" value="{{ userAttributes.email }}"></input>
 
 		<br>
 		<div class='rounded-sml'>
 			<div class="label">Groups:</div>
-			<input type="text" dojoAttachPoint="groups" value="{{ user.groups }}"></input>
+			<input type="text" dojoAttachPoint="groups" value="{{ userAttributes.groups }}"></input>
 			<br>
 		</div>
 
@@ -30,6 +30,6 @@
 			<button dojoAttachEvent='onclick: _save'>save</button>
 			<button dojoAttachEvent='onclick: _cancel'>cancel</button>
 		</div>
-			<button dojoAttachEvent='onclick: _openGroups'>group</button>
+			<!-- button dojoAttachEvent='onclick: _openGroups'>group</button -->
 	</div>
 </div>

@@ -62,28 +62,8 @@ dojo.declare("apstrata.devConsole.UsersPanel",
 	
 	onClick: function(index, label) {
 		var self = this
-		if (this.openWidget) this.openWidget.destroy()
 
-		this.container.client.call({
-			action: "GetUser",
-			request: {
-				apsim: {
-					user: label
-				}
-			},
-			load: function(operation) {
-				var user = {}
-				user.name = operation.response.result.user['@name']
-
-				dojo.forEach(operation.response.result.user.attributes, function(attribute) {
-					user[attribute['@name']] = attribute.values.value
-				})
-	
-				self.openPanel(apstrata.devConsole.UserEditPanel, {user: user})
-			},
-			error: function(operation) {
-			}
-		})
+		this.openPanel(apstrata.devConsole.UserEditPanel, {userName: label})
 
 		this.inherited(arguments)		
 	},
@@ -108,7 +88,7 @@ dojo.declare("apstrata.devConsole.UsersPanel",
 
 	newItem: function() {
 		this.openPanel(apstrata.devConsole.UserEditPanel)
-
+	
 		this.inherited(arguments)
 	}
 })
@@ -120,7 +100,7 @@ dojo.declare("apstrata.devConsole.UserEditPanel",
 	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/UserEditPanel.html"),
 
 	constructor: function(attrs) {
-		this.user = {
+		this.userAttributes = {
 			user: '',
 			password: '',
 			password2: '',
@@ -128,19 +108,44 @@ dojo.declare("apstrata.devConsole.UserEditPanel",
 			email: '',
 			groups: ''
 		}			
-		
-		if (attrs.user) {
-			this.user.user = attrs.user.login
-			this.user.name = attrs.user.name
-			this.user.email = attrs.user.email
-			this.user.groups = attrs.user.groups?attrs.user.groups:""
+
+		this.update = false
+
+		if (attrs.userName) {
+			this._userName = attrs.userName
 			
 			this.update = true
-		} else this.update = false
-		
-		console.dir(this.user)
-		console.debug(this.update)
+		} 
 	},
+	
+	postCreate: function() {
+		var usersPanel = this
+
+		if (this.update) {
+			this.container.client.call({
+				action: "GetUser",
+				request: {
+					apsim: {
+						user: usersPanel._userName
+					}
+				},
+				load: function(operation) {
+					usersPanel.userAttributes.user = usersPanel._userName
+					usersPanel.userAttributes.name = operation.response.result.user['@name']
+	
+					dojo.forEach(operation.response.result.user.attributes, function(attribute) {
+						usersPanel.userAttributes[attribute['@name']] = attribute.values.value
+					})
+					
+					usersPanel.render()
+				},
+				error: function(operation) {
+				}
+			})
+		}		
+		
+		this.inherited(arguments)
+	},	
 	
 	_save: function() {
 		var self = this
@@ -151,19 +156,18 @@ dojo.declare("apstrata.devConsole.UserEditPanel",
 		
 		this.container.client.call({
 			action: "SaveUser",
-			fields: {
+			request: {
 				apsim: {
 					user: self.user.value,
 					password: self.password.value,
 					name: self.name.value,
 					email: self.email.value,
-					group: self.groups.value,
+					group: (self.groups.value).split(','),
 					update: self.update
 				}
 			},
 			load: function(operation) {
-				self.panel.parentList.refresh()
-				self.panel.destroy()
+				self.getParent().reload()
 			},
 			error: function(operation) {
 			}

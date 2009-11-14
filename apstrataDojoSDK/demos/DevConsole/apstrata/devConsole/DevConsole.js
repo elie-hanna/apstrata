@@ -45,47 +45,64 @@ dojo.declare("apstrata.devConsole.MainPanel",
 	],
 	
 	postCreate: function() {
-		var self = this
-		
+		var mainPanel = this
+
 		dojo.subscribe("/apstrata/connection/login/success", function(data) {
-			self.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"})
-			self.render()
-			
-			if (self.openTarget) self.open(self.openTarget)
-			delete self.openTarget
+			mainPanel.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"})
+			mainPanel.render()
 		})
 		
 		dojo.subscribe("/apstrata/connection/logout", function(data) {
-			self.data.pop()
-			self.render()
-			self.open("home")
+			mainPanel.data.pop()
+			mainPanel.render()
+			mainPanel.home()
 		})
+		
+		this.inherited(arguments)
 	},
-
-	onClick: function(index, label) {
-		var self = this
-		
-		this.closePanel()
-		
+	
+	_openPanelbyLabel: function(label) {
 		switch (label) {
-			case 'home': this.openPanel(apstrata.devConsole.HomePanel); break;
 			case 'stores': this.openPanel(apstrata.devConsole.StoresPanel); break;
 			case 'schemas': this.openPanel(apstrata.devConsole.SchemasPanel); break;
 			case 'scripts': this.openPanel(apstrata.devConsole.ScriptsPanel); break;
 			case 'groups': this.openPanel(apstrata.devConsole.GroupsPanel); break;
 			case 'users': this.openPanel(apstrata.devConsole.UsersPanel); break;
 			case 'favourites': this.openPanel(apstrata.devConsole.FavouritesPanel); break;
-			case 'preferences': this.openPanel(apstrata.devConsole.PreferencesPanel); break;
-			case 'logout':  this.container.connection.logout(); break;
+			case 'logout':  this.getContainer().connection.logout(); break;
 		}
+	},
+
+	onClick: function(index, label) {
+		var self = this
+
+		if ((label == 'home') || (label == 'preferences')) {
+			switch (label) {
+				case 'home': this.openPanel(apstrata.devConsole.HomePanel); break;
+				case 'preferences': this.openPanel(apstrata.devConsole.PreferencesPanel); break;
+			}
+		} else {
+			if (connection.hasCredentials()) {
+				self._openPanelbyLabel(label)
+			} else {
+				var okay = false
+				this.openPanel(apstrata.horizon.Login, {
+					success: function() {
+						okay = true
+						if (okay) self._openPanelbyLabel(label)
+					}, 
+					failure: function() {
+					} 
+				})
+			}
+		}			
 	},
 	
 	startup: function() {
-		this.home()		
+		this.home()
 	},
 	
 	home: function() {
-		this.closePanel()
 		this.openPanel(apstrata.devConsole.HomePanel)
 	}
 })
@@ -123,17 +140,25 @@ dojo.declare("apstrata.devConsole.DevConsole",
 		})
 		
 		this.margin = {}
+		
+		this.margin.left = 25
+		this.margin.right = 25
+		this.margin.top = 75
+		this.margin.bottom = 30
+		
+
+/*
 		this.margin.w = 50
 		this.margin.h = 145
 
-/*
 		this.margin.topH = 70
 		this.margin.bottomH = 40
 		this.margin.leftW = 25
 		this.margin.rightW = 25
-*/
+
 		this.width = 450
 		this.height = 250
+*/
 	},
 	
 	postCreate: function() {
