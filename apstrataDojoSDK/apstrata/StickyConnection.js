@@ -29,7 +29,8 @@ dojo.declare("apstrata.StickyConnection",
 
 		hasCredentials: function() {
 			// Assume that we have a session if either the secret or password are present
-			return (this.credentials.secret != "") || (this.credentials.pw != "")
+			return ((this.credentials.secret != undefined) && (this.credentials.secret != null) && (this.credentials.secret != "")) 
+					|| ((this.credentials.password != undefined) && (this.credentials.password != null) && (this.credentials.password != "")) 
 		},
 		
 	    /**
@@ -47,8 +48,38 @@ dojo.declare("apstrata.StickyConnection",
 			if (this.credentials.secret && this.credentials.secret!="") return this.LOGIN_MASTER
 			return undefined			
 		},
+		
+		loginUser: function(handlers) {
+			var self = this
+			
+			
+			// todo: implement credentials checking, by calling ListStores
+			//  possible return codes
+			//  INVALID_AUTHENTICATION_KEY
+			//  INVALID_USER
+			//  PERMISSION_DENIED means credentials valid
+			
+			if (this.credentials.username 
+			&& (this.credentials.username!="") 
+			&& this.credentials.key 
+			&& (this.credentials.key!="")) {
+				dojo.publish("/apstrata/connection/login/success", [{
+					key: self.credentials.key,
+					username: self.credentials.username
+				}])
+	
+				if (handlers.success) handlers.success()
+			} else {
+				dojo.publish("/apstrata/connection/login/failure", [{
+					key: self.credentials.key
+				}])
 
-		login: function(handlers) {
+				if (handlers.failure) handlers.failure("key and username are missing", "key and username are missing")
+			}
+
+		},
+		
+		loginMaster: function(handlers) {
 			var self = this
 			
 			self._ongoingLogin = true
@@ -67,7 +98,7 @@ dojo.declare("apstrata.StickyConnection",
 						key: self.credentials.key
 					}])
 
-					handlers.success()
+					if (handlers.success) handlers.success()
 				},
 				error: function(operation) {
 					// Clear the secret and password so hasCredentials() functions
@@ -78,7 +109,7 @@ dojo.declare("apstrata.StickyConnection",
 						key: self.credentials.key
 					}])
 
-					handlers.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage)
+					if (handlers.failure) handlers.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage)
 				}
 			})
 		},
@@ -89,7 +120,7 @@ dojo.declare("apstrata.StickyConnection",
 
 			// Erase secret and password
 			this.credentials.secret = ""
-			this.credentials.pw = ""
+			this.credentials.password = ""
 			
 			// Make sure key/username are not null/undefined
 			if (!this.credentials.key) this.credentials.key=""

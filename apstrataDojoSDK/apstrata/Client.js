@@ -58,7 +58,7 @@ dojo.declare("apstrata.Client",
 					duration: self._MESSAGE_DURATION
 			}])
 			
-			if (attrs.action != "SaveDocument") {
+			if ((attrs.action != "SaveDocument") || (attrs.action != "SetSchema")) {
 				var operation = new apstrata.Get(this.connection)
 			} else {
 				var operation = new apstrata.Post(this.connection)
@@ -68,9 +68,12 @@ dojo.declare("apstrata.Client",
 
 			operation.request = attrs.request
 
-			dojo.connect(operation, "handleResult", function() {
+			var handle1 = dojo.connect(operation, "handleResult", function() {
 				if (self.handleResult) self.handleResult(operation)
 				attrs.load(operation)
+				
+				dojo.disconnect(handle1)
+				dojo.disconnect(handle2)
 
 				dojo.publish("/apstrata/connection", [{
 					action: 'end',
@@ -81,9 +84,12 @@ dojo.declare("apstrata.Client",
 				}]);
 			})
 
-			dojo.connect(operation, "handleError", function() {
+			var handle2 = dojo.connect(operation, "handleError", function() {
 				if (self.handleError) self.handleError(operation)
 				attrs.error(operation)
+
+				dojo.disconnect(handle1)
+				dojo.disconnect(handle2)
 
 				dojo.publish("/apstrata/connection", [{
 					action: 'end',

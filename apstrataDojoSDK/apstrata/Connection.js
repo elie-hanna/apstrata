@@ -67,7 +67,7 @@ dojo.declare("apstrata.Connection",
 			this.timeout = 10000
 			this.serviceUrl= this._DEFAULT_SERVICE_URL
 			this.defaultStore = ""
-			this.credentials= {key: "", secret: "", un: "", pw: ""}
+			this.credentials= {key: "", secret: "", username: "", password: ""}
 			this._urlSigner = new apstrata.URLSignerMD5()				
 
 			if (attrs) {
