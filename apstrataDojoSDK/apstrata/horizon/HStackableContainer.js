@@ -30,9 +30,22 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 {
 	
 	_marginRight: 5,
+
+	__children: {},
 	
 	addChild: function(child) {
-//		child.container = this
+		console.debug("**** add    ********************"+child.id)
+		
+		this.__children[child.id] = child
+		
+		this.inherited(arguments)
+	},
+	
+	removeChild: function(child) {
+		console.debug("**** remove ********************"+child.id)
+
+		if (this.__children[child.id]) delete this.__children[child.id]
+		
 		this.inherited(arguments)
 	},
 	
@@ -42,30 +55,38 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 		
 	getRemainingFreeWidth: function() {
 		var w = 0
-		dojo.forEach(this.getChildren(), function(child) {
+		
+		for (id in this.__children) {
+			var child = this.__children[id]
+			
 			w += child.domNode.offsetWidth
-		})
+		}
+
+//	todo: don't know why this is not working on logout		
+//		dojo.forEach(this.__children, function(child) {
+//			w += child.domNode.offsetWidth
+//		})
 		return this.domNode.offsetWidth - w - this._marginRight * this.getChildren().length
 	},
 
 	/*
 	 * Auto calculate coordinates and size of Explorer based on 
-	 *  window size and margin
+	 *  window size and this.margin analog to CSS margin
 	 */
 	_layoutMarginMode: function() {
 		var w = dijit.getViewport()
 		
 		var coord = {}
 
-		coord.top = (this.margin.h/2+5) + "px"
-		coord.left = (this.margin.w/2+5) + "px"
-		coord.width = (w.w - this.margin.w - 10) + "px"
-		coord.height = (w.h - this.margin.h - 10) + "px"
+		coord.top = (this.margin.top + this._marginRight) + "px"
+		coord.left = (this.margin.left + this._marginRight) + "px"
+		coord.width = (w.w - this.margin.left - this.margin.right - 2*this._marginRight) + "px"
+		coord.height = (w.h - this.margin.top - this.margin.bottom - 2*this._marginRight) + "px"
 		dojo.style(this.background, {
-			top: (this.margin.h/2) + "px",
-			left: (this.margin.w/2) + "px",
-			width: (w.w - this.margin.w) + "px",
-			height: (w.h - this.margin.h) + "px",
+			top: (this.margin.top) + "px",
+			left: (this.margin.left) + "px",
+			width: (w.w - this.margin.left - this.margin.right) + "px",
+			height: (w.h - this.margin.top - this.margin.bottom) + "px",
 			zIndex: "10"
 		})
 		dojo.style(this.domNode, {
@@ -76,7 +97,7 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 			zIndex: "100"
 		})
 	},
-	
+
 	/*
 	 * Auto calculate coordinates and size of Explorer based on 
 	 *  window size and explorer target size
@@ -171,10 +192,6 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 		this._savedId = this.domNode.id
 	},
 	
-	startup: function() {
-		this.inherited(arguments)
-	},
-	
 	/*
 	 * Creates sliding effect
 	 */
@@ -232,6 +249,8 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 
 		// Add to DojoLayout container
 		this.getContainer().addChild(this._openPanel)
+		
+		return this._openPanel
 	},
 	
 	/*
@@ -240,7 +259,7 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 	closePanel: function() {
 		// Destroy an existing child open panel
 		if (this._openPanel) {
-			this.container.removeChild(this._openPanel)
+			this.getContainer().removeChild(this._openPanel)
 			this._openPanel.destroy()
 			this._openPanel = null
 		}
@@ -255,6 +274,7 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 	 */
 	destroy: function() {
 		this.closePanel()
+		this.inherited(arguments)
 	},
 	
 	/*

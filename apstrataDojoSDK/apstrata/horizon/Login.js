@@ -29,6 +29,14 @@ dojo.declare("apstrata.horizon.Login",
 
 	maximizePanel: true,
 	
+	constructor: function(attrs) {
+		var self = this
+		if (attrs) {
+			if (attrs.success) self._success = attrs.success
+			if (attrs.failure) self._failure = attrs.failure
+		}
+	},
+	
 	_onMouseoverMaster: function() {
 		dojo.style(this.dvMaster, {background: "#AAAADD"})
 	},
@@ -46,11 +54,40 @@ dojo.declare("apstrata.horizon.Login",
 	},
 
 	loginMaster: function() {
+		var self = this
+		connection.credentials.key = this.mKey.value
+		connection.credentials.secret = this.mSecret.value
 
+		this.getContainer().connection.loginMaster({
+			success: function() {
+				if (self._success) self._success()
+			},
+			
+			failure: function(error, message) {
+				if (self._failure) self._failure()
+				var msg = (error == "INVALID_SIGNATURE")?"Invalid credentials.":"[" + error + "] " + message
+				self.container.alert(msg, self)
+			}
+		})
 	},
 	
 	loginUser: function() {
-		
-	}
+		var self = this
+		connection.credentials.key = this.key.value
+		connection.credentials.secret = ""
+		connection.credentials.username = this.un.value
+		connection.credentials.password = this.pw.value
 
+		this.getContainer().connection.loginUser({
+			success: function() {
+				if (self._success) self._success()
+			},
+			
+			failure: function(error, message) {
+				if (self._failure) self._failure()
+				var msg = (error == "INVALID_SIGNATURE")?"Invalid credentials.":"[" + error + "] " + message
+				self.container.alert(msg, self)
+			}
+		})
+	}
 })
