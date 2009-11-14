@@ -73,3 +73,19 @@ html, body {
 	font-weight: bold;
 }
 
+
+.documentation {
+	font-family: sans-serif;
+	color: #111111;
+}
+
+.documentation h1 {
+	font-size: 2em;
+}
+.documentation p {
+	line-height: 1.4em;
+}
+
+.documentation ul {
+	line-height: 1.4em;
+}
