@@ -71,7 +71,10 @@ dojo.declare("apstrata.explorer.Survey",
 	postCreate: function() {
 		this.refresh()
 		this.inherited(arguments)
-		
+		dojo.publish("/apstrata/documentation/topic", [{
+			topic: "Survey Code Snippet",
+			id: "Survey"
+		}])
 		
 	},
 	
