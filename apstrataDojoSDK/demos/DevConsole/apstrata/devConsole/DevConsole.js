@@ -20,12 +20,12 @@
 dojo.provide("apstrata.devConsole.DevConsole")
 
 dojo.require("apstrata.horizon.Login")
+dojo.require("apstrata.horizon.Preferences")
 
 dojo.require("apstrata.devConsole.HomePanel")
 dojo.require("apstrata.devConsole.StoresPanel")
 dojo.require("apstrata.devConsole.SchemasPanel")
 dojo.require("apstrata.devConsole.ScriptsPanel")
-dojo.require("apstrata.devConsole.PreferencesPanel")
 dojo.require("apstrata.devConsole.GroupsPanel")
 dojo.require("apstrata.devConsole.UsersPanel")
 
@@ -79,7 +79,7 @@ dojo.declare("apstrata.devConsole.MainPanel",
 		if ((label == 'home') || (label == 'preferences')) {
 			switch (label) {
 				case 'home': this.openPanel(apstrata.devConsole.HomePanel); break;
-				case 'preferences': this.openPanel(apstrata.devConsole.PreferencesPanel); break;
+				case 'preferences': this.openPanel(apstrata.horizon.Preferences); break;
 			}
 		} else {
 			if (connection.hasCredentials()) {

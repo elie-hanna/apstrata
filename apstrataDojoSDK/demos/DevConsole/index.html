@@ -78,7 +78,17 @@
 				
 				toast = dijit.byId("toast")
 				dojo.parser.parse()
+				
+				dojo.connect(devConsole, 'preferencesChanged', function(prefs) {
+console.debug('init preferences')
+console.dir(prefs)
+					contextualHelp.setVisible(prefs.showContextualHelp)
+					restMonitor.setVisible(prefs.showRestMonitor)
+					connection.serviceUrl = prefs.serviceUrl
+					connection.timeout = prefs.timeout
+				})
 			})
+			
 		</script>
 	</head>
 	<body class='nihilo'>
@@ -87,7 +97,7 @@
 		<div style='clear:both'></div>
 
 		<div dojoType='apstrata.widgets.SlidingPanel' 
-			dojoAttachPoint='slidingPanel' 
+			jsId='restMonitor' 
 			class='ConsoleOutput rounded-top-sml' 
 			attach='bottom' 
 			visibleWidth='20'>
@@ -95,7 +105,7 @@
 		</div>
 
 		<div dojoType='apstrata.widgets.SlidingPanel' 
-			dojoAttachPoint='slidingPanel' 
+			jsId='contextualHelp' 
 			class='ConsoleOutput rounded-bottom-sml' 
 			attach='top' 
 			visibleWidth='20'>
@@ -104,7 +114,7 @@
 
 		<div dojoType='apstrata.widgets.client.ConnectionStatus'></div>
 
-		<div dojoType="dojox.widget.Toaster" id="toast" 
+		<div dojoType="dojox.widget.Toaster" id="toast" jsId='toaster'
 			positionDirection="br-left" duration="0" 
 			messageTopic="/apstrata/connection"></div>    
 
@@ -112,7 +122,7 @@
 		<!-- div dojoType='apstrata.explorer.HStackableContainer' dojoAttachPoint='container'></div -->
 
 <div>
-		<div dojoType="apstrata.devConsole.DevConsole" jsId='adminWidget'
+		<div dojoType="apstrata.devConsole.DevConsole" jsId='devConsole' applicationId='devConsole'
 			connection='connection'></div>
 </div>
 	</body>
