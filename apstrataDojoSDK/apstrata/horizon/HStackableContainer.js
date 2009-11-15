@@ -22,6 +22,8 @@ dojo.provide("apstrata.horizon.HStackablePanel")
 dojo.provide("apstrata.horizon.HStackableList")
 dojo.provide("apstrata.horizon.HStackableContainer")
 
+dojo.require("dojo.cookie")
+
 /*
  * Layout widget container of the HStackable widgets
  */
@@ -29,21 +31,31 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 [dijit.layout._LayoutWidget], 
 {
 	
+	applicationId: "horizon",
+	
 	_marginRight: 5,
 
 	__children: {},
 	
-	addChild: function(child) {
-		console.debug("**** add    ********************"+child.id)
+	constructor: function(attrs) {
+		if (attrs && attrs.applicationId) this.applicationId = attrs.applicationId
+	},
+	
+	startup: function() {
+//		setTimeout (dojo.hitch(this, "timeout"), 2000)
+		setTimeout(dojo.hitch(this, 'loadPreferences'), 3000)
+//		this.loadPreferences()
 		
+		this.inherited(arguments)
+	},
+	
+	addChild: function(child) {
 		this.__children[child.id] = child
 		
 		this.inherited(arguments)
 	},
 	
 	removeChild: function(child) {
-		console.debug("**** remove ********************"+child.id)
-
 		if (this.__children[child.id]) delete this.__children[child.id]
 		
 		this.inherited(arguments)
@@ -135,7 +147,27 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 		})
 
 		this.inherited(arguments)
-	}	
+	},
+	
+	savePreferences: function(preferences) {
+		dojo.cookie(this.applicationId + "-prefs", dojo.toJson(preferences))
+		this.preferencesChanged(preferences)
+	},
+	
+	loadPreferences: function() {
+		var prefs = {}
+
+		try {
+			var prefs = dojo.fromJson(dojo.cookie(this.applicationId + "-prefs"))
+			if (prefs) this.preferencesChanged(prefs); else prefs = {}
+		} catch (err) {
+			
+		}
+		
+		return prefs
+	},
+
+	preferencesChanged: function(preferences) {}
 })
 
 /*
@@ -292,8 +324,10 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 		this._animateToPosition()
 	},
 
+	/*
+	 * Invoked by the container when the window size changes
+	 */
 	layout: function() {
-		console.debug('layout ->')
 	}
 })
 
