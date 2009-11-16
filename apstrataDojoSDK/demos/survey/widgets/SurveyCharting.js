@@ -51,7 +51,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				if (attrs.storeName) this.storeName = attrs.storeName
 				if (attrs.schema) this.schema = attrs.schema				
 			} else {
-				this.schema = this.schema;
+				this.schema = schema;
 			}
 			
 			if(this.schema != null){
