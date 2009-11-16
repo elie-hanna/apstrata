@@ -50,11 +50,6 @@
 
 			dojo.addOnLoad(function() {
 
-
-/*
-				connection = new apstrata.StickyConnection()
-*/				
-
 				connection = new apstrata.StickyConnection({
 					credentials: {
 						key: "7744293024",
@@ -65,105 +60,25 @@
 				})
 
 				connection.timeout = 60000
-/*
-				connection.serviceUrl = "http://apsdb.apstrata.com/sandbox-apsdb/rest"
-*/				
 
 				dojo.registerModuleRelative ("apstrata.explorer", "apstrata/explorer");
 				
-				toast = dijit.byId("toast")
 				dojo.parser.parse()
 
-
-				var data = {
-					configurations: [{
-						apsdb: {
-							createSchemaACL: "group:survey-users"
-						}
-					}],
+				// AJAX Load the summary text, based on summaryUrl
+				dojo.xhrGet({
+					url: "initAccount.json",
+					handleAs: 'json',
 					
-					stores: [
-						{
-							apsdb: {
-								store: 'explorerBlog',
-								saveDocumentACL: 'group:blog-users',
-								deleteDocumentACL: 'group:blog-users',
-								getFileACL: 'anonymous',
-								queryACL: 'anonymous'
-							}
-						},
-						{
-							apsdb: {
-								store: 'surveyStore'
-							}
-						}
-					],
+					load: function(json) {
+						var is = new apstrata.util.BulkUpdate({connection: connection, data: json})
+					},
 					
-					groups: [
-						{
-							apsim: {
-								group: 'blog-users'
-							}	
-						},
-						{
-							apsim: {
-								group: 'blog-admins'
-							}	
-						},
-						{
-							apsim: {
-								group: 'survey-users'
-							}	
-						}
-					],
-					
-					users: [
-						{
-							apsim:{
-								user: 'joe',
-								password: 'qw3rty',
-								name: 'Joe Blogger',
-								email: 'joe.blogger.explorer@apstrata.com',
-								group: 'blog-users',
-								update: 'false'
-							}
-						},
-						{
-							apsim:{
-								user: 'jane',
-								password: 'qw3rty',
-								name: 'Jane Blogger',
-								email: 'jane.blogger.explorer@apstrata.com',
-								group: 'blog-users',
-								update: 'false'
-							}
-						},
-						{
-							apsim:{
-								user: 'mike',
-								password: 'qw3rty',
-								name: 'Michael Liss',
-								email: 'michael.liss@apstrata.com',
-								group: 'survey-users',
-								update: 'false'
-							}
-						},
-						{
-							apsim:{
-								user: 'ryan',
-								password: 'qw3rty',
-								name: 'Ryan Murray',
-								email: 'ryan.murray@apstrata.com',
-								group: 'survey-users',
-								update: 'false'
-							}
-						},
-					]
-				}
-
-				
-				var is = new apstrata.util.BulkUpdate({connection: connection, data: data})
-				
+					error: function() {
+						// not found
+						apstrata.alert("File initAccount.json not found!")
+					}
+				})
 			})
 		</script>
 	</head>

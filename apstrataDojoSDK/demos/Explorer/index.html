@@ -57,13 +57,15 @@
 			
 			dojo.addOnLoad(function() {
 				connection = new apstrata.StickyConnection(
-//				{
-//					credentials: {
-//						key: "7744293024",
-//						username: "joe",
-//						password: "qw3rty"
-//					}
-//				}
+/*
+					{
+						credentials: {
+							key: "7744293024",
+							username: "joe",
+							password: "qw3rty"
+						}
+					}
+*/
 				)
 
 				dojo.registerModuleRelative ("apstrata.explorer", "apstrata/explorer");
@@ -102,7 +104,6 @@
 
 		<div dojoType='apstrata.widgets.SlidingPanel' 
 			jsId='contextualHelp'
-			openOnClick='true'
 			class='ConsoleOutput rounded-bottom-sml' 
 			attach='top' 
 			visibleWidth='20'>

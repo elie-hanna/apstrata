@@ -31,8 +31,8 @@ dojo.declare("apstrata.explorer.Blog",
 	data: [
 		{label: "Posts", iconSrc: "../../apstrata/resources/images/pencil-icons/file.png"},
 		{label: "Gallery", iconSrc: "../../apstrata/resources/images/pencil-icons/picture.png"},
-		{label: "Favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/star.png"},
-		{label: "Tags", iconSrc: "../../apstrata/resources/images/pencil-icons/tag.png"},
+//		{label: "Favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/star.png"},
+//		{label: "Tags", iconSrc: "../../apstrata/resources/images/pencil-icons/tag.png"},
 		{label: "New Post", iconSrc: "../../apstrata/resources/images/pencil-icons/notepad.png"}
 	],
 	
@@ -40,17 +40,33 @@ dojo.declare("apstrata.explorer.Blog",
 		var self = this
 		var w
 		
-		this.closePanel()
-		
-		switch (label)
-		{
-			case 'Posts': this.openPanel(apstrata.explorer.BlogPosts)
-				break;
-			case 'New Post': this.openPanel(apstrata.explorer.BlogPost)
-				break;
-			case 'Gallery': this.openPanel(apstrata.explorer.BlogGallery)
-				break;
-			default:
+		if (label == 'New Post') {
+			if (connection.hasCredentials()) {
+				self.openPanel(apstrata.explorer.BlogPost)
+			} else {
+				var okay = false
+
+				var parent = self.getParent()
+
+				this.openPanel(apstrata.horizon.Login, {
+					success: function() {
+						self.openPanel(apstrata.explorer.BlogPost)
+					}, 
+					failure: function() {
+					} 
+				})
+			}
+		} else {
+			switch (label)
+			{
+				case 'Posts': this.openPanel(apstrata.explorer.BlogPosts)
+					break;
+				case 'New Post': this.openPanel(apstrata.explorer.BlogPost)
+					break;
+				case 'Gallery': this.openPanel(apstrata.explorer.BlogGallery)
+					break;
+				default:
+			}
 		}
 	}
 })

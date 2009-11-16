@@ -48,7 +48,6 @@ dojo.declare("apstrata.explorer.MainPanel",
 	
 	_openPanelbyLabel: function(label) {
 		switch (label) {
-			case 'blog': this.openPanel(apstrata.explorer.Blog); break;
 			case 'survey': this.openPanel(apstrata.explorer.Survey); break;
 			case 'init demos': this.openPanel(apstrata.explorer.InitDemos); break;
 			case 'logout':  this.getContainer().connection.logout(); break;
@@ -58,9 +57,10 @@ dojo.declare("apstrata.explorer.MainPanel",
 	onClick: function(index, label) {
 		var self = this
 
-		if ((label == 'home') || (label == 'preferences')) {
+		if ((label == 'home') || (label == 'blog') || (label == 'preferences')) {
 			switch (label) {
 				case 'home': this.home(); break;
+				case 'blog': this.openPanel(apstrata.explorer.Blog); break;
 				case 'preferences': this.openPanel(apstrata.horizon.Preferences); break;
 			}
 		} else {
@@ -109,8 +109,15 @@ dojo.declare("apstrata.explorer.Explorer",
 			connection: self.connection,
 			handleResult: function(operation) {},
 			handleError: function(operation) {
-				var msg = 'Oops, there seems to be a problem:<br><br><b>' + operation.response.metadata.errorDetail + '</b>'
-				self.alert(msg, self.domNode)
+				var errMsg 
+				if (operation.response.metadata.errorDetail=="") {
+					errMsg = operation.response.metadata.errorCode
+				} else {
+					errMsg = operation.response.metadata.errorDetail
+				}
+				
+				var msg = 'Oops, there seems to be a problem:<br><br><b>' + errMsg + '</b>'
+				apstrata.alert(msg, self.domNode)
 			}
 		})
 		
@@ -137,22 +144,6 @@ dojo.declare("apstrata.explorer.Explorer",
 		this.addChild(this.main)
 		
 		this.inherited(arguments)
-	},
-	
-	alert: function(msg, origin) {
-		var dialog = new apstrata.widgets.Alert({width: 300, 
-												height: 250, 
-												actions: "close", 
-												message: msg, 
-												clazz: "rounded-sml Alert", 
-												iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
-												animation: {from: origin}, 
-												modal: true })
-
-		dialog.show()
-		dojo.connect(dialog, "buttonPressed", function(label) {
-			dialog.hide()
-		})
 	}
 })
 
@@ -173,99 +164,23 @@ dojo.declare("apstrata.explorer.InitDemos",
 
 	maximizePanel: true,
 
-	data: {
-			configurations: [{
-				apsdb: {
-					createSchemaACL: "anonymous"
-				}
-			}],
-			
-			stores: [
-				{
-					apsdb: {
-						store: 'explorerBlog',
-						saveDocumentACL: 'group:blog-users',
-						deleteDocumentACL: 'group:blog-users',
-						getFileACL: 'anonymous',
-						queryACL: 'anonymous'
-					}
-				},
-				{
-					apsdb: {
-						store: 'surveyStore',
-						saveDocumentACL: 'anonymous',
-						deleteDocumentACL: 'anonymous',
-						getFileACL: 'anonymous',
-						queryACL: 'anonymous'
-					}
-				}
-			],
-			
-			groups: [
-				{
-					apsim: {
-						group: 'blog-users'
-					}	
-				},
-				{
-					apsim: {
-						group: 'blog-admins'
-					}	
-				},
-				{
-					apsim: {
-						group: 'survey-users'
-					}	
-				}
-			],
-			
-			users: [
-				{
-					apsim:{
-						user: 'joe',
-						password: 'qw3rty',
-						name: 'Joe Blogger',
-						email: 'joe.blogger.explorer@apstrata.com',
-						group: 'blog-users',
-						update: 'false'
-					}
-				},
-				{
-					apsim:{
-						user: 'jane',
-						password: 'qw3rty',
-						name: 'Jane Blogger',
-						email: 'jane.blogger.explorer@apstrata.com',
-						group: 'blog-users',
-						update: 'false'
-					}
-				},
-				{
-					apsim:{
-						user: 'mike',
-						password: 'qw3rty',
-						name: 'Michael Liss',
-						email: 'michael.liss@apstrata.com',
-						group: 'survey-users',
-						update: 'false'
-					}
-				},
-				{
-					apsim:{
-						user: 'ryan',
-						password: 'qw3rty',
-						name: 'Ryan Murray',
-						email: 'ryan.murray@apstrata.com',
-						group: 'survey-users',
-						update: 'false'
-					}
-				},
-			]
-		},
-	
 	_init: function() {
 		var self = this
-		var is = new apstrata.util.BulkUpdate({connection: connection, data: self.data})
+
+		// AJAX Load the summary text, based on summaryUrl
+		dojo.xhrGet({
+			url: "initAccount.json",
+			handleAs: 'json',
+			
+			load: function(json) {
+				var is = new apstrata.util.BulkUpdate({connection: connection, data: json})
+			},
+			
+			error: function() {
+				// not found
+				apstrata.alert("File initAccount.json not found!")
+			}
+		})
 	}
 })
 
