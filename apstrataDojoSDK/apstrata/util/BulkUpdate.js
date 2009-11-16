@@ -23,10 +23,13 @@ dojo.declare('apstrata.util.BulkUpdate', [], {
 	
 	data: null,
 	
-	operation: function(action, request, next) {
+	operation: function(request, next) {
 		var self = this
 		
-		console.dir([action, request, next])
+		console.dir(request)
+		var action = request["apsdb.action"]
+		
+		delete request["apsdb.action"]
 		
 		this.client.call({
 			action: action,
@@ -40,7 +43,19 @@ dojo.declare('apstrata.util.BulkUpdate', [], {
 		})
 	},
 	
-	queue: function(action, requestQueue, nextOperation) {
+	queue: function(requestQueue) {
+		var self = this
+		
+		if (requestQueue.length>0) {
+			var curRequest = requestQueue.pop()
+			
+			this.operation(curRequest, function() {
+				self.queue(requestQueue)
+			})
+		} 
+	},
+
+	queue1: function(action, requestQueue, nextOperation) {
 		var self = this
 		
 		if (requestQueue.length>0) {
@@ -56,6 +71,9 @@ dojo.declare('apstrata.util.BulkUpdate', [], {
 
 	init: function() {
 		var self = this
+		self.data.reverse()
+		self.queue(self.data)
+return
 		
 		var store = function() {
 			if (self.data.stores) {
