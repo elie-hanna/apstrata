@@ -47,17 +47,23 @@ dojo.declare("surveyWidget.widgets.Survey",
 		//
 		storeName: "myStore",
 
-		constructor: function() {
+		constructor: function(attrs) {
+			if (attrs) {
+				if (attrs.storeName) this.storeName = attrs.storeName
+				if (attrs.editingMode) this.editMode = attrs.editingMode
+				if (attrs.schema) this.schema = attrs.schema				
+				if (attrs.usingCookie) this.usingCookie = attrs.usingCookie				
+			} else {
+				this.editMode = editingMode;
+				if(typeof(usingCookie) != "undefined")
+					this.useCookie = usingCookie;
+				else
+					this.useCookie = true;
+			}
+
 			if(schema != null)
 				this.jsonDataModel = decodeURIComponent(schema);
 			
-			this.editMode = editingMode;
-			
-			if(typeof(usingCookie) != "undefined")
-				this.useCookie = usingCookie;
-			else
-				this.useCookie = true;
-
 			dataModel = dojo.fromJson(this.jsonDataModel);
 
 			if (dataModel.title != null) this.surveyTitle = dataModel.title;
