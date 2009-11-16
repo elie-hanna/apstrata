@@ -176,7 +176,7 @@ dojo.declare("apstrata.explorer.InitDemos",
 	data: {
 			configurations: [{
 				apsdb: {
-					createSchemaACL: "group:survey-users"
+					createSchemaACL: "anonymous"
 				}
 			}],
 			
@@ -192,7 +192,11 @@ dojo.declare("apstrata.explorer.InitDemos",
 				},
 				{
 					apsdb: {
-						store: 'surveyStore'
+						store: 'surveyStore',
+						saveDocumentACL: 'anonymous',
+						deleteDocumentACL: 'anonymous',
+						getFileACL: 'anonymous',
+						queryACL: 'anonymous'
 					}
 				}
 			],
