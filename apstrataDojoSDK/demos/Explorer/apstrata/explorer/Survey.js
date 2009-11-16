@@ -90,6 +90,7 @@ dojo.require("dijit.form.Form");
 dojo.require("dijit.form.ValidationTextBox");
 dojo.require("dijit.form.FilteringSelect");
 dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.SimpleTextarea");
 dojo.require("surveyWidget.widgets.Survey");
 dojo.require("apstrata.util.schema.Schema");
 dojo.require("surveyWidget.widgets.config");

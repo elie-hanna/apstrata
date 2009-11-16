@@ -45,6 +45,7 @@ dojo.require("dijit.form.Form");
 dojo.require("dijit.form.ValidationTextBox");
 dojo.require("dijit.form.FilteringSelect");
 dojo.require("dijit.form.CheckBox");
+dojo.require("dijit.form.SimpleTextarea");
 dojo.require("dojo.parser"); 
 //dojo.registerModulePath("surveyWidget","../../../../demos/survey");
 //dojo.registerModulePath("apstrata","../../../../apstrata");

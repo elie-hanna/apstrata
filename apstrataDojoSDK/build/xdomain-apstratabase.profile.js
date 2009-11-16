@@ -17,6 +17,7 @@ dependencies = {
 				"dijit.form.FilteringSelect",
 				"dijit.form.CheckBox",				
 				"dijit.InlineEditBox",
+				"dijit.form.SimpleTextarea",
 				"apstrata.util.schema.Schema",
 				"apstrata.Connection",
 				"apstrata.Client",
