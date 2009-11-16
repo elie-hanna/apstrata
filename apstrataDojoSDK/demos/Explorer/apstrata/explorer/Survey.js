@@ -32,7 +32,7 @@ dojo.declare("apstrata.explorer.Survey",
 //		{label: "search", iconSrc: "../../apstrata/resources/images/pencil-icons/search.png"},	
 	],
 	
-	surveyStore: "myStore",
+	storeName: "surveyStore",
 	editable: true,
 	
 	refresh: function() {
@@ -65,7 +65,8 @@ dojo.declare("apstrata.explorer.Survey",
 	},
 	
 	newItem: function() {
-		this.openPanel(apstrata.explorer.SurveyEditor,{schema:null, editingMode:true})
+		var self = this
+		this.openPanel(apstrata.explorer.SurveyEditor,{schema:null, editingMode:true, storeName: self.storeName, usingCookie: false})
 	},
 	
 	postCreate: function() {
@@ -105,9 +106,22 @@ dojo.declare("apstrata.explorer.SurveyEditor",
 	maximizePanel: true,
 	
 	constructor: function(attrs) {
-		schema = attrs.schema
-		editingMode = attrs.editingMode
-		usingCookie = false
+		this.attrs = attrs
+	},
+	
+	postCreate: function() {
+		var survey = new surveyWidget.widgets.Survey(attrs)
+		dojo.place(survey.domNode, this.dvSurvey, 'only')
+		/*
+			if (attrs) {
+				if (attrs.storeName) this.storeName = attrs.storeName
+				if (attrs.editingMode) this.editMode = attrs.editingMode
+				if (attrs.schema) this.schema = attrs.schema				
+				if (attrs.usingCookie) this.usingCookie = attrs.usingCookie				
+			}
+		 
+		 */
+		this.inherited(arguments)
 	}
 })
 

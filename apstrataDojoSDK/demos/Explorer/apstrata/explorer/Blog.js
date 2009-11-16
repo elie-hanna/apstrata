@@ -26,7 +26,7 @@ dojo.provide("apstrata.explorer.BlogGallery")
 dojo.declare("apstrata.explorer.Blog",
 [apstrata.horizon.HStackableList], 
 {
-	storeName: 'explorerBlog',
+	storeName: 'blog',
 		
 	data: [
 		{label: "Posts", iconSrc: "../../apstrata/resources/images/pencil-icons/file.png"},
@@ -137,9 +137,6 @@ dojo.declare("apstrata.explorer.BlogPosts",
 	maximizePanel: true,
 	query: "formType=\"blog\"",
 	
-	constructor: function() {
-	},
-
 	fetch: function() {
 		var self = this
 		

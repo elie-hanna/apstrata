@@ -27,32 +27,65 @@ dojo.require("apstrata.horizon.Login")
 
 dojo.require("apstrata.StickyConnection")
 
+dojo.require("apstrata.horizon.HStackableMainPanel")
+dojo.require("apstrata.horizon.Login")
+dojo.require("apstrata.horizon.Preferences")
+
 dojo.declare("apstrata.explorer.MainPanel", 
-[apstrata.horizon.HStackableList], 
+[apstrata.horizon.HStackableMainPanel], 
 {
 	data: [
 		{label: "home", iconSrc: "../../apstrata/resources/images/pencil-icons/home.png"},
 		{label: "blog", iconSrc: "../../apstrata/resources/images/pencil-icons/movie.png"},
 		{label: "survey", iconSrc: "../../apstrata/resources/images/pencil-icons/comment.png"},
+		{label: "init demos", iconSrc: "../../apstrata/resources/images/pencil-icons/refresh.png"},
 		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"}
 	],
 	
 	startup: function() {
-		this.openPanel(apstrata.explorer.Survey)
+		this.openPanel(apstrata.explorer.HomePanel);
+	},
+	
+	_openPanelbyLabel: function(label) {
+		switch (label) {
+			case 'blog': this.openPanel(apstrata.explorer.Blog); break;
+			case 'survey': this.openPanel(apstrata.explorer.Survey); break;
+			case 'init demos': this.openPanel(apstrata.explorer.InitDemos); break;
+			case 'logout':  this.getContainer().connection.logout(); break;
+		}
 	},
 
 	onClick: function(index, label) {
 		var self = this
-		
-//		if (!connection.isLoggedIn()) {
-//			if (label='survey') this.openPanel(apstrata.horizon.Login, {loginSuccess: function() {s.openPanel(apstrata.explorer.Survey)}});
-//		}
-		
-		if (label=='blog') this.openPanel(apstrata.explorer.Blog);
-		else if (label=='home') this.openPanel(apstrata.horizon.Login);
-		else if (label=='survey') this.openPanel(apstrata.explorer.Survey);
-		else if (label=='preferences') this.openPanel(apstrata.explorer.SurveyEditor);
-		else this.closePanel()
+
+		if ((label == 'home') || (label == 'preferences')) {
+			switch (label) {
+				case 'home': this.home(); break;
+				case 'preferences': this.openPanel(apstrata.horizon.Preferences); break;
+			}
+		} else {
+			if (connection.hasCredentials()) {
+				self._openPanelbyLabel(label)
+			} else {
+				var okay = false
+				this.openPanel(apstrata.horizon.Login, {
+					success: function() {
+						okay = true
+						if (okay) self._openPanelbyLabel(label)
+					}, 
+					failure: function() {
+					} 
+				})
+			}
+		}			
+	},
+	
+	startup: function() {
+		this.home()
+	},
+	
+	home: function() {
+		this.openPanel(apstrata.explorer.HomePanel)
 	}
 })
 
@@ -82,17 +115,11 @@ dojo.declare("apstrata.explorer.Explorer",
 		})
 		
 		this.margin = {}
-		this.margin.w = 50
-		this.margin.h = 145
-
-/*
-		this.margin.topH = 70
-		this.margin.bottomH = 40
-		this.margin.leftW = 25
-		this.margin.rightW = 25
-*/
-		this.width = 450
-		this.height = 250
+		
+		this.margin.left = 25
+		this.margin.right = 25
+		this.margin.top = 75
+		this.margin.bottom = 30
 	},
 	
 	postCreate: function() {
@@ -129,4 +156,112 @@ dojo.declare("apstrata.explorer.Explorer",
 	}
 })
 
+dojo.declare("apstrata.explorer.HomePanel", 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
+{
+	widgetsInTemplate: true,
+	templatePath: dojo.moduleUrl("apstrata.explorer", "templates/HomePanel.html"),
+
+	maximizePanel: true
+})
+
+dojo.declare("apstrata.explorer.InitDemos", 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
+{
+	widgetsInTemplate: true,
+	templatePath: dojo.moduleUrl("apstrata.explorer", "templates/InitDemos.html"),
+
+	maximizePanel: true,
+
+	data: {
+			configurations: [{
+				apsdb: {
+					createSchemaACL: "group:survey-users"
+				}
+			}],
+			
+			stores: [
+				{
+					apsdb: {
+						store: 'explorerBlog',
+						saveDocumentACL: 'group:blog-users',
+						deleteDocumentACL: 'group:blog-users',
+						getFileACL: 'anonymous',
+						queryACL: 'anonymous'
+					}
+				},
+				{
+					apsdb: {
+						store: 'myStore'
+					}
+				}
+			],
+			
+			groups: [
+				{
+					apsim: {
+						group: 'blog-users'
+					}	
+				},
+				{
+					apsim: {
+						group: 'blog-admins'
+					}	
+				},
+				{
+					apsim: {
+						group: 'survey-users'
+					}	
+				}
+			],
+			
+			users: [
+				{
+					apsim:{
+						user: 'joe',
+						password: 'qw3rty',
+						name: 'Joe Blogger',
+						email: 'joe.blogger.explorer@apstrata.com',
+						group: 'blog-users',
+						update: 'false'
+					}
+				},
+				{
+					apsim:{
+						user: 'jane',
+						password: 'qw3rty',
+						name: 'Jane Blogger',
+						email: 'jane.blogger.explorer@apstrata.com',
+						group: 'blog-users',
+						update: 'false'
+					}
+				},
+				{
+					apsim:{
+						user: 'mike',
+						password: 'qw3rty',
+						name: 'Michael Liss',
+						email: 'michael.liss@apstrata.com',
+						group: 'survey-users',
+						update: 'false'
+					}
+				},
+				{
+					apsim:{
+						user: 'ryan',
+						password: 'qw3rty',
+						name: 'Ryan Murray',
+						email: 'ryan.murray@apstrata.com',
+						group: 'survey-users',
+						update: 'false'
+					}
+				},
+			]
+		},
+	
+	_init: function() {
+		var self = this
+		var is = new apstrata.util.BulkUpdate({connection: connection, data: self.data})
+	}
+})
 
