@@ -111,6 +111,14 @@ dojo.declare("apstrata.widgets.SlidingPanel", [dijit.layout._LayoutWidget], {
 		this.inherited(arguments)
 	},
 	
+	setVisible: function(visible) {
+		dojo.style(this.domNode, {visibility: visible?'visible':'hidden'})
+	},
+	
+	isVisible: function() {
+		return contextualHelp.domNode.style.visibility == "visible"
+	},
+	
 	keepOpen: function(/* boolean */ keepOpen) {
 		this._keepOpen = keepOpen
 		this._open()
