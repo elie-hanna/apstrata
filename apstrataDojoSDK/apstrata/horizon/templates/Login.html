@@ -1,4 +1,4 @@
-<div class='panel'>
+<div class='panel' style='overflow-y: auto;'>
 	{% if true %}
 	{% endif %}
 	<style>
@@ -8,8 +8,8 @@
 			font-size: 0.9em;
 			height: 320px;
 			margin: 10px;
+			height: 100%;		
 		}
-		
 		.LoginForm .title {
 			font-family:'Georgia','Serif';
 			font-size: 1.4em;
@@ -54,8 +54,8 @@
 			height: 30px;
 		}
 	</style>
-	<div class='homePanel' style='font-size: 1.1em;'>
-		<span style='position: relative; top: 40px; left: 170px;'>(do you need an <a href="">account</a>?)</span>
+	<div class='homePanel' style='font-size: 1em;'>
+		<span style='position: relative; top: 35px; left: 152px;'>(do you need an <a href="">account</a>?)</span>
 		<h3>Login to apstrata</h3>
 
 		<p>This will capture your login credentials and use them to sign all the apstrata API requests sent by the application. 
@@ -88,8 +88,6 @@
 				
 							<div class="label">Secret:</div>
 							<input type="password" dojoAttachPoint="mSecret" value="" />
-							
-							<br><br><br><br><br><br>
 						</form>
 						<div class="buttonContainer">
 							<button dojoAttachEvent="onClick: loginMaster" dojoType='dijit.form.Button'>Login</button>
@@ -113,8 +111,6 @@
 				
 							<div class="label">Password:</div>
 							<input type="password" dojoAttachPoint="pw" value="" />
-				
-							<br><br><br>
 						</form>
 						<div class="buttonContainer">
 							<button dojoAttachEvent="onClick: loginUser" dojoType='dijit.form.Button'>Login</button>
