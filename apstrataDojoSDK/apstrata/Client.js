@@ -58,10 +58,10 @@ dojo.declare("apstrata.Client",
 					duration: self._MESSAGE_DURATION
 			}])
 			
-			if ((attrs.action != "SaveDocument") || (attrs.action != "SetSchema")) {
-				var operation = new apstrata.Get(this.connection)
-			} else {
+			if ((attrs.action == "SaveDocument") || (attrs.action == "SetSchema")) {
 				var operation = new apstrata.Post(this.connection)
+			} else {
+				var operation = new apstrata.Get(this.connection)
 			}
 
 			operation.apsdbOperation = attrs.action
