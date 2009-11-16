@@ -1,10 +1,12 @@
 <div class='panel'>
+	{% if true %}
+	{% endif %}
 	<style>
 		.LoginForm {
 			background: #DDDDee;
 			padding: 20px;
 			font-size: 0.9em;
-			height: 260px;
+			height: 320px;
 			margin: 10px;
 		}
 		
@@ -40,28 +42,43 @@
 		    -webkit-border-radius: 5px;
 		    border-radius: 5px;
 		}
+
+		.LogingForm .buttonContainer {
+			width: 100%;
+			text-align: right;
+			
+		}
+		
+		.LoginForm button {
+			width: 60px;
+			height: 30px;
+		}
 	</style>
-	<div class='homePanel'>
+	<div class='homePanel' style='font-size: 1.1em;'>
+		<span style='position: relative; top: 40px; left: 170px;'>(do you need an <a href="">account</a>?)</span>
 		<h3>Login to apstrata</h3>
-		<!-- img src='../../apstrata/resources/images/pencil-icons/computer.png' width='70' style='position: absolute; top:15px; left: 460px;' -->
 
 		<p>This will capture your login credentials and use them to sign all the apstrata API requests sent by the application. 
 		You can look at how the requests are constructed and signed by moving your mouse over the 
-		<span class='highlight'>REST monitor</span> panel at the bottom of the page.</p>
-		<br>
+		<span class='highlight'>REST monitor</span> panel at the bottom of the page. 
+		You may change the apstrata <span class='highlight'>service URL</span> from the preferences panel.</p>
+		
 		<table width="100%">
 			<tr>
 				<td width="33%" valign="top">
-					<p>The <span class='highlight'>Master Credentials</span> that were provided when you created the apstrata
-					account will give you superuser control over all API calls. 
+					<p>If you use the <span class='highlight'>Master Credentials</span> that were provided when you created the apstrata
+					account, this will give you superuser control over all API calls. You need to login in this mode to be able to create
+					<strong>stores</strong>, <strong>groups</strong>, <strong>users</strong>, <strong>schemas</strong> and <strong>scripts</strong>. 
 					<br><br>
-					<span class='highlight'>User Credentials</span> provide ACL enforced access. You can use the <a href='../DevConsole'>Developer Console</a> 
-					to create an initial set of users for your applications.</p>
+
+					<span class='highlight'>User Credentials</span> provide ACL enforced access to saving, modifying and querying documents. 
+					This is the typical signing mode you'd use inside your applications before sending requests to apstrata.</p>
 				</td>
 				<td width="33%" valign="top">
 					<div class="LoginForm rounded-sml" 
-							dojoAttachPoint="dvMaster" 
-							dojoAttachEvent='onmouseover: _onMouseoverMaster,onmouseout: _onMouseoutMaster'>
+						dojoAttachPoint="dvMaster" 
+						dojoAttachEvent='onmouseover: _onMouseoverMaster,onmouseout: _onMouseoutMaster'>
+
 						<form action="" method="">
 							<span class="title">Master Credentials</span>
 							<br><br>
@@ -72,27 +89,36 @@
 							<div class="label">Secret:</div>
 							<input type="password" dojoAttachPoint="mSecret" value="" />
 							
-							<br><br><br><br><br>
+							<br><br><br><br><br><br>
 						</form>
-							<button dojoAttachEvent="onclick: loginMaster">Login</button>
+						<div class="buttonContainer">
+							<button dojoAttachEvent="onClick: loginMaster" dojoType='dijit.form.Button'>Login</button>
+						</div>
 					</div>
 				</td>
 				<td width="33%" valign="top">
-					<div class="LoginForm  rounded-sml" dojoAttachPoint="dvUser" dojoAttachEvent='onmouseover: _onMouseoverUser,onmouseout: _onMouseoutUser'>
-						<span class="title">User Credentials</span>
-						<br><br>
-			
-						<div class="label">Key:</div>
-						<input type="text" dojoAttachPoint="key" value="" />
-			
-						<div class="label">User Name:</div>
-						<input type="text" dojoAttachPoint="un" value="" />
-			
-						<div class="label">Password:</div>
-						<input type="text" dojoAttachPoint="pw" value="" />
-			
-						<br><br>
-						<button dojoAttachEvent="onclick: loginUser">Login</button>
+					<div class="LoginForm  rounded-sml" 
+						dojoAttachPoint="dvUser" 
+						dojoAttachEvent='onmouseover: _onMouseoverUser,onmouseout: _onMouseoutUser'>
+
+						<form action="" method="">
+							<span class="title">User Credentials</span>
+							<br><br>
+				
+							<div class="label">Key:</div>
+							<input type="text" dojoAttachPoint="key" value="" />
+				
+							<div class="label">User Name:</div>
+							<input type="text" dojoAttachPoint="un" value="" />
+				
+							<div class="label">Password:</div>
+							<input type="text" dojoAttachPoint="pw" value="" />
+				
+							<br><br><br>
+						</form>
+						<div class="buttonContainer">
+							<button dojoAttachEvent="onClick: loginUser" dojoType='dijit.form.Button'>Login</button>
+						</div>
 					</div>
 				</td>
 			</tr>

@@ -21,6 +21,7 @@
 dojo.provide("apstrata.horizon.HStackablePanel")
 dojo.provide("apstrata.horizon.HStackableList")
 dojo.provide("apstrata.horizon.HStackableContainer")
+dojo.provide("apstrata.horizon.HStackableMainPanel")
 
 dojo.require("dojo.cookie")
 
@@ -463,6 +464,27 @@ dojo.declare("apstrata.horizon.HStackableList",
 		})
 	}
 })			
+
+dojo.declare("apstrata.horizon.HStackableMainPanel", 
+[apstrata.horizon.HStackableList], 
+{
+	postCreate: function() {
+		var mainPanel = this
+
+		dojo.subscribe("/apstrata/connection/login/success", function(data) {
+			mainPanel.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"})
+			mainPanel.render()
+		})
+		
+		dojo.subscribe("/apstrata/connection/logout", function(data) {
+			mainPanel.data.pop()
+			mainPanel.render()
+			mainPanel.home()
+		})
+		
+		this.inherited(arguments)
+	}
+})
 
 dojo.declare("apstrata.horizon.HStackableMultiSelectList", 
 [apstrata.horizon.HStackableList], 

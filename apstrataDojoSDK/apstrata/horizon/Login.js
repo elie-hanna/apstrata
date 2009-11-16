@@ -60,6 +60,9 @@ dojo.declare("apstrata.horizon.Login",
 
 		this.getContainer().connection.loginMaster({
 			success: function() {
+				apstrata.apConfig.key = connection.credentials.key
+				apstrata.apConfig.secret = connection.credentials.secret
+				
 				if (self._success) self._success()
 			},
 			
@@ -80,6 +83,10 @@ dojo.declare("apstrata.horizon.Login",
 
 		this.getContainer().connection.loginUser({
 			success: function() {
+				apstrata.apConfig.key = connection.credentials.key
+				apstrata.apConfig.username = connection.credentials.username
+				apstrata.apConfig.password = connection.credentials.password
+
 				if (self._success) self._success()
 			},
 			
