@@ -224,7 +224,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 					data[i] = childModel;
 
 					// Create an XML schema field object
-					schemaFieldArr[i] = new SchemaField(childModel.name, "string", false);
+					if (childModel['type'] == 'text area')
+						schemaFieldArr[i] = new SchemaField(childModel.name, "text", false);
+					else
+						schemaFieldArr[i] = new SchemaField(childModel.name, "string", false);
 					var minCardinality = 0;
 					var maxCardinality = null;
 					// Make the field mandatory by setting its minimum cardinality to 1
