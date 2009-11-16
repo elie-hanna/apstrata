@@ -41,6 +41,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		surveyTitle : "Type the survey title here",
 		surveyDescription : "You can place the survey description here.",
 		fieldSerialNumber: 0,
+		attrs: null,
 
 		//
 		// Replace here with your store name
@@ -49,10 +50,23 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 		constructor: function(attrs) {
 			if (attrs) {
+				this.attrs = attrs
 				if (attrs.storeName) this.storeName = attrs.storeName
-				if(typeof(attrs.editingMode) != "undefined") this.editMode = attrs.editingMode
-				if (attrs.schema) this.schema = attrs.schema				
-				if(typeof(attrs.usingCookie) != "undefined") this.usingCookie = attrs.usingCookie				
+				if(typeof(attrs.editingMode) != "undefined") 
+					this.editMode = attrs.editingMode
+				else 
+					this.editMode = editingMode;
+				if (attrs.schema) 
+					this.schema = attrs.schema				
+				else
+					this.schema = schema;
+				if(typeof(attrs.usingCookie) != "undefined") 
+					this.usingCookie = attrs.usingCookie				
+				else
+					if(typeof(usingCookie) != "undefined")
+						this.useCookie = usingCookie;
+					else
+						this.useCookie = true;			
 			} else {
 				this.editMode = editingMode;
 				this.schema = schema;
@@ -581,7 +595,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 
 		loadAggregatedResults: function() {
-			var charts = new surveyWidget.widgets.SurveyCharting();
+			if(this.attrs != null && this.attrs.schema)
+				var charts = new surveyWidget.widgets.SurveyCharting(this.attrs);
+			else
+				var charts = new surveyWidget.widgets.SurveyCharting();
 			dojo._destroyElement(this.survey);
 			this.aggregatedResults.addChild(charts);
 		}

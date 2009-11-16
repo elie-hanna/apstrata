@@ -49,7 +49,10 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		constructor: function(attrs) {
 			if (attrs) {
 				if (attrs.storeName) this.storeName = attrs.storeName
-				if (attrs.schema) this.schema = attrs.schema				
+				if (attrs.schema) 
+					this.schema = attrs.schema	
+				else		
+					this.schema = schema;	
 			} else {
 				this.schema = schema;
 			}
