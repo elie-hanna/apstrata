@@ -21,8 +21,8 @@ dojo.provide("surveyWidget.widgets.config")
 
 dojo.declare("surveyWidget.widgets.config", [], {})
 
-//var apServiceURL = "http://apsdb.apstrata.com/apsdb/rest"  //"http://apsdb.apstrata.com/sandbox-apsdb/rest" 
-//var apSourceURL = "http://developer.apstrata.com/apstrataSDK/" 
+var apServiceURL = "http://apsdb.apstrata.com/sandbox-apsdb/rest"  //"http://apsdb.apstrata.com/sandbox-apsdb/rest" 
+var apSourceURL = "http://developer.apstrata.com/apstrataSDK/" 
 
-var apServiceURL = "http://localhost/apstratabase/rest" 
-var apSourceURL = "http://localhost:8080/apstrataDojoSDK/" 
+//var apServiceURL = "http://localhost/apstratabase/rest" 
+//var apSourceURL = "http://localhost:8080/apstrataDojoSDK/" 
