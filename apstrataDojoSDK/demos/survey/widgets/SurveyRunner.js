@@ -50,6 +50,8 @@ dojo.require("dojo.parser");
 //dojo.registerModulePath("apstrata","../../../../apstrata");
 dojo.require("apstrata.Connection")
 dojo.require("apstrata.Client")
+dojo.require("apstrata.util.schema.Schema");
+dojo.require("surveyWidget.widgets.config");
 dojo.require("surveyWidget.widgets.Survey");
 
 var connection = new apstrata.Connection({

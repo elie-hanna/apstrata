@@ -237,6 +237,19 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					this.spnValue.innerHTML = newField;
 					dojo.parser.parse(this.spnValue);
 					break;
+				case 'text area':
+					if(this.editMode){
+						this.divChoices.style.display = "none";	
+						var required = false;
+						this.fieldName = this.fldName.value;
+					} else
+						var required = this.fieldMandatory;						
+
+					newField = '<br/><textarea name="'+this.fieldName+'" dojoType="dijit.form.SimpleTextarea" rows="3" style="width:auto;" required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue">'+this.defaultFieldValue+'</textarea>';
+
+					this.spnValue.innerHTML = newField;
+					dojo.parser.parse(this.spnValue);
+					break;
 				default:
 					if(this.editMode){
 						this.divChoices.style.display = "none";	

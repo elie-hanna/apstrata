@@ -42,6 +42,8 @@ loadjscssfile("http://o.aolcdn.com/dojo/1.3/dojo/resources/dojo.css", "css");
 dojo.require("dijit.Declaration");
 //dojo.registerModulePath("surveyWidget","../../../../demos/survey");
 //dojo.registerModulePath("apstrata","../../../../apstrata");
+dojo.require("apstrata.util.schema.Schema");
+dojo.require("surveyWidget.widgets.config");
 dojo.require("surveyWidget.widgets.SurveyCharting");
 dojo.require("apstrata.Connection")
 dojo.require("apstrata.Client")

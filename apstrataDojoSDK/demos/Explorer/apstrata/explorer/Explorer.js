@@ -192,7 +192,7 @@ dojo.declare("apstrata.explorer.InitDemos",
 				},
 				{
 					apsdb: {
-						store: 'myStore'
+						store: 'surveyStore'
 					}
 				}
 			],

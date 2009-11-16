@@ -42,7 +42,7 @@ dojo.declare("apstrata.explorer.Survey",
 				action: "Query",
 				request: {
 					apsdb: {
-						store: self.surveyStore,
+						store: self.storeName,
 						query: "apsdb.creator=\"" + connection.credentials.username+ "\" and isSurveyMetadata=\"true\"",
 						queryFields: "surveyName,apsdb.documentKey,surveySchema"
 					}
@@ -80,8 +80,8 @@ dojo.declare("apstrata.explorer.Survey",
 	},
 	
 	onClick: function(index, label, attrs) {
-		this.openPanel(apstrata.explorer.SurveyActions, {schema: attrs.schema});
-//		this.openPanel(apstrata.explorer.SurveyActions, {schema: '%7B%22title%22%3A%22Maher%27s%20Survey%22%2C%22description%22%3A%22Maher%27s%20Survey%20Description%22%2C%22viewResults%22%3Atrue%2C%22successMessage%22%3A%22%22%2C%22questions%22%3A%5B%7B%22title%22%3A%22How%20r%20u%3F%22%2C%22type%22%3A%22radio%20button%22%2C%22choices%22%3A%22good%2Cmaher%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22MahersSurvey_1%22%2C%22defaultValue%22%3Anull%7D%2C%7B%22choices%22%3A%22%22%2C%22defaultValue%22%3A%22s_7744293024_MahersSu_CAEB07056D%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22apsdbSchema%22%2C%22title%22%3A%22Apstrata%20Survey%20Schema%20Name%22%2C%22type%22%3A%22text%22%7D%2C%7B%22choices%22%3A%22%22%2C%22defaultValue%22%3A%22s_7744293024_MahersSu_CAEB07056D%22%2C%22mandatory%22%3Afalse%2C%22name%22%3A%22apsdbDockey%22%2C%22title%22%3A%22Apstrata%20Survey%20Dockey%22%2C%22type%22%3A%22text%22%7D%5D%7D'});
+		var self = this
+		this.openPanel(apstrata.explorer.SurveyActions, {schema: attrs.schema, storeName: self.storeName});
 	}
 })
 
@@ -100,8 +100,6 @@ dojo.declare("apstrata.explorer.SurveyEditor",
 {
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.explorer", "templates/SurveyEditorPanel.html"),
-	schema: null,
-	//editingMode: true,
 
 	maximizePanel: true,
 	
@@ -110,17 +108,8 @@ dojo.declare("apstrata.explorer.SurveyEditor",
 	},
 	
 	postCreate: function() {
-		var survey = new surveyWidget.widgets.Survey(attrs)
+		var survey = new surveyWidget.widgets.Survey(this.attrs)
 		dojo.place(survey.domNode, this.dvSurvey, 'only')
-		/*
-			if (attrs) {
-				if (attrs.storeName) this.storeName = attrs.storeName
-				if (attrs.editingMode) this.editMode = attrs.editingMode
-				if (attrs.schema) this.schema = attrs.schema				
-				if (attrs.usingCookie) this.usingCookie = attrs.usingCookie				
-			}
-		 
-		 */
 		this.inherited(arguments)
 	}
 })
@@ -137,7 +126,8 @@ dojo.declare("apstrata.explorer.SurveyActions",
 	schema: null,
 	
 	constructor: function(attrs) {
-		schema = attrs.schema
+		this.schema = attrs.schema
+		this.storeName = attrs.storeName
 	},
 	
 	onClick: function(index, label) {
@@ -148,19 +138,19 @@ dojo.declare("apstrata.explorer.SurveyActions",
 		switch (label)
 		{
 			case 'Clone':
-				this.openPanel(apstrata.explorer.SurveyEditor,{schema:schema, editingMode:true})
-				break;
+				this.openPanel(apstrata.explorer.SurveyEditor,{schema:self.schema, editingMode:true, storeName: self.storeName, usingCookie: false})
+			break;
 			case 'Submit':
-				this.openPanel(apstrata.explorer.SurveyEditor, {schema:schema, editingMode:false})
-				break;
+				this.openPanel(apstrata.explorer.SurveyEditor,{schema:self.schema, editingMode:false, storeName: self.storeName, usingCookie: false})
+			break;
 			case 'Results':
-				this.openPanel(apstrata.explorer.SurveyResults, {schema:schema})
+				this.openPanel(apstrata.explorer.SurveyResults, {schema:self.schema, storeName: self.storeName})
 				
-		dojo.publish("/apstrata/documentation/topic", [{
-			topic: "Survey Code Snippet",
-			id: "Survey"
-		}])
-				break;
+				dojo.publish("/apstrata/documentation/topic", [{
+					topic: "Survey Code Snippet",
+					id: "Survey"
+				}])
+			break;
 			default:
 		}
 	}
@@ -173,10 +163,15 @@ dojo.declare("apstrata.explorer.SurveyResults",
 {
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.explorer", "templates/SurveyResultsPanel.html"),
-	schema: null,
 	maximizePanel: true,
-	
+
 	constructor: function(attrs) {
-		schema = attrs.schema
+		this.attrs = attrs
+	},
+	
+	postCreate: function() {
+		var surveyResults = new surveyWidget.widgets.SurveyCharting(this.attrs)
+		dojo.place(surveyResults.domNode, this.dvSurveyResults, 'only')
+		this.inherited(arguments)
 	}
 })

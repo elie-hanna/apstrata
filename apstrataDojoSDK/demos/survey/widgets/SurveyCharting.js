@@ -44,11 +44,18 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		// Replace here with your apsdb account
 		//  and target store name
 		//
-		storeName: "myStore",
+		storeName: "surveyStore",
 		
-		constructor: function() {
-			if(schema != null){
-				this.jsonDataModel = decodeURIComponent(schema);
+		constructor: function(attrs) {
+			if (attrs) {
+				if (attrs.storeName) this.storeName = attrs.storeName
+				if (attrs.schema) this.schema = attrs.schema				
+			} else {
+				this.schema = schema;
+			}
+			
+			if(this.schema != null){
+				this.jsonDataModel = decodeURIComponent(this.schema);
 				this.dojoDataModel = dojo.fromJson(this.jsonDataModel);
 				this.questions = this.dojoDataModel.questions;
 
@@ -701,7 +708,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		 * After creation of this widget: Set the title and call the query
 		 */
 		postCreate: function() {
-			if (schema != null) {
+			if (this.schema != null) {
 				this.title.innerHTML = this.dojoDataModel.title;
 				this.query();
 			}

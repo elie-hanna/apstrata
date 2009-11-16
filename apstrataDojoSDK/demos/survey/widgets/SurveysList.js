@@ -57,7 +57,7 @@ dojo.declare("surveyWidget.widgets.SurveysList",
 		username: null,
 		key: null,
 		
-		storeName: "myStore",
+		storeName: "surveyStore",
 		
 		constructor: function() {
 			if(connection.credentials.username != null && connection.credentials.username != ""){

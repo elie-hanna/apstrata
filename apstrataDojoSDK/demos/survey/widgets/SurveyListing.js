@@ -42,7 +42,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		apsdbKey: "apstrata",
 		apsdbSecret: "secret",
 		apsdbServiceUrl: "http://localhost:8080/autoforms/rest", //"http://apsdb.apstrata.com/apsdb/rest",
-		storeName: "myStore",
+		storeName: "surveyStore",
 		
 		constructor: function() {
 			if(schema != null){
