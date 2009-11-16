@@ -66,13 +66,15 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 		this.domNode.scrollLeft = this.domNode.scrollWidth - this.domNode.clientWidth
 	},
 		
-	getRemainingFreeWidth: function() {
+	getRemainingFreeWidth: function(excludeId) {
 		var w = 0
 		
 		for (id in this.__children) {
-			var child = this.__children[id]
-			
-			w += child.domNode.offsetWidth
+			if (id != excludeId) {
+				var child = this.__children[id]
+				
+				w += child.domNode.offsetWidth
+			}
 		}
 
 //	todo: don't know why this is not working on logout		
@@ -212,7 +214,7 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 		dojo.addClass(this.domNode, 'rounded-sml')
 
 		// Change panel width to occupy all remaining free space in container
-		if (this.maximizePanel) dojo.style(this.domNode, {width: self.getContainer().getRemainingFreeWidth()+'px'})
+		if (this.maximizePanel) dojo.style(this.domNode, {width: self.getContainer().getRemainingFreeWidth(self.id)+'px'})
 	},
 
 	postCreate: function() {
@@ -329,6 +331,7 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 	 * Invoked by the container when the window size changes
 	 */
 	layout: function() {
+		this._setStyle()
 	}
 })
 
