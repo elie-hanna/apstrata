@@ -326,6 +326,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 			var sd = client.call({
 					action: "SaveDocument",
+					useHttpMethod : "GET",
 					request: saveDocumentRequest,
 					load: function(operation) {
 					},
@@ -541,6 +542,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 				var sd = client.call({
 					action: "SaveDocument",
+					useHttpMethod : "GET",
 					request: saveDocumentRequest,
 					load: function(operation) {
 						dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
