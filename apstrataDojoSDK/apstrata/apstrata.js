@@ -136,16 +136,6 @@ if (typeof apstrata == "undefined" || !apstrata.configured) {
 		// Init default logger apstrata.logger: This is happening in BasicLogger to guarantee that
 		// it happens before any code is run
 
-		var apConfigClass
-
-		apstrata.loadConfig = function(apConfigClass) {
-			try {
-				dojo.require(apConfigClass)		
-			} catch (error) {
-				
-			}
-		}
-	
 		dojo.extend(dijit._Widget, {
 			_apstrataRoot: apstrata.baseUrl
 		})
