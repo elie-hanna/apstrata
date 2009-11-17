@@ -278,3 +278,22 @@ dojo.declare("apstrata.widgets.Alert",
 	}
 
 })
+
+apstrata.alert = function(msg, origin) {
+	var dialog = new apstrata.widgets.Alert({width: 300, 
+											height: 250, 
+											actions: "close", 
+											message: msg, 
+											clazz: "rounded-sml Alert", 
+											iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
+											animation: {from: origin}, 
+											modal: true })
+
+	dialog.show()
+	var handle = dojo.connect(dialog, "buttonPressed", function(label) {
+		dojo.disconnect(handle)
+		dialog.hide()
+		dialog.destroy()
+	})
+}
+
