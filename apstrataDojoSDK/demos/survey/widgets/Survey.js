@@ -305,7 +305,6 @@ dojo.declare("surveyWidget.widgets.Survey",
 			xmlSchema.addACLGroup(aclGroup);
 
 			var client = new apstrata.Client({connection: connection});
-			var surveyData = null;
 			var surveySchema = this.generateSurveySchema(data);
 			var listResultSchema = this.generateListResultSchema(arrFields, arrTitleFields, xmlSchema.name, dockey);
 				
@@ -346,7 +345,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					action: "SetSchema",
 					request: setSchemaRequest,
 					load: function(operation) {
-						surveyData = self.generateAndDisplayEmbedCodes(surveySchema, listResultSchema);
+						self.generateAndDisplayEmbedCodes(surveySchema, listResultSchema);
 					},
 					error: function(operation) {
 						var warningMsg = '';
@@ -365,8 +364,6 @@ dojo.declare("surveyWidget.widgets.Survey",
 						self.warningMessage.innerHTML = warningMsg;
 					}
 				});
-
-			return surveyData;
 		},
 
 		/**
@@ -489,8 +486,6 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '</textarea>';*/
 			this.chartingEmbed.style.display = "";
 			this.chartingEmbed.width = "800px";
-
-			return surveyData;
 		},
 
 		addslashes: function(str) {
