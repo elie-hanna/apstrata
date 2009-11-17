@@ -91,7 +91,6 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				apsdb: {
 					store: charting.storeName,
 					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\"",
-					queryFields: '*',
 					count: true
 				}
 			};
