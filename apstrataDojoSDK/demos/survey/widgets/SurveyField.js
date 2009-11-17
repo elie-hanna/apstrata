@@ -245,7 +245,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					} else
 						var required = this.fieldMandatory;						
 
-					newField = '<br/><textarea name="'+this.fieldName+'" dojoType="dijit.form.SimpleTextarea" rows="3" style="width:auto;" required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue">'+this.defaultFieldValue+'</textarea>';
+					newField = '<br/><textarea name="'+this.fieldName+'" dojoType="dijit.form.SimpleTextarea" rows="2" style="width:190px;" required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue">'+this.defaultFieldValue+'</textarea>';
 
 					this.spnValue.innerHTML = newField;
 					dojo.parser.parse(this.spnValue);

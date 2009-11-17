@@ -131,7 +131,7 @@ dojo.declare("apstrata.StickyConnection",
 			}])
 
 //			this.saveToCookie()
-		},
+		}
 
 	});
 	

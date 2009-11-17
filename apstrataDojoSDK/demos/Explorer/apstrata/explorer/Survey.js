@@ -52,7 +52,7 @@ dojo.declare("apstrata.explorer.Survey",
 
 					self.data = []
 					dojo.forEach(operation.response.result.documents, function(document) {
-						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{schema: document.fields[2].values[0]}})
+						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{schema: document.fields[2].values[0], documentKey: document.fields[1].values[0]}})
 					})
 	
 					// Cause the DTL to rerender with the fresh self.data
@@ -62,6 +62,8 @@ dojo.declare("apstrata.explorer.Survey",
 				error: function(operation) {
 				}
 			});
+			
+			this.inherited(arguments)
 	},
 	
 	newItem: function() {
@@ -82,6 +84,37 @@ dojo.declare("apstrata.explorer.Survey",
 	onClick: function(index, label, attrs) {
 		var self = this
 		this.openPanel(apstrata.explorer.SurveyActions, {schema: attrs.schema, storeName: self.storeName});
+	},
+	
+	onDeleteItem: function(index, label, attrs) {
+		var self = this
+		this.getContainer().client.call({
+				action: "DeleteSchema",
+				request: {
+					apsdb: {
+						schemaName : attrs.documentKey
+					}
+				},
+				load: function(operation) {
+					self.getContainer().client.call({
+						action: "DeleteDocument",
+						request: {
+							apsdb: {
+								store : self.storeName,
+								documentKey : attrs.documentKey
+							}
+						},
+						load: function(operation) {
+							self.refresh();
+						},
+						error: function(operation) {
+							// something happened
+						}
+					});
+				},
+				error: function(operation) {
+				}
+			});
 	}
 })
 

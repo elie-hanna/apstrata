@@ -56,7 +56,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					this.editMode = attrs.editingMode
 				else 
 					this.editMode = editingMode;
-				if (attrs.schema) 
+				if(typeof(attrs.schema) != "undefined")
 					this.schema = attrs.schema				
 				else
 					this.schema = schema;
@@ -320,7 +320,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			}, {
 					apsdb: {
 							store: self.storeName,
-						documentKey: dockey
+							documentKey: dockey
 				}
 			});
 
@@ -330,7 +330,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					load: function(operation) {
 					},
 					error: function(operation) {
-						self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
+						self.warningMessage.innerHTML = operation.response.metadata.errorDetail;
 					}
 				});
 				
@@ -523,7 +523,6 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var cookie = 'apstrata.' + apstrata.apConfig.key + '.' + strTitleForCookie;
 
 			if(this.surveyform.validate()){
-				this.successMessage.innerHTML = "Your survey is being processed...";
 				var jsonObj = this.surveyform.getValues();
 				var self = this;
 
@@ -558,7 +557,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 						}
 					},
 					error: function(operation) {
-						self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
+						if (operation.response.metadata.errorDetail.indexOf('Incorrect value for fields') === 0)
+							self.errorMessage.innerHTML = 'Please select a value for "Which presenter deserves to win Best of Show?"';
+						else
+							self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
 					}
 				});
 

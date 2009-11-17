@@ -66,6 +66,7 @@ dojo.declare("apstrata.explorer.Blog",
 				case 'Gallery': this.openPanel(apstrata.explorer.BlogGallery)
 					break;
 				default:
+					break;
 			}
 		}
 	}
@@ -120,7 +121,7 @@ dojo.declare("apstrata.explorer.BlogPost",
 					"default.readACL": readACL,
 
 					apsdb: {
-						store: self.getParent().storeName,
+						store: self.getParent().storeName
 					}
 				},
 				formNode: self.blogForm.domNode,
@@ -167,7 +168,7 @@ dojo.declare("apstrata.explorer.BlogPosts",
 						creationTime: item.getValue('apsdb.creationTime'),
 						title: item.getValue('title')?item.getValue('title'):"",
 						blogPost: item.getValue('blogPost')?item.getValue('blogPost'):"",
-						hasImage: item.getValue('hasImage')?item.getValue('hasImage'):false,
+						hasImage: item.getValue('hasImage')?item.getValue('hasImage'):false
 					}
 					
 					if (item.getValue("apsdb_attachments")) {

@@ -368,6 +368,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 
 	refresh: function() {
 		this._editMode = false
+		
 	},
 	
 	_onClick: function(e) {
@@ -428,13 +429,14 @@ dojo.declare("apstrata.horizon.HStackableList",
 			dojo.forEach(items, function(item) {
 				var n = dojo.create("div", {innerHTML: "<div class='iconDelete'><img src='"+ self._apstrataRoot +"/resources/images/pencil-icons/stop-red.png'></div>"})
 				n.setAttribute('itemLabel', item.getAttribute('itemLabel'))
+				n.setAttribute('itemIndex', item.getAttribute('itemIndex'))
 				dojo.place(n, item, 'first')
 				
 				dojo.connect(n, 'onclick', function(e) {
 					self._alert(self.msgDelete + '[' + e.currentTarget.getAttribute('itemLabel') + "] ?", 
 								e.currentTarget, 
 								function(target) {
-									self.onDeleteItem(target.getAttribute('itemIndex'), target.getAttribute('itemLabel'))
+									self.onDeleteItem(target.getAttribute('itemIndex'), target.getAttribute('itemLabel'), self.data[target.getAttribute('itemIndex')].attrs)
 								}, function(target) {
 									
 								})
@@ -444,7 +446,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 		}
 	},
 	
-	onDeleteItem: function(index, label) {},
+	onDeleteItem: function(index, label, attrs) {},
 
 	_alert: function (msg, origin, yes, no) {
 		dialog3 = new apstrata.widgets.Alert({width: 300, 
