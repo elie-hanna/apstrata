@@ -64,15 +64,18 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		},
 		
 		query: function() {
-
 			var client = new apstrata.Client({connection: connection});
 			var listing = this;
+			var strArrFieldsToDisplay = '';
+			for(var i=0; i<listing.arrFieldsToDisplay.length; i++)
+				strArrFieldsToDisplay += listing.arrFieldsToDisplay[i] + ',';
+			strArrFieldsToDisplay = strArrFieldsToDisplay.substring(0, strArrFieldsToDisplay.length - 1);
 
 			var queryRequest = {
 				apsdb: {
 					store: listing.storeName,
 					query: "apsdb.objectName=\"" + listing.apsdbSchema + "\"",
-					queryFields: listing.arrFieldsToDisplay
+					queryFields: strArrFieldsToDisplay
 				}
 			};
 
