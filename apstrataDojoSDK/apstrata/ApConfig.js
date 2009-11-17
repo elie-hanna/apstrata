@@ -30,7 +30,8 @@ apstrata.apConfig = {
 	key:'',
 	secret:'',
 	serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest',
-	timeout: 10000	
+	defaultStore: '',
+	timeout: 10000    
 }
 */
 
