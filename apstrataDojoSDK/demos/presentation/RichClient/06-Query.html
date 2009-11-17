@@ -24,12 +24,8 @@ dojo.require("apstrata.widgets.QueryWidget")
 dojo.require("apstrata.apsdb.client.Connection")
 dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus")
 
-var connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
-connection.credentials.key = '68CA69E0CE'
-connection.credentials.secret = '8099BF56799BFA67C945'
-
 var storeAttrs = {	
-	connection: connection, 
+	connection: apstrata.presentation.connection, 
 	resultsPerPage: 5,
 	apsdbStoreName: apstrata.presentation.connection.defaultStore, 
 	fields:"name, dob, JSExperience, totalExperience", 
