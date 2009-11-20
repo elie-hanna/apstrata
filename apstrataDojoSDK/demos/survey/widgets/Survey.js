@@ -43,23 +43,36 @@ dojo.declare("surveyWidget.widgets.Survey",
 		fieldSerialNumber: 0,
 		attrs: null,
 
-		//
-		// Replace here with your store name
-		//
+		// Store used by the survey widget
 		storeName: "surveyStore",
-
+		
+		/**
+		 * Constructor of the survey widget.
+		 * 
+		 * @param attrs
+		 * 		JSON object containing some info about the survey: 
+		 * 			storeName: the store used by the survey widget
+		 * 			editingMode: When set to true, the suvey is in edit mode and it allows user to clone the survey. 
+		 * 						 When set to false, the survey is in running mode and it allows users to take the survey
+		 * 			schema: Contains the schema of the loaded survey or is null when creating a new survey from scratch  
+		 * 			usingCookie: When set to true, the survey can be taken only once per user (based on the value of a cookie)
+		 * 						 When set to false, there is no limit in taking the survey.
+		 */
 		constructor: function(attrs) {
 			if (attrs) {
 				this.attrs = attrs
 				if (attrs.storeName) this.storeName = attrs.storeName
+				
 				if(typeof(attrs.editingMode) != "undefined") 
 					this.editMode = attrs.editingMode
 				else 
 					this.editMode = editingMode;
+					
 				if(typeof(attrs.schema) != "undefined")
 					this.schema = attrs.schema				
 				else
 					this.schema = schema;
+					
 				if(typeof(attrs.usingCookie) != "undefined") 
 					this.usingCookie = attrs.usingCookie				
 				else
@@ -79,63 +92,72 @@ dojo.declare("surveyWidget.widgets.Survey",
 			if(this.schema != null)
 				this.jsonDataModel = decodeURIComponent(this.schema);
 			
-			dataModel = dojo.fromJson(this.jsonDataModel);
+			dataModel = dojo.fromJson(this.jsonDataModel); // dataModel object contains the dojo representation of the survey schema
 
-			if (dataModel.title != null) this.surveyTitle = dataModel.title;
-			if (dataModel.description != null) this.surveyDescription = dataModel.description;
+			if (dataModel.title != null) this.surveyTitle = dataModel.title; // extract the title from the survey schema
+			if (dataModel.description != null) this.surveyDescription = dataModel.description; // extract the description from the survey schema
 			
-			if(!this.editMode) 
+			if(!this.editMode) // If the survey widget is not in editing mode use a different template
 				this.templatePath = dojo.moduleUrl("surveyWidget.widgets", "templates/SurveyRun.html");
 		},
 		
+		/**
+		 * Function called after the constructor used to construct and display the survey widget.
+		 * 
+		 */
 		postCreate: function(){
-			// Assemble the cookie name
+			// Assemble the cookie name based on the survey's title and the authentication key. This cookie is used to test if the survey has already been taken.
 			var strTitleForCookie = this.surveyTitle.replace(/ /g, ''); // Remove all spaces from the survey title
 			strTitleForCookie = (strTitleForCookie.length > 30) ? strTitleForCookie.substring(0, 30) : strTitleForCookie;
 			var cookie = 'apstrata.' + apstrata.apConfig.key + '.' + strTitleForCookie;
 			
-			// Make sure that this user has not already taken the survey and already a cookie
+			// Test if this user has not already taken the survey by checking the existence of the cookie
 			if (!this.editMode && this.useCookie && dojo.cookie(cookie) == 'taken') { 
-				if (dataModel.viewResults) {
-					this.loadAggregatedResults();
+				if (dataModel.viewResults) { // checks the survey's configuration to see what should be loaded after submission
+					this.loadAggregatedResults(); // Loads the results charts 
 				} else {
 					this.surveyDiv.style.display = 'none';
-					this.successMessage.innerHTML = dataModel.successMessage;
+					this.successMessage.innerHTML = dataModel.successMessage; // Shows the success message extracted from the survey's schema
 				}
 			} else {
-			this.inherited(arguments);
-			// when clicking on "get Data Model" the getModel function is called
-			if (this.editMode) {
-				this.connect(this.btnGetData, "onclick", "getModel");
-				this.connect(this.viewResults, "onclick", "toggleTextBox");
-			}
-			else {
-				this.connect(this.btnSubmit, "onclick", "saveSurvey");
-			}
-
-			this.questionContainer = this.initDnd();
-			var survey = this;
-
-			dojo.forEach(dataModel.questions, function(fieldDataModel) {
-				// Do not show the 'apsdbSchema' field
-				var isVisible = (fieldDataModel.name != 'apsdbSchema') && (fieldDataModel.name != 'apsdbDockey');
-				if(isVisible || (!isVisible && !survey.editMode) )
-					var newField = survey.createField(fieldDataModel, isVisible);
-			});
-
-			if(this.editMode)
-				var newField = this.createField(null, true);
+				this.inherited(arguments);
+				// when clicking on "get Data Model" the getModel function is called
+				if (this.editMode) {
+					this.connect(this.btnGetData, "onclick", "getModel"); // Attaching the getModel function to the onclick event on the "Generate Embed Code" button
+					this.connect(this.viewResults, "onclick", "toggleTextBox"); // Attaching the toggleTextBox function to the onclick event on the "Show results to users" check box
+				}
+				else {
+					this.connect(this.btnSubmit, "onclick", "saveSurvey"); // Attaching the saveSurvey function to the onclick event on the "Submit" button
+				}
+	
+				this.questionContainer = this.initDnd();
+				var survey = this;
+	
+				dojo.forEach(dataModel.questions, function(fieldDataModel) {
+					var isVisible = (fieldDataModel.name != 'apsdbSchema') && (fieldDataModel.name != 'apsdbDockey');// Sets isVisible to false if the current field is either apsdbSchema or apsdbDockey.
+					if(isVisible || (!isVisible && !survey.editMode) ) // This variable is used to display only the fields that have isVisible set to true.
+						var newField = survey.createField(fieldDataModel, isVisible); // Creates and displays the question corresponding to the current field.
+				});
+	
+				if(this.editMode)
+					var newField = this.createField(null, true); // If the survey is in edit mode, create a dummy question used to create new ones.
 			}
 		},
 		
+		/**
+		 * Defines the drag and drop area.
+		 * 
+		 *  @return The area in which the survey's questions can be dragged and dropped.
+		 */
 		initDnd: function() {
 			src = new dojo.dnd.Source(this.questions.domNode,{withHandles:true});
 			return(src);
 		},
 		
-		deselectFields: function() {
-		},
-		
+		/**
+		 * Shows or hides the "success message" field depending on the value of the "Show results to users" check box.
+		 * 
+		 */
 		toggleTextBox: function() {
 			if(this.viewResults.checked)
 				this.successMsgDiv.style.display = "none";
@@ -143,6 +165,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 				this.successMsgDiv.style.display = "";
 		},
 		
+		/**
+		 * Shows or hides the "success message" field depending on the value of the "Show results to users" check box.
+		 * 
+		 */
 		createField: function(dataModel, isVisible) {
 			var newField = new surveyWidget.widgets.SurveyField(dataModel, this.editMode, ++this.fieldSerialNumber);
 
@@ -554,10 +580,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 						}
 					},
 					error: function(operation) {
-						if (operation.response.metadata.errorDetail.indexOf('Incorrect value for fields') === 0)
-							self.errorMessage.innerHTML = 'Please select a value for "Which presenter deserves to win Best of Show?"';
-						else
-							self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
+						self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
 					}
 				});
 
