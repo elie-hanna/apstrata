@@ -56,17 +56,7 @@
 			dojo.require("apstrata.util.BulkUpdate")
 			
 			dojo.addOnLoad(function() {
-				connection = new apstrata.StickyConnection(
-/*
-					{
-						credentials: {
-							key: "7744293024",
-							username: "joe",
-							password: "qw3rty"
-						}
-					}
-*/
-				)
+				connection = new apstrata.StickyConnection()
 
 				dojo.registerModuleRelative ("apstrata.explorer", "apstrata/explorer");
 				dojo.registerModuleRelative ("surveyWidget.widgets", "../survey/widgets");
