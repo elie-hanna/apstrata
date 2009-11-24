@@ -18,11 +18,12 @@
  * *****************************************************************************
  */
 dojo.provide("surveyWidget.widgets.config")
-
 dojo.declare("surveyWidget.widgets.config", [], {})
 
-var apServiceURL = "http://apsdb.apstrata.com/sandbox-apsdb/rest"  //"http://apsdb.apstrata.com/sandbox-apsdb/rest" 
-var apSourceURL = "http://developer.apstrata.com/apstrataSDK/" 
+// The following two global variables are used when constructing the survey embed codes.
 
-//var apServiceURL = "http://localhost/apstratabase/rest" 
-//var apSourceURL = "http://localhost:8080/apstrataDojoSDK/" 
+// apServiceURL is used to communicate with our REST-ful services. 
+var apServiceURL = "http://apsdb.apstrata.com/sandbox-apsdb/rest"  //"http://apsdb.apstrata.com/apsdb/rest" 
+
+// apSourceURL points to where the survey code is hosted. 
+var apSourceURL = "http://developer.apstrata.com/apstrataSDK/" 

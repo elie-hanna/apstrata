@@ -17,9 +17,12 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
+/*
+ * This file is used to require the needed class for the survey widget.
+ */
 
-var schema = null
-var editingMode = false
+var schema = null // The global variable schema is null when creating a new survey or contains the detailed schema of the survey to load
+var editingMode = false //When set to true, the survey loaded is editable
 
 function loadjscssfile(filename, filetype){
 	 if (filetype=="js"){ //if filename is a external JavaScript file
@@ -55,6 +58,7 @@ dojo.require("apstrata.util.schema.Schema");
 dojo.require("surveyWidget.widgets.config");
 dojo.require("surveyWidget.widgets.Survey");
 
+//The global variable connection contains the credentials information to be used by the survey. They are set from the apConfig tag found in the html page using the survey widget
 var connection = new apstrata.Connection({
 		credentials: {
 			key: apstrata.apConfig.key,

@@ -31,21 +31,25 @@ dojo.declare("surveyWidget.widgets.SurveyObj",
 		surveyName: "",
 		surveyId: "",
 		
+		/**
+		 * Constructor of the SurveyObj widget.
+		 * 
+		 * @param attrs
+		 * 		JSON object containing some info about the survey: 
+		 * 			nameParam: Title of the survey
+		 * 			idParam: documentKey of the metadata document representing the survey 
+		 */
 		constructor: function(attrs) {
 			this.surveyName = attrs.nameParam;
 			this.surveyId = attrs.idParam;
 		},
 		
+		/**
+		 * Function called after the constructor, used to construct and display the SurveyObj widget.
+		 * 
+		 */
 		postCreate: function(){
 			this.inherited(arguments);
-		},
-		
-		cloneSurvey: function() {
-			
-			var editingMode = true;
-			//var surveyToClone = new surveyWidget.widgets.Survey();
-			//dojo._destroyElement(this.surveysList);
-			//this.surveyEdit.addChild(surveyToClone);
 		}
 	});
 
@@ -59,6 +63,10 @@ dojo.declare("surveyWidget.widgets.SurveysList",
 		
 		storeName: "surveyStore",
 		
+		/**
+		 * Constructor of the SurveysList widget.
+		 * 
+		 */
 		constructor: function() {
 			if(connection.credentials.username != null && connection.credentials.username != ""){
 				this.username = connection.credentials.username;
@@ -66,15 +74,22 @@ dojo.declare("surveyWidget.widgets.SurveysList",
 			}
 		},
 		
+		/**
+		 * Function called after the constructor, used to construct and display the SurveysList widget.
+		 * 
+		 */
 		postCreate: function(){
 			if(this.username != null){
-				//this.title.innerHTML = this.dojoDataModel.title;
 				this.query();
 			}
 			else
 				this.title.innerHTML = "No user is logged in";
 		},
 		
+		/**
+		 * Sends a query request to the store to get the survey's name, schema and documentKey of all the surveys created by the current user
+		 * 
+		 */
 		query: function() {
 
 			var client = new apstrata.Client({connection: connection});
@@ -93,19 +108,21 @@ dojo.declare("surveyWidget.widgets.SurveysList",
 					listing.display(operation.response);
 				},
 				error: function(operation) {
-					//fail(operation)
 				}
 			});
 			
 		},
 		
+		/**
+		 * Displays the list of surveys created by the current user
+		 * 
+		 */
 		display: function(data) {
 			
 			var newField = null;
 			var arrSurvey = data.result.documents;
 			
 			for (var doc = 0; doc < arrSurvey.length; doc++) {
-				//newField += "<div><a title=\"Powered by apstrata\" href=# onClick=\"javascript:cloneSurvey('"+arrSurvey[doc].fields[2].values[0]+"')\">"+arrSurvey[doc].fields[0].values[0]+" </a></div>";
 				newField = new surveyWidget.widgets.SurveyObj({
 					nameParam: arrSurvey[doc].fields[0].values[0],
 					idParam: arrSurvey[doc].fields[2].values[0]

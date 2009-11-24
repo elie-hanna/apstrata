@@ -46,6 +46,18 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 		serialNumber: 0,
 		initialState: null,		
 		
+		/**
+		 * Constructor of the SurveyField widget.
+		 * 
+		 * @param dataModel
+		 * 		dojo object containing the details of the question to create
+		 * 
+		 * @param editMode
+		 * 		When set to true, the suvey is in edit mode and it allows user to edit the current question. 
+		 * 
+		 * @param serialNumber
+		 * 		Integer representing the index of the current field  
+		 */
 		constructor: function(dataModel, editMode, serialNumber) {
 			this.fieldDataModel = dataModel;
 			this.editMode = editMode;
@@ -71,12 +83,23 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 				this.templatePath = dojo.moduleUrl("surveyWidget.widgets", "templates/SurveyFieldRun.html");
 		},
 
+		/**
+		 * Link the current question to its Survey object.
+		 * 
+		 * @param parentSurvey
+		 * 		Object of type Survey that contains all the questions
+		 *  
+		 */
 		setParent: function(parentSurvey) {
 			this.parentSurvey = parentSurvey;
 			if(this.editMode)
 				this.parentSurvey.questionContainer.sync();
 		},
-
+		
+		/**
+		 * Function called after the constructor, used to construct and display the SurveyField widget.
+		 * 
+		 */
 		postCreate: function(){
 			this.inherited(arguments);
 			
@@ -87,9 +110,6 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 						if (this.title == null) 
 							this.deleteField();
 						else {
-							//var constructedFieldName = this.constructFieldName();
-							
-							//this.fldName.value = constructedFieldName;
 							this.unselect();
 						}
 					});
@@ -103,7 +123,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			}
 			
 			if(this.fieldDataModel != null){
-				// Create the fields using the field schema if it was sent 
+				// Create the field using the field schema if it was sent 
 				if(this.editMode){
 					this.lstType.value = this.fieldType;
 					this.chkMandatory.checked = this.fieldMandatory;
@@ -114,18 +134,32 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			}
 		},
 		
+		/**
+		 *	Called after a widget's children, and other widgets on the page, have been created.
+		 *	Provides an opportunity to manipulate any children before they are displayed.
+		 *	This is useful for composite widgets that need to control or layout sub-widgets.
+		 *	Many layout widgets can use this as a wiring phase.
+		 */
 		startup: function(){
 			this.inherited(arguments);
 		},
 		 
+		/**
+		 *	Deletes the selected question
+		 */
 		deleteField: function() {
 			this.destroy();
 		},
 		
+		/**
+		 *	Function called when a question is selected
+		 */
 		selectedEvent: function() {
-			//this.highlight();	
 		},
-				
+			
+		/**
+		 *	Sets the current question to be in edit mode
+		 */	
 		select: function() {
 			if (this.parentSurvey.editMode) {
 				
@@ -147,10 +181,11 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					this.changeType();
 				}
 			}
-
-				//this.selected = true;	
 		},
-				
+		
+		/**
+		 *	Sets the current question to be in unselected
+		 */			
 		unselect: function() {
 			this.editor.style.display = "none";	
 			this.surveyField.style.backgroundColor = "";
@@ -159,9 +194,15 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			this.selected = false;
 		},
 		
+		/**
+		 *	Function called when a the initial state of a question is saved, before editing it
+		 */	
 		saveInitialState: function() {
 		},
 		
+		/**
+		 *	Restores the initial state of a question before it was edited
+		 */	
 		restoreInitialState: function() {
 			this.title = this.initialState.title;
 			this.fldTitle.setValue(this.initialState.title);
@@ -183,6 +224,9 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			this.unselect();
 		},
 		
+		/**
+		 *	Creates and displays the current question based on its type
+		 */	
 		changeType: function() {
 
 			if(this.editMode){
@@ -265,6 +309,9 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			}
 		},
 		
+		/**
+		 *	Creates a question of type list
+		 */	
 		createSelectTag: function() {
 			var optionsTags = "";
 			var newField = "";
@@ -282,6 +329,9 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			return newField;
 		},
 		
+		/**
+		 *	Creates a question of type radio button
+		 */	
 		createRadioButtonsTag: function() {
 			var newField = "<br/>";
 			var checked = "";
@@ -303,6 +353,9 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			return newField;
 		},
 
+		/**
+		 *	Creates a question of type multiple choice
+		 */	
 		createMultipleChoiceTag: function() {
 			var newField = "<br/>";
 			var checked = "";
@@ -330,8 +383,10 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			return newField;
 		},
 
+		/**
+		 *	Displays a field box or a check box depending on the type of the current question
+		 */	
 		fieldModified: function() {
-				//this.surveyField.style.backgroundColor = "";
 				if (this.lstType.value == "checkbox") {
 					this.spnValue.style.display = "none";
 					this.checkBoxValue.style.display = "";
@@ -345,6 +400,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					this.selectedEvent();
 		},
 		
+		// NOT USED (TO DELETE)	
 		getData: function() {
 			var survey = this;
 			var value = this.fldValue.value;
@@ -357,19 +413,25 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			return data;
 		},
 		
+		
+		/**
+		 *	Creates a JSON object containing the current question's information
+		 *
+		 * @return The created JSON object
+		 */	
 		getModel: function() {
 			var survey = this;
 			var fieldValue = "";
 			var type = survey.lstType.value;
 
-			var constructedFieldName = this.fldName.value; //survey.constructFieldName();
+			var constructedFieldName = this.fldName.value;
 
 			var model = {
 				title: survey.title,
 				type: survey.lstType.value,
 				choices: survey.txtChoices.value,
 				mandatory: survey.chkMandatory.checked,
-				name: constructedFieldName//survey.fldName.value
+				name: constructedFieldName
 			}
 			return model;
 		},
@@ -382,7 +444,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 		constructFieldName: function () {
 			var survey = this;
 			
-			var constructedFieldName = this.parentSurvey.title.value; //survey.fldTitle.value;
+			var constructedFieldName = this.parentSurvey.title.value; 
 			constructedFieldName = constructedFieldName.replace(/&amp;/g, '');
 			constructedFieldName = constructedFieldName.replace(/[^a-zA-Z0-9]+/g, '');
 			constructedFieldName = constructedFieldName.substring(0, (constructedFieldName.length > 15) ? 15 : constructedFieldName.length);

@@ -102,7 +102,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		/**
-		 * Function called after the constructor used to construct and display the survey widget.
+		 * Function called after the constructor, used to construct and display the survey widget.
 		 * 
 		 */
 		postCreate: function(){
@@ -121,7 +121,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			} else {
 				this.inherited(arguments);
-				// when clicking on "get Data Model" the getModel function is called
+				
 				if (this.editMode) {
 					this.connect(this.btnGetData, "onclick", "getModel"); // Attaching the getModel function to the onclick event on the "Generate Embed Code" button
 					this.connect(this.viewResults, "onclick", "toggleTextBox"); // Attaching the toggleTextBox function to the onclick event on the "Show results to users" check box
@@ -147,7 +147,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		/**
 		 * Defines the drag and drop area.
 		 * 
-		 *  @return The area in which the survey's questions can be dragged and dropped.
+		 * @return The area in which the survey's questions can be dragged and dropped.
 		 */
 		initDnd: function() {
 			src = new dojo.dnd.Source(this.questions.domNode,{withHandles:true});
@@ -166,8 +166,15 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		/**
-		 * Shows or hides the "success message" field depending on the value of the "Show results to users" check box.
+		 * Creates an object of type surveyWidget.widgets.SurveyField that represent one question.
 		 * 
+		 * @param dataModel
+		 * 		dojo object containing the details of the question to create
+		 * 
+		 * @param isVisible
+		 * 		 If isVisisble is false then the question will be hidden else it will appear in the survey.
+		 *  
+		 * @return The created question object.
 		 */
 		createField: function(dataModel, isVisible) {
 			var newField = new surveyWidget.widgets.SurveyField(dataModel, this.editMode, ++this.fieldSerialNumber);
@@ -177,25 +184,29 @@ dojo.declare("surveyWidget.widgets.Survey",
 				newField.surveyField.style.display = 'none';
 			}
 
+			// Adds the newField node to the document
 			this.questions.addChild(newField);
 
 			newField.setParent(this);
 
 			var survey = this;
 			
+			// If the survey is in editMode and the user clicks on the dummy question then  
+			// it will become the current question and a new dummy question will be created
 			this.connect(newField , "fieldModified", function() {
-					if (this.editMode) {
-						var children = this.questions.getChildren();
-						if (newField.dummyField) {
+					if (this.editMode) {	//this condition should be moved outside the connect
+						var children = this.questions.getChildren();	// this should be deleted
+						if (newField.dummyField) {	//this condition should be moved outside the connect
 							this.createField(null, true);
 							newField.dummyField = false;
 						}
 					}
 				});
 
-
+	
+			// On event fieldModified, select the new question and unselect the previous one
 			this.connect(newField , "selectedEvent", function () {
-					if (this.editMode) {
+					if (this.editMode) { //this condition should be moved outside the connect
 						dojo.forEach(this.questions.getChildren(), function(child) {
 							if(child.selected)
 								child.restoreInitialState();
@@ -205,8 +216,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 					}
 				});
 				
+			// Saves the initial state of the currently edited question, to be able to roll back if the user chooses to cancel his changes
 			this.connect(newField , "saveInitialState", function () {
-					if (this.editMode) {
+					if (this.editMode) { //this condition should be moved outside the connect
 						this.setInitialState(newField);
 					}
 				});
@@ -214,6 +226,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 			return newField;
 		},
 		
+		/**
+		 * Saves the initial state of the currently edited question
+		 * 
+		 * @param newField
+		 * 		SurveyField object representing the currently edited question
+		 */
 		setInitialState: function(newField) {
 			if (!newField.selected) {
 				var jsonObj = this.surveyform.getValues();
@@ -228,10 +246,17 @@ dojo.declare("surveyWidget.widgets.Survey",
 			}
 		},
 		
+		/**
+		 *	Called after a widget's children, and other widgets on the page, have been created.
+		 *	Provides an opportunity to manipulate any children before they are displayed.
+		 *	This is useful for composite widgets that need to control or layout sub-widgets.
+		 *	Many layout widgets can use this as a wiring phase.
+		 */
 		startup: function(){
 			this.inherited(arguments);
 		},
 		
+		// NOT USED (TO DELETE)		
 		getData: function() {
 			var data = new Array();
 			var i=0;
@@ -241,9 +266,13 @@ dojo.declare("surveyWidget.widgets.Survey",
 			return data;
 		},
 		
+		/**
+		 * Constructs and displays the embed codes used to run a survey, list the results of the survey in a table or list the results as charts
+		 * 
+		 */
 		getModel: function() {
 			var self = this;
-			var jsonObj = this.surveyform.getValues();
+			var jsonObj = this.surveyform.getValues();	// JSON object containing the default values of the created survey's questions
 			var data = new Array();
 			var arrFields = new Array();
 			var arrTitleFields = new Array();
@@ -292,8 +321,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 			self.warningMessage.style.display = 'none'; // Hide the warning message in case it was displayed before
 
-			// Create a new object for the schema name and insert it as a survey field
-			// The schema name must be between 3-32 characters long: [user key]_[survey title]_[random hash]
+			// Create two new objects, one for the schema name and one for the survey docKey, and insert them as survey fields
+			// The schema name must be between 3-32 characters long: s_[user key]_[survey title]_[random hash]
 			var strTitleForSchema = this.cleanTitleForSchemaName(this.title.value);
 			var schemaName = 's_' + apstrata.apConfig.key + '_' + strTitleForSchema + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase().substring(0, 10);
 			var dockey = schemaName;
@@ -323,7 +352,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			});
 
-			// Building the schema
+			// Building the survey schema
 			var xmlSchema = new Schema(schemaName);
 			xmlSchema.setSchemaACL("creator", "creator", "creator");
 			xmlSchema.setDefaultACL("creator", "creator", "creator");
@@ -331,8 +360,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 			xmlSchema.addACLGroup(aclGroup);
 
 			var client = new apstrata.Client({connection: connection});
-			var surveySchema = this.generateSurveySchema(data);
-			var listResultSchema = this.generateListResultSchema(arrFields, arrTitleFields, xmlSchema.name, dockey);
+			var surveySchema = this.generateSurveySchema(data); // json object containing the survey's info needed to diplay the survey in running mode and the results as charts
+			var listResultSchema = this.generateListResultSchema(arrFields, arrTitleFields, xmlSchema.name, dockey); // json object containing the survey's info needed to diplay the results in a table
 				
 			var saveDocumentRequest = dojo.mixin({
 							surveyName: self.title.value,
@@ -349,6 +378,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			});
 
+			// Saves the metadata info of the survey in a document where the documentKey is equal to the schema name of the survey
 			var sd = client.call({
 					action: "SaveDocument",
 					useHttpMethod : "GET",
@@ -367,6 +397,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			};
 
+			// creates an apstrata schema for the survey
 			var ss = client.call({
 					action: "SetSchema",
 					request: setSchemaRequest,
@@ -411,6 +442,14 @@ dojo.declare("surveyWidget.widgets.Survey",
 			return strTitleForSchema;
 		},
 		
+		/**
+		 * Creates a JSON object containing the information needed by the embed code to display the survey and its results in charts.
+		 * 
+		 * @param data
+		 * 		JSON object containing the question objects of the survey
+		 * 
+		 * @return The JSON object containing the information needed by the embed code.
+		 */
 		generateSurveySchema: function (data) {
 			var surveyData = {
 				title: this.title.value,
@@ -424,8 +463,24 @@ dojo.declare("surveyWidget.widgets.Survey",
 			
 			return surveyDataSchema;
 		},
-
 		
+		/**
+		 * Creates a JSON object containing the information needed by the embed code to display the results of the survey in a table.
+		 * 
+		 * @param arrFields
+		 * 		Array containing the field's names of the survey's questions
+		 * 
+		 * @param arrTitleFields
+		 * 		Array containing the titles of the survey's questions
+		 * 
+		 * @param schemaName
+		 * 		String representing the name of the apstrata schema created for the survey
+		 * 
+		 * @param dockey
+		 * 		String representing the documentKey of the metadata document created for the survey
+		 * 		
+		 * @return The JSON object containing the information needed by the embed code.
+		 */
 		generateListResultSchema: function (arrFields, arrTitleFields, schemaName, dockey) {
 			var listSurveyData = {
 				title: this.title.value,
@@ -440,12 +495,21 @@ dojo.declare("surveyWidget.widgets.Survey",
 			return listSurveyDataSchema;
 		},
 
+		/**
+		 * Displays the embed codes used to run a survey, list the results of the survey in a table or list the results as charts
+		 * 
+		 * @param surveyDataSchema
+		 * 		JSON object containing the information needed by the embed code to display the survey and its results in charts.
+		 * 
+		 * @param listSurveyDataSchema
+		 * 		JSON object containing the information needed by the embed code to display the results of the survey in a table.
+		 * 		
+		 */
 		generateAndDisplayEmbedCodes: function (surveyDataSchema, listSurveyDataSchema) {
 
-			var viewUrl = this.getViewUrl();
+			var viewUrl = this.getViewUrl(); // NOT USED (TO DELETE)
 			
 			// Embed code to run the survey
-			//console.debug(dojo.toJson(surveyData));
 			var generatedCode = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
 			+ '<script type="text/javascript" src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"\n' 
@@ -459,11 +523,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div dojoType="surveyWidget.widgets.Survey" /></div>'
 			+ '</textarea>';
-/*
-			var surveyDataSchema = encodeURIComponent(dojo.toJson(surveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
-			this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
-			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?key=' + apstrata.apConfig.username + '&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + surveyDataSchema + '\' ></iframe>'
-			+ '</textarea>';*/
+
 			this.output.innerHTML = generatedCode;
 			this.output.style.display = "";
 			this.output.width = "800px";
@@ -484,14 +544,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<div dojoType="surveyWidget.widgets.SurveyListing" /></div>'
 			+ '</div>'
 			+ '</textarea>';
-			/*var listSurveyDataSchema = encodeURIComponent(dojo.toJson(listSurveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
-			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:400px; height:100px;">'
-			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?AF_deliveryChannel=listing&key=' + apstrata.apConfig.username + '&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + listSurveyDataSchema + '\' ></iframe>'
-			+ '</textarea>';*/
+
 			this.listingEmbed.style.display = "";
 			this.listingEmbed.width = "800px";
 
-			// Embed code to see charts of results of your survey
+			// Embed code to see the results of your survey in charts
 			this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see charts of results of your survey.</div><textarea style="width:400px; height:100px;">'
 			+ '<!-- You can move the script tag to the head of your html page -->\n'
 			+ '<script type="text/javascript" src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"' 
@@ -507,13 +564,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<div dojoType="surveyWidget.widgets.SurveyCharting" /></div>'
 			+ '</div>'
 			+ '</textarea>';
-			/*this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see charts of results of your survey.</div><textarea style="width:400px; height:100px;">'
-			+ '<iframe width="400px" height="700px" src=\''+ viewUrl +'/generateEmbed.view?AF_deliveryChannel=aggregates&key=' + apstrata.apConfig.username + '&serviceURL=http://apsdb.apstrata.com/sandbox-apsdb/rest&schema=' + surveyDataSchema + '\' ></iframe>'
-			+ '</textarea>';*/
+	
 			this.chartingEmbed.style.display = "";
 			this.chartingEmbed.width = "800px";
 		},
 
+		// NOT USED (TO DELETE)
 		addslashes: function(str) {
 			str=str.replace(/\\/g,'\\\\');
 			str=str.replace(/\'/g,'\\\'');
@@ -521,12 +577,14 @@ dojo.declare("surveyWidget.widgets.Survey",
 			return str;
 		},
 		
+		// NOT USED (TO DELETE)
 		getViewUrl: function() {
 			pathName = window.location.pathname.split("/");
 			viewUrl = window.location.protocol + "//" + window.location.host + "/" + pathName[1];
 			return viewUrl;
 		},
 		
+		// NOT USED (TO DELETE)
 		getUrlParam: function(name) {
 		  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 		  var regexS = "[\\?&]"+name+"=([^&#]*)";
@@ -538,8 +596,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 		    return results[1];
 		},
 		
+		/**
+		 * Saves the values of the submitted survey.
+		 * 		
+		 */
 		saveSurvey: function() {
-			// Assemble the cookie name
+			// Assemble the cookie name. The cookie will be used to ensure that a user doesn't take the survey more than once.
 			var strTitleForCookie = this.surveyTitle.replace(/ /g, ''); // Remove all spaces from the survey title
 			strTitleForCookie = (strTitleForCookie.length > 30) ? strTitleForCookie.substring(0, 30) : strTitleForCookie;
 			var cookie = 'apstrata.' + apstrata.apConfig.key + '.' + strTitleForCookie;
@@ -554,13 +616,13 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 				var client = new apstrata.Client({connection: connection});
 				
-				// Save a document of the data gathered from the user
 				var saveDocumentRequest = dojo.mixin(jsonObj, {
 					apsdb: {
 							store: self.storeName
 					}
 				});
 
+				// Save a document of the data gathered from the user
 				var sd = client.call({
 					action: "SaveDocument",
 					useHttpMethod : "GET",
@@ -571,7 +633,6 @@ dojo.declare("surveyWidget.widgets.Survey",
 						self.tweetTheSubmitting(jsonObj.apsdbDockey);
 
 						if (dataModel.viewResults){
-							//window.location = dataModel.resultsUrl;
 							self.loadAggregatedResults();
 						}
 						else {
@@ -590,9 +651,16 @@ dojo.declare("surveyWidget.widgets.Survey",
 				return false;
 			}
 		},
-
+		
+		/**
+		 * Runs a script
+		 * 
+		 * @param apsdbDockey
+		 * 		DocumentKey (String) of the document containing the metadata information of the survey
+		 * 
+		 */
 		tweetTheSubmitting: function(apsdbDockey) {
-			// Run a script after saving the document. It will probably Tweet to Twitter
+			// Run a script
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
 			var runScriptletRequest = dojo.mixin({
@@ -615,7 +683,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			});
 		},
-
+		
+		/**
+		 * Replace the survey by its results in charts
+		 * 
+		 */
 		loadAggregatedResults: function() {
 			if(this.attrs != null && this.attrs.schema)
 				var charts = new surveyWidget.widgets.SurveyCharting(this.attrs);

@@ -36,14 +36,14 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		apsdbSchema: null,
 
 		//
-		// Replace here with your apsdb account
-		//  and target store name
+		// Replace here with your target store name
 		//
-		apsdbKey: "apstrata",
-		apsdbSecret: "secret",
-		apsdbServiceUrl: "http://localhost:8080/autoforms/rest", //"http://apsdb.apstrata.com/apsdb/rest",
 		storeName: "surveyStore",
 		
+		/**
+		 * Constructor of the SurveyListing widget.
+		 * 
+		 */
 		constructor: function() {
 			if(schema != null){
 				this.jsonDataModel = decodeURIComponent(schema);
@@ -54,6 +54,10 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			}
 		},
 		
+		/**
+		 * Function called after the constructor, used to construct and display the SurveyListing widget.
+		 * 
+		 */
 		postCreate: function(){
 			if(schema != null){
 				this.title.innerHTML = this.dojoDataModel.title;
@@ -63,6 +67,10 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				this.title.innerHTML = "The survey schema is missing";
 		},
 		
+		/**
+		 * Sends a query request to the store to get the data submitted to the current survey
+		 * 
+		 */
 		query: function() {
 			var client = new apstrata.Client({connection: connection});
 			var listing = this;
@@ -82,17 +90,28 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			var q = client.call({
 				action: "Query",
 				request: queryRequest,
-				load: function(operation) {
+				load: function(operation) { // on success call the display function to display the results in a table
 					listing.resultResponse = operation.response;
 					listing.display(listing.resultResponse,listing.arrFieldsToDisplay, listing.arrTitleFieldsToDisplay);
 				},
 				error: function(operation) {
-					//fail(operation)
 				}
 			});
 			
 		},
 		
+		/**
+		 * Displays all the data submitted to the current survey in a table
+		 * 
+		 * @param data
+		 * 		JSON object containing all the documents belonging to the current survey
+		 * 
+		 * @param columns
+		 * 		 Array containing the name of the fields to display
+		 *  
+		 * @param columnsTitle
+		 * 		 Array containing the column's title to use when displaying the table
+		 */
 		display: function(data, columns, columnsTitle) {
 			var found = false;
 			var columnClass = 'rounded';
@@ -118,7 +137,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			}
 			this.displayTable.appendChild(headerTHead);
 
-			// Add the survey rows
+			// Add the document rows
 			var arrSurvey = data.result.documents;
 			var rowCount = 1;
 			for (var doc=0; doc<arrSurvey.length; doc++) {

@@ -46,6 +46,14 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		//
 		storeName: "surveyStore",
 		
+		/**
+		 * Constructor of the SurveyCharting widget.
+		 * 
+		 * @param attrs
+		 * 		JSON object containing some info about the survey: 
+		 * 			storeName: the store used by the SurveyCharting widget
+		 * 			schema: Contains the schema of the current survey  
+		 */
 		constructor: function(attrs) {
 			if (attrs) {
 				if (attrs.storeName) this.storeName = attrs.storeName
