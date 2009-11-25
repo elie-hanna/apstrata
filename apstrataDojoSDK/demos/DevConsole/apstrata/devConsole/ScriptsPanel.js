@@ -70,7 +70,7 @@ dojo.declare("apstrata.devConsole.ScriptsEditorPanel",
 		if (self.schemaName != self.fldName.value) apsdb.newSchemaName = self.fldName.value
 		
 		this.container.client.call({
-			action: "SetSchema",
+			action: "SaveSchema",
 			request: {
 				apsdb: apsdb
 			},

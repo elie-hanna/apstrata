@@ -9,23 +9,23 @@
  *  specific language governing permissions and limitations under the License.
  * *****************************************************************************
  */
-dojo.provide("apstrata.apsdb.client.SetSchema");
+dojo.provide("apstrata.apsdb.client.SaveSchema");
 
 dojo.require("apstrata.apsdb.client.Get");
 
 /**
  * Allows the creation of an apstrata database schema
- * @class apstrata.apsdb.client.SetSchema
+ * @class apstrata.apsdb.client.SaveSchema
  * @extends apstrata.apsdb.client.Get
 */
-dojo.declare("apstrata.apsdb.client.SetSchema",
+dojo.declare("apstrata.apsdb.client.SaveSchema",
 [apstrata.apsdb.client.Get],
 {
     /**
-     * @constructor SetSchema Does not require any parameters
+     * @constructor SaveSchema Does not require any parameters
     */
     constructor: function(){
-        this.apsdbOperation = "SetSchema"
+        this.apsdbOperation = "SaveSchema"
     },
 
     /**
@@ -48,7 +48,7 @@ dojo.declare("apstrata.apsdb.client.SetSchema",
             this.inherited(arguments);
         }
         else 
-            throw new Error("apstrata.apsdb.client.SetSchema: missing parameter.")
+            throw new Error("apstrata.apsdb.client.SaveSchema: missing parameter.")
     }
 });
 

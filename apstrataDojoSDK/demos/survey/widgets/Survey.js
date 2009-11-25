@@ -390,7 +390,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					}
 				});
 				
-			var setSchemaRequest = {
+			var saveSchemaRequest = {
 					apsdb: {
 						schema: xmlSchema.toString(),
 						schemaName: xmlSchema.name
@@ -399,8 +399,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 			// creates an apstrata schema for the survey
 			var ss = client.call({
-					action: "SetSchema",
-					request: setSchemaRequest,
+					action: "SaveSchema",
+					request: saveSchemaRequest,
 					load: function(operation) {
 						self.generateAndDisplayEmbedCodes(surveySchema, listResultSchema);
 					},

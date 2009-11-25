@@ -188,7 +188,7 @@
 				var operation = client.deleteDocument(
 					function() {
 						test.success(operation)
-						setSchema()
+						saveSchema()
 					}, function() {
 						test.fail(operation)
 					},
@@ -199,8 +199,8 @@
 				)
 			}
 			
-			function setSchema() {
-				var operation = client.setSchema(
+			function saveSchema() {
+				var operation = client.saveSchema(
 					function() {
 						test.success(operation)
 						getSchema()

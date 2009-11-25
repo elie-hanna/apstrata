@@ -119,9 +119,9 @@
                 });
 			}
             
-            function setSchema(){
-                dojo.require("apstrata.apsdb.client.SetSchema")
-                var operation = new apstrata.apsdb.client.SetSchema(connection)
+            function saveSchema(){
+                dojo.require("apstrata.apsdb.client.SaveSchema")
+                var operation = new apstrata.apsdb.client.SaveSchema(connection)
                 
                 dojo.connect(operation, "handleResult", function(){
                     populateSchemasList()
@@ -192,7 +192,7 @@
                 <textarea id="schema" cols="60" rows="5">
                 </textarea>
             </div>
-            <button id="create" title="Set Schema" onclick="setSchema()">
+            <button id="create" title="Set Schema" onclick="saveSchema()">
                 set
             </button>
         </div>
