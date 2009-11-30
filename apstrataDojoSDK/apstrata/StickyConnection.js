@@ -20,11 +20,62 @@
 dojo.provide("apstrata.StickyConnection")
 
 dojo.require("apstrata.Client")
+dojo.require("dojo.cookie")
 
 dojo.declare("apstrata.StickyConnection",
 	[apstrata.Connection],
 	{
+		_COOKIE_NAME: "apstrata.client",
+		_COOKIE_EXPIRY: 15,
+		
 		constructor: function(attrs) {
+			if (apstrata.apConfig) {
+				this.credentials.key = apstrata.apConfig.key
+				this.credentials.secret = apstrata.apConfig.secret
+				this.credentials.username = apstrata.apConfig.username
+				this.credentials.password = apstrata.apConfig.password
+			}
+			
+			this.load()
+		},
+		
+		load: function() {
+			var json = dojo.cookie(this._COOKIE_NAME /* TODO: add a URL prefix */)
+			
+			if (json) {
+				var o = dojo.fromJson(json) 
+				
+				apstrata.logger.info("Loaded connection from cookie", o)
+
+				if (o.credentials) {
+					// In case the cookie is corrupted
+					if (!o.credentials.key) o.credentials.key=""
+					if (!o.credentials.secret) o.credentials.secret=""
+					if (!o.credentials.username) o.credentials.username=""
+					if (!o.credentials.password) o.credentials.password=""
+				}
+
+				this.credentials = o.credentials
+				if (o.serviceUrl) this.serviceUrl = o.serviceUrl
+				if (o.defaultStore) this.defaultStore = o.defaultStore
+				
+//				apstrata.logger.log("debug", "apstrata.StickyConnection" ,"Credentials set to:", this.credentials)
+
+				apstrata.logger.info("Credentials set to:", this.credentials)
+				apstrata.logger.info("ServiceUrl:", this.serviceUrl)
+				apstrata.logger.info("defaultStore:", this.defaultStore)
+			}
+		},
+		
+		save: function() {
+			var o = {}
+			o.credentials = this.credentials
+			
+			dojo.cookie(this._COOKIE_NAME /* TODO: add a URL prefix */, dojo.toJson(o), {expires: this._COOKIE_EXPIRY})			
+		},
+		
+		eraseCookie: function() {
+			
 		},
 
 		hasCredentials: function() {
@@ -92,7 +143,7 @@ dojo.declare("apstrata.StickyConnection",
 				load: function(operation) {
 					self._ongoingLogin = false
 					self.debug("logging in: saving credentials to cookie")
-//					self.saveToCookie()
+					self.save()
 	
 					dojo.publish("/apstrata/connection/login/success", [{
 						key: self.credentials.key
@@ -126,12 +177,12 @@ dojo.declare("apstrata.StickyConnection",
 			if (!this.credentials.key) this.credentials.key=""
 			if (!this.credentials.username) this.credentials.username=""
 
+			this.save()
+
 			dojo.publish("/apstrata/connection/logout", [{
 				key: self.credentials.key
 			}])
-
-//			this.saveToCookie()
-		}
+		},
 
 	});
 	
