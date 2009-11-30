@@ -23,7 +23,6 @@ dojo.provide("apstrata.widgets.QueryWidget")
 dojo.require("dojox.grid.DataGrid")
 
 dojo.require ("apstrata.widgets.PageNumberSelector")
-dojo.require ("apstrata.apsdb.client.widgets.ConnectionStatus")
 
 dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], {
 	widgetsInTemplate: true,
