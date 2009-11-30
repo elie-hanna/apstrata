@@ -55,57 +55,10 @@ dojo.declare('apstrata.util.BulkUpdate', [], {
 		} 
 	},
 
-	queue1: function(action, requestQueue, nextOperation) {
-		var self = this
-		
-		if (requestQueue.length>0) {
-			var curRequest = requestQueue.pop()
-			
-			this.operation(action, curRequest, function() {
-				self.queue(action, requestQueue, nextOperation)
-			})
-		} else {
-			if (nextOperation) nextOperation()
-		}
-	},
-
 	init: function() {
 		var self = this
 		self.data.reverse()
 		self.queue(self.data)
-return
-		
-		var store = function() {
-			if (self.data.stores) {
-				self.queue("CreateStore", self.data.stores)
-			} 
-		}
-
-		var user = function () {
-			if (self.data.users) {
-				self.queue("SaveUser", self.data.users, store)
-			} else {
-				store()
-			}
-		}
-
-		var group = function () {
-			if (self.data.groups) {
-				self.queue("CreateGroup", self.data.groups, user)
-			} else {
-				user()
-			}
-		}
-		
-		var configurations = function() {
-			if (self.data.configurations) {
-				self.queue("SaveConfiguration", self.data.configurations, group)
-			} else {
-				group()
-			}
-		}
-		
-		configurations()
 	},
 
 	constructor: function(attrs) {
