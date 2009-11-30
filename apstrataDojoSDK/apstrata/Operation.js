@@ -19,7 +19,6 @@ dojo.require ("apstrata.util.logger.BasicLogger")
 /**
  * Extends the apstrata database logger to include request and response features
  * @class apstrata.apsdb.client.Operation
- * @extends apstrata.util.logger.Loggable
 */
 dojo.declare("apstrata.Operation",
 [],

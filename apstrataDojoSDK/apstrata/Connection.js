@@ -21,8 +21,6 @@ dojo.provide("apstrata.Connection")
 
 dojo.require("dojox.encoding.digests.MD5");
 
-dojo.require("apstrata.util.logger.Loggable")
-
 dojo.declare("apstrata.URLSignerMD5", [], {	
 	sign: function (connection, operation, params, responseType) {
 					var timestamp = new Date().getTime() + '';

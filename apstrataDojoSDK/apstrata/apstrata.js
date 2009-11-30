@@ -139,6 +139,15 @@ if (typeof apstrata == "undefined" || !apstrata.configured) {
 		dojo.extend(dijit._Widget, {
 			_apstrataRoot: apstrata.baseUrl
 		})
+
+		/*		
+		apstrata.loadConfig = function(apConfigClass) {
+			try {
+				dojo.require(apConfigClass)		
+			} catch (error) {
+				
+			}
+		}
+		*/
 	})
-	
 }

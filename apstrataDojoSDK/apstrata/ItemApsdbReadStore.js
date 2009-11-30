@@ -25,8 +25,6 @@ dojo.require("dojo.data.api.Request")
 dojo.require("apstrata.Connection")
 dojo.require("apstrata.Client")
 
-dojo.require("apstrata.util.logger.Loggable")
-
 dojo.require("apstrata._Item")
 
 dojo.declare("apstrata.ItemApsdbReadStore", 
@@ -41,8 +39,8 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 		
 		constructor: function(attrs) {
 			// add log capabilities to object
-			_l = new apstrata.util.logger.Loggable()
-			dojo.mixin(this, _l)
+//			_l = new apstrata.util.logger.Loggable()
+//			dojo.mixin(this, _l)
 			this._features = {'dojo.data.api.Read':true, 'dojo.data.api.Identity':true};
 
 			// Arrays that hold fetched items
@@ -139,7 +137,7 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 				pageNumber: pageNumber,
 				count: count
 			}
-			
+
 			var apsim = {}
 			
 			if (keywordArgs.query.runAs) apsim.runAs = keywordArgs.query.runAs
@@ -175,10 +173,22 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 					}
 					
 					self._itemsMap = []
+
+					// if it's a * query, init fieldsArray with the fields in the 1st row
+					if (apsdb.queryFields == '*') {
+						self._fieldsArray = []
+						if (q.result.documents[0]) {
+							dojo.forEach(q.result.documents[0].fields, function(field) {
+								self._fieldsArray.push(field['@name'])
+							})
+						}						
+					}
+					
 					dojo.forEach(q.result.documents, function(item) {
 						var item = new apstrata._Item({item: item, fieldNames: self._fieldsArray, childrenNames: self._childrenArray})
 						self._addItem(item)
 					})
+					
 					self._fetchSuccess(request)
 				},
 				error: function(operation) {
