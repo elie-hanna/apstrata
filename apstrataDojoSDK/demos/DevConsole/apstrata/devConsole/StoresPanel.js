@@ -28,7 +28,8 @@ dojo.declare("apstrata.devConsole.StoreOperations",
 {
 	data: [
 		{label: "Query", iconSrc: "../../apstrata/resources/images/pencil-icons/search.png"},
-		{label: "Saved Query", iconSrc: "../../apstrata/resources/images/pencil-icons/savedQuery.png"}
+		{label: "Saved Query", iconSrc: "../../apstrata/resources/images/pencil-icons/savedQuery.png"},
+		{label: "Edit Store", iconSrc: "../../apstrata/resources/images/pencil-icons/schema.png"}
 	],
 
 	constructor: function(attrs) {

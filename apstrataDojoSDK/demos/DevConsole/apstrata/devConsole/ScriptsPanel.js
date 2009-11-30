@@ -19,34 +19,34 @@
  */
 
 dojo.provide("apstrata.devConsole.ScriptsPanel")
+dojo.provide("apstrata.devConsole.ScriptEditorPanel")
 
-dojo.declare("apstrata.devConsole.ScriptsEditorPanel", 
+dojo.declare("apstrata.devConsole.ScriptEditorPanel", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
 {
 	widgetsInTemplate: true,	
-	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/SchemaEditorPanel.html"),
+	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/ScriptEditorPanel.html"),
 	maximizePanel: true,
 	
 	constructor: function(attrs) {
-		if (attrs.target) this.schemaName = attrs.target; else this.schemaName= ""
+		if (attrs.target) this.scriptName = attrs.target; else this.scriptName= ""
 		if (attrs && attrs.target) this.update = true; else this.update = false
 	},
 	
 	postCreate: function() {
 		var self = this
 		
-		if (self.schemaName) {
+		if (self.scriptName) {
 			this.container.client.call({
-				action: "GetSchema",
+				action: "GetScript",
 				request: {
 					apsdb: {
-						schemaName: self.schemaName
+						scriptName: self.scriptName
 					}
 				},
 				load: function(operation) {
-//					self.txtSchema.value =  self.formatXml(operation.response.result)
-					self.txtSchema.value =  operation.response.result
-					self.fldName.value = self.schemaName 
+					self.txtScript.value =  operation.response.result
+					self.fldName.value = self.scriptName 
 				},
 				error: function(operation) {
 				}
@@ -59,18 +59,18 @@ dojo.declare("apstrata.devConsole.ScriptsEditorPanel",
 	_save: function() {
 		var self = this
 
-		if (self.schemaName=="") self.schemaName = self.fldName.value
+		if (self.scriptName=="") self.scriptName = self.fldName.value
 
 		var apsdb = {
-			schemaName: self.schemaName,
-			schema: self.txtSchema.value,
+			scriptName: self.scriptName,
+			script: self.txtScript.value,
 			update: self.update
 		}
 
-		if (self.schemaName != self.fldName.value) apsdb.newSchemaName = self.fldName.value
+		if (self.scriptName != self.fldName.value) apsdb.newScriptName = self.fldName.value
 		
 		this.container.client.call({
-			action: "SaveSchema",
+			action: "SaveScript",
 			request: {
 				apsdb: apsdb
 			},
@@ -86,10 +86,10 @@ dojo.declare("apstrata.devConsole.ScriptsEditorPanel",
 		var self = this
 		
 		this.container.client.call({
-			action: "DeleteSchema",
+			action: "DeleteScript",
 			request: {
 				apsim: {
-					schemaName: label
+					scriptName: label
 				}
 			},
 			load: function(operation){

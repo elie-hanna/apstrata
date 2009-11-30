@@ -19,6 +19,8 @@
  */
 dojo.provide("apstrata.devConsole.DevConsole")
 
+dojo.require("apstrata.horizon.HStackableMainPanel")
+
 dojo.require("apstrata.horizon.Login")
 dojo.require("apstrata.horizon.Preferences")
 
@@ -30,7 +32,7 @@ dojo.require("apstrata.devConsole.GroupsPanel")
 dojo.require("apstrata.devConsole.UsersPanel")
 
 dojo.declare("apstrata.devConsole.MainPanel", 
-[apstrata.horizon.HStackableList], 
+[apstrata.horizon.HStackableMainPanel], 
 {
 	data: [
 		{label: "home", iconSrc: "../../apstrata/resources/images/pencil-icons/home.png"},
@@ -39,27 +41,10 @@ dojo.declare("apstrata.devConsole.MainPanel",
 		{label: "scripts", iconSrc: "../../apstrata/resources/images/pencil-icons/configuration.png"},
 		{label: "groups", iconSrc: "../../apstrata/resources/images/pencil-icons/users.png"},
 		{label: "users", iconSrc: "../../apstrata/resources/images/pencil-icons/user-man.png"},
-		{label: "favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/favourites.png"},
+//		{label: "favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/favourites.png"},
 		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"},
 //		{label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"}
 	],
-	
-	postCreate: function() {
-		var mainPanel = this
-
-		dojo.subscribe("/apstrata/connection/login/success", function(data) {
-			mainPanel.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"})
-			mainPanel.render()
-		})
-		
-		dojo.subscribe("/apstrata/connection/logout", function(data) {
-			mainPanel.data.pop()
-			mainPanel.render()
-			mainPanel.home()
-		})
-		
-		this.inherited(arguments)
-	},
 	
 	_openPanelbyLabel: function(label) {
 		switch (label) {
@@ -135,7 +120,7 @@ dojo.declare("apstrata.devConsole.DevConsole",
 				}
 				
 				var msg = 'Oops, there seems to be a problem:<br><br><b>' + errMsg + '</b>'
-				self.alert(msg, self.domNode)
+				apstrata.alert(msg, self.domNode)
 			}
 		})
 		
@@ -176,21 +161,5 @@ dojo.declare("apstrata.devConsole.DevConsole",
 		this.addChild(this.main)
 		
 		this.inherited(arguments)
-	},
-	
-	alert: function(msg, origin) {
-		var dialog = new apstrata.widgets.Alert({width: 300, 
-												height: 250, 
-												actions: "close", 
-												message: msg, 
-												clazz: "rounded-sml Alert", 
-												iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
-												animation: {from: origin}, 
-												modal: true })
-
-		dialog.show()
-		dojo.connect(dialog, "buttonPressed", function(label) {
-			dialog.hide()
-		})
 	}
 })

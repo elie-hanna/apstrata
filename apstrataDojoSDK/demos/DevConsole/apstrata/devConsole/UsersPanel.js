@@ -72,10 +72,10 @@ dojo.declare("apstrata.devConsole.UsersPanel",
 		var self = this
 		
 		this.container.client.call({
-			action: "DeleteGroup",
+			action: "DeleteUser",
 			request: {
 				apsim: {
-					group: label
+					user: label
 				}
 			},
 			load: function(operation){
