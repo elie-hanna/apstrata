@@ -29,14 +29,17 @@ dojo.declare("apstrata.StickyConnection",
 		_COOKIE_EXPIRY: 15,
 		
 		constructor: function(attrs) {
-			if (apstrata.apConfig) {
+			if (attrs && attrs.credentials) {
+				this.credentials.key = attrs.credentials.key
+				this.credentials.secret = attrs.credentials.secret
+				this.credentials.username = attrs.credentials.username
+				this.credentials.password = attrs.credentials.password
+			} else if (apstrata.apConfig) {
 				this.credentials.key = apstrata.apConfig.key
 				this.credentials.secret = apstrata.apConfig.secret
 				this.credentials.username = apstrata.apConfig.username
 				this.credentials.password = apstrata.apConfig.password
-			}
-			
-			this.load()
+			} else this.load()
 		},
 		
 		load: function() {
