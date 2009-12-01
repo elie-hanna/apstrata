@@ -40,6 +40,7 @@ dojo.declare("apstrata.StickyConnection",
 		},
 		
 		load: function() {
+			var self = this
 			var json = dojo.cookie(this._COOKIE_NAME /* TODO: add a URL prefix */)
 			
 			if (json) {
@@ -59,7 +60,19 @@ dojo.declare("apstrata.StickyConnection",
 				if (o.serviceUrl) this.serviceUrl = o.serviceUrl
 				if (o.defaultStore) this.defaultStore = o.defaultStore
 				
-//				apstrata.logger.log("debug", "apstrata.StickyConnection" ,"Credentials set to:", this.credentials)
+
+				if (o.credentials.key && o.credentials.secret) {
+					dojo.publish("/apstrata/connection/login/success", [{
+						key: self.credentials.key,
+					}])					
+				} else if (o.credentials.key && o.credentials.username && o.credentials.password) {
+					dojo.publish("/apstrata/connection/login/success", [{
+						key: self.credentials.key,
+						username: self.credentials.username
+					}])					
+				}
+				
+				apstrata.logger.log("debug", "apstrata.StickyConnection" ,"Credentials set to:", this.credentials)
 
 				apstrata.logger.info("Credentials set to:", this.credentials)
 				apstrata.logger.info("ServiceUrl:", this.serviceUrl)
@@ -103,7 +116,6 @@ dojo.declare("apstrata.StickyConnection",
 		loginUser: function(handlers) {
 			var self = this
 			
-			
 			// todo: implement credentials checking, by calling ListStores
 			//  possible return codes
 			//  INVALID_AUTHENTICATION_KEY
@@ -134,15 +146,15 @@ dojo.declare("apstrata.StickyConnection",
 			var self = this
 			
 			self._ongoingLogin = true
-			//this.debug("logging in: attemting ListStores to apstrata to validate credentials")
+			apstrata.logger.debug("logging in: attemting ListStores to apstrata to validate credentials")
 			
 			var client = new apstrata.Client({connection: self})
 			
 			client.call({
-				action: "VerifyCredentials",
+				action: "ListStores",
 				load: function(operation) {
 					self._ongoingLogin = false
-					self.debug("logging in: saving credentials to cookie")
+					apstrata.logger.debug("logging in: saving credentials to cookie")
 					self.save()
 	
 					dojo.publish("/apstrata/connection/login/success", [{
@@ -167,7 +179,7 @@ dojo.declare("apstrata.StickyConnection",
 
 		logout: function() {
 			var self = this
-			this.debug("logging out: erasing credentials from cookie")
+			apstrata.logger.debug("logging out: erasing credentials from cookie")
 
 			// Erase secret and password
 			this.credentials.secret = ""
