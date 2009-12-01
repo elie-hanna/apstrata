@@ -63,6 +63,7 @@
 				
 				dojo.require ('apstrata.explorer.Explorer')
 				
+				toast = dijit.byId("toast")
 				dojo.parser.parse()
 
 				contextualHelp.setVisible(false)
@@ -93,7 +94,6 @@
 
 		<div dojoType='apstrata.widgets.SlidingPanel' 
 			jsId='contextualHelp'
-			openOnClick='false'
 			class='ConsoleOutput rounded-bottom-sml' 
 			attach='top' 
 			visibleWidth='20'>

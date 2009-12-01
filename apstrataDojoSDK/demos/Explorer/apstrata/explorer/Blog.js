@@ -26,7 +26,7 @@ dojo.provide("apstrata.explorer.BlogGallery")
 dojo.declare("apstrata.explorer.Blog",
 [apstrata.horizon.HStackableList], 
 {
-	storeName: 'blog',
+	storeName: 'explorerBlog',
 		
 	data: [
 		{label: "Posts", iconSrc: "../../apstrata/resources/images/pencil-icons/file.png"},
@@ -66,7 +66,6 @@ dojo.declare("apstrata.explorer.Blog",
 				case 'Gallery': this.openPanel(apstrata.explorer.BlogGallery)
 					break;
 				default:
-					break;
 			}
 		}
 	}
@@ -121,7 +120,8 @@ dojo.declare("apstrata.explorer.BlogPost",
 					"default.readACL": readACL,
 
 					apsdb: {
-						store: self.getParent().storeName
+						store: self.getParent().storeName,
+						ftsFields: "blogPost"
 					}
 				},
 				formNode: self.blogForm.domNode,
@@ -159,6 +159,8 @@ dojo.declare("apstrata.explorer.BlogPosts",
 		
 		var getFile = new apstrata.GetFile(this.getContainer().client.connection)
 		
+		connection.credentials.key = "7744293024"
+		
 		var args = {
 			onComplete: function(items, request) {
 				self.items = []
@@ -168,7 +170,7 @@ dojo.declare("apstrata.explorer.BlogPosts",
 						creationTime: item.getValue('apsdb.creationTime'),
 						title: item.getValue('title')?item.getValue('title'):"",
 						blogPost: item.getValue('blogPost')?item.getValue('blogPost'):"",
-						hasImage: item.getValue('hasImage')?item.getValue('hasImage'):false
+						hasImage: item.getValue('hasImage')?item.getValue('hasImage'):false,
 					}
 					
 					if (item.getValue("apsdb_attachments")) {

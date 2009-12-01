@@ -42,8 +42,14 @@ dojo.declare("apstrata.explorer.MainPanel",
 		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"}
 	],
 	
+	constructor: function() {
+		this.setConnection(connection)
+	},
+	
 	startup: function() {
-		this.openPanel(apstrata.explorer.HomePanel);
+		this.openPanel(apstrata.explorer.HomePanel)
+		
+		this.inherited(arguments)
 	},
 	
 	_openPanelbyLabel: function(label) {
