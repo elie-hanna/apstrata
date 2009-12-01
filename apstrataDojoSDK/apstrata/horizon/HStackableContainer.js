@@ -43,9 +43,7 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 	},
 	
 	startup: function() {
-//		setTimeout (dojo.hitch(this, "timeout"), 2000)
 		setTimeout(dojo.hitch(this, 'loadPreferences'), 3000)
-//		this.loadPreferences()
 		
 		this.inherited(arguments)
 	},
@@ -488,6 +486,14 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 		})
 		
 		this.inherited(arguments)
+	},
+	
+	startup: function() {
+		// TODO: this should not use global connection, find a solution
+		if (connection.hasCredentials) {
+			this.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"})
+			this.render()
+		} 
 	}
 })
 
