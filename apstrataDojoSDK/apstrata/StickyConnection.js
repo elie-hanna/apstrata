@@ -134,12 +134,12 @@ dojo.declare("apstrata.StickyConnection",
 			var self = this
 			
 			self._ongoingLogin = true
-			this.debug("logging in: attemting ListStores to apstrata to validate credentials")
+			//this.debug("logging in: attemting ListStores to apstrata to validate credentials")
 			
 			var client = new apstrata.Client({connection: self})
 			
 			client.call({
-				action: "ListStores",
+				action: "VerifyCredentials",
 				load: function(operation) {
 					self._ongoingLogin = false
 					self.debug("logging in: saving credentials to cookie")
