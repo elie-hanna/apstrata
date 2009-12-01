@@ -46,6 +46,10 @@ dojo.declare("apstrata.devConsole.MainPanel",
 //		{label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"}
 	],
 	
+	constructor: function() {
+		this.setConnection(connection)
+	},
+	
 	_openPanelbyLabel: function(label) {
 		switch (label) {
 			case 'stores': this.openPanel(apstrata.devConsole.StoresPanel); break;
@@ -85,6 +89,8 @@ dojo.declare("apstrata.devConsole.MainPanel",
 	
 	startup: function() {
 		this.home()
+		
+		this.inherited(arguments)
 	},
 	
 	home: function() {

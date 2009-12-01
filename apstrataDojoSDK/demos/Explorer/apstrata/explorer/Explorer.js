@@ -82,6 +82,8 @@ dojo.declare("apstrata.explorer.MainPanel",
 	
 	startup: function() {
 		this.home()
+		
+		this.inherited(arguments)
 	},
 	
 	home: function() {
