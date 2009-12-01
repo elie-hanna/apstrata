@@ -471,6 +471,14 @@ dojo.declare("apstrata.horizon.HStackableList",
 dojo.declare("apstrata.horizon.HStackableMainPanel", 
 [apstrata.horizon.HStackableList], 
 {
+	constructor: function() {
+		this._connection = null
+	},
+	
+	setConnection: function(myConnection) {
+		this._connection = myConnection
+	},
+	
 	postCreate: function() {
 		var mainPanel = this
 
@@ -489,8 +497,7 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 	},
 	
 	startup: function() {
-		// TODO: this should not use global connection, find a solution
-		if (connection.hasCredentials) {
+		if (this._connection.hasCredentials()) {
 			this.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"})
 			this.render()
 		} 
