@@ -154,7 +154,7 @@ dojo.declare("apstrata.StickyConnection",
 			var client = new apstrata.Client({connection: self})
 			
 			client.call({
-				action: "ListStores",
+				action: "VerifyCredentials",
 				load: function(operation) {
 					self._ongoingLogin = false
 					apstrata.logger.debug("logging in: saving credentials to cookie")
