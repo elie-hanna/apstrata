@@ -130,7 +130,7 @@ dojo.declare("apstrata.devConsole.SchemasPanel",
 				// Rearrange the result to suite the template
 				self.data = []
 				dojo.forEach(operation.response.result.schemas, function(schema) {
-					self.data.push({label: schema['@name'], iconSrc: ""})
+					self.data.push({label: schema['name'], iconSrc: ""})
 				})			
 	
 				// Cause the DTL to rerender with the fresh self.data

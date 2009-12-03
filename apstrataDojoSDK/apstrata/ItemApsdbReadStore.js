@@ -169,7 +169,7 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 					
 					// Throw an event with the page and global values of the aggregate if they are in the response
 					if (q.result.aggregate) {
-						self.aggregateCalculated(q.result.aggregate['@pageValue'], q.result.aggregate['@globalValue']);
+						self.aggregateCalculated(q.result.aggregate['pageValue'], q.result.aggregate['globalValue']);
 					}
 					
 					self._itemsMap = []
@@ -179,7 +179,7 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 						self._fieldsArray = []
 						if (q.result.documents[0]) {
 							dojo.forEach(q.result.documents[0].fields, function(field) {
-								self._fieldsArray.push(field['@name'])
+								self._fieldsArray.push(field['name'])
 							})
 						}						
 					}
