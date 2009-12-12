@@ -155,13 +155,6 @@ dojo.declare("apstrata.devConsole.DevConsole",
 	postCreate: function() {
 		var self = this
 
-		dojo.addClass(this.domNode, 'horizon')
-
-		// Create the background transparent div
-		this.background = dojo.create("div", null, dojo.body())
-		dojo.addClass(this.background, "horizonBackground")
-		dojo.addClass(this.background, "rounded-sml")
-
 		// Create the leftMost Panel
 		this.main = new apstrata.devConsole.MainPanel({container: self})
 		this.addChild(this.main)
