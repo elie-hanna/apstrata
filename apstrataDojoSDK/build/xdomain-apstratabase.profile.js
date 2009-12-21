@@ -22,7 +22,6 @@ dependencies = {
 				"apstrata.Connection",
 				"apstrata.Client",
 				"apstrata.util.logger.BasicLogger",
-				"surveyWidget.widgets.config",
 				"surveyWidget.widgets.SurveyField",
 				"surveyWidget.widgets.SurveyCharting",
 				"surveyWidget.widgets.Survey",
@@ -43,7 +42,6 @@ dependencies = {
 				"apstrata.Connection",
 				"apstrata.Client",
 				"apstrata.util.logger.BasicLogger",
-				"surveyWidget.widgets.config",
 				"surveyWidget.widgets.SurveyListing",
 				"surveyWidget.widgets.SurveyListingLoader"
 	        ]
@@ -64,7 +62,6 @@ dependencies = {
 				"apstrata.Connection",
 				"apstrata.Client",
 				"apstrata.util.logger.BasicLogger",
-				"surveyWidget.widgets.config",
 				"surveyWidget.widgets.SurveyCharting",
 				"surveyWidget.widgets.SurveyChartingLoader"
 	        ]
@@ -82,7 +79,6 @@ dependencies = {
 				"apstrata.Connection",
 				"apstrata.Client",
 				"apstrata.util.logger.BasicLogger",
-				"surveyWidget.widgets.config",
 				"surveyWidget.widgets.SurveysList",
 				"surveyWidget.widgets.SurveysListLoader"
 	        ]
