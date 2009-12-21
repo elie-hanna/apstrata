@@ -58,7 +58,7 @@ dojo.declare("apstrata.URLSignerMD5", [], {
 dojo.declare("apstrata.Connection",
 	[apstrata.util.logger.Loggable],
 	{
-		_KEY_APSDB_ID: "@key",
+		_KEY_APSDB_ID: "@key",  // could we delete this? not used...
 		
 		constructor: function(attrs) {
 			this._DEFAULT_SERVICE_URL= "http://apsdb.apstrata.com/sandbox-apsdb/rest"
