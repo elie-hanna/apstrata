@@ -72,15 +72,15 @@ dojo.declare("apstrata._Item",
 			
 			// item is obtained from the raw json response to apsdb fetch
 			if (attrs.item != undefined) {
-				// the key label from an apsdb query is @key
-				self[this._KEY_LABEL] = attrs.item["@key"]
+				// the key label from an apsdb query is key
+				self[this._KEY_LABEL] = attrs.item["key"]
 
 				self.fieldsMap = {}		
 	
 				dojo.forEach(attrs.item.fields, function(field) {
 					
 					// If this is a children attribute
-					if (dojo.indexOf(attrs.childrenNames, field["@name"])>=0) {
+					if (dojo.indexOf(attrs.childrenNames, field["name"])>=0) {
 						var _values = []
 						dojo.forEach(field.values, function(value) {
 							
@@ -92,12 +92,12 @@ dojo.declare("apstrata._Item",
 						
 						var _field = {}
 						_field.values = _values
-						_field["@name"] = field["@name"]
-						_field["@type"] = self.declaredClass
+						_field["name"] = field["name"]
+						_field["type"] = self.declaredClass
 						
-						self.fieldsMap[field["@name"]] = _field
+						self.fieldsMap[field["name"]] = _field
 					} else {
-						self.fieldsMap[field["@name"]] = field							
+						self.fieldsMap[field["name"]] = field							
 					}					
 				})
 
@@ -152,7 +152,7 @@ dojo.declare("apstrata._Item",
 		 */
 		setValues: function(attribute, type, values) {
 			var value = {}
-			value["@type"] = type
+			value["type"] = type
 			value["values"] = values
 			this.fieldsMap[attribute] = value	
 		},
