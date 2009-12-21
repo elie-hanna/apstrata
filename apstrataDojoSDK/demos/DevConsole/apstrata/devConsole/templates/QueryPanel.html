@@ -1,30 +1,40 @@
 <div class='panel' style='overflow-y: auto; overflow-x: hidden;'>
+	{% if true %}
+	{% endif %}
 
-	<div class="apstrataForm rounded-top-sml rounded-bottom-sml" style='width: 300px;'>
+	<div dojoType="dijit.form.Form" dojoAttachPoint="queryForm" class="apstrataForm rounded-top-sml rounded-bottom-sml" encType="multipart/form-data" action="" method="" style='width: 300px;'>
 
 		<div class="label">Query Expression:</div>
-		<textarea dojoAttachPoint='txtQuery' name="query"></textarea>
+		<textarea name="query" dojoType="dijit.form.SimpleTextarea" dojoAttachPoint="txtQuery" class="rounded-xsml" style="width:100%;" ></textarea>
 	
 		<div class="label">Fields:</div>
-		<input type="text" dojoAttachPoint="fldFields" value="apsdb.documentKey" />
-		
-		<div class="label">Aggregates:</div>
-		<input type="text" dojoAttachPoint="fldAggregates" value="" />
+		<input type="text" dojoAttachPoint="fldFields" value="apsdb.documentKey" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml ext" />
 		
 		<div class="label">Sorting:</div>
-		<input type="text" dojoAttachPoint="fldSorting" value="" />
+		<input type="text" dojoAttachPoint="fldSorting" value="" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml ext" />
 	
 		<div class="label">Full Text Search Expression:</div>
-		<input type="text" dojoAttachPoint="fldFts" value="" />
+		<input type="text" dojoAttachPoint="fldFts" value="" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml ext" />
+		
+		<div class="label">Run As:</div>
+		<select dojoType="dijit.form.FilteringSelect" dojoAttachPoint="fldRunAs"  name="runAs" searchAttr="label" required="false"  class="rounded-xsml ext fdText"  > </select>
+		<div class="label"><input dojoType="dijit.form.CheckBox" value="true" dojoAttachPoint="fldDeniedFields"  name="deniedFields" />Return Denied Fields</div>
+		
+		<div class="label">Aggregates:</div>
+		<input type="text" dojoAttachPoint="fldAggregates" value="" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml ext" />
+		<div class="label">Aggregates Scope:</div>
+		<span class="fdText"><input dojoType="dijit.form.CheckBox" dojoAttachPoint="fldAggPScope" name="scope" value="aggregatePage">Page</span><br/>
+		<span class="fdText"><input dojoType="dijit.form.CheckBox" dojoAttachPoint="fldAggGScope" name="scope" value="aggregateGlobal" >Global</span><br/>
 		
 		<!--
 		<div class="label">Run As:</div>
 		<div id="userName"></div><button dojoAttachEvent='onclick: _refresh'>refresh</button>	
 		-->
+		
 		<br>
 		<br>
 		<div style='width: 100%; text-align: right'>
-			<button dojoAttachEvent='onclick: _query'>query</button>
+			<button dojoAttachEvent='onClick: _query' dojoType='dijit.form.Button' >query</button>
 		</div>
 	</div>
 </div>

@@ -25,6 +25,8 @@ dojo.require("dijit.form.Form");
 dojo.require("dijit.form.Button");
 dojo.require("dijit.form.ValidationTextBox");
 dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.form.FilteringSelect");
+dojo.require("dojo.data.ItemFileReadStore");
 
 dojo.require('apstrata.ItemApsdbReadStore')
 dojo.require('apstrata.widgets.QueryWidget')
@@ -48,6 +50,8 @@ dojo.declare("apstrata.devConsole.QueryResultsPanel",
 		
 		this.grid = new apstrata.widgets.QueryWidget(this.attrs.query);
 		dojo.place(this.grid.domNode, this.dvGrid, "first")		
+		//dojo.place(this.grid.domNode, this.dvAggregatePage, "first")		
+		//dojo.place(this.grid.domNode, this.dvAggregateGlobal, "first")		
 
 		this.inherited(arguments)
 	},
@@ -67,37 +71,77 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 		this._target = attrs.target
 	},
 	
+	postCreate: function() {
+		var self = this
+		dojo.connect(self.fldRunAs, 'onClick', function () {
+			self.container.client.call({
+				action: "ListUsers",
+				load: function(operation) {
+					self.data = []
+					dojo.forEach(operation.response.result.users, function(user) {
+						self.data.push({name: user['name'], label: user['name'], abbreviation: user['name']})
+					})
+					
+					self.userList = {identifier:'abbreviation',label: 'name',items: self.data}
+		        	self.fldRunAs.store = new dojo.data.ItemFileReadStore({ data: self.userList });
+				},
+				error: function(operation) {
+				}
+			})
+	    });	
+
+		this.inherited(arguments)
+	},
+	
 	_query: function() {
 			var self = this
-			
-			var queryString = this.txtQuery.value
-			
-			var columnsString = self.fldFields.value
-			var aggregatesString = self.fldAggregates.value
-			var sortingString = self.fldSorting.value
-			var FTSString = self.fldFts.value
-
-			if ((queryString == "") && (FTSString == "")) queryString = "q12345!=\"x12345\""
-
-			var store = new apstrata.ItemApsdbReadStore({client: self.container.client, 
-														resultsPerPage: 10,
-														apsdbStoreName: self.target,
-														fields: self.fldFields.value, 
-														label: "name"})
-
-			var attrs = {
-				store: store,
-				query: queryString,
-//		        runAs: runAsString,
-		        aggregates: self.fldAggregates.value,
-		        sort: self.fldSorting.value,
-		        ftsQuery: self.fldFts.value,
-				columns: self.fldFields.value,
-				page: 1
+			if (this.queryForm.validate()) {
+				var queryString = this.txtQuery.getValue()
+				
+				var columnsString = self.fldFields.getValue()
+				var aggregatesString = self.fldAggregates.getValue()
+				var sortingString = self.fldSorting.getValue()
+				var FTSString = self.fldFts.getValue()
+				var runAs = self.fldRunAs.getValue()
+				var aggPageScope = (self.fldAggPScope.getValue()=="aggregatePage")?"true":"false"
+				var aggGlobalScope = (self.fldAggGScope.getValue()=="aggregateGlobal")?"true":"false"
+				var deniedFields = self.fldDeniedFields.getValue()
+				
+				if ((queryString == "") && (FTSString == "")) 
+					queryString = "q12345!=\"x12345\""
+				
+				var store = new apstrata.ItemApsdbReadStore({
+					client: self.container.client,
+					resultsPerPage: 10,
+					apsdbStoreName: self.target,
+					fields: columnsString,
+					label: "name"
+				})
+				
+				var attrs = {
+					store: store,
+					query: queryString,
+					aggregates: aggregatesString,
+					sort: sortingString,
+					ftsQuery: FTSString,
+					columns: columnsString,
+					page: 1,
+					runAs: runAs
+				}
+				
+				if(aggregatesString != ""){
+					attrs.aggregatePage = aggPageScope
+					attrs.aggregateGlobal = aggGlobalScope
+				}
+				if(runAs != ""){
+					attrs.deniedFields = deniedFields
+				}
+				
+				self.closePanel()
+				self.openPanel(apstrata.devConsole.QueryResultsPanel, {
+					query: attrs
+				})
 			}
-
-			self.closePanel()
-			self.openPanel(apstrata.devConsole.QueryResultsPanel, {query: attrs})
 	}	
 })
 

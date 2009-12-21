@@ -32,6 +32,10 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 	columns: "apsdb.documentKey",
 	runAs: "",
 	aggregates: "",
+	aggregatePage: "",
+	aggregateGlobal: "",
+	runAs: "",
+	deniedFields: "",
 	sort: "",
 	ftsQuery: "",
 	page: 1,
@@ -45,6 +49,10 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		if (attrs.columns) this.columns = attrs.columns
 	    if (attrs.runAs) this.runAs = attrs.runAs
 	    if (attrs.aggregates) this.aggregates = attrs.aggregates
+	    if (attrs.aggregatePage) this.aggregatePage = attrs.aggregatePage
+	    if (attrs.aggregateGlobal) this.aggregateGlobal = attrs.aggregateGlobal
+	    if (attrs.runAs) this.runAs = attrs.runAs
+	    if (attrs.deniedFields) this.deniedFields = attrs.deniedFields
 	    if (attrs.sort) this.sort = attrs.sort
 	    if (attrs.ftsQuery) this.ftsQuery = attrs.ftsQuery
 		if (attrs.layout) {
@@ -116,7 +124,11 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 				pageNumber: self.page,
 		        runAs: self.runAs,
 		        aggregates: self.aggregates,
+		        aggregatePage: self.aggregatePage,
+		        aggregateGlobal: self.aggregateGlobal,
 		        sort: self.sort,
+		        runAs: self.runAs,
+		        deniedFields: self.deniedFields,
 		        ftsQuery: self.ftsQuery
 			}, 
             store: self.store,
