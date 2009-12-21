@@ -79,16 +79,16 @@
 						dojoAttachPoint="dvMaster" 
 						dojoAttachEvent='onmouseover: _onMouseoverMaster,onmouseout: _onMouseoutMaster'>
 
-						<form action="" method="">
+						<div dojoType="dijit.form.Form" dojoAttachPoint="masterForm" class="apstrataForm rounded-top-sml rounded-bottom-sml" encType="multipart/form-data" action="" method="">
 							<span class="title">Master Credentials</span>
 							<br><br>
 				
 							<div class="label">Key:</div>
-							<input type="text" dojoAttachPoint="mKey" value="" />
+							<input type="text" dojoAttachPoint="mKey" value="apstrata1" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
 				
 							<div class="label">Secret:</div>
-							<input type="password" dojoAttachPoint="mSecret" value="" />
-						</form>
+							<input type="password" dojoAttachPoint="mSecret" value="secret" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
+						</div>
 						<br><br><br><br>
 						<div class="buttonContainer">
 							<button dojoAttachEvent="onClick: loginMaster" dojoType='dijit.form.Button'>Login</button>
@@ -100,19 +100,19 @@
 						dojoAttachPoint="dvUser" 
 						dojoAttachEvent='onmouseover: _onMouseoverUser,onmouseout: _onMouseoutUser'>
 
-						<form action="" method="">
+						<div dojoType="dijit.form.Form" dojoAttachPoint="userForm" class="apstrataForm rounded-top-sml rounded-bottom-sml" encType="multipart/form-data" action="" method="">
 							<span class="title">User Credentials</span>
 							<br><br>
 				
 							<div class="label">Key:</div>
-							<input type="text" dojoAttachPoint="key" value="" />
+							<input type="text" dojoAttachPoint="key" value="" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
 				
 							<div class="label">User Name:</div>
-							<input type="text" dojoAttachPoint="un" value="" />
+							<input type="text" dojoAttachPoint="un" value="" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
 				
 							<div class="label">Password:</div>
-							<input type="password" dojoAttachPoint="pw" value="" />
-						</form>
+							<input type="password" dojoAttachPoint="pw" value="" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
+						</div>
 						<br>
 						<div class="buttonContainer">
 							<button dojoAttachEvent="onClick: loginUser" dojoType='dijit.form.Button'>Login</button>

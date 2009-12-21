@@ -23,6 +23,7 @@ dojo.provide("apstrata.devConsole.HomePanel")
 dojo.require("dijit.form.Form");
 dojo.require("dijit.form.Button");
 dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.SimpleTextarea");
 dojo.require("dijit.form.DateTextBox");
 dojo.require("dijit.form.HorizontalSlider")
 dojo.require("dijit.form.HorizontalRuleLabels")

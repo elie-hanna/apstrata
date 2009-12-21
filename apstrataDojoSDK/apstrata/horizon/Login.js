@@ -55,50 +55,60 @@ dojo.declare("apstrata.horizon.Login",
 
 	loginMaster: function() {
 		var self = this
-		connection.credentials.key = this.mKey.value
-		connection.credentials.secret = this.mSecret.value
-		
-		if(!apstrata.apConfig) apstrata.apConfig = {};
-
-		this.getContainer().connection.loginMaster({
-			success: function() {
-				apstrata.apConfig.key = connection.credentials.key
-				apstrata.apConfig.secret = connection.credentials.secret
-				
-				if (self._success) self._success()
-			},
+		if (this.masterForm.validate()) {
+			connection.credentials.key = this.mKey.value
+			connection.credentials.secret = this.mSecret.value
 			
-			failure: function(error, message) {
-				if (self._failure) self._failure()
-				var msg = (error == "INVALID_SIGNATURE")?"Invalid credentials.":"[" + error + "] " + message
-				self.container.alert(msg, self)
-			}
-		})
+			if (!apstrata.apConfig) 
+				apstrata.apConfig = {};
+			
+			this.getContainer().connection.loginMaster({
+				success: function(){
+					apstrata.apConfig.key = connection.credentials.key
+					apstrata.apConfig.secret = connection.credentials.secret
+					
+					if (self._success) 
+						self._success()
+				},
+				
+				failure: function(error, message){
+					if (self._failure) 
+						self._failure()
+					var msg = (error == "INVALID_SIGNATURE") ? "Invalid credentials." : "[" + error + "] " + message
+					apstrata.alert(msg, self)
+				}
+			})
+		}
 	},
 	
-	loginUser: function() {
+	loginUser: function(){
 		var self = this
-		connection.credentials.key = this.key.value
-		connection.credentials.secret = ""
-		connection.credentials.username = this.un.value
-		connection.credentials.password = this.pw.value
-		
-		if(!apstrata.apConfig) apstrata.apConfig = {};
-
-		this.getContainer().connection.loginUser({
-			success: function() {
-				apstrata.apConfig.key = connection.credentials.key
-				apstrata.apConfig.username = connection.credentials.username
-				apstrata.apConfig.password = connection.credentials.password
-
-				if (self._success) self._success()
-			},
+		if (this.userForm.validate()) {
+			connection.credentials.key = this.key.value
+			connection.credentials.secret = ""
+			connection.credentials.username = this.un.value
+			connection.credentials.password = this.pw.value
 			
-			failure: function(error, message) {
-				if (self._failure) self._failure()
-				var msg = (error == "INVALID_SIGNATURE")?"Invalid credentials.":"[" + error + "] " + message
-				self.container.alert(msg, self)
-			}
-		})
+			if (!apstrata.apConfig) 
+				apstrata.apConfig = {};
+			
+			this.getContainer().connection.loginUser({
+				success: function(){
+					apstrata.apConfig.key = connection.credentials.key
+					apstrata.apConfig.username = connection.credentials.username
+					apstrata.apConfig.password = connection.credentials.password
+					
+					if (self._success) 
+						self._success()
+				},
+				
+				failure: function(error, message){
+					if (self._failure) 
+						self._failure()
+					var msg = (error == "INVALID_SIGNATURE") ? "Invalid credentials." : "[" + error + "] " + message
+					apstrata.alert(msg, self)
+				}
+			})
+		}
 	}
 })

@@ -75,3 +75,9 @@
     -webkit-border-radius: 5px;
     border-radius: 5px;
 }
+
+.apstrataForm .fdText {
+	font-family: sans-serif;
+	font-size: 0.9em;
+	padding: 5px;
+}
