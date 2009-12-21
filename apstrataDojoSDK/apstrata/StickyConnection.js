@@ -119,29 +119,43 @@ dojo.declare("apstrata.StickyConnection",
 		loginUser: function(handlers) {
 			var self = this
 			
-			// todo: implement credentials checking, by calling ListStores
-			//  possible return codes
-			//  INVALID_AUTHENTICATION_KEY
-			//  INVALID_USER
-			//  PERMISSION_DENIED means credentials valid
+			self._ongoingLogin = true
+			apstrata.logger.debug("logging in: attemting to call VerifyCredentials to apstrata to validate credentials")
 			
-			if (this.credentials.username 
-			&& (this.credentials.username!="") 
-			&& this.credentials.key 
-			&& (this.credentials.key!="")) {
-				dojo.publish("/apstrata/connection/login/success", [{
-					key: self.credentials.key,
-					username: self.credentials.username
-				}])
+			var verifyCredentialsRequest = {
+					apsws: {
+						user: this.credentials.username
+				}
+			};
+			
+			var client = new apstrata.Client({connection: self})
+			
+			client.call({
+				action: "VerifyCredentials",
+				load: function(operation) {
+					self._ongoingLogin = false
+					apstrata.logger.debug("logging in: saving credentials to cookie")
+					self.save()
 	
-				if (handlers.success) handlers.success()
-			} else {
-				dojo.publish("/apstrata/connection/login/failure", [{
-					key: self.credentials.key
-				}])
+					dojo.publish("/apstrata/connection/login/success", [{
+						key: self.credentials.key
+					}])
 
-				if (handlers.failure) handlers.failure("key and username are missing", "key and username are missing")
-			}
+					if (handlers.success) handlers.success()
+				},
+				error: function(operation) {
+					// Clear the secret and password so hasCredentials() functions
+					self.credentials.secret=""
+					self.credentials.username=""
+					self.credentials.password=""
+
+					dojo.publish("/apstrata/connection/login/failure", [{
+						key: self.credentials.key
+					}])
+
+					if (handlers.failure) handlers.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage)
+				}
+			})
 
 		},
 		
@@ -149,7 +163,7 @@ dojo.declare("apstrata.StickyConnection",
 			var self = this
 			
 			self._ongoingLogin = true
-			apstrata.logger.debug("logging in: attemting ListStores to apstrata to validate credentials")
+			apstrata.logger.debug("logging in: attemting to call VerifyCredentials to apstrata to validate credentials")
 			
 			var client = new apstrata.Client({connection: self})
 			
