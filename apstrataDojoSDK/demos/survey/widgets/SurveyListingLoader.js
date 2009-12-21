@@ -45,7 +45,6 @@ dojo.require("dijit.Declaration");
 //dojo.registerModulePath("surveyWidget","../../../../demos/survey");
 //dojo.registerModulePath("apstrata","../../../../apstrata");
 dojo.require("apstrata.util.schema.Schema");
-dojo.require("surveyWidget.widgets.config");
 dojo.require("surveyWidget.widgets.SurveyListing");
 dojo.require("apstrata.Connection")
 dojo.require("apstrata.Client")

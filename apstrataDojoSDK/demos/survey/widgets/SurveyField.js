@@ -400,20 +400,6 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					this.selectedEvent();
 		},
 		
-		// NOT USED (TO DELETE)	
-		getData: function() {
-			var survey = this;
-			var value = this.fldValue.value;
-			
-			var data = {
-				title: survey.title,
-				value: value
-			}
-			
-			return data;
-		},
-		
-		
 		/**
 		 *	Creates a JSON object containing the current question's information
 		 *

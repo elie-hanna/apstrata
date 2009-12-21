@@ -55,7 +55,6 @@ dojo.require("dojo.parser");
 dojo.require("apstrata.Connection")
 dojo.require("apstrata.Client")
 dojo.require("apstrata.util.schema.Schema");
-dojo.require("surveyWidget.widgets.config");
 dojo.require("surveyWidget.widgets.Survey");
 
 //The global variable connection contains the credentials information to be used by the survey. They are set from the apConfig tag found in the html page using the survey widget
