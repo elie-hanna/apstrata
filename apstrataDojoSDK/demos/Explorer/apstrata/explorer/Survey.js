@@ -121,7 +121,6 @@ dojo.require("dijit.form.CheckBox");
 dojo.require("dijit.form.SimpleTextarea");
 dojo.require("surveyWidget.widgets.Survey");
 dojo.require("apstrata.util.schema.Schema");
-dojo.require("surveyWidget.widgets.config");
 
 
 dojo.declare("apstrata.explorer.SurveyEditor", 
