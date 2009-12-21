@@ -131,21 +131,26 @@ dojo.declare("apstrata.devConsole.StoresEditPanel",
 	
 	_save: function() {
 		var self = this
-		
-		this.container.client.call({
-			action: "CreateStore",
-			request: {
-				apsdb: {
-					store: self.storeName.value
+		if (this.newStoreForm.validate()) {
+			this.container.client.call({
+				action: "CreateStore",
+				request: {
+					apsdb: {
+						store: self.storeName.getValue(),
+						saveDocumentACL: self.saveDocumentACL.getValue(),
+						deleteDocumentACL: self.deleteDocumentACL.getValue(),
+						getFileACL: self.getFileACL.getValue(),
+						queryACL: self.queryACL.getValue()
+					}
+				},
+				load: function(operation){
+					self.getParent().reload()
+					self.getParent().closePanel()
+				},
+				error: function(operation){
 				}
-			},
-			load: function(operation) {
-				self.getParent().reload()
-				self.getParent().closePanel()
-			},
-			error: function(operation) {
-			}
-		})
+			})
+		}
 	},
 	
 	_cancel: function() {
