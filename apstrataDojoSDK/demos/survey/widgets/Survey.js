@@ -291,6 +291,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var j=0;
 			var k=0;
 			var schemaFieldArr = new Array();
+			var surveyQuestions = new Object();
 
 			var children = this.questions.getChildren();
 			var breakProcessing = false;
@@ -324,14 +325,25 @@ dojo.declare("surveyWidget.widgets.Survey",
 					schemaFieldArr[i].setRegex(regex); // Set the validation regex
 
 					i++;
-				} else if ((child.title == null || child.title == '') && !child.dummyField) { // Check that all questions have titles
+
+					surveyQuestions["q"+i] = child.title;
+					surveyQuestions["q"+i+"Type"] = childModel['type'];
+					if (childModel['type'] == 'multiple choice' || childModel['type'] == 'list' || childModel['type'] == 'radio button')
+						surveyQuestions["q"+i+"Answers"] = childModel['choices'];
+					surveyQuestions["q"+i+"Mandatory"] = childModel.mandatory;
+					surveyQuestions["q"+i+"Default"] = childModel["defaultValue"];
+					surveyQuestions["q"+i+"Name"] = childModel.name;
+					
+				} else if ((child.title == null || child.title == '') && !child.dummyField) { // check if any question doens't have a title and if true display an error message
 					child.select(); // Select the empty question
 					self.warningMessage.style.display = ''; // Display the warning message
 					self.warningMessage.innerHTML = 'All questions must have a title!';
 					breakProcessing = true;
 				}
 			});
-
+			
+			var questionCount = i;
+			
 			// Stop processing the embed codes if a warning message was displayed
 			if (breakProcessing)
 				return;
@@ -387,13 +399,17 @@ dojo.declare("surveyWidget.widgets.Survey",
 							"surveySchema.apsdb.fieldType": "text",
 							listResultSchema: listResultSchema,
 							"listResultSchema.apsdb.fieldType": "text",
-							isSurveyMetadata: "true"
+							isSurveyMetadata: "true",
+							viewResults: self.viewResults.checked,
+							successMessage: self.successMsg.value,
+							qCount: questionCount
 			}, {
 					apsdb: {
 							store: self.storeName,
 							documentKey: dockey
 				}
-			});
+			},
+				surveyQuestions);
 				
 			var setSchemaRequest = {
 					apsdb: {
