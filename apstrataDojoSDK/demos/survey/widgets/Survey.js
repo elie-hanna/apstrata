@@ -28,6 +28,7 @@ dojo.require("dojo.dnd.Manager");
 dojo.require("dojo.dnd.Source");
 dojo.require("dojo.cookie");
 
+
 dojo.declare("surveyWidget.widgets.Survey",
 	[dijit._Widget, dijit._Templated],
 	{
@@ -129,6 +130,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 				if (this.editMode) {
 					this.connect(this.btnGetData, "onclick", "getModel"); // Attaching the getModel function to the onclick event on the "Generate Embed Code" button
 					this.connect(this.viewResults, "onclick", "toggleTextBox"); // Attaching the toggleTextBox function to the onclick event on the "Show results to users" check box
+					this.connect(this.emailCheckbox, "onclick", "toggleEmail"); // Attaching the toggleEmail function to the onclick event on the "Send by email" check box
+					this.connect(this.smsCheckbox, "onclick", "toggleSms"); // Attaching the toggleSms function to the onclick event on the "Send by email" check box
+					this.connect(this.btnEmail, "onclick", "sendEmail"); // Attaching the sendEmail function to the onclick event on the "Send"(email) button
+					this.connect(this.btnSms, "onclick", "sendSms"); // Attaching the sendSms function to the onclick event on the "Send"(sms) button
 				}
 				else {
 					this.connect(this.btnSubmit, "onclick", "saveSurvey"); // Attaching the saveSurvey function to the onclick event on the "Submit" button
@@ -168,6 +173,41 @@ dojo.declare("surveyWidget.widgets.Survey",
 			else
 				this.successMsgDiv.style.display = "";
 		},
+		
+		/**
+		 * Shows or hides the Email input and button
+		 * 
+		 */
+		toggleEmail: function() {
+			if(this.emailCheckbox.checked)
+				if(this.email.style.display == "none")
+						this.email.style.display = "";
+					else
+						this.email.style.display = "none";
+			else
+				if(this.email.style.display == "none")
+						this.email.style.display = "";
+					else
+						this.email.style.display = "none";
+		},
+		
+		/**
+		 * Shows or hides the sms input and button
+		 * 
+		 */
+		toggleSms: function() {
+			if(this.smsCheckbox.checked)
+				if(this.phone.style.display == "none")
+						this.phone.style.display = "";
+					else
+						this.phone.style.display = "none";
+			else
+				if(this.phone.style.display == "none")
+						this.phone.style.display = "";
+					else
+						this.phone.style.display = "none";
+		},
+
 		
 		/**
 		 * Creates an object of type surveyWidget.widgets.SurveyField that represent one question.
@@ -276,6 +316,40 @@ dojo.declare("surveyWidget.widgets.Survey",
 			this.inherited(arguments);
 		},
 		
+		/**
+		 * Send Email to recipient
+		 * 
+		 */
+		sendEmail: function() {
+		},
+		/**
+		 * Send Sms to recipient
+		 * 
+		 */
+		sendSms: function(){
+			var client = new apstrata.Client({connection: connection});
+			var self = this;
+			var runScriptRequest = dojo.mixin({
+				surveyName: self.title.value,
+				phoneNumber: self.phoneNumber.value
+			}, {
+				apsdb: {
+					scriptName: "sendSms"
+				}
+			});
+			var sd = client.call({
+					action: "RunScript",
+					useHttpMethod : "GET",
+					request: runScriptRequest,
+					load: function(operation) {
+						self.warningMessage.style.display = 'none'; // On success hide the warning message
+					},
+					error: function(operation) {
+						self.warningMessage.style.display = ''; // Display the warning message
+						self.warningMessage.innerHTML = "Error while sending the sms";
+					}
+				});
+		},
 		/**
 		 * Constructs and displays the embed codes used to run a survey, list the results of the survey in a table or list the results as charts
 		 * 
@@ -432,6 +506,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 							load: function(operation) {
 								self.warningMessage.style.display = 'none'; // On success hide the warning message
 								self.generateAndDisplayEmbedCodes(surveySchema, listResultSchema);
+								self.emailSurvey.style.display = ""; // On success show the Send by Email
+								self.smsSurvey.style.display = ""; // On success show the Send by Sms
+								
 							},
 							error: function(operation) {
 								var warningMsg = '';

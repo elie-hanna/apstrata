@@ -5,11 +5,29 @@
 		<form dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
 		<div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer"  withHandles="true" class="questionsPanel"></div>
 		</form>
+		
+		<br/>
+		<div title="Sms survey to users" dojoAttachPoint="smsSurvey" style="display: none;">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="smsCheckbox" dojoAttachEvent="onClick: toggleSms" name="smsSurvey"/> Send by sms
+			<div dojoAttachPoint="phone" style="display: none;">
+				<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="phoneNumber" trim=true value=""><input dojoAttachPoint="btnSms" type="button" value="send" />
+			</div>
+		</div>
+		
+		<br/>
+		<div title="Email survey to users" dojoAttachPoint="emailSurvey" style="display: none;">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="emailCheckbox" dojoAttachEvent="onClick: toggleEmail" name="emailSurvey"/> Send by email
+			<div dojoAttachPoint="email" style="display: none;">
+				<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="emailaddress" trim=true value=""><input dojoAttachPoint="btnEmail" type="button" value="send" />
+			</div>	
+		</div>
+		
 		<br/>
 		<div title="Show results to users">
 			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: toggleTextBox" name="allowViewingResults"/> Show results to users
 		</div>
 		<br/>
+		
 		<div title="Success Message" dojoAttachPoint="successMsgDiv">
 			Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
 		</div>
