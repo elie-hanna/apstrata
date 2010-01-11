@@ -119,8 +119,37 @@ dojo.declare("apstrata.StickyConnection",
 		loginUser: function(handlers) {
 			var self = this
 			
+			// todo: implement credentials checking, by calling ListStores
+			//  possible return codes
+			//  INVALID_AUTHENTICATION_KEY
+			//  INVALID_USER
+			//  PERMISSION_DENIED means credentials valid
+			
+			if (this.credentials.username 
+			&& (this.credentials.username!="") 
+			&& this.credentials.key 
+			&& (this.credentials.key!="")) {
+				dojo.publish("/apstrata/connection/login/success", [{
+					key: self.credentials.key,
+					username: self.credentials.username
+				}])
+	
+				if (handlers.success) handlers.success()
+			} else {
+				dojo.publish("/apstrata/connection/login/failure", [{
+					key: self.credentials.key
+				}])
+
+				if (handlers.failure) handlers.failure("key and username are missing", "key and username are missing")
+			}
+
+		},
+		/*
+		loginUser: function(handlers) {
+			var self = this
+			
 			self._ongoingLogin = true
-			apstrata.logger.debug("logging in: attemting to call VerifyCredentials to apstrata to validate credentials")
+			apstrata.logger.debug("logging in: attemting to call ListStores to apstrata to validate credentials")
 			
 			var verifyCredentialsRequest = {
 					apsws: {
@@ -131,7 +160,7 @@ dojo.declare("apstrata.StickyConnection",
 			var client = new apstrata.Client({connection: self})
 			
 			client.call({
-				action: "VerifyCredentials",
+				action: "ListStores",
 				load: function(operation) {
 					self._ongoingLogin = false
 					apstrata.logger.debug("logging in: saving credentials to cookie")
@@ -157,18 +186,18 @@ dojo.declare("apstrata.StickyConnection",
 				}
 			})
 
-		},
+		},*/
 		
 		loginMaster: function(handlers) {
 			var self = this
 			
 			self._ongoingLogin = true
-			apstrata.logger.debug("logging in: attemting to call VerifyCredentials to apstrata to validate credentials")
+			apstrata.logger.debug("logging in: attemting to call ListStores to apstrata to validate credentials")
 			
 			var client = new apstrata.Client({connection: self})
 			
 			client.call({
-				action: "VerifyCredentials",
+				action: "ListStores",
 				load: function(operation) {
 					self._ongoingLogin = false
 					apstrata.logger.debug("logging in: saving credentials to cookie")
