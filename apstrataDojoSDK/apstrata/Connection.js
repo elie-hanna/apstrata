@@ -41,9 +41,9 @@ dojo.declare("apstrata.URLSignerMD5", [], {
 					}
 		
 					var apswsReqUrl = connection.serviceUrl
-							+ "/" + connection.credentials.key
-							+ "/" + operation
-							+ "?apsws.time=" + timestamp
+							+ "?apsws.authKey=" + connection.credentials.key
+							+ "&apsdb.action=" + operation
+							+ "&apsws.time=" + timestamp
 							+ ((signature!="")?"&apsws.authSig=":"") + signature
 							+ ((userName!="")?"&apsws.user=":"") + userName
 							+ "&apsws.responseType=" + responseType
