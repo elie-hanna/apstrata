@@ -51,7 +51,7 @@ dojo.declare('apstrata.mForms.Targets',
 				apsdb: {
 					store: self.storeName,
 					query: "formType=\"targetGroup\"",
-					queryFields: "apsdb.documentKey,targetName,description,members"
+					queryFields: "apsdb.documentKey,targetName,targetDescription,targetMembers"
 				}
 			},
 			load: function(operation){
@@ -125,17 +125,20 @@ dojo.declare("apstrata.mForms.TargetEdit",
 	constructor: function(attrs){
 		if (attrs) {
 			if (attrs.document) {
+				this.documentKey = attrs.document.fields[0].values[0]
 				this.target = attrs.document.fields[1].values[0]
-				this.description = '-'
-				this.members = '-'
+				this.description = attrs.document.fields[2].values[0]
+				this.members = attrs.document.fields[3].values[0]
 				this.update = true
 			} else {
+				this.documentKey = ''
 				this.target = ''
 				this.description = ''
 				this.members = ''
 				this.update = false
 			}
 		} else {
+			this.documentKey = ''
 			this.target = ''
 			this.description = ''
 			this.members = ''
@@ -145,17 +148,31 @@ dojo.declare("apstrata.mForms.TargetEdit",
 	
 	_save: function() {
 		var self = this
+		var saveDocumentRequest = {}
+		if(this.update == true){
+			saveDocumentRequest = {
+				formType: "targetGroup",
+				"targetMembers.apsdb.fieldType": "text",
+				apsdb: {
+					store: self.getParent().storeName,
+					update: "true",
+					documentKey: self.documentKey
+				}
+			}
+		} else{
+			saveDocumentRequest = {
+				formType: "targetGroup",
+				"targetMembers.apsdb.fieldType": "text",
+				apsdb: {
+					store: self.getParent().storeName
+				}
+			}
+		}
+	
 		console.dir(this.targetForm.attr("value"))
 		this.getContainer().client.call({
 				action: "SaveDocument",
-				request: {
-					formType: "targetGroup",
-					"targetMembers.apsdb.fieldType": "text",
-					
-					apsdb: {
-						store: self.getParent().storeName
-					}
-				},
+				request: saveDocumentRequest,
 				formNode: self.targetForm.domNode,
 				load: function(operation) {
 					self.getParent().refresh();
@@ -167,6 +184,7 @@ dojo.declare("apstrata.mForms.TargetEdit",
 	},
 	
 	_cancel: function() {
+		this.close()
 	}
 })
 
