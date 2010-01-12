@@ -330,7 +330,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
 			var runScriptRequest = dojo.mixin({
-				surveyName: self.title.value,
+				surveyName: self.schemaName,
 				phoneNumber: self.phoneNumber.value
 			}, {
 				apsdb: {
@@ -429,6 +429,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var strTitleForSchema = this.cleanTitleForSchemaName(this.title.value);
 			var schemaName = 's_' + apstrata.apConfig.key + '_' + strTitleForSchema + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase().substring(0, 10);
 			var dockey = schemaName;
+			this.schemaName = schemaName;
 
 			var apstrataSurveySchemaName = new Object();
 			apstrataSurveySchemaName.choices = '';
