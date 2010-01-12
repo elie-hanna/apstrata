@@ -59,7 +59,7 @@ dojo.declare('apstrata.mForms.Campaigns',
 				apsdb: {
 					store: self.storeName,
 					query: "formType=\"campaign\"",
-					queryFields: "apsdb.documentKey,campaignName,target,sms,email,startDate,startTime,endDate,endTime"
+					queryFields: "apsdb.documentKey,campaignName,target,formName,sms,email,startDate,startTime,endDate,endTime"
 				}
 			},
 			load: function(operation){
@@ -70,6 +70,7 @@ dojo.declare('apstrata.mForms.Campaigns',
 					var o = {
 						'apsdb.documentKey': '',
 						campaignName: '',
+						formName: '',
 						target: '',
 						sms: '',
 						email: '',
@@ -150,10 +151,9 @@ dojo.declare("apstrata.mForms.CampaignForm",
 		if (attrs) this.attrs = attrs
 	},
 	
-	refreshTargetsList: function(onRefresh) {
+	_getTargetsStore: function(onLoad) {
 		var self = this
-		
-		// Retrieve targets
+
 		this.getContainer().client.call({
 			action: "Query",
 			request: {
@@ -176,39 +176,99 @@ dojo.declare("apstrata.mForms.CampaignForm",
 					})
 				})
 
-		        var targetsStore = new dojo.data.ItemFileReadStore({
+		        var store = new dojo.data.ItemFileReadStore({
 					data: data
 		        });
-
-		        var filteringSelect = new dijit.form.ComboBox({
-		            name: "target",
-		            value: "",
-		            store: targetsStore,
-		            searchAttr: "targetName"
-		        },
-		        self.dvSelectTarget);
 				
-				onRefresh()
+				onLoad(store)
 			},
 			error: function(operation){
 			}
 		});
 	},
+
+	_getFormsStore: function(onLoad) {
+		var self = this
+		this.getContainer().client.call({
+				action: "Query",
+				request: {
+					apsdb: {
+						store: self.storeName,
+						query: "apsdb.creator=\"" + connection.credentials.username+ "\" and isSurveyMetadata=\"true\"",
+						queryFields: "surveyName,apsdb.documentKey"
+					}
+				},
+				load: function(operation) {
+					// Rearrange the result to suite the template
+
+					self.data = []
+					dojo.forEach(operation.response.result.documents, function(document) {
+						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{documentKey: document.fields[1].values[0]}})
+					})
+
+					var data = {label: "formName", identifier: "documentKey"}
+					data.items = []
+					
+					dojo.forEach(operation.response.result.documents, function(document){
+						data.items.push({
+							documentKey: document.fields[1].values[0],
+							formName: document.fields[0].values[0]
+						})
+					})
+	
+			        var store = new dojo.data.ItemFileReadStore({
+						data: data
+			        });
+					
+					onLoad(store)
+				},
+				error: function(operation) {
+				}
+			});
+	},
 	
 	postCreate: function() {
 		var self = this
 		this.update = false
-		
-		this.refreshTargetsList(function() {
-			if (self.attrs) {
-				console.dir(self.attrs)
-				if (self.attrs.document) {
-					self.update = true
-					self.render()
-					self.schedule.setValues(self.attrs.document)
+		var targets
+
+		self._getTargetsStore(function(t) {
+			targetsStore = t
+			self._getFormsStore(function(formsStore) {
+				if (self.attrs) {
+					console.dir(self.attrs)
+					if (self.attrs.document) {
+						self.update = true
+						self.render()
+						self.schedule.setValues(self.attrs.document)
+					}
 				}
-			}
+				
+				var targetName = ""
+				if (self.attrs.document) targetName = self.attrs.document.target
+
+				var formName = ""
+				if (self.attrs.document) formName = self.attrs.document.formName
+
+		        new dijit.form.ComboBox({
+		            name: "target",
+		            value: targetName,
+		            store: targetsStore,
+		            searchAttr: "targetName"
+		        },
+		        self.dvSelectTarget);
+
+		        new dijit.form.ComboBox({
+		            name: "formName",
+		            value: formName,
+		            store: formsStore,
+		            searchAttr: "formName"
+		        },
+		        self.dvSelectForm);
+			})
 		})
+		
+//		this.refreshTargetsList(function() {})
 		this.inherited(arguments)
 	},
 	
@@ -225,6 +285,8 @@ dojo.declare("apstrata.mForms.CampaignForm",
 				store: self.getParent().storeName
 			}
 		})
+		
+		if (this.update) request.apsdb.documentKey = this.attrs.document['apsdb.documentKey']
 
 		this.getContainer().client.call({
 				action: "SaveDocument",
