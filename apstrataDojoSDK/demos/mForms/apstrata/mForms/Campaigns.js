@@ -146,6 +146,8 @@ dojo.declare("apstrata.mForms.CampaignForm",
 	update: false,
 	
 	storeName: "DefaultStore",
+	phoneNumbers: "",
+	surveyName: "",
 	
 	constructor: function(attrs) {
 		if (attrs) this.attrs = attrs
@@ -160,7 +162,7 @@ dojo.declare("apstrata.mForms.CampaignForm",
 				apsdb: {
 					store: self.storeName,
 					query: "formType=\"targetGroup\"",
-					queryFields: "apsdb.documentKey,targetName,description,members"
+					queryFields: "apsdb.documentKey,targetName"
 				}
 			},
 			load: function(operation){
@@ -250,7 +252,7 @@ dojo.declare("apstrata.mForms.CampaignForm",
 				var formId = ""
 				if (self.attrs.document) formId = self.attrs.document.formId
 
-		        new dijit.form.ComboBox({
+		        new dijit.form.FilteringSelect({
 		            name: "target",
 		            value: targetName,
 		            store: targetsStore,
@@ -258,7 +260,7 @@ dojo.declare("apstrata.mForms.CampaignForm",
 		        },
 		        self.dvSelectTarget);
 
-		        new dijit.form.ComboBox({
+		        new dijit.form.FilteringSelect({
 		            name: "formId",
 		            value: formId,
 		            store: formsStore,
@@ -293,7 +295,41 @@ dojo.declare("apstrata.mForms.CampaignForm",
 				request: request,
 //				formNode: self.schedule.domNode,
 				load: function(operation) {
-					self.getParent().refresh();
+					self.getContainer().client.call({
+						action: "Query",
+						request: {
+							apsdb: {
+								store: self.getParent().storeName,
+								query: "apsdb.documentKey=\"" + self.schedule.attr("value").target + "\"",
+								queryFields: "targetMembers"
+							}
+						},
+						load: function(operation){
+		
+							var runScriptletRequest = dojo.mixin({
+								phoneNumbers: operation.response.result.documents[0].fields[0].values[0],
+								surveyName: self.schedule.attr("value").formId,
+								smsText: self.schedule.attr("value").sms
+							}, {
+								apsdb: {
+									scriptName: 'sendSms'
+								}
+							});
+							
+							// Run the send sms script 
+							self.getContainer().client.call({
+								action: "RunScriptlet",
+								request: runScriptletRequest,
+								load: function(operation) {
+								},
+								error: function(operation) {
+								}
+							})
+						},
+						error: function(operation){
+						}
+					});
+					self.getParent().refresh()
 				},
 				error: function(operation) {
 				}
