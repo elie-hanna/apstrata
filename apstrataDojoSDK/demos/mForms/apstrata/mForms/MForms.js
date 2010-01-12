@@ -31,7 +31,7 @@ dojo.require("apstrata.horizon.HStackableMainPanel")
 dojo.require("apstrata.horizon.Login")
 dojo.require("apstrata.horizon.Preferences")
 
-dojo.require("apstrata.mForms.Schedule")
+dojo.require("apstrata.mForms.Campaigns")
 dojo.require("apstrata.mForms.Targets")
 dojo.require("apstrata.mForms.Forms")
 
@@ -62,7 +62,7 @@ dojo.declare("apstrata.explorer.MainPanel",
 		switch (label) {
 			case 'targets': this.openPanel(apstrata.mForms.Targets); break;
 			case 'forms': this.openPanel(apstrata.mForms.Forms); break;
-			case 'campaigns': this.openPanel(apstrata.mForms.ScheduleForm); break;
+			case 'campaigns': this.openPanel(apstrata.mForms.Campaigns); break;
 			case 'logout':  this.getContainer().connection.logout(); break;
 		}
 	},

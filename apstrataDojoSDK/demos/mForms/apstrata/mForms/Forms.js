@@ -130,7 +130,7 @@ dojo.declare("apstrata.mForms.FormActions",
 		switch (label)
 		{
 			case 'schedule':
-				this.openPanel(apstrata.mForms.ScheduleForm, {schema:self.schema, editingMode:false, storeName: self.storeName});
+				this.openPanel(apstrata.mForms.CampaignForm, {schema:self.schema, editingMode:false, storeName: self.storeName});
 			break;
 			case 'try':
 				this.openPanel(apstrata.mForms.SurveyEditor,{schema:self.schema, editingMode:false, storeName: self.storeName, usingCookie: false})
