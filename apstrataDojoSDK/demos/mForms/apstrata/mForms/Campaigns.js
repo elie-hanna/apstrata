@@ -59,7 +59,7 @@ dojo.declare('apstrata.mForms.Campaigns',
 				apsdb: {
 					store: self.storeName,
 					query: "formType=\"campaign\"",
-					queryFields: "apsdb.documentKey,campaignName,target,formName,sms,email,startDate,startTime,endDate,endTime"
+					queryFields: "apsdb.documentKey,campaignName,target,formId,sms,email,startDate,startTime,endDate,endTime"
 				}
 			},
 			load: function(operation){
@@ -70,7 +70,7 @@ dojo.declare('apstrata.mForms.Campaigns',
 					var o = {
 						'apsdb.documentKey': '',
 						campaignName: '',
-						formName: '',
+						formId: '',
 						target: '',
 						sms: '',
 						email: '',
@@ -206,13 +206,13 @@ dojo.declare("apstrata.mForms.CampaignForm",
 						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{documentKey: document.fields[1].values[0]}})
 					})
 
-					var data = {label: "formName", identifier: "documentKey"}
+					var data = {label: "formId", identifier: "documentKey"}
 					data.items = []
 					
 					dojo.forEach(operation.response.result.documents, function(document){
 						data.items.push({
 							documentKey: document.fields[1].values[0],
-							formName: document.fields[0].values[0]
+							formId: document.fields[0].values[0]
 						})
 					})
 	
@@ -247,8 +247,8 @@ dojo.declare("apstrata.mForms.CampaignForm",
 				var targetName = ""
 				if (self.attrs.document) targetName = self.attrs.document.target
 
-				var formName = ""
-				if (self.attrs.document) formName = self.attrs.document.formName
+				var formId = ""
+				if (self.attrs.document) formId = self.attrs.document.formId
 
 		        new dijit.form.ComboBox({
 		            name: "target",
@@ -259,10 +259,10 @@ dojo.declare("apstrata.mForms.CampaignForm",
 		        self.dvSelectTarget);
 
 		        new dijit.form.ComboBox({
-		            name: "formName",
-		            value: formName,
+		            name: "formId",
+		            value: formId,
 		            store: formsStore,
-		            searchAttr: "formName"
+		            searchAttr: "formId"
 		        },
 		        self.dvSelectForm);
 			})
