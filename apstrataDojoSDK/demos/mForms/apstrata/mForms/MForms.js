@@ -160,7 +160,17 @@ dojo.declare("apstrata.mForms.HomePanel",
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/HomePanel.html"),
 
-	maximizePanel: true
+	maximizePanel: true,
+	
+	constructor: function() {
+		var config = new apstrata.mForms.ApConfig()
+		
+		if (config.get().cobranding) 
+			if (config.get().cobranding.homePanelTemplate) 
+				this.templatePath = config.get().cobranding.homePanelTemplate
+	}
+	
+	
 })
 
 dojo.require("apstrata.mForms.ApConfig")
