@@ -62,6 +62,8 @@ dojo.declare("apstrata.StickyConnection",
 				this.credentials = o.credentials
 				if (o.serviceUrl) this.serviceUrl = o.serviceUrl
 				if (o.defaultStore) this.defaultStore = o.defaultStore
+
+				 apstrata.apConfig = o.credentials
 				
 
 				if (o.credentials.key && o.credentials.secret) {
@@ -133,6 +135,9 @@ dojo.declare("apstrata.StickyConnection",
 					key: self.credentials.key,
 					username: self.credentials.username
 				}])
+
+				apstrata.logger.debug("logging in: saving credentials to cookie")
+				self.save()
 	
 				if (handlers.success) handlers.success()
 			} else {
