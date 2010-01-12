@@ -1,0 +1,47 @@
+<div class='panel' style='width: 375px;overflow-y: auto;'>
+	{% if true %} 
+	{% endif %}
+	
+	<div class="apstrataForm" style='width: 220px;'>
+
+		<div dojoType="dijit.form.Form" class="apstrataForm rounded-top-sml rounded-bottom-sml"
+			dojoAttachPoint="targetForm" encType="multipart/form-data" action="" method="">
+	
+			<div class="label">Target:</div>
+			<input type="text"
+				name="targetName" 
+				dojoAttachPoint="target" 
+				style='width: 310px;' 
+				value="{{ target }}" {% if update %} disabled='disabled' {% endif %}></input>
+			
+			<div class="label">Description:</div>
+			<input type="text"
+				name="targetDescription" 
+				dojoAttachPoint="description" 
+				style='width: 310px;' 
+				value="{{ description }}"></input>
+			
+			<div class="label">Members:</div>
+			<textarea type="text" 
+				name="targetMembers" 
+				dojoAttachPoint="members"
+				dojoType='dijit.form.Textarea'
+				style='width: 320px;' 
+			 	value="{{ members }}"></textarea>
+	
+			<div style='font-size: 0.8em;color: grey;'>comma separated list</div>
+			<br><br>
+	        <div class="label">import CSV:</div>
+	        <input 
+				name="apsdb_attachments" 
+				dojoAttachPoint="membersCSV" 
+				dojoType="dojox.form.FileInput"
+				style='width: 214px;' 
+				class="rounded-xsml" /><br>
+			<br><br>
+		</div>
+
+		<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: _save'>save</button>
+		<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: _cancel'>cancel</button>
+	</div>
+</div>
