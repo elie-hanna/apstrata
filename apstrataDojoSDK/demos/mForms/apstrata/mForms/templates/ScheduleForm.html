@@ -14,30 +14,17 @@
 
 	                <div class="label">Invitation Text sent by SMS:</div>
 	                <input class="rounded-xsml" type="text" style="width: 350px; height: 50px;"
+						name='sms'
 						required="true" dojoType="dijit.form.SimpleTextarea"/><br>
 	
 	                <div class="label">Invitation Text sent by Email:</div>
 					<div style="background: #ffffff;">
-					    <div dojoType="dijit.Editor" 
+					    <textarea rows='3' style="height: 100px;width: 200px;"
+							dojoType="dijit.Editor"
+							name='email'
 							extraPlugins="['foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true}]" 
-							dojoAttachPoint="edtrPost" style="height: 100px;"></div>
+							dojoAttachPoint="edtrPost"></textarea>
 					</div>
-
-<style>
-	.label-sml {
-		font-size: 0.8em;
-	}
-	
-	.calendar-red {
-		background: #eedede;
-		padding: 5px;
-	}
-
-	.calendar-green {
-		background: #deeede;
-		padding: 5px;
-	}
-</style>
 
 				<!-- Campaign Schedule -->
 				<div class="label">Start</div>
@@ -49,11 +36,11 @@
 					<tr>
 						<td>
 							<div class="label-sml">Date</div>
-							<input class="rounded-xsml" type="text" name="date" dojoType="dijit.form.DateTextBox" required="true" />
+							<input class="rounded-xsml" type="text" name="startDate" dojoType="dijit.form.DateTextBox" required="true" />
 						</td>
 						<td>
 							<div class="label-sml">Time</div>
-							<input class="rounded-xsml" type="text" name="time" value="T12:00:00" dojoType="dijit.form.TimeTextBox" required="false" />
+							<input class="rounded-xsml" type="text" name="startTime" value="T12:00:00" dojoType="dijit.form.TimeTextBox" required="false" />
 						</td>
 					</tr>
 				</table>
@@ -67,11 +54,11 @@
 					<tr>
 						<td>
 							<div class="label-sml">Date</div>
-							<input class="rounded-xsml" type="text" name="date" dojoType="dijit.form.DateTextBox" required="true" />
+							<input class="rounded-xsml" type="text" name="endDate" dojoType="dijit.form.DateTextBox" required="true" />
 						</td>
 						<td>
 							<div class="label-sml">Time</div>
-							<input class="rounded-xsml" type="text" name="time" value="T12:00:00" dojoType="dijit.form.TimeTextBox" required="false" />
+							<input class="rounded-xsml" type="text" name="endTime" value="T12:00:00" dojoType="dijit.form.TimeTextBox" required="false" />
 						</td>
 					</tr>
 				</table>

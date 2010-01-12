@@ -95,3 +95,19 @@ html, body {
 .documentation ul {
 	line-height: 1.4em;
 }
+
+
+
+.label-sml {
+	font-size: 0.8em;
+}
+
+.calendar-red {
+	background: #eedede;
+	padding: 5px;
+}
+
+.calendar-green {
+	background: #deeede;
+	padding: 5px;
+}
