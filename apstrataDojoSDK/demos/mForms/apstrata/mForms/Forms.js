@@ -109,7 +109,6 @@ dojo.declare("apstrata.mForms.FormActions",
 [apstrata.horizon.HStackableList], 
 {
 	data: [
-		{label: "schedule", iconSrc: "../../apstrata/resources/images/pencil-icons/calendar.png"},
 		{label: "try", iconSrc: "../../apstrata/resources/images/pencil-icons/survey.png"},
 		{label: "results", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"},
 		{label: "edit", iconSrc: "../../apstrata/resources/images/pencil-icons/edit.png"}
