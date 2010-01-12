@@ -36,7 +36,7 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 		var mainPanel = this
 
 		dojo.subscribe("/apstrata/connection/login/success", function(data) {
-			mainPanel.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"})
+			mainPanel.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/logout.png"})
 			mainPanel.render()
 		})
 		
@@ -51,7 +51,7 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 	
 	startup: function() {
 		if (this._connection.hasCredentials()) {
-			this.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"})
+			this.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/logout.png"})
 			this.render()
 		} 
 	}
