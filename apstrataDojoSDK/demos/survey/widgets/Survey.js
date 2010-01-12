@@ -338,7 +338,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			});
 			var sd = client.call({
-					action: "RunScript",
+					action: "RunScriptlet",
 					useHttpMethod : "GET",
 					request: runScriptRequest,
 					load: function(operation) {
