@@ -9,6 +9,12 @@
 			</div>
 				<br>
 			<div>
+	                <div class="label">Campaign Name:</div>
+	                <input class="rounded-xsml" type="text" style="width: 350px"
+						name='campaignName'
+						{% if update %} disabled='disabled' {% endif %}
+						required="true" dojoType="dijit.form.ValidationTextBox"/><br>
+
 	                <div class="label">Pick a target group:</div>
 					<div class="rounded-xsml" dojoAttachPoint='dvSelectTarget'></div>
 
@@ -36,11 +42,17 @@
 					<tr>
 						<td>
 							<div class="label-sml">Date</div>
-							<input class="rounded-xsml" type="text" name="startDate" dojoType="dijit.form.DateTextBox" required="true" />
+							<input class="rounded-xsml" type="text" 
+							name="startDate" 
+							dojoType="dijit.form.DateTextBox" 
+							required="true" />
 						</td>
 						<td>
 							<div class="label-sml">Time</div>
-							<input class="rounded-xsml" type="text" name="startTime" value="T12:00:00" dojoType="dijit.form.TimeTextBox" required="false" />
+							<input class="rounded-xsml" type="text" 
+							name="startTime" value="T12:00:00" 
+							dojoType="dijit.form.TimeTextBox" 
+							required="false" />
 						</td>
 					</tr>
 				</table>
@@ -77,7 +89,11 @@
 
 			</div>
 			<br><br>
-		<div><button dojoType="dijit.form.Button" dojoAttachEvent="onClick: save">Launch</button></div>
+		<div>
+			<button dojoType="dijit.form.Button" dojoAttachEvent="onClick: save">
+				{% if update %} Save {% else %} Launch {% endif %}			
+			</button>
+		</div>
 	</div>
 	
 </div>

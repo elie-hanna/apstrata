@@ -59,7 +59,7 @@ dojo.declare('apstrata.mForms.Campaigns',
 				apsdb: {
 					store: self.storeName,
 					query: "formType=\"campaign\"",
-					queryFields: "apsdb.documentKey,target,sms,email,startDate,startTime,endDate,endTime"
+					queryFields: "apsdb.documentKey,campaignName,target,sms,email,startDate,startTime,endDate,endTime"
 				}
 			},
 			load: function(operation){
@@ -69,6 +69,8 @@ dojo.declare('apstrata.mForms.Campaigns',
 				dojo.forEach(operation.response.result.documents, function(document) {
 					var o = {
 						'apsdb.documentKey': '',
+						campaignName: '',
+						target: '',
 						sms: '',
 						email: '',
 /*
@@ -140,13 +142,15 @@ dojo.declare("apstrata.mForms.CampaignForm",
 	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/ScheduleForm.html"),
 	maximizePanel: true,
 	
+	update: false,
+	
 	storeName: "DefaultStore",
 	
 	constructor: function(attrs) {
 		if (attrs) this.attrs = attrs
 	},
 	
-	refreshTargetsList: function() {
+	refreshTargetsList: function(onRefresh) {
 		var self = this
 		
 		// Retrieve targets
@@ -184,6 +188,7 @@ dojo.declare("apstrata.mForms.CampaignForm",
 		        },
 		        self.dvSelectTarget);
 				
+				onRefresh()
 			},
 			error: function(operation){
 			}
@@ -191,13 +196,19 @@ dojo.declare("apstrata.mForms.CampaignForm",
 	},
 	
 	postCreate: function() {
-		this.refreshTargetsList()
+		var self = this
+		this.update = false
 		
-		if (this.attrs) {
-			console.dir(this.attrs)
-			if (this.attrs.document) this.schedule.setValues(this.attrs.document)
-		}
-		
+		this.refreshTargetsList(function() {
+			if (self.attrs) {
+				console.dir(self.attrs)
+				if (self.attrs.document) {
+					self.update = true
+					self.render()
+					self.schedule.setValues(self.attrs.document)
+				}
+			}
+		})
 		this.inherited(arguments)
 	},
 	
@@ -205,17 +216,20 @@ dojo.declare("apstrata.mForms.CampaignForm",
 		var self = this
 		
 		console.dir(this.schedule.attr("value"))
+		
+		request = dojo.mixin(this.schedule.attr("value"), {
+			formType: "campaign",
+			"email.apsdb.fieldType": "text",
+			
+			apsdb: {
+				store: self.getParent().storeName
+			}
+		})
+
 		this.getContainer().client.call({
 				action: "SaveDocument",
-				request: {
-					formType: "campaign",
-					"email.apsdb.fieldType": "text",
-					
-					apsdb: {
-						store: self.getParent().storeName
-					}
-				},
-				formNode: self.schedule.domNode,
+				request: request,
+//				formNode: self.schedule.domNode,
 				load: function(operation) {
 					self.getParent().refresh();
 				},
