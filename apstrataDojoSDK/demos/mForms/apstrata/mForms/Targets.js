@@ -124,10 +124,17 @@ dojo.declare("apstrata.mForms.TargetEdit",
 
 	constructor: function(attrs){
 		if (attrs) {
-			this.target = attrs.document.fields[1].values[0]
-			this.description = '-'
-			this.members = '-'
-			this.update = true
+			if (attrs.document) {
+				this.target = attrs.document.fields[1].values[0]
+				this.description = '-'
+				this.members = '-'
+				this.update = true
+			} else {
+				this.target = ''
+				this.description = ''
+				this.members = ''
+				this.update = false
+			}
 		} else {
 			this.target = ''
 			this.description = ''
@@ -138,7 +145,7 @@ dojo.declare("apstrata.mForms.TargetEdit",
 	
 	_save: function() {
 		var self = this
-		
+		console.dir(this.targetForm.attr("value"))
 		this.getContainer().client.call({
 				action: "SaveDocument",
 				request: {
