@@ -44,7 +44,7 @@ dojo.declare("apstrata.explorer.MainPanel",
 		{label: "targets", iconSrc: "../../apstrata/resources/images/pencil-icons/users.png"},
 		{label: "forms", iconSrc: "../../apstrata/resources/images/pencil-icons/survey.png"},
 		{label: "campaigns", iconSrc: "../../apstrata/resources/images/pencil-icons/calendar.png"},
-		{label: "extract", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"},
+//		{label: "extract", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"},
 		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"}
 	],
 	
