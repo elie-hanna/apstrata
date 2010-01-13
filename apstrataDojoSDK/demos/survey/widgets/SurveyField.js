@@ -288,8 +288,12 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 						this.fieldName = this.fldName.value;
 					} else
 						var required = this.fieldMandatory;						
-
-					newField = '<br/><textarea name="'+this.fieldName+'" dojoType="dijit.form.SimpleTextarea" rows="2" style="width:190px;" required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue">'+this.defaultFieldValue+'</textarea>';
+					
+					var defaultValue = "";
+					if(typeof(this.defaultFieldValue) != "undefined") 
+						defaultValue = this.defaultFieldValue;
+					
+					newField = '<br/><textarea name="'+this.fieldName+'" dojoType="dijit.form.SimpleTextarea" rows="2" style="width:190px;" required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue">'+defaultValue+'</textarea>';
 
 					this.spnValue.innerHTML = newField;
 					dojo.parser.parse(this.spnValue);
@@ -300,9 +304,13 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 						var required = false;
 						this.fieldName = this.fldName.value;
 					} else
-						var required = this.fieldMandatory;						
+						var required = this.fieldMandatory;		
+						
+					var defaultValue = "";
+					if(typeof(this.defaultFieldValue) != "undefined") 
+						defaultValue = this.defaultFieldValue;
 
-					newField = '<br/><input dojoType="dijit.form.ValidationTextBox" trim=true required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue"  value="'+this.defaultFieldValue+'" name="'+this.fieldName+'">';	
+					newField = '<br/><input dojoType="dijit.form.ValidationTextBox" trim=true required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue"  value="'+defaultValue+'" name="'+this.fieldName+'">';	
 					this.spnValue.innerHTML = newField;
 					dojo.parser.parse(this.spnValue);
 					break;
