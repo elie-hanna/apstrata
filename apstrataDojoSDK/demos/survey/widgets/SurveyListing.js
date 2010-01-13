@@ -78,7 +78,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			if(this.schema != null){
 				this.title.innerHTML = this.dojoDataModel.title;
 				this.query();
-				//this.downloadCsvData();
+				this.downloadCsvData();
 			}
 			else
 				this.title.innerHTML = "The survey schema is missing";
@@ -205,6 +205,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
 			
+			
 			var runScriptletRequest = dojo.mixin({
 				storeName: self.storeName,
 				arrFields: self.arrFieldsToDisplay,
@@ -216,16 +217,17 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 					scriptName: 'downloadCSV'
 				}
 			});
-
-			var sd = client.call({
-				action: "RunScript",
+			var params = "&apsdb.scriptName=downloadCSV&storeName="+self.storeName+"&arrFields="+self.arrFieldsToDisplay+"&arrTitleFields="+ self.arrTitleFieldsToDisplay+"&apsdbSchema="+self.apsdbSchema;
+			this.CSV.href=connection.signUrl("RunScriptlet", params,"json").url;// serviceUrl+"/"+;
+			/*var sd = client.call({
+				action: "RunScriptlet",
 				request: runScriptletRequest,
 				load: function(operation) {
 				},
 				error: function(operation) {
 					self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
 				}
-			});
+			});*/
 		}
 	});
 
