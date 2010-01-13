@@ -22,6 +22,7 @@
  */
 
 var schema = null // The global variable schema is set in the embed code and contains the detailed schema of the survey needed to load its results
+var storeName = "surveyStore"
 
 function loadjscssfile(filename, filetype){
 	 if (filetype=="js"){ //if filename is a external JavaScript file

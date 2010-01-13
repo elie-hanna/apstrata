@@ -38,7 +38,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		//
 		// Replace here with your target store name
 		//
-		storeName: "surveyStore",
+		//storeName: "surveyStore",
 		
 		/**
 		 * Constructor of the SurveyListing widget.
@@ -46,13 +46,19 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		 */
 		constructor: function(attrs) {
 			if (attrs) {
-				if (attrs.storeName) this.storeName = attrs.storeName
+
+				if(typeof(attrs.storeName) != "undefined") 
+					this.storeName = attrs.storeName
+				else 
+					this.storeName = storeName;
+
 				if (attrs.schema) 
 					this.schema = attrs.schema	
 				else		
 					this.schema = schema;	
 			} else {
 				this.schema = schema;
+				this.storeName = storeName;
 			}
 			
 			if(this.schema != null){

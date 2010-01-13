@@ -48,7 +48,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		apSourceURL : "http://developer.apstrata.com/apstrataSDK/", // apSourceURL points to where the survey code is hosted. 
 
 		// Store used by the survey widget
-		storeName: "surveyStore",
+		//storeName: "surveyStore",
 		
 		/**
 		 * Constructor of the survey widget.
@@ -65,7 +65,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 		constructor: function(attrs) {
 			if (attrs) {
 				this.attrs = attrs
-				if (attrs.storeName) this.storeName = attrs.storeName
+
+				if(typeof(attrs.storeName) != "undefined") 
+					this.storeName = attrs.storeName
+				else 
+					this.storeName = storeName;
 				
 				if(typeof(attrs.editingMode) != "undefined") 
 					this.editMode = attrs.editingMode
@@ -87,6 +91,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			} else {
 				this.editMode = editingMode;
 				this.schema = schema;
+				this.storeName = storeName;
 				if(typeof(usingCookie) != "undefined")
 					this.useCookie = usingCookie;
 				else
@@ -634,7 +639,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></script>\n'
 			+ '<script type="text/javascript" src="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata-lib.js.uncompressed.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + this.apServiceURL + '\'"></script>\n'
 			+ '<link rel=stylesheet href="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
-			+ '<script>var schema = \'' + surveyDataSchema + '\';</script>\n'
+			+ '<script>var storeName = \'' + this.storeName + '\'; var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div dojoType="surveyWidget.widgets.Survey" /></div>'
 			+ '</textarea>';
@@ -653,7 +658,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></script>'
 			+ '<script type="text/javascript" src="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/list-apstrata-lib.js.uncompressed.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + this.apServiceURL + '\'"></script>\n'
 			+ '<link rel=stylesheet href="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
-			+ '<script>var schema = \'' + listSurveyDataSchema + '\';</script>\n'
+			+ '<script>var storeName = \'' + this.storeName + '\'; var schema = \'' + listSurveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div>'
 			+ '<div dojoType="surveyWidget.widgets.SurveyListing" /></div>'
@@ -673,7 +678,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
 			+ '<script type="text/javascript" src="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/chart-apstrata-lib.js.uncompressed.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + this.apServiceURL + '\'"></script>\n'
 			+ '<link rel=stylesheet href="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
-			+ '<script>var schema = \'' + surveyDataSchema + '\';</script>\n'
+			+ '<script>var storeName = \'' + this.storeName + '\'; var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div>'
 			+ '<div dojoType="surveyWidget.widgets.SurveyCharting" /></div>'
