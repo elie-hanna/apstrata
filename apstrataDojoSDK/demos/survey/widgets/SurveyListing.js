@@ -144,7 +144,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				else if (col == columnsTitle.length-1)
 					columnClass = "rounded-last";
 				else
-					columnClass = "rounded";
+					columnClass = "";
 
 				var headerCell = document.createElement('TH');
 				headerCell.setAttribute('scope', 'col');
