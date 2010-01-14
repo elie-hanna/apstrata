@@ -111,7 +111,7 @@ dojo.declare("apstrata.mForms.FormActions",
 	data: [
 		{label: "try", iconSrc: "../../apstrata/resources/images/pencil-icons/survey.png"},
 		{label: "results", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"},
-		{label: "list", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"},
+		{label: "list", iconSrc: "../../apstrata/resources/images/pencil-icons/notepad.png"},
 		{label: "edit", iconSrc: "../../apstrata/resources/images/pencil-icons/edit.png"}
 	],
 	
