@@ -65,7 +65,7 @@ dojo.declare("apstrata.Client",
 					var operation = new apstrata.Get(this.connection)
 				} 
 			} else {
-				if ((attrs.action == "SaveDocument") || (attrs.action == "SaveSchema")) {
+				if ((attrs.action == "SaveDocument") || (attrs.action == "SetSchema")) {
 					var operation = new apstrata.Post(this.connection)
 				} else {
 					var operation = new apstrata.Get(this.connection)

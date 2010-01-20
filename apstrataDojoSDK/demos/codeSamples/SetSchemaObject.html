@@ -13,7 +13,7 @@
 		<script language="JavaScript" type="text/javascript">
 			
 			dojo.require("apstrata.apsdb.client.Connection")
-			dojo.require("apstrata.apsdb.client.SaveSchema")
+			dojo.require("apstrata.apsdb.client.SetSchema")
 			dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus");
 
 			/**
@@ -37,7 +37,7 @@
 				connection.serviceUrl = "";
 				
 				//instantiating set schema operation
-				var operation = new apstrata.apsdb.client.SaveSchema(connection)
+				var operation = new apstrata.apsdb.client.SetSchema(connection)
 	            
 				//success method
 	            dojo.connect(operation, "handleResult", function(){
