@@ -1,6 +1,0 @@
-{
-	key:'key',
-	secret:'secret',
-	serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest',
-	timeout: 10000
-}
