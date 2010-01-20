@@ -134,7 +134,7 @@ dojo.declare("apstrata.devConsole.UserEditPanel",
 					usersPanel.userAttributes.name = operation.response.result.user['@name']
 	
 					dojo.forEach(operation.response.result.user.attributes, function(attribute) {
-						usersPanel.userAttributes[attribute['@name']] = attribute.values[0];
+						usersPanel.userAttributes[attribute['@name']] = attribute.values.value;
 					})
 					
 					usersPanel.render()
