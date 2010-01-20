@@ -1,0 +1,322 @@
+#sourceViewer {
+	position: relative;
+	background: #aeaeae;
+	top: -550px;
+	left: 65px;
+	width: 700px;
+	height: 500px;
+	opacity: .9;
+	border: solid 2px #454545;
+	visibility: hidden;
+	z-index: 99999;
+	overflow: hidden;
+}
+
+#sourceViewer .separator {
+	float:left; 
+	height: 100%;
+	border-right: solid 2px #454545;
+	padding: 8px;
+}
+
+#sourceViewer .button {
+	border-right: solid 2px #454545; 
+	float: left;
+	padding: 8px;
+	color: #454545;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+#sourceViewer .rightSeparator {
+	float:left; 
+	height: 100%;
+	border-left: solid 2px #454545;
+	padding: 8px;
+}
+
+#sourceViewer .rightButton {
+	border-left: solid 2px #454545; 
+	float: left;
+	padding: 8px;
+	color: #454545;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+#txtSourceCode {
+	background:  #dedede;
+	width: 690px;
+	height: 457px;
+	border: none;
+	overflow-x: hidden;
+	overflow-y: auto;
+	font-size: 1em;
+	padding: 4px;
+#	color: #dedede;
+}
+
+#messageViewer {
+	position: relative;
+	background: white;
+	top: -1050px;
+	left: 65px;
+	width: 700px;
+	height: 500px;
+	opacity: .95;
+	border: solid 2px #dedede;
+	visibility: hidden;
+	z-index: 99999;
+	overflow: hidden;
+}
+
+#messageViewerContents {
+	padding: 20px;
+	height: 422px;
+	width: 656px;
+	background: white;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#messageViewer .separator {
+	float:left; 
+	height: 100%;
+	border-right: solid 2px #dedede;
+	padding: 8px;
+}
+
+#messageViewer .button {
+	border-right: solid 2px #dedede; 
+	float: left;
+	padding: 8px;
+	color: #696969;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+#messageViewer .rightSeparator {
+	float:left; 
+	height: 100%;
+	border-left: solid 2px #dedede;
+	padding: 8px;
+}
+
+#messageViewer .rightButton {
+	border-left: solid 2px #dedede; 
+	float: left;
+	padding: 8px;
+	color: #696969;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+
+.Presentation {
+}
+
+.Presentation .container {
+	margin-top: 0px;
+	margin-left: 15px;
+	
+	width: 800px;
+	height: 600px;
+	
+	background: white;
+	opacity: 0.95;
+    -o-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.Presentation .control {
+	position: absolute;
+	top: 50px;
+	left: 880px;
+	width: 240px;
+#	height: 320px;
+	background: #9999CC;
+	opacity: .8;
+	padding: 8px;
+	text-align: center;
+
+#	background: #CC6600;
+#	opacity: .9;
+}
+
+.Presentation .control p {
+	margin: 0px;
+	font-size: 1em;
+	line-height: 1.6em;
+}
+
+.Presentation .control #controlArea {
+	background: #efefef; 
+#	height: 33px; 
+	width: 100%;
+}
+
+
+.Presentation .control .numbers {
+	position: relative;
+	top: 2px;
+	font-size: 1.2em;
+	width: 100%;
+	color: black;
+}
+
+.Presentation .control .summary {
+	width: 100%;
+	padding-top: 10px;
+	text-align: justify;
+	font-size: 1.1em;
+	color: white;
+}
+
+.TitleSlide {
+	padding: 4px;
+	width: 100%;
+	height: 100%;
+}
+
+.TitleSlide .logo {
+	position: relative;
+	top: 40px;
+	left: 40px;
+}
+
+.TitleSlide .title {
+	margin-top: 180px;
+	font-family: sans-serif, verdana, arial;
+	font-size: 3.4em;
+	font-weight: bolder;
+	color: white;
+	text-align: center;
+
+	padding-top: 15px;
+	padding-bottom: 15px;
+	opacity: .6;
+	background: #ef9900;
+	
+	position:  relative;
+	width: 830px;
+	left: -20px;
+}
+
+.TitleSlide .subtitle {
+	margin-top: 20px;
+	font-family: sans-serif, verdana, arial;
+	font-size: 2.2em;
+	color: #669966;
+	text-align: center;
+}
+
+.Slide {
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+}
+
+.Slide .title {
+	font-family: sans-serif, verdana, arial;
+	font-size: 4em;
+	color: white;
+	text-align: center;
+	
+	padding-top: 7px;
+	opacity: .7;
+	background: #ef9900;
+	
+	position:  relative;
+	width: 840px;
+	height: 55px;
+	left: -20px;
+	top: +20px;
+}
+
+.Slide .formTitle {
+	font-family:'Georgia','Serif';
+	font-size: 20pt;
+	width: 100%;
+	text-align: left;
+	padding: 0px;
+	color: #0000AA;
+	margin-bottom: 5px;
+	margin-left: 10px;
+}
+
+.Slide .contents {
+	font-family: sans-serif, verdana, arial;
+	font-size: 1.4em;
+	color: #666666;
+	padding-right: 20px;
+	padding-top: 20px;
+}
+
+.Slide .example {
+	font-size: .9em;
+	margin-left: 30px;
+	margin-bottom: 10px;
+	margin-top: 0px;
+	border-left: solid 5px #FFCC00;
+	padding: 10px;
+	background: #f3f3f3;
+}
+
+.Slide .example p {
+	font-size: 0.8em;
+	margin-top:0px;
+	margin-right:0px;
+	margin-left:0px;
+	margin-bottom: 10px;	
+}
+
+.Slide .grid {
+	width: 700px; 
+	height: 132px;
+	font-size: .7em;
+}
+
+.Slide .contents .center {
+	width: 100%;
+	text-align: center;
+}
+
+.Slide .contents ul {
+}
+
+.Slide .contents li {
+	margin-top: 8px;
+}
+
+.Slide .contents strong {
+	color: #ff9900;
+}
+
+.Slide .contents a {
+	color: #ff9900;
+	font-weight: bold;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.Slide div {
+	margin-top: 0px;
+}
+
+.Alert {
+	background: #fafafa;	
+}
+
+.Callout {
+	background: white;
+	color: #777777;
+	font-size: 1em;
+}

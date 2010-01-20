@@ -1,0 +1,78 @@
+<div class='Slide'>
+	<div class='title' style='font-size: 3em; padding-top: 15px;'>
+		Support for Digital Assets
+	</div>
+	<div  class='contents'>
+		<ul>
+			<li><li>
+		</ul>
+		<button onclick='displayBlogs()'>display</button>
+		<div id='blogEntries'>
+			
+		</div>
+	</div>
+	<script>
+		
+dojo.declare("BlogEntries", [dijit._Widget, dojox.dtl._Templated], {
+	
+	widgetsInTemplate: true,
+	templateString: "<div>{% for blog in entries %}<div class='blogEntry rounded-top-left'> <div class='blogTitle'>{{ blog.title }}</div> {% if blog.image %} <div class='blogImage'> <img dojoType='dojox.image.LightboxNano' width='75' href='{{ blog.image }}' src='{{ blog.image }}'> </div> {% endif %} <div class='blogPost'>{{ blog.post|safe }}</div> <div style='clear: both;'></div> </div>{% endfor %}</div>",
+	
+	constructor: function(items) {
+		this.entries = []
+
+		if (items) {
+			var get = new apstrata.apsdb.client.GetFile(connection)
+
+			for(var i=1; i<items.length; i++) {
+				var o = {}
+				o.title = items[i].getValue("title")
+				o.post = items[i].getValue("blogPost")?items[i].getValue("blogPost"):""
+
+				if (items[i].getValue("apsdb_attachments")) {
+					var attrs = {
+							store: connection.defaultStore,
+							documentKey: items[i].getIdentity(),
+							fieldName: "apsdb_attachments",
+							fileName: items[i].getValue("apsdb_attachments"),
+							setContentDisposition: "false"
+						}
+					
+					o.image = get.getUrl(attrs)
+				} 
+				
+				this.entries.push(o)
+			}
+		}
+	},
+	
+	entries: [{title: "title 1", post: " stuff ", image: "http://localhost/~rabih/apstrataDojoSDK/demos/codeSamples/images/apstrata-logo.png"}, 
+				{title: "title 2", post: " stuff 2", image: "http://localhost/~rabih/apstrataDojoSDK/demos/codeSamples/images/screen-capture-14.png"}]
+})
+		
+function displayBlogs() {
+	var myStore = new apstrata.apsdb.client.ItemApsdbReadStore({connection: connection, 
+								resultsPerPage: 50,
+								apsdbStoreName: "chartData", 
+								fields:"title, blogPost, apsdb_attachments", 
+								label: "title"})
+
+	myStore.fetch({
+		onComplete: function(items, request) {
+			var blogEntries = new BlogEntries(items)
+			dojo.place(blogEntries.domNode, "blogEntries", "only")
+		},
+		
+		onError: function(errorData, request) {
+		},
+		
+	    query: {
+			query: "formType = \"blog\"",
+//				count: true,
+			pageNumber: 1
+		}
+	})
+}
+	
+	</script>
+</div>

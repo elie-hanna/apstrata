@@ -1,0 +1,49 @@
+<div class="tundra">
+	<div dojoAttachPoint="roundedBox survey" title="Survey" class="survey" >
+		<h2 dojoAttachPoint="title" title="Survey title" dojoType="dijit.InlineEditBox">${surveyTitle}</h2>
+		<h3 dojoAttachPoint="description" title="Survey description" dojoType="dijit.InlineEditBox">${surveyDescription}</h3>
+		<form dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
+		<div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer"  withHandles="true" class="questionsPanel"></div>
+		</form>
+		
+		<br/>
+		<div title="Sms survey to users" dojoAttachPoint="smsSurvey" style="display: none;">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="smsCheckbox" dojoAttachEvent="onClick: toggleSms" name="smsSurvey"/> Send by sms
+			<div dojoAttachPoint="phone" style="display: none;">
+				<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="phoneNumber" trim=true value=""><input dojoAttachPoint="btnSms" type="button" value="send" />
+			</div>
+		</div>
+		
+		<br/>
+		<div title="Email survey to users" dojoAttachPoint="emailSurvey" style="display: none;">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="emailCheckbox" dojoAttachEvent="onClick: toggleEmail" name="emailSurvey"/> Send by email
+			<div dojoAttachPoint="email" style="display: none;">
+				<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="emailaddress" trim=true value=""><input dojoAttachPoint="btnEmail" type="button" value="send" />
+			</div>	
+		</div>
+		
+		<br/>
+		<div title="Show results to users">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: toggleTextBox" name="allowViewingResults"/> Show results to users
+		</div>
+		<br/>
+		
+		<div title="Success Message" dojoAttachPoint="successMsgDiv">
+			Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
+		</div>
+		<div class="surveyPageFooter" title="Powered by apstrata">
+          <a target="_blank" href="http://www.apstrata.com" title="Powered by apstrata">&nbsp;</a>
+        </div>
+		<div class="clear"></div>
+	</div>
+
+	<br/><br/>
+	<div style="height: 30px;">
+		<input dojoAttachPoint="btnGetData" class="surveyButton" style="cursor:pointer" title="Generate Embed Code" type="button" value="Generate Embed Code" />
+		<div dojoAttachPoint="warningMessage" class="warningMessage" style="display: none;"></div>
+	</div>
+
+	<div dojoAttachPoint="output" class="embedCodeDiv" style="display: none;"></div>
+	<div dojoAttachPoint="listingEmbed" class="embedCodeDiv" style="display: none;"></div>
+	<div dojoAttachPoint="chartingEmbed" class="embedCodeDiv" style="display: none;"></div>
+</div>

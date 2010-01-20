@@ -1,0 +1,71 @@
+<div>
+
+	<!-- This is where the presentation displays -->
+	<div class="container" id='viewport' dojoAttachPoint='dvViewport'>
+	</div>
+	
+	<!-- start: The control/info/summary section of the presentation --> 
+	<div class='control rounded'>
+		<div class='rounded-sml' id='controlArea'>
+			<img src='{{ _apstrataRoot }}/resources/images/apstrata-sml.png'><br>
+			<span style='font-size: 1.2em; font-weight: bold;color: #4444BB;'>{{ title|safe }}</span>
+		</div>
+		<br>
+		<div class='rounded-sml' id='controlArea'>
+			<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: first'>&#60;&#60;</button>
+			<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: previous'>&#60;</button>
+			<span class='numbers'>
+				{{ currentSlideIndex }} / {{ totalSlides }}		
+			</span>
+			<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: next'>&#62;</button>
+			<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: last'>&#62;&#62;</button>
+		</div>
+		<br>
+		<div class='rounded-sml' id='controlArea'>
+			<div dojoType='dijit.form.Button' dojoAttachEvent='onClick: showSourceCodeViewer'>view source</div>
+		</div>
+		<div class='summary' dojoAttachPoint='dvSummary'>
+			{{ summaryText|safe }}
+		</div>
+	</div>		
+	<!-- end: The control/info/summary section of the presentation -->
+		
+	<!-- start: Source Code Viewer dialog -->
+	<div id='sourceViewer' class='rounded-top-sml'>
+		<div>
+			<div style='float: left;'>
+				<div class='separator'>&nbsp;</div>
+				<div class='button' onclick='presentation.viewScript()'>View Script</div>
+				<div class='button' onclick='presentation.viewHTML()'>View HTML</div>
+			</div>
+			<div style='float: right;'>
+				<div class='rightButton' onclick='presentation.hideSourceCodeViewer()'>Close</div>
+				<div class='rightSeparator'>&nbsp;</div>
+			</div>
+			<div style='clear: both; width:100%; border-bottom: solid 2px #454545;'></div>
+		</div>
+		<div style='padding-left: 0px;'>
+			<textarea id='txtSourceCode'></textarea>
+		</div>
+	</div>
+	<!-- end: Source Code Viewer dialog -->
+	
+	<!-- start: Message dialog -->
+	<div id='messageViewer' class='rounded-top-sml'>
+		<div>
+			<div style='float: left;'>
+			</div>
+			<div style='float: right;'>
+				<div class='rightButton' onclick='presentation.hideSubSlide()'>Close</div>
+				<div class='rightSeparator'>&nbsp;</div>
+			</div>
+			<div style='clear: both; width:100%; border-bottom: solid 2px #dedede;'></div>
+		</div>
+		<div id='messageViewerContents'>
+			
+		</div>
+	</div>
+	<!-- end: Message dialog -->
+
+
+</div>

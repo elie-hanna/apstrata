@@ -1,0 +1,25 @@
+<div class='panel'>
+	{% if true %}
+	{% endif %}
+	<div dojoType="dijit.form.Form" dojoAttachPoint="newStoreForm" class="apstrataForm" encType="multipart/form-data" action="" method="" style='width: 220px;'>
+		<div class="label">Storename:</div>
+		<input type="text" dojoAttachPoint="storeName" dojoType="dijit.form.ValidationTextBox" required="true" class="rounded-xsml">
+		
+		<div class="label">Default saveDocumentACL:</div>
+		<input type="text" dojoAttachPoint="saveDocumentACL" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
+		
+		<div class="label">Default deleteDocumentACL:</div>
+		<input type="text" dojoAttachPoint="deleteDocumentACL" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
+		
+		<div class="label">Default getFileACL:</div>
+		<input type="text" dojoAttachPoint="getFileACL" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
+		
+		<div class="label">Default queryACL:</div>
+		<input type="text" dojoAttachPoint="queryACL" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
+		
+		<br><br>
+		<div style='width: 100%; text-align: right'>
+			<button dojoAttachEvent='onClick: _save' dojoType='dijit.form.Button' >save</button>
+		</div>
+	</div>
+</div>

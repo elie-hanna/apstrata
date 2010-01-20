@@ -1,0 +1,25 @@
+<div class="tundra">
+    <div dojoAttachPoint="survey" title="Survey" class="survey">
+        <div dojoAttachPoint="surveyDiv">
+            <h2 title="Survey title" dojoAttachPoint="title">${surveyTitle}</h2>
+            <h3 title="Survey description" dojoAttachPoint="description">${surveyDescription}</h3>
+            <form dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
+                <div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer" class="questionsPanel">
+                </div>
+                <br/>
+                <input dojoAttachPoint="btnSubmit" class="surveyButton" style="cursor:pointer" title="Submit" type="button" value="Submit" />
+            </form>
+            <br/>
+        </div>
+		<br />
+        <div dojoAttachPoint="successMessage" style="clear: both;">
+        </div>
+        <div dojoAttachPoint="errorMessage" style="clear: both;">
+        </div>
+        <div class="surveyPageFooter" title="Powered by apstrata">
+          <a target="_blank" href="http://www.apstrata.com" title="Powered by apstrata">&nbsp;</a>
+        </div>
+		<div class="clear"></div>
+    </div>
+	<div dojoAttachPoint="aggregatedResults" dojoType="dijit.layout.LayoutContainer" ></div>
+</div>

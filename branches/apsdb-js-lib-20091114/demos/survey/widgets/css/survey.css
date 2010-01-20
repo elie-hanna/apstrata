@@ -1,0 +1,278 @@
+.roundedBox {
+
+}
+
+.survey {
+    width: 350px;
+
+    padding: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    font-family: sans-serif;
+    font-size:  small;
+    background-color: #e8edff;
+    /*background-color: #8fbc8f;*/
+    overflow: visible;    
+
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.survey h2 {
+    font-size: 2em;
+    color: #666699;
+    /*color: green;*/
+}
+
+.survey h3 {
+    font-size: 1.3em;
+    /*color: #222222;*/
+}
+
+
+
+.surveryField {
+    width: 250px;
+    padding: 10px;
+}
+
+.surveyButton {
+		float: left;
+    margin-left: 85px;
+		background-color: #F0F8FF ;
+}
+
+.warningMessage {
+		float: left;
+		margin: 2px 15px;
+		color: red;
+}
+
+.survey .questionsPanel {
+    overflow: visible; 
+    background: #DEE1EE;
+    background: rgba(200, 200, 200, 0.3);
+    padding: 10px;
+
+    
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;    
+}
+
+.surveyFieldEditor {
+    background: #FFFF8E;
+    background: rgba(255, 255, 130, .9);
+    padding: 5px;
+    width: 220px;
+    
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    border: none;
+    font-family: sans-serif;
+    font-size:  small;
+    padding-bottom: 7px;
+    padding-left: 30px;
+    overflow: visible;
+    
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.displayTable td{
+	width: 150px;
+}
+
+.displayTable{
+	border: solid 1px black;
+}
+
+.displayTable .heading{
+	font-weight: bold;
+}
+
+
+.surveyListing {
+    
+    padding: 20px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    font-family: sans-serif;
+    font-size:  small;
+    background-color: #e8edff;
+    /*background-color: #8fbc8f;*/
+    overflow: visible;    
+
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.survey-listing {
+	width: auto;
+	display: inline-block;
+	width: 480px;
+}
+
+.survey-title {
+	
+	margin-left: 45px;
+	margin-top: 45px;
+    font-size: 1.7em;
+    color: #666699;
+}
+
+.rounded-corner
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 45px;
+	margin-right: 0;
+	width: 480px;
+	text-align: left;
+	border-collapse: collapse;
+}
+.rounded-corner thead th.rounded-first
+{
+	background: #b9c9fe url('../images/left.png') left -1px no-repeat;
+}
+.rounded-corner thead th.rounded-last
+{
+	background: #b9c9fe url('../images/right.png') right -1px no-repeat;
+}
+.rounded-corner th
+{
+	padding: 8px;
+	font-weight: normal;
+	font-size: 13px;
+	color: #039;
+	background: #b9c9fe;
+}
+.rounded-corner td
+{
+	padding: 8px;
+	background: #e8edff;
+	border-top: 1px solid #fff;
+	color: #669;
+}
+.rounded-corner td.rounded-foot-left
+{
+	background: #e8edff url('../images/botleft.png') left bottom no-repeat;
+}
+.rounded-corner td.rounded-foot-right
+{
+	background: #e8edff url('../images/botright.png') right bottom no-repeat;
+}
+.rounded-corner tbody tr:hover td
+{
+	background: #d0dafd;
+}
+.dojoDndHandle
+{
+	width: 5px;
+	background: url('../images/apstrata-brackets.gif') left -1px no-repeat;
+	cursor: move; 
+}
+.dojoDndAvatarHeader {
+        display: none;
+}
+
+.embedCodeDiv {
+    background: #FFFF8E;
+    background: rgba(255, 255, 130, .9);
+    padding: 5px;
+    width: 465px;
+    
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    border: none;
+    font-family: sans-serif;
+    font-size:  small;
+	color:blue;
+    padding-bottom: 7px;
+    padding-left: 30px;
+    overflow: visible;
+    
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.surveyPageFooter {
+	color:#7C7C7C;
+	font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
+	font-size:10px;
+	margin: 20px 0 0 0;
+	width: 15px;
+	height: 15px;
+	float: right;
+	background: url('../images/apstrata-brackets.gif') left -1px no-repeat;
+}
+
+.clear {clear: both;}
+
+.surveyPageFooter a:link, .surveyPageFooter a:visited {
+	color:#7C7C7C;
+	font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;
+	font-size:10px;
+	text-decoration: none;
+	width: 15px;
+	height: 15px;
+	display: block;
+}
+
+.surveyChartSize {
+	width: 200px;
+	height: 200px;
+}
+
+.surveyChartLineSize {
+	width: 460px;
+	height: 230px;
+}

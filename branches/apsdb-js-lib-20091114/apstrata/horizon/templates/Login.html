@@ -1,0 +1,126 @@
+<div class='panel' style='overflow-y: auto;'>
+	{% if true %}
+	{% endif %}
+	<style>
+		.LoginForm {
+			background: #DDDDee;
+			padding: 20px;
+			font-size: 0.9em;
+			height: 320px;
+			margin: 10px;
+			height: 100%;		
+		}
+		.LoginForm .title {
+			font-family:'Georgia','Serif';
+			font-size: 1.4em;
+			width: 100%;
+			text-align: center;
+			padding: 0px;
+			color: #0000AA
+		}
+				
+		.LoginForm .label {
+			font-size: 0.9em;
+		
+			font-family: sans-serif;
+			padding-top: 4px;
+			padding-bottom: 2px;
+			color: #0000AA;
+		}
+		
+		.LoginForm input {
+			font-family: sans-serif;
+			font-size: 0.9em;
+		
+			padding: 5px;
+			width: 97%;
+			
+			border: solid 0px #ababab;
+		
+		    -o-border-radius: 5px;
+		    -moz-border-radius: 5px;
+		    -webkit-border-radius: 5px;
+		    border-radius: 5px;
+		}
+
+		.LogingForm .buttonContainer {
+			width: 100%;
+			text-align: right;
+			
+		}
+		
+		.LoginForm button {
+			width: 60px;
+			height: 30px;
+		}
+	</style>
+	<div class='homePanel' style='font-size: 1em;'>
+		<span style='position: relative; top: 35px; left: 152px;'>(do you need an <a href="https://developer.apstrata.com/dashboard/form/provisioning/customer" target="_blank">account</a>?)</span>
+		<h3>Login to apstrata</h3>
+
+		<p>This will capture your login credentials and use them to sign all the apstrata API requests sent by the application. 
+		You can look at how the requests are constructed and signed by moving your mouse over the 
+		<span class='highlight'>REST monitor</span> panel at the bottom of the page. 
+		You may change the apstrata <span class='highlight'>service URL</span> from the preferences panel.</p>
+		
+		<table width="100%">
+			<tr>
+				<td width="33%" valign="top">
+					<p>If you use the <span class='highlight'>Master Credentials</span> that were provided when you created the apstrata
+					account, this will give you superuser control over all API calls. You need to login in this mode to be able to create
+					<strong>stores</strong>, <strong>groups</strong>, <strong>users</strong>, <strong>schemas</strong> and <strong>scripts</strong>. 
+					<br><br>
+
+					<span class='highlight'>User Credentials</span> provide ACL enforced access to saving, modifying and querying documents. 
+					This is the typical signing mode you'd use inside your applications before sending requests to apstrata.</p>
+				</td>
+				<td width="33%" valign="top">
+					<div class="LoginForm rounded-sml" 
+						dojoAttachPoint="dvMaster" 
+						dojoAttachEvent='onmouseover: _onMouseoverMaster,onmouseout: _onMouseoutMaster'>
+
+						<div dojoType="dijit.form.Form" dojoAttachPoint="masterForm" class="apstrataForm rounded-top-sml rounded-bottom-sml" encType="multipart/form-data" action="" method="">
+							<span class="title">Master Credentials</span>
+							<br><br>
+				
+							<div class="label">Key:</div>
+							<input type="text" dojoAttachPoint="mKey" value="" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
+				
+							<div class="label">Secret:</div>
+							<input type="password" dojoAttachPoint="mSecret" value="" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
+						</div>
+						<br><br><br><br>
+						<div class="buttonContainer">
+							<button dojoAttachEvent="onClick: loginMaster" dojoType='dijit.form.Button'>Login</button>
+						</div>
+					</div>
+				</td>
+				<td width="33%" valign="top">
+					<div class="LoginForm  rounded-sml" 
+						dojoAttachPoint="dvUser" 
+						dojoAttachEvent='onmouseover: _onMouseoverUser,onmouseout: _onMouseoutUser'>
+
+						<div dojoType="dijit.form.Form" dojoAttachPoint="userForm" class="apstrataForm rounded-top-sml rounded-bottom-sml" encType="multipart/form-data" action="" method="">
+							<span class="title">User Credentials</span>
+							<br><br>
+				
+							<div class="label">Key:</div>
+							<input type="text" dojoAttachPoint="key" value="" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
+				
+							<div class="label">User Name:</div>
+							<input type="text" dojoAttachPoint="un" value="" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
+				
+							<div class="label">Password:</div>
+							<input type="password" dojoAttachPoint="pw" value="" required="true" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml" style="width: 100%;"/>
+						</div>
+						<br>
+						<div class="buttonContainer">
+							<button dojoAttachEvent="onClick: loginUser" dojoType='dijit.form.Button'>Login</button>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</div>

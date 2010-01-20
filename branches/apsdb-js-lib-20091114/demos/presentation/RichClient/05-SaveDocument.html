@@ -1,0 +1,227 @@
+<div class='Slide'>
+	<div class='title' style='font-size: 3em; padding-top: 15px;'>
+		Client2Cloud example
+	</div>
+	<div  class='contents'>
+		<ul>
+			<li>
+				The user input provided in the sample plain HTML recruitment form below is persisted in apstrata using
+				a <a href='#sub:sldSaveDocument'>SaveDocument</a>  API call. Check out the
+				<a onclick="presentation.showSourceCodeViewer()">source code</a>.
+			</li>
+			<li>
+				<a onclick="presentation.showSubSlide('sldSaveDocument')">SaveDocument</a> is very versatile, it can be used in
+				schema constrained or schemaless (schema as you go) modes. A <a href="#sub:sldSchema">schema</a> adds more robust security, server side 
+				validation & type checking.
+			</li>
+			<li>
+				SaveDocument creates a data instance in apstrata that we call <a href='#sub:sldDocument'>document</a>. 
+				A document is protected by granular <a href='#sub:sldDocument'>ACL rules</a> and can contain 
+				<a href='#sub:sldDocument'>meta data</a> and <a href='#sub:sldDocument'>digital assets</a> 
+				(documents, images, videos etc.). 
+			</li>
+		</ul>
+		<br>
+		<div class="example" style="height:180px;">
+			<p>Data entered in this form is directly persisted in apstrata. Try it, then look at the next slide to see your entry.</p>
+			
+			<div dojoType="dijit.form.Form" id="jobForm" 
+				class="apstrataForm rounded-top-sml rounded-bottom-sml"
+						jsId="jobForm" encType="multipart/form-data" action="" method=""
+							style="width: 100%;height: 150px;">			
+			
+					<div class="formTitle">
+						We are seeking talented developers
+					</div>
+					<div class="column">
+			                <div class="label">Name:</div>
+			                <input class="rounded-xsml" type="text" name="name" required="true" dojoType="dijit.form.ValidationTextBox"/><br>
+			                <div class="label">Date of birth:</div>
+			                <input class="rounded-xsml" type="text" name="dob" dojoType="dijit.form.DateTextBox"/><br>
+					</div>
+					<div class="column">
+						<div class="label">Total years of experience:</div>
+				        <div dojoType="dijit.form.HorizontalSlider" value="0"
+				        minimum="0" maximum="10" discreteValues="11" intermediateChanges="true"
+				        showButtons="false" class="sliders" name="totalExperience">
+				            <ol dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration"
+				            class="sliderLabels">
+				                <li>0</li><li>1</li><li>2</li><li>3</li><li>4</li>
+				                <li>5</li><li>6</li><li>7</li><li>8</li><li>9</li>
+								<li>10+</li>
+				            </ol>
+				        </div>
+						<div class="label">Javascript experience:</div>
+				        <div dojoType="dijit.form.HorizontalSlider" value="0"
+				        minimum="0" maximum="10" discreteValues="11" intermediateChanges="true"
+				        showButtons="false" class="sliders" name="JSExperience">
+				            <ol dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration"
+				            class="sliderLabels">
+				                <li>0</li><li>1</li><li>2</li><li>3</li><li>4</li>
+				                <li>5</li><li>6</li><li>7</li><li>8</li><li>9</li>
+								<li>10+</li>
+				            </ol>
+				        </div><br>
+					</div>
+					<div class="column">
+						<div class="label">Tell us about your experience:</div>
+						<div style="background: white;width: 250px;">
+						    <div dojoType="dijit.Editor" style='width: 250px;height: 65px;' id="editor2" name="latestProjects" plugins="['cut','copy','paste','|','bold','italic','|','insertUnorderedList']">
+						    </div>
+						</div>
+					</div>
+				<div style="clear: both;text-align: center;width: 100%;">
+						<div style='width: 100%;text-align: right;'>
+						    <button dojoType="dijit.form.Button" id="btnSaveJob" onClick="saveJobApplication()">Save</button>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id='sldSaveDocument' style='visibility: hidden;'>
+		<div class='title' style='font-size: 3em; padding-top: 15px;'>
+			SaveDocument
+		</div>
+		<div  class='contents'>
+			<p>
+				Saves or updates the document that the user is sending by either updating an existing document or creating 
+				a new one with the given parameters.
+			</p>
+			<p>
+				There are two ways to save a document, with an already defined schema, or without one. Users wanting more 
+				flexibility and control over files and security should create documents with schema.
+			</p>
+			<p>
+				Note that “schema-less” documents are actually documents with a default schema. The default schema contains two fields. 
+				One dedicated for files, and another containing the names of the fields to be indexed.	
+			</p>
+		</div>
+	</div>
+	<div id='sldDocument' style='visibility: hidden;'>
+		<div class='title' style='font-size: 3em; padding-top: 15px;'>
+			What's a document?
+		</div>
+		<div  class='contents'>
+			<p>
+				<strong>Document:</strong> You can think of a document as the equivalent of a relational database record
+				on steroids. We chose to call our basic storage entity a document, because it is the closest metaphor to
+				the real use cases most web applications have to deal with.
+			</p>
+			<p>
+				<strong>Meta Data:</strong> The data fields contained in a document is referred to as meta-data. Meta-Data can
+				be short text, numbers or large chunks of text such as HTML. All meta-data is automatically full-text indexed
+				by apstrata for full text search.
+			</p>
+			<p>
+				<strong>ACL:</strong> Each apstrata individual document can be made secure by using Access Control Lists. ACLs can be set on 
+				the entire document or parts of it (groups of fields). ACLs determine for each group of fields the users or groups
+				that can read or write.
+			</p>
+			<p>
+				<strong>Digital Assets:</strong> A document can contain any number of digital assets, such as Office documents, 
+				images, videos. All text based documents are full-text indexed for search. Developers can program apstrata to 
+				react to other document types such as video by initiating a transcode operation using a 3rd party API for example. 
+			</p>
+		</div>
+	</div>
+	<div id='sldSchema' style='visibility: hidden;'>
+		<div class='title' style='font-size: 3em; padding-top: 15px;'>
+			The schema
+		</div>
+		<div  class='contents'>
+			<p>
+				Just like its counterpart in a relational database, the apstrata schema allows you to define the structure
+				of the different tables that make up your database. apstrata structure allows you to define the structure of the
+				documents that will persist in an apstrata stores. 
+			</p>
+			<p>
+				The apstrata schema includes:
+				<ul>
+					<li>
+						List of fields
+					</li>
+					<li>
+						Type of each field
+					</li>
+					<li>
+						Validation rules: mandatory, cardinality, enumeration, regex
+					</li>
+					<li>
+						Field groupins with ACL rules for the users/groups that can read or write those fields
+					</li>
+				</ul>
+			</p>
+		</div>
+	</div>
+
+	<div dojoTypex="apstrata.widgets.Alert" clazz="rounded-sml" id="dlgConfirmJobApp" animation="{from: 'jobForm', bounding: 'jobForm'}" 
+		width="360" height="260" actions="close" style='background: white; color: #555555;'
+		iconSrc='images/apstrata-logo.png'>
+			<h4>Apstrata is dedicated to helping you get your user application online quickly and reliably.</h4>
+			<span style='font-size: 9pt; color: blue;'>An alert can be centered around an existing div on the page, 
+			notice how this appears in the green box.</span>
+	</div>
+
+
+	<script>
+dojo.require("apstrata.apsdb.client.ItemApsdbWriteStore")
+dojo.require("apstrata.widgets.Alert")
+
+var attrs = {	
+	connection:  apstrata.presentation.connection, 
+	resultsPerPage: 10,
+	apsdbStoreName:  apstrata.presentation.connection.defaultStore, 
+	fields:"name, dob", 
+	label: "name"
+}
+
+
+function saveJobApplication() {
+	var jobForm = dijit.byId('jobForm') 
+
+
+	if (jobForm.validate()) {
+		var store = new apstrata.apsdb.client.ItemApsdbWriteStore(attrs)
+
+		var doc = jobForm.getValues()
+		doc.formType = "job"
+		
+		store.newItem(doc)
+		store.save({
+			onComplete: function() {
+				console.debug("saved")
+		
+				// Define save success dialog
+				var msg = "Thank you <b>" + doc.name 
+					+ "</b> for submitting your application but we're extremely picky!"
+			
+				var dialog = new apstrata.widgets.Alert({
+						width: 450, 
+						height: 170, 
+						actions: "close", 
+						modal: true, 
+						message: msg, 
+						clazz: "rounded-sml", 
+						iconSrc: apstrata.baseUrl 
+							+ "/resources/images/favicon.png", 
+						animation: {from: 'btnSaveJob', bounding: 'jobForm'} 
+				})
+
+				dialog.show()
+		
+				dojo.connect(dialog,
+					"buttonPressed", 
+					function() {
+						dialog.hide()
+						dijit.byId("editor2").setValue('')
+						jobForm.reset()
+					})
+			},
+			onError: function() {
+				cosole.debug("error")
+			} 
+		})
+	} 
+} 
+	</script>
+</div>

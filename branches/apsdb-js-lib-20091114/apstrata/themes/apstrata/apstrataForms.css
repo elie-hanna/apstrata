@@ -1,0 +1,90 @@
+
+
+.apstrataForm {
+	background: #DDDDFF;
+	padding: 10px;
+#	width: 520px;
+	font-size: 10pt;
+}
+
+.apstrataForm .title {
+	font-family:'Georgia','Serif';
+	font-size: 20pt;
+	width: 100%;
+	text-align: center;
+	padding: 0px;
+	color: #0000AA
+}
+
+.apstrataForm .column {
+	float: left;
+	width: 250px;
+	height: 100%;
+}
+
+.apstrataForm .label {
+	font-family: sans-serif;
+	padding-top: 4px;
+	padding-bottom: 2px;
+	color: #0000AA;
+}
+
+.apstrataForm input {
+	padding: 5px;
+}
+
+.apstrataForm textarea {
+	padding: 5px;
+}
+
+.apstrataForm .sliders {
+	padding: 5px;
+	width: 200px;
+}
+
+.apstrataForm .sliderLabels {
+	height:2.1em;
+	font-size:75%;
+	color: #0000FF;
+}
+
+
+
+.nihilo .dijitFakeInput input {
+	-o-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	
+	-moz-box-sizing: border-box;
+	-opera-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-khtml-box-sizing: border-box;
+	box-sizing: border-box;
+	
+	border:1px solid #CECECE;
+	background:#fff url("../../../dijit/themes/nihilo/images/validationInputBg.png") repeat-x top left;
+	background-position:0 -30px; 
+	padding: 6px;
+}
+.nihilo .dijitFileInputButton,
+.nihilo .dijitFileInputText {
+	-o-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	
+	-moz-box-sizing: border-box;
+	-opera-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-khtml-box-sizing: border-box;
+	box-sizing: border-box;
+	
+	border:1px solid #CECECE;
+	padding: 5px;
+	position: relative;
+	top: 0px;
+	height: 28px;
+	background:#b7cdee url('../../../dijit/themes/nihilo/images/buttonEnabled.png') repeat-x; 
+}
+

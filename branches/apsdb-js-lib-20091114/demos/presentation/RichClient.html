@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>ap((strata Live Deck: Rich Cloud Services</title>
+    <style type="text/css">
+	    @import "../../lib/dojo/1.3.0-src/dijit/themes/nihilo/nihilo.css";
+	    @import "../../lib/dojo/1.3.0-src/dojox/grid/resources/nihiloGrid.css";
+
+        @import "../../lib/dojo/1.3.0-src/dojo/resources/dojo.css";
+
+        @import "../../apstrata/themes/apstrata/apstrata.css";
+        @import "../../apstrata/themes/apstrata/presentation.css";
+        @import "../../apstrata/themes/apstrata/Alert.css";
+
+		@import "./RichClient/forms.css";
+
+		
+		html {
+			background-image: url('./images/blurry-lights-crop.jpg');
+			background-position: 0px -110px;			
+		}
+		
+	    body { 
+			margin-left:10px; 
+			margin-top:5px; 
+			padding:0px; 
+			width:100%; 
+			height:100%;
+			overflow: hidden;
+			font-family:Arial,sans-serif;
+			font-size: 10pt;
+		}
+		
+    </style>
+
+	<script type="text/javascript" src="../../lib/dojo/1.3.0-src/dojo/dojo.js" djConfig="parseOnLoad: false"></script>
+	<script type="text/javascript" src="../../apstrata/apstrata.js"></script>
+
+    <script type="text/javascript">
+		
+		dojo.require("apstrata.widgets.presentation.Presentation")
+
+		// List here all required packages by the diferent slides to insure they would be loaded on time
+		dojo.require('dijit.form.Form')
+		dojo.require('dijit.form.HorizontalRuleLabels')		
+		dojo.require("dijit.form.ValidationTextBox")
+		dojo.require("dijit.form.DateTextBox")
+		dojo.require('dijit.form.HorizontalSlider')
+		dojo.require('dijit.Editor')
+		
+		dojo.require('apstrata.apsdb.client.GetFile')
+		dojo.require('apstrata.apsdb.client.ItemApsdbReadStore')
+
+		var connection
+		var presentation
+
+        dojo.addOnLoad(function() {
+			dojo.parser.parse()
+
+			dojo.registerModuleRelative ("apstrata.presentation", "apstrata/presentation");
+
+			apstrata.loadConfig("apstrata.presentation.ApConfig")
+
+			connection = new apstrata.apsdb.client.Connection({statusWidget: "apstrata.apsdb.client.widgets.ConnectionStatus"})
+			connection.defaultStore = 'presentation'
+
+			// List all the URLs of the slides to be included in this presentation
+			var slides = [
+				'RichClient/01-introduction.html',
+				'RichClient/02-apstrata.html',
+				'RichClient/02-ThinClient.html',
+				'RichClient/03-RichClient.html',
+				'RichClient/04-RichCloud.html',
+				'RichClient/05-SaveDocument.html',
+				'RichClient/06-Query.html',
+//				'RichClient/07-DigitalAssets.html',
+				'RichClient/08-Scripts.html',
+				'RichClient/09-OurAPI.html',
+//				'RichClient/10-Roadmap.html',
+			]
+
+			var attrs = {
+				title: 'Rich Cloud Services',
+				summaryUrl: 'RichClient/summary.html',
+				slides: slides,
+				viewport: 'viewport',
+				connection: connection
+			}
+			
+			presentation = new apstrata.widgets.presentation.Presentation(attrs)
+			dojo.place(presentation.domNode, 'presentation', "first")
+		})
+	</script>
+</head>
+<body class="nihilo">
+	<div class="Presentation" id='presentation'></div>
+</body>
+
+</html>

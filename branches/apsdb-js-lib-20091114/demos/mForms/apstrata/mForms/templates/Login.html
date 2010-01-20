@@ -1,0 +1,97 @@
+<div class='panel' style='overflow-y: auto;'>
+	{% if true %}
+	{% endif %}
+	<style>
+		.LoginForm {
+			background: #DDDDee;
+			padding: 20px;
+			font-size: 0.9em;
+			height: 320px;
+			margin: 10px;
+			height: 100%;		
+		}
+		.LoginForm .title {
+			font-family:'Georgia','Serif';
+			font-size: 1.4em;
+			width: 100%;
+			text-align: center;
+			padding: 0px;
+			color: #0000AA
+		}
+				
+		.LoginForm .label {
+			font-size: 0.9em;
+		
+			font-family: sans-serif;
+			padding-top: 4px;
+			padding-bottom: 2px;
+			color: #0000AA;
+		}
+		
+		.LoginForm input {
+			font-family: sans-serif;
+			font-size: 0.9em;
+		
+			padding: 5px;
+			width: 97%;
+			
+			border: solid 0px #ababab;
+		
+		    -o-border-radius: 5px;
+		    -moz-border-radius: 5px;
+		    -webkit-border-radius: 5px;
+		    border-radius: 5px;
+		}
+
+		.LogingForm .buttonContainer {
+			width: 100%;
+			text-align: right;
+			
+		}
+		
+		.LoginForm button {
+			width: 60px;
+			height: 30px;
+		}
+	</style>
+	<div class='homePanel' style='font-size: 1em;'>
+		<h3>Login to apstrata mForms</h3>
+
+		
+		<table width="100%">
+			<tr>
+				<td width="66%" valign="top">
+					<div class="LoginForm  rounded-sml" style='background: #dedede;text-align: center;height: 400px;'>
+					<br><br><br>
+						<span style='font-size: 0.8em;'>THIS SPACE IS AVAILABLE FOR OPERATOR BRANDING & ANNOUCEMENTS</span>
+					</div>
+				</td>
+				<td width="33%" valign="top">
+					<div class="LoginForm  rounded-sml" 
+						dojoAttachPoint="dvUser" 
+						dojoAttachEvent='onmouseover: _onMouseoverUser,onmouseout: _onMouseoutUser'>
+
+						<form action="" method="" dojoType="dijit.form.Form" dojoAttachPoint="userForm">
+							<span class="title">User Credentials</span>
+							<br><br>
+<!--				
+							<div class="label">Key:</div>
+							<input type="text" dojoAttachPoint="key" value="" />
+-->				
+							<div class="label">User Name:</div>
+							<input type="text" dojoAttachPoint="un" value="" />
+				
+							<div class="label">Password:</div>
+							<input type="password" dojoAttachPoint="pw" value="" />
+						</form>
+						<br>
+						<div class="buttonContainer">
+							<button dojoAttachEvent="onClick: loginUser" dojoType='dijit.form.Button'>Login</button>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</div>

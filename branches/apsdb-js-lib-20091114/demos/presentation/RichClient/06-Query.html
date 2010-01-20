@@ -1,0 +1,47 @@
+<div class='Slide'>
+	<div class='title' style='font-size: 3em; padding-top: 15px;'>
+		Client2Cloud example: Query
+	</div>
+	<div  class='contents'>
+		<ul>
+			<li>
+				apstrata Query is a powerful API that allows you to retrieve data from apstrata. It provides natural support
+				for web applications such as pagination, stored queries & feeds.
+			<li>
+				The Query call params include a filter expression that is very similar to the traditional SQL where statement, 
+				the list of fields to return, sort options, full text search expression, aggregates, pagination rules.
+			</li>
+		</ul>
+		<br>
+		<div class="example" style="height:250px;">
+			<p>This grid provides a view of the documents entered previously in the job application form.</p>
+			<div id="dvQuery" class="grid" style="height:200px;"><div style='text-align: center;'><br><br>loading widget<br><img src='{{ _apstrataRoot }}/themes/apstrata/images/horizontal-wait-bar-f3f3f3back.gif'></div></div>
+		</div>
+	</div>
+	<script>
+dojo.require("apstrata.apsdb.client.ItemApsdbWriteStore")
+dojo.require("apstrata.widgets.QueryWidget")
+dojo.require("apstrata.apsdb.client.Connection")
+dojo.require("apstrata.apsdb.client.widgets.ConnectionStatus")
+
+var storeAttrs = {	
+	connection: apstrata.presentation.connection, 
+	resultsPerPage: 5,
+	apsdbStoreName: apstrata.presentation.connection.defaultStore, 
+	fields:"name, dob, JSExperience, totalExperience", 
+	label: "name" 
+}
+
+var myStore = new apstrata.apsdb.client.ItemApsdbWriteStore(storeAttrs)
+
+var queryAttrs = {
+	store: myStore,
+	query: "formType = \"job\"",
+	columns: "name, dob, JSExperience, totalExperience",
+	page: 1
+}
+
+var qw = new apstrata.widgets.QueryWidget(queryAttrs)
+dojo.place(qw.domNode, "dvQuery", "only")
+	</script>
+</div>

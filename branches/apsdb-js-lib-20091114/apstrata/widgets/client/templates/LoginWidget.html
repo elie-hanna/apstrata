@@ -1,0 +1,60 @@
+<div>
+	<div dojoType='apstrata.widgets.SlidingPanel' 
+		dojoAttachPoint='slider' 
+		class='LoginWidgetSlidingPanel rounded-bottom-sml shadow'
+		attach='top' visibleWidth="12"
+		offsetFromCenter='{{ offsetFromCenter }}'>
+	
+        {% if assumeLoggedIn %}
+			<a href="#" dojoAttachEvent="onclick: logout"]]>logout</a> | <a href="#" dojoAttachEvent="onclick: editProfile">edit profile</a><br><br>
+        {% else %}
+			<div class="loginWidgetErrorPane">{{ errorMessage }}</div>
+
+            <div dojoType="dijit.layout.TabContainer" class="rounded-bottom-sml" dojoAttachPoint="tabsLoginType"
+				 doLayout="false" nested="false">
+                <div dojoType="dijit.layout.ContentPane" title="User" selected="false" class="rounded-bottom-sml">
+					<div dojoType="dijit.form.Form" dojoAttachPoint="frmLoginUser">
+						Key<br>
+						<input type="text" name="key" value="{{ connection.credentials.key|default_if_none:"" }}" dojoType="dijit.form.ValidationTextBox"><br>
+						User<br>
+						<input type="text" name="un" value="{{ connection.credentials.un|default_if_none:"" }}" dojoType="dijit.form.ValidationTextBox"><br>
+						Password<br>
+						<input type="password" name="pw" value="" dojoType="dijit.form.ValidationTextBox"><br><br>
+						
+						<div style="width: 100%;"><span style="float: right;">
+							<button dojoType="dijit.form.Button" dojoAttachEvent="onClick: login">login</button>
+						</span></div>
+						<div style="clear: both;"></div>
+					</div>
+				</div>
+                <div dojoType="dijit.layout.ContentPane" title="Admin" selected="true" class="rounded-bottom-sml">
+					<div dojoType="dijit.form.Form" class="rounded-bottom-right" dojoAttachPoint="frmLoginAdmin">
+						Key<br>
+						<input type="text" name="key" size="10" value="{{ connection.credentials.key|default_if_none:"" }}" dojoType="dijit.form.ValidationTextBox"><br>
+						Secret<br>
+						<input type="password" name="secret" size="10" value="" dojoType="dijit.form.ValidationTextBox"><br><br>
+						
+						<div style="width: 100%;"><span style="float: right;">
+							<button dojoType="dijit.form.Button" dojoAttachEvent="onClick: login">login</button>
+						</span></div>
+						<div style="clear: both;"></div>
+					</div>
+				</div>
+                <div dojoType="dijit.layout.ContentPane" title="Settings" selected="false">
+					<div dojoType="dijit.form.Form" class="rounded-bottom-right" dojoAttachPoint="frmSettings">
+						Service URL<br>
+						<input type="text" name="serviceUrl" size="10" dojoType="dijit.form.ValidationTextBox" value="{{ connection.serviceUrl }}"><br>
+						Timeout (ms)<br>
+						<input type="text" name="timeout" size="10" dojoType="dijit.form.ValidationTextBox" value="{{ connection.timeout }}"><br>
+						Default Store<br>
+						<input type="text" name="defaultStore" size="10" dojoType="dijit.form.ValidationTextBox" value="{{ connection.defaultStore }}"><br><br>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		<div dojoAttachPoint="statusLine" style="padding-top: 5px;text-align: center;">{{ accountTypeLabel }} {{ accountMessage }}<br></div>
+		
+	</div>
+</div>
+
+
