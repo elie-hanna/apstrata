@@ -121,7 +121,7 @@ dojo.declare("apstrata.devConsole.ScriptsPanel",
 				// Rearrange the result to suite the template
 				self.data = []
 				dojo.forEach(operation.response.result.scripts, function(script) {
-					self.data.push({label: script['name'], iconSrc: ""})
+					self.data.push({label: script['@name'], iconSrc: ""})
 				})			
 	
 				// Cause the DTL to rerender with the fresh self.data

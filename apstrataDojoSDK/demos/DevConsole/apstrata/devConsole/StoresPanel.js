@@ -70,7 +70,7 @@ dojo.declare("apstrata.devConsole.StoresPanel",
 				// Rearrange the result to suite the template
 				self.data = []
 				dojo.forEach(operation.response.result.stores, function(store) {
-					self.data.push({label: store['name'], iconSrc: ""})
+					self.data.push({label: store['@name'], iconSrc: ""})
 				})
 	
 				// Cause the DTL to rerender with the fresh self.data

@@ -36,7 +36,7 @@ dojo.declare("apstrata.devConsole.GroupsPanel",
 				// Rearrange the result to suite the template
 				self.data = []
 				dojo.forEach(operation.response.result.groups, function(group) {
-					self.data.push({label: group['name'], iconSrc: ""})
+					self.data.push({label: group['@name'], iconSrc: ""})
 				})
 	
 				// Cause the DTL to rerender with the fresh self.data
