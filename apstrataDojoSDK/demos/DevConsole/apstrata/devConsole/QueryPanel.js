@@ -79,7 +79,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 				load: function(operation) {
 					self.data = []
 					dojo.forEach(operation.response.result.users, function(user) {
-						self.data.push({name: user['name'], label: user['name'], abbreviation: user['name']})
+						self.data.push({name: user['@name'], label: user['@name'], abbreviation: user['@name']})
 					})
 					
 					self.userList = {identifier:'abbreviation',label: 'name',items: self.data}
@@ -102,7 +102,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 				var aggregatesString = self.fldAggregates.getValue()
 				var sortingString = self.fldSorting.getValue()
 				var FTSString = self.fldFts.getValue()
-				var runAs = self.fldRunAs.getValue()
+				var runAs = self.fldRunAs.getValue() //
 				var aggPageScope = (self.fldAggPScope.getValue()=="aggregatePage")?"true":"false"
 				var aggGlobalScope = (self.fldAggGScope.getValue()=="aggregateGlobal")?"true":"false"
 				var deniedFields = self.fldDeniedFields.getValue()
