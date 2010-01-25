@@ -34,11 +34,11 @@ dojo.declare("apstrata.mForms.ApConfig", [], {
 		// DO NOT COMMIT YOUR CREDENTIALS INTO SVN
 		//
 		// ****************************************
-		key:'',
-		secret: '',
-		username: '',
-		password: '',
-		serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest',
+		key: 'apstrata1',//'T15613A768', //'Q6C6741B5E',
+		secret: 'secret', //'Y7A120D8C1DFFA537D7E', //'YFB1E94CB62C5498FB7F',
+		username: 'caroline1', //'caroline', //'rabih',
+		password: '111111', //'111111', //'q1w2e3r4',
+		serviceURL: 'http://localhost/apstratabase/rest', //'http://apsdb.apstrata.com/sandbox-apsdb/rest',
 		defaultStore: 'DefaultStore',
 		timeout: 10000	
 	},

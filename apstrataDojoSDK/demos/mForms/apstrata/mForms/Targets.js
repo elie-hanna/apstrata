@@ -60,14 +60,12 @@ dojo.declare('apstrata.mForms.Targets',
 				self.data = []
 				dojo.forEach(operation.response.result.documents, function(document){
 					self.data.push({
-						label: document.fields[1].values[0],
+						label: document.targetName,
 						iconSrc: "",
 						attrs: {
-							documentKey: document.fields[0].values[0],
-							targetName: document.fields[1].values[0],
+							documentKey: document.key,
+							targetName: document.targetName,
 							document: document
-//							description: document.fields[2].values[0],
-//							members: document.fields[3].values[0]
 						}
 					})
 				})
@@ -125,10 +123,10 @@ dojo.declare("apstrata.mForms.TargetEdit",
 	constructor: function(attrs){
 		if (attrs) {
 			if (attrs.document) {
-				this.documentKey = attrs.document.fields[0].values[0]
-				this.target = attrs.document.fields[1].values[0]
-				this.description = attrs.document.fields[2].values[0]
-				this.members = attrs.document.fields[3].values[0]
+				this.documentKey = attrs.document.key
+				this.target = attrs.document.targetName
+				this.description = attrs.document.targetDescription
+				this.members = attrs.document.targetMembers
 				this.update = true
 			} else {
 				this.documentKey = ''

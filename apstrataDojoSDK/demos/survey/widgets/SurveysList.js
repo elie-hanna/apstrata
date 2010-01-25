@@ -124,8 +124,8 @@ dojo.declare("surveyWidget.widgets.SurveysList",
 			
 			for (var doc = 0; doc < arrSurvey.length; doc++) {
 				newField = new surveyWidget.widgets.SurveyObj({
-					nameParam: arrSurvey[doc].fields[0].values[0],
-					idParam: arrSurvey[doc].fields[2].values[0]
+					nameParam: arrSurvey[doc].surveyName,
+					idParam: arrSurvey[doc].key
 				});
 				this.surveys.addChild(newField);
 			}

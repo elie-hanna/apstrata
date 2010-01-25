@@ -76,31 +76,50 @@ dojo.declare("apstrata._Item",
 				self[this._KEY_LABEL] = attrs.item["key"]
 
 				self.fieldsMap = {}		
-	
-				dojo.forEach(attrs.item.fields, function(field) {
-					
+				for( var fieldName in attrs.item)
+				{
+					if(fieldName == "_type" || fieldName == "_deniedFields")
+					{
+						continue;
+					}
 					// If this is a children attribute
-					if (dojo.indexOf(attrs.childrenNames, field["name"])>=0) {
+					if (dojo.indexOf(attrs.childrenNames, fieldName) >= 0) 
+					{
+						
 						var _values = []
-						dojo.forEach(field.values, function(value) {
-							
+						//if this is multivalue, we receive an array of values, else it is a single value prop/value
+						if(attrs.item[fieldName] instanceof Array)
+						{
+							for(var i =0; i < attrs.item[fieldName].length; i++)
+							{
+								// instantiate _Item placeholders 
+								var _item = new apstrata.apsdb.client._Item();
+								_item.setIdentity(attrs.item[fieldName][i]);
+								_values.push(_item);	
+							}
+						}
+						else
+						{
 							// instantiate _Item placeholders 
-							var _item = new apstrata.apsdb.client._Item()
-							_item.setIdentity(value)
-							_values.push(_item)
-						})
+							var _item = new apstrata.apsdb.client._Item();
+							_item.setIdentity(attrs.item[fieldName]);
+							_values.push(_item);	
+						}
+						
 						
 						var _field = {}
 						_field.values = _values
-						_field["name"] = field["name"]
+						_field["name"] = fieldName;
 						_field["type"] = self.declaredClass
 						
-						self.fieldsMap[field["name"]] = _field
+						self.fieldsMap[fieldName] = _field
 					} else {
-						self.fieldsMap[field["name"]] = field							
-					}					
-				})
-
+						self.fieldsMap[fieldName] = {
+							"name": fieldName,
+							"values": [attrs.item[fieldName]]
+						};
+					}
+				}
 
 				// Hack needed for dojo grid (and maybe other widgets), if a column is expected and it's not found in the item
 				//  the widget breaks

@@ -133,6 +133,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			var found = false;
 			var columnClass = 'rounded';
 			var bottomCornerClass = '';
+			var cellValue = "";
 
 			// Add the header row
 			var headerTHead = document.createElement('THEAD');
@@ -158,16 +159,20 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			var arrSurvey = data.result.documents;
 			var rowCount = 1;
 			for (var doc=0; doc<arrSurvey.length; doc++) {
-				if (arrSurvey[doc].fields) {
 					var tableRow = this.displayTable.insertRow(rowCount++);
 					var cellCount = 0;
 					for (var ncol=0; ncol<columns.length; ncol++) {
 						found = false;
-						for (var fid = 0; fid<arrSurvey[doc].fields.length; fid++) {
-							if (columns[ncol] == arrSurvey[doc].fields[fid]["@name"]) {
+						/*for (var fid = 0; fid<arrSurvey[doc].fields.length; fid++) {
+							if (columns[ncol] == arrSurvey[doc].fields[fid]["name"]) {
 								found = true;
 								break;
 							}
+						}
+						*/
+						if(arrSurvey[doc][columns[ncol]])
+						{
+							found = true;
 						}
 
 						if (doc == arrSurvey.length-1 && ncol == 0)
@@ -181,18 +186,27 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 							var tableCell = tableRow.insertCell(cellCount++);
 							tableCell.className = bottomCornerClass;
 
-							for (var ival=0; ival<arrSurvey[doc].fields[fid].values.length; ival++) {
-								tableCell.innerHTML = arrSurvey[doc].fields[fid].values[ival];
-
-								if (ival < arrSurvey[doc].fields[fid].values.length-1)
-									tableCell.innerHTML += ',';
+							if(arrSurvey[doc][columns[ncol]] instanceof Array)
+							{
+								cellValue = "";
+								for (var ival=0; ival<arrSurvey[doc][columns[ncol]].length; ival++) {
+									cellValue += arrSurvey[doc][columns[ncol]][ival];
+	
+									if (ival < arrSurvey[doc][columns[ncol]].length-1)
+										cellValue += ',';
+								}
+								tableCell.innerHTML = cellValue;
 							}
+							else{
+								tableCell.innerHTML = arrSurvey[doc][columns[ncol]];
+							}
+
+							
 						} else {
 							var tableCell = tableRow.insertCell(cellCount++);
 							tableCell.className = bottomCornerClass;
 						}
 					}
-				}
 			}
 		},
 		
@@ -218,7 +232,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				}
 			});
 			var params = "&apsdb.scriptName=downloadCSV&storeName="+self.storeName+"&arrFields="+self.arrFieldsToDisplay+"&arrTitleFields="+ self.arrTitleFieldsToDisplay+"&apsdbSchema="+self.apsdbSchema;
-			this.CSV.href=connection.signUrl("RunScriptlet", params,"json").url;// serviceUrl+"/"+;
+			this.CSV.href=connection.signUrl("RunScript", params,"json").url;// serviceUrl+"/"+;
 			/*var sd = client.call({
 				action: "RunScriptlet",
 				request: runScriptletRequest,

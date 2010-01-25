@@ -82,15 +82,15 @@ dojo.declare('apstrata.mForms.Campaigns',
 */
 					}
 					
-					var ohoh = apstrata.documentUtils.copyToObject(o, document)
+					//var ohoh = apstrata.documentUtils.copyToObject(o, document)
 
 					self.data.push({
-						label: document.fields[1].values[0],
+						label: document.campaignName,
 						iconSrc: "",
 						attrs: {
-							documentKey: document.fields[0].values[0],
-							targetName: document.fields[1].values[0],
-							document: apstrata.documentUtils.copyToObject(o, document)
+							documentKey: document.key,
+							targetName: document.campaignName,
+							document: document//apstrata.documentUtils.copyToObject(o, document)
 						}
 					})
 				})
@@ -173,8 +173,8 @@ dojo.declare("apstrata.mForms.CampaignForm",
 				
 				dojo.forEach(operation.response.result.documents, function(document){
 					data.items.push({
-						documentKey: document.fields[0].values[0],
-						targetName: document.fields[1].values[0]
+						documentKey: document.key,
+						targetName: document.targetName
 					})
 				})
 
@@ -205,7 +205,7 @@ dojo.declare("apstrata.mForms.CampaignForm",
 
 					self.data = []
 					dojo.forEach(operation.response.result.documents, function(document) {
-						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{documentKey: document.fields[1].values[0]}})
+						self.data.push({label: document.surveyName, iconSrc: "", attrs:{documentKey: document.key}})
 					})
 
 					var data = {label: "formId", identifier: "documentKey"}
@@ -213,8 +213,8 @@ dojo.declare("apstrata.mForms.CampaignForm",
 					
 					dojo.forEach(operation.response.result.documents, function(document){
 						data.items.push({
-							documentKey: document.fields[1].values[0],
-							formId: document.fields[0].values[0]
+							documentKey: document.key,
+							formId: document.surveyName
 						})
 					})
 	
@@ -307,7 +307,7 @@ dojo.declare("apstrata.mForms.CampaignForm",
 						load: function(operation){
 		
 							var runScriptletRequest = dojo.mixin({
-								phoneNumbers: operation.response.result.documents[0].fields[0].values[0],
+								phoneNumbers: operation.response.result.documents[0].targetMembers,
 								surveyName: self.schedule.attr("value").formId,
 								smsText: self.schedule.attr("value").sms
 							}, {
@@ -318,7 +318,7 @@ dojo.declare("apstrata.mForms.CampaignForm",
 							
 							// Run the send sms script 
 							self.getContainer().client.call({
-								action: "RunScriptlet",
+								action: "RunScript",
 								request: runScriptletRequest,
 								load: function(operation) {
 								},

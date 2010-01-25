@@ -44,7 +44,7 @@ dojo.declare("apstrata.devConsole.UsersPanel",
 				// Rearrange the result to suite the template
 				self.data = []
 				dojo.forEach(operation.response.result.users, function(user) {
-					self.data.push({label: user['@name'], iconSrc: ""})
+					self.data.push({label: user['name'], iconSrc: ""})
 				})
 	
 				// Cause the DTL to rerender with the fresh self.data
@@ -131,11 +131,10 @@ dojo.declare("apstrata.devConsole.UserEditPanel",
 				},
 				load: function(operation) {
 					usersPanel.userAttributes.user = usersPanel._userName
-					usersPanel.userAttributes.name = operation.response.result.user['@name']
 	
-					dojo.forEach(operation.response.result.user.attributes, function(attribute) {
-						usersPanel.userAttributes[attribute['@name']] = attribute.values[0];
-					})
+					for (var prop in operation.response.result.user){
+						usersPanel.userAttributes[prop] = operation.response.result.user[prop];
+					}
 					
 					usersPanel.render()
 				},

@@ -37,13 +37,19 @@ dojo.declare("apstrata.explorer.Survey",
 	
 	refresh: function() {
 		var self = this
+		this.surveyCreator = "";
+		
+		if (connection.credentials.username && connection.credentials.username!="")
+			this.surveyCreator =  connection.credentials.username;
+		else if (connection.credentials.key && connection.credentials.key!="")
+			this.surveyCreator =  connection.credentials.key;
 		
 		this.getContainer().client.call({
 				action: "Query",
 				request: {
 					apsdb: {
 						store: self.storeName,
-						query: "apsdb.creator=\"" + connection.credentials.username+ "\" and isSurveyMetadata=\"true\"",
+						query: "apsdb.creator=\"" + self.surveyCreator+ "\" and isSurveyMetadata=\"true\"",
 						queryFields: "surveyName,apsdb.documentKey,surveySchema"
 					}
 				},
@@ -52,7 +58,7 @@ dojo.declare("apstrata.explorer.Survey",
 
 					self.data = []
 					dojo.forEach(operation.response.result.documents, function(document) {
-						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{schema: document.fields[2].values[0], documentKey: document.fields[1].values[0]}})
+						self.data.push({label: document.surveyName, iconSrc: "", attrs:{schema: document.surveySchema, documentKey: document.key}})
 					})
 	
 					// Cause the DTL to rerender with the fresh self.data

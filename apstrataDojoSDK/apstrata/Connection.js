@@ -41,9 +41,9 @@ dojo.declare("apstrata.URLSignerMD5", [], {
 					}
 		
 					var apswsReqUrl = connection.serviceUrl
-							+ "?apsws.authKey=" + connection.credentials.key
-							+ "&apsdb.action=" + operation
-							+ "&apsws.time=" + timestamp
+							+ "/" + connection.credentials.key
+							+ "/" + operation
+							+ "?apsws.time=" + timestamp
 							+ ((signature!="")?"&apsws.authSig=":"") + signature
 							+ ((userName!="")?"&apsws.user=":"") + userName
 							+ "&apsws.responseType=" + responseType
@@ -58,7 +58,7 @@ dojo.declare("apstrata.URLSignerMD5", [], {
 dojo.declare("apstrata.Connection",
 	[apstrata.util.logger.Loggable],
 	{
-		_KEY_APSDB_ID: "@key",  // could we delete this? not used...
+		_KEY_APSDB_ID: "key",  // could we delete this? not used...
 		
 		constructor: function(attrs) {
 			this._DEFAULT_SERVICE_URL= "http://apsdb.apstrata.com/sandbox-apsdb/rest"
