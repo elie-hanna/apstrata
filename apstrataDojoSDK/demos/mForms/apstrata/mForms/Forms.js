@@ -44,7 +44,7 @@ dojo.declare("apstrata.mForms.Forms",
 
 					self.data = []
 					dojo.forEach(operation.response.result.documents, function(document) {
-						self.data.push({label: document.fields[0].values[0], iconSrc: "", attrs:{schema: document.fields[2].values[0], documentKey: document.fields[1].values[0], listSchema: document.fields[3].values[0]}})
+						self.data.push({label: document.surveyName, iconSrc: "", attrs:{schema: document.surveySchema, documentKey: document.documentKey, listSchema: document.listResultSchema}})
 					})
 	
 					// Cause the DTL to rerender with the fresh self.data
@@ -174,6 +174,7 @@ dojo.declare("apstrata.mForms.SurveyEditor",
 	
 	postCreate: function() {
 		var survey = new surveyWidget.widgets.Survey(this.attrs)
+		//var survey = new surveyWidget.widgets.Survey({attrs : this.attrs})
 		dojo.place(survey.domNode, this.dvSurvey, 'only')
 		this.inherited(arguments)
 	}

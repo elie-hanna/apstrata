@@ -343,7 +343,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			});
 			var sd = client.call({
-					action: "RunScriptlet",
+					action: "RunScript",
 					useHttpMethod : "GET",
 					request: runScriptRequest,
 					load: function(operation) {
@@ -507,7 +507,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 						self.warningMessage.style.display = 'none'; // On success hide the warning message
 						// on success, creates an apstrata schema for the survey
 						var ss = client.call({
-							action: "SetSchema",
+							action: "SaveSchema",
 							request: setSchemaRequest,
 							load: function(operation) {
 								self.warningMessage.style.display = 'none'; // On success hide the warning message
