@@ -326,6 +326,35 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * 
 		 */
 		sendEmail: function() {
+			var client = new apstrata.Client({connection: connection});
+			var self = this;
+			var sendEmailRequest = dojo.mixin({
+				surveyName: self.schemaName,
+				serviceURL: self.apServiceURL
+			}, {
+				apsdb: {
+					scriptName: "sendEmail",
+					storeName: self.storeName,
+					debugLevel: 4
+				}
+			}, {
+				apsma: {
+					to: self.emailaddress.value,
+					subject: "Apstrata Survey",
+				}
+			});
+			var sd = client.call({
+					action: "RunScript",
+					useHttpMethod : "GET",
+					request: sendEmailRequest,
+					load: function(operation) {
+						self.warningMessage.style.display = 'none'; // On success hide the warning message
+					},
+					error: function(operation) {
+						self.warningMessage.style.display = ''; // Display the warning message
+						self.warningMessage.innerHTML = operation.response.metadata.errorDetail;
+					}
+				});
 		},
 		/**
 		 * Send Sms to recipient
