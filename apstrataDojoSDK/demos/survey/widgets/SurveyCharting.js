@@ -100,6 +100,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 			var fieldValueCounts = new Array(); // Holds the counts of every value of every field
+			var fieldValueTotalCounts = new Array(); // Holds the total count of answers of every value of every field
 
 			var queryRequest = {
 				apsdb: {
@@ -115,6 +116,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				request: queryRequest,
 				load: function(operation) {
 					charting.surveysTakenCount = operation.response.result.count;
+					charting.totalSubmissions.innerHTML = 'Total submissions: ' + charting.surveysTakenCount;
 					var fieldResponses = new Array();
 
 					// Now we can query each field in the survey and aggregate the results
@@ -132,7 +134,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 									fieldValueCounts[i] = new Array(choices.length);
 									for (var j=0; j<choices.length; j++) {
 										fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = null;
-										charting.queryAndDisplayDelayedTypes(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
+										fieldValueTotalCounts[fieldDataModel.name] = 0;
+										charting.queryAndDisplayDelayedTypes(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i], fieldValueTotalCounts);
 									}
 									break;
 								case 'radio button':
@@ -141,14 +144,16 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 									fieldValueCounts[i] = new Array(choices.length);
 									for (var j=0; j<choices.length; j++) {
 										fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = null;
-										charting.queryAndDisplayDelayedTypes(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
+										fieldValueTotalCounts[fieldDataModel.name] = 0;
+										charting.queryAndDisplayDelayedTypes(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i], fieldValueTotalCounts);
 									}
 									break;
 								case 'checkbox':
 									// Count and display the number of people who checked this checkbox
 									fieldValueCounts[i] = new Array();
 									fieldValueCounts[i][fieldDataModel.name + '_checked'] = 0;
-									charting.queryAndDisplayCheckbox(fieldDataModel.name, 'checked', fieldResponses[i][0], fieldValueCounts[i]);
+									fieldValueTotalCounts[fieldDataModel.name] = 0;
+									charting.queryAndDisplayCheckbox(fieldDataModel.name, 'checked', fieldResponses[i][0], fieldValueCounts[i], fieldValueTotalCounts);
 									break;
 								case 'list':
 									// Count and display the number of people chose each of these list items
@@ -156,7 +161,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 									fieldValueCounts[i] = new Array(choices.length);
 									for (var j=0; j<choices.length; j++) {
 										fieldValueCounts[i][fieldDataModel.name + '_' + choices[j]] = null;
-										charting.queryAndDisplayDelayedTypes(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i]);
+										fieldValueTotalCounts[fieldDataModel.name] = 0;
+										charting.queryAndDisplayDelayedTypes(fieldDataModel.name, choices[j], fieldResponses[i][j], fieldValueCounts[i], fieldValueTotalCounts);
 									}
 									break;
 							}
@@ -178,8 +184,9 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		 * @param fieldValue The value of the field to use in the query expression
 		 * @param callbackResult The callback result container, it is only used to differentiate the callback of every XHR when it returns
 		 * @param fieldValueCounts The array location to store the field value counts
+		 * @param fieldValueTotalCounts The array containing the total field value counts for each question
 		 */
-		queryAndDisplayCheckbox: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
+		queryAndDisplayCheckbox: function (fieldName, fieldValue, callbackResult, fieldValueCounts, fieldValueTotalCounts) {
 			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
@@ -187,7 +194,6 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				apsdb: {
 					store: charting.storeName,
 					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
-					queryFields: "*",
 					count: true
 				}
 			};
@@ -196,8 +202,10 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				action: "Query",
 				request: queryRequest,
 				load: function(operation) {
+					var countPeopleWhoAnsweredThisQuestion = operation.response.result.count;
 					var valueCount = operation.response.result.count;
 					fieldValueCounts[fieldName + '_' + fieldValue] = valueCount; // Save the returned value count
+					fieldValueTotalCounts[fieldName] = valueCount * 1;
 
 					var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
 					var chartCell = null;
@@ -219,9 +227,11 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 
 					// 1- Add the chart title to the chart cell
 					var chartTitle = document.createElement('DIV');
-					chartTitle.style.width = '220px';
+					chartTitle.style.width = '320px';
 					chartTitle.style.paddingLeft = '10px';
+					chartTitle.style.paddingBottom = '5px';
 					var fieldTitle = charting.getTitleOf(fieldName);
+					chartTitle.className = 'questionTitle';
 					chartTitle.innerHTML = fieldTitle;
 					chartCell.appendChild(chartTitle);
 
@@ -231,7 +241,20 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					chartDIV.className = 'surveyChartSize';
 					chartCell.appendChild(chartDIV);
 
-					// 3- Create and render the chart
+					// 3- Add the count of the people who answered this question to the chart cell
+					var chartPeopleWhoAnsweredThisQuestion = document.createElement('DIV');
+					chartPeopleWhoAnsweredThisQuestion.style.width = '320px';
+					chartPeopleWhoAnsweredThisQuestion.style.paddingLeft = '10px';
+					chartPeopleWhoAnsweredThisQuestion.style.paddingTop = '5px';
+					pctOfPeopleWhoAnsweredThisQuestion = (countPeopleWhoAnsweredThisQuestion / charting.surveysTakenCount) * 100 + '';
+					if (pctOfPeopleWhoAnsweredThisQuestion.lastIndexOf('.') > 1)
+						try {
+							pctOfPeopleWhoAnsweredThisQuestion = pctOfPeopleWhoAnsweredThisQuestion.substring(0, pctOfPeopleWhoAnsweredThisQuestion.lastIndexOf('.') + 3);
+						} catch (err) {}
+					chartPeopleWhoAnsweredThisQuestion.innerHTML = 'People who answered this question: <span class="emphasizeNumber">' + countPeopleWhoAnsweredThisQuestion + ' (' + pctOfPeopleWhoAnsweredThisQuestion + '%)</span>';
+					chartCell.appendChild(chartPeopleWhoAnsweredThisQuestion);
+
+					// 4- Create and render the chart
 					var chart = new dojox.charting.Chart2D(fieldName + '_' + fieldValue);
 /*					//TODO: Replace this code with the code below it in order to get pie charts instead of horizontal bar graphs
 					chart.setTheme(dojox.charting.themes.PlotKit.red);
@@ -247,26 +270,39 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						{y: inverseCount, text: inverseCount + ' No', color: 'red'}
 					]);*/
 					chart.addAxis("x", {
-						fixLower: 'major',
-						fixUpper: 'major',
-						minorTick: {stroke: "black", length: 0},
-						minorLabels: false,
-						includeZero: true
+						majorLabels: false,
+						includeZero: true, 
+						minorTicks: false, 
+						microTicks: false, 
+						majorTick: { length: 0 }
 					});
+
+					// Calculate the percentage of people who answered 'Yes' and 'No' to this question
+					var inverseCount = charting.surveysTakenCount - valueCount;
+					var percentageOfYesAnswers = ((valueCount / charting.surveysTakenCount) * 100 ) + '';
+					var percentageOfNoAnswers = ((inverseCount / charting.surveysTakenCount) * 100 ) + '';
+					if (percentageOfYesAnswers.lastIndexOf('.') > 1)
+						try {
+							percentageOfYesAnswers = percentageOfYesAnswers.substring(0, percentageOfYesAnswers.lastIndexOf('.') + 3);
+						} catch (err) {}
+					if (percentageOfNoAnswers.lastIndexOf('.') > 1)
+						try {
+							percentageOfNoAnswers = percentageOfNoAnswers.substring(0, percentageOfNoAnswers.lastIndexOf('.') + 3);
+						} catch (err) {}
+					var chartlabel = fieldValue.substring(fieldValue.lastIndexOf('_') + 1, fieldValue.length);
 					chart.addAxis("y", {
-						vertical: true, 
-						fixLower: "none", 
-						fixUpper: "none", 
+						vertical: true,
+						fixLower: "none",
+						fixUpper: "none",
 						natural: true,
 						majorTick: { length: 3 },
 						labels: [
 							{value: 0, text: ''},
-							{value: 1, text: 'Yes'}, 
-							{value: 2, text: 'No'}
+							{value: 1, text: 'Yes (' + percentageOfYesAnswers + '%)'},
+							{value: 2, text: 'No (' + percentageOfNoAnswers + '%)'}
 						]
 					});
 					chart.addPlot("default", { type: "Bars", gap: 16 });
-					var inverseCount = charting.surveysTakenCount - valueCount;
 					chart.addSeries(
 						"Series A", 
 						[ valueCount * 1, inverseCount ],
@@ -281,6 +317,13 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 
 					// Alternate the isNewLine variable to show the charts in two columns
 					charting.isNewLine = (charting.isNewLine) ? false : true;
+
+					//  Looping over the 'RECT' elements that Dojo has created in the charts in order to set an empty
+					// title on each of them since the default title is not user-friendly!
+					var chartRectangleCollection = chartDIV.getElementsByTagName('RECT');
+					for (var i=0; i<chartRectangleCollection.length; i++) {
+							chartRectangleCollection.item(i).setAttribute('title', ' ');
+					}
 				},
 				error: function(operation) {
 					//fail(operation)
@@ -300,8 +343,9 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		 * @param fieldValue The value of the field to use in the query expression
 		 * @param callbackResult The callback result container, it is only used to differentiate the callback of every XHR when it returns
 		 * @param fieldValueCounts The array location to store the field value counts
+		 * @param fieldValueTotalCounts The array containing the total field value counts for each question
 		 */
-		queryAndDisplayDelayedTypes: function (fieldName, fieldValue, callbackResult, fieldValueCounts) {
+		queryAndDisplayDelayedTypes: function (fieldName, fieldValue, callbackResult, fieldValueCounts, fieldValueTotalCounts) {
 			var client = new apstrata.Client({connection: connection});
 			var charting = this;
 
@@ -309,7 +353,6 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				apsdb: {
 					store: charting.storeName,
 					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
-					queryFields: "*",
 					count: true
 				}
 			};
@@ -324,114 +367,170 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 					// Loop over the existing field value counts and if all values have been accounted for, then display the chart
 					var areAllValuesPresent = true;
 					for (fieldValue in fieldValueCounts) {
+						fieldValueTotalCounts[fieldName] += fieldValueCounts[fieldValue] * 1;
 						if (fieldValueCounts[fieldValue] == null) {
 							areAllValuesPresent = false;
+							fieldValueTotalCounts[fieldName] = 0;
 							break;
 						}
 					}
 
 					// If all radio button values have returned their count, then display this field's chart
 					if (areAllValuesPresent) {
-						var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
-						var chartCell = null;
-						// Create a new line if: (1) We couldn't find one, (2) We found a default text node, (3) The caller is asking for a new line
-						if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
-							chartLine = document.createElement('DIV');
-							chartCell = document.createElement('DIV');
-							chartLine.className = 'surveyChartLineSize';
-							chartLine.appendChild(chartCell);
-							charting.floatElement(chartCell, 'left');
-
-							charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
-						} else {
-							var chartCell = document.createElement('DIV');
-							charting.floatElement(chartCell, 'left');
-
-							chartLine.appendChild(chartCell); // Just add the new cell to the existing line
+						var queryFields = '';
+						for (constructedNameValueKey in fieldValueCounts) {
+							queryFields += fieldName + '=\"' + charting.clean(constructedNameValueKey.substring(constructedNameValueKey.lastIndexOf('_') + 1, constructedNameValueKey.length)) + '\" OR ';
 						}
+						// This is to remove the last 3 characters from the query fields (which should be:' OR')
+						queryFields = ' AND (' + queryFields.substring(0, queryFields.length - 4) + ')';
 
-						// 1- Add the chart title to the chart cell
-						var chartTitle = document.createElement('DIV');
-						chartTitle.style.width = '220px';
-						chartTitle.style.paddingLeft = '10px';
-						var fieldTitle = charting.getTitleOf(fieldName);
-						chartTitle.innerHTML = fieldTitle;
-						chartCell.appendChild(chartTitle);
+						var countPeopleQueryRequest = {
+							apsdb: {
+								store: charting.storeName,
+								query: "apsdb.objectName=\"" + charting.apsdbSchema + "\"" + queryFields,
+								count: true
+							}
+						};
+						
+						countPeopleQueryCallbackResult = client.call({
+							action: "Query",
+							request: countPeopleQueryRequest,
+							load: function(countPeopleOperation) {
+								var countPeopleWhoAnsweredThisQuestion = countPeopleOperation.response.result.count;
 
-						// 2- Add the chart placeholder in the chart cell
-						var chartDIV = document.createElement('DIV');
-						chartDIV.setAttribute('id', fieldName);
-						chartDIV.className = 'surveyChartSize';
-						chartCell.appendChild(chartDIV);
+								var chartLine = charting.displayTable.lastChild; // Get the last DIV in the display table
+								var chartCell = null;
+								// Create a new line if: (1) We couldn't find one, (2) We found a default text node, (3) The caller is asking for a new line
+								if (chartLine == null || chartLine.nodeType == 3 || charting.isNewLine) {
+									chartLine = document.createElement('DIV');
+									chartCell = document.createElement('DIV');
+									chartLine.className = 'surveyChartLineSize';
+									chartLine.appendChild(chartCell);
+									charting.floatElement(chartCell, 'left');
+		
+									charting.displayTable.appendChild(chartLine); // Add the new line with the new cell to the display table
+								} else {
+									var chartCell = document.createElement('DIV');
+									charting.floatElement(chartCell, 'left');
+		
+									chartLine.appendChild(chartCell); // Just add the new cell to the existing line
+								}
 
-						// 3- Create and render the chart
-						var chart = new dojox.charting.Chart2D(fieldName);
-/*						//TODO: Replace this code with the code below it in order to get pie charts instead of horizontal bar graphs
-						chart.setTheme(dojox.charting.themes.PlotKit.red);
-						chart.addPlot('default', {
-							type: 'Pie',
-							font: 'normal normal bold 8pt Tahoma',
-							fontColor: 'white',
-							labelOffset: 40
+								// 1- Add the chart title to the chart cell
+								var chartTitle = document.createElement('DIV');
+								chartTitle.style.width = '320px';
+								chartTitle.style.paddingLeft = '10px';
+								chartTitle.style.paddingBottom = '5px';
+								var fieldTitle = charting.getTitleOf(fieldName);
+								chartTitle.className = 'questionTitle';
+								chartTitle.innerHTML = fieldTitle;
+								chartCell.appendChild(chartTitle);
+		
+								// 2- Add the chart placeholder in the chart cell
+								var chartDIV = document.createElement('DIV');
+								chartDIV.setAttribute('id', fieldName);
+								chartDIV.className = 'surveyChartSize';
+								chartCell.appendChild(chartDIV);
+		
+								// 3- Add the count of the people who answered this question to the chart cell
+								var chartPeopleWhoAnsweredThisQuestion = document.createElement('DIV');
+								chartPeopleWhoAnsweredThisQuestion.style.width = '320px';
+								chartPeopleWhoAnsweredThisQuestion.style.paddingLeft = '10px';
+								chartPeopleWhoAnsweredThisQuestion.style.paddingTop = '5px';
+								pctOfPeopleWhoAnsweredThisQuestion = (countPeopleWhoAnsweredThisQuestion / charting.surveysTakenCount) * 100 + '';
+								if (pctOfPeopleWhoAnsweredThisQuestion.lastIndexOf('.') > 1)
+									try {
+										pctOfPeopleWhoAnsweredThisQuestion = pctOfPeopleWhoAnsweredThisQuestion.substring(0, pctOfPeopleWhoAnsweredThisQuestion.lastIndexOf('.') + 3);
+									} catch (err) {}
+								chartPeopleWhoAnsweredThisQuestion.innerHTML = 'People who answered this question: <span class="emphasizeNumber">' + countPeopleWhoAnsweredThisQuestion + ' (' + pctOfPeopleWhoAnsweredThisQuestion + '%)</span>';
+								chartCell.appendChild(chartPeopleWhoAnsweredThisQuestion);
+		
+								// 4- Create and render the chart
+								var chart = new dojox.charting.Chart2D(fieldName);
+/*								//TODO: Replace this code with the code below it in order to get pie charts instead of horizontal bar graphs
+								chart.setTheme(dojox.charting.themes.PlotKit.red);
+								chart.addPlot('default', {
+									type: 'Pie',
+									font: 'normal normal bold 8pt Tahoma',
+									fontColor: 'white',
+									labelOffset: 40
+								});
+
+								var valuesArr = new Array(fieldValueCounts.length);
+								var k = 0;
+								for (fieldValue in fieldValueCounts) {
+									var chartlabel = fieldValue.substring(fieldValue.lastIndexOf('_') + 1, fieldValue.length);
+									valuesArr[k] = {y: fieldValueCounts[fieldValue], text: fieldValueCounts[fieldValue] + ' ' + chartlabel};
+									k++;
+								}
+								chart.addSeries('Series A', valuesArr);*/
+								chart.addAxis("x", {
+									majorLabels: false,
+									includeZero: true,
+									minorTicks: false,
+									microTicks: false,
+									majorTick: { length: 0 }
+								});
+
+								// Calculate the percentage of people who answered every value of this question, and construct the labels and values arrays
+								var lablesArr = new Array(fieldValueCounts.length + 1);
+								var valuesArr = new Array(fieldValueCounts.length);
+								var k = 0;
+								lablesArr[k] = {value: 0, text: ''};
+								for (fieldValue in fieldValueCounts) {
+									var percentageOfAnswers = ((fieldValueCounts[fieldValue] / fieldValueTotalCounts[fieldName]) * 100 ) + '';
+									if (percentageOfAnswers.lastIndexOf('.') > 1)
+										try {
+											percentageOfAnswers = percentageOfAnswers.substring(0, percentageOfAnswers.lastIndexOf('.') + 3);
+										} catch (err) {}
+									var chartlabel = fieldValue.substring(fieldValue.lastIndexOf('_') + 1, fieldValue.length) + ' (' + percentageOfAnswers + '%)';
+									lablesArr[k + 1] = {value: k + 1, text: chartlabel};
+									valuesArr[k] = fieldValueCounts[fieldValue] * 1;
+									k++;
+								}
+								chart.addAxis("y", {
+									vertical: true,
+									fixLower: "none", 
+									fixUpper: "none", 
+									natural: true,
+									majorTick: { length: 3 },
+									labels: lablesArr
+								});
+
+								// Set the gap between the bars according to the number of bars, i.e. More bars = Smaller gap
+								var gapBetweenBars = 0;
+								if (fieldValueCounts.length < 4) gapBetweenBars = 11;
+								else if (fieldValueCounts.length < 7) gapBetweenBars = 9;
+								else if (fieldValueCounts.length > 6) gapBetweenBars = 3;
+								chart.addPlot("default", { type: "Bars", gap: gapBetweenBars });
+		
+								var inverseCount = charting.surveysTakenCount - valueCount;
+								chart.addSeries(
+									"Series A", 
+									valuesArr,
+									{ stroke: {width: 0}, fill: '#ff6600' }
+								);
+								var animA = new dojox.charting.action2d.Highlight(chart, "default", {
+									duration: 450,
+									easing:   dojo.fx.easing.bounceOut
+								});
+								var animB = new dojox.charting.action2d.Tooltip(chart, "default");
+								chart.render();
+		
+								// Alternate the isNewLine variable to show the charts in two columns
+								charting.isNewLine = (charting.isNewLine) ? false : true;
+
+								//  Looping over the 'RECT' elements that Dojo has created in the charts in order to set an empty
+								// title on each of them since the default title is not user-friendly!
+								var chartRectangleCollection = chartDIV.getElementsByTagName('RECT');
+								for (var i=0; i<chartRectangleCollection.length; i++) {
+								    chartRectangleCollection.item(i).setAttribute('title', ' ');
+								}
+							},
+							error: function(countPeopleOperation) {
+								//fail(operation)
+							}
 						});
-
-						var valuesArr = new Array(fieldValueCounts.length);
-						var k = 0;
-						for (fieldValue in fieldValueCounts) {
-							var chartlabel = fieldValue.substring(fieldValue.lastIndexOf('_') + 1, fieldValue.length);
-							valuesArr[k] = {y: fieldValueCounts[fieldValue], text: fieldValueCounts[fieldValue] + ' ' + chartlabel};
-							k++;
-						}
-						chart.addSeries('Series A', valuesArr);*/
-						chart.addAxis("x", {
-							fixLower: 'major',
-							fixUpper: 'major',
-							minorTick: {stroke: "black", length: 0},
-							minorLabels: false,
-							includeZero: true
-						});
-						// Construct the labels and values arrays
-						var lablesArr = new Array(fieldValueCounts.length + 1);
-						var valuesArr = new Array(fieldValueCounts.length);
-						var k = 0;
-						lablesArr[k] = {value: 0, text: ''};
-						for (fieldValue in fieldValueCounts) {
-							var chartlabel = fieldValue.substring(fieldValue.lastIndexOf('_') + 1, fieldValue.length);
-							lablesArr[k + 1] = {value: k + 1, text: chartlabel};
-							valuesArr[k] = fieldValueCounts[fieldValue] * 1;
-							k++;
-						}
-						chart.addAxis("y", {
-							vertical: true, 
-							fixLower: "none", 
-							fixUpper: "none", 
-							natural: true,
-							majorTick: { length: 3 },
-							labels: lablesArr
-						});
-
-						// Set the gap between the bars according to the number of bars, i.e. More bars = Smaller gap
-						var gapBetweenBars = 0;
-						if (fieldValueCounts.length < 4) gapBetweenBars = 11;
-						else if (fieldValueCounts.length < 7) gapBetweenBars = 9;
-						else if (fieldValueCounts.length > 6) gapBetweenBars = 3;
-						chart.addPlot("default", { type: "Bars", gap: gapBetweenBars });
-
-						var inverseCount = charting.surveysTakenCount - valueCount;
-						chart.addSeries(
-							"Series A", 
-							valuesArr,
-							{ stroke: {width: 0}, fill: '#ff6600' }
-						);
-						var animA = new dojox.charting.action2d.Highlight(chart, "default", {
-							duration: 450,
-							easing:   dojo.fx.easing.bounceOut
-						});
-						var animB = new dojox.charting.action2d.Tooltip(chart, "default");
-						chart.render();
-
-						// Alternate the isNewLine variable to show the charts in two columns
-						charting.isNewLine = (charting.isNewLine) ? false : true;
 					}
 				},
 				error: function(operation) {
