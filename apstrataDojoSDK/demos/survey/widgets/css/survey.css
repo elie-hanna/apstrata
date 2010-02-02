@@ -149,7 +149,7 @@
 .survey-listing {
 	width: auto;
 	display: inline-block;
-	width: 480px;
+	width: 680px;
 }
 
 .survey-title {
@@ -268,11 +268,30 @@
 }
 
 .surveyChartSize {
-	width: 200px;
+	width: 300px;
 	height: 200px;
 }
 
 .surveyChartLineSize {
-	width: 460px;
-	height: 230px;
+	width: 660px;
+	height: 260px;
+}
+
+.emphasizeNumber {
+	font-weight: bold;
+}
+
+.survey-listing .rounded-corner {
+	font-family: Verdana,"Lucida Sans Unicode","Lucida Grande",Sans-Serif;
+	font-size: 11px;
+}
+
+.questionTitle {
+	font-family: Verdana,"Lucida Sans Unicode","Lucida Grande",Sans-Serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.submissionsCount {
+	font-size: 14px !important;
 }
