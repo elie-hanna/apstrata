@@ -117,6 +117,9 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				load: function(operation) {
 					charting.surveysTakenCount = operation.response.result.count;
 					charting.totalSubmissions.innerHTML = 'Total submissions: ' + charting.surveysTakenCount;
+					if (charting.surveysTakenCount < 1) // Do not proceed with the calculations if no surveys have been submitted
+						return;
+
 					var fieldResponses = new Array();
 
 					// Now we can query each field in the survey and aggregate the results
