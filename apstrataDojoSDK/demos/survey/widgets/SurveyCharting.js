@@ -39,55 +39,71 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 		apsdbSchema: '',
 		surveysTakenCount: 0,
 		isNewLine: true,
-
-		//
-		// Replace here with your apsdb account
-		//  and target store name
-		//
-		//storeName: "surveyStore",
-		
 		/**
-		 * Constructor of the SurveyCharting widget.
-		 * 
-		 * @param attrs
-		 * 		JSON object containing some info about the survey: 
+		 * 		attrs is a JSON object containing some info about the survey's charts: 
 		 * 			storeName: the store used by the SurveyCharting widget
 		 * 			schema: Contains the schema of the current survey  
 		 */
-		constructor: function(attrs) {
-			if (attrs) {
-				
-				if(typeof(attrs.storeName) != "undefined") 
-					this.storeName = attrs.storeName
-				else 
-					this.storeName = storeName;
-					
-				if (attrs.schema) 
-					this.schema = attrs.schema	
-				else		
-					this.schema = schema;	
-			} else {
-				this.schema = schema;
-				this.storeName = storeName;
-			}
+		attrs: {},
+		
+		/**
+		 * Constructor of the SurveyCharting widget.
+		 */
+		constructor: function() {
+		},
+		
+		/**
+		 * Function called by the constructor, used to set properties that are referenced in the widget
+		 */
+		postMixInProperties: function() {
 			
-			if(this.schema != null){
-				this.jsonDataModel = decodeURIComponent(this.schema);
-				this.dojoDataModel = dojo.fromJson(this.jsonDataModel);
-				this.questions = this.dojoDataModel.questions;
+			if(this.attrs.storeName) 
+				this.storeName = this.attrs.storeName
+				
+			if(this.attrs.surveyID)
+				this.surveyID = this.attrs.surveyID;			
+		},
 
-				// Look for and set the apstrata survey identifier
-				var self = this;
-				dojo.forEach(this.questions, function(fieldDataModel) {
-					if (fieldDataModel.name == 'apsdbSchema') {
-						self.apsdbSchema = fieldDataModel.defaultValue;
+		/**
+		 * After creation of this widget: Set the title and call the query
+		 */
+		postCreate: function() {
+			
+			var self = this;
+			var client = new apstrata.Client({connection: connection});
+			
+			if (this.surveyID != null) { // Verify that the document key is not null
+				var queryRequest = {
+					apsdb: {
+						store: this.storeName,
+						query: "apsdb.documentKey=\"" + this.surveyID + "\"",
+						queryFields: "surveySchema"
+					}};
+	
+				var q = client.call({
+					action: "Query",
+					request: queryRequest,
+					load: function(operation) { // on success, set the survey schema and construct the survey
+						if (operation.response.result.documents.length > 0) {
+							if(operation.response.result.documents[0]["surveySchema"] != undefined){
+								self.schema = operation.response.result.documents[0]["surveySchema"];
+								self.jsonDataModel = decodeURIComponent(self.schema);
+								self.dojoDataModel = dojo.fromJson(self.jsonDataModel);
+								self.questions = self.dojoDataModel.questions;
+								self.apsdbSchema = self.surveyID; // Look for and set the apstrata survey identifier
+								self.title.innerHTML = self.dojoDataModel.title;
+								self.query();
+							} else // if no schema was found in the metadata document then display a message
+								self.title.innerHTML = "The survey's charts are not available";
+						} else // if no metadata document corresponds to the survey ID then display a message
+							self.title.innerHTML = "The survey's charts are not available";
+					},
+					error: function(operation) {  //on error, display a message
+						self.title.innerHTML = "The survey's charts are not available";
 					}
 				});
-
-				if (this.apsdbSchema == null) {
-					// TODO: Throw an error because we use the survey ID to query for the results of the widget
-				}
-			}
+			} else // if no survey key is specified then display a message
+				this.title.innerHTML = "The survey's charts are not available";
 		},
 
 		/**
@@ -555,18 +571,6 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			for (var k=0; k<charting.questions.length; k++)
 				if (charting.questions[k].name == fieldName)
 					return charting.questions[k].title;
-		},
-
-		/**
-		 * After creation of this widget: Set the title and call the query
-		 */
-		postCreate: function() {
-			if (this.schema != null) {
-				this.title.innerHTML = this.dojoDataModel.title;
-				this.query();
-			}
-			else
-				this.title.innerHTML = "The survey charting schema is missing";
 		},
 
 		/**

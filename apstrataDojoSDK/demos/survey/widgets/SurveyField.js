@@ -44,38 +44,49 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 		editMode:false,
 		dummyField:false,
 		serialNumber: 0,
-		initialState: null,		
+		initialState: null,	
+		/**
+		 * 		attrs is a JSON object containing some info about the survey fields: 
+		 * 			dataModel: dojo object containing the details of the question to create
+		 * 			editMode: When set to true, the suvey is in edit mode and it allows user to edit the current question. 
+		 * 			serialNumber: Integer representing the index of the current field    
+		 */
+		attrs: {},	
 		
 		/**
 		 * Constructor of the SurveyField widget.
-		 * 
-		 * @param dataModel
-		 * 		dojo object containing the details of the question to create
-		 * 
-		 * @param editMode
-		 * 		When set to true, the suvey is in edit mode and it allows user to edit the current question. 
-		 * 
-		 * @param serialNumber
-		 * 		Integer representing the index of the current field  
 		 */
-		constructor: function(dataModel, editMode, serialNumber) {
-			this.fieldDataModel = dataModel;
-			this.editMode = editMode;
-			this.serialNumber = serialNumber;
+		constructor: function() {
 			
-			if (dataModel != null) {
-				if (dataModel.title != null) 
-					this.title = dataModel.title;
-				if (dataModel.type != null) 
-					this.fieldType = dataModel.type;
-				if (dataModel.mandatory != null) 
-					this.fieldMandatory = dataModel.mandatory;
-				if (dataModel.choices != null) 
-					this.fieldChoices = dataModel.choices;
-				if (dataModel.name != null) 
-					this.fieldName = dataModel.name;
-				if (dataModel.defaultValue != null) 
-					this.defaultFieldValue = dataModel.defaultValue;
+		},
+		
+		/**
+		 * Function called by the constructor, used to set properties that are referenced in the widget
+		 */
+		postMixInProperties: function() {
+			
+			if(this.attrs.dataModel)
+				this.fieldDataModel = this.attrs.dataModel
+			
+			if(this.attrs.editMode) 
+				this.editMode = this.attrs.editMode
+				
+			if(this.attrs.serialNumber)
+				this.serialNumber = this.attrs.serialNumber				
+			
+			if (this.fieldDataModel != null) {
+				if (this.fieldDataModel.title != null) 
+					this.title = this.fieldDataModel.title;
+				if (this.fieldDataModel.type != null) 
+					this.fieldType = this.fieldDataModel.type;
+				if (this.fieldDataModel.mandatory != null) 
+					this.fieldMandatory = this.fieldDataModel.mandatory;
+				if (this.fieldDataModel.choices != null) 
+					this.fieldChoices = this.fieldDataModel.choices;
+				if (this.fieldDataModel.name != null) 
+					this.fieldName = this.fieldDataModel.name;
+				if (this.fieldDataModel.defaultValue != null) 
+					this.defaultFieldValue = this.fieldDataModel.defaultValue;
 			} else
 				this.dummyField = true;
 

@@ -36,89 +36,115 @@ dojo.declare("surveyWidget.widgets.Survey",
 		templateString: null,
 		templatePath: dojo.moduleUrl("surveyWidget.widgets", "templates/Survey.html"),
 		jsonDataModel: "{}",
-		editMode: true,
+		editMode: false,
+		useCookie: true,
 		questionContainer: null,
+		surveyID: null,
 		dataModel: null,
 		surveyTitle : "Type the survey title here",
 		surveyDockey : "",
 		surveyDescription : "You can place the survey description here.",
 		fieldSerialNumber: 0,
-		attrs: null,
 		apServiceURL : "http://apsdb.apstrata.com/sandbox-apsdb/rest",  // apServiceURL is used to communicate with our REST-ful services
 		apSourceURL : "http://developer.apstrata.com/apstrataSDK/", // apSourceURL points to where the survey code is hosted. 
 
-		// Store used by the survey widget
-		//storeName: "surveyStore",
-		
 		/**
-		 * Constructor of the survey widget.
-		 * 
-		 * @param attrs
-		 * 		JSON object containing some info about the survey: 
+		 * 		attrs is a JSON object containing some info about the survey: 
 		 * 			storeName: the store used by the survey widget
 		 * 			editingMode: When set to true, the suvey is in edit mode and it allows user to clone the survey. 
 		 * 						 When set to false, the survey is in running mode and it allows users to take the survey
 		 * 			schema: Contains the schema of the loaded survey or is null when creating a new survey from scratch  
+		 * 			surveyID: Contains the survey ID of the loaded survey or is null when creating a new survey from scratch     
 		 * 			usingCookie: When set to true, the survey can be taken only once per user (based on the value of a cookie)
 		 * 						 When set to false, there is no limit in taking the survey.
 		 */
-		constructor: function(attrs) {
-			if (attrs) {
-				this.attrs = attrs
+		attrs: {},
+		
+		/**
+		 * Constructor of the survey widget.
+		 */
+		constructor: function() {
 
-				if(typeof(attrs.storeName) != "undefined") 
-					this.storeName = attrs.storeName
-				else 
-					this.storeName = storeName;
+		},
+		
+		/**
+		 * Function called by the constructor, used to set properties that are referenced in the widget
+		 */
+		postMixInProperties: function( ) {
+
+			if(this.attrs.storeName) //if(typeof(this.attrs.storeName) != "undefined") 
+				this.storeName = this.attrs.storeName
+			
+			if(this.attrs.editingMode) 
+				this.editMode = (this.attrs.editingMode == "true")?true:false;
 				
-				if(typeof(attrs.editingMode) != "undefined") 
-					this.editMode = attrs.editingMode
-				else 
-					this.editMode = editingMode;
-					
-				if(typeof(attrs.schema) != "undefined")
-					this.schema = attrs.schema				
-				else
-					this.schema = schema;
-					
-				if(typeof(attrs.usingCookie) != "undefined") 
-					this.usingCookie = attrs.usingCookie				
-				else
-					if(typeof(usingCookie) != "undefined")
-						this.useCookie = usingCookie;
-					else
-						this.useCookie = true;			
-			} else {
-				this.editMode = editingMode;
-				this.schema = schema;
-				this.storeName = storeName;
-				if(typeof(usingCookie) != "undefined")
-					this.useCookie = usingCookie;
-				else
-					this.useCookie = true;
-			}
-
+			if(this.attrs.usingCookie) 
+				this.useCookie = (this.attrs.usingCookie == "true")?true:false;	
+				
+			if(this.attrs.surveyID)
+				this.surveyID = this.attrs.surveyID;	
+			
+			if(!this.editMode) // If the survey widget is not in editing mode use a different template
+				this.templatePath = dojo.moduleUrl("surveyWidget.widgets", "templates/SurveyRun.html");
+			
+		},
+		
+		/**
+		 * Function called by the constructor, used to construct and display the survey widget.
+		 * 
+		 */
+		postCreate: function(){
+			
+			var self = this;
+			var client = new apstrata.Client({connection: connection});
+			
+			if (this.surveyID != null) { // Verify that the document key is not null
+				var queryRequest = {
+					apsdb: {
+						store: this.storeName,
+						query: "apsdb.documentKey=\"" + this.surveyID + "\"",
+						queryFields: "surveySchema"
+					}};
+	
+				var q = client.call({
+					action: "Query",
+					request: queryRequest,
+					load: function(operation) { // on success set the survey schema and construct the survey
+						if(operation.response.result.documents.length > 0)
+							self.schema = operation.response.result.documents[0]["surveySchema"];
+						self.constructSurvey();
+					},
+					error: function(operation) { // on error construct an empty survey
+						self.constructSurvey();
+					}
+				});
+			} else // if no survey key is specified then construct an empty survey
+				this.constructSurvey();
+			// Cause the DTL to rerender with the fresh self.data
+			//this.render()
+			//this.buildRendering()
+		},
+		
+		/**
+		 * Constructs and display the survey.
+		 * 
+		 */
+		constructSurvey: function() {
 			if(this.schema != null)
 				this.jsonDataModel = decodeURIComponent(this.schema);
 			
 			dataModel = dojo.fromJson(this.jsonDataModel); // dataModel object contains the dojo representation of the survey schema
 
-			if (dataModel.title != null) this.surveyTitle = dataModel.title; // extract the title from the survey schema
-			if (dataModel.description != null) this.surveyDescription = dataModel.description; // extract the description from the survey schema
+			if(this.editMode){
+				if (dataModel.title != null) this.title.setValue(dataModel.title); // extract the title from the survey schema
+				if (dataModel.description != null) this.description.setValue(dataModel.description); // extract the description from the survey schema
+			} else{
+				if (dataModel.title != null) this.title.innerHTML = dataModel.title; // extract the title from the survey schema
+				if (dataModel.description != null) this.description.innerHTML = dataModel.description; // extract the description from the survey schema
+			} 
 			if (dataModel.dockey != null) this.surveyDockey = dataModel.dockey; // extract the survey dockey from the survey schema
 			
-			if(!this.editMode) // If the survey widget is not in editing mode use a different template
-				this.templatePath = dojo.moduleUrl("surveyWidget.widgets", "templates/SurveyRun.html");
-		},
-		
-		/**
-		 * Function called after the constructor, used to construct and display the survey widget.
-		 * 
-		 */
-		postCreate: function(){
-			// Assemble the cookie name based on the survey's title and the authentication key. This cookie is used to test if the survey has already been taken.
-			var strTitleForCookie = this.surveyTitle.replace(/ /g, ''); // Remove all spaces from the survey title
-			//strTitleForCookie = (strTitleForCookie.length > 20) ? strTitleForCookie.substring(0, 20) : strTitleForCookie;
+			// Assemble the cookie name based on the survey's document key. This cookie is used to test if the survey has already been taken.
 			var cookie = 'ap_' + this.surveyDockey;
 			
 			// Test if this user has not already taken the survey by checking the existence of the cookie
@@ -130,7 +156,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					this.successMessage.innerHTML = dataModel.successMessage; // Shows the success message extracted from the survey's schema
 				}
 			} else {
-				this.inherited(arguments);
+				//this.inherited(arguments);
 				
 				if (this.editMode) {
 					this.connect(this.btnGetData, "onclick", "getModel"); // Attaching the getModel function to the onclick event on the "Generate Embed Code" button
@@ -226,7 +252,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * @return The created question object.
 		 */
 		createField: function(dataModel, isVisible) {
-			var newField = new surveyWidget.widgets.SurveyField(dataModel, this.editMode, ++this.fieldSerialNumber);
+			
+			var newField = new surveyWidget.widgets.SurveyField({attrs : {dataModel:dataModel, editMode:this.editMode, serialNumber:++this.fieldSerialNumber}});
 
 			// Do not display the field that should be invisible
 			if (!isVisible) {
@@ -462,7 +489,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			// The schema name must be between 3-32 characters long: s_[user key]_[survey title]_[random hash]
 			var strTitleForSchema = this.cleanTitleForSchemaName(this.title.value);
 			var schemaName = 's_' + apstrata.apConfig.key + '_' + strTitleForSchema + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase().substring(0, 10);
-			var dockey = schemaName;
+			var dockey = schemaName; // The document key of the survey's metadata document is the name of the survey's schema
 			this.schemaName = schemaName;
 
 			var apstrataSurveySchemaName = new Object();
@@ -540,7 +567,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 							request: setSchemaRequest,
 							load: function(operation) {
 								self.warningMessage.style.display = 'none'; // On success hide the warning message
-								self.generateAndDisplayEmbedCodes(surveySchema, listResultSchema);
+								self.generateAndDisplayEmbedCodes(dockey);
 								self.emailSurvey.style.display = ""; // On success show the Send by Email
 								self.smsSurvey.style.display = ""; // On success show the Send by Sms
 								
@@ -640,6 +667,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 				apsdbSchema: schemaName,
 				dockey: dockey
 			};
+			// Adding the takenBy field that should be displayed in the table of taken surveys to show who took the survey (phone number, email address or anonymous)
+			listSurveyData.fields[listSurveyData.fields.length] = "takenBy";
+			listSurveyData.titleFields[listSurveyData.titleFields.length] = "Taken By";
 
 			var listSurveyDataSchema = encodeURIComponent(dojo.toJson(listSurveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
 			
@@ -656,7 +686,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * 		JSON object containing the information needed by the embed code to display the results of the survey in a table.
 		 * 		
 		 */
-		generateAndDisplayEmbedCodes: function (surveyDataSchema, listSurveyDataSchema) {
+		generateAndDisplayEmbedCodes: function (surveyID) {
 
 			// Embed code to run the survey
 			var generatedCode = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:400px; height:100px;">'
@@ -668,9 +698,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></script>\n'
 			+ '<script type="text/javascript" src="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata-lib.js.uncompressed.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + this.apServiceURL + '\'"></script>\n'
 			+ '<link rel=stylesheet href="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
-			+ '<script>var storeName = \'' + this.storeName + '\'; var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
-			+ '<div dojoType="surveyWidget.widgets.Survey" /></div>'
+			+ '<div dojoType="surveyWidget.widgets.Survey" attrs="{storeName:\'' + this.storeName + '\',surveyID:\'' + surveyID + '\'}" /></div>'
 			+ '</textarea>';
 
 			this.output.innerHTML = generatedCode;
@@ -687,10 +716,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></script>'
 			+ '<script type="text/javascript" src="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/list-apstrata-lib.js.uncompressed.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + this.apServiceURL + '\'"></script>\n'
 			+ '<link rel=stylesheet href="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
-			+ '<script>var storeName = \'' + this.storeName + '\'; var schema = \'' + listSurveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div>'
-			+ '<div dojoType="surveyWidget.widgets.SurveyListing" /></div>'
+			+ '<div dojoType="surveyWidget.widgets.SurveyListing" attrs="{storeName:\'' + this.storeName + '\',surveyID:\'' + surveyID + '\'}" /></div>'
 			+ '</div>'
 			+ '</textarea>';
 
@@ -707,10 +735,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 		  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
 			+ '<script type="text/javascript" src="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/chart-apstrata-lib.js.uncompressed.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + this.apServiceURL + '\'"></script>\n'
 			+ '<link rel=stylesheet href="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
-			+ '<script>var storeName = \'' + this.storeName + '\'; var schema = \'' + surveyDataSchema + '\';</script>\n'
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div>'
-			+ '<div dojoType="surveyWidget.widgets.SurveyCharting" /></div>'
+			+ '<div dojoType="surveyWidget.widgets.SurveyCharting" attrs="{storeName:\'' + this.storeName + '\',surveyID:\'' + surveyID + '\'}"  /></div>'
 			+ '</div>'
 			+ '</textarea>';
 	
@@ -730,8 +757,6 @@ dojo.declare("surveyWidget.widgets.Survey",
 				var self = this;
 				
 				// Assemble the cookie name. The cookie will be used to ensure that a user doesn't take the survey more than once.
-				var strTitleForCookie = this.surveyTitle.replace(/ /g, ''); // Remove all spaces from the survey title
-			//	strTitleForCookie = (strTitleForCookie.length > 20) ? strTitleForCookie.substring(0, 20) : strTitleForCookie;
 				var cookie = 'ap_' + jsonObj.apsdbSchema;
 
 				// Change the name of the attribute 'apsdbSchema' to 'apsdb.schema', then delete the 'apsdbSchema' attribute
@@ -810,8 +835,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * 
 		 */
 		loadAggregatedResults: function() {
-			if(this.attrs != null && this.attrs.schema)
-				var charts = new surveyWidget.widgets.SurveyCharting(this.attrs);
+			if(this.attrs != null && this.attrs.surveyID)
+				var charts = new surveyWidget.widgets.SurveyCharting({attrs : this.attrs});
 			else
 				var charts = new surveyWidget.widgets.SurveyCharting();
 			dojo._destroyElement(this.survey);

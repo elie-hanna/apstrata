@@ -34,40 +34,31 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		resultResponse: null,
 		dojoDataModel: null,
 		apsdbSchema: null,
-
-		//
-		// Replace here with your target store name
-		//
-		//storeName: "surveyStore",
+		
+		/**
+		 * 		attrs is a JSON object containing some info about the survey's list: 
+		 * 			storeName: the store used by the SurveyCharting widget
+		 * 			schema: Contains the schema of the current survey  
+		 */
+		attrs: {},
 		
 		/**
 		 * Constructor of the SurveyListing widget.
 		 * 
 		 */
-		constructor: function(attrs) {
-			if (attrs) {
-
-				if(typeof(attrs.storeName) != "undefined") 
-					this.storeName = attrs.storeName
-				else 
-					this.storeName = storeName;
-
-				if (attrs.schema) 
-					this.schema = attrs.schema	
-				else		
-					this.schema = schema;	
-			} else {
-				this.schema = schema;
-				this.storeName = storeName;
-			}
+		constructor: function() {
+		},
+		
+		/**
+		 * Function called by the constructor, used to set properties that are referenced in the widget
+		 */
+		postMixInProperties: function() {
 			
-			if(this.schema != null){
-				this.jsonDataModel = decodeURIComponent(this.schema);
-				this.dojoDataModel = dojo.fromJson(this.jsonDataModel);
-				this.arrFieldsToDisplay = this.dojoDataModel.fields;
-				this.arrTitleFieldsToDisplay = this.dojoDataModel.titleFields;
-				this.apsdbSchema = this.dojoDataModel.apsdbSchema;
-			}
+			if(this.attrs.storeName) 
+				this.storeName = this.attrs.storeName
+				
+			if(this.attrs.surveyID)
+				this.surveyID = this.attrs.surveyID;
 		},
 		
 		/**
@@ -75,13 +66,44 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		 * 
 		 */
 		postCreate: function(){
-			if(this.schema != null){
-				this.title.innerHTML = this.dojoDataModel.title;
-				this.query();
-				this.downloadCsvData();
-			}
-			else
-				this.title.innerHTML = "The survey schema is missing";
+			
+			var self = this;
+			var client = new apstrata.Client({connection: connection});
+			
+			if (this.surveyID != null) { // Verify that the document key is not null
+				var queryRequest = {
+					apsdb: {
+						store: this.storeName,
+						query: "apsdb.documentKey=\"" + this.surveyID + "\"",
+						queryFields: "listResultSchema"
+					}};
+	
+				var q = client.call({
+					action: "Query",
+					request: queryRequest,
+					load: function(operation) { // on success, set the survey schema and construct the table of data
+						if (operation.response.result.documents.length > 0) {
+							if(operation.response.result.documents[0]["listResultSchema"] != undefined){
+								self.schema = operation.response.result.documents[0]["listResultSchema"];
+								self.jsonDataModel = decodeURIComponent(self.schema);
+								self.dojoDataModel = dojo.fromJson(self.jsonDataModel);
+								self.arrFieldsToDisplay = self.dojoDataModel.fields;
+								self.arrTitleFieldsToDisplay = self.dojoDataModel.titleFields;
+								self.apsdbSchema = self.dojoDataModel.apsdbSchema;
+								self.title.innerHTML = self.dojoDataModel.title;
+								self.query();
+								self.downloadCsvData();
+							} else // if no schema was found in the metadata document then display a message
+								self.title.innerHTML = "The survey's data are not available";
+						} else // if no metadata document corresponds to the survey ID then display a message
+							self.title.innerHTML = "The survey's data are not available";
+					},
+					error: function(operation) {  //on error, display a message
+						self.title.innerHTML = "The survey's data are not available";
+					}
+				});
+			} else // if no survey key is specified then display a message
+				this.title.innerHTML = "The survey's data are not available";
 		},
 		
 		/**
@@ -163,13 +185,6 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 					var cellCount = 0;
 					for (var ncol=0; ncol<columns.length; ncol++) {
 						found = false;
-						/*for (var fid = 0; fid<arrSurvey[doc].fields.length; fid++) {
-							if (columns[ncol] == arrSurvey[doc].fields[fid]["name"]) {
-								found = true;
-								break;
-							}
-						}
-						*/
 						if(arrSurvey[doc][columns[ncol]])
 						{
 							found = true;
@@ -211,37 +226,12 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		},
 		
 		/**
-		 * Download the survey data in CSV format
+		 * Construct and add a link to download the survey data in CSV format
 		 * 
 		 */
 		downloadCsvData: function() {
-			// Run a script
-			var client = new apstrata.Client({connection: connection});
-			var self = this;
-			
-			
-			var runScriptletRequest = dojo.mixin({
-				storeName: self.storeName,
-				arrFields: self.arrFieldsToDisplay,
-				arrTitleFields: self.arrTitleFieldsToDisplay,
-				apsdbSchema: self.apsdbSchema,
-				
-			}, {
-				apsdb: {
-					scriptName: 'downloadCSV'
-				}
-			});
-			var params = "&apsdb.scriptName=downloadCSV&storeName="+self.storeName+"&arrFields="+self.arrFieldsToDisplay+"&arrTitleFields="+ self.arrTitleFieldsToDisplay+"&apsdbSchema="+self.apsdbSchema;
-			this.CSV.href=connection.signUrl("RunScript", params,"json").url;// serviceUrl+"/"+;
-			/*var sd = client.call({
-				action: "RunScriptlet",
-				request: runScriptletRequest,
-				load: function(operation) {
-				},
-				error: function(operation) {
-					self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
-				}
-			});*/
+			var params = "&apsdb.scriptName=downloadCSV&storeName="+this.storeName+"&arrFields="+this.arrFieldsToDisplay+"&arrTitleFields="+ this.arrTitleFieldsToDisplay+"&apsdbSchema="+this.apsdbSchema;
+			this.CSV.href=connection.signUrl("RunScript", params,"json").url;
 		}
 	});
 

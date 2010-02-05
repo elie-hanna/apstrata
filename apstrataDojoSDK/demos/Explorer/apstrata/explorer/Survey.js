@@ -50,7 +50,7 @@ dojo.declare("apstrata.explorer.Survey",
 					apsdb: {
 						store: self.storeName,
 						query: "apsdb.creator=\"" + self.surveyCreator+ "\" and isSurveyMetadata=\"true\"",
-						queryFields: "surveyName,apsdb.documentKey,surveySchema"
+						queryFields: "surveyName"
 					}
 				},
 				load: function(operation) {
@@ -58,7 +58,7 @@ dojo.declare("apstrata.explorer.Survey",
 
 					self.data = []
 					dojo.forEach(operation.response.result.documents, function(document) {
-						self.data.push({label: document.surveyName, iconSrc: "", attrs:{schema: document.surveySchema, documentKey: document.key}})
+						self.data.push({label: document.surveyName, iconSrc: "", attrs:{documentKey: document.key}})
 					})
 	
 					// Cause the DTL to rerender with the fresh self.data
@@ -74,7 +74,7 @@ dojo.declare("apstrata.explorer.Survey",
 	
 	newItem: function() {
 		var self = this
-		this.openPanel(apstrata.explorer.SurveyEditor,{schema:null, editingMode:true, storeName: self.storeName, usingCookie: false})
+		this.openPanel(apstrata.explorer.SurveyEditor,{surveyID:null, editingMode:'true', storeName: self.storeName, usingCookie: 'false'})
 	},
 	
 	postCreate: function() {
@@ -84,7 +84,7 @@ dojo.declare("apstrata.explorer.Survey",
 	
 	onClick: function(index, label, attrs) {
 		var self = this
-		this.openPanel(apstrata.explorer.SurveyActions, {schema: attrs.schema, storeName: self.storeName});
+		this.openPanel(apstrata.explorer.SurveyActions, {surveyID: attrs.documentKey, storeName: self.storeName});
 	},
 	
 	onDeleteItem: function(index, label, attrs) {
@@ -142,7 +142,7 @@ dojo.declare("apstrata.explorer.SurveyEditor",
 	},
 	
 	postCreate: function() {
-		var survey = new surveyWidget.widgets.Survey(this.attrs)
+		var survey = new surveyWidget.widgets.Survey({attrs : this.attrs})
 		dojo.place(survey.domNode, this.dvSurvey, 'only')
 		this.inherited(arguments)
 	}
@@ -157,10 +157,8 @@ dojo.declare("apstrata.explorer.SurveyActions",
 		{label: "Results", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"}
 	],
 	
-	schema: null,
-	
 	constructor: function(attrs) {
-		this.schema = attrs.schema
+		this.surveyID = attrs.surveyID
 		this.storeName = attrs.storeName
 	},
 	
@@ -172,13 +170,13 @@ dojo.declare("apstrata.explorer.SurveyActions",
 		switch (label)
 		{
 			case 'Clone':
-				this.openPanel(apstrata.explorer.SurveyEditor,{schema:self.schema, editingMode:true, storeName: self.storeName, usingCookie: false})
+				this.openPanel(apstrata.explorer.SurveyEditor,{surveyID:self.surveyID, editingMode:'true', storeName: self.storeName, usingCookie: 'false'})
 			break;
 			case 'Submit':
-				this.openPanel(apstrata.explorer.SurveyEditor,{schema:self.schema, editingMode:false, storeName: self.storeName, usingCookie: false})
+				this.openPanel(apstrata.explorer.SurveyEditor,{surveyID:self.surveyID, editingMode:'false', storeName: self.storeName, usingCookie: 'false'})
 			break;
 			case 'Results':
-				this.openPanel(apstrata.explorer.SurveyResults, {schema:self.schema, storeName: self.storeName})
+				this.openPanel(apstrata.explorer.SurveyResults, {surveyID:self.surveyID, storeName: self.storeName})
 			break;
 			default:
 		}
@@ -199,7 +197,7 @@ dojo.declare("apstrata.explorer.SurveyResults",
 	},
 	
 	postCreate: function() {
-		var surveyResults = new surveyWidget.widgets.SurveyCharting(this.attrs)
+		var surveyResults = new surveyWidget.widgets.SurveyCharting({attrs : this.attrs})
 		dojo.place(surveyResults.domNode, this.dvSurveyResults, 'only')
 		this.inherited(arguments)
 	}

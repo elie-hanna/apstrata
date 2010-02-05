@@ -36,7 +36,7 @@ dojo.declare("apstrata.mForms.Forms",
 					apsdb: {
 						store: self.storeName,
 						query: "apsdb.creator=\"" + connection.credentials.username+ "\" and isSurveyMetadata=\"true\"",
-						queryFields: "surveyName,apsdb.documentKey,surveySchema,listResultSchema"
+						queryFields: "surveyName"
 					}
 				},
 				load: function(operation) {
@@ -44,7 +44,7 @@ dojo.declare("apstrata.mForms.Forms",
 
 					self.data = []
 					dojo.forEach(operation.response.result.documents, function(document) {
-						self.data.push({label: document.surveyName, iconSrc: "", attrs:{schema: document.surveySchema, documentKey: document.documentKey, listSchema: document.listResultSchema}})
+						self.data.push({label: document.surveyName, iconSrc: "", attrs:{documentKey: document.key}})
 					})
 	
 					// Cause the DTL to rerender with the fresh self.data
@@ -60,7 +60,7 @@ dojo.declare("apstrata.mForms.Forms",
 	
 	newItem: function() {
 		var self = this
-		this.openPanel(apstrata.mForms.SurveyEditor,{schema:null, editingMode:true, storeName: self.storeName, usingCookie: false})
+		this.openPanel(apstrata.mForms.SurveyEditor,{surveyID:null, editingMode:'true', storeName: self.storeName, usingCookie: 'false'})
 	},
 	
 	postCreate: function() {
@@ -70,7 +70,7 @@ dojo.declare("apstrata.mForms.Forms",
 	
 	onClick: function(index, label, attrs) {
 		var self = this
-		this.openPanel(apstrata.mForms.FormActions, {schema: attrs.schema, storeName: self.storeName, listSchema: attrs.listSchema});
+		this.openPanel(apstrata.mForms.FormActions, {surveyID: attrs.documentKey, storeName: self.storeName});
 	},
 	
 	onDeleteItem: function(index, label, attrs) {
@@ -115,12 +115,9 @@ dojo.declare("apstrata.mForms.FormActions",
 		{label: "edit", iconSrc: "../../apstrata/resources/images/pencil-icons/edit.png"}
 	],
 	
-	schema: null,
-	
 	constructor: function(attrs) {
-		this.schema = attrs.schema
+		this.surveyID = attrs.surveyID
 		this.storeName = attrs.storeName
-		this.listSchema = attrs.listSchema
 	},
 	
 	onClick: function(index, label) {
@@ -131,19 +128,19 @@ dojo.declare("apstrata.mForms.FormActions",
 		switch (label)
 		{
 			case 'schedule':
-				this.openPanel(apstrata.mForms.CampaignForm, {schema:self.schema, editingMode:false, storeName: self.storeName});
+				this.openPanel(apstrata.mForms.CampaignForm, {editingMode:'false', storeName: self.storeName});
 			break;
 			case 'try':
-				this.openPanel(apstrata.mForms.SurveyEditor,{schema:self.schema, editingMode:false, storeName: self.storeName, usingCookie: false})
+				this.openPanel(apstrata.mForms.SurveyEditor,{surveyID:self.surveyID, editingMode:'false', storeName: self.storeName, usingCookie: 'false'})
 			break;
 			case 'results':
-				this.openPanel(apstrata.mForms.SurveyResults, {schema:self.schema, storeName: self.storeName})
+				this.openPanel(apstrata.mForms.SurveyResults, {surveyID:self.surveyID, storeName: self.storeName})
 			break;
 			case 'list':
-				this.openPanel(apstrata.mForms.SurveyData,{schema:self.listSchema, storeName: self.storeName})
+				this.openPanel(apstrata.mForms.SurveyData,{surveyID:self.surveyID, storeName: self.storeName})
 			break;
 			case 'edit':
-				this.openPanel(apstrata.mForms.SurveyEditor,{schema:self.schema, editingMode:true, storeName: self.storeName, usingCookie: false})
+				this.openPanel(apstrata.mForms.SurveyEditor,{surveyID:self.surveyID, editingMode:'true', storeName: self.storeName, usingCookie: 'false'})
 			break;
 			default:
 		}
@@ -173,8 +170,7 @@ dojo.declare("apstrata.mForms.SurveyEditor",
 	},
 	
 	postCreate: function() {
-		var survey = new surveyWidget.widgets.Survey(this.attrs)
-		//var survey = new surveyWidget.widgets.Survey({attrs : this.attrs})
+		var survey = new surveyWidget.widgets.Survey({attrs : this.attrs})
 		dojo.place(survey.domNode, this.dvSurvey, 'only')
 		this.inherited(arguments)
 	}
@@ -194,7 +190,7 @@ dojo.declare("apstrata.mForms.SurveyResults",
 	},
 	
 	postCreate: function() {
-		var surveyResults = new surveyWidget.widgets.SurveyCharting(this.attrs)
+		var surveyResults = new surveyWidget.widgets.SurveyCharting({attrs : this.attrs})
 		dojo.place(surveyResults.domNode, this.dvSurveyResults, 'only')
 		this.inherited(arguments)
 	}
@@ -214,13 +210,7 @@ dojo.declare("apstrata.mForms.SurveyData",
 	},
 	
 	postCreate: function() {
-		var jsonDataModel = decodeURIComponent(this.attrs.schema);
-		var dojoDataModel = dojo.fromJson(jsonDataModel);
-		dojoDataModel.fields[dojoDataModel.fields.length] = "takenBy";
-		dojoDataModel.titleFields[dojoDataModel.titleFields.length] = "Taken By";
-		var surveyDataSchema = encodeURIComponent(dojo.toJson(dojoDataModel)).replace(/'/g, '%27'); // Replace single quotes with their HEX
-		this.attrs.schema = surveyDataSchema;
-		var surveyData = new surveyWidget.widgets.SurveyListing(this.attrs)
+		var surveyData = new surveyWidget.widgets.SurveyListing({attrs : this.attrs})
 		dojo.place(surveyData.domNode, this.dvSurveyData, 'only')
 		this.inherited(arguments)
 	}

@@ -22,7 +22,7 @@
  */
 
 var schema = null // The global variable schema is null when creating a new survey or contains the detailed schema of the survey to load
-var editingMode = false //When set to true, the survey loaded is editable
+var editingMode = 'false' //When set to true, the survey loaded is editable
 var storeName = "surveyStore"
 
 function loadjscssfile(filename, filetype){
