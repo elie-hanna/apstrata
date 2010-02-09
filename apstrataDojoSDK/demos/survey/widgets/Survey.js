@@ -165,6 +165,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					this.connect(this.smsCheckbox, "onclick", "toggleSms"); // Attaching the toggleSms function to the onclick event on the "Send by email" check box
 					this.connect(this.btnEmail, "onclick", "sendEmail"); // Attaching the sendEmail function to the onclick event on the "Send"(email) button
 					this.connect(this.btnSms, "onclick", "sendSms"); // Attaching the sendSms function to the onclick event on the "Send"(sms) button
+					this.connect(this.btnForceSms, "onclick", "forceSendSms"); // Attaching the forceSendSms function to the onclick event on the "forceSendSms"(sms) button
 				}
 				else {
 					this.connect(this.btnSubmit, "onclick", "saveSurvey"); // Attaching the saveSurvey function to the onclick event on the "Submit" button
@@ -383,6 +384,52 @@ dojo.declare("surveyWidget.widgets.Survey",
 					}
 				});
 		},
+		/*
+		 * Force send sms
+		 */
+		forceSendSms: function(){
+			var client = new apstrata.Client({connection: connection});
+			var self = this;
+			var runScriptRequest = dojo.mixin({
+				surveyName: self.schemaName,
+				phoneNumbers: self.phoneNumber.value,
+				killSurvey: "true"
+			}, {
+				apsdb: {
+					scriptName: "sendSms"
+				}
+			});
+			var sd = client.call({
+					action: "RunScript",
+					useHttpMethod : "GET",
+					request: runScriptRequest,
+					load: function(operation) {
+						self.warningMessage.style.display = 'none'; // On success hide the warning message
+						self.btnSms.style.display = '';
+						self.btnForceSms.style.display = 'none';
+					},
+					error: function(operation) {
+						self.warningMessage.style.display = ''; // Display the warning message
+						//TODO: change this once custom error codes are added
+						switch (operation.response.metadata.errorDetail.substring(7,12)) {
+							case 'RETRY':
+								warningMsg = 'Sms server currently busy.Please try again later';
+								self.btnSms.style.display = '';
+								self.btnForceSms.style.display = 'none';
+								break;
+							case 'FORCE':
+								warningMsg = 'Survey already in progress.Click on force send to abort and send a new survey.';
+								break;
+							default:
+								warningMsg = "Error while sending the sms";
+								self.btnSms.style.display = '';
+								self.btnForceSms.style.display = 'none';
+						}
+								self.warningMessage.style.display = ''; // Display the warning message
+								self.warningMessage.innerHTML = warningMsg;
+					}
+				});
+		},
 		/**
 		 * Send Sms to recipient
 		 * 
@@ -407,7 +454,21 @@ dojo.declare("surveyWidget.widgets.Survey",
 					},
 					error: function(operation) {
 						self.warningMessage.style.display = ''; // Display the warning message
-						self.warningMessage.innerHTML = "Error while sending the sms";
+						//TODO: change this once custom error codes are added
+						switch (operation.response.metadata.errorDetail.substring(7,12)) {
+							case 'RETRY':
+								warningMsg = 'Sms server currently busy.Please try again later';
+								break;
+							case 'FORCE':
+								warningMsg = 'Survey already in progress.Click on force send to abort and send a new survey.';
+								self.btnSms.style.display = 'none';
+								self.btnForceSms.style.display = '';
+								break;
+							default:
+								warningMsg = "Error while sending the sms";
+						}
+								self.warningMessage.style.display = ''; // Display the warning message
+								self.warningMessage.innerHTML = warningMsg;
 					}
 				});
 		},

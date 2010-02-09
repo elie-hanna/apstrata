@@ -11,6 +11,7 @@
 			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="smsCheckbox" dojoAttachEvent="onClick: toggleSms" name="smsSurvey"/> Send by sms
 			<div dojoAttachPoint="phone" style="display: none;">
 				<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="phoneNumber" trim=true value=""><input dojoAttachPoint="btnSms" type="button" value="send" />
+				<input style="display: none;color:#F87217" dojoAttachPoint="btnForceSms" type="button" value="force send" />
 			</div>
 		</div>
 		
