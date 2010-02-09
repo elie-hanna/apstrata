@@ -392,7 +392,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var self = this;
 			var runScriptRequest = dojo.mixin({
 				surveyName: self.schemaName,
-				phoneNumbers: self.phoneNumber.value,
+				phoneNumber: self.phoneNumber.value,
 				killSurvey: "true"
 			}, {
 				apsdb: {
@@ -439,7 +439,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var self = this;
 			var runScriptRequest = dojo.mixin({
 				surveyName: self.schemaName,
-				phoneNumbers: self.phoneNumber.value
+				phoneNumber: self.phoneNumber.value
 			}, {
 				apsdb: {
 					scriptName: "sendSms"
