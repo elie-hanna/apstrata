@@ -204,8 +204,7 @@ dojo.declare("apstrata.mForms.Login",
 	 * NOTE: Called from the "Register here" link in the Login.html file
 	 */
 	switchToRegisterPanel: function () {
-		this.close();
-		this.openPanel(apstrata.mForms.RegistrationPanel);
+		this.getParent().openPanel(apstrata.mForms.RegistrationPanel);
 	}
 })
 
