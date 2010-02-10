@@ -2,11 +2,30 @@
 	{% if true %}
 	{% endif %}
 	<style>
+		.registrationPanel {
+			padding-left: 10px;
+			padding-right: 20px;
+		}
+		
+		.MessageBox {
+			padding: 20px;
+			margin: 10px;
+			line-height: 150%;
+
+			font-family:'Georgia','Serif';
+			font-size: 1.4em;
+			width: 100%;
+			height: 370px;
+			color: #0000AA;
+
+			background: #DDDDee;
+		}
+
+
 		.RegistrationForm {
 			background: #DDDDee;
 			padding: 20px;
 			font-size: 0.9em;
-			height: 320px;
 			margin: 10px;
 			height: 100%;		
 		}
@@ -63,16 +82,15 @@
 			color: red;
 		}
 	</style>
-	<div class='homePanel' style='font-size: 1em;'>
-		<h3>Register to apstrata mForms</h3>
-
-		
-		<table width="100%">
+	<div class='registrationPanel' style='font-size: 1em;'>
+<br><br><br>
+		<table width="100%" cellpadding='3'>
 			<tr>
-				<td width="66%" valign="top">
-					<div class="RegistrationForm  rounded-sml" style='background: #dedede;text-align: center;height: 400px;'>
-					<br /><br /><br />
-						<span style='font-size: 0.8em;'>THIS SPACE IS AVAILABLE FOR OPERATOR BRANDING & ANNOUCEMENTS</span>
+				<td width="33%" valign="top">
+					<div class="MessageBox rounded-sml">
+						<div>Please provide the required information to register for an apstrata mForms account. </div>
+						<br>
+						<div>A validation message will be sent to your email address.</div>
 					</div>
 				</td>
 				<td width="33%" valign="top">
@@ -81,65 +99,71 @@
 						dojoAttachEvent='onmouseover: _onMouseoverUser,onmouseout: _onMouseoutUser'>
 
 						<form action="" method="" dojoType="dijit.form.Form" dojoAttachPoint="registerUserForm">
-							<span class="title">Register for an Apstrata mForms account</span>
+							<span class="title">Registration form</span>
 							<br /><br />
 							
-							<span class="description">Please fill out the information below to register for an apstrata mForms account. 
-							After submitting this form, your credentials will be a sent to the email address you entered below.</span>
-							<br /><br />
-
-							<div class="label">First:</div>
-							<input type="text" value="" class="registrationInput"
-								dojoAttachPoint="firstName"
-								dojoType="dijit.form.ValidationTextBox"
-						        propercase="true"
-						        trim="true"
-							/>
-	
-							<div class="label">Last:</div>
-							<input type="text" value="" class="registrationInput"
-								dojoAttachPoint="lastName"
-								dojoType="dijit.form.ValidationTextBox"
-						        propercase="true"
-						        trim="true"
-							/>
-
-							<div class="label">Email address:</div>
-							<input type="text" value="" class="registrationInput"
-								dojoAttachPoint="email"
-								dojoType="dijit.form.ValidationTextBox"
-								required="true"
-								regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b"
-						        invalidMessage="Invalid email address."
-						        trim="true"
-							/>
-
-							<div class="label">Username:</div>
-							<input type="text" value="" class="registrationInput"
-								dojoAttachPoint="username"
-								dojoType="dijit.form.ValidationTextBox"
-								required="true"
-						        invalidMessage="Username is required."
-						        trim="true"
-							/>
+										<div class="label">First:</div>
+										<input type="text" value="" class="registrationInput"
+											dojoAttachPoint="firstName"
+											dojoType="dijit.form.ValidationTextBox"
+									        propercase="true"
+									        trim="true"
+										/>
 				
-							<div class="label">Password:</div>
-							<input type="password" value="" class="registrationInput"
-								dojoAttachPoint="password"
-								dojoType="dijit.form.ValidationTextBox"
-								required="true"
-						        invalidMessage="Password is required."
-						        trim="true"
-							/>
-				
-							<div class="label">Re-enter Password:</div>
-							<input type="password" value="" class="registrationInput"
-								dojoAttachPoint="reenteredPassword"
-								dojoType="dijit.form.ValidationTextBox"
-								required="true"
-						        invalidMessage="Password is required."
-						        trim="true"
-							/>
+										<div class="label">Last:</div>
+										<input type="text" value="" class="registrationInput"
+											dojoAttachPoint="lastName"
+											dojoType="dijit.form.ValidationTextBox"
+									        propercase="true"
+									        trim="true"
+										/>
+			
+										<div class="label">Email address:</div>
+										<input type="text" value="" class="registrationInput"
+											dojoAttachPoint="email"
+											dojoType="dijit.form.ValidationTextBox"
+											required="true"
+											regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b"
+									        invalidMessage="Invalid email address."
+									        trim="true"
+										/>
+										<div class="label">Username:</div>
+										<input type="text" value="" class="registrationInput"
+											dojoAttachPoint="username"
+											dojoType="dijit.form.ValidationTextBox"
+											required="true"
+									        invalidMessage="Username is required."
+									        trim="true"
+										/>
+							
+										<div class="label">Password:</div>
+										<input type="password" value="" class="registrationInput"
+											dojoAttachPoint="password"
+											dojoType="dijit.form.ValidationTextBox"
+											required="true"
+									        invalidMessage="Password is required."
+									        trim="true"
+										/>
+							
+										<div class="label">Re-enter Password:</div>
+										<input type="password" value="" class="registrationInput"
+											dojoAttachPoint="reenteredPassword"
+											dojoType="dijit.form.ValidationTextBox"
+											required="true"
+									        invalidMessage="Password is required."
+									        trim="true"
+										/>
+
+<!--
+							<table style='width: 100%;' cellpadding='10' >
+								<tr>
+									<td>
+									</td>
+									<td>
+									</td>
+								</tr>
+							</table>
+-->							
 						</form>
 						<br />
 						<div class="errorMsg" dojoAttachPoint="errorMsg">
@@ -150,6 +174,13 @@
 						</div>
 					</div>
 				</td>
+				<td width='34%'>
+					<div class="LoginForm  rounded-sml" style='background: #dedede;text-align: center;height: 390px;'>
+					<br /><br /><br />
+						<span style='font-size: 0.8em;'>THIS SPACE IS AVAILABLE FOR <br> OPERATOR BRANDING & ANNOUCEMENTS</span>
+					</div>
+				</td>
+
 			</tr>
 		</table>
 

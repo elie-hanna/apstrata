@@ -19,6 +19,15 @@
 			color: #0000AA
 		}
 				
+		.LoginForm .title-registration {
+			font-family:'Georgia','Serif';
+			font-size: 1em;
+			width: 100%;
+			text-align: center;
+			padding: 0px;
+			color: #0000AA
+		}
+
 		.LoginForm .label {
 			font-size: 0.9em;
 		
@@ -73,6 +82,7 @@
 
 						<form action="" method="" dojoType="dijit.form.Form" dojoAttachPoint="userForm">
 							<span class="title">User Credentials</span>
+							<span class="title-registration">(<a href='#' dojoAttachEvent="onclick: switchToRegisterPanel">not registered?</a>)</span>
 							<br /><br />
 <!--				
 							<div class="label">Key:</div>
@@ -87,10 +97,6 @@
 						<br />
 						<div class="buttonContainer">
 							<button dojoAttachEvent="onClick: loginUser" dojoType='dijit.form.Button'>Login</button>
-						</div>
-						<br />
-						<div>
-							<button dojoAttachEvent="onClick: switchToRegisterPanel" dojoType="dijit.form.Button">Not registered? Register here</button>
 						</div>
 					</div>
 				</td>
