@@ -104,6 +104,8 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 				});
 			} else // if no survey key is specified then display a message
 				this.title.innerHTML = "The survey's charts are not available";
+			
+			this.domNode.title = ' ';
 		},
 
 		/**
