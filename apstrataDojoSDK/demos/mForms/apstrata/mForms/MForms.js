@@ -192,6 +192,11 @@ dojo.declare("apstrata.mForms.Login",
 	
 	postCreate: function() {
 		console.debug(this.templatePath)
+
+		// Set a class on the register button in order to increase its width
+		var buttonCollection = this.registerButton.domNode.getElementsByTagName('BUTTON');
+		buttonCollection.item(0).className += ' registerButton';
+
 		this.inherited(arguments)
 	},
 	
@@ -219,8 +224,8 @@ dojo.declare("apstrata.mForms.RegistrationPanel",
 	constructor: function() {
 		var config = new apstrata.mForms.ApConfig()
 		
-		this.key = {}
-		this.key.value = config.get().key
+		connection.credentials.key = config.get().key;
+		connection.credentials.secret = config.get().secret;
 	},
 	
 	_onMouseoverUser: function() {
@@ -272,12 +277,11 @@ dojo.declare("apstrata.mForms.RegistrationPanel",
 				action: "RunScript",
 				request: scriptRequest,
 				load: function(operation) {
-					if (operation.result.status == 'success') {
-						var documentKey = operation.result.documentKey;
-						self.close();
-						self.openPanel(apstrata.mForms.VerifyRegistrationPanel, documentKey);
+					if (operation.response.metadata.status == 'success' && operation.response.result.status == 'success') {
+						var documentKey = operation.response.result.documentKey;
+						self.getParent().openPanel(apstrata.mForms.VerifyRegistrationPanel, { "documentKey": documentKey, "username": self.username.value, "password": self.password.value });
 					} else {
-						//operation.result.errorDetail;
+						self.errorMsg.innerHTML = operation.response.result.errorDetail;
 					}
 				},
 				error: function(operation) {
@@ -296,13 +300,17 @@ dojo.declare("apstrata.mForms.VerifyRegistrationPanel",
 
 	maximizePanel: true,
 	documentKey: "",
+	username: "",
+	password: "",
 	
-	constructor: function(documentKeyParam) {
+	constructor: function(documentKeyContainerObj) {
 		var config = new apstrata.mForms.ApConfig()
 		
 		this.key = {}
 		this.key.value = config.get().key
-		this.documentKey = documentKeyParam;
+		this.documentKey = documentKeyContainerObj.documentKey;
+		this.username = documentKeyContainerObj.username;
+		this.password = documentKeyContainerObj.password;
 	},
 	
 	_onMouseoverUser: function() {
@@ -346,12 +354,39 @@ dojo.declare("apstrata.mForms.VerifyRegistrationPanel",
 				action: "RunScript",
 				request: scriptRequest,
 				load: function(operation) {
-					if (operation.result.status != 'success') {
-						self.errorMsg.innerHTML = operation.result.errorDetail;
+					if (operation.response.result.status != 'success') {
+						self.errorMsg.innerHTML = operation.response.result.errorDetail;
+					} else {
+						connection.credentials.secret = '';
+						connection.credentials.username = self.username;
+						connection.credentials.password = self.password;
+
+						if (!apstrata.apConfig) 
+							apstrata.apConfig = {};
+
+						self.getContainer().connection.loginUser({
+							success: function(){
+								apstrata.apConfig.key = connection.credentials.key;
+								apstrata.apConfig.username = connection.credentials.username;
+								apstrata.apConfig.password = connection.credentials.password;
+								
+								if (self._success) 
+									self._success();
+
+								self.getParent().openPanel(apstrata.mForms.HomePanel);
+							},
+
+							failure: function(error, message){
+								if (self._failure) 
+									self._failure();
+								var msg = (error == "INVALID_SIGNATURE") ? "Invalid credentials." : "[" + error + "] " + message;
+								apstrata.alert(msg, self);
+							}
+						})
 					}
 				},
 				error: function(operation) {
-					//fail(operation)
+					self.errorMsg.innerHTML = operation.response.metadata.errorCode + ': ' + operation.response.metadata.errorDetail;
 				}
 			});
 		}
