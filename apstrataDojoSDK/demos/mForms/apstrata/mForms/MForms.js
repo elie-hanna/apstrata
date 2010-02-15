@@ -40,64 +40,17 @@ dojo.declare("apstrata.explorer.MainPanel",
 [apstrata.horizon.HStackableMainPanel], 
 {
 	data: [
-		{label: "introduction", iconSrc: "../../apstrata/resources/images/pencil-icons/home.png"},
-		{label: "targets", iconSrc: "../../apstrata/resources/images/pencil-icons/users.png"},
-		{label: "forms", iconSrc: "../../apstrata/resources/images/pencil-icons/survey.png"},
-		{label: "campaigns", iconSrc: "../../apstrata/resources/images/pencil-icons/calendar.png"},
-//		{label: "extract", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"},
-		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"}
+		{label: "introduction", iconSrc: "../../apstrata/resources/images/pencil-icons/home.png", clazz: apstrata.mForms.HomePanel, auth: false},
+		{label: "targets", iconSrc: "../../apstrata/resources/images/pencil-icons/users.png", clazz: apstrata.mForms.Targets, auth: true},
+		{label: "forms", iconSrc: "../../apstrata/resources/images/pencil-icons/survey.png", clazz: apstrata.mForms.Forms, auth: true},
+		{label: "campaigns", iconSrc: "../../apstrata/resources/images/pencil-icons/calendar.png", clazz: apstrata.mForms.Campaigns, auth: true},
+		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png", clazz: apstrata.horizon.Preferences, auth: false}
 	],
 	
 	constructor: function() {
 		this.setConnection(connection)
 	},
-	
-	startup: function() {
-		this.openPanel(apstrata.explorer.HomePanel)
-		
-		this.inherited(arguments)
-	},
-	
-	_openPanelbyLabel: function(label) {
-		switch (label) {
-			case 'targets': this.openPanel(apstrata.mForms.Targets); break;
-			case 'forms': this.openPanel(apstrata.mForms.Forms); break;
-			case 'campaigns': this.openPanel(apstrata.mForms.Campaigns); break;
-			case 'logout':  this.getContainer().connection.logout(); break;
-		}
-	},
 
-	onClick: function(index, label) {
-		var self = this
-
-		if ((label == 'introduction') || (label == 'preferences')) {
-			switch (label) {
-				case 'introduction': this.home(); break;
-				case 'preferences': this.openPanel(apstrata.horizon.Preferences); break;
-			}
-		} else {
-			if (connection.hasCredentials()) {
-				self._openPanelbyLabel(label)
-			} else {
-				var okay = false
-				this.openPanel(apstrata.mForms.Login, {
-					success: function() {
-						okay = true
-						if (okay) self._openPanelbyLabel(label)
-					}, 
-					failure: function() {
-					} 
-				})
-			}
-		}			
-	},
-	
-	startup: function() {
-		this.home()
-		
-		this.inherited(arguments)
-	},
-	
 	home: function() {
 		this.openPanel(apstrata.mForms.HomePanel)
 	}
@@ -192,10 +145,6 @@ dojo.declare("apstrata.mForms.Login",
 	
 	postCreate: function() {
 		console.debug(this.templatePath)
-
-		// Set a class on the register button in order to increase its width
-		var buttonCollection = this.registerButton.domNode.getElementsByTagName('BUTTON');
-		buttonCollection.item(0).className += ' registerButton';
 
 		this.inherited(arguments)
 	},
