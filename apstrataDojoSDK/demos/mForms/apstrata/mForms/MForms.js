@@ -36,6 +36,23 @@ dojo.require("apstrata.mForms.Targets")
 dojo.require("apstrata.mForms.Forms")
 
 
+dojo.declare("apstrata.mForms.HomePanel", 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
+{
+	widgetsInTemplate: true,
+	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/HomePanel.html"),
+
+	maximizePanel: true,
+	
+	constructor: function() {
+		var config = new apstrata.mForms.ApConfig()
+		
+		if (config.get().cobranding) 
+			if (config.get().cobranding.homePanelTemplate) 
+				this.templatePath = config.get().cobranding.homePanelTemplate
+	}
+})
+
 dojo.declare("apstrata.explorer.MainPanel", 
 [apstrata.horizon.HStackableMainPanel], 
 {
@@ -105,25 +122,6 @@ dojo.declare("apstrata.mForms.MForms",
 		
 		this.inherited(arguments)
 	}
-})
-
-dojo.declare("apstrata.mForms.HomePanel", 
-[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
-{
-	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/HomePanel.html"),
-
-	maximizePanel: true,
-	
-	constructor: function() {
-		var config = new apstrata.mForms.ApConfig()
-		
-		if (config.get().cobranding) 
-			if (config.get().cobranding.homePanelTemplate) 
-				this.templatePath = config.get().cobranding.homePanelTemplate
-	}
-	
-	
 })
 
 dojo.require("apstrata.mForms.ApConfig")
