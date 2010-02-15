@@ -54,5 +54,45 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 			this.data.push({label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/logout.png"})
 			this.render()
 		} 
+
+		this.home()
+	},
+
+	// Assumes the following data structure of the main list  
+	//
+	//	data: [
+	//		{label: "LABEL", iconSrc: "PATH TO ICON", clazz: CLASS.OF.PANEL, auth: REQUIRES-AUTHENTICATION},
+	//	],
+	//
+	// ex:
+	//	data: [
+	//		{label: "introduction", iconSrc: "../../apstrata/resources/images/pencil-icons/home.png", clazz: apstrata.mForms.HomePanel, auth: false},
+	//	],
+
+	onClick: function(index, label) {
+		var self = this
+		
+		if (label == 'logout') {
+			this.getContainer().connection.logout();
+		} else if (this.data[index].auth) {
+			if (connection.hasCredentials()) {
+				this.openPanel(this.data[index].clazz)
+			} else {
+				var okay = false
+				this.openPanel(apstrata.mForms.Login, {
+					success: function() {
+						self.openPanel(self.data[index].clazz)
+					}, 
+					failure: function() {
+					} 
+				})
+			}			
+		} else {
+			this.openPanel(this.data[index].clazz)
+		}
+	},
+	
+	home: function() {
 	}
+
 })
