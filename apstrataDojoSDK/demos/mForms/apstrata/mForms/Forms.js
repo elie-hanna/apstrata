@@ -110,8 +110,6 @@ dojo.declare("apstrata.mForms.FormActions",
 {
 	data: [
 		{label: "try", iconSrc: "../../apstrata/resources/images/pencil-icons/survey.png"},
-		{label: "results", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"},
-		{label: "list", iconSrc: "../../apstrata/resources/images/pencil-icons/notepad.png"},
 		{label: "edit", iconSrc: "../../apstrata/resources/images/pencil-icons/edit.png"}
 	],
 	
@@ -132,12 +130,6 @@ dojo.declare("apstrata.mForms.FormActions",
 			break;
 			case 'try':
 				this.openPanel(apstrata.mForms.SurveyEditor,{surveyID:self.surveyID, editingMode:'false', storeName: self.storeName, usingCookie: 'false'})
-			break;
-			case 'results':
-				this.openPanel(apstrata.mForms.SurveyResults, {surveyID:self.surveyID, storeName: self.storeName})
-			break;
-			case 'list':
-				this.openPanel(apstrata.mForms.SurveyData,{surveyID:self.surveyID, storeName: self.storeName})
 			break;
 			case 'edit':
 				this.openPanel(apstrata.mForms.SurveyEditor,{surveyID:self.surveyID, editingMode:'true', storeName: self.storeName, usingCookie: 'false'})
@@ -172,46 +164,6 @@ dojo.declare("apstrata.mForms.SurveyEditor",
 	postCreate: function() {
 		var survey = new surveyWidget.widgets.Survey({attrs : this.attrs})
 		dojo.place(survey.domNode, this.dvSurvey, 'only')
-		this.inherited(arguments)
-	}
-})
-
-dojo.require("surveyWidget.widgets.SurveyCharting");
-
-dojo.declare("apstrata.mForms.SurveyResults", 
-[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
-{
-	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/SurveyResultsPanel.html"),
-	maximizePanel: true,
-
-	constructor: function(attrs) {
-		this.attrs = attrs
-	},
-	
-	postCreate: function() {
-		var surveyResults = new surveyWidget.widgets.SurveyCharting({attrs : this.attrs})
-		dojo.place(surveyResults.domNode, this.dvSurveyResults, 'only')
-		this.inherited(arguments)
-	}
-})
-
-dojo.require("surveyWidget.widgets.SurveyListing");
-
-dojo.declare("apstrata.mForms.SurveyData", 
-[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
-{
-	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/SurveyDataPanel.html"),
-	maximizePanel: true,
-
-	constructor: function(attrs) {
-		this.attrs = attrs
-	},
-	
-	postCreate: function() {
-		var surveyData = new surveyWidget.widgets.SurveyListing({attrs : this.attrs})
-		dojo.place(surveyData.domNode, this.dvSurveyData, 'only')
 		this.inherited(arguments)
 	}
 })

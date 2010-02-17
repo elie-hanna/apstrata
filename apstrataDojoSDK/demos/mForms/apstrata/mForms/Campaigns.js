@@ -90,7 +90,8 @@ dojo.declare('apstrata.mForms.Campaigns',
 						attrs: {
 							documentKey: document.key,
 							targetName: document.campaignName,
-							document: document//apstrata.documentUtils.copyToObject(o, document)
+							document: document,
+							surveyID: document.formId
 						}
 					})
 				})
@@ -113,7 +114,7 @@ dojo.declare('apstrata.mForms.Campaigns',
 
 	onClick: function(index, label, attrs) {
 		var self = this
-		this.openPanel(apstrata.mForms.CampaignForm, {document: attrs.document, storeName: self.storeName});
+		this.openPanel(apstrata.mForms.CampaignActions, {surveyID: attrs.document.formId, document: attrs.document, storeName: self.storeName});
 	},
 
 	onDeleteItem: function(index, label, attrs) {
@@ -134,6 +135,42 @@ dojo.declare('apstrata.mForms.Campaigns',
 			});
 	}
 	
+})
+
+dojo.declare("apstrata.mForms.CampaignActions", 
+[apstrata.horizon.HStackableList], 
+{
+	data: [
+		{label: "edit", iconSrc: "../../apstrata/resources/images/pencil-icons/edit.png"},
+		{label: "list", iconSrc: "../../apstrata/resources/images/pencil-icons/notepad.png"},
+		{label: "results", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"}
+	],
+	
+	constructor: function(attrs) {
+		this.surveyID = attrs.surveyID;
+		this.document = attrs.document;
+		this.storeName = attrs.storeName;
+	},
+	
+	onClick: function(index, label) {
+		var self = this
+		
+		this.closePanel()
+		
+		switch (label)
+		{
+			case 'edit':
+				this.openPanel(apstrata.mForms.CampaignForm,{document: self.document, storeName: self.storeName})
+			break;
+			case 'list':
+				this.openPanel(apstrata.mForms.SurveyData,{surveyID:self.surveyID, storeName: self.storeName})
+			break;
+			case 'results':
+				this.openPanel(apstrata.mForms.SurveyResults, {surveyID:self.surveyID, storeName: self.storeName})
+			break;
+			default:
+		}
+	}
 })
 
 dojo.declare("apstrata.mForms.CampaignForm", 
@@ -337,3 +374,42 @@ dojo.declare("apstrata.mForms.CampaignForm",
 	}
 })
 
+dojo.require("surveyWidget.widgets.SurveyCharting");
+
+dojo.declare("apstrata.mForms.SurveyResults", 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
+{
+	widgetsInTemplate: true,
+	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/SurveyResultsPanel.html"),
+	maximizePanel: true,
+
+	constructor: function(attrs) {
+		this.attrs = attrs
+	},
+	
+	postCreate: function() {
+		var surveyResults = new surveyWidget.widgets.SurveyCharting({attrs : this.attrs})
+		dojo.place(surveyResults.domNode, this.dvSurveyResults, 'only')
+		this.inherited(arguments)
+	}
+})
+
+dojo.require("surveyWidget.widgets.SurveyListing");
+
+dojo.declare("apstrata.mForms.SurveyData", 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
+{
+	widgetsInTemplate: true,
+	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/SurveyDataPanel.html"),
+	maximizePanel: true,
+
+	constructor: function(attrs) {
+		this.attrs = attrs
+	},
+	
+	postCreate: function() {
+		var surveyData = new surveyWidget.widgets.SurveyListing({attrs : this.attrs})
+		dojo.place(surveyData.domNode, this.dvSurveyData, 'only')
+		this.inherited(arguments)
+	}
+})
