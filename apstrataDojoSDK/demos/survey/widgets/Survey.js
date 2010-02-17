@@ -38,6 +38,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 		jsonDataModel: "{}",
 		editMode: false,
 		useCookie: true,
+		update: false,
+		displayType: 'none',
 		questionContainer: null,
 		surveyID: null,
 		dataModel: null,
@@ -63,7 +65,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		/**
 		 * Constructor of the survey widget.
 		 */
-		constructor: function() {
+		constructor: function() {this.update = false
 
 		},
 		
@@ -83,6 +85,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 				
 			if(this.attrs.surveyID)
 				this.surveyID = this.attrs.surveyID;	
+			
+			if (this.editMode && this.surveyID != null) {
+				this.update = true;
+				this.displayType = '';
+			}
 			
 			if(!this.editMode) // If the survey widget is not in editing mode use a different template
 				this.templatePath = dojo.moduleUrl("surveyWidget.widgets", "templates/SurveyRun.html");
@@ -120,9 +127,6 @@ dojo.declare("surveyWidget.widgets.Survey",
 				});
 			} else // if no survey key is specified then construct an empty survey
 				this.constructSurvey();
-			// Cause the DTL to rerender with the fresh self.data
-			//this.render()
-			//this.buildRendering()
 		},
 		
 		/**
@@ -549,7 +553,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 			// Create two new objects, one for the schema name and one for the survey docKey, and insert them as survey fields
 			// The schema name must be between 3-32 characters long: s_[user key]_[survey title]_[random hash]
 			var strTitleForSchema = this.cleanTitleForSchemaName(this.title.value);
-			var schemaName = 's_' + apstrata.apConfig.key + '_' + strTitleForSchema + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase().substring(0, 10);
+			
+			if(this.update)
+				var schemaName = this.surveyID;
+			else
+				var schemaName = 's_' + apstrata.apConfig.key + '_' + strTitleForSchema + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase().substring(0, 10);
+			
 			var dockey = schemaName; // The document key of the survey's metadata document is the name of the survey's schema
 			this.schemaName = schemaName;
 
@@ -589,6 +598,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var surveySchema = this.generateSurveySchema(data, dockey); // json object containing the survey's info needed to diplay the survey in running mode and the results as charts
 			var listResultSchema = this.generateListResultSchema(arrFields, arrTitleFields, xmlSchema.name, dockey); // json object containing the survey's info needed to diplay the results in a table
 				
+			if(this.update)
+				var apsdbRequest = {apsdb: {store: self.storeName,documentKey: dockey, update:true}};
+			else
+				var apsdbRequest = {apsdb: {store: self.storeName,documentKey: dockey}};
+			
 			var saveDocumentRequest = dojo.mixin({
 							surveyName: self.title.value,
 							surveyDescription: self.description.value,
@@ -600,20 +614,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 							viewResults: self.viewResults.checked,
 							successMessage: self.successMsg.value,
 							qCount: questionCount
-			}, {
-					apsdb: {
-							store: self.storeName,
-							documentKey: dockey
-				}
-			},
-				surveyQuestions);
-				
-			var setSchemaRequest = {
-					apsdb: {
-						schema: xmlSchema.toString(),
-						schemaName: xmlSchema.name
-				}
-			};
+			}, apsdbRequest, surveyQuestions);
+			
+			if(this.update) 
+				var setSchemaRequest = {apsdb: {schema: xmlSchema.toString(), schemaName: xmlSchema.name, update:true}};
+			else
+				var setSchemaRequest = {apsdb: {schema: xmlSchema.toString(), schemaName: xmlSchema.name}};
 
 			// Saves the metadata info of the survey in a document where the documentKey is equal to the schema name of the survey
 			var sd = client.call({
@@ -762,10 +768,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
 			+ '<div dojoType="surveyWidget.widgets.Survey" attrs="{storeName:\'' + this.storeName + '\',surveyID:\'' + surveyID + '\'}" /></div>'
 			+ '</textarea>';
-
-			this.output.innerHTML = generatedCode;
-			this.output.style.display = "";
-			this.output.width = "800px";
+			
+			if (!this.update) {
+				this.output.innerHTML = generatedCode;
+				this.output.style.display = "";
+				this.output.width = "800px";
+			}
 			
 			// Embed code to see the results of your survey
 			this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:400px; height:100px;">'
@@ -783,8 +791,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '</div>'
 			+ '</textarea>';
 
-			this.listingEmbed.style.display = "";
-			this.listingEmbed.width = "800px";
+			if (!this.update) {
+				this.listingEmbed.style.display = "";
+				this.listingEmbed.width = "800px";
+			}
 
 			// Embed code to see the results of your survey in charts
 			this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see charts of results of your survey.</div><textarea style="width:400px; height:100px;">'
@@ -801,9 +811,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 			+ '<div dojoType="surveyWidget.widgets.SurveyCharting" attrs="{storeName:\'' + this.storeName + '\',surveyID:\'' + surveyID + '\'}"  /></div>'
 			+ '</div>'
 			+ '</textarea>';
-	
-			this.chartingEmbed.style.display = "";
-			this.chartingEmbed.width = "800px";
+			
+			if (!this.update) {
+				this.chartingEmbed.style.display = "";
+				this.chartingEmbed.width = "800px";
+			}
 		},
 		
 		/**

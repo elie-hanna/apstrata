@@ -60,6 +60,10 @@
 		color: red;
 }
 
+.updateMessage {
+		color: red;
+}
+
 .survey .questionsPanel {
     overflow: visible; 
     background: #DEE1EE;
