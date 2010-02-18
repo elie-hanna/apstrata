@@ -29,7 +29,7 @@
 	color: #0000AA;
 }
 
-.apstrataForm input {
+.apstrataForm input{
 	font-family: sans-serif;
 	font-size: 0.9em;
 
@@ -74,4 +74,12 @@
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+}
+
+.apstrataForm label {
+	font-family: sans-serif;
+	font-size: 0.9em;
+
+	padding: 5px;
+	width: 100%;
 }

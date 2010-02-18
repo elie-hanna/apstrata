@@ -10,7 +10,7 @@
 				<br>
 			<div>
 	                <div class="label">Campaign Name:</div>
-	                <input class="rounded-xsml" type="text" style="width: 350px"
+	                <input class="rounded-xsml" type="text" style="width: 350px" trim=true dojoAttachPoint='dvCampaignName'
 						name='campaignName'
 						{% if update %} disabled='disabled' {% endif %}
 						required="true" dojoType="dijit.form.ValidationTextBox"/><br>
@@ -20,6 +20,11 @@
 
 	                <div class="label">Pick a form:</div>
 					<div class="rounded-xsml" dojoAttachPoint='dvSelectForm'></div>
+					
+					<div class="label">Pick the distribution channel:</div>
+					<input dojoType="dijit.form.RadioButton" name="distributionMode" value="sms" "checked" /><label>SMS</label><br/>
+					<input dojoType="dijit.form.RadioButton" name="distributionMode" value="email" /><label>Email</label><br/>
+					<input dojoType="dijit.form.RadioButton" name="distributionMode" value="online" /><label>Online</label><br/>
 
 	                <div class="label">Invitation Text sent by SMS:</div>
 	                <input class="rounded-xsml" type="text" style="width: 350px; height: 50px;"
@@ -69,7 +74,7 @@
 					<tr>
 						<td>
 							<div class="label-sml">Date</div>
-							<input class="rounded-xsml" type="text" name="endDate" dojoType="dijit.form.DateTextBox" required="true" />
+							<input class="rounded-xsml" type="text" name="endDate" dojoType="dijit.form.DateTextBox" required="false" />
 						</td>
 						<td>
 							<div class="label-sml">Time</div>
@@ -94,7 +99,11 @@
 			<br><br>
 		<div>
 			<button dojoType="dijit.form.Button" dojoAttachEvent="onClick: save">
-				{% if update %} Save {% else %} Launch {% endif %}			
+				Save	
+			</button>
+			
+			<button dojoType="dijit.form.Button" dojoAttachEvent="onClick: activate">
+				Save & Activate			
 			</button>
 		</div>
 	</div>

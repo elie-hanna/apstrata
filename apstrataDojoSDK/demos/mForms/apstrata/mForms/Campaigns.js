@@ -59,7 +59,7 @@ dojo.declare('apstrata.mForms.Campaigns',
 				apsdb: {
 					store: self.storeName,
 					query: "formType=\"campaign\"",
-					queryFields: "apsdb.documentKey,campaignName,target,formId,sms,email,startDate,startTime,endDate,endTime"
+					queryFields: "apsdb.documentKey,campaignName,target,formId,sms,email,distributionMode,startDate,startTime,endDate,endTime"
 				}
 			},
 			load: function(operation){
@@ -74,6 +74,7 @@ dojo.declare('apstrata.mForms.Campaigns',
 						target: '',
 						sms: '',
 						email: '',
+						distributionMode: ''
 /*
 						startDate: '',
 						startTime: '',
@@ -293,7 +294,8 @@ dojo.declare("apstrata.mForms.CampaignForm",
 		            name: "target",
 		            value: targetName,
 		            store: targetsStore,
-		            searchAttr: "targetName"
+		            searchAttr: "targetName",
+					required: "true"
 		        },
 		        self.dvSelectTarget);
 
@@ -301,7 +303,8 @@ dojo.declare("apstrata.mForms.CampaignForm",
 		            name: "formId",
 		            value: formId,
 		            store: formsStore,
-		            searchAttr: "formId"
+		            searchAttr: "formId",
+					required: "true"
 		        },
 		        self.dvSelectForm);
 			})
@@ -311,27 +314,28 @@ dojo.declare("apstrata.mForms.CampaignForm",
 		this.inherited(arguments)
 	},
 	
-	save: function() {
+	activate: function() {
 		var self = this
 		
 		console.dir(this.schedule.attr("value"))
-		
-		request = dojo.mixin(this.schedule.attr("value"), {
-			formType: "campaign",
-			"email.apsdb.fieldType": "text",
+		if (this.schedule.validate()) {
+			request = dojo.mixin(this.schedule.attr("value"), {
+				formType: "campaign",
+				"email.apsdb.fieldType": "text",
+				
+				apsdb: {
+					store: self.getParent().storeName
+				}
+			})
 			
-			apsdb: {
-				store: self.getParent().storeName
-			}
-		})
-		
-		if (this.update) request.apsdb.documentKey = this.attrs.document['apsdb.documentKey']
-
-		this.getContainer().client.call({
+			if (this.update) 
+				request.apsdb.documentKey = this.attrs.document['apsdb.documentKey']
+			
+			this.getContainer().client.call({
 				action: "SaveDocument",
 				request: request,
-//				formNode: self.schedule.domNode,
-				load: function(operation) {
+				//				formNode: self.schedule.domNode,
+				load: function(operation){
 					self.getContainer().client.call({
 						action: "Query",
 						request: {
@@ -342,7 +346,7 @@ dojo.declare("apstrata.mForms.CampaignForm",
 							}
 						},
 						load: function(operation){
-		
+						
 							var runScriptletRequest = dojo.mixin({
 								phoneNumbers: operation.response.result.documents[0].targetMembers,
 								surveyName: self.schedule.attr("value").formId,
@@ -357,9 +361,9 @@ dojo.declare("apstrata.mForms.CampaignForm",
 							self.getContainer().client.call({
 								action: "RunScript",
 								request: runScriptletRequest,
-								load: function(operation) {
+								load: function(operation){
 								},
-								error: function(operation) {
+								error: function(operation){
 								}
 							})
 						},
@@ -368,9 +372,38 @@ dojo.declare("apstrata.mForms.CampaignForm",
 					});
 					self.getParent().refresh()
 				},
-				error: function(operation) {
+				error: function(operation){
 				}
-		});
+			});
+		}
+	},
+	
+	save: function(){
+		var self = this
+				
+		if (this.update || (!this.update && this.dvCampaignName.isValid())) {
+			request = dojo.mixin(this.schedule.attr("value"), {
+				formType: "campaign",
+				"email.apsdb.fieldType": "text",
+				
+				apsdb: {
+					store: self.getParent().storeName
+				}
+			})
+			
+			if (this.update) 
+				request.apsdb.documentKey = this.attrs.document['apsdb.documentKey']
+			
+			this.getContainer().client.call({
+				action: "SaveDocument",
+				request: request,
+				load: function(operation){
+					self.getParent().refresh()
+				},
+				error: function(operation){
+				}
+			});
+		} 
 	}
 })
 
