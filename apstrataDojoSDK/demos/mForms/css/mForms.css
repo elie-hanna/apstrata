@@ -111,3 +111,31 @@ html, body {
 	background: #deeede;
 	padding: 5px;
 }
+
+.campaignEmbedCodeDiv {
+    padding: 2px;
+    width: 500px;
+
+    margin-top: 5px;
+    margin-left: 2px;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    border: none;
+    font-family: sans-serif;
+    font-size:  small;
+	color:blue;
+    padding-bottom: 7px;
+    padding-left: 15px;
+    overflow: visible;
+    
+    -o-border-radius: 10px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 7px #adadad;
+    border-radius: 10px;
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+}

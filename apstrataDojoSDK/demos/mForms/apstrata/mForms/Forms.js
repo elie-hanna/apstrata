@@ -132,7 +132,7 @@ dojo.declare("apstrata.mForms.FormActions",
 				this.openPanel(apstrata.mForms.SurveyEditor,{surveyID:self.surveyID, editingMode:'false', storeName: self.storeName, usingCookie: 'false'})
 			break;
 			case 'edit':
-				this.openPanel(apstrata.mForms.SurveyEditor,{surveyID:self.surveyID, editingMode:'true', storeName: self.storeName, usingCookie: 'false'})
+				this.openPanel(apstrata.mForms.SurveyEditor,{showEmbedCode: 'false', surveyID:self.surveyID, editingMode:'true', storeName: self.storeName, usingCookie: 'false'})
 			break;
 			default:
 		}

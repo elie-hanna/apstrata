@@ -38,6 +38,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		jsonDataModel: "{}",
 		editMode: false,
 		useCookie: true,
+		showEmbedCode: true,
 		update: false,
 		displayType: 'none',
 		questionContainer: null,
@@ -47,8 +48,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 		surveyDockey : "",
 		surveyDescription : "You can place the survey description here.",
 		fieldSerialNumber: 0,
-		apServiceURL : "http://apsdb.apstrata.com/sandbox-apsdb/rest",  // apServiceURL is used to communicate with our REST-ful services
-		apSourceURL : "http://developer.apstrata.com/apstrataSDK/", // apSourceURL points to where the survey code is hosted. 
+		apServiceURL : "http://localhost/apstratabase/rest",  // apServiceURL is used to communicate with our REST-ful services
+		apSourceURL : "http://localhost:8000/apstrataDojoSDK/", // apSourceURL points to where the survey code is hosted. 
 
 		/**
 		 * 		attrs is a JSON object containing some info about the survey: 
@@ -82,6 +83,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 				
 			if(this.attrs.usingCookie) 
 				this.useCookie = (this.attrs.usingCookie == "true")?true:false;	
+				
+			if(this.attrs.showEmbedCode) 
+				this.showEmbedCode = (this.attrs.showEmbedCode == "true")?true:false;	
 				
 			if(this.attrs.surveyID)
 				this.surveyID = this.attrs.surveyID;	
@@ -634,7 +638,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 							request: setSchemaRequest,
 							load: function(operation) {
 								self.warningMessage.style.display = 'none'; // On success hide the warning message
-								self.generateAndDisplayEmbedCodes(dockey);
+								if (this.showEmbedCode == true) {
+									self.generateAndDisplayEmbedCodes(dockey);
+								}
 								self.emailSurvey.style.display = ""; // On success show the Send by Email
 								self.smsSurvey.style.display = ""; // On success show the Send by Sms
 								
@@ -838,28 +844,42 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 				var client = new apstrata.Client({connection: connection});
 				
-				var saveDocumentRequest = dojo.mixin(jsonObj, {
+				jsonObj['storeName'] = self.storeName;
+				jsonObj['surveyID'] = self.surveyID;
+				var runScriptRequest = dojo.mixin(jsonObj, {
 					apsdb: {
-							store: self.storeName
+							store: self.storeName,
+							scriptName: "saveSurveyUserResult"
 					}
 				});
 
 				// Save a document of the data gathered from the user
 				var sd = client.call({
-					action: "SaveDocument",
+					action: "RunScript",
 					useHttpMethod : "GET",
-					request: saveDocumentRequest,
+					request: runScriptRequest,
 					load: function(operation) {
-						dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
+						if(operation.response.metadata.status == "success")
+						{
+							if(operation.response.result.status == "success")
+							{
+								dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
 
-						self.tweetTheSubmitting(jsonObj.apsdbDockey);
-
-						if (dataModel.viewResults){
-							self.loadAggregatedResults();
-						}
-						else {
-							self.surveyDiv.style.display = 'none';
-							self.successMessage.innerHTML = dataModel.successMessage;
+								self.tweetTheSubmitting(jsonObj.apsdbDockey);
+		
+								if (dataModel.viewResults){
+									self.loadAggregatedResults();
+								}
+								else {
+									self.surveyDiv.style.display = 'none';
+									self.successMessage.innerHTML = dataModel.successMessage;
+								}
+							}
+							else
+							{
+								self.surveyDiv.style.display = 'none';
+								self.successMessage.innerHTML = operation.response.result.message;
+							}
 						}
 					},
 					error: function(operation) {

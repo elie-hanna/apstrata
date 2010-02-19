@@ -144,7 +144,8 @@ dojo.declare("apstrata.mForms.CampaignActions",
 	data: [
 		{label: "edit", iconSrc: "../../apstrata/resources/images/pencil-icons/edit.png"},
 		{label: "list", iconSrc: "../../apstrata/resources/images/pencil-icons/notepad.png"},
-		{label: "results", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"}
+		{label: "results", iconSrc: "../../apstrata/resources/images/pencil-icons/statistic.png"},
+		{label: "embed code", iconSrc: "../../apstrata/resources/images/pencil-icons/clasp.png"}
 	],
 	
 	constructor: function(attrs) {
@@ -168,6 +169,9 @@ dojo.declare("apstrata.mForms.CampaignActions",
 			break;
 			case 'results':
 				this.openPanel(apstrata.mForms.SurveyResults, {surveyID:self.surveyID, storeName: self.storeName})
+			break;
+			case 'embed code':
+				this.openPanel(apstrata.mForms.EmbedCode, {surveyID:self.surveyID, storeName: self.storeName})
 			break;
 			default:
 		}
@@ -318,11 +322,27 @@ dojo.declare("apstrata.mForms.CampaignForm",
 		var self = this
 		
 		console.dir(this.schedule.attr("value"))
+		
+		var endDate = "";
+		if(this.schedule.attr("value").endDate && this.schedule.attr("value").endDate != "")
+		{
+			endDate = Date.parse(this.schedule.attr("value").endDate);
+			endDate +=  Date.parse(this.schedule.attr("value").endTime);
+		}
+		
+		var startDate = "";
+		if(this.schedule.attr("value").startDate && this.schedule.attr("value").startDate != "")
+		{
+			startDate = Date.parse(this.schedule.attr("value").startDate);
+			startDate +=  Date.parse(this.schedule.attr("value").startTime);
+		}
+		
 		if (this.schedule.validate()) {
 			request = dojo.mixin(this.schedule.attr("value"), {
 				formType: "campaign",
 				"email.apsdb.fieldType": "text",
-				
+				"campaignEndDate": endDate,
+				"campaignStartDate": startDate,
 				apsdb: {
 					store: self.getParent().storeName
 				}
@@ -380,12 +400,28 @@ dojo.declare("apstrata.mForms.CampaignForm",
 	
 	save: function(){
 		var self = this
-				
+
+
+		var endDate = "";
+		if(this.schedule.attr("value").endDate && this.schedule.attr("value").endDate != "")
+		{
+			endDate = Date.parse(this.schedule.attr("value").endDate);
+			endDate +=  Date.parse(this.schedule.attr("value").endTime);
+		}
+		
+		var startDate = "";
+		if(this.schedule.attr("value").startDate && this.schedule.attr("value").startDate != "")
+		{
+			startDate = Date.parse(this.schedule.attr("value").startDate);
+			startDate +=  Date.parse(this.schedule.attr("value").startTime);
+		}
+		
 		if (this.update || (!this.update && this.dvCampaignName.isValid())) {
 			request = dojo.mixin(this.schedule.attr("value"), {
 				formType: "campaign",
 				"email.apsdb.fieldType": "text",
-				
+				"campaignEndDate": endDate,
+				"campaignStartDate": startDate,
 				apsdb: {
 					store: self.getParent().storeName
 				}
@@ -447,5 +483,94 @@ dojo.declare("apstrata.mForms.SurveyData",
 		var surveyData = new surveyWidget.widgets.SurveyListing({attrs : this.attrs})
 		dojo.place(surveyData.domNode, this.dvSurveyData, 'only')
 		this.inherited(arguments)
+	}
+})
+
+dojo.declare("apstrata.mForms.EmbedCode", 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
+{
+	widgetsInTemplate: true,
+	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/EmbedCode.html"),
+	maximizePanel: true,
+	apServiceURL : "http://apsdb.apstrata.com/sandbox-apsdb/rest",
+	apSourceURL : "http://developer.apstrata.com/apstrataSDK/",
+
+	constructor: function(attrs) {
+		this.surveyID = attrs.surveyID;
+		this.storeName = attrs.storeName;
+	},
+	
+	postCreate: function() {
+		//var surveyResults = new surveyWidget.widgets.SurveyCharting({attrs : this.attrs})
+		//dojo.place(surveyResults.domNode, this.dvSurveyResults, 'only')
+		this.generateAndDisplayEmbedCodes(this.surveyID);
+		this.inherited(arguments);
+	},
+	/**
+	 * Displays the embed codes used to run a survey, list the results of the survey in a table or list the results as charts
+	 * 
+	 * @param surveyDataSchema
+	 * 		JSON object containing the information needed by the embed code to display the survey and its results in charts.
+	 * 
+	 * @param listSurveyDataSchema
+	 * 		JSON object containing the information needed by the embed code to display the results of the survey in a table.
+	 * 		
+	 */
+	generateAndDisplayEmbedCodes: function (surveyID) {
+		
+		// Embed code to run the survey
+		this.output.innerHTML = '<div>Copy and paste the following embed code in your html page to run the survey.</div><textarea style="width:500px; height:150px;">'
+		+ '<!-- You can move the script tag to the head of your html page -->\n'
+		+ '<script type="text/javascript" src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"\n' 
+		+ 'djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,\n'
+      	+ 'modulePaths: { surveyWidget: \''+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget\',\n'
+	  	+ '			 apstrata: \''+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata\',\n'
+	  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></script>\n'
+		+ '<script type="text/javascript" src="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/apstrata-lib.js.uncompressed.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + this.apServiceURL + '\'"></script>\n'
+		+ '<link rel=stylesheet href="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
+		+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
+		+ '<div dojoType="surveyWidget.widgets.Survey" attrs="{storeName:\'' + this.storeName + '\',surveyID:\'' + this.surveyID + '\'}" /></div>'
+		+ '</textarea>';
+		
+		this.output.style.display = "";
+		this.output.width = "800px";
+		
+		// Embed code to see the results of your survey
+		this.listingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see the results of your survey.</div><textarea style="width:500px; height:150px;">'
+		+ '<!-- You can move the script tag to the head of your html page -->\n'
+		+ '<script type="text/javascript" src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"' 
+		+ 'djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,'
+      	+ 'modulePaths: { surveyWidget: \''+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
+	  	+ '			 apstrata: \''+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata\','
+	  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></script>'
+		+ '<script type="text/javascript" src="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/list-apstrata-lib.js.uncompressed.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + this.apServiceURL + '\'"></script>\n'
+		+ '<link rel=stylesheet href="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
+		+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
+		+ '<div>'
+		+ '<div dojoType="surveyWidget.widgets.SurveyListing" attrs="{storeName:\'' + this.storeName + '\',surveyID:\'' + this.surveyID + '\'}" /></div>'
+		+ '</div>'
+		+ '</textarea>';
+
+		this.listingEmbed.style.display = "";
+		this.listingEmbed.width = "800px";
+
+		// Embed code to see the results of your survey in charts
+		this.chartingEmbed.innerHTML = '<div>Copy and paste the following embed code in your html page to see charts of results of your survey.</div><textarea style="width:500px; height:150px;">'
+		+ '<!-- You can move the script tag to the head of your html page -->\n'
+		+ '<script type="text/javascript" src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"' 
+		+ 'djConfig="debugAtAllCosts: false, xdWaitSeconds: 10, parseOnLoad: true, useXDomain: true, isDebug: false,'
+      	+ 'modulePaths: { surveyWidget: \''+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget\','
+	  	+ '			 apstrata: \''+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata\','
+	  	+ '			 dojo: \'http://o.aolcdn.com/dojo/1.3/dojo/\' }"></SCRIPT>'
+		+ '<script type="text/javascript" src="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/apstrata/chart-apstrata-lib.js.uncompressed.js" apConfig="key:\'' + apstrata.apConfig.key + '\', serviceURL: \'' + this.apServiceURL + '\'"></script>\n'
+		+ '<link rel=stylesheet href="'+this.apSourceURL+'lib/dojo/1.3.0-src/release/apstrata/surveyWidget/widgets/css/survey.css" type="text/css">\n'
+		+ '<!-- Place this DIV where you want the widget to appear in your page -->\n'
+		+ '<div>'
+		+ '<div dojoType="surveyWidget.widgets.SurveyCharting" attrs="{storeName:\'' + this.storeName + '\',surveyID:\'' + this.surveyID + '\'}"  /></div>'
+		+ '</div>'
+		+ '</textarea>';
+		
+		this.chartingEmbed.style.display = "";
+		this.chartingEmbed.width = "800px";
 	}
 })
