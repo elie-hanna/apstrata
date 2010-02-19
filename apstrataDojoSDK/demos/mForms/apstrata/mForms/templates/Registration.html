@@ -102,68 +102,71 @@
 							<span class="title">Registration form</span>
 							<br /><br />
 							
-										<div class="label">First:</div>
-										<input type="text" value="" class="registrationInput"
-											dojoAttachPoint="firstName"
-											dojoType="dijit.form.ValidationTextBox"
-									        propercase="true"
-									        trim="true"
-										/>
-				
-										<div class="label">Last:</div>
-										<input type="text" value="" class="registrationInput"
-											dojoAttachPoint="lastName"
-											dojoType="dijit.form.ValidationTextBox"
-									        propercase="true"
-									        trim="true"
-										/>
-			
-										<div class="label">Email address:</div>
-										<input type="text" value="" class="registrationInput"
-											dojoAttachPoint="email"
-											dojoType="dijit.form.ValidationTextBox"
-											required="true"
-											regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b"
-									        invalidMessage="Invalid email address."
-									        trim="true"
-										/>
-										<div class="label">Username:</div>
-										<input type="text" value="" class="registrationInput"
-											dojoAttachPoint="username"
-											dojoType="dijit.form.ValidationTextBox"
-											required="true"
-									        invalidMessage="Username is required."
-									        trim="true"
-										/>
-							
-										<div class="label">Password:</div>
-										<input type="password" value="" class="registrationInput"
-											dojoAttachPoint="password"
-											dojoType="dijit.form.ValidationTextBox"
-											required="true"
-									        invalidMessage="Password is required."
-									        trim="true"
-										/>
-							
-										<div class="label">Re-enter Password:</div>
-										<input type="password" value="" class="registrationInput"
-											dojoAttachPoint="reenteredPassword"
-											dojoType="dijit.form.ValidationTextBox"
-											required="true"
-									        invalidMessage="Password is required."
-									        trim="true"
-										/>
-
-<!--
-							<table style='width: 100%;' cellpadding='10' >
-								<tr>
-									<td>
-									</td>
-									<td>
-									</td>
-								</tr>
-							</table>
--->							
+								<div class="label">First:</div>
+								<input type="text" value="" class="registrationInput"
+									dojoAttachPoint="firstName"
+									dojoType="dijit.form.ValidationTextBox"
+							        propercase="true"
+							        trim="true"
+								/>
+		
+								<div class="label">Last:</div>
+								<input type="text" value="" class="registrationInput"
+									dojoAttachPoint="lastName"
+									dojoType="dijit.form.ValidationTextBox"
+							        propercase="true"
+							        trim="true"
+								/>
+	
+								<div class="label">Email address:</div>
+								<input type="text" value="" class="registrationInput"
+									dojoAttachPoint="email"
+									dojoType="dijit.form.ValidationTextBox"
+									required="true"
+									regExp="\b[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\b"
+							        invalidMessage="Invalid email address."
+							        trim="true"
+								/>
+								<div class="label">Username:</div>
+								<input type="text" value="" class="registrationInput"
+									dojoAttachPoint="username"
+									dojoType="dijit.form.ValidationTextBox"
+									required="true"
+							        invalidMessage="Username is required."
+							        trim="true"
+								/>
+					
+								<div class="label">Password:</div>
+								<input type="password" value="" class="registrationInput"
+									dojoAttachPoint="password"
+									dojoType="dijit.form.ValidationTextBox"
+									required="true"
+							        invalidMessage="Password is required."
+							        trim="true"
+								/>
+					
+								<div class="label">Re-enter Password:</div>
+								<input type="password" value="" class="registrationInput"
+									dojoAttachPoint="reenteredPassword"
+									dojoType="dijit.form.ValidationTextBox"
+									required="true"
+							        invalidMessage="Password is required."
+							        trim="true"
+								/>
+					
+								<table>
+									<tr>
+										<td>
+											<input value=""
+												dojoAttachPoint="informMeOfWidgets"
+												dojoType="dijit.form.CheckBox"
+											/>
+										</td>
+										<td style="padding-top: 12px;">
+											<div class="label">I would like to hear about new Apstrata Products when they become available.</div>
+										</td>
+									</tr>
+								</table>
 						</form>
 						<br />
 						<div class="errorMsg" dojoAttachPoint="errorMsg">
