@@ -381,7 +381,7 @@ dojo.declare("apstrata.mForms.CampaignForm",
                                 case "email":
 	                                var runScriptletRequest = dojo.mixin({
 	                                    surveyName:  self.schedule.attr("value").formId,
-										emailHeader: self.edtrPost
+										emailHeader: self.schedule.attr("value").email
 	                                }, {
 	                                    apsdb: {
 	                                        scriptName: "sendEmail",
