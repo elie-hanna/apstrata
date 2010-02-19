@@ -403,7 +403,10 @@ dojo.declare("apstrata.mForms.CampaignForm",
 				error: function(operation){
 				}
 			});
-		} 
+		} else {
+			this.dvCampaignName.focus()
+			this.dvCampaignName.displayMessage("The campaign's name is required")
+		}
 	}
 })
 

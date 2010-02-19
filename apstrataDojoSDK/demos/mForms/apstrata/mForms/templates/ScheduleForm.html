@@ -13,7 +13,7 @@
 	                <input class="rounded-xsml" type="text" style="width: 350px" trim=true dojoAttachPoint='dvCampaignName'
 						name='campaignName'
 						{% if update %} disabled='disabled' {% endif %}
-						required="true" dojoType="dijit.form.ValidationTextBox"/><br>
+						required="true" invalidMessage="The campaign's name is required" dojoType="dijit.form.ValidationTextBox"/><br>
 
 	                <div class="label">Pick a target group:</div>
 					<div class="rounded-xsml" dojoAttachPoint='dvSelectTarget'></div>
