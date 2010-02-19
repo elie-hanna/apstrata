@@ -143,7 +143,6 @@ dojo.declare("apstrata.mForms.Login",
 	
 	postCreate: function() {
 		console.debug(this.templatePath)
-
 		this.inherited(arguments)
 	},
 	
@@ -216,7 +215,8 @@ dojo.declare("apstrata.mForms.RegistrationPanel",
 					lastName: self.lastName.value,
 					password: self.password.value,
 					username: self.username.value,
-					email: self.email.value
+					email: self.email.value,
+					informMeOfWidgets: self.informMeOfWidgets.checked
 				});
 
 			// Call the verifyMFormsUser1 script to save a document with the registration code and send an email to the user
@@ -224,7 +224,7 @@ dojo.declare("apstrata.mForms.RegistrationPanel",
 				action: "RunScript",
 				request: scriptRequest,
 				load: function(operation) {
-					if (operation.response.metadata.status == 'success' && operation.response.result.status == 'success') {
+					if (operation.response.result.status == 'success') {
 						var documentKey = operation.response.result.documentKey;
 						self.getParent().openPanel(apstrata.mForms.VerifyRegistrationPanel, { "documentKey": documentKey, "username": self.username.value, "password": self.password.value });
 					} else {
@@ -250,7 +250,7 @@ dojo.declare("apstrata.mForms.VerifyRegistrationPanel",
 	username: "",
 	password: "",
 	
-	constructor: function(documentKeyContainerObj) {
+	constructor: function(documentKeyContainerObj) {console.debug('ABD1');console.dir(documentKeyContainerObj);
 		var config = new apstrata.mForms.ApConfig()
 		
 		this.key = {}
