@@ -366,18 +366,39 @@ dojo.declare("apstrata.mForms.CampaignForm",
 							}
 						},
 						load: function(operation){
-						
-							var runScriptletRequest = dojo.mixin({
-								phoneNumbers: operation.response.result.documents[0].targetMembers,
-								surveyName: self.schedule.attr("value").formId,
-								smsText: self.schedule.attr("value").sms
-							}, {
-								apsdb: {
-									scriptName: 'sendSms'
-								}
-							});
-							
-							// Run the send sms script 
+                            switch (self.schedule.attr("value").distributionMode) {
+								case "sms":
+                                    var runScriptletRequest = dojo.mixin({
+                                        phoneNumbers: operation.response.result.documents[0].targetMembers,
+                                        surveyName: self.schedule.attr("value").formId,
+                                        smsText: self.schedule.attr("value").sms
+                                    }, {
+                                        apsdb: {
+                                            scriptName: 'sendSms'
+                                        }
+                                    });
+                                    break;
+                                case "email":
+	                                var runScriptletRequest = dojo.mixin({
+	                                    surveyName:  self.schedule.attr("value").formId,
+										emailHeader: self.edtrPost
+	                                }, {
+	                                    apsdb: {
+	                                        scriptName: "sendEmail",
+	                                        storeName: self.getParent().storeName,
+	                                        debugLevel: 4
+	                                    }
+	                                }, {
+	                                    apsma: {
+	                                        to: operation.response.result.documents[0].targetMembers,
+	                                        subject: "Apstrata Survey",
+	                                    }
+	                                });
+                                    break;
+                                case "online":
+                                    break;
+                            }
+							// Run the script 
 							self.getContainer().client.call({
 								action: "RunScript",
 								request: runScriptletRequest,
