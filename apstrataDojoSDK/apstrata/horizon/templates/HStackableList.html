@@ -1,20 +1,75 @@
-<div class='verticalList hStackable rounded-sml'>
-	<div class='vScrollable' dojoAttachPoint='dvList'>
-		{% for o in data %} 
-			<div class='item' itemIndex='{{ forloop.counter0 }}' itemLabel='{{ o.label }}' dojoAttachEvent='onmouseover: _onMouseover,onmouseout: _onMouseout,onclick: _onClick'> 
+<div class='verticalList hStackable rounded-sml' style='width: {{ width }}px'>
+	<style>
+		.sortField {
+			width: 24px;
+		}
 
-				{% if o.iconSrc %}
-					<div class='icon'><img src='{{ o.iconSrc }}'></div>
-				{% endif %} 
+		.searchField {
+			text-align: left;
+		}
+		
+		.searchField input {
+			font-size:0.8em;
 
-				<div class='label'> {{ o.label }} </div> 
-				<div style='clear: both;'></div></div> 
-		{% endfor %}
-	</div> 
-	<div style='width: 100%; text-align: center;'> 
+			-moz-border-radius-topleft: 3px;
+			-webkit-border-top-left-radius: 3px;
+			border-top-left-radius: 3px;
+		
+			-moz-border-radius-bottomleft: 3px;
+			-webkit-border-bottom-left-radius: 3px;
+			border-bottom-left-radius: 3px;
+		
+			text-align: left;
+			border:1px solid #CECECE;
+			border:1px solid white;
+			padding: 1px;
+		}
+		
+		.sortField .on {
+			opacity: 1;
+			cursor: pointer;
+		}
+
+		.sortField .off {
+			opacity: .3;
+			cursor: pointer;
+		}
+	</style>
+	<div style='height: 4px;'></div>
+	<table>
+		{% if sortable %} 
+			<tr>
+				<td>
+					<table>
+						<tr>
+							<td>
+								<div class='sortField'>
+									<img dojoAttachPoint='imgUp' dojoAttachEvent='onmouseover: _upOn, onmouseout: _upOff, onclick: _ascending' class='off' src='{{ _apstrataRoot }}/resources/images/pencil-icons/sml-up-arrow.png'><img dojoAttachPoint='imgDown'  dojoAttachEvent='onmouseover: _downOn, onmouseout: _downOff, onclick: _descending' class='off' src='{{ _apstrataRoot }}/resources/images/pencil-icons/sml-down-arrow.png'>
+								</div>
+							</td>
+							<td>
+								<div class='searchField'>
+									<input type='text' class='searchField' dojoAttachPoint='dvSearchField' dojoAttachEvent='onkeypress: filterChange' value='' />
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		{% endif %}
+		<tr>
+			<td>
+				<div dojoAttachPoint='dvItems'>
+				</div> 
+			</td>
+		</tr>
+		<tr>
+			<td style='text-align: center;'>
 		{% if editable %} 
 			<div dojoType='dijit.form.ToggleButton' iconClass='dijitCheckBoxIcon' dojoAttachEvent='onClick: editItems'>delete</div>
 			<div dojoType='dijit.form.Button' dojoAttachEvent='onClick: newItem' dojoAttachPoint='aaa'>new</div>
 		{% endif %}
-	</div>
+			</td>
+		</tr>
+	</table>
 </div>

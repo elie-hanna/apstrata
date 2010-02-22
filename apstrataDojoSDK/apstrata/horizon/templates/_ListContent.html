@@ -1,0 +1,20 @@
+<div class='vScrollable' style='width: {{ width }}px; height: {{ height }}px;'>
+	{% for o in data %} 
+	
+			<div class='item' style='width: {{ _itemWidth }}px;' itemIndex='{{ forloop.counter0 }}' itemLabel='{{ o.label }}' dojoAttachEvent='onmouseover: _onMouseover,onmouseout: _onMouseout,onclick: _onClick'> 
+				<table class='content'>
+					<tr valign='center'>
+						<td class='deleteCell' valign='top' itemIndex='{{ forloop.counter0 }}' itemLabel='{{ o.label }}'></td>
+					{% if o.iconSrc %}
+						<td width='0'>
+							<div class='icon'><img src='{{ o.iconSrc }}'></div>
+						</td>
+					{% endif %} 
+						<td valign='center' class='label' width='100%'> 
+							{{ o.label }} 
+						</td>
+					</tr>
+				</table>
+			</div> 
+	{% endfor %}
+</div> 
