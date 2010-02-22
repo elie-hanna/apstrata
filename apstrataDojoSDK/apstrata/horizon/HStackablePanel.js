@@ -56,6 +56,7 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 		} 
 
 		this.home()
+		this.inherited(arguments)
 	},
 
 	// Assumes the following data structure of the main list  

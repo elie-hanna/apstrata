@@ -32,6 +32,8 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 	parentList: null,
 
 	maximizePanel: false,
+	width: 160,
+	height: 300,
 
 	/*
 	 * Instantiate an HStackable and set its parent
@@ -161,7 +163,7 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 		this.closePanel()
 		this.inherited(arguments)
 	},
-	
+		
 	/*
 	 * Executes animation effect after a slide contents have been refreshed
 	 */

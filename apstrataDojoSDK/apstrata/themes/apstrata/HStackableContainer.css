@@ -48,8 +48,6 @@
 }
 
 .horizon .verticalList {
-	width: 160px;
-
 	background: #f5f5f5;
 	color: #333333;
 }
@@ -65,17 +63,18 @@
 
 .horizon .verticalList .vScrollable {
 	overflow-y: auto;
-	overflow-x: hidden;					
-	height: 95%;
+	overflow-x: hidden;
 }
 
 .horizon .verticalList .item {
 	height: 45px;
 	position: relative;
 	top: 12px;
-	padding-left: 15px;
+	padding-left: 0px;
 	border-bottom: solid 0px #aaaaaa;
 	overflow: hidden;
+	
+	text-align: left;
 	
 	width: 400px;
 	
@@ -99,6 +98,14 @@
 
 }
 
+.item .content {
+	height: 45px;
+}
+
+.item .content .deleteCell {
+	width: 0;
+}
+
 .horizon .verticalList .itemMouseOver {
 	background: #898989;
 }
@@ -115,7 +122,6 @@
 }
 
 .horizon .verticalList .item .icon {
-	float: left;
 }
 
 .horizon .verticalList .item .icon img {
@@ -125,7 +131,6 @@
 }
 
 .horizon .verticalList .item .iconDelete {
-	float: left;
 }
 
 .horizon .verticalList .item .iconDelete img {
@@ -141,9 +146,5 @@
 }
 
 .horizon .verticalList .item .label {
-	position: relative;
-	top: 15px;
-	width: 85px;
-	float: left;
-	padding-left: 10px;
+	padding-left: 3px;
 }
