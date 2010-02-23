@@ -40,6 +40,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 	data: null,
 
 	_filter: '',
+	_FILTER_MESSAGE: 'type to filter',
 
 	msgDelete: "are you sure you want to delete item: ",
 
@@ -197,6 +198,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 	},
 
 	filterChange: function(e) {
+		var self = this
 		if (e.keyCode == 8) {
 			this._filter = (e.currentTarget.value.toLowerCase()).substr(0, e.currentTarget.value.length-1)
 		} else {
@@ -205,17 +207,31 @@ dojo.declare("apstrata.horizon.HStackableList",
  		
 		if (this._filter == '') {
 			var _newData = this.data
+//			this.txtSearch.value = this._FILTER_MESSAGE
 		} else {
 			var _newData = []
 			
 			for (var i=0; i<this.data.length; i++) {
-				if (((this.data[i]).label.toLowerCase()).indexOf(this._filter)>=0) _newData.push(this.data[i])
+				j = ((this.data[i]).label.toLowerCase()).indexOf(this._filter)
+				if (j>=0) {
+					var label = this.data[i].label.substring(0, j) + 
+						"<span class='highlight'>" + this._filter + "</span>" + 
+						this.data[i].label.substring(j + this._filter.length)
+console.debug(label)	
+					if (j>=0) _newData.push({label: label, img: self.iconSrc})
+				}
 			}
 		}
 		
 		this._listContent.setData(_newData)
 	},
-
+/*	
+	focus: function(e) {
+		console.dir(e)
+		if (this._filter == '') this.txtSearch.value = ''
+		
+	},
+*/
 	_ascending: function() {
 		if (this._sort != 1) {
 			this._sort = 1

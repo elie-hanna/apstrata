@@ -148,7 +148,7 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 
 		// Call layout for each contained widget upon resize
 		dojo.forEach(this.getChildren(), function(child) {
-			child.layout()
+			if (child) child.layout()
 		})
 
 		this.inherited(arguments)
