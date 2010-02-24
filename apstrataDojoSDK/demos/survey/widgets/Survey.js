@@ -169,11 +169,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 				if (this.editMode) {
 					this.connect(this.btnGetData, "onclick", "getModel"); // Attaching the getModel function to the onclick event on the "Generate Embed Code" button
 					this.connect(this.viewResults, "onclick", "toggleTextBox"); // Attaching the toggleTextBox function to the onclick event on the "Show results to users" check box
-					this.connect(this.emailCheckbox, "onclick", "toggleEmail"); // Attaching the toggleEmail function to the onclick event on the "Send by email" check box
-					this.connect(this.smsCheckbox, "onclick", "toggleSms"); // Attaching the toggleSms function to the onclick event on the "Send by email" check box
-					this.connect(this.btnEmail, "onclick", "sendEmail"); // Attaching the sendEmail function to the onclick event on the "Send"(email) button
-					this.connect(this.btnSms, "onclick", "sendSms"); // Attaching the sendSms function to the onclick event on the "Send"(sms) button
-					this.connect(this.btnForceSms, "onclick", "forceSendSms"); // Attaching the forceSendSms function to the onclick event on the "forceSendSms"(sms) button
+//					this.connect(this.emailCheckbox, "onclick", "toggleEmail"); // Attaching the toggleEmail function to the onclick event on the "Send by email" check box
+//					this.connect(this.smsCheckbox, "onclick", "toggleSms"); // Attaching the toggleSms function to the onclick event on the "Send by email" check box
+//					this.connect(this.btnEmail, "onclick", "sendEmail"); // Attaching the sendEmail function to the onclick event on the "Send"(email) button
+//					this.connect(this.btnSms, "onclick", "sendSms"); // Attaching the sendSms function to the onclick event on the "Send"(sms) button
+//					this.connect(this.btnForceSms, "onclick", "forceSendSms"); // Attaching the forceSendSms function to the onclick event on the "forceSendSms"(sms) button
 				}
 				else {
 					this.connect(this.btnSubmit, "onclick", "saveSurvey"); // Attaching the saveSurvey function to the onclick event on the "Submit" button
@@ -218,6 +218,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * Shows or hides the Email input and button
 		 * 
 		 */
+/*
 		toggleEmail: function() {
 			if(this.emailCheckbox.checked)
 				if(this.email.style.display == "none")
@@ -230,11 +231,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 					else
 						this.email.style.display = "none";
 		},
-		
+*/	
 		/**
 		 * Shows or hides the sms input and button
 		 * 
 		 */
+/*
 		toggleSms: function() {
 			if(this.smsCheckbox.checked)
 				if(this.phone.style.display == "none")
@@ -248,7 +250,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 						this.phone.style.display = "none";
 		},
 
-		
+*/			
 		/**
 		 * Creates an object of type surveyWidget.widgets.SurveyField that represent one question.
 		 * 
@@ -361,6 +363,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * Send Email to recipient
 		 * 
 		 */
+/*
 		sendEmail: function() {
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
@@ -392,9 +395,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 					}
 				});
 		},
+*/		
 		/*
 		 * Force send sms
 		 */
+/*
 		forceSendSms: function(){
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
@@ -438,10 +443,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 					}
 				});
 		},
+*/		
 		/**
 		 * Send Sms to recipient
 		 * 
 		 */
+/*		
 		sendSms: function(){
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
@@ -480,6 +487,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					}
 				});
 		},
+*/		
 		/**
 		 * Constructs and displays the embed codes used to run a survey, list the results of the survey in a table or list the results as charts
 		 * 
@@ -641,8 +649,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 								if (this.showEmbedCode == true) {
 									self.generateAndDisplayEmbedCodes(dockey);
 								}
-								self.emailSurvey.style.display = ""; // On success show the Send by Email
-								self.smsSurvey.style.display = ""; // On success show the Send by Sms
+//								self.emailSurvey.style.display = ""; // On success show the Send by Email
+//								self.smsSurvey.style.display = ""; // On success show the Send by Sms
 								
 							},
 							error: function(operation) {
