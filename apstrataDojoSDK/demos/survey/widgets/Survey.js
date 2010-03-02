@@ -665,7 +665,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 								}
 //								self.emailSurvey.style.display = ""; // On success show the Send by Email
 //								self.smsSurvey.style.display = ""; // On success show the Send by Sms
-								
+								// Used to refresh the list of forms later,publishing here, subscribing in the mforms
+								dojo.publish("/SAVE/FORM", [{ some:"object data" }]);
+
 							},
 							error: function(operation) {
 								var warningMsg = '';
