@@ -179,8 +179,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 				//this.inherited(arguments);
 				
 				if (this.editMode) {
-					this.connect(this.btnGetData, "onclick", function(){survey.getModel(true)}); // Attaching the getModel function to the onclick event on the "Save" button
-					this.connect(this.btnSaveAsSurvey, "onclick",  function(){survey.getModel(false)}); // Attaching the getModel function to the onclick event on the "Save As" button
+					this.connect(this.btnGetData, "onclick", function(){survey.getModel(false)}); // Attaching the getModel function to the onclick event on the "Save" button
+					this.connect(this.btnSaveAsSurvey, "onclick",  function(){survey.getModel(true)}); // Attaching the getModel function to the onclick event on the "Save As" button
 					this.connect(this.viewResults, "onclick", "toggleTextBox"); // Attaching the toggleTextBox function to the onclick event on the "Show results to users" check box
 //					this.connect(this.emailCheckbox, "onclick", "toggleEmail"); // Attaching the toggleEmail function to the onclick event on the "Send by email" check box
 //					this.connect(this.smsCheckbox, "onclick", "toggleSms"); // Attaching the toggleSms function to the onclick event on the "Send by email" check box
