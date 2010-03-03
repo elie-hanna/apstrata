@@ -32,6 +32,14 @@
 			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: toggleTextBox" name="allowViewingResults"/> Show results to users
 		</div>
 		<br/>
+		<div title="Send me an email for each submission">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendEmailSubmission" name="sendSMSUponSubmission"/> Send me an email for each submission
+		</div>
+		<br/>
+		<div title="Send me an SMS for each submission">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendSMSSubmission" name="sendSMSUponSubmission"/> Send me an SMS for each submission
+		</div>
+		<br/>
 		
 		<div title="Success Message" dojoAttachPoint="successMsgDiv">
 			Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">

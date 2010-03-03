@@ -125,15 +125,18 @@ dojo.declare("surveyWidget.widgets.Survey",
 					apsdb: {
 						store: this.storeName,
 						query: "apsdb.documentKey=\"" + this.surveyID + "\"",
-						queryFields: "surveySchema"
+						queryFields: "surveySchema,sendEmailUponSubmission,sendSMSUponSubmission"
 					}};
 	
 				var q = client.call({
 					action: "Query",
 					request: queryRequest,
 					load: function(operation) { // on success set the survey schema and construct the survey
-						if(operation.response.result.documents.length > 0)
+						if (operation.response.result.documents.length > 0) {
 							self.schema = operation.response.result.documents[0]["surveySchema"];
+							self.sendEmailUponSubmission = operation.response.result.documents[0]["sendEmailUponSubmission"];
+							self.sendSMSUponSubmission = operation.response.result.documents[0]["sendSMSUponSubmission"];
+						}
 						self.constructSurvey();
 					},
 					error: function(operation) { // on error construct an empty survey
@@ -638,6 +641,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 							"listResultSchema.apsdb.fieldType": "text",
 							isSurveyMetadata: "true",
 							viewResults: self.viewResults.checked,
+							sendEmailUponSubmission: self.sendEmailSubmission.checked,
+							sendSMSUponSubmission: self.sendSMSSubmission.checked,
 							successMessage: self.successMsg.value,
 							qCount: questionCount
 			}, apsdbRequest, surveyQuestions, self.extraParam);
@@ -890,19 +895,31 @@ dojo.declare("surveyWidget.widgets.Survey",
 								dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
 
 								self.tweetTheSubmitting(jsonObj.apsdbDockey);
-		
-								if (dataModel.viewResults){
+								if (self.sendEmailUponSubmission == 'true') {
+									self.emailTheSubmitting();
+								}
+								
+								if (self.sendSMSUponSubmission == 'true') {
+									//self.smsTheSubmitting(jsonObj.apsdbDockey);
+								}
+								
+								if (dataModel.viewResults) {
 									self.loadAggregatedResults();
+									self.tweetTheSubmitting(jsonObj.apsdbDockey);
+									
+									if (dataModel.viewResults) {
+										self.loadAggregatedResults();
+									}
+									else {
+										self.surveyDiv.style.display = 'none';
+										self.successMessage.innerHTML = dataModel.successMessage;
+									}
 								}
-								else {
-									self.surveyDiv.style.display = 'none';
-									self.successMessage.innerHTML = dataModel.successMessage;
-								}
-							}
 							else
 							{
-								self.surveyDiv.style.display = 'none';
-								self.successMessage.innerHTML = operation.response.result.message;
+									self.surveyDiv.style.display = 'none';
+									self.successMessage.innerHTML = operation.response.result.message;
+								}
 							}
 						}
 					},
@@ -916,7 +933,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		/**
-		 * Runs a script
+		 * Runs the tweeting script
 		 * 
 		 * @param apsdbDockey
 		 * 		DocumentKey (String) of the document containing the metadata information of the survey
@@ -933,6 +950,64 @@ dojo.declare("surveyWidget.widgets.Survey",
 			}, {
 				apsdb: {
 					scriptName: 'tweetSurveyTaken'
+				}
+			});
+
+			var sd = client.call({
+				action: "RunScriptlet",
+				request: runScriptletRequest,
+				load: function(operation) {
+				},
+				error: function(operation) {
+					self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
+				}
+			});
+		},
+		
+		/**
+		 * Runs the emailing script
+		 */
+		emailTheSubmitting: function() {
+			// Run a script
+			var client = new apstrata.Client({connection: connection});
+			var self = this;
+			var runScriptletRequest = dojo.mixin({
+				title: self.surveyTitle
+			}, {
+				apsdb: {
+					scriptName: 'emailSurveyTaken'
+				}
+			});
+
+			var sd = client.call({
+				action: "RunScriptlet",
+				request: runScriptletRequest,
+				load: function(operation) {
+				},
+				error: function(operation) {
+					self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
+				}
+			});
+		},
+
+		/**
+		 * Runs the SMSing script
+		 * 
+		 * @param apsdbDockey
+		 * 		DocumentKey (String) of the document containing the metadata information of the survey
+		 * 
+		 */
+		smsTheSubmitting: function(apsdbDockey) {
+			// Run a script
+			var client = new apstrata.Client({connection: connection});
+			var self = this;
+			var runScriptletRequest = dojo.mixin({
+				store: self.storeName,
+				dockey: apsdbDockey,
+				title: self.surveyTitle
+			}, {
+				apsdb: {
+					scriptName: 'smsSurveyTaken'
 				}
 			});
 
