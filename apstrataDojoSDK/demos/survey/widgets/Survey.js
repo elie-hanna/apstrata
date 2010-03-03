@@ -28,7 +28,6 @@ dojo.require("dojo.dnd.Manager");
 dojo.require("dojo.dnd.Source");
 dojo.require("dojo.cookie");
 
-
 dojo.declare("surveyWidget.widgets.Survey",
 	[dijit._Widget, dijit._Templated],
 	{
@@ -900,7 +899,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 								}
 								
 								if (self.sendSMSUponSubmission == 'true') {
-									//self.smsTheSubmitting(jsonObj.apsdbDockey);
+									self.smsTheSubmitting();
 								}
 								
 								if (dataModel.viewResults) {
@@ -946,7 +945,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var runScriptletRequest = dojo.mixin({
 				store: self.storeName,
 				dockey: apsdbDockey,
-				title: self.surveyTitle
+				title: self.title.innerHTML
 			}, {
 				apsdb: {
 					scriptName: 'tweetSurveyTaken'
@@ -954,7 +953,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			});
 
 			var sd = client.call({
-				action: "RunScriptlet",
+				action: "RunScript",
 				request: runScriptletRequest,
 				load: function(operation) {
 				},
@@ -972,7 +971,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
 			var runScriptletRequest = dojo.mixin({
-				title: self.surveyTitle
+				title: self.title.innerHTML
 			}, {
 				apsdb: {
 					scriptName: 'emailSurveyTaken'
@@ -980,7 +979,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			});
 
 			var sd = client.call({
-				action: "RunScriptlet",
+				action: "RunScript",
 				request: runScriptletRequest,
 				load: function(operation) {
 				},
@@ -992,19 +991,14 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 		/**
 		 * Runs the SMSing script
-		 * 
-		 * @param apsdbDockey
-		 * 		DocumentKey (String) of the document containing the metadata information of the survey
-		 * 
 		 */
-		smsTheSubmitting: function(apsdbDockey) {
+		smsTheSubmitting: function() {
 			// Run a script
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
+
 			var runScriptletRequest = dojo.mixin({
-				store: self.storeName,
-				dockey: apsdbDockey,
-				title: self.surveyTitle
+				title: self.title.innerHTML
 			}, {
 				apsdb: {
 					scriptName: 'smsSurveyTaken'
@@ -1012,7 +1006,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			});
 
 			var sd = client.call({
-				action: "RunScriptlet",
+				action: "RunScript",
 				request: runScriptletRequest,
 				load: function(operation) {
 				},
