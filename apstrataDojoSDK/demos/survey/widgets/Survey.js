@@ -181,8 +181,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 				//this.inherited(arguments);
 				
 				if (this.editMode) {
-					this.connect(this.btnGetData, "onclick", function(){survey.getModel(false)}); // Attaching the getModel function to the onclick event on the "Save" button
-					this.connect(this.btnSaveAsSurvey, "onclick",  function(){survey.getModel(true)}); // Attaching the getModel function to the onclick event on the "Save As" button
+					if(this.surveyID != null)
+						this.connect(this.btnGetData, "onclick", function(){survey.getModel(true)}); // if the survey id is not null then the "Save" button should update the existing survey
+					else
+						this.connect(this.btnGetData, "onclick", function(){survey.getModel(false)}); // if the survey id is null then the "Save" button should create a new survey
+					this.connect(this.btnSaveAsSurvey, "onclick",  function(){survey.getModel(false)}); // Attaching the getModel function to the onclick event on the "Save As" button
 					this.connect(this.viewResults, "onclick", "toggleTextBox"); // Attaching the toggleTextBox function to the onclick event on the "Show results to users" check box
 //					this.connect(this.emailCheckbox, "onclick", "toggleEmail"); // Attaching the toggleEmail function to the onclick event on the "Send by email" check box
 //					this.connect(this.smsCheckbox, "onclick", "toggleSms"); // Attaching the toggleSms function to the onclick event on the "Send by email" check box
@@ -506,7 +509,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * Constructs and displays the embed codes used to run a survey, list the results of the survey in a table or list the results as charts
 		 * 
 		 * @param update
-		 * 		The boolean 'update' defines if the survey should be updated of if a new survey should be created out of the current one
+		 * 		The boolean 'update' defines if the survey should be updated of if a new survey should be created
 		 */
 		getModel: function(update) {
 			var self = this;
@@ -701,7 +704,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		/**
 		 * Excludes the following characters:
 		 * ', ,~,!,%
-		 * Then truncates the string to the first 10 characters
+		 * Then truncates the string to the first 8 characters
 		 *
 		 * @param title The survey title to use for the schema name
 		 */
