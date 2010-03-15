@@ -775,6 +775,14 @@ dojo.declare("surveyWidget.widgets.Survey",
 			listSurveyData.fields[listSurveyData.fields.length] = "takenBy";
 			listSurveyData.titleFields[listSurveyData.titleFields.length] = "Taken By";
 
+			// Adding the Ip field that should be displayed in the table of taken surveys to show who took the survey (phone number, email address or anonymous)
+			listSurveyData.fields[listSurveyData.fields.length] = "ip";
+			listSurveyData.titleFields[listSurveyData.titleFields.length] = "Ip";
+
+			// Adding the Time field that should be displayed in the table of taken surveys to show who took the survey (phone number, email address or anonymous)
+			listSurveyData.fields[listSurveyData.fields.length] = "time";
+			listSurveyData.titleFields[listSurveyData.titleFields.length] = "Time";
+			
 			var listSurveyDataSchema = encodeURIComponent(dojo.toJson(listSurveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
 			
 			return listSurveyDataSchema;
