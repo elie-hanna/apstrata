@@ -230,7 +230,18 @@ dojo.declare("surveyWidget.widgets.Survey",
 			else
 				this.successMsgDiv.style.display = "";
 		},
-		
+
+		/**
+		 * Shows or hides the "SMS Notification" field depending on the value of the "Send me an SMS for each submission" check box.
+		 * 
+		 */
+		toggleSMSNotificationTextBox: function() {
+			if(this.sendSMSSubmission.checked)
+				this.smsNotificationNumberDiv.style.display = "";
+			else
+				this.smsNotificationNumberDiv.style.display = "none";
+		},
+
 		/**
 		 * Shows or hides the Email input and button
 		 * 
@@ -645,6 +656,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 							viewResults: self.viewResults.checked,
 							sendEmailUponSubmission: self.sendEmailSubmission.checked,
 							sendSMSUponSubmission: self.sendSMSSubmission.checked,
+							smsNotificationNumber: self.smsNotificationNumber.value,
 							successMessage: self.successMsg.value,
 							qCount: questionCount
 			}, apsdbRequest, surveyQuestions, self.extraParam);
@@ -904,7 +916,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 							{
 								dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
 
-								self.tweetTheSubmitting(jsonObj.apsdbDockey);
+								// TODO : Removed the call to tweet the submitting of a survey since we do not need it now
+								//self.tweetTheSubmitting(jsonObj.apsdbDockey);
 								if (self.sendEmailUponSubmission == 'true') {
 									self.emailTheSubmitting();
 								}
@@ -1009,7 +1022,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var self = this;
 
 			var runScriptletRequest = dojo.mixin({
-				title: self.title.innerHTML
+				title: self.title.innerHTML,
+				smsNotificationNumber: self.smsNotificationNumber.value
 			}, {
 				apsdb: {
 					scriptName: 'smsSurveyTaken'

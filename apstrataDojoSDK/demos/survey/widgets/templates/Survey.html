@@ -37,7 +37,12 @@
 		</div>
 		<br/>
 		<div title="Send me an SMS for each submission">
-			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendSMSSubmission" name="sendSMSUponSubmission"/> Send me an SMS for each submission
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendSMSSubmission" dojoAttachEvent="onClick: toggleSMSNotificationTextBox" name="sendSMSUponSubmission"/>
+				Send me an SMS for each submission
+		</div>
+		<br/>
+		<div title="SMS Notification Number" dojoAttachPoint="smsNotificationNumberDiv" style="display: none;">
+			SMS Notification Number: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="smsNotificationNumber"  name="smsNotificationNumber">
 		</div>
 		<br/>
 		
