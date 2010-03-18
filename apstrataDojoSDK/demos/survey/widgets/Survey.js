@@ -674,6 +674,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					load: function(operation) {
 						self.warningMessage.style.display = 'none'; // On success hide the warning message
 						// on success, creates an apstrata schema for the survey
+						var documentKey = operation.response.result.document.key;
 						var ss = client.call({
 							action: "SaveSchema",
 							request: setSchemaRequest,
@@ -685,8 +686,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 //								self.emailSurvey.style.display = ""; // On success show the Send by Email
 //								self.smsSurvey.style.display = ""; // On success show the Send by Sms
 								// Used to refresh the list of forms later,publishing here, subscribing in the mforms
-								dojo.publish("/SAVE/FORM", [{ some:"object data" }]);
-
+								dojo.publish("/SAVE/FORM", [{ documentKey:documentKey}]);
 							},
 							error: function(operation) {
 								var warningMsg = '';
