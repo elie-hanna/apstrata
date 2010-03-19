@@ -230,7 +230,19 @@ dojo.declare("surveyWidget.widgets.Survey",
 			else
 				this.successMsgDiv.style.display = "";
 		},
-
+		
+		/**
+		 * Toggles the text direction from rtl or ltr
+		 * 
+		 */
+		toggleDirection: function() {
+			if(this.direction.checked){
+				this.surveyParentDiv.dir = "rtl";
+			}else{
+				this.surveyParentDiv.dir = "ltr";
+			}	
+		},
+		
 		/**
 		 * Shows or hides the "SMS Notification" field depending on the value of the "Send me an SMS for each submission" check box.
 		 * 
