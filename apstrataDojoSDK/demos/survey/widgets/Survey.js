@@ -712,9 +712,24 @@ dojo.declare("surveyWidget.widgets.Survey",
 									default:
 										warningMsg = operation.response.metadata.errorDetail;
 								}
-			
 								self.warningMessage.style.display = ''; // Display the warning message
 								self.warningMessage.innerHTML = warningMsg;
+								var dd = client.call({
+									action: "DeleteDocument",
+									request: {
+										apsdb: {
+											store : self.storeName,
+											documentKey : documentKey
+										}
+									},
+									load: function(operation) {
+										//deleting the form metadata document if schema is not created
+									},
+									error: function(operation) {
+										// something happened
+									}
+								});
+								
 							}
 						});
 					},
