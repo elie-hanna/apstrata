@@ -698,7 +698,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 //								self.emailSurvey.style.display = ""; // On success show the Send by Email
 //								self.smsSurvey.style.display = ""; // On success show the Send by Sms
 								// Used to refresh the list of forms later,publishing here, subscribing in the mforms
-								dojo.publish("/SAVE/FORM", [{ documentKey:documentKey}]);
+								dojo.publish("/SAVE/FORM", [{ documentKey: documentKey, surveyName: self.title.value }]);
 							},
 							error: function(operation) {
 								var warningMsg = '';
@@ -1007,7 +1007,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
 			var runScriptletRequest = dojo.mixin({
-				title: self.title.innerHTML
+				title: self.title.innerHTML,
+				store: self.storeName,
+				surveyName: self.surveyID
 			}, {
 				apsdb: {
 					scriptName: 'emailSurveyTaken'
