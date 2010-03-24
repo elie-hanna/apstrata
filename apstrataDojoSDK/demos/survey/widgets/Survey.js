@@ -236,11 +236,14 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * 
 		 */
 		toggleDirection: function() {
-			if(this.direction.checked){
-				this.surveyParentDiv.dir = "rtl";
-			}else{
-				this.surveyParentDiv.dir = "ltr";
-			}	
+			if (this.direction != null) {
+				if (this.direction.checked) {
+					this.surveyParentDiv.dir = "rtl";
+				}
+				else {
+					this.surveyParentDiv.dir = "ltr";
+				}
+			}
 		},
 		
 		/**
@@ -554,6 +557,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 					// Do nothing
 				} else if (child.title != null && child.title != '' && !child.dummyField) {
 					childModel = child.getModel();
+					if(childModel['type'] == "checkbox" || childModel['type'] == "text area"){
+						childModel['choices'] = "[]";
+					} 
 					childModel["defaultValue"] = jsonObj[child.fieldName];
 					data[i] = childModel;
 
@@ -657,6 +663,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 			else
 				var apsdbRequest = {apsdb: {store: self.storeName,documentKey: dockey}};
 			
+			var rtl = "false";
+			if(self.direction != null){
+				rtl = self.direction.checked;
+			}
 			var saveDocumentRequest = dojo.mixin({
 							surveyName: self.title.value,
 							surveyDescription: self.description.value,
@@ -668,6 +678,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 							viewResults: self.viewResults.checked,
 							sendEmailUponSubmission: self.sendEmailSubmission.checked,
 							sendSMSUponSubmission: self.sendSMSSubmission.checked,
+							rtl: rtl,
 							smsNotificationNumber: self.smsNotificationNumber.value,
 							successMessage: self.successMsg.value,
 							qCount: questionCount
