@@ -209,8 +209,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 				if(this.editMode)
 					var newField = this.createField(null, true); // If the survey is in edit mode, create a dummy question used to create new ones.
 				
-				// Toggle survey text direction	
-				this.toggleDirection();	
+				// Sets the survey text direction	
+				this.setDirection();	
 			}
 		},
 		
@@ -240,15 +240,22 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * 
 		 */
 		toggleDirection: function() {
-			if(this.rtl != null && this.rtl == "true"){
-				this.direction.checked = true;
-			}
 			if (this.direction != null) {
 				if (this.direction.checked) {
 					this.surveyParentDiv.dir = "rtl";
-				}
-				else {
+				} else {
 					this.surveyParentDiv.dir = "ltr";
+				}
+			}
+		},
+		
+		setDirection: function(){
+			if(this.editMode){
+				if(this.rtl != null && this.rtl == "true"){
+					if(this.direction != null){
+						this.direction.setValue(true);
+						this.surveyParentDiv.dir = "rtl";
+					}
 				}
 			}
 		},
