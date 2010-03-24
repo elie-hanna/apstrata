@@ -124,7 +124,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					apsdb: {
 						store: this.storeName,
 						query: "apsdb.documentKey=\"" + this.surveyID + "\"",
-						queryFields: "surveySchema,sendEmailUponSubmission,sendSMSUponSubmission"
+						queryFields: "surveySchema,sendEmailUponSubmission,sendSMSUponSubmission,rtl"
 					}};
 	
 				var q = client.call({
@@ -135,6 +135,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 							self.schema = operation.response.result.documents[0]["surveySchema"];
 							self.sendEmailUponSubmission = operation.response.result.documents[0]["sendEmailUponSubmission"];
 							self.sendSMSUponSubmission = operation.response.result.documents[0]["sendSMSUponSubmission"];
+							self.rtl = operation.response.result.documents[0]["rtl"];
 						}
 						self.constructSurvey();
 					},
@@ -207,6 +208,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 	
 				if(this.editMode)
 					var newField = this.createField(null, true); // If the survey is in edit mode, create a dummy question used to create new ones.
+				
+				// Toggle survey text direction	
+				this.toggleDirection();	
 			}
 		},
 		
@@ -236,6 +240,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 		 * 
 		 */
 		toggleDirection: function() {
+			if(this.rtl != null && this.rtl == "true"){
+				this.direction.checked = true;
+			}
 			if (this.direction != null) {
 				if (this.direction.checked) {
 					this.surveyParentDiv.dir = "rtl";
