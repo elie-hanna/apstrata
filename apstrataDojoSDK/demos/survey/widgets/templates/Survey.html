@@ -1,4 +1,11 @@
 <div class="tundra">
+	<style>
+		.secondaryCheckbox
+		{
+			margin-top:10px;
+			margin-left:10px;
+		}
+	</style>
 	<div class="survey" style="display: ${displayType};">
 		<span class="updateMessage" >Note that editing this survey might affect the accuracy of its results.</span>
 	</div>
@@ -38,6 +45,9 @@
 			<br/>
 			<div title="Send me an email for each submission">
 				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendEmailSubmission" name="sendSMSUponSubmission"/> Send me an email for each submission
+				<div class="secondaryCheckbox" dojoAttachPoint="sendAnswersInEmailSubmissionDivAP"  name="sendAnswersInEmailSubmissionDiv" style="display:none">
+					<input dojoType="dijit.form.CheckBox"  dojoAttachPoint="sendAnswersInEmailSubmissionAP" type="checkbox"/>Include answers			
+				</div>
 			</div>
 			<br/>
 			<div title="Send me an SMS for each submission">

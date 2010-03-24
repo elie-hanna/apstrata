@@ -684,6 +684,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 							isSurveyMetadata: "true",
 							viewResults: self.viewResults.checked,
 							sendEmailUponSubmission: self.sendEmailSubmission.checked,
+							sendAnswersInEmailUponSubmission: self.sendAnswersInEmailSubmissionAP.checked,
 							sendSMSUponSubmission: self.sendSMSSubmission.checked,
 							rtl: rtl,
 							smsNotificationNumber: self.smsNotificationNumber.value,
@@ -1099,5 +1100,17 @@ dojo.declare("surveyWidget.widgets.Survey",
 				var charts = new surveyWidget.widgets.SurveyCharting();
 			dojo._destroyElement(this.survey);
 			this.aggregatedResults.addChild(charts);
+		},
+		showIncludeAnswersCheckBox: function()
+		{
+			if(this.sendEmailSubmission.checked)
+			{
+				this.sendAnswersInEmailSubmissionDivAP.style.display = "";
+			}
+			else{
+				this.sendAnswersInEmailSubmissionAP.setValue(false);
+				this.sendAnswersInEmailSubmissionDivAP.style.display = "none";
+			}
+			
 		}
 	});
