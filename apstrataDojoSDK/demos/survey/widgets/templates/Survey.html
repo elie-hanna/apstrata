@@ -44,7 +44,7 @@
 			</div>
 			<br/>
 			<div title="Send me an email for each submission">
-				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendEmailSubmission" name="sendSMSUponSubmission"/> Send me an email for each submission
+				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendEmailSubmission" name="sendSMSUponSubmission" dojoAttachEvent="onClick: showIncludeAnswersCheckBox"/> Send me an email for each submission
 				<div class="secondaryCheckbox" dojoAttachPoint="sendAnswersInEmailSubmissionDivAP"  name="sendAnswersInEmailSubmissionDiv" style="display:none">
 					<input dojoType="dijit.form.CheckBox"  dojoAttachPoint="sendAnswersInEmailSubmissionAP" type="checkbox"/>Include answers			
 				</div>
