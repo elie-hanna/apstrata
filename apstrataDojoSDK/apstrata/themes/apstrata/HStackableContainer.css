@@ -147,4 +147,5 @@
 
 .horizon .verticalList .item .label {
 	padding-left: 3px;
+	word-wrap: break-word;
 }
