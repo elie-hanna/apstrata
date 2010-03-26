@@ -952,8 +952,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 				jsonObj['surveyID'] = self.surveyID;
 				var runScriptRequest = dojo.mixin(jsonObj, {
 					apsdb: {
-							store: self.storeName,
-							scriptName: "saveSurveyUserResult"
+						store: self.storeName,
+						scriptName: "saveSurveyUserResult"
 					}
 				});
 
@@ -967,9 +967,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 						{
 							if(operation.response.result.status == "success")
 							{
-								dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years
+								dojo.cookie(cookie, 'taken', {expires: 30 * 256}); // Set the cookie to expire after 30 years.
 
-								// TODO : Removed the call to tweet the submitting of a survey since we do not need it now
+								// TODO : Removed the call to tweet the submitting of a survey since we do not need it now.
 								//self.tweetTheSubmitting(jsonObj.apsdbDockey);
 								if (self.sendEmailUponSubmission == 'true') {
 									self.emailTheSubmitting();
@@ -978,23 +978,19 @@ dojo.declare("surveyWidget.widgets.Survey",
 								if (self.sendSMSUponSubmission == 'true') {
 									self.smsTheSubmitting();
 								}
-								
+
+								//  According to the survey creators choice, either display the result charts or a message (either
+								// from the script or the success message set by the creator).
 								if (dataModel.viewResults) {
 									self.loadAggregatedResults();
-									self.tweetTheSubmitting(jsonObj.apsdbDockey);
-									
-									if (dataModel.viewResults) {
-										self.loadAggregatedResults();
-									}
-									else {
+									// TODO : Removed the call to tweet the submitting of a survey since we do not need it now.
+									//self.tweetTheSubmitting(jsonObj.apsdbDockey);
+								} else {
 										self.surveyDiv.style.display = 'none';
-										self.successMessage.innerHTML = dataModel.successMessage;
-									}
-								}
-							else
-							{
-									self.surveyDiv.style.display = 'none';
-									self.successMessage.innerHTML = operation.response.result.message;
+										if (operation.response.result.message == "")
+											self.successMessage.innerHTML = dataModel.successMessage;
+										else
+											self.successMessage.innerHTML = operation.response.result.message;
 								}
 							}
 						}
