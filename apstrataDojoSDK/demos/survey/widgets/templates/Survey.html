@@ -1,7 +1,6 @@
 <div class="tundra">
 	<style>
-		.secondaryCheckbox
-		{
+		.secondaryCheckbox {
 			margin-top:10px;
 			margin-left:10px;
 		}
@@ -43,6 +42,10 @@
 				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: toggleTextBox" name="allowViewingResults"/> Show results to users
 			</div>
 			<br/>
+			<div title="Success Message" dojoAttachPoint="successMsgDiv">
+				Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
+			</div>
+			<br/>
 			<div title="Send me an email for each submission">
 				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendEmailSubmission" name="sendSMSUponSubmission" dojoAttachEvent="onClick: showIncludeAnswersCheckBox"/> Send me an email for each submission
 				<div class="secondaryCheckbox" dojoAttachPoint="sendAnswersInEmailSubmissionDivAP"  name="sendAnswersInEmailSubmissionDiv" style="display:none">
@@ -59,10 +62,6 @@
 				SMS Notification Number: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="smsNotificationNumber"  name="smsNotificationNumber">
 			</div>
 			<br/>
-			
-			<div title="Success Message" dojoAttachPoint="successMsgDiv">
-				Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
-			</div>
 			<div class="surveyPageFooter" title="Powered by apstrata">
 	          <a target="_blank" href="http://www.apstrata.com" title="Powered by apstrata">&nbsp;</a>
 	        </div>
