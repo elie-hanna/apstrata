@@ -1,7 +1,7 @@
 <div class='vScrollable' style='width: {{ width }}px; height: {{ height }}px;'>
 	{% for o in data %} 
 	
-			<div class='item' style='width: {{ _itemWidth }}px;' itemIndex='{{ forloop.counter0 }}' itemLabel='{{ o.label }}' dojoAttachEvent='onmouseover: _onMouseover,onmouseout: _onMouseout,onclick: _onClick'> 
+			<div class='item' style='width: {{ _itemWidth }}px;' itemIndex='{{ forloop.counter0 }}' title='{{ o.label }}' itemLabel='{{ o.label }}' dojoAttachEvent='onmouseover: _onMouseover,onmouseout: _onMouseout,onclick: _onClick'> 
 				<table class='content'>
 					<tr valign='center'>
 						<td class='deleteCell' valign='top' itemIndex='{{ forloop.counter0 }}' itemLabel='{{ o.label }}'></td>
