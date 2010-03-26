@@ -33,19 +33,25 @@
 .survey h2 {
     font-size: 2em;
     color: #666699;
+	word-wrap: break-word;
     /*color: green;*/
 }
 
 .survey h3 {
     font-size: 1.3em;
+	word-wrap: break-word;
     /*color: #222222;*/
 }
 
 
 
-.surveryField {
+.surveyField {
     width: 250px;
     padding: 10px;
+}
+
+.surveyField span {
+	word-wrap: break-word;
 }
 
 .surveyButton {
