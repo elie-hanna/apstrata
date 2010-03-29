@@ -37,10 +37,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 		jsonDataModel: "{}",
 		extraParam: {},
 		isSurveyTemplate: false,
-		showSaveAs: 'none',
 		editMode: false,
 		useCookie: true,
 		showEmbedCode: true,
+		clone: false,
 		displayType: 'none',
 		questionContainer: null,
 		surveyID: null,
@@ -55,7 +55,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		/**
 		 * 		attrs is a JSON object containing some info about the survey: 
 		 * 			storeName: the store used by the survey widget
-		 * 			editingMode: When set to true, the suvey is in edit mode and it allows user to clone the survey. 
+		 * 			editingMode: When set to true, the suvey is in edit mode and it allows user to update the survey. 
 		 * 						 When set to false, the survey is in running mode and it allows users to take the survey
 		 * 			schema: Contains the schema of the loaded survey or is null when creating a new survey from scratch  
 		 * 			surveyID: Contains the survey ID of the loaded survey or is null when creating a new survey from scratch     
@@ -85,11 +85,13 @@ dojo.declare("surveyWidget.widgets.Survey",
 				this.useCookie = (this.attrs.usingCookie == "true")?true:false;	
 				
 			if(this.attrs.showEmbedCode) 
-				this.showEmbedCode = (this.attrs.showEmbedCode == "true")?true:false;	
+				this.showEmbedCode = (this.attrs.showEmbedCode == "true")?true:false;
+				
+			if(this.attrs.cloningMode) 
+				this.clone = (this.attrs.cloningMode == "true")?true:false;	
 				
 			if (this.attrs.surveyID) {
 				this.surveyID = this.attrs.surveyID;
-				this.showSaveAs = '';
 			}
 				
 			if (this.attrs.extraParam) {
@@ -98,7 +100,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					this.isSurveyTemplate = (this.attrs.extraParam.isSurveyTemplate == "true")?true:false;	
 			}		
 				
-			if (this.editMode && this.surveyID != null) {
+			if (this.editMode && this.surveyID != null && !this.clone) {
 				if(this.isSurveyTemplate)
 					this.displayType = 'none';
 				else
@@ -159,7 +161,12 @@ dojo.declare("surveyWidget.widgets.Survey",
 			dataModel = dojo.fromJson(this.jsonDataModel); // dataModel object contains the dojo representation of the survey schema
 
 			if(this.editMode){
-				if (dataModel.title != null) this.title.setValue(dataModel.title); // extract the title from the survey schema
+				if(this.clone)
+					var sTitle = "Copy of " + dataModel.title
+				else
+					var sTitle = dataModel.title
+					
+				if (dataModel.title != null) this.title.setValue(sTitle); // extract the title from the survey schema
 				if (dataModel.description != null) this.description.setValue(dataModel.description); // extract the description from the survey schema
 			} else{
 				if (dataModel.title != null) this.title.innerHTML = dataModel.title; // extract the title from the survey schema
@@ -182,11 +189,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 				//this.inherited(arguments);
 				
 				if (this.editMode) {
-					if(this.surveyID != null)
-						this.connect(this.btnGetData, "onclick", function(){survey.getModel(true)}); // if the survey id is not null then the "Save" button should update the existing survey
+					if(this.surveyID != null && !this.clone)
+						this.connect(this.btnGetData, "onclick", function(){survey.validateSurvey(true)}); // if the survey id is not null then the "Save" button should update the existing survey
 					else
-						this.connect(this.btnGetData, "onclick", function(){survey.getModel(false)}); // if the survey id is null then the "Save" button should create a new survey
-					this.connect(this.btnSaveAsSurvey, "onclick",  function(){survey.getModel(false)}); // Attaching the getModel function to the onclick event on the "Save As" button
+						this.connect(this.btnGetData, "onclick", function(){survey.validateSurvey(false)}); // if the survey id is null then the "Save" button should create a new survey
 					this.connect(this.viewResults, "onclick", "toggleTextBox"); // Attaching the toggleTextBox function to the onclick event on the "Show results to users" check box
 //					this.connect(this.emailCheckbox, "onclick", "toggleEmail"); // Attaching the toggleEmail function to the onclick event on the "Send by email" check box
 //					this.connect(this.smsCheckbox, "onclick", "toggleSms"); // Attaching the toggleSms function to the onclick event on the "Send by email" check box
@@ -545,15 +551,56 @@ dojo.declare("surveyWidget.widgets.Survey",
 				});
 		},
 */		
+		
+		validateSurvey: function(update) {
+			var self = this
+			if(this.title.value!=""){
+				if (!update && connection.credentials.username != "") {
+					var client = new apstrata.Client({connection: connection});
+					var q = client.call({
+						action: "Query",
+						request: {
+							apsdb: {
+								store: self.storeName,
+								query: "apsdb.creator=\"" + connection.credentials.username + "\" and isSurveyMetadata=\"true\" and isSurveyTemplate=\"true\" and surveyName=\""+this.title.value+"\"",
+								count: true
+							}
+						},
+						load: function(operation){
+							if (operation.response.result.count == '0') {
+								self.warningMessage.style.display = 'none'; // Hide the warning message
+								self.getModel(self, update)
+							}
+							else {
+								self.warningMessage.style.display = ''; // Display the warning message
+								self.warningMessage.innerHTML = "The survey's name should be unique";
+							}
+						},
+						error: function(operation){
+							self.warningMessage.style.display = 'none'; // Hide the warning message
+							self.getModel(self, update)
+						}
+					});
+				}
+				else {
+					self.warningMessage.style.display = 'none'; // Hide the warning message
+					self.getModel(self, update)
+				}
+			} else {
+				self.warningMessage.style.display = ''; // Display the warning message
+				self.warningMessage.innerHTML = "The campaign's name is required";
+			}
+		},
+		
 		/**
 		 * Constructs and displays the embed codes used to run a survey, list the results of the survey in a table or list the results as charts
 		 * 
 		 * @param update
 		 * 		The boolean 'update' defines if the survey should be updated of if a new survey should be created
 		 */
-		getModel: function(update) {
-			var self = this;
-			var jsonObj = this.surveyform.getValues();	// JSON object containing the default values of the created survey's questions
+		getModel: function(context,update) {
+			var self = context;
+			var jsonObj = self.surveyform.getValues();	// JSON object containing the default values of the created survey's questions
 			var data = new Array();
 			var arrFields = new Array();
 			var arrTitleFields = new Array();
@@ -564,9 +611,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var schemaFieldArr = new Array();
 			var surveyQuestions = new Object();
 
-			var children = this.questions.getChildren();
+			var children = self.questions.getChildren();
 			var breakProcessing = false;
-			dojo.forEach(this.questions.getChildren(), function(child) {
+			dojo.forEach(self.questions.getChildren(), function(child) {
 				if (breakProcessing) {
 					// Do nothing
 				} else if (child.title != null && child.title != '' && !child.dummyField) {
@@ -626,15 +673,15 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 			// Create two new objects, one for the schema name and one for the survey docKey, and insert them as survey fields
 			// The schema name must be between 3-32 characters long: s_[user key]_[survey title]_[random hash]
-			var strTitleForSchema = this.cleanTitleForSchemaName(this.title.value);
+			var strTitleForSchema = self.cleanTitleForSchemaName(self.title.value);
 			
 			if(update)
-				var schemaName = this.surveyID;
+				var schemaName = self.surveyID;
 			else
 				var schemaName = 's_' + apstrata.apConfig.key + '_' + strTitleForSchema + '_' + dojox.encoding.digests.MD5('' + new Date().getTime() + data, dojox.encoding.digests.outputTypes.Hex).toUpperCase().substring(0, 10);
 			
 			var dockey = schemaName; // The document key of the survey's metadata document is the name of the survey's schema
-			this.schemaName = schemaName;
+			self.schemaName = schemaName;
 
 			var apstrataSurveySchemaName = new Object();
 			apstrataSurveySchemaName.choices = '';
@@ -654,7 +701,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			apstrataSurveyDockey.type = 'text';
 			data[i++] = apstrataSurveyDockey;
 
-			dojo.forEach(this.questions.getChildren(), function(child) {
+			dojo.forEach(self.questions.getChildren(), function(child) {
 				if (child.title != null && !child.dummyField) {
 					arrFields[j++] = child.fldName.value;
 					arrTitleFields[k++] = child.fldTitle.value;
@@ -669,8 +716,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 			xmlSchema.addACLGroup(aclGroup);
 
 			var client = new apstrata.Client({connection: connection});
-			var surveySchema = this.generateSurveySchema(data, dockey); // json object containing the survey's info needed to diplay the survey in running mode and the results as charts
-			var listResultSchema = this.generateListResultSchema(arrFields, arrTitleFields, xmlSchema.name, dockey); // json object containing the survey's info needed to diplay the results in a table
+			var surveySchema = self.generateSurveySchema(data, dockey); // json object containing the survey's info needed to diplay the survey in running mode and the results as charts
+			var listResultSchema = self.generateListResultSchema(arrFields, arrTitleFields, xmlSchema.name, dockey); // json object containing the survey's info needed to diplay the results in a table
 				
 			if(update)
 				var apsdbRequest = {apsdb: {store: self.storeName,documentKey: dockey, update:true}};
@@ -718,13 +765,16 @@ dojo.declare("surveyWidget.widgets.Survey",
 							request: setSchemaRequest,
 							load: function(operation) {
 								self.warningMessage.style.display = 'none'; // On success hide the warning message
-								if (this.showEmbedCode == true) {
+								if (self.showEmbedCode == true) {
 									self.generateAndDisplayEmbedCodes(dockey, update);
 								}
 //								self.emailSurvey.style.display = ""; // On success show the Send by Email
 //								self.smsSurvey.style.display = ""; // On success show the Send by Sms
 								// Used to refresh the list of forms later,publishing here, subscribing in the mforms
-								dojo.publish("/SAVE/FORM", [{ documentKey: documentKey, surveyName: self.title.value }]);
+								if(self.clone)									
+									dojo.publish("/CLONE/FORM", [{}]);
+								else
+									dojo.publish("/SAVE/FORM", [{ documentKey: documentKey, surveyName: self.title.value }]);
 							},
 							error: function(operation) {
 								var warningMsg = '';
@@ -952,8 +1002,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 				jsonObj['surveyID'] = self.surveyID;
 				var runScriptRequest = dojo.mixin(jsonObj, {
 					apsdb: {
-						store: self.storeName,
-						scriptName: "saveSurveyUserResult"
+							store: self.storeName,
+							scriptName: "saveSurveyUserResult"
 					}
 				});
 
@@ -978,20 +1028,23 @@ dojo.declare("surveyWidget.widgets.Survey",
 								if (self.sendSMSUponSubmission == 'true') {
 									self.smsTheSubmitting();
 								}
-
+								
 								//  According to the survey creators choice, either display the result charts or a message (either
 								// from the script or the success message set by the creator).
 								if (dataModel.viewResults) {
 									self.loadAggregatedResults();
 									// TODO : Removed the call to tweet the submitting of a survey since we do not need it now.
 									//self.tweetTheSubmitting(jsonObj.apsdbDockey);
-								} else {
-										self.surveyDiv.style.display = 'none';
-										if (operation.response.result.message == "")
-											self.successMessage.innerHTML = dataModel.successMessage;
-										else
-											self.successMessage.innerHTML = operation.response.result.message;
 								}
+								else {
+									self.surveyDiv.style.display = 'none';
+									self.successMessage.innerHTML = dataModel.successMessage;
+								}
+							}
+							else
+							{
+								self.surveyDiv.style.display = 'none';
+								self.successMessage.innerHTML = operation.response.result.message;
 							}
 						}
 					},
