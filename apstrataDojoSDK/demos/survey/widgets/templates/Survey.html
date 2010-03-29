@@ -18,55 +18,54 @@
 			<form dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
 			<div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer"  withHandles="true" class="questionsPanel"></div>
 			</form>
-			
+		</div>	
 			<br/>
-	<!--
-			<div title="Sms survey to users" dojoAttachPoint="smsSurvey" style="display: none;">
-				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="smsCheckbox" dojoAttachEvent="onClick: toggleSms" name="smsSurvey"/> Send by sms
-				<div dojoAttachPoint="phone" style="display: none;">
-					<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="phoneNumber" trim=true value=""><input dojoAttachPoint="btnSms" type="button" value="send" />
-					<input style="display: none;color:#F87217" dojoAttachPoint="btnForceSms" type="button" value="force send" />
-				</div>
+<!--
+		<div title="Sms survey to users" dojoAttachPoint="smsSurvey" style="display: none;">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="smsCheckbox" dojoAttachEvent="onClick: toggleSms" name="smsSurvey"/> Send by sms
+			<div dojoAttachPoint="phone" style="display: none;">
+				<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="phoneNumber" trim=true value=""><input dojoAttachPoint="btnSms" type="button" value="send" />
+				<input style="display: none;color:#F87217" dojoAttachPoint="btnForceSms" type="button" value="force send" />
 			</div>
-			
-			<br/>
-			<div title="Email survey to users" dojoAttachPoint="emailSurvey" style="display: none;">
-				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="emailCheckbox" dojoAttachEvent="onClick: toggleEmail" name="emailSurvey"/> Send by email
-				<div dojoAttachPoint="email" style="display: none;">
-					<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="emailaddress" trim=true value=""><input dojoAttachPoint="btnEmail" type="button" value="send" />
-				</div>	
+		</div>
+		
+		<br/>
+		<div title="Email survey to users" dojoAttachPoint="emailSurvey" style="display: none;">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="emailCheckbox" dojoAttachEvent="onClick: toggleEmail" name="emailSurvey"/> Send by email
+			<div dojoAttachPoint="email" style="display: none;">
+				<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="emailaddress" trim=true value=""><input dojoAttachPoint="btnEmail" type="button" value="send" />
+			</div>	
+		</div>
+-->		
+		<br/>
+		<div title="Show results to users">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: toggleTextBox" name="allowViewingResults"/> Show results to users
+		</div>
+		<br/>
+		<div title="Success Message" dojoAttachPoint="successMsgDiv">
+			Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
+		</div>
+		<br/>
+		<div title="Send me an email for each submission">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendEmailSubmission" name="sendSMSUponSubmission" dojoAttachEvent="onClick: showIncludeAnswersCheckBox"/> Send me an email for each submission
+			<div class="secondaryCheckbox" dojoAttachPoint="sendAnswersInEmailSubmissionDivAP"  name="sendAnswersInEmailSubmissionDiv" style="display:none">
+				<input dojoType="dijit.form.CheckBox"  dojoAttachPoint="sendAnswersInEmailSubmissionAP" type="checkbox"/>Include answers			
 			</div>
-	-->		
-			<br/>
-			<div title="Show results to users">
-				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: toggleTextBox" name="allowViewingResults"/> Show results to users
-			</div>
-			<br/>
-			<div title="Success Message" dojoAttachPoint="successMsgDiv">
-				Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
-			</div>
-			<br/>
-			<div title="Send me an email for each submission">
-				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendEmailSubmission" name="sendSMSUponSubmission" dojoAttachEvent="onClick: showIncludeAnswersCheckBox"/> Send me an email for each submission
-				<div class="secondaryCheckbox" dojoAttachPoint="sendAnswersInEmailSubmissionDivAP"  name="sendAnswersInEmailSubmissionDiv" style="display:none">
-					<input dojoType="dijit.form.CheckBox"  dojoAttachPoint="sendAnswersInEmailSubmissionAP" type="checkbox"/>Include answers			
-				</div>
-			</div>
-			<br/>
-			<div title="Send me an SMS for each submission">
-				<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendSMSSubmission" dojoAttachEvent="onClick: toggleSMSNotificationTextBox" name="sendSMSUponSubmission"/>
-					Send me an SMS for each submission
-			</div>
-			<br/>
-			<div title="SMS Notification Number" dojoAttachPoint="smsNotificationNumberDiv" style="display: none;">
-				SMS Notification Number: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="smsNotificationNumber"  name="smsNotificationNumber">
-			</div>
-			<br/>
-			<div class="surveyPageFooter" title="Powered by apstrata">
-	          <a target="_blank" href="http://www.apstrata.com" title="Powered by apstrata">&nbsp;</a>
-	        </div>
-			<div class="clear"></div>
-			</div>
+		</div>
+		<br/>
+		<div title="Send me an SMS for each submission">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendSMSSubmission" dojoAttachEvent="onClick: toggleSMSNotificationTextBox" name="sendSMSUponSubmission"/>
+				Send me an SMS for each submission
+		</div>
+		<br/>
+		<div title="SMS Notification Number" dojoAttachPoint="smsNotificationNumberDiv" style="display: none;">
+			SMS Notification Number: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="smsNotificationNumber"  name="smsNotificationNumber">
+		</div>
+		<br/>
+		<div class="surveyPageFooter" title="Powered by apstrata">
+          <a target="_blank" href="http://www.apstrata.com" title="Powered by apstrata">&nbsp;</a>
+        </div>
+		<div class="clear"></div>
 		</div>
 
 	<br/><br/>
