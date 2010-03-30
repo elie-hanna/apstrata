@@ -366,7 +366,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 						checked = "checked";
 					else
 						checked = "";
-					newField = newField + '<span><input dojoType="dijit.form.RadioButton" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice + '" '+ checked +'>' + choice + '</span><br/>';
+					newField = newField + '<div><input dojoType="dijit.form.RadioButton" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice.trim() + '" '+ checked +'> ' + choice.trim() + '</div>';
 				});
 			
 			return newField;
@@ -387,16 +387,19 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			
 			dojo.forEach(eval(choiceValues.split(",")),
 				function(choice) {
-					for (i=0; i < survey.defaultFieldValue.length; i++) 
+					if(typeof(survey.defaultFieldValue) != "undefined")
 					{
-						if (survey.defaultFieldValue[i] == choice){
-							checked = "checked";
-							break;
-						}else
-							checked = "";
+						for (i=0; i < survey.defaultFieldValue.length; i++) 
+						{
+							if (survey.defaultFieldValue[i] == choice){
+								checked = "checked";
+								break;
+							}else
+								checked = "";
+						}
 					}
 
-					newField = newField + '<span><input dojoType="dijit.form.CheckBox" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice + '" '+ checked +'>' + choice + '</span><br/>';
+					newField = newField + '<div><input dojoType="dijit.form.CheckBox" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice.trim() + '" '+ checked +'> ' + choice.trim() + '</div>';
 				});
 			
 			return newField;
