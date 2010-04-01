@@ -754,8 +754,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 			// Saves the metadata info of the survey in a document where the documentKey is equal to the schema name of the survey
 			var sd = client.call({
 					action: "SaveDocument",
-					useHttpMethod : "GET",
+					useHttpMethod : "POST",
 					request: saveDocumentRequest,
+					formNode: self.surveyform.domNode,
 					load: function(operation) {
 						self.warningMessage.style.display = 'none'; // On success hide the warning message
 						// on success, creates an apstrata schema for the survey

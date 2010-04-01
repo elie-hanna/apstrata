@@ -15,7 +15,7 @@
 		<div dir="ltr" dojoAttachPoint="surveyParentDiv">
 			<h2 dojoAttachPoint="title" title="Survey title" dojoType="dijit.InlineEditBox">${surveyTitle}</h2>
 			<h3 dojoAttachPoint="description" title="Survey description" dojoType="dijit.InlineEditBox">${surveyDescription}</h3>
-			<form dojoType="dijit.form.Form" dojoAttachPoint="surveyform">
+			<form dojoType="dijit.form.Form" dojoAttachPoint="surveyform" encType="multipart/form-data" action="" method="">
 			<div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer"  withHandles="true" class="questionsPanel"></div>
 			</form>
 		</div>	
