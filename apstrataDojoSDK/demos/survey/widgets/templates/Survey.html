@@ -18,6 +18,7 @@
 			<form dojoType="dijit.form.Form" dojoAttachPoint="surveyform" encType="multipart/form-data" action="" method="">
 			<div dojoAttachPoint="questions" dojoType="dijit.layout.LayoutContainer"  withHandles="true" class="questionsPanel"></div>
 			</form>
+			<form dojoType="dijit.form.Form" dojoAttachPoint="schemaform" encType="multipart/form-data" action="" method=""></form>
 		</div>	
 			<br/>
 <!--
@@ -60,8 +61,18 @@
 		<br/>
 		<div title="SMS Notification Number" dojoAttachPoint="smsNotificationNumberDiv" style="display: none;">
 			SMS Notification Number: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="smsNotificationNumber"  name="smsNotificationNumber">
+			<br/><br/>
+		</div>
+		<div title="Send me a Twitter Direct Message notification for each submission">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendTDMSubmission" dojoAttachEvent="onClick: toggleTDMNotificationTextBox" name="sendTDMUponSubmission"/>
+				Send me a Twitter DM notification for each submission
 		</div>
 		<br/>
+		<div title="My Twitter username" dojoAttachPoint="twitterUsernameDiv" style="display: none;">
+			<div>Note that in order to receive a Direct Message from us you need to be a follower of "apstratatest". This feature won't work until you are our follower.</div><br/>
+			My Twitter username: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="twitterUsername"  name="twitterUsername">
+			<br/><br/>
+		</div>
 		<div class="surveyPageFooter" title="Powered by apstrata">
           <a target="_blank" href="http://www.apstrata.com" title="Powered by apstrata">&nbsp;</a>
         </div>
