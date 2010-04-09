@@ -49,6 +49,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 		surveyDockey : "",
 		surveyDescription : "You can place the survey description here.",
 		fieldSerialNumber: 0,
+		sendAnswersInEmailUponSubmission: null,
+		smsNotificationNumberValue: null,
+		twitterUsernameValue: null,
 		apServiceURL : "http://localhost/apstratabase/rest",  // apServiceURL is used to communicate with our REST-ful services
 		apSourceURL : "http://localhost:8000/apstrataDojoSDK/", // apSourceURL points to where the survey code is hosted. 
 
@@ -126,7 +129,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					apsdb: {
 						store: this.storeName,
 						query: "apsdb.documentKey=\"" + this.surveyID + "\"",
-						queryFields: "surveySchema,sendEmailUponSubmission,sendSMSUponSubmission,rtl"
+						queryFields: "surveySchema,sendEmailUponSubmission,sendAnswersInEmailUponSubmission,sendSMSUponSubmission,smsNotificationNumber,rtl,sendTDMUponSubmission,twitterUsername"
 					}};
 	
 				var q = client.call({
@@ -136,7 +139,14 @@ dojo.declare("surveyWidget.widgets.Survey",
 						if (operation.response.result.documents.length > 0) {
 							self.schema = operation.response.result.documents[0]["surveySchema"];
 							self.sendEmailUponSubmission = operation.response.result.documents[0]["sendEmailUponSubmission"];
+							if(operation.response.result.documents[0]["sendAnswersInEmailUponSubmission"])
+								self.sendAnswersInEmailUponSubmission = operation.response.result.documents[0]["sendAnswersInEmailUponSubmission"];
 							self.sendSMSUponSubmission = operation.response.result.documents[0]["sendSMSUponSubmission"];
+							if(operation.response.result.documents[0]["smsNotificationNumber"])
+								self.smsNotificationNumberValue = operation.response.result.documents[0]["smsNotificationNumber"];
+							self.sendTDMUponSubmission = operation.response.result.documents[0]["sendTDMUponSubmission"];
+							if(operation.response.result.documents[0]["twitterUsername"])
+								self.twitterUsernameValue = operation.response.result.documents[0]["twitterUsername"];
 							self.rtl = operation.response.result.documents[0]["rtl"];
 						}
 						self.constructSurvey();
@@ -168,6 +178,38 @@ dojo.declare("surveyWidget.widgets.Survey",
 					
 				if (dataModel.title != null) this.title.setValue(sTitle); // extract the title from the survey schema
 				if (dataModel.description != null) this.description.setValue(dataModel.description); // extract the description from the survey schema
+				if (this.sendEmailUponSubmission != null && this.sendEmailUponSubmission == 'true') {
+					this.sendEmailSubmission.setValue(this.sendEmailUponSubmission);
+					this.sendAnswersInEmailSubmissionDivAP.style.display = "";
+					if (this.sendAnswersInEmailUponSubmission != null && this.sendAnswersInEmailUponSubmission == 'true') {
+						this.sendAnswersInEmailSubmissionAP.setValue(this.sendAnswersInEmailUponSubmission);
+					}
+				}
+				if (this.sendSMSUponSubmission != null && this.sendSMSUponSubmission == 'true') {
+					this.sendSMSSubmission.setValue(this.sendSMSUponSubmission);
+					this.smsNotificationNumberDiv.style.display = "";
+					if (this.smsNotificationNumberValue != null) {
+						this.smsNotificationNumber.setValue(this.smsNotificationNumberValue);
+					}
+				}
+				if (this.sendTDMUponSubmission != null && this.sendTDMUponSubmission == 'true') {
+					this.sendTDMSubmission.setValue(this.sendTDMUponSubmission);
+					this.twitterUsernameDiv.style.display = "";
+					if (this.twitterUsernameValue != null) {
+						this.twitterUsername.setValue(this.twitterUsernameValue);
+						this.twitterUsernameDiv.style.display = "";
+					}
+				}
+				if (dataModel.viewResults != null){
+					if (dataModel.viewResults) {
+						this.viewResults.setValue(dataModel.viewResults);
+						this.successMsgDiv.style.display = "none";
+					}
+					else {
+						this.successMsg.setValue(dataModel.successMessage);
+						this.successMsgDiv.style.display = "";
+					}
+				}
 			} else{
 				if (dataModel.title != null) this.title.innerHTML = dataModel.title; // extract the title from the survey schema
 				if (dataModel.description != null) this.description.innerHTML = dataModel.description; // extract the description from the survey schema
@@ -275,6 +317,17 @@ dojo.declare("surveyWidget.widgets.Survey",
 				this.smsNotificationNumberDiv.style.display = "";
 			else
 				this.smsNotificationNumberDiv.style.display = "none";
+		},
+		
+		/**
+		 * Shows or hides the "My Twitter username" field depending on the value of the "Send me a Twitter DM notification for each submission" check box.
+		 * 
+		 */
+		toggleTDMNotificationTextBox: function() {
+			if(this.sendTDMSubmission.checked)
+				this.twitterUsernameDiv.style.display = "";
+			else
+				this.twitterUsernameDiv.style.display = "none";
 		},
 
 		/**
@@ -742,6 +795,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 							sendSMSUponSubmission: self.sendSMSSubmission.checked,
 							rtl: rtl,
 							smsNotificationNumber: self.smsNotificationNumber.value,
+							sendTDMUponSubmission: self.sendTDMSubmission.checked,
+							twitterUsername: self.twitterUsername.value,
 							successMessage: self.successMsg.value,
 							qCount: questionCount
 			}, apsdbRequest, surveyQuestions, self.extraParam);
@@ -751,70 +806,75 @@ dojo.declare("surveyWidget.widgets.Survey",
 			else
 				var setSchemaRequest = {apsdb: {schema: xmlSchema.toString(), schemaName: xmlSchema.name}};
 
-			// Saves the metadata info of the survey in a document where the documentKey is equal to the schema name of the survey
-			var sd = client.call({
-					action: "SaveDocument",
-					useHttpMethod : "POST",
-					request: saveDocumentRequest,
-					formNode: self.surveyform.domNode,
-					load: function(operation) {
-						self.warningMessage.style.display = 'none'; // On success hide the warning message
-						// on success, creates an apstrata schema for the survey
-						var documentKey = operation.response.result.document.key;
-						var ss = client.call({
-							action: "SaveSchema",
-							request: setSchemaRequest,
-							load: function(operation) {
-								self.warningMessage.style.display = 'none'; // On success hide the warning message
-								if (self.showEmbedCode == true) {
-									self.generateAndDisplayEmbedCodes(dockey, update);
-								}
-//								self.emailSurvey.style.display = ""; // On success show the Send by Email
-//								self.smsSurvey.style.display = ""; // On success show the Send by Sms
-								// Used to refresh the list of forms later,publishing here, subscribing in the mforms
-								if(self.clone)									
-									dojo.publish("/CLONE/FORM", [{}]);
-								else
-									dojo.publish("/SAVE/FORM", [{ documentKey: documentKey, surveyName: self.title.value }]);
-							},
-							error: function(operation) {
-								var warningMsg = '';
-								switch (operation.response.metadata.errorCode) {
-									case 'DUPLICATE_SCHEMA_NAME':
-										warningMsg = 'Survey already exists! Please change its name';
-										break;
-									case 'INVALID_SCHEMA_NAME':
-										warningMsg = 'The survey title must not contain any special characters! Please change its name';
-										break;
-									default:
-										warningMsg = operation.response.metadata.errorDetail;
-								}
-								self.warningMessage.style.display = ''; // Display the warning message
-								self.warningMessage.innerHTML = warningMsg;
-								var dd = client.call({
-									action: "DeleteDocument",
+			
+			
+			// Creates a schema for the survey
+			var ss = client.call({
+				action: "SaveSchema",
+				useHttpMethod : "POST",
+				formNode: self.schemaform.domNode,
+				request: setSchemaRequest,
+				load: function(operation) {
+					self.warningMessage.style.display = 'none'; // On success hide the warning message
+					// Saves the metadata info of the survey in a document where the documentKey is equal to the schema name of the survey
+					var sd = client.call({
+						action: "SaveDocument",
+						useHttpMethod : "POST",
+						request: saveDocumentRequest,
+						formNode: self.surveyform.domNode,
+						load: function(operation) {
+							self.warningMessage.style.display = 'none'; // On success hide the warning message
+							var documentKey = operation.response.result.document.key;
+							if (self.showEmbedCode == true) {
+								self.generateAndDisplayEmbedCodes(dockey, update);
+							}
+							// self.emailSurvey.style.display = ""; // On success show the Send by Email
+							// self.smsSurvey.style.display = ""; // On success show the Send by Sms
+							// Used to refresh the list of forms later,publishing here, subscribing in the mforms
+							if(self.clone)									
+								dojo.publish("/CLONE/FORM", [{}]);
+							else
+								dojo.publish("/SAVE/FORM", [{ documentKey: documentKey, surveyName: self.title.value }]);
+							
+						},
+						error: function(operation) {
+							self.warningMessage.style.display = ''; // Display the warning message
+							self.warningMessage.innerHTML = operation.response.metadata.errorDetail;
+							if(!update){
+								var ds = client.call({
+									action: "DeleteSchema",
 									request: {
 										apsdb: {
-											store : self.storeName,
-											documentKey : documentKey
+											schemaName : xmlSchema.name
 										}
 									},
 									load: function(operation) {
-										//deleting the form metadata document if schema is not created
+										//deleting the form metadata schema if the document couldn't be created
 									},
 									error: function(operation) {
 										// something happened
 									}
 								});
-								
 							}
-						});
-					},
-					error: function(operation) {
-						self.warningMessage.style.display = ''; // Display the warning message
-						self.warningMessage.innerHTML = operation.response.metadata.errorDetail;
+						}
+					});
+				},
+				error: function(operation) {
+					var warningMsg = '';
+					switch (operation.response.metadata.errorCode) {
+						case 'DUPLICATE_SCHEMA_NAME':
+							warningMsg = 'Survey already exists! Please change its name';
+							break;
+						case 'INVALID_SCHEMA_NAME':
+							warningMsg = 'The survey title must not contain any special characters! Please change its name';
+							break;
+						default:
+							warningMsg = operation.response.metadata.errorDetail;
 					}
-				});
+					self.warningMessage.style.display = ''; // Display the warning message
+					self.warningMessage.innerHTML = warningMsg;
+				}
+			});
 		},
 
 		/**
@@ -1031,6 +1091,10 @@ dojo.declare("surveyWidget.widgets.Survey",
 									self.smsTheSubmitting();
 								}
 								
+								if (self.sendTDMUponSubmission == 'true') {
+									self.twitterDMTheSubmitting();
+								}
+								
 								//  According to the survey creators choice, either display the result charts or a message (either
 								// from the script or the success message set by the creator).
 								if (dataModel.viewResults) {
@@ -1133,6 +1197,37 @@ dojo.declare("surveyWidget.widgets.Survey",
 			}, {
 				apsdb: {
 					scriptName: 'smsSurveyTaken'
+				}
+			});
+
+			var sd = client.call({
+				action: "RunScript",
+				request: runScriptletRequest,
+				load: function(operation) {
+				},
+				error: function(operation) {
+					self.errorMessage.innerHTML = operation.response.metadata.errorDetail;
+				}
+			});
+		},
+
+		/**
+		 * Runs the Twitter Direct Message script
+		 */
+		twitterDMTheSubmitting: function() {
+			// Run a script
+			var client = new apstrata.Client({connection: connection});
+			var self = this;
+			
+			var runScriptletRequest = dojo.mixin({
+				surveyID: self.surveyID,
+				store: self.storeName,
+				title: self.title.innerHTML
+			}, {
+				apsdb: {
+					store: self.storeName,
+					scriptName: 'twitterDMSurveyTaken',
+								debugLevel: 4
 				}
 			});
 
