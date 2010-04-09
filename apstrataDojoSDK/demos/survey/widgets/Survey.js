@@ -854,7 +854,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 				viewResults: this.viewResults.checked,
 				successMessage: this.successMsg.value,
 				questions: data,
-				dockey: dockey
+				dockey: dockey,
+				rtl: (this.direction.checked != null && this.direction.checked == true)? "true": "false"
 			};
 
 			var surveyDataSchema = encodeURIComponent(dojo.toJson(surveyData)).replace(/'/g, '%27'); // Replace single quotes with their HEX
