@@ -22,6 +22,8 @@ dojo.provide("surveyWidget.widgets.SurveyListing");
 
 dojo.require("dijit._Templated");
 dojo.require("dijit.layout.LayoutContainer");
+dojo.require('apstrata.ItemApsdbReadStore');
+dojo.require('apstrata.widgets.QueryWidget');
 
 dojo.declare("surveyWidget.widgets.SurveyListing",
 	[dijit._Widget, dijit._Templated],
@@ -111,7 +113,40 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 		 * 
 		 */
 		query: function() {
+			
 			var client = new apstrata.Client({connection: connection});
+			var self = this;
+			var layout = []	
+			
+			var strArrFieldsToDisplay = '';
+			for (var i = 0; i < self.arrFieldsToDisplay.length; i++) {
+				strArrFieldsToDisplay += self.arrFieldsToDisplay[i] + ',';
+				layout.push({ field: self.arrFieldsToDisplay[i], name: self.arrTitleFieldsToDisplay[i], width: 'auto' })
+			}
+			strArrFieldsToDisplay = strArrFieldsToDisplay.substring(0, strArrFieldsToDisplay.length - 1);
+			
+			var store = new apstrata.ItemApsdbReadStore({
+					client: client,
+					resultsPerPage: 10,
+					apsdbStoreName: self.storeName,
+					fields: strArrFieldsToDisplay,
+					label: "name"
+				})
+				
+			var attrs = {
+				store: store,
+				query: "apsdb.objectName=\"" + self.apsdbSchema + "\"",
+				columns: strArrFieldsToDisplay,
+				layout: layout,
+				page: 1
+			}
+			
+			this.grid = new apstrata.widgets.QueryWidget(attrs);
+			dojo.place(this.grid.domNode, this.dvGrid, "first")		
+			
+			
+			/*
+			
 			var listing = this;
 			var strArrFieldsToDisplay = '';
 			for(var i=0; i<listing.arrFieldsToDisplay.length; i++)
@@ -135,7 +170,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				},
 				error: function(operation) {
 				}
-			});
+			});*/
 			
 		},
 		
