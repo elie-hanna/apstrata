@@ -664,9 +664,15 @@ dojo.declare("surveyWidget.widgets.Survey",
 			var schemaFieldArr = new Array();
 			var surveyQuestions = new Object();
 
+			//this input is being used just for checkbox questions, in order to fix the 
+			//default value, because calling form.getValues() we are not getting if checked or not
+			//adding id to the field didnt work as dojo complained
+			var inputs = document.getElementsByTagName("input");
 			var children = self.questions.getChildren();
 			var breakProcessing = false;
-			dojo.forEach(self.questions.getChildren(), function(child) {
+			for(var childrenIndex=0; childrenIndex < children.length; childrenIndex++)
+			{
+				var child = children[childrenIndex];
 				if (breakProcessing) {
 					// Do nothing
 				} else if (child.title != null && child.title != '' && !child.dummyField) {
@@ -674,7 +680,22 @@ dojo.declare("surveyWidget.widgets.Survey",
 					if(childModel['type'] == "checkbox" || childModel['type'] == "text area"){
 						childModel['choices'] = "[]";
 					} 
-					childModel["defaultValue"] = jsonObj[child.fieldName];
+					//getValues does not return the value of a checkbox
+					if(childModel['type'] != "checkbox")
+					{
+						childModel["defaultValue"] = jsonObj[child.fieldName];
+					}
+					else
+					{
+						for(var inputsIndex=0; inputsIndex < inputs.length; inputsIndex++)
+						{
+							if(inputs.item(inputsIndex).type == "checkbox" && inputs.item(inputsIndex).name == child.fieldName)
+							{
+								childModel["defaultValue"] = inputs.item(inputsIndex).checked ? "checked" : "";
+								break;
+							}
+						}
+					}
 					data[i] = childModel;
 
 					// Create an XML schema field object
@@ -714,7 +735,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					self.warningMessage.innerHTML = 'All questions must have a title!';
 					breakProcessing = true;
 				}
-			});
+			}
 			
 			var questionCount = i;
 			

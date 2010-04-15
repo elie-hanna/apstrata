@@ -362,7 +362,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			
 			dojo.forEach(eval(choiceValues.split(",")),
 				function(choice) {
-					if(survey.defaultFieldValue == choice)
+					if(survey.defaultFieldValue.trim() == choice.trim())
 						checked = "checked";
 					else
 						checked = "";
@@ -391,7 +391,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					{
 						for (i=0; i < survey.defaultFieldValue.length; i++) 
 						{
-							if (survey.defaultFieldValue[i] == choice){
+							if (survey.defaultFieldValue[i].trim() == choice.trim()){
 								checked = "checked";
 								break;
 							}else
