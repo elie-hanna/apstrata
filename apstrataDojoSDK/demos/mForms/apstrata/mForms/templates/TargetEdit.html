@@ -1,4 +1,4 @@
-<div class='panel' style='width: 375px;overflow-y: auto;'>
+<div class='panel' style='width: 465px; overflow-y: auto;'>
 	{% if true %} 
 	{% endif %}
 	
@@ -10,38 +10,34 @@
 			<div class="label">Target:</div>
 			<input type="text"
 				name="targetName" 
+				maxLength="120"
+				regExp="[0-9A-Za-z-_. ]{1,120}"
 				dojoAttachPoint="target" 
 				style='width: 310px;' 
-				value="{{ target }}" {% if update %} disabled='disabled' {% endif %}></input>
+				value="{{ target }}" {% if update %} readonly="readonly" {% endif %}
+				required="true" invalidMessage="Target name is invalid, eg. target_2009-09-14.v2(max 120 chars)" dojoType="dijit.form.ValidationTextBox"></input>
 			
 			<div class="label">Description:</div>
 			<input type="text"
 				name="targetDescription" 
 				dojoAttachPoint="description" 
 				style='width: 310px;' 
-				value="{{ description }}"></input>
+				 {% if description %} value="{{ description }}" {% endif %}></input>
 			
-			<div class="label">Members:</div>
-			<textarea type="text" 
-				name="targetMembers" 
-				dojoAttachPoint="members"
-				dojoType='dijit.form.Textarea'
-				style='width: 320px;' 
-			 	value="{{ members }}"></textarea>
-	
-			<div style='font-size: 0.8em;color: grey;'>comma separated list</div>
 			<br><br>
-	        <div class="label">import CSV:</div>
+	        <div class="label">Import CSV:</div>
 	        <input 
-				name="apsdb_attachments" 
-				dojoAttachPoint="membersCSV" 
+				name="membersCSV" 
+				dojoAttachPoint="membersCSV"
 				dojoType="dojox.form.FileInput"
-				style='width: 214px;' 
+				style='width: 144px;' 
 				class="rounded-xsml" /><br>
-			<br><br>
+			<br>
+			<div dojoAttachPoint="warningMessage" class="warningMessage" style="width: 350px; margin: -12px 2px 0px 2px;"></div>
+			<br />
 		</div>
 
-		<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: _save'>save</button>
-		<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: _cancel'>cancel</button>
+		<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: _save'>Save</button>
+		<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: _cancel'>Cancel</button>
 	</div>
 </div>
