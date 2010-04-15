@@ -641,7 +641,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 				}
 			} else {
 				self.warningMessage.style.display = ''; // Display the warning message
-				self.warningMessage.innerHTML = "The campaign's name is required";
+				self.warningMessage.innerHTML = "The survey's name is required";
 			}
 		},
 		
