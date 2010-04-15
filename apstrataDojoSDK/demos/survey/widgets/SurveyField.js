@@ -321,7 +321,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					if(typeof(this.defaultFieldValue) != "undefined") 
 						defaultValue = this.defaultFieldValue;
 
-					newField = '<br/><input dojoType="dijit.form.ValidationTextBox" trim=true required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue"  value="'+defaultValue+'" name="'+this.fieldName+'">';	
+					newField = '<br/><input dojoType="dijit.form.ValidationTextBox" required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue"  value="'+defaultValue+'" name="'+this.fieldName+'">';	
 					this.spnValue.innerHTML = newField;
 					dojo.parser.parse(this.spnValue);
 					break;
@@ -362,11 +362,11 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 			
 			dojo.forEach(eval(choiceValues.split(",")),
 				function(choice) {
-					if(survey.defaultFieldValue.trim() == choice.trim())
+					if(survey.defaultFieldValue == choice)
 						checked = "checked";
 					else
 						checked = "";
-					newField = newField + '<div><input dojoType="dijit.form.RadioButton" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice.trim() + '" '+ checked +'> ' + choice.trim() + '</div>';
+					newField = newField + '<div><input dojoType="dijit.form.RadioButton" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice + '" '+ checked +'> ' + choice + '</div>';
 				});
 			
 			return newField;
@@ -391,7 +391,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					{
 						for (i=0; i < survey.defaultFieldValue.length; i++) 
 						{
-							if (survey.defaultFieldValue[i].trim() == choice.trim()){
+							if (survey.defaultFieldValue[i] == choice){
 								checked = "checked";
 								break;
 							}else
@@ -399,7 +399,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 						}
 					}
 
-					newField = newField + '<div><input dojoType="dijit.form.CheckBox" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice.trim() + '" '+ checked +'> ' + choice.trim() + '</div>';
+					newField = newField + '<div><input dojoType="dijit.form.CheckBox" dojoAttachPoint="fldValue" name="'+survey.fieldName+'" value="' + choice + '" '+ checked +'> ' + choice + '</div>';
 				});
 			
 			return newField;
