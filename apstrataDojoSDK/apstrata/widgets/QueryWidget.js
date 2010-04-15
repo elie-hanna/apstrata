@@ -56,7 +56,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 	    if (attrs.sort) this.sort = attrs.sort
 	    if (attrs.ftsQuery) this.ftsQuery = attrs.ftsQuery
 		if (attrs.layout) {
-			this._layout=layout; 
+			this._layout= attrs.layout; 
 		} else {
 				this._layout = []
 		
@@ -81,9 +81,60 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 					self._refresh()
 				})
 			}
-		})			
+		})	
+		
+		// Create the function that will overwrite the sort function of the grid
+		var sortFunc = function (e) {
+			this._lastScrollTop = this.scrollTop;
+			
+			var sortingProps = this.getSortProps();
+			sortingOrder = (sortingProps[0].descending == true)?"DESC":"ASC";
+			self.sort = sortingProps[0].attribute + ":" + sortingOrder;
+			
+			var query = {
+				query: self.query,
+				count: (self.page == 1),
+				pageNumber: self.page,
+		        runAs: self.runAs,
+		        aggregates: self.aggregates,
+		        aggregatePage: self.aggregatePage,
+		        aggregateGlobal: self.aggregateGlobal,
+		        sort: self.sort,
+		        runAs: self.runAs,
+		        deniedFields: self.deniedFields,
+		        ftsQuery: self.ftsQuery
+			} 
+			this.setQuery(query)
+			
+			this._refresh();
+		}
+		 
+		// create a new grid:
+        this._grid = new dojox.grid.DataGrid({
+            query: {
+				query: self.query,
+				count: (self.page == 1),
+				pageNumber: self.page,
+		        runAs: self.runAs,
+		        aggregates: self.aggregates,
+		        aggregatePage: self.aggregatePage,
+		        aggregateGlobal: self.aggregateGlobal,
+		        sort: self.sort,
+		        runAs: self.runAs,
+		        deniedFields: self.deniedFields,
+		        ftsQuery: self.ftsQuery
+			}, 
+            store: self.store,
+            rowSelector: '15px',
+			sort: sortFunc,
+            structure: self._layout
+        }, document.createElement('div'));
+		
+        // append the new grid to the div "gridContainer4":
+        this.dvGrid.appendChild(this._grid.domNode);
 
-		this._refresh()
+        // Call startup, in order to render the grid:
+        this._grid.startup();		
 	},
 	
 	destroy: function() {
@@ -110,15 +161,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 	
 	_refresh: function() {
 		var self = this
-		
-		if (this._grid) {
-			this._grid.destroy()
-			this.dvGrid.innerHTML = ""
-		}
-			
-        // create a new grid:
-        this._grid = new dojox.grid.DataGrid({
-            query: {
+		var query = {
 				query: self.query,
 				count: (self.page == 1),
 				pageNumber: self.page,
@@ -130,17 +173,13 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		        runAs: self.runAs,
 		        deniedFields: self.deniedFields,
 		        ftsQuery: self.ftsQuery
-			}, 
-            store: self.store,
-            rowSelector: '15px',
-            structure: self._layout
-        }, document.createElement('div'));
-	
-        // append the new grid to the div "gridContainer4":
-        this.dvGrid.appendChild(this._grid.domNode);
-
-        // Call startup, in order to render the grid:
-        this._grid.startup();			
+			} 
+			
+		if (this._grid) {
+			this._grid.setQuery(query)
+			this._grid._refresh()
+		}
+			
 	},
 	
 	destroy: function() {

@@ -42,6 +42,8 @@ dependencies = {
 				"apstrata.Connection",
 				"apstrata.Client",
 				"apstrata.util.logger.BasicLogger",
+				"apstrata.ItemApsdbReadStore",
+				"apstrata.widgets.QueryWidget",
 				"surveyWidget.widgets.SurveyListing",
 				"surveyWidget.widgets.SurveyListingLoader"
 	        ]
