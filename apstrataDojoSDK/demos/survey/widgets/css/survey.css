@@ -254,6 +254,12 @@
     -khtml-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+.embedCode {
+	width:400px; 
+	height:100px;
+}
+
 .surveyPageFooter {
 	color:#7C7C7C;
 	font-family:'Lucida Sans Unicode','Lucida Grande',Tahoma,sans-serif;

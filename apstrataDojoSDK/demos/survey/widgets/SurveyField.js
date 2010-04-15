@@ -304,7 +304,7 @@ dojo.declare("surveyWidget.widgets.SurveyField",
 					if(typeof(this.defaultFieldValue) != "undefined") 
 						defaultValue = this.defaultFieldValue;
 					
-					newField = '<br/><textarea name="'+this.fieldName+'" dojoType="dijit.form.SimpleTextarea" rows="2" style="width:190px;" required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue">'+defaultValue+'</textarea>';
+					newField = '<br/><textarea name="'+this.fieldName+'" dojoType="dijit.form.SimpleTextarea" rows="2" cols="22" required="'+ required +'" invalidMessage="Required." dojoAttachPoint="fldValue">'+defaultValue+'</textarea>';
 
 					this.spnValue.innerHTML = newField;
 					dojo.parser.parse(this.spnValue);
