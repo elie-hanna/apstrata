@@ -8,9 +8,6 @@
 	<div class="survey" style="display: ${displayType};">
 		<span class="updateMessage" >Note that editing this survey might affect the accuracy of its results.</span>
 	</div>
-	<div class="survey" title="Configuration">
-		<input dojoType="dijit.form.CheckBox" title="Select/Deselect to change the survey direction" dojoAttachPoint="direction" dojoAttachEvent="onClick: toggleDirection" /> Left-to-Right text direction
-	</div>
 	<div dojoAttachPoint="roundedBox survey" title="Survey" class="survey" >
 		<div dir="ltr" dojoAttachPoint="surveyParentDiv">
 			<h2 dojoAttachPoint="title" title="Survey title" dojoType="dijit.InlineEditBox">${surveyTitle}</h2>
@@ -38,6 +35,10 @@
 			</div>	
 		</div>
 -->		
+		<hr>
+		<div title="Configuration">
+			<input dojoType="dijit.form.CheckBox" title="Select/Deselect to change the survey direction" dojoAttachPoint="direction" dojoAttachEvent="onClick: toggleDirection" /> Right-to-Left text direction
+		</div>
 		<br/>
 		<div title="Show results to users">
 			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: toggleTextBox" name="allowViewingResults"/> Show results to users
