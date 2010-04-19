@@ -212,7 +212,7 @@ dojo.declare("apstrata.StickyConnection",
 			dojo.publish("/apstrata/connection/logout", [{
 				key: self.credentials.key
 			}])
-		},
+		}
 
 	});
 	
