@@ -26,7 +26,7 @@ dojo.require ("apstrata.widgets.PageNumberSelector")
 
 dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], {
 	widgetsInTemplate: true,
-	templateString: "<div style='width: 100%; height: 100%;'><div dojoAttachPoint='dvSpinner'></div><div dojoAttachPoint='dvGrid' style='width: 100%; height: 100%;'></div></div>",
+	templateString: "<div style='width: 100%; height: 100%;'><div dojoAttachPoint='dvSearch'></div><div dojoAttachPoint='dvSpinner'></div><div dojoAttachPoint='dvGrid' style='width: 100%; height: 100%;'></div></div>",
 	store: null,
 	query: "X!=\"Y\"",
 	columns: "apsdb.documentKey",
@@ -40,6 +40,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 	ftsQuery: "",
 	page: 1,
 	rows: 10,
+	showSearch: false,
 
 	constructor: function(attrs){
 		var self = this
@@ -66,6 +67,14 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 					self._layout.push({ field: field, name: field, width: 'auto' })
 				})		
 			}
+		if (attrs.showSearch) this.showSearch = attrs.showSearch
+	},
+	
+	postMixInProperties: function() {
+		// Add the search field and button if showSearch was set to true 
+		if (this.showSearch) {
+			this.templateString = "<div style='width: 100%; height: 100%;'><div dojoAttachPoint='dvSearch'><input dojoType='dijit.form.TextBox' dojoAttachPoint='searchText' value=''><input dojoAttachPoint='btnSearch' title='Search' type='button' value='Search' /></div><div dojoAttachPoint='dvSpinner'></div><div dojoAttachPoint='dvGrid' style='width: 100%; height: 100%;'></div></div>";
+		}
 	},
 	
 	postCreate: function() {
@@ -132,6 +141,30 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		
         // append the new grid to the div "gridContainer4":
         this.dvGrid.appendChild(this._grid.domNode);
+		
+		// Add the search field and button if showSearch was set to true 
+		if (this.showSearch) {
+			dojo.connect(self.btnSearch, "onclick", function(){
+				self.ftsQuery = self.searchText.value;
+				
+				var query = {
+					query: self.query,
+					count: (self.page == 1),
+					pageNumber: self.page,
+			        runAs: self.runAs,
+			        aggregates: self.aggregates,
+			        aggregatePage: self.aggregatePage,
+			        aggregateGlobal: self.aggregateGlobal,
+			        sort: self.sort,
+			        runAs: self.runAs,
+			        deniedFields: self.deniedFields,
+			        ftsQuery: self.ftsQuery
+				} 
+				self._grid.setQuery(query)
+				self._grid._clearData();
+				self._grid._fetch();
+			})
+		}
 
         // Call startup, in order to render the grid:
         this._grid.startup();		
