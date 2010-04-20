@@ -51,6 +51,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		fieldSerialNumber: 0,
 		sendAnswersInEmailUponSubmission: null,
 		smsNotificationNumberValue: null,
+		successMsgValue: null,
 		twitterUsernameValue: null,
 		apServiceURL : "http://localhost/apstratabase/rest",  // apServiceURL is used to communicate with our REST-ful services
 		apSourceURL : "http://localhost:8000/apstrataDojoSDK/", // apSourceURL points to where the survey code is hosted. 
@@ -129,7 +130,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					apsdb: {
 						store: this.storeName,
 						query: "apsdb.documentKey=\"" + this.surveyID + "\"",
-						queryFields: "surveySchema,sendEmailUponSubmission,sendAnswersInEmailUponSubmission,sendSMSUponSubmission,smsNotificationNumber,rtl,sendTDMUponSubmission,twitterUsername"
+						queryFields: "surveySchema,showSuccessMessage,sendEmailUponSubmission,sendAnswersInEmailUponSubmission,sendSMSUponSubmission,smsNotificationNumber,rtl,sendTDMUponSubmission,twitterUsername"
 					}};
 	
 				var q = client.call({
@@ -138,6 +139,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					load: function(operation) { // on success set the survey schema and construct the survey
 						if (operation.response.result.documents.length > 0) {
 							self.schema = operation.response.result.documents[0]["surveySchema"];
+							self.showSuccessMessage = operation.response.result.documents[0]["showSuccessMessage"];
 							self.sendEmailUponSubmission = operation.response.result.documents[0]["sendEmailUponSubmission"];
 							if(operation.response.result.documents[0]["sendAnswersInEmailUponSubmission"])
 								self.sendAnswersInEmailUponSubmission = operation.response.result.documents[0]["sendAnswersInEmailUponSubmission"];
@@ -149,116 +151,122 @@ dojo.declare("surveyWidget.widgets.Survey",
 								self.twitterUsernameValue = operation.response.result.documents[0]["twitterUsername"];
 							self.rtl = operation.response.result.documents[0]["rtl"];
 						}
-						self.constructSurvey();
+						self.constructSurvey(self);
 					},
 					error: function(operation) { // on error construct an empty survey
-						self.constructSurvey();
+						self.constructSurvey(self);
 					}
 				});
 			} else // if no survey key is specified then construct an empty survey
-				this.constructSurvey();
+				this.constructSurvey(this);
 		},
 		
 		/**
 		 * Constructs and display the survey.
 		 * 
 		 */
-		constructSurvey: function() {
-			var survey = this;
-			if(this.schema != null)
-				this.jsonDataModel = decodeURIComponent(this.schema);
+		constructSurvey: function(context) {
+			var self = context;
+			if(self.schema != null)
+				self.jsonDataModel = decodeURIComponent(self.schema);
 			
-			dataModel = dojo.fromJson(this.jsonDataModel); // dataModel object contains the dojo representation of the survey schema
+			dataModel = dojo.fromJson(self.jsonDataModel); // dataModel object contains the dojo representation of the survey schema
 
-			if(this.editMode){
-				if(this.clone)
+			if(self.editMode){
+				if(self.clone)
 					var sTitle = "Copy of " + dataModel.title
 				else
 					var sTitle = dataModel.title
 					
-				if (dataModel.title != null) this.title.setValue(sTitle); // extract the title from the survey schema
-				if (dataModel.description != null) this.description.setValue(dataModel.description); // extract the description from the survey schema
-				if (this.sendEmailUponSubmission != null && this.sendEmailUponSubmission == 'true') {
-					this.sendEmailSubmission.setValue(this.sendEmailUponSubmission);
-					this.sendAnswersInEmailSubmissionDivAP.style.display = "";
-					if (this.sendAnswersInEmailUponSubmission != null && this.sendAnswersInEmailUponSubmission == 'true') {
-						this.sendAnswersInEmailSubmissionAP.setValue(this.sendAnswersInEmailUponSubmission);
+				if (dataModel.title != null) self.title.setValue(sTitle); // extract the title from the survey schema
+				if (dataModel.description != null) self.description.setValue(dataModel.description); // extract the description from the survey schema
+				if (self.sendEmailUponSubmission != null && self.sendEmailUponSubmission == 'true') {
+					self.sendEmailSubmission.setValue(self.sendEmailUponSubmission);
+					self.sendAnswersInEmailSubmissionDivAP.style.display = "";
+					if (self.sendAnswersInEmailUponSubmission != null && self.sendAnswersInEmailUponSubmission == 'true') {
+						self.sendAnswersInEmailSubmissionAP.setValue(self.sendAnswersInEmailUponSubmission);
 					}
 				}
-				if (this.sendSMSUponSubmission != null && this.sendSMSUponSubmission == 'true') {
-					this.sendSMSSubmission.setValue(this.sendSMSUponSubmission);
-					this.smsNotificationNumberDiv.style.display = "";
-					if (this.smsNotificationNumberValue != null) {
-						this.smsNotificationNumber.setValue(this.smsNotificationNumberValue);
+				if (self.sendSMSUponSubmission != null && self.sendSMSUponSubmission == 'true') {
+					self.sendSMSSubmission.setValue(self.sendSMSUponSubmission);
+					self.smsNotificationNumberDiv.style.display = "";
+					if (self.smsNotificationNumberValue != null) {
+						self.smsNotificationNumber.setValue(self.smsNotificationNumberValue);
 					}
 				}
-				if (this.sendTDMUponSubmission != null && this.sendTDMUponSubmission == 'true') {
-					this.sendTDMSubmission.setValue(this.sendTDMUponSubmission);
-					this.twitterUsernameDiv.style.display = "";
-					if (this.twitterUsernameValue != null) {
-						this.twitterUsername.setValue(this.twitterUsernameValue);
-						this.twitterUsernameDiv.style.display = "";
+				if (self.sendTDMUponSubmission != null && self.sendTDMUponSubmission == 'true') {
+					self.sendTDMSubmission.setValue(self.sendTDMUponSubmission);
+					self.twitterUsernameDiv.style.display = "";
+					if (self.twitterUsernameValue != null) {
+						self.twitterUsername.setValue(self.twitterUsernameValue);
+						self.twitterUsernameDiv.style.display = "";
+					}
+				}
+				if (self.showSuccessMessage != null && self.showSuccessMessage == 'true') {
+					self.showSuccessMsg.setValue(self.showSuccessMsg);
+					self.successMsgDiv.style.display = "";
+					if (dataModel.successMessage != null) {
+						self.successMsg.setValue(dataModel.successMessage);
 					}
 				}
 				if (dataModel.viewResults != null){
-					if (dataModel.viewResults) {
-						this.viewResults.setValue(dataModel.viewResults);
-						this.successMsgDiv.style.display = "none";
-					}
-					else {
-						this.successMsg.setValue(dataModel.successMessage);
-						this.successMsgDiv.style.display = "";
+					self.viewResults.setValue(dataModel.viewResults);
+					if(dataModel.viewResults){
+						self.successMsgDiv.style.display = "none";
+						self.showSuccessMsg.attr('disabled', true);
+						self.showSuccessMsg.attr('value', false);
 					}
 				}
 			} else{
-				if (dataModel.title != null) this.title.innerHTML = dataModel.title; // extract the title from the survey schema
-				if (dataModel.description != null) this.description.innerHTML = dataModel.description; // extract the description from the survey schema
+				if (dataModel.title != null) self.title.innerHTML = dataModel.title; // extract the title from the survey schema
+				if (dataModel.description != null) self.description.innerHTML = dataModel.description; // extract the description from the survey schema
 			} 
-			if (dataModel.dockey != null) this.surveyDockey = dataModel.dockey; // extract the survey dockey from the survey schema
+			if (dataModel.dockey != null) self.surveyDockey = dataModel.dockey; // extract the survey dockey from the survey schema
 			
 			// Assemble the cookie name based on the survey's document key. This cookie is used to test if the survey has already been taken.
-			var cookie = 'ap_' + this.surveyDockey;
+			var cookie = 'ap_' + self.surveyDockey;
 			
 			// Test if this user has not already taken the survey by checking the existence of the cookie
-			if (!this.editMode && this.useCookie && dojo.cookie(cookie) == 'taken') { 
+			if (!self.editMode && self.useCookie && dojo.cookie(cookie) == 'taken') { 
 				if (dataModel.viewResults) { // checks the survey's configuration to see what should be loaded after submission
-					this.loadAggregatedResults(); // Loads the results charts 
+					self.loadAggregatedResults(); // Loads the results charts 
 				} else {
-					this.surveyDiv.style.display = 'none';
-					this.successMessage.innerHTML = dataModel.successMessage; // Shows the success message extracted from the survey's schema
+					self.surveyDiv.style.display = 'none';
+					if (self.showSuccessMessage != null && self.showSuccessMessage == 'true')
+						self.successMessage.innerHTML = dataModel.successMessage; // Shows the success message extracted from the survey's schema
 				}
 			} else {
-				//this.inherited(arguments);
+				//self.inherited(arguments);
 				
-				if (this.editMode) {
-					if(this.surveyID != null && !this.clone)
-						this.connect(this.btnGetData, "onclick", function(){survey.validateSurvey(true)}); // if the survey id is not null then the "Save" button should update the existing survey
+				if (self.editMode) {
+					if(self.surveyID != null && !self.clone)
+						self.connect(self.btnGetData, "onclick", function(){self.validateSurvey(true)}); // if the survey id is not null then the "Save" button should update the existing survey
 					else
-						this.connect(this.btnGetData, "onclick", function(){survey.validateSurvey(false)}); // if the survey id is null then the "Save" button should create a new survey
-					this.connect(this.viewResults, "onclick", "toggleTextBox"); // Attaching the toggleTextBox function to the onclick event on the "Show results to users" check box
-//					this.connect(this.emailCheckbox, "onclick", "toggleEmail"); // Attaching the toggleEmail function to the onclick event on the "Send by email" check box
-//					this.connect(this.smsCheckbox, "onclick", "toggleSms"); // Attaching the toggleSms function to the onclick event on the "Send by email" check box
-//					this.connect(this.btnEmail, "onclick", "sendEmail"); // Attaching the sendEmail function to the onclick event on the "Send"(email) button
-//					this.connect(this.btnSms, "onclick", "sendSms"); // Attaching the sendSms function to the onclick event on the "Send"(sms) button
-//					this.connect(this.btnForceSms, "onclick", "forceSendSms"); // Attaching the forceSendSms function to the onclick event on the "forceSendSms"(sms) button
+						self.connect(self.btnGetData, "onclick", function(){self.validateSurvey(false)}); // if the survey id is null then the "Save" button should create a new survey
+					//self.connect(self.viewResults, "onclick", "toggleTextBox"); // Attaching the toggleTextBox function to the onclick event on the "Show results to users" check box
+//					self.connect(self.emailCheckbox, "onclick", "toggleEmail"); // Attaching the toggleEmail function to the onclick event on the "Send by email" check box
+//					self.connect(self.smsCheckbox, "onclick", "toggleSms"); // Attaching the toggleSms function to the onclick event on the "Send by email" check box
+//					self.connect(self.btnEmail, "onclick", "sendEmail"); // Attaching the sendEmail function to the onclick event on the "Send"(email) button
+//					self.connect(self.btnSms, "onclick", "sendSms"); // Attaching the sendSms function to the onclick event on the "Send"(sms) button
+//					self.connect(self.btnForceSms, "onclick", "forceSendSms"); // Attaching the forceSendSms function to the onclick event on the "forceSendSms"(sms) button
 				}
 				else {
-					this.connect(this.btnSubmit, "onclick", "saveSurvey"); // Attaching the saveSurvey function to the onclick event on the "Submit" button
+					self.connect(self.btnSubmit, "onclick", "saveSurvey"); // Attaching the saveSurvey function to the onclick event on the "Submit" button
 				}
 	
-				this.questionContainer = this.initDnd();
+				self.questionContainer = self.initDnd();
 	
 				dojo.forEach(dataModel.questions, function(fieldDataModel) {
 					var isVisible = (fieldDataModel.name != 'apsdbSchema') && (fieldDataModel.name != 'apsdbDockey');// Sets isVisible to false if the current field is either apsdbSchema or apsdbDockey.
-					if(isVisible || (!isVisible && !survey.editMode) ) // This variable is used to display only the fields that have isVisible set to true.
-						var newField = survey.createField(fieldDataModel, isVisible); // Creates and displays the question corresponding to the current field.
+					if(isVisible || (!isVisible && !self.editMode) ) // This variable is used to display only the fields that have isVisible set to true.
+						var newField = self.createField(fieldDataModel, isVisible); // Creates and displays the question corresponding to the current field.
 				});
 	
-				if(this.editMode)
-					var newField = this.createField(null, true); // If the survey is in edit mode, create a dummy question used to create new ones.
+				if(self.editMode)
+					var newField = self.createField(null, true); // If the survey is in edit mode, create a dummy question used to create new ones.
 				
 				// Sets the survey text direction	
-				this.setDirection();	
+				self.setDirection();	
 			}
 		},
 		
@@ -270,17 +278,6 @@ dojo.declare("surveyWidget.widgets.Survey",
 		initDnd: function() {
 			src = new dojo.dnd.Source(this.questions.domNode,{withHandles:true});
 			return(src);
-		},
-		
-		/**
-		 * Shows or hides the "success message" field depending on the value of the "Show results to users" check box.
-		 * 
-		 */
-		toggleTextBox: function() {
-			if(this.viewResults.checked)
-				this.successMsgDiv.style.display = "none";
-			else
-				this.successMsgDiv.style.display = "";
 		},
 		
 		/**
@@ -306,6 +303,32 @@ dojo.declare("surveyWidget.widgets.Survey",
 					}
 				}
 			}
+		},
+		
+		/**
+		 * Disables or unable the " Show Success Message" check box depending on the value of the "show results" check box.
+		 * 
+		 */
+		disableSuccessMsgCheckBox: function() {
+			if (this.viewResults.checked) {
+				this.successMsgDiv.style.display = "none";
+				this.showSuccessMsg.attr('disabled', true);
+				this.showSuccessMsg.attr('value', false);
+			}
+			else {
+				this.showSuccessMsg.attr('disabled', false);
+			}
+		},
+		
+		/**
+		 * Shows or hides the "Success Message" field depending on the value of the check box.
+		 * 
+		 */
+		toggleSuccessMessageTextBox: function() {
+			if(this.showSuccessMsg.checked)
+				this.successMsgDiv.style.display = "";
+			else
+				this.successMsgDiv.style.display = "none";
 		},
 		
 		/**
@@ -814,11 +837,13 @@ dojo.declare("surveyWidget.widgets.Survey",
 							sendEmailUponSubmission: self.sendEmailSubmission.checked,
 							sendAnswersInEmailUponSubmission: self.sendAnswersInEmailSubmissionAP.checked,
 							sendSMSUponSubmission: self.sendSMSSubmission.checked,
+							showSuccessMessage: self.showSuccessMsg.checked,
 							rtl: rtl,
 							smsNotificationNumber: self.smsNotificationNumber.value,
 							sendTDMUponSubmission: self.sendTDMSubmission.checked,
 							twitterUsername: self.twitterUsername.value,
 							successMessage: self.successMsg.value,
+							"successMessage.apsdb.fieldType": "text",
 							qCount: questionCount
 			}, apsdbRequest, surveyQuestions, self.extraParam);
 			
@@ -1125,7 +1150,8 @@ dojo.declare("surveyWidget.widgets.Survey",
 								}
 								else {
 									self.surveyDiv.style.display = 'none';
-									self.successMessage.innerHTML = dataModel.successMessage;
+									if (self.showSuccessMessage != null && self.showSuccessMessage == 'true')
+										self.successMessage.innerHTML = dataModel.successMessage; // Shows the success message extracted from the survey's schema
 								}
 							}
 							else

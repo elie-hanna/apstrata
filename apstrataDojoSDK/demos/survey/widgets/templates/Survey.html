@@ -17,37 +17,28 @@
 			</form>
 			<form dojoType="dijit.form.Form" dojoAttachPoint="schemaform" encType="multipart/form-data" action="" method=""></form>
 		</div>	
-			<br/>
-<!--
-		<div title="Sms survey to users" dojoAttachPoint="smsSurvey" style="display: none;">
-			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="smsCheckbox" dojoAttachEvent="onClick: toggleSms" name="smsSurvey"/> Send by sms
-			<div dojoAttachPoint="phone" style="display: none;">
-				<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="phoneNumber" trim=true value=""><input dojoAttachPoint="btnSms" type="button" value="send" />
-				<input style="display: none;color:#F87217" dojoAttachPoint="btnForceSms" type="button" value="force send" />
-			</div>
-		</div>
-		
+			<br/>	
 		<br/>
-		<div title="Email survey to users" dojoAttachPoint="emailSurvey" style="display: none;">
-			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="emailCheckbox" dojoAttachEvent="onClick: toggleEmail" name="emailSurvey"/> Send by email
-			<div dojoAttachPoint="email" style="display: none;">
-				<input dojoType="dijit.form.ValidationTextBox" dojoAttachPoint="emailaddress" trim=true value=""><input dojoAttachPoint="btnEmail" type="button" value="send" />
-			</div>	
 		</div>
--->		
-		<hr>
+		<div class="survey">
 		<div title="Configuration">
 			<input dojoType="dijit.form.CheckBox" title="Select/Deselect to change the survey direction" dojoAttachPoint="direction" dojoAttachEvent="onClick: toggleDirection" /> Right-to-Left text direction
 		</div>
 		<br/>
-		<div title="Show results to users">
-			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: toggleTextBox" name="allowViewingResults"/> Show results to users
+		<div title="Show results to the users after submitting the survey">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="viewResults" dojoAttachEvent="onClick: disableSuccessMsgCheckBox"  name="allowViewingResults"/> Show results to the users after submitting the survey
 		</div>
 		<br/>
-		<div title="Success Message" dojoAttachPoint="successMsgDiv">
-			Success Message: <input dojoType="dijit.form.ValidationTextBox" trim=true dojoAttachPoint="successMsg" value="">
+		<div title="Show a success message to the users after submitting the survey">
+			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="showSuccessMsg" dojoAttachEvent="onClick: toggleSuccessMessageTextBox" name="showSuccessMessage"/>
+				Show a success message to the users after submitting the survey
 		</div>
 		<br/>
+		<div title="Success Message" dojoAttachPoint="successMsgDiv" style="display: none;">
+			Success Message: <textarea dojoType="dijit.form.SimpleTextarea" rows="1" cols="22" dojoAttachPoint="successMsg">Your survey has been successfully submitted.</textarea>
+			<br/><br/>
+		</div>
+		<br/><br/>	
 		<div title="Send me an email for each submission">
 			<input dojoType="dijit.form.CheckBox" dojoAttachPoint="sendEmailSubmission" name="sendSMSUponSubmission" dojoAttachEvent="onClick: showIncludeAnswersCheckBox"/> Send me an email for each submission
 			<div class="secondaryCheckbox" dojoAttachPoint="sendAnswersInEmailSubmissionDivAP"  name="sendAnswersInEmailSubmissionDiv" style="display:none">
