@@ -126,10 +126,24 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 		var self = this
 		
 		// Destroy an existing child open panel
-		this.closePanel()
-		
+		this.closePanel();
+
+		// Use the parentList and container parameters if they were sent in the argument list.
+		var parentList = null;
+		var container = null;
+		if (args) {
+			if (args.parentList)
+				parentList = args.parentList;
+			if (args.container)
+				container = args.container;
+		}
+		if (parentList == null)
+			parentList = self;
+		if (container == null)
+			container = self.getContainer();
+
 		// Mixin to the custom args the pointers to the parent and container		
-		var newArgs = dojo.mixin(args, {parentList: self, container: self.getContainer()})
+		var newArgs = dojo.mixin(args, {parentList: parentList, container: container})
 		
 		// Instantiate new Class 'panel'
 		this._openPanel = new panel(newArgs)
