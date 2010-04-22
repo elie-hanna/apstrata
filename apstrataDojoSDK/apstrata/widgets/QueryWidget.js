@@ -73,7 +73,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 	postMixInProperties: function() {
 		// Add the search field and button if showSearch was set to true 
 		if (this.showSearch) {
-			this.templateString = "<div style='width: 100%; height: 100%;'><div dojoAttachPoint='dvSearch'><input dojoType='dijit.form.TextBox' dojoAttachPoint='searchText' value=''><input dojoAttachPoint='btnSearch' title='Search' type='button' value='Search' /></div><div dojoAttachPoint='dvSpinner'></div><div dojoAttachPoint='dvGrid' style='width: 100%; height: 100%;'></div></div>";
+			this.templateString = "<div style='width: 100%; height: 100%;'><div dojoAttachPoint='dvSearch' class='searchBox'><input dojoType='dijit.form.TextBox' dojoAttachPoint='searchText' value=''><button dojoType='dijit.form.Button' dojoAttachPoint='btnSearch'>Search</button></div></br><div dojoAttachPoint='dvSpinner'></div><div dojoAttachPoint='dvGrid' style='width: 100%; height: 100%;'></div></div>";
 		}
 	},
 	
@@ -144,7 +144,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		
 		// Add the search field and button if showSearch was set to true 
 		if (this.showSearch) {
-			dojo.connect(self.btnSearch, "onclick", function(){
+			dojo.connect(self.btnSearch, "onClick", function(){
 				self.ftsQuery = self.searchText.value;
 				
 				var query = {
