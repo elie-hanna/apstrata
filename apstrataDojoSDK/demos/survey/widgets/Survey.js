@@ -703,6 +703,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 					if(childModel['type'] == "checkbox" || childModel['type'] == "text area"){
 						childModel['choices'] = "[]";
 					} 
+					
 					//getValues does not return the value of a checkbox
 					if(childModel['type'] != "checkbox")
 					{
@@ -723,7 +724,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 					// Create an XML schema field object
 					if (childModel['type'] == 'text area')
-						schemaFieldArr[i] = new SchemaField(childModel.name, "text", false);
+						schemaFieldArr[i] = new SchemaField(childModel.name, "text", true);
+					else if(childModel['type'] == 'text')
+						schemaFieldArr[i] = new SchemaField(childModel.name, "string", true);
 					else
 						schemaFieldArr[i] = new SchemaField(childModel.name, "string", false);
 					var minCardinality = 0;
