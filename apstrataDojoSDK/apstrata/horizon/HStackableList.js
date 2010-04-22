@@ -49,7 +49,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 		this._resizeFilterField()
 		this.inherited(arguments)
 	},
-	
+
 	startup: function() {
 		this.inherited(arguments)
 		this.refresh()
@@ -66,8 +66,8 @@ dojo.declare("apstrata.horizon.HStackableList",
 	refresh: function() {
 		var self = this
 
-//		this._listContent = new apstrata.horizon._ListContent({data: self.data, parent: self})
-//		dojo.place(this._listContent.domNode, this.dvItems)
+		this._listContent = new apstrata.horizon._ListContent({data: self.data, parent: self})
+		dojo.place(this._listContent.domNode, this.dvItems)
 
 		this._resizeFilterField()
 		this._editMode = false
@@ -215,7 +215,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 				j = ((this.data[i]).label.toLowerCase()).indexOf(this._filter)
 				if (j>=0) {
 					var label = this.data[i].label.substring(0, j) + 
-						"<span class='highlight'>" + this._filter + "</span>" + 
+						"<span class='highlightFilter'>" + this._filter + "</span>" + 
 						this.data[i].label.substring(j + this._filter.length)
 console.debug(label)	
 					if (j>=0) _newData.push({label: label, img: self.iconSrc})
