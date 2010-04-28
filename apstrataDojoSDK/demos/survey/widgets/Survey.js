@@ -632,11 +632,15 @@ dojo.declare("surveyWidget.widgets.Survey",
 		validateSurvey: function(update) {
 			var self = this
 			if(this.title.value!=""){
-				// Check that the SMS notification number is set if the sendSMSSubmission checkbox is checked.
+				// Check that the SMS notification number is set and is a number if the sendSMSSubmission checkbox is checked.
 				if (self.sendSMSSubmission.checked) {
 					if (self.smsNotificationNumber.value == null || self.smsNotificationNumber.value == '') {
 						self.smsNotificationNumber.focus();
 						self.smsNotificationNumber.displayMessage("The SMS notification number is required");
+						return; // Stop execution.
+					} else if (isNaN(self.smsNotificationNumber.value)) {
+						self.smsNotificationNumber.focus();
+						self.smsNotificationNumber.displayMessage("The SMS notification number must be numeric only");
 						return; // Stop execution.
 					}
 				}
