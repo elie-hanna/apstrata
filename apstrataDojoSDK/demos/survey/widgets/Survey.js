@@ -150,6 +150,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 							if(operation.response.result.documents[0]["twitterUsername"])
 								self.twitterUsernameValue = operation.response.result.documents[0]["twitterUsername"];
 							self.rtl = operation.response.result.documents[0]["rtl"];
+							self.sendAnswersInEmailUponSubmission = operation.response.result.documents[0]["sendAnswersInEmailUponSubmission"];
 						}
 						self.constructSurvey(self);
 					},
@@ -1133,7 +1134,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 								// TODO : Removed the call to tweet the submitting of a survey since we do not need it now.
 								//self.tweetTheSubmitting(jsonObj.apsdbDockey);
 								if (self.sendEmailUponSubmission == 'true') {
-									self.emailTheSubmitting();
+									self.emailTheSubmitting(self.surveyform.getValues());
 								}
 								
 								if (self.sendSMSUponSubmission == 'true') {
@@ -1208,7 +1209,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 		/**
 		 * Runs the emailing script
 		 */
-		emailTheSubmitting: function() {
+		emailTheSubmitting: function(answers) {
 			// Run a script
 			var client = new apstrata.Client({connection: connection});
 			var self = this;
@@ -1221,6 +1222,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 					scriptName: 'emailSurveyTaken'
 				}
 			});
+			
+			for(var st in answers)
+			{
+				runScriptletRequest[st] = answers[st];
+			}	
 
 			var sd = client.call({
 				action: "RunScript",
