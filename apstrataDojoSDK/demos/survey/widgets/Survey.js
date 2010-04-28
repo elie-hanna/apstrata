@@ -1249,7 +1249,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 
 			var runScriptletRequest = dojo.mixin({
 				title: self.title.innerHTML,
-				smsNotificationNumber: self.smsNotificationNumber.value
+				smsNotificationNumber: self.smsNotificationNumberValue
 			}, {
 				apsdb: {
 					scriptName: 'smsSurveyTaken'
