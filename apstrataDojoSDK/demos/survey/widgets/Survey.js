@@ -632,6 +632,24 @@ dojo.declare("surveyWidget.widgets.Survey",
 		validateSurvey: function(update) {
 			var self = this
 			if(this.title.value!=""){
+				// Check that the SMS notification number is set if the sendSMSSubmission checkbox is checked.
+				if (self.sendSMSSubmission.checked) {
+					if (self.smsNotificationNumber.value == null || self.smsNotificationNumber.value == '') {
+						self.smsNotificationNumber.focus();
+						self.smsNotificationNumber.displayMessage("The SMS notification number is required");
+						return; // Stop execution.
+					}
+				}
+
+				// Check that the Twitter username is set if the sendTDMSubmission checkbox is checked.
+				if (self.sendTDMSubmission.checked) {
+					if (self.twitterUsername.value == null || self.twitterUsername.value == '') {
+						self.twitterUsername.focus();
+						self.twitterUsername.displayMessage("The Twitter username is required");
+						return; // Stop execution.
+					}
+				}
+
 				if (!update && connection.credentials.username != "") {
 					var client = new apstrata.Client({connection: connection});
 					var q = client.call({
@@ -829,6 +847,7 @@ dojo.declare("surveyWidget.widgets.Survey",
 			if(self.direction != null){
 				rtl = self.direction.checked;
 			}
+
 			var saveDocumentRequest = dojo.mixin({
 							surveyName: self.title.value,
 							surveyDescription: self.description.value,
