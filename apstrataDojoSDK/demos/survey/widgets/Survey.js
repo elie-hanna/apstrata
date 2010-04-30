@@ -85,6 +85,9 @@ dojo.declare("surveyWidget.widgets.Survey",
 			if(this.attrs.editingMode) 
 				this.editMode = (this.attrs.editingMode == "true")?true:false;
 				
+			if(this.attrs.tryMode) 
+				this.tryMode = (this.attrs.tryMode == "true")?true:false;	
+				
 			if(this.attrs.usingCookie) 
 				this.useCookie = (this.attrs.usingCookie == "true")?true:false;	
 				
@@ -296,6 +299,11 @@ dojo.declare("surveyWidget.widgets.Survey",
 		},
 		
 		setDirection: function(){
+			if(this.tryMode){
+				if(this.rtl != null && this.rtl == "true"){
+					this.surveyDiv.dir = "rtl";
+				}
+			}
 			if(this.editMode){
 				if(this.rtl != null && this.rtl == "true"){
 					if(this.direction != null){
