@@ -165,6 +165,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 								e.currentTarget, 
 								function(target) {
 									self.onDeleteItem(target.getAttribute('itemIndex'), target.getAttribute('itemLabel'), self.data[target.getAttribute('itemIndex')].attrs)
+									self._editMode = false
 								}, function(target) {
 									
 								})
