@@ -74,7 +74,11 @@ dojo.declare("apstrata.horizon.Login",
 				failure: function(error, message){
 					if (self._failure) 
 						self._failure()
-					var msg = (error == "INVALID_SIGNATURE") ? "Invalid credentials." : "[" + error + "] " + message
+					var msg = ""
+					if(error == "INVALID_SIGNATURE" || error == "INVALID_AUTHENTICATION_KEY")
+						msg = "Invalid credentials."
+					else
+						msg = "Invalid username or password."
 					apstrata.alert(msg, self)
 				}
 			})
@@ -105,7 +109,11 @@ dojo.declare("apstrata.horizon.Login",
 				failure: function(error, message){
 					if (self._failure) 
 						self._failure()
-					var msg = (error == "INVALID_SIGNATURE") ? "Invalid credentials." : "[" + error + "] " + message
+					var msg = ""
+					if(error == "INVALID_SIGNATURE" || error == "INVALID_AUTHENTICATION_KEY")
+						msg = "Invalid credentials."
+					else
+						msg = "Invalid username or password."
 					apstrata.alert(msg, self)
 				}
 			})
