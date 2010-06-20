@@ -83,9 +83,6 @@ dojo.declare("apstrata.horizon._ListContent",
 	},
 	
 	render: function() {
-		console.debug('rendering list')
-		console.dir(this.data)
-		
 		this.inherited(arguments)
 	},
 	
