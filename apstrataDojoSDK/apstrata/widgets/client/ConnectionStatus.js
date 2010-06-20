@@ -31,7 +31,13 @@ dojo.declare("apstrata.widgets.client.ConnectionStatus",
 				background: "url('"+apstrata.baseUrl+"/resources/images/apstrata-clouds.gif')",
 				border: "solid 1px grey"
 			})
-
+			
+			
+			// TODO: this should be replaced by more elegant solution
+			dojo.connect(window, "onerror", function(msg, url, linenumber) {
+				dialog.hide()
+				return false
+			})
 			dojo.subscribe("/apstrata/connection", function(data) {
 				if (data.action == 'start') dialog.show()
 				if (data.action == 'end') dialog.hide()
