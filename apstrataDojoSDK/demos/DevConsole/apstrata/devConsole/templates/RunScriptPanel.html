@@ -1,0 +1,72 @@
+<div class='panel'>
+	{% if true %} 
+	{% endif %}
+	<div class="apstrataForm rounded-top-sml rounded-bottom-sml">
+		<form action="#" dojoType="dijit.form.Form" dojoAttachPoint="frmParams">
+			<table>
+				<tr>
+					<td>
+						Request Param
+					</td>
+					<td>
+						Value
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param1"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value1"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param2"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value2"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param3"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value3"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param4"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value4"></input>
+					</td>
+				</tr>
+			</table>
+		</form>
+
+		<br>
+		<table style='font-size: small;'>
+			<tr>
+				<td>
+					The script returns an attachement or an HTML page
+				</td>
+				<td>
+					<input type="submit" dojoAttachEvent='onclick: _goNewWindow' value='Go' style='width: 50px;'></input>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					The script returns a JSON string
+				</td>
+				<td>
+					<input type="submit" dojoAttachEvent='onclick: _go' value='Go' style='width: 50px;'></input>
+				</td>
+			</tr>
+		</table>
+		<div style='width: 100%; text-align: center'>
+		</div>
+	</div>
+</div>
