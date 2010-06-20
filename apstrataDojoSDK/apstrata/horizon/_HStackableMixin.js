@@ -66,7 +66,16 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 		dojo.addClass(this.domNode, 'rounded-sml')
 
 		// Change panel width to occupy all remaining free space in container
-		if (this.maximizePanel) dojo.style(this.domNode, {width: self.getContainer().getRemainingFreeWidth(self.id)+'px'})
+		if (this.maximizePanel) {
+			if (!this._maximizeWidth) {
+				this._maximizeWidth = self.getContainer().getRemainingFreeWidth(self.id)+'px'		
+			}
+			dojo.style(this.domNode, {width: self._maximizeWidth})
+		}
+		 
+
+		// Change panel width to occupy all remaining free space in container
+		//if (this.maximizePanel) dojo.style(this.domNode, {width: self.getContainer().getRemainingFreeWidth(self.id)+'px'})
 	},
 
 	postCreate: function() {
