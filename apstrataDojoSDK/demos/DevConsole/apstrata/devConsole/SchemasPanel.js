@@ -47,15 +47,34 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 //					self.txtSchema.value =  self.formatXml(operation.response.result)
 					self.txtSchema.value =  operation.response.result
 					self.fldName.value = self.schemaName 
+					self._initCodeEditor()
 				},
 				error: function(operation) {
 				}
 			})
+		} else {
+			self.txtSchema.value = ""
+			
+			// TODO: find a more elegant solution, initializing CodeEditor is giving an error, 
+			//  unless some delay is provided
+			setTimeout(dojo.hitch(this,'_initCodeEditor'), 500)	
 		}
 		
 		this.inherited(arguments)
 	},
 	
+	_initCodeEditor: function() {
+		editAreaLoader.init({
+			id: "txtEditor"	// id of the textarea to transform		
+			,start_highlight: true	// if start with highlight
+			,allow_resize: "both"
+			,allow_toggle: false
+			,word_wrap: true
+			,language: "en"
+			,syntax: "xml"	
+		});
+	},
+
 	formatXml: function(xml) {
 	    var formatted = '';
 	    var reg = /(>)(<)(\/*)/g;
@@ -92,10 +111,10 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 		var self = this
 
 		if (self.schemaName=="") self.schemaName = self.fldName.value
-
+console.debug(editAreaLoader.getValue("txtEditor"))
 		var apsdb = {
 			schemaName: self.schemaName,
-			schema: self.txtSchema.value,
+			schema: editAreaLoader.getValue("txtEditor"),
 			update: self.update
 		}
 

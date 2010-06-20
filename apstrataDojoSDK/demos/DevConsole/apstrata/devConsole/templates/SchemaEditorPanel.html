@@ -2,16 +2,15 @@
 	{% if true %} 
 	{% endif %}
 	<div class="apstrataForm rounded-top-sml rounded-bottom-sml">
-
 		<div class="label">Name:</div>
 		<input type="text" dojoAttachPoint="fldName" value=""></input>
 
 		<div class="label">Schema XML:</div>
-		<textarea dojoAttachPoint='txtSchema' class='longTextarea'></textarea>
+		<textarea dojoAttachPoint='txtSchema' class='longTextarea' id='txtEditor'></textarea>
 
 		<br>
 		<div style='width: 100%; text-align: right'>
-			<button dojoAttachEvent='onclick: _save'>save</button>
+			<input type='submit' style='width: 60px;' value="Save" dojoAttachEvent='onclick: _save'></input>
 		</div>
 	</div>
 </div>
