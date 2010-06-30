@@ -134,10 +134,13 @@ dojo.declare("apstrata.devConsole.ScriptEditorPanel",
 		} else {
 			self.txtScript.value =  ""
 			self.fldName.value = ""
-
+			
+			dojo.attr(this.btnRun, {'disabled': 'disabled'})
+			
 			// TODO: find a more elegant solution, initializing CodeEditor is giving an error, 
 			//  unless some delay is provided
 			setTimeout(dojo.hitch(this,'_initCodeEditor'), 500)	
+			
 		}
 		
 		this.inherited(arguments)
@@ -174,8 +177,12 @@ dojo.declare("apstrata.devConsole.ScriptEditorPanel",
 				apsdb: apsdb
 			},
 			load: function(operation) {
-				if (self.scriptName!=self.fldName.value) 
+				self.btnRun.removeAttribute('disabled')
+//				dojo.attr(self.btnRun, {'disabled': ''})
+				if (self.scriptName!=self.fldName.value) {
+					self.scriptName = self.fldName.value
 					self.getParent().reload()
+				}
 			},
 			error: function(operation) {
 			}
@@ -221,6 +228,18 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 		if (attrs.scriptName) this.scriptName = attrs.scriptName
 	},
 	
+	_getParams: function() {
+		var frm = this.frmParams.attr('value')
+		var params = {}
+		
+		if (frm.param1) params[frm.param1] = frm.value1 
+		if (frm.param2) params[frm.param2] = frm.value2 
+		if (frm.param3) params[frm.param3] = frm.value3 
+		if (frm.param4) params[frm.param4] = frm.value4 
+
+		return params 
+	},
+	
 	_goNewWindow: function() {
 		var self = this
 		
@@ -234,6 +253,8 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 				scriptName: self.scriptName
 			}
 		}
+
+		dojo.mixin(operation.request, this._getParams())
 
 		var url = operation.buildUrl().url;
 		window.open(url, 'Script Output:' + self.scriptName) 
