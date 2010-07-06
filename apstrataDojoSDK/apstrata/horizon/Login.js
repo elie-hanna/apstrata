@@ -75,7 +75,7 @@ dojo.declare("apstrata.horizon.Login",
 					if (self._failure) 
 						self._failure()
 					var msg = ""
-					if(error == "INVALID_SIGNATURE" || error == "INVALID_AUTHENTICATION_KEY")
+					if(error == "INVALID_SIGNATURE")
 						msg = "Invalid credentials."
 					else
 						msg = "Invalid username or password."
@@ -110,7 +110,7 @@ dojo.declare("apstrata.horizon.Login",
 					if (self._failure) 
 						self._failure()
 					var msg = ""
-					if(error == "INVALID_SIGNATURE" || error == "INVALID_AUTHENTICATION_KEY")
+					if(error == "INVALID_SIGNATURE")
 						msg = "Invalid credentials."
 					else
 						msg = "Invalid username or password."
