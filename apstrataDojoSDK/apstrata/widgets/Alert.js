@@ -233,7 +233,7 @@ dojo.declare("apstrata.widgets.Alert",
 			easing: dojo.fx.easing.bounceOut,
 			duration: 200,
 			onEnd: function() {
-				dojo.style(self.domNode, {
+				if (self.domNode) dojo.style(self.domNode, {
 					visibility: "hidden"
 				})
 				if (handler) handler()
