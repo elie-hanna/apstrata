@@ -163,9 +163,9 @@ dojo.declare("apstrata.Operation",
 	    // Sets the timeout of the operation to the timeout of the connection
 		_setTimeout: function() {
 			var self = this;
-			if (self.connection.getTimeout()>0) {
-				self._timeoutHandler = setTimeout (dojo.hitch(self, "timeout"), self.connection.getTimeout());
-				this.log.debug('timeout handler set:', self.connection.getTimeout(), ",", self._timeoutHandler)
+			if (self.connection.timeout>0) {
+				self._timeoutHandler = setTimeout (dojo.hitch(self, "timeout"), self.connection.timeout);
+				this.log.debug('timeout handler set:', self.connection.timeout, ",", self._timeoutHandler)
 			}
 		},
 
@@ -192,7 +192,7 @@ dojo.declare("apstrata.Operation",
 			this.response.metadata.errorCode = "timeout_communication_error";
 			this.response.metadata.errorDetail = "Timeout or communication error";
 
-			this.responseTime = this.connection.getTimeout()
+			this.responseTime = this.connection.timeout
 	
 			dojo.publish("/apstrata/operation", [{
 					id: self.operationId,
@@ -236,6 +236,6 @@ dojo.declare("apstrata.Operation",
 		handleError: function() {
 			//this.connection.activity.stop(this)
         	this.log.warn("errorCode:", this.response.metadata.errorCode)
-        	this.log.warn("errorMessage:", this.response.metadata.errorMessage)
+        	this.log.warn("errorDetail:", this.response.metadata.errorDetail)
 		}
 	});
