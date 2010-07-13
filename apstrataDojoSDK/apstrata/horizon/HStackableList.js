@@ -219,7 +219,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 						"<span class='highlightFilter'>" + this._filter + "</span>" + 
 						this.data[i].label.substring(j + this._filter.length)
 console.debug(label)	
-					if (j>=0) _newData.push({label: label, img: self.iconSrc})
+					if (j>=0) _newData.push({label: this._filter, img: self.iconSrc})
 				}
 			}
 		}
