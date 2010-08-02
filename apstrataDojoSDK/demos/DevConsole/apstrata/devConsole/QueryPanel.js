@@ -70,16 +70,25 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 	constructor: function(attrs) {
 		this._target = attrs.target
 	},
-	
+
 	postCreate: function() {
 		var self = this
+		this.userListFetched = false
+		
 		dojo.connect(self.fldRunAs, 'onClick', function () {
+			if (self.userListFetched) return
 			self.container.client.call({
 				action: "ListUsers",
+				request: {
+					apsim: {
+						query: "q12345!=\"x12345\""
+					}
+				},			
 				load: function(operation) {
 					self.data = []
+					self.userListFetched = true
 					dojo.forEach(operation.response.result.users, function(user) {
-						self.data.push({name: user['name'], label: user['name'], abbreviation: user['name']})
+						self.data.push({name: user['apsim.user'], label: user['apsim.user'], abbreviation: user['apsim.user']})
 					})
 					
 					self.userList = {identifier:'abbreviation',label: 'name',items: self.data}

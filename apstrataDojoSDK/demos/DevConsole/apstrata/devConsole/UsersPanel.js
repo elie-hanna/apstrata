@@ -40,11 +40,16 @@ dojo.declare("apstrata.devConsole.UsersPanel",
 
 		this.container.client.call({
 			action: "ListUsers",
+			request: {
+				apsim: {
+					query: "q12345!=\"x12345\""
+				}
+			},			
 			load: function(operation) {
 				// Rearrange the result to suite the template
 				self.data = []
 				dojo.forEach(operation.response.result.users, function(user) {
-					self.data.push({label: user['name'], iconSrc: ""})
+					self.data.push({label: user['apsim.user'], iconSrc: ""})
 				})
 	
 				// Cause the DTL to rerender with the fresh self.data

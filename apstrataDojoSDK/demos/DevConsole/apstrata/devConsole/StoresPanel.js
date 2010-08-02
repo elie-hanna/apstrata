@@ -48,7 +48,9 @@ dojo.declare("apstrata.devConsole.StoreOperations",
 			if(label == 'Query') {
 				self.closePanel()
 				self.openPanel(apstrata.devConsole.QueryPanel, {target: self.target})
-			} 
+			} else if (label == 'Edit Store') {
+				self.openPanel(apstrata.devConsole.StoresEditPanel, {target: self.target})
+			}
 		})
 
 		this.inherited(arguments)
@@ -129,6 +131,23 @@ dojo.declare("apstrata.devConsole.StoresEditPanel",
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/StoresEditPanel.html"),
 	
+	constructor: function(attrs) {
+		this.target = attrs.target
+	},
+	
+	postCreate: function() {
+		var self = this
+		this.container.client.call({
+			action: "ListConfigurations",
+			request: {
+			},
+			load: function(operation){
+			},
+			error: function(operation){
+			}
+		})
+	},
+
 	_save: function() {
 		var self = this
 		if (this.newStoreForm.validate()) {

@@ -111,7 +111,7 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 		var self = this
 
 		if (self.schemaName=="") self.schemaName = self.fldName.value
-console.debug(editAreaLoader.getValue("txtEditor"))
+
 		var apsdb = {
 			schemaName: self.schemaName,
 			schema: editAreaLoader.getValue("txtEditor"),
