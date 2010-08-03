@@ -24,12 +24,14 @@ dojo.require("apstrata.Get")
 dojo.require("apstrata.Post")
 
 dojo.declare("apstrata.Client", 
-	[apstrata.util.logger.Loggable], 
+	null, 
 	{
 		
 		_MESSAGE_DURATION: 1000,
 		
 		constructor: function(attrs) {
+			var self = this
+
 			if (attrs) {
 				if (attrs.connection) {
 					this.connection = attrs.connection
@@ -45,7 +47,6 @@ dojo.declare("apstrata.Client",
 			if (!this.connection) {
 				this.connection = new apstrata.Connection()
 			}
-			
 		},
 		
 		call: function(attrs) {
@@ -65,7 +66,7 @@ dojo.declare("apstrata.Client",
 					var operation = new apstrata.Get(this.connection)
 				} 
 			} else {
-				if ((attrs.action == "SaveDocument") || (attrs.action == "SaveSchema")) {
+				if ((attrs.action == "SaveDocument") || (attrs.action == "SaveSchema") || (attrs.action == "SaveScript")) {
 					var operation = new apstrata.Post(this.connection)
 				} else {
 					var operation = new apstrata.Get(this.connection)

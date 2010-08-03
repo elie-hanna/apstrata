@@ -19,47 +19,11 @@
  */
 dojo.provide("apstrata.Connection")
 
-dojo.require("dojox.encoding.digests.MD5");
-
-dojo.declare("apstrata.URLSignerMD5", [], {	
-	sign: function (connection, operation, params, responseType) {
-					var timestamp = new Date().getTime() + '';
-					
-					responseType = responseType || "json"
-					
-					var signature = ''
-					var userName =''
-					var valueToHash = ''
-					
-					if (connection.credentials.username && connection.credentials.password && connection.credentials.username != '' && connection.credentials.password != '') {
-						valueToHash = timestamp + connection.credentials.username + operation + dojox.encoding.digests.MD5(connection.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
-						signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-						userName = connection.credentials.username;
-					} else if(connection.credentials.secret && connection.credentials.secret != ''){
-						valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
-						signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-					}
-		
-					var apswsReqUrl = connection.serviceUrl
-							+ "/" + connection.credentials.key
-							+ "/" + operation
-							+ "?apsws.time=" + timestamp
-							+ ((signature!="")?"&apsws.authSig=":"") + signature
-							+ ((userName!="")?"&apsws.user=":"") + userName
-							+ "&apsws.responseType=" + responseType
-							+ "&apsws.authMode=simple"
-							+ ((params!="")?"&":"") + params
-		
-					return {url: apswsReqUrl, signature: signature};
-			}
-})
-
+dojo.require("apstrata.URLSignerMD5")
 
 dojo.declare("apstrata.Connection",
-	[apstrata.util.logger.Loggable],
+	null,
 	{
-		_KEY_APSDB_ID: "key",  // could we delete this? not used...
-		
 		constructor: function(attrs) {
 			this._DEFAULT_SERVICE_URL= "http://apsdb.apstrata.com/sandbox-apsdb/rest"
 			this.timeout = 10000
@@ -69,20 +33,99 @@ dojo.declare("apstrata.Connection",
 			this._urlSigner = new apstrata.URLSignerMD5()				
 
 			if (attrs) {
-				if (attrs.credentials) this.credentials = attrs.credentials
-				
 				if (attrs.timeout) this.timeout =  attrs.timeout
 				if (attrs.serviceUrl) this.serviceUrl = attrs.serviceUrl
 			} 
+
+			if (attrs && attrs.credentials) {
+				this.credentials.key = attrs.credentials.key
+				this.credentials.secret = attrs.credentials.secret
+				this.credentials.username = attrs.credentials.username
+				this.credentials.password = attrs.credentials.password
+			} else if (apstrata.apConfig) {
+				this.credentials.key = apstrata.apConfig.key
+				this.credentials.secret = apstrata.apConfig.secret
+				this.credentials.username = apstrata.apConfig.username
+				this.credentials.password = apstrata.apConfig.password
+			}
 		},
 		
 		signUrl: function(operation, params, responseType) {
 			return this._urlSigner.sign(this, operation, params, responseType)
 		},
 
-		getTimeout: function() {
-			return this.timeout
-		}
+		hasCredentials: function() {
+			// Assume that we have a session if either the secret or password are present
+			return ((this.credentials.secret != undefined) && (this.credentials.secret != null) && (this.credentials.secret != "")) 
+					|| ((this.credentials.password != undefined) && (this.credentials.password != null) && (this.credentials.password != "")) 
+		},
 
+		save: function() {},
+
+		loginMaster: function(handlers) {
+			this.login(handlers)
+		},
+		
+		loginUser: function(handlers) {
+			this.credentials.secret=""
+			this.login(handlers)
+		},
+
+		login: function(handlers) {
+			var self = this
+			
+			self._ongoingLogin = true
+			apstrata.logger.debug("logging in: Calling VerifyCredentials to validate credentials")
+			
+			var client = new apstrata.Client({connection: self})
+			
+			client.call({
+				action: "VerifyCredentials",
+				load: function(operation) {
+					self._ongoingLogin = false
+					apstrata.logger.debug("logging in")
+					self.save()
+	
+					dojo.publish("/apstrata/connection/login/success", [{
+						key: self.credentials.key
+					}])
+
+					if (handlers && handlers.success) handlers.success()
+				},
+				error: function(operation) {
+					// Clear the secret and password so hasCredentials() functions
+					self.credentials.secret=""
+					self.credentials.pw=""
+
+					dojo.publish("/apstrata/connection/login/failure", [{
+						key: self.credentials.key
+					}])
+
+					if (handlers && handlers.failure) handlers.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage)
+				}
+			})
+		},
+
+		logout: function() {
+			var self = this
+			apstrata.logger.debug("logging out")
+
+			// Erase secret and password
+			this.credentials.secret = ""
+			this.credentials.password = ""
+			this.credentials.key=""
+			this.credentials.username=""
+			
+			// Make sure key/username are not null/undefined
+//			if (!this.credentials.key) this.credentials.key=""
+//			if (!this.credentials.username) this.credentials.username=""
+
+			this.save()
+
+			dojo.publish("/apstrata/connection/logout", [{
+				key: self.credentials.key
+			}])
+		}
+		
 	});
 	
