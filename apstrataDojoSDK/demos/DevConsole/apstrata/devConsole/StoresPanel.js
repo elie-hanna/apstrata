@@ -137,6 +137,7 @@ dojo.declare("apstrata.devConsole.StoresEditPanel",
 	
 	postCreate: function() {
 		var self = this
+/*
 		this.container.client.call({
 			action: "ListConfigurations",
 			request: {
@@ -146,6 +147,9 @@ dojo.declare("apstrata.devConsole.StoresEditPanel",
 			error: function(operation){
 			}
 		})
+ 
+ */		
+		this.inherited(arguments)
 	},
 
 	_save: function() {
