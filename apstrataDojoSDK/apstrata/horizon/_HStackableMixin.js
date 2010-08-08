@@ -73,6 +73,7 @@ dojo.declare("apstrata.horizon._HStackableMixin", [],
 			dojo.style(this.domNode, {width: self._maximizeWidth})
 		}
 		 
+//		dojo.style(this.domNode, {height: (this.getContainer().height - 20) + "px"})
 
 		// Change panel width to occupy all remaining free space in container
 		//if (this.maximizePanel) dojo.style(this.domNode, {width: self.getContainer().getRemainingFreeWidth(self.id)+'px'})
