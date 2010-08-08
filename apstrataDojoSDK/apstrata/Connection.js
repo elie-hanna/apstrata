@@ -35,6 +35,7 @@ dojo.declare("apstrata.Connection",
 			if (attrs) {
 				if (attrs.timeout) this.timeout =  attrs.timeout
 				if (attrs.serviceUrl) this.serviceUrl = attrs.serviceUrl
+				if (attrs.defaultStore) this.defaultStore = attrs.defaultStore
 			} 
 
 			if (attrs && attrs.credentials) {
