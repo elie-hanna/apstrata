@@ -45,6 +45,7 @@ dojo.declare("apstrata.horizon._ListContent",
 
 	_setHeight: function() {
 		var m = (this.parent.editable?36:0) + ((this.parent.filterable || this.parent.sortable)?25:0) + 17
+//		var m = (this.parent.editable?36:0) + ((this.parent.filterable || this.parent.sortable)?25:0) + 17 + 20
 		
 		this.height = this.parent.getContainer().height - m
 	},
@@ -105,6 +106,9 @@ dojo.declare("apstrata.horizon._ListContent",
 		
 		this.render()
 	},
+	
+	select: function(index, label, attrs) {
+	},
 
 	_onClick: function(e) {
 		if (this.noEdit) return;
@@ -114,10 +118,10 @@ dojo.declare("apstrata.horizon._ListContent",
 		var index = e.currentTarget.getAttribute('itemIndex')
 		var attrs = this.data[index].attrs
 		
+//		this.select(index, label, attrs)
+
 		if (this._lastSelected) dojo.removeClass(this._lastSelected, "itemSelected")
-		
 		this._lastSelected = e.currentTarget
-		
 		dojo.addClass(e.currentTarget, "itemSelected")
 
 		this.parent.onClick(index, label, attrs)
