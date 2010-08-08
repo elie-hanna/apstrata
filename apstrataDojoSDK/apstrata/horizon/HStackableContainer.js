@@ -121,6 +121,19 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 			height: coord.height,
 			zIndex: "100"
 		})
+
+		coord.top = (this.margin.top + this._marginRight - 5) + "px"
+		coord.left = (this.margin.left + this._marginRight - 5) + "px"
+		coord.width = (w.w - this.margin.left - this.margin.right - 2*this._marginRight + 10) + "px"
+		coord.height = (w.h - this.margin.top - this.margin.bottom - 2*this._marginRight + 10) + "px"
+
+		dojo.style(this.background, {
+			top: coord.top,
+			left: coord.left,
+			width: coord.width,
+			height: coord.height,
+			zIndex: "1"
+		})
 	},
 
 	/*
