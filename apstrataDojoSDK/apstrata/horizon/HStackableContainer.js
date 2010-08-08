@@ -41,7 +41,21 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 	
 	constructor: function(attrs) {
 		if (attrs && attrs.applicationId) this.applicationId = attrs.applicationId
+
+		// Extract the request params into an object		
+		var s = window.location.search.substring(1)
+		var params = s.split('&')
+		this.request = {}
+		for (var i=0; i<params.length; i++) {
+			var tmp = params[i].split('=')
+			this.request[tmp[0]] = tmp[1]
+		}
+
+		// Decompose the path (request param path) into an array
+		if (this.request['path']) this.path = this.request['path'].split('/');
+		else this.path = [];
 	},
+	
 	
 	startup: function() {
 		setTimeout(dojo.hitch(this, 'loadPreferences'), 3000)
@@ -80,7 +94,8 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 //		dojo.forEach(this.__children, function(child) {
 //			w += child.domNode.offsetWidth
 //		})
-		return this.domNode.offsetWidth - w - this._marginRight * this.getChildren().length
+
+		return this.domNode.offsetWidth - w - this._marginRight * (this.getChildren().length)
 	},
 
 	/*
@@ -99,13 +114,6 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 		
 		this.height = (w.h - this.margin.top - this.margin.bottom - 2*this._marginRight)
 		
-		dojo.style(this.background, {
-			top: (this.margin.top) + "px",
-			left: (this.margin.left) + "px",
-			width: (w.w - this.margin.left - this.margin.right) + "px",
-			height: (w.h - this.margin.top - this.margin.bottom) + "px",
-			zIndex: "10"
-		})
 		dojo.style(this.domNode, {
 			top: coord.top,
 			left: coord.left,
@@ -162,6 +170,7 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 		dojo.addClass(this.background, "horizonBackground")
 		dojo.addClass(this.background, "rounded-sml")
 		
+		this.layout()
 //		this.maximize = dojo.create("div", null, dojo.body())
 		
 		this.inherited(arguments)
