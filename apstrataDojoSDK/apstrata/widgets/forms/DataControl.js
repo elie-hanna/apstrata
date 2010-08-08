@@ -3,6 +3,8 @@ dojo.provide("apstrata.widgets.forms.DataControl")
 dojo.require("dijit.form.Button")
 dojo.require("dojo.fx")
 
+dojo.require("apstrata.widgets.EmbeddedAlert")
+
 dojo.declare("apstrata.widgets.forms.DataControl", 
 [dijit._Widget, dijit._Templated], 
 {
@@ -14,21 +16,30 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	scriptName: null,
 	additionalFields: null,
 	successMessageDiv: null,
+	errorMessageDiv: null,
 	store: null,
 	
 	constructor: function(attrs) {
 		var self = this
 		
 		self._actions = {}
-		
 		if (attrs) {
 			if (attrs.store) this.store = attrs.store;
 			if (attrs.actions) this.actions = attrs.actions;
 			if (attrs.bindForm) this.bind = attrs.bindForm;
 			if (attrs.scriptName) this.scriptName = attrs.scriptName;
-			if (attrs.additionalData) this.bind = attrs.additionalData;
-			if (attrs.additionalFields) this.bind = attrs.additionalFields;
-			if (attrs.successMessageDiv) this.successMessageDiv = attrs.successMessageDiv 
+			if (attrs.additionalData) this.additionalData = attrs.additionalData;
+			if (attrs.additionalFields) this.additionalFields = attrs.additionalFields;
+			
+			if (attrs.successMessageDiv) {
+				this.successMessageDiv = attrs.successMessageDiv 
+				this.successMessageHTML = self._getDivInnerHTML(attrs.successMessageDiv)
+			}
+			
+			if (attrs.errorMessageDiv) {
+				this.errorMessageDiv = attrs.errorMessageDiv 
+				this.errorMessageHTML = self._getDivInnerHTML(attrs.errorMessageDiv)
+			}
 
 			if (attrs.connection) {
 				this.connection = attrs.connection
@@ -46,6 +57,17 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 		}
 	},
 	
+	_getDivInnerHTML: function(node) {
+		if (dojo.isString(node)) {
+			return dojo.byId(node).innerHTML
+		} else {
+			return node.innerHTML
+		}
+	},
+		
+	handleResult: function(operation) {},
+	handleError: function(operation) {},
+
 	postCreate: function() {
 		var self = this;
 
@@ -81,142 +103,68 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 				dojo.place(button.domNode, self.domNode)
 			})
 		}
-
 	},
 	
-	
-	handleResult: function(operation) {
-		
-	},
-	
-	handleError: function(operation) {
-		var errMsg 
-		if (operation.response.metadata.errorDetail=="") {
-			errMsg = operation.response.metadata.errorCode
-		} else {
-			errMsg = operation.response.metadata.errorDetail
-		}
-		
-		var msg = 'Oops, there seems to be a problem:<br><br><b>' + errMsg + '</b>'
-		apstrata.alert(msg, self.domNode)
-	},
 	
 	_dimForm: function() {
-		var self = this
-
-		dojo.style(self.bindForm.domNode, {opacity: .4})
-		dojo.query('.field', self.bindForm.domNode).forEach(
-		  function(inputElem){
-		    inputElem.disabled = 'disabled';
-		  }
-		)
-		
-		
-
-				
-/*
-				var w = dojo.position(contactUs.domNode)
-				console.dir(w)
-				dv = dojo.create("div", null, dojo.body())
-				dojo.addClass(dv, "dimLayer")
-
-
-				dojo.style(dv, {
-					top: w.y + "px",
-					left: w.x + "px",
-					width: w.w + "px",
-					height: w.h + "px"
-				})
-
- */				
-		
+		this._disableInputs(true)
+		dojo.style(this.bindForm.domNode, {opacity: .4})
 	},
 	
 	_undimForm: function() {
-		var self = this
-
-		dojo.style(self.bindForm.domNode, {opacity: 1})
-		dojo.query('.field', self.bindForm.domNode).forEach(
-		  function(inputElem){
-			inputElem.removeAttribute("disabled")
-		  }
-		)
+		this._disableInputs(false)
+		dojo.style(this.bindForm.domNode, {opacity: 1})
 	},
 	
-	_getValue: function() {
-		var value = {}
+	_disableInputs: function(disable) {
+		dojo.query("input, button, textarea, select", this.bindForm.domNode).attr("disabled", disable);
+	},
+	
+	showMessage: function(html) {
+		var self = this
+		new apstrata.widgets.EmbeddedAlert({container: self.bindForm.domNode, 
+											width: 270, height: 170, 
+											content: html, 
+											actions: "close",
+											onClose: function() {
+												self._undimForm()
+											}})
+	},
 
-		dojo.query("input", this.bindForm.domNode).forEach(function(node) {
-			var name = dojo.attr(node, "name")
-			var nodeValue = dojo.attr(node, "value")
-			var checked = dojo.attr(node, "checked")
-			var type = dojo.attr(node, "type")
-			
-			if (type == 'text') {
-				value[name] = nodeValue 
-			} else if (type == 'checkbox') {
-				if (checked) {
-					if (!value[name]) value[name] = []
-					value[name].push(nodeValue)
-				}
-			} else if (type == 'radio') {
-				if (checked) value[name] = nodeValue
+	_flashNotValid: function() {
+		var self = this
+		var backgroundColor = dojo.style(self.bindForm.domNode, "backgroundColor")
+
+		self._disableInputs(true)
+		
+		var alert = dojo.animateProperty({
+			node: self.bindForm.domNode, 
+			duration: 100,
+			properties: {
+				backgroundColor: { start: backgroundColor, end: "#AA1111" }
 			}
 		})
-
-		dojo.query("select", this.bindForm.domNode).forEach(function(node) {
-			value[dojo.attr(node, "name")] = dojo.attr(node, "value")			
-		})
-
-		dojo.query("textarea", this.bindForm.domNode).forEach(function(node) {
-			value[dojo.attr(node, "name")] = dojo.attr(node, "value")
-		})
+		 
+		var revert = dojo.animateProperty({
+			node: self.bindForm.domNode, 
+			duration: 300,
+			properties: {
+				backgroundColor:   { start: "red", end: backgroundColor }
+			}
+		}) 
 		
-		return value
-	},
-	
-	_invalid: function() {
+		dojo.fx.chain([alert, revert, alert, revert]).play()
 		
-	},
-	
-	_disableInputs: function(disabled) {
-		
-		for (key in this._actions) {
-			this._actions[key].setAttribute("disabled", disabled)
-		}
+		setTimeout(dojo.hitch(self, "_disableInputs", false), 1000)
 	},
 
 	submit: function() {
 		var self = this
 
 		if (!this.bindForm.isValid()) {
-			var backgroundColor = dojo.style("contactUs", "backgroundColor")
-
-			self._disableInputs(true)
-			
-			var alert = dojo.animateProperty({
-				node: self.bindForm.domNode, 
-				duration: 100,
-				properties: {
-					backgroundColor: { start: backgroundColor, end: "#AA1111" }
-				}
-			})
-			 
-			var revert = dojo.animateProperty({
-				node: self.bindForm.domNode, 
-				duration: 300,
-				properties: {
-					backgroundColor:   { start: "red", end: backgroundColor }
-				}
-			}) 
-			
-			dojo.fx.chain([alert, revert, alert, revert]).play()
-			
-			setTimeout(dojo.hitch(self, "_disableInputs", false), 1000)
-			
+			this._flashNotValid()
 			return
 		} 
-
 		
 		if (!(this.bindForm && this.client)) return; 
 		var request = {}
@@ -236,7 +184,6 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 		dojo.mixin(request, this.additionalData)
 
 		dojo.mixin(request, this.bindForm.getValues())
-//		dojo.mixin(request, this._getValue())
 		
 		self._dimForm()
 
@@ -249,12 +196,18 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 				action: "RunScript",
 				request: request,
 				load: function(operation) {
-					self._undimForm()
-					if (self.successMessageDiv) self.bindForm.domNode.innerHTML = dojo.byId(self.successMessageDiv).innerHTML;
-					else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>"
+					if (operation.response.result.status == "success") {
+						self._undimForm()
+						
+						if (self.successMessageHTML) self.bindForm.domNode.innerHTML = self.successMessageHTML;
+						else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>"
+					} else {
+						//log(operation.response.result.information)
+						self.showMessage(self.errorMessageHTML)					
+					}
 				},
 				error: function(operation) {
-					self._undimForm()
+					self.showMessage(self.errorMessageHTML)					
 				}
 			}
 		} else {
@@ -267,15 +220,14 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 				request: request,
 				load: function(operation) {
 					self._undimForm()
-					if (self.successMessageDiv) self.bindForm.domNode.innerHTML = dojo.byId(self.successMessageDiv).innerHTML;
+					if (self.successMessageHTML) self.bindForm.domNode.innerHTML = self.successMessageHTML;
 					else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>"
 				},
 				error: function(operation) {
-					self._undimForm()
+					self.showMessage(self.errorMessageHTML)
 				}
 			}
 		}
-
 
 		this.client.call(attrs)
 	},
