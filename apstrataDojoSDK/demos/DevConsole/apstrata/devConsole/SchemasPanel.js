@@ -44,9 +44,9 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 					}
 				},
 				load: function(operation) {
-//					self.txtSchema.value =  self.formatXml(operation.response.result)
-					self.txtSchema.value =  operation.response.result
-					self.fldName.value = self.schemaName 
+					self.fldName.attr("value", self.schemaName)
+					self.txtSchema.attr("value", operation.response.result)
+
 					self._initCodeEditor()
 				},
 				error: function(operation) {
@@ -114,7 +114,7 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 
 		var apsdb = {
 			schemaName: self.schemaName,
-			schema: editAreaLoader.getValue("txtEditor"),
+			schema: editAreaLoader.getValue(self.txtSchema.id),
 			update: self.update
 		}
 
@@ -125,6 +125,7 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 			request: {
 				apsdb: apsdb
 			},
+			formNode: self.frmSchema.domNode,
 			load: function(operation) {
 				self.getParent().reload()
 			},

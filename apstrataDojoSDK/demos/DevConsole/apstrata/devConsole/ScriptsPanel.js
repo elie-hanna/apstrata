@@ -21,6 +21,11 @@
 dojo.provide("apstrata.devConsole.ScriptsPanel")
 dojo.provide("apstrata.devConsole.ScriptEditorPanel")
 
+dojo.require("dijit.form.Form")
+dojo.require("dijit.form.Button")
+dojo.require("dijit.form.ValidationTextBox")
+dojo.require("dijit.form.SimpleTextarea")
+
 dojo.declare("apstrata.devConsole.ScriptsPanel", 
 [apstrata.horizon.HStackableList], 
 {	
@@ -124,31 +129,32 @@ dojo.declare("apstrata.devConsole.ScriptEditorPanel",
 					}
 				},
 				load: function(operation) {
-					self.txtScript.value =  operation.response.result
-					self.fldName.value = self.scriptName
+					self.fldName.attr("value", self.scriptName)
+					self.txtScript.attr("value", operation.response.result)
+					
 					self._initCodeEditor()
 				},
 				error: function(operation) {
 				}
 			})
 		} else {
-			self.txtScript.value =  ""
-			self.fldName.value = ""
+			self.fldName.attr("value", "")
+			self.txtScript.attr("value", "")
 			
 			dojo.attr(this.btnRun, {'disabled': 'disabled'})
 			
 			// TODO: find a more elegant solution, initializing CodeEditor is giving an error, 
 			//  unless some delay is provided
 			setTimeout(dojo.hitch(this,'_initCodeEditor'), 500)	
-			
 		}
 		
 		this.inherited(arguments)
 	},
 	
 	_initCodeEditor: function() {
+		var self = this
 		editAreaLoader.init({
-			id: "txtEditor"	// id of the textarea to transform		
+			id: self.txtScript.id// "txtEditor"	// id of the textarea to transform		
 			,start_highlight: true	// if start with highlight
 			,allow_resize: "both"
 			,allow_toggle: false
@@ -161,23 +167,20 @@ dojo.declare("apstrata.devConsole.ScriptEditorPanel",
 	_save: function() {
 		var self = this
 
-//		if (self.scriptName=="") self.scriptName = self.fldName.value
-
 		var apsdb = {
 			scriptName: self.fldName.value,
-			script: editAreaLoader.getValue("txtEditor"),
+			script: editAreaLoader.getValue(self.txtScript.id),
 			update: self.update
 		}
-
-//		if (self.scriptName != self.fldName.value) apsdb.newScriptName = self.fldName.value
 		
 		this.container.client.call({
 			action: "SaveScript",
 			request: {
 				apsdb: apsdb
 			},
+			formNode: self.frmScript.domNode,
 			load: function(operation) {
-				self.btnRun.removeAttribute('disabled')
+//				self.btnRun.removeAttribute('disabled')
 //				dojo.attr(self.btnRun, {'disabled': ''})
 				if (self.scriptName!=self.fldName.value) {
 					self.scriptName = self.fldName.value

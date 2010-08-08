@@ -1,16 +1,20 @@
 <div class='panel'>
 	{% if true %} 
 	{% endif %}
-	<div class="apstrataForm rounded-top-sml rounded-bottom-sml">
+
+	<div dojoType="dijit.form.Form" class="apstrataForm rounded-top-sml rounded-bottom-sml"
+		dojoAttachPoint="frmSchema" encType="multipart/form-data" action="" method="">
+
 		<div class="label">Name:</div>
-		<input type="text" dojoAttachPoint="fldName" value=""></input>
+		<div class="input" type="text" dojoAttachPoint="fldName" value="" dojoType="dijit.form.ValidationTextBox"></div>
 
 		<div class="label">Schema XML:</div>
-		<textarea dojoAttachPoint='txtSchema' class='longTextarea' id='txtEditor'></textarea>
+		<textarea dojoAttachPoint='txtSchema' class='longTextarea' dojoType="dijit.form.SimpleTextarea"></textarea>
 
-		<br>
 		<div style='width: 100%; text-align: right'>
-			<input type='submit' style='width: 60px;' value="Save" dojoAttachEvent='onclick: _save'></input>
+			<div dojoType="dijit.form.Button" dojoAttachEvent='onClick: _save'>Save</div>
 		</div>
 	</div>
+	
+	<br>
 </div>

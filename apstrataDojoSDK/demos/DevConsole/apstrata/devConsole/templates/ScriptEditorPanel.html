@@ -1,19 +1,22 @@
 <div class='panel'>
 	{% if true %} 
 	{% endif %}
-	<div class="apstrataForm rounded-top-sml rounded-bottom-sml">
-		<div class="label">Name:</div>
-		<input type="text" dojoAttachPoint="fldName" value=""></input>
+	
+		<div dojoType="dijit.form.Form" class="apstrataForm rounded-top-sml rounded-bottom-sml"
+			dojoAttachPoint="frmScript" encType="multipart/form-data" action="" method="">
 
-		<div class="label">Script:</div>
-		<textarea dojoAttachPoint='txtScript' class='longTextarea' id='txtEditor'>
-			
-		</textarea>
+			<div class="label">Name:</div>
+			<div class="input" type="text" dojoAttachPoint="fldName" value="" dojoType="dijit.form.ValidationTextBox"></div>
+	
+			<div class="label">Script:</div>
+			<textarea dojoAttachPoint='txtScript' class='longTextarea' dojoType="dijit.form.SimpleTextarea"></textarea>
 
-		<br>
-		<div style='width: 100%; text-align: right'>
-			<input type='submit' style='width: 60px;' value="Save" dojoAttachEvent='onclick: _save'></input>
-			<input type='submit' style='width: 60px;' value="Run" dojoAttachPoint='btnRun' dojoAttachEvent='onclick: _run'></input>
+			<div style='width: 100%; text-align: right'>
+				<div dojoType="dijit.form.Button" dojoAttachEvent='onClick: _save'>Save</div>
+				<div dojoType="dijit.form.Button" dojoAttachPoint='btnRun' dojoAttachEvent='onClick: _run'>Run</div>
+			</div>
+
 		</div>
-	</div>
+		
+		<br>
 </div>
