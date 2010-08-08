@@ -29,17 +29,8 @@ dojo.declare("apstrata.StickyConnection",
 		_COOKIE_EXPIRY: 15,
 		
 		constructor: function(attrs) {
-			if (attrs && attrs.credentials) {
-				this.credentials.key = attrs.credentials.key
-				this.credentials.secret = attrs.credentials.secret
-				this.credentials.username = attrs.credentials.username
-				this.credentials.password = attrs.credentials.password
-			} else if (apstrata.apConfig) {
-				this.credentials.key = apstrata.apConfig.key
-				this.credentials.secret = apstrata.apConfig.secret
-				this.credentials.username = apstrata.apConfig.username
-				this.credentials.password = apstrata.apConfig.password
-			} else this.load()
+			// If credentials are not passed in constructor OR into apConfig, load from cookie
+			if (!((attrs && attrs.credentials) || apstrata.apConfig)) this.load()
 		},
 		
 		load: function() {
@@ -64,18 +55,7 @@ dojo.declare("apstrata.StickyConnection",
 				if (o.defaultStore) this.defaultStore = o.defaultStore
 
 				apstrata.apConfig = o.credentials
-				
-				if (o.credentials.key && o.credentials.secret) {
-					dojo.publish("/apstrata/connection/login/success", [{
-						key: self.credentials.key,
-					}])					
-				} else if (o.credentials.key && o.credentials.username && o.credentials.password) {
-					dojo.publish("/apstrata/connection/login/success", [{
-						key: self.credentials.key,
-						username: self.credentials.username
-					}])					
-				}
-				
+
 				apstrata.logger.log("debug", "apstrata.StickyConnection" ,"Credentials set to:", this.credentials)
 
 				apstrata.logger.info("Credentials set to:", this.credentials)
@@ -88,131 +68,27 @@ dojo.declare("apstrata.StickyConnection",
 			var o = {}
 			o.credentials = this.credentials
 			
+			apstrata.logger.debug("Saving credentials to cookie.")
+			
 			dojo.cookie(this._COOKIE_NAME /* TODO: add a URL prefix */, dojo.toJson(o), {expires: this._COOKIE_EXPIRY})			
 		},
 		
-		eraseCookie: function() {
-			
-		},
+		eraseCookie: function() {},
 
-		hasCredentials: function() {
-			// Assume that we have a session if either the secret or password are present
-			return ((this.credentials.secret != undefined) && (this.credentials.secret != null) && (this.credentials.secret != "")) 
-					|| ((this.credentials.password != undefined) && (this.credentials.password != null) && (this.credentials.password != "")) 
-		},
-		
 	    /**
 	     * @function getAccountId returns the account identifier (key) for master login or (username) for user logins
 	     * 
 	     */
-		getAccountId: function() {
-			if (this.credentials.password && this.credentials.password!="") return this.credentials.username
-			if (this.credentials.secret && this.credentials.secret!="") return this.credentials.key
-			return ""
-		},
-		
 		getLoginType: function() {
 			if (this.credentials.password && this.credentials.password!="") return this.LOGIN_USER
 			if (this.credentials.secret && this.credentials.secret!="") return this.LOGIN_MASTER
-			return undefined			
+			return null			
 		},
 		
-		loginUser: function(handlers) {
-			var self = this
-			
-			self._ongoingLogin = true
-			apstrata.logger.debug("logging in: attemting to call VerifyCredentials to apstrata to validate credentials")
-			
-			var verifyCredentialsRequest = {
-					apsws: {
-						user: this.credentials.username
-				}
-			};
-			
-			var client = new apstrata.Client({connection: self})
-			
-			client.call({
-				action: "VerifyCredentials",
-				load: function(operation) {
-					self._ongoingLogin = false
-					apstrata.logger.debug("logging in: saving credentials to cookie")
-					self.save()
-	
-					dojo.publish("/apstrata/connection/login/success", [{
-						key: self.credentials.key
-					}])
-
-					if (handlers.success) handlers.success()
-				},
-				error: function(operation) {
-					// Clear the secret and password so hasCredentials() functions
-					self.credentials.secret=""
-					self.credentials.username=""
-					self.credentials.password=""
-
-					dojo.publish("/apstrata/connection/login/failure", [{
-						key: self.credentials.key
-					}])
-
-					if (handlers.failure) handlers.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage)
-				}
-			})
-
-		},
-		
-		loginMaster: function(handlers) {
-			var self = this
-			
-			self._ongoingLogin = true
-			apstrata.logger.debug("logging in: attemting to call VerifyCredentials to apstrata to validate credentials")
-			
-			var client = new apstrata.Client({connection: self})
-			
-			client.call({
-				action: "VerifyCredentials",
-				load: function(operation) {
-					self._ongoingLogin = false
-					apstrata.logger.debug("logging in: saving credentials to cookie")
-					self.save()
-	
-					dojo.publish("/apstrata/connection/login/success", [{
-						key: self.credentials.key
-					}])
-
-					if (handlers.success) handlers.success()
-				},
-				error: function(operation) {
-					// Clear the secret and password so hasCredentials() functions
-					self.credentials.secret=""
-					self.credentials.pw=""
-
-					dojo.publish("/apstrata/connection/login/failure", [{
-						key: self.credentials.key
-					}])
-
-					if (handlers.failure) handlers.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage)
-				}
-			})
-		},
-
-		logout: function() {
-			var self = this
-			apstrata.logger.debug("logging out: erasing credentials from cookie")
-
-			// Erase secret and password
-			this.credentials.secret = ""
-			this.credentials.password = ""
-			
-			// Make sure key/username are not null/undefined
-			if (!this.credentials.key) this.credentials.key=""
-			if (!this.credentials.username) this.credentials.username=""
-
-			this.save()
-
-			dojo.publish("/apstrata/connection/logout", [{
-				key: self.credentials.key
-			}])
+		getAccountId: function() {
+			if (this.getLoginType()==this.LOGIN_USER) return this.credentials.username;
+			else if (this.getLoginType()==this.LOGIN_MASTER) return this.credentials.key;
+			else return null
 		}
-
 	});
 	
