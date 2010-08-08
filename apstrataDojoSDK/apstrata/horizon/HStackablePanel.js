@@ -24,9 +24,8 @@ dojo.provide("apstrata.horizon.HStackableMainPanel")
 dojo.declare("apstrata.horizon.HStackableMainPanel", 
 [apstrata.horizon.HStackableList], 
 {
-	logoutIcon: "../../apstrata/resources/images/pencil-icons/logout.png",
-	
 	constructor: function() {
+		this.logoutIcon = this._apstrataRoot + "../../apstrata/resources/images/pencil-icons/logout.png"
 		this._connection = null
 	},
 	
@@ -36,6 +35,7 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 	
 	postCreate: function() {
 		var mainPanel = this
+
 
 		dojo.subscribe("/apstrata/connection/login/success", function(data) {
 			mainPanel.data.push({label: "logout", iconSrc: mainPanel.logoutIcon})
@@ -47,30 +47,30 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 			mainPanel.render()
 			mainPanel.home()
 		})
-		
+
+
+/*		
+		this._connection.login({
+			success: function() {
+				mainPanel.home()
+			},
+			
+			failure: function() {
+			}
+		})
+*/		
 		this.inherited(arguments)
 	},
 	
 	startup: function() {
+		var mainPanel = this
+		this.inherited(arguments)		
+//		this._connection.login()
 		if (this._connection.hasCredentials()) {
-			this.data.push({label: "logout", iconSrc: this.logoutIcon})
-			this.render()
-		} 
-
-		this.home()
-		this.inherited(arguments)
+//			mainPanel.data.push({label: "logout", iconSrc: mainPanel.logoutIcon})
+//			mainPanel.render()
+		}
 	},
-
-	// Assumes the following data structure of the main list  
-	//
-	//	data: [
-	//		{label: "LABEL", iconSrc: "PATH TO ICON", clazz: CLASS.OF.PANEL, auth: REQUIRES-AUTHENTICATION},
-	//	],
-	//
-	// ex:
-	//	data: [
-	//		{label: "introduction", iconSrc: "../../apstrata/resources/images/pencil-icons/home.png", clazz: apstrata.mForms.HomePanel, auth: false},
-	//	],
 
 	onClick: function(index, label) {
 		var self = this
@@ -82,7 +82,7 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 				this.openPanel(this.data[index].clazz)
 			} else {
 				var okay = false
-				this.openPanel(apstrata.mForms.Login, {
+				this.openPanel(apstrata.horizon.Login, {
 					success: function() {
 						self.openPanel(self.data[index].clazz)
 					}, 
