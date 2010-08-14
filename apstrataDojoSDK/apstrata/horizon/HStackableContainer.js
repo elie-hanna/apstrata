@@ -24,6 +24,8 @@ dojo.require("apstrata.horizon._HStackableMixin")
 dojo.require("apstrata.horizon.HStackableList")
 dojo.require("apstrata.horizon.HStackablePanel")
 
+dojo.require("apstrata.horizon._ControlToolbar")
+
 dojo.require("dojo.cookie")
 
 /*
@@ -134,36 +136,14 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 			height: coord.height,
 			zIndex: "1"
 		})
+
+		coord.top = (this.margin.top - 21) + "px"
+		coord.left = ( w.w - 2*this._marginRight + 5 - 200) + "px"
+		coord.left = (this.margin.left + this._marginRight + 5) + "px"
+
+		this._controlToolbar.setPosition(coord.top, coord.left)
 	},
 
-	/*
-	 * Auto calculate coordinates and size of Explorer based on 
-	 *  window size and explorer target size
-	 */
-	_layoutSizeMode: function() {
-		coord.top = ((w.h - this.height)/2)
-		coord.left = ((w.w - this.width)/2)
-		coord.width = (this.width)
-		coord.height = (this.height)
-
-
-		dojo.style(this.background, {
-			top: (this.margin.h/2) + "px",
-			left: (this.margin.w/2) + "px",
-			width: (w.w - this.margin.w) + "px",
-			height: (w.h - this.margin.h) + "px",
-			zIndex: "10"
-		})
-
-		dojo.style(this.domNode, {
-			top: coord.top + "px",
-			left: coord.left + "px",
-			width: coord.width + "px",
-			height: coord.height + "px",
-			zIndex: "100"
-		})
-	},
-	
 	layout: function() {
 		this._layoutMarginMode()
 
@@ -176,6 +156,8 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 	},
 	
 	postCreate: function() {
+		var self = this
+		
 		dojo.addClass(this.domNode, 'horizon')
 
 		// Create the background transparent div
@@ -183,8 +165,10 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 		dojo.addClass(this.background, "horizonBackground")
 		dojo.addClass(this.background, "rounded-sml")
 		
+		this._controlToolbar = new apstrata.horizon._ControlToolbar({container: self})
+		dojo.place(this._controlToolbar.domNode, dojo.body())
+		
 		this.layout()
-//		this.maximize = dojo.create("div", null, dojo.body())
 		
 		this.inherited(arguments)
 	},
