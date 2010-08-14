@@ -74,21 +74,5 @@ dojo.declare("apstrata.StickyConnection",
 		},
 		
 		eraseCookie: function() {},
-
-	    /**
-	     * @function getAccountId returns the account identifier (key) for master login or (username) for user logins
-	     * 
-	     */
-		getLoginType: function() {
-			if (this.credentials.password && this.credentials.password!="") return this.LOGIN_USER
-			if (this.credentials.secret && this.credentials.secret!="") return this.LOGIN_MASTER
-			return null			
-		},
-		
-		getAccountId: function() {
-			if (this.getLoginType()==this.LOGIN_USER) return this.credentials.username;
-			else if (this.getLoginType()==this.LOGIN_MASTER) return this.credentials.key;
-			else return null
-		}
 	});
 	
