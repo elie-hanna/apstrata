@@ -12,7 +12,7 @@ html, body {
 
 .logo {
 	float: left;
-	width: 250px;
+	width: 180px;
 	padding-left: 25px;	
 	padding-top: 10px;
 }
@@ -24,7 +24,7 @@ html, body {
 	padding-top: 23px;
 
 	font-family: sans-serif; 
-	font-size: 2em;
+	font-size: 1.5em;
 	color: #000099;
 }
 
