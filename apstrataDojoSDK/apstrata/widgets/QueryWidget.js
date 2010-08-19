@@ -134,7 +134,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		        ftsQuery: self.ftsQuery
 			}, 
             store: self.store,
-            rowSelector: '15px',
+            rowSelector: '0px',
 			sort: sortFunc,
 			autoHeight: true,
             structure: self._layout
