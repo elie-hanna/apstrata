@@ -136,7 +136,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
             store: self.store,
             rowSelector: '0px',
 			sort: sortFunc,
-			autoHeight: true,
+			autoHeight: 5,
             structure: self._layout
         }, document.createElement('div'));
 		
