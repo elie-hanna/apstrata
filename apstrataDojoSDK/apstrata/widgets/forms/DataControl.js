@@ -4,6 +4,7 @@ dojo.require("dijit.form.Button")
 dojo.require("dojo.fx")
 
 dojo.require("apstrata.widgets.EmbeddedAlert")
+dojo.require("apstrata.widgets.Curtain")
 
 dojo.declare("apstrata.widgets.forms.DataControl", 
 [dijit._Widget, dijit._Templated], 
@@ -26,7 +27,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 		if (attrs) {
 			if (attrs.store) this.store = attrs.store;
 			if (attrs.actions) this.actions = attrs.actions;
-			if (attrs.bindForm) this.bind = attrs.bindForm;
+			if (attrs.bindForm) this.bindForm = attrs.bindForm;
 			if (attrs.scriptName) this.scriptName = attrs.scriptName;
 			if (attrs.additionalData) this.additionalData = attrs.additionalData;
 			if (attrs.additionalFields) this.additionalFields = attrs.additionalFields;
@@ -71,6 +72,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	postCreate: function() {
 		var self = this;
 
+		this._curtain = new apstrata.widgets.Curtain({container: self.bindForm.domNode})
+
 		if (this.actions) {
 			var actions = self.actions.split(",")
 			dojo.forEach(actions, function(action) {
@@ -93,8 +96,9 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 		        var button = new dijit.form.Button({
 		            label: label,
 		            onClick: function() {
+						
 						// fire corresponding event
-						self[action]()
+						self["_"+action]()
 		            }
 		        })
 				
@@ -107,13 +111,14 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	
 	
 	_dimForm: function() {
-		this._disableInputs(true)
-		dojo.style(this.bindForm.domNode, {opacity: .4})
+		var self = this
+		this._curtain.show()
+		//dojo.style(this.bindForm.domNode, {opacity: .4})
 	},
 	
 	_undimForm: function() {
-		this._disableInputs(false)
-		dojo.style(this.bindForm.domNode, {opacity: 1})
+		this._curtain.hide()
+		//dojo.style(this.bindForm.domNode, {opacity: 1})
 	},
 	
 	_disableInputs: function(disable) {
@@ -158,7 +163,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 		setTimeout(dojo.hitch(self, "_disableInputs", false), 1000)
 	},
 
-	submit: function() {
+	_submit: function() {
 		var self = this
 
 		if (!this.bindForm.isValid()) {
@@ -183,8 +188,6 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 		dojo.mixin(request, additionalFields)
 		dojo.mixin(request, this.additionalData)
 
-		dojo.mixin(request, this.bindForm.getValues())
-		
 		self._dimForm()
 
 		if (self.scriptName) {
@@ -195,6 +198,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			var attrs = {
 				action: "RunScript",
 				request: request,
+				formNode: self.bindForm.domNode,
+				useHttpMethod: "POST",
 				load: function(operation) {
 					if (operation.response.result.status == "success") {
 						self._undimForm()
@@ -202,7 +207,6 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 						if (self.successMessageHTML) self.bindForm.domNode.innerHTML = self.successMessageHTML;
 						else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>"
 					} else {
-						//log(operation.response.result.information)
 						self.showMessage(self.errorMessageHTML)					
 					}
 				},
@@ -218,6 +222,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			var attrs = {
 				action: "SaveDocument",
 				request: request,
+				formNode: self.bindForm.domNode,
 				load: function(operation) {
 					self._undimForm()
 					if (self.successMessageHTML) self.bindForm.domNode.innerHTML = self.successMessageHTML;
@@ -228,11 +233,10 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 				}
 			}
 		}
-
 		this.client.call(attrs)
 	},
 	
-	reset: function() {
+	_reset: function() {
 		if (this.bindForm) this.bindForm.reset()
 	}
 })
