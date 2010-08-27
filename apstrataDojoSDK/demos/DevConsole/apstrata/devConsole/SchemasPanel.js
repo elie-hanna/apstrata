@@ -34,7 +34,14 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 	
 	postCreate: function() {
 		var self = this
-		
+
+		// If the schema being shown is the UD schema, then show the default UD schema button to allow resetting the UD schema.
+		if (self.schemaName == apstrata.apConfig.key + '_ud_user') {
+			self.btnDefaultUDSchema.domNode.style.display = '';
+		} else {
+			self.btnDefaultUDSchema.domNode.style.display = 'none';
+		}
+
 		if (self.schemaName) {
 			this.container.client.call({
 				action: "GetSchema",
@@ -54,25 +61,55 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 			})
 		} else {
 			self.txtSchema.value = ""
-			
+
 			// TODO: find a more elegant solution, initializing CodeEditor is giving an error, 
 			//  unless some delay is provided
 			setTimeout(dojo.hitch(this,'_initCodeEditor'), 500)	
 		}
-		
+
 		this.inherited(arguments)
 	},
 	
 	_initCodeEditor: function() {
+		var self = this;
 		editAreaLoader.init({
-			id: "txtEditor"	// id of the textarea to transform		
+			id: self.txtSchema.id	// id of the textarea to transform
 			,start_highlight: true	// if start with highlight
 			,allow_resize: "both"
 			,allow_toggle: false
 			,word_wrap: true
 			,language: "en"
-			,syntax: "xml"	
+			,syntax: "xml"
 		});
+	},
+
+	/**
+	 * Sets the default user directory schema in the edit area.
+	 */
+	_defaultUDSchema: function() {
+		var self = this;
+		var defaultUDSchema = '<schema>\n'
+							+ '<aclGroups>\n'
+							+ '        <aclGroup name="requiredVisibles">\n'
+							+ '                <read>anonymous</read>\n'
+							+ '                <fields>\n'
+							+ '                        <field>login</field>\n'
+							+ '                        <field>name</field>\n'
+							+ '                        <field>groups</field>\n'
+							+ '                        <field>password</field>\n'
+							+ '                        <field>locale</field>\n'
+							+ '                </fields>\n'
+							+ '        </aclGroup>\n'
+							+ '</aclGroups>\n'
+							+ '<fields>\n'
+							+ '        <field name="login" type="string" />\n'
+							+ '        <field name="name" type="string"/>\n'
+							+ '        <field name="groups" type="string" />\n'
+							+ '        <field name="password" type="string" />\n'
+							+ '        <field name="locale" type="string" />\n'
+							+ '</fields>\n'
+							+ '</schema>';
+		editAreaLoader.setValue(self.txtSchema.id, defaultUDSchema);
 	},
 
 	formatXml: function(xml) {
