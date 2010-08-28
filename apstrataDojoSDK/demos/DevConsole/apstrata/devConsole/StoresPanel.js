@@ -132,47 +132,92 @@ dojo.declare("apstrata.devConsole.StoresEditPanel",
 	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/StoresEditPanel.html"),
 	
 	constructor: function(attrs) {
+		if (attrs.target) this.update = true
 		this.target = attrs.target
 	},
 	
 	postCreate: function() {
 		var self = this
-/*
-		this.container.client.call({
+		
+		this.storeName.attr("value", this.target)
+
+		var request = {}
+		
+		var attrs = {
 			action: "ListConfigurations",
-			request: {
+			request: request,
+			load: function(operation) {
+				console.dir(operation)
+				console.dir(operation.response.result.stores)
+				console.dir(operation.response.result.stores[0].configurations)
+
+				var stores = operation.response.result.stores
+
+				for(var i=0; i<stores.length; i++) {
+					if (stores[i].name == self.target) {
+						self.saveDocumentACL.attr("value", stores[i].configurations.saveDocumentACL)
+						self.deleteDocumentACL.attr("value", stores[i].configurations.deleteDocumentACL)
+						self.getFileACL.attr("value", stores[i].configurations.getFileACL)
+						self.queryACL.attr("value", stores[i].configurations.queryACL)
+
+						break;						
+					}
+				}
 			},
-			load: function(operation){
-			},
-			error: function(operation){
+			error: function(operation) {
 			}
-		})
- 
- */		
+		}
+		this.container.client.call(attrs)
+		
 		this.inherited(arguments)
 	},
 
 	_save: function() {
 		var self = this
 		if (this.newStoreForm.validate()) {
-			this.container.client.call({
-				action: "CreateStore",
-				request: {
-					apsdb: {
-						store: self.storeName.getValue(),
+			var attrs
+
+			if (this.update) {
+				var request = {}
+				request["apsdb." + this.target] = {
 						saveDocumentACL: self.saveDocumentACL.getValue(),
 						deleteDocumentACL: self.deleteDocumentACL.getValue(),
 						getFileACL: self.getFileACL.getValue(),
 						queryACL: self.queryACL.getValue()
-					}
-				},
-				load: function(operation){
-					self.getParent().reload()
-					self.getParent().closePanel()
-				},
-				error: function(operation){
 				}
-			})
+				
+				attrs = {
+					action: "SaveConfiguration",
+					request: request,
+					load: function(operation){
+//						self.getParent().reload()
+//						self.getParent().closePanel()
+					},
+					error: function(operation){
+					}
+				}
+			} else {
+				attrs = {
+					action: "CreateStore",
+					request: {
+						apsdb: {
+							store: self.storeName.getValue(),
+							saveDocumentACL: self.saveDocumentACL.getValue(),
+							deleteDocumentACL: self.deleteDocumentACL.getValue(),
+							getFileACL: self.getFileACL.getValue(),
+							queryACL: self.queryACL.getValue()
+						}
+					},
+					load: function(operation){
+						self.getParent().reload()
+						self.getParent().closePanel()
+					},
+					error: function(operation){
+					}
+				}
+			}
+			
+			this.container.client.call(attrs)
 		}
 	},
 	
