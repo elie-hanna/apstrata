@@ -36,7 +36,7 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 		var self = this
 
 		// If the schema being shown is the UD schema, then show the default UD schema button to allow resetting the UD schema.
-		if (self.schemaName == apstrata.apConfig.key + '_ud_user') {
+		if (self.schemaName == 'apsdb_user') {
 			self.btnDefaultUDSchema.domNode.style.display = '';
 		} else {
 			self.btnDefaultUDSchema.domNode.style.display = 'none';
