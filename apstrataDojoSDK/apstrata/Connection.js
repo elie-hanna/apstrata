@@ -20,6 +20,7 @@
 dojo.provide("apstrata.Connection")
 
 dojo.require("apstrata.URLSignerMD5")
+dojo.require("apstrata.Client")
 
 dojo.declare("apstrata.Connection",
 	null,
@@ -117,7 +118,7 @@ dojo.declare("apstrata.Connection",
 			// Erase secret and password
 			this.credentials.secret = ""
 			this.credentials.password = ""
-			this.credentials.key=""
+//			this.credentials.key=""
 			this.credentials.username=""
 			
 			// Make sure key/username are not null/undefined

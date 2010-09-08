@@ -116,7 +116,7 @@ dojo.declare("apstrata.Post",
 
 			dojo.publish("/apstrata/operation", [{
 					id: self.operationId,
-					method: 'GET',
+					method: 'POST',
 					type: "message", 
 					url: self.url,
 					message: message

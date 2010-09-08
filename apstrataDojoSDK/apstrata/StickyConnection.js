@@ -70,9 +70,9 @@ dojo.declare("apstrata.StickyConnection",
 			
 			apstrata.logger.debug("Saving credentials to cookie.")
 			
-			dojo.cookie(this._COOKIE_NAME /* TODO: add a URL prefix */, dojo.toJson(o), {expires: this._COOKIE_EXPIRY})			
+			dojo.cookie(this._COOKIE_NAME /* TODO: add a URL prefix */, dojo.toJson(o), {expires: this._COOKIE_EXPIRY, path: "/"})			
 		},
 		
-		eraseCookie: function() {},
+		eraseCookie: function() {}
 	});
 	
