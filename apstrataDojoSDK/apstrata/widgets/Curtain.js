@@ -27,7 +27,7 @@ dojo.require("dojo.fx.easing")
 dojo.declare("apstrata.widgets.Curtain", 
 [dijit._Widget, dijit._Templated], 
 {
-	templateString:"<div style='background: #000; opacity: 1;'></div>",
+	templateString:"<div style='background: #000; opacity: 1;'><img style='position:relative;' dojoAttachPoint='icon' src='${animationURL}'></div>",
 	
 	container: null,
 	width: null,
@@ -36,10 +36,15 @@ dojo.declare("apstrata.widgets.Curtain",
 	actions: null,
 	onClose: null,
 	
+	
 	constructor: function(attrs) {
 		if (attrs) {
 			if (attrs.container) this.container = attrs.container
+			if (attrs.showAnimation) this.showAnimation = attrs.showAnimation
+			if (attrs.animationURL) this.animationURL = attrs.animationURL
 		}
+		
+		this.animationURL = this._apstrataRoot + "/resources/images/ajax-loader-orange-on-grey"
 	},
 	
 	postCreate: function() {
@@ -65,8 +70,13 @@ dojo.declare("apstrata.widgets.Curtain",
 		
 		dojo.anim(this.domNode, { opacity: .85 }, 1000);
 		
-//		dojo.fadeOut(fadeArgs).play();
-
+		var iconPos = dojo.position(this.icon, true)
+		
+		dojo.style(this.icon, {
+		    left: (pos.w/2 - iconPos.w/2) + "px",
+		    top: (pos.h/2 - iconPos.h/2)  + "px",
+			visibility: "visible"
+		})
 	},
 	
 	hide: function() {
