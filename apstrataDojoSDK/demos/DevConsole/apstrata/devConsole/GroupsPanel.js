@@ -58,9 +58,7 @@ dojo.declare("apstrata.devConsole.GroupsPanel",
 		this.container.client.call({
 			action: "DeleteGroup",
 			request: {
-				apsim: {
-					group: label
-				}
+				groupName: label
 			},
 			load: function(operation){
 				self.reload()
@@ -90,9 +88,7 @@ dojo.declare("apstrata.devConsole.GroupEditPanel",
 		this.container.client.call({
 			action: "CreateGroup",
 			request: {
-				apsim: {
-					group: self.groupName.value
-				}
+				groupName: self.groupName.value
 			},
 			load: function(operation) {
 				self.getParent().reload()

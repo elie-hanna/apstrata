@@ -80,7 +80,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 			self.container.client.call({
 				action: "ListUsers",
 				request: {
-					apsim: {
+					apsdb: {
 						query: "q12345!=\"x12345\""
 					}
 				},			
@@ -88,7 +88,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 					self.data = []
 					self.userListFetched = true
 					dojo.forEach(operation.response.result.users, function(user) {
-						self.data.push({name: user['apsim.user'], label: user['apsim.user'], abbreviation: user['apsim.user']})
+						self.data.push({name: user['login'], label: user['login'], abbreviation: user['login']})
 					})
 					
 					self.userList = {identifier:'abbreviation',label: 'name',items: self.data}

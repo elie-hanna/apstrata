@@ -140,14 +140,13 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 
 			var apsim = {}
 			
-			if (keywordArgs.query.runAs) apsim.runAs = keywordArgs.query.runAs
+			if (keywordArgs.query.runAs) apsdb.runAs = keywordArgs.query.runAs
 			if (keywordArgs.query.sort) apsdb.sort = keywordArgs.query.sort
 			if (keywordArgs.query.ftsQuery) apsdb.ftsQuery = keywordArgs.query.ftsQuery
 			if (keywordArgs.query.aggregates) apsdb.aggregateExpression = keywordArgs.query.aggregates
 			if (keywordArgs.query.aggregateGlobal) apsdb.aggregateGlobal = keywordArgs.query.aggregateGlobal
 			if (keywordArgs.query.aggregatePage) apsdb.aggregatePage = keywordArgs.query.aggregatePage
 			if (keywordArgs.query.deniedFields) apsdb.deniedFields = keywordArgs.query.deniedFields
-			if (keywordArgs.query.runAs) apsim.runAs = keywordArgs.query.runAs
 
 			this._client.call({
 				action: "Query",

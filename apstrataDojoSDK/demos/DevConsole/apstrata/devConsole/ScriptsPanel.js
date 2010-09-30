@@ -206,7 +206,7 @@ dojo.declare("apstrata.devConsole.ScriptEditorPanel",
 		this.container.client.call({
 			action: "DeleteScript",
 			request: {
-				apsim: {
+				apsdb: {
 					scriptName: label
 				}
 			},

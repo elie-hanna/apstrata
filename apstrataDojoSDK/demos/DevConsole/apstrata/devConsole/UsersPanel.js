@@ -41,7 +41,7 @@ dojo.declare("apstrata.devConsole.UsersPanel",
 		this.container.client.call({
 			action: "ListUsers",
 			request: {
-				apsim: {
+				apsdb: {
 					query: "q12345!=\"x12345\""
 				}
 			},			
@@ -49,7 +49,7 @@ dojo.declare("apstrata.devConsole.UsersPanel",
 				// Rearrange the result to suite the template
 				self.data = []
 				dojo.forEach(operation.response.result.users, function(user) {
-					self.data.push({label: user['apsim.user'], iconSrc: ""})
+					self.data.push({label: user['login'], iconSrc: ""})
 				})
 	
 				// Cause the DTL to rerender with the fresh self.data
@@ -79,9 +79,7 @@ dojo.declare("apstrata.devConsole.UsersPanel",
 		this.container.client.call({
 			action: "DeleteUser",
 			request: {
-				apsim: {
-					user: label
-				}
+				login: label
 			},
 			load: function(operation){
 				self.reload()
@@ -130,9 +128,7 @@ dojo.declare("apstrata.devConsole.UserEditPanel",
 			this.container.client.call({
 				action: "GetUser",
 				request: {
-					apsim: {
-						user: usersPanel._userName
-					}
+					login: usersPanel._userName
 				},
 				load: function(operation) {
 					usersPanel.userAttributes.user = usersPanel._userName
@@ -161,14 +157,15 @@ dojo.declare("apstrata.devConsole.UserEditPanel",
 		this.container.client.call({
 			action: "SaveUser",
 			request: {
-				apsim: {
-					user: self.user.value,
-					password: self.password.value,
-					name: self.name.value,
-					email: self.email.value,
-					group: (self.groups.value).split(','),
+				apsdb: {
 					update: self.update
-				}
+				},
+				login: self.user.value,
+				password: self.password.value,
+				name: self.name.value,
+				email: self.email.value,
+				groups: (self.groups.value).split(','),
+				
 			},
 			load: function(operation) {
 				self.getParent().reload()

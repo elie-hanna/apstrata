@@ -35,7 +35,7 @@
 var queryResult = <b>apsdb.callApi("Query"</b>, { "apsdb.queryFields" : "apsdb.creator",  "apsdb.store" : store,  "apsdb.query" : 'apsdb.documentKey = "' + docKey + '"' } , null);<br/>
 <br/>
 <b>//get the creator of the survey in order to get his twitter account</b><br/>
-var getUserResult = <b>apsdb.callApi("GetUser"</b>, { "apsim.user" : queryResult.result.documents[0]["apsdb.creator"] }, null);<br/>
+var getUserResult = <b>apsdb.callApi("GetUser"</b>, { "login" : queryResult.result.documents[0]["apsdb.creator"] }, null);<br/>
 <br/>
 <b>//send message to the survey owner that someone filled the survey</b><br/>
 httpResp = <b>apsdb.callHttp("http://twitter.com/direct_messages/new.json"</b>, "POST", { text : title, user : twitterUserName }, ["apstratatest","changeme"], null, null, false, null, false, false);<br/>
