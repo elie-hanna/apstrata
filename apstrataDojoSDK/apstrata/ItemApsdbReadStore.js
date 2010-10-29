@@ -171,23 +171,21 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 					}
 					
 					self._itemsMap = []
-
-					// if it's a * query, init fieldsArray with the fields in the 1st row
+					// if it's a * query, init fieldsArray with the fields from all rows
 					if (apsdb.queryFields == '*') {
 						self._fieldsArray = []
-						if (q.result.documents[0]) {
-							for(var fieldName in q.result.documents[0])
+						for(var i = 0 ; i < q.result.documents.length; i++){
+							for(var fieldName in q.result.documents[i])
 							{
-								self._fieldsArray.push(fieldName);
+								if(dojo.indexOf(self._fieldsArray, fieldName) == -1)
+									self._fieldsArray.push(fieldName);
 							}
-						}						
+						}
 					}
-					
 					dojo.forEach(q.result.documents, function(item) {
 						var item = new apstrata._Item({item: item, fieldNames: self._fieldsArray, childrenNames: self._childrenArray})
 						self._addItem(item)
 					})
-					
 					self._fetchSuccess(request)
 				},
 				error: function(operation) {

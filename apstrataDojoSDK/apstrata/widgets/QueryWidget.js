@@ -20,7 +20,7 @@
 
 dojo.provide("apstrata.widgets.QueryWidget")
 
-dojo.require("dojox.grid.DataGrid")
+dojo.require("apstrata.widgets.DynamicColumnsDataGrid")
 
 dojo.require ("apstrata.widgets.PageNumberSelector")
 
@@ -119,7 +119,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		}
 		 
 		// create a new grid:
-        this._grid = new dojox.grid.DataGrid({
+        this._grid = new apstrata.widgets.DynamicColumnsDataGrid({
             query: {
 				query: self.query,
 				count: (self.page == 1),
