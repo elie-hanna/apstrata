@@ -60,12 +60,14 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 			this._layout= attrs.layout; 
 		} else {
 				this._layout = []
-		
-				// compute layout
-				dojo.forEach(self.columns.split(","), function(field) {
-					field = dojo.string.trim(field)
-					self._layout.push({ field: field, name: field, width: 'auto' })
-				})		
+				if(self.columns != "*"){
+					//this is a * query, do not bother adding the * column to the structure
+					// compute layout
+					dojo.forEach(self.columns.split(","), function(field) {
+						field = dojo.string.trim(field)
+						self._layout.push({ field: field, name: field, width: 'auto' })
+					})		
+				}
 			}
 		if (attrs.showSearch) this.showSearch = attrs.showSearch
 	},
