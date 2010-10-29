@@ -38,6 +38,13 @@ html, body {
 	font-size: .7em;
 }
 
+.AlertContent{
+	font-size: .7em;
+	width: 280px;
+	height: 100px;
+	overflow-x: auto;
+}	
+
 .devConsoleBackground {
 	position: absolute;
 	height: 482px;

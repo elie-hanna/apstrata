@@ -281,7 +281,7 @@ dojo.declare("apstrata.widgets.Alert",
 
 apstrata.alert = function(msg, origin) {
 	var dialog = new apstrata.widgets.Alert({width: 300, 
-											height: 250, 
+											height: 300, 
 											actions: "close", 
 											message: msg, 
 											clazz: "rounded-sml Alert", 
