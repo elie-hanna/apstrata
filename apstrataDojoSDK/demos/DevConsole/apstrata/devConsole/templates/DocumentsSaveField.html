@@ -1,0 +1,32 @@
+<div class="field" dojoAttachPoint="templateField">
+        <div style="float:left">
+		<div class="label">Name:</div>
+		<input dojoAttachPoint="fieldName" type="text" dojoType="dijit.form.ValidationTextBox" required="true" class="rounded-xsml"/>
+		</div>
+		<!--  -->		
+
+		<div style="float:left">
+		<div class="label">Type:</div>
+		<select dojoType="dijit.form.FilteringSelect" dojoAttachEvent='onChange: _typeChanged' required="false" autocomplete="true" dojoAttachPoint="fieldType" class="rounded-xsml">
+			<option value="string">string</option>
+			<option value="numeric">numeric</option>
+			<option value="date">date</option>
+			<option value="text">text</option>
+		</select>
+		</div>
+		
+		<div style="float:left">
+		<div class="label">Value:</div>
+		<div dojoAttachPoint="otherTypeInput" style="display:none;">
+			<input dojoAttachPoint="fieldValue" type="text" dojoType="dijit.form.ValidationTextBox" required="false" class="rounded-xsml"/>	
+		</div>
+		<div dojoAttachPoint="dateTypeInput" style="display:none;">
+			<input dojoAttachPoint="fieldDateValue" constraints="{datePattern:'dd/MM/yyyy HH:mm:ss'}" type="text" dojoType="dijit.form.DateTextBox" required="false" class="rounded-xsml"/>
+		</div>
+		</div>
+		
+		<div style="float:left">
+		<div class="label">&nbsp;</div>		
+		<button dojoAttachEvent='onClick: _removeFieldLine' dojoType='dijit.form.Button'>-</button>	
+		</div>
+</div>

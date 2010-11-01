@@ -22,6 +22,7 @@ dojo.provide("apstrata.admin.StoreOperations")
 dojo.provide("apstrata.devConsole.StoresEditPanel")
 
 dojo.require("apstrata.devConsole.QueryPanel")
+dojo.require("apstrata.devConsole.DocumentsSavePanel")
 
 dojo.declare("apstrata.devConsole.StoreOperations", 
 [apstrata.horizon.HStackableList], 
@@ -29,7 +30,8 @@ dojo.declare("apstrata.devConsole.StoreOperations",
 	data: [
 		{label: "Query", iconSrc: "../../apstrata/resources/images/pencil-icons/search.png"},
 		{label: "Saved Query", iconSrc: "../../apstrata/resources/images/pencil-icons/savedQuery.png"},
-		{label: "Edit Store", iconSrc: "../../apstrata/resources/images/pencil-icons/schema.png"}
+		{label: "Edit Store", iconSrc: "../../apstrata/resources/images/pencil-icons/schema.png"},
+		{label: "Save Document", iconSrc: "../../apstrata/resources/images/pencil-icons/schema.png"}
 	],
 
 	constructor: function(attrs) {
@@ -44,15 +46,27 @@ dojo.declare("apstrata.devConsole.StoreOperations",
 			id: "QueryAPI"
 		}])
 
-		dojo.connect(self, 'onClick', function(index, label) {
+		dojo.connect(self, 'onClick', function(index, label, docKey) {
 			if(label == 'Query') {
 				self.closePanel()
 				self.openPanel(apstrata.devConsole.QueryPanel, {target: self.target})
 			} else if (label == 'Edit Store') {
 				self.openPanel(apstrata.devConsole.StoresEditPanel, {target: self.target})
-			}
+			} else if (label == 'Save Document') {		
+				//populate the list of schemas
+				this.container.client.call({
+					action: "ListSchemas",
+					request: {
+						apsdb: {}
+					},
+					load: function(operation) {
+						self.openPanel(apstrata.devConsole.DocumentsSavePanel, {target: self.target, docKey: docKey, listSchemas: operation.response.result.schemas});
+					},
+					error: function(operation) {
+					}
+				});
+			}			
 		})
-
 		this.inherited(arguments)
 	}
 })
@@ -225,5 +239,3 @@ dojo.declare("apstrata.devConsole.StoresEditPanel",
 		this.panel.destroy()
 	}
 })
-
-

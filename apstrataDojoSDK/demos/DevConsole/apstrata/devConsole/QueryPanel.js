@@ -31,6 +31,8 @@ dojo.require("dojo.data.ItemFileReadStore");
 dojo.require('apstrata.ItemApsdbReadStore')
 dojo.require('apstrata.widgets.QueryWidget')
 
+dojo.require("apstrata.devConsole.DocumentsSavePanel")
+
 dojo.declare("apstrata.devConsole.QueryResultsPanel", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
 {
@@ -135,6 +137,10 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 					ftsQuery: FTSString,
 					columns: columnsString,
 					page: 1,
+					editAction: self._onEditAction,
+					deleteAction: self._onDeleteAction,
+					gridRef: self,
+					theRowId: "key",
 					runAs: runAs
 				}
 				
@@ -151,6 +157,36 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 					query: attrs
 				})
 			}
-	}	
+	},
+	
+	_onEditAction: function(docKey, refContainer) {
+		refContainer.container.client.call({
+			action: "ListSchemas",
+			request: {
+				apsdb: {}
+			},
+			load: function(operation) {
+				refContainer.openPanel(apstrata.devConsole.DocumentsSavePanel, {target: refContainer.target, docKey: docKey, listSchemas: operation.response.result.schemas});
+			},
+			error: function(operation) {
+			}
+		});
+	},
+	
+	_onDeleteAction: function(docKey, refContainer, gridRefContainer) {
+		refContainer.container.client.call({
+			action: "DeleteDocument",
+			request: {
+				apsdb: {documentKey : docKey, store : refContainer.target}
+			},			
+			load: function(operation) {
+				if (gridRefContainer != null) {
+					gridRefContainer._refresh(true);
+				}
+			},
+			error: function(operation) {
+			}
+		})		
+	}
+	
 })
-

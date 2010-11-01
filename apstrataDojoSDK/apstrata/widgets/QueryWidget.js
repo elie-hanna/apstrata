@@ -19,6 +19,7 @@
  */
 
 dojo.provide("apstrata.widgets.QueryWidget")
+dojo.provide("apstrata.widgets.QueryWidget.ActionColumn")
 
 dojo.require("apstrata.widgets.DynamicColumnsDataGrid")
 
@@ -68,9 +69,22 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 						self._layout.push({ field: field, name: field, width: 'auto' })
 					})		
 				}
-			}
+				// add edit and delete button to the Actions column
+				if (attrs.editAction || attrs.deleteAction) {
+					self._layout.push({name: "Actions", field: attrs.theRowId, width: '15%', formatter: function (pk) {
+						var zActions = new Object();
+						if (attrs.editAction) {
+							zActions["editAction"] = attrs.editAction;
+						}
+						if (attrs.deleteAction) {
+							zActions["deleteAction"] = attrs.deleteAction;
+						}
+						return new apstrata.widgets.QueryWidget.ActionColumn({actions: zActions, pk: pk, container: attrs.gridRef, gridReference: self});
+					}});
+				}		
+		}
 		if (attrs.showSearch) this.showSearch = attrs.showSearch
-	},
+	},	
 	
 	postMixInProperties: function() {
 		// Add the search field and button if showSearch was set to true 
@@ -83,7 +97,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		var self = this
 
 		dojo.connect(self.store, "totalPagesCalculated", function(pages, itemsCount) {
-			if (self._spinner == undefined) {
+			if (self._spinner == undefined || self.forceCount) {
 				self._spinner = new apstrata.widgets.PageNumberSelector({min:1, max:pages, value:1, visibleRange: 10, bigStep: 5})
 		        self.dvSpinner.appendChild(self._spinner.domNode);
 				
@@ -138,7 +152,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
             store: self.store,
             rowSelector: '0px',
 			sort: sortFunc,
-			autoHeight: 5,
+			autoHeight: 11,
             structure: self._layout
         }, document.createElement('div'));
 		
@@ -195,11 +209,13 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		this._refresh()
 	},
 	
-	_refresh: function() {
+	_refresh: function(forceCount) {
 		var self = this
+		self.forceCount = forceCount;
+		if(forceCount) this._spinner.destroy();
 		var query = {
 				query: self.query,
-				count: (self.page == 1),
+				count: (self.forceCount || self.page == 1),
 				pageNumber: self.page,
 		        runAs: self.runAs,
 		        aggregates: self.aggregates,
@@ -227,3 +243,42 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 })
 
 
+dojo.declare("apstrata.widgets.QueryWidget.ActionColumn", [dijit._Widget, dijit._Templated], 
+{
+	widgetsInTemplate: true,
+	templateString: "<div dojoAttachPoint=\"actionDiv\"><button style=\"display:none;\" dojoAttachPoint=\"editButton\" dojoType=\"dijit.form.Button\">Edit</button><button style=\"display:none;\" dojoAttachPoint=\"deleteButton\" dojoType=\"dijit.form.Button\">Delete</button></div>",
+	self: null,
+	
+	/**
+	 * Constructor of a grid action column.
+	 */
+	constructor: function(attrs) {
+	    self = this;
+		this.actions = attrs.actions;
+		this.pk = attrs.pk;
+		
+		if (attrs.gridReference != null) {
+			this.gridReference = attrs.gridReference;
+		}
+		if (attrs.container !== undefined) {
+			this.container = attrs.container;
+		}
+	},
+	
+	postCreate: function() {
+		var localSelf = this;
+		if(localSelf.actions.editAction) {
+			localSelf.editButton.domNode.style.display = "inline";
+			dojo.connect(localSelf.editButton, 'onClick', function() {
+				localSelf.actions.editAction(localSelf.pk, self.container, self.gridReference);
+			});			
+		}
+		
+		if(localSelf.actions.deleteAction) {
+			localSelf.deleteButton.domNode.style.display = "inline";
+			dojo.connect(localSelf.deleteButton, 'onClick', function() {
+				localSelf.actions.deleteAction(localSelf.pk, self.container, self.gridReference);
+			});			
+		}		
+	}
+})

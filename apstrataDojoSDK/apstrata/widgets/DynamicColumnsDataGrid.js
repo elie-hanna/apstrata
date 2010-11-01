@@ -17,15 +17,14 @@ dojo.declare("apstrata.widgets.DynamicColumnsDataGrid", [dojox.grid.DataGrid], {
 
 	_onFetchComplete: function(items, req){
 		if(!this.scroller){ return; }
-		struct = []
+        var self = this;
 		// compute layout
 		dojo.forEach(this.store._fieldsArray, function(field) {
 			field = dojo.string.trim(field)
 			//if(!dojo.string.startsWith("apsd."))
-				struct.push({ field: field, name: field, width: 'auto' })
+			if (dojo.indexOf(self.structure, field) == -1)
+				self.structure.push({ field: field, name: field, width: 'auto' })
 		})
-		
-		this.setStructure(struct);
 		
 		if(req.isRender){
 			this.scroller.init(items.length, this.keepRows, this.rowsPerPage);
