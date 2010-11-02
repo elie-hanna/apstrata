@@ -154,6 +154,14 @@ dojo.declare("apstrata.devConsole.UserEditPanel",
 			alert("passwords don't match")
 		}
 		
+		var userGroups = (self.groups.value).split(',');
+		// trim spaces from the groups list
+		for (var group in userGroups){
+			if (userGroups.hasOwnProperty (group)){ // make sure we're not playing with anything on the prototype, just with attributes of this object
+				userGroups [group] = userGroups[group].replace(/^\s+|\s+$/g,""); // trim leading and trailing spaces from the group name
+			}			
+		}
+		
 		this.container.client.call({
 			action: "SaveUser",
 			request: {
@@ -164,7 +172,7 @@ dojo.declare("apstrata.devConsole.UserEditPanel",
 				password: self.password.value,
 				name: self.name.value,
 				email: self.email.value,
-				groups: (self.groups.value).split(','),
+				groups: userGroups,
 				
 			},
 			load: function(operation) {
