@@ -234,12 +234,18 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 	_getParams: function() {
 		var frm = this.frmParams.attr('value')
 		var params = {}
-		
+ 
 		if (frm.param1) params[frm.param1] = frm.value1 
 		if (frm.param2) params[frm.param2] = frm.value2 
 		if (frm.param3) params[frm.param3] = frm.value3 
 		if (frm.param4) params[frm.param4] = frm.value4 
-
+		if (frm.param5) params[frm.param5] = frm.value5
+		if (frm.param6) params[frm.param6] = frm.value6
+		if (frm.param7) params[frm.param7] = frm.value7
+		if (frm.param8) params[frm.param8] = frm.value8
+		if (frm.param9) params[frm.param9] = frm.value9
+		if (frm.param10) params[frm.param10] = frm.value10
+		
 		return params 
 	},
 	
@@ -262,7 +268,7 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 		var url = operation.buildUrl().url;
 		window.open(url, 'Script Output:' + self.scriptName) 
 	},
-
+/*
 	_go: function() {
 		var self = this
 		
@@ -282,7 +288,7 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 			})
 		}
 	},
-	
+*/	
 	postCreate: function() {
 		this.inherited(arguments)
 	},
