@@ -42,7 +42,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 	_filter: '',
 	_FILTER_MESSAGE: 'type to filter',
 
-	msgDelete: "are you sure you want to delete item: ",
+	msgDelete: "Are you sure you want to delete item: ",
 
 	postCreate: function() {
 		this._resizeFilterField()
@@ -178,7 +178,7 @@ dojo.declare("apstrata.horizon.HStackableList",
 
 	_alert: function (msg, origin, yes, no) {
 		dialog3 = new apstrata.widgets.Alert({width: 300, 
-												height: 250, 
+												height: 300, 
 												actions: "yes,no", 
 												message: msg, 
 												clazz: "rounded-sml Alert", 

@@ -134,8 +134,7 @@ dojo.declare("apstrata.devConsole.DevConsole",
 				} else {
 					errMsg = operation.response.metadata.errorDetail
 				}
-				
-				var msg = 'Oops, there seems to be a problem:<br><br><b>' + errMsg + '</b>'
+				var msg = 'Oops, there seems to be a problem:<br><br><b>' + errMsg.replace(/\&/g, "&amp;").replace(/\\u000a/g, " ").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;") + '</b>'
 				apstrata.alert(msg, self.domNode)
 			}
 		})
