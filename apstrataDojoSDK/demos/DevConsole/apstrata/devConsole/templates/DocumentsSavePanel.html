@@ -10,8 +10,8 @@
 		    height: 26px;
 		  }				
 	</style>
-	<div dojoType="dijit.form.Form" dojoAttachPoint="saveDocumentForm" class="apstrataForm narrowForm" encType="multipart/form-data" action="" method="" style="width:705px;">
-		<div class="label">Schema</div>
+	<div dojoType="dijit.form.Form" dojoAttachPoint="saveDocumentForm" class="apstrataForm narrowForm" encType="multipart/form-data" action="" method="" style="width:820px;">
+		<div class="label">Schema:</div>
 		<select dojoType="dijit.form.FilteringSelect" required="false" autocomplete="true" dojoAttachPoint="schemaName" class="rounded-xsml">
 			<option value=""></option>
 			{% for o in listSchemas %} 
@@ -19,34 +19,16 @@
 			{% endfor %}
 		</select>
 
-		<div class="label">Update:</div>
-		<input type="text" dojoAttachPoint="update" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">		
-
-		<div class="label">Revision Number:</div>
-		<input type="text" dojoAttachPoint="revisionNumber" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
-
 		<div class="label">Document Key:</div>
 		<input type="text" dojoAttachPoint="documentKey" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
-
-		<div class="label">Enable 'Full Text Search' for field:</div>
-		<input type="text" dojoAttachPoint="ftsFields" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
-
-        <!-- 
-		<div class="label">Global Date Format:</div>
-		<input type="text" dojoAttachPoint="globalDateFormat" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
-		-->
 
 		<div class="label">Run as:</div>
 		<select dojoType="dijit.form.FilteringSelect" autocomplete="true" dojoAttachPoint="runAs" searchAttr="label" required="false"  class="rounded-xsml"> </select>
 
 		<div style="height:5px;"></div>
-		<fieldset style="width:98%;"><legend class="label">Document Fields<button dojoAttachEvent='onClick: _addFieldLine' dojoType='dijit.form.Button'>+</button></legend>
+		<fieldset style="width:98%;border:1px dashed #00f;"><legend class="label">Document Fields<button dojoAttachEvent='onClick: _addFieldLine' dojoType='dijit.form.Button'>+</button></legend>
 		<div class="fields" dojoAttachPoint="fieldsList" dojoType="dijit.layout.LayoutContainer"></div>		
-		</fieldset>
-		<div style="height:5px;"></div>
-
-		<div class="label">MV append:</div>
-		<input type="text" dojoAttachPoint="multivalueAppend" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">				
+		</fieldset>			
 
 		<br><br>
 		<div style='width: 220px; text-align: right;'>
