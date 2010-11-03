@@ -20,8 +20,10 @@
 
 dojo.provide("apstrata.devConsole.DocumentsSavePanel");
 dojo.provide("apstrata.devConsole.DocumentsSaveField");
+dojo.provide("apstrata.devConsole.DocumentsSaveFieldValue");
 
 dojo.require("dijit.layout.LayoutContainer");
+dojo.require("dijit.form.ToggleButton");
 dojo.require("dojo.data.ItemFileReadStore");
 dojo.require("dijit.form.FilteringSelect");
 dojo.require("dojo.date.locale");
@@ -40,6 +42,9 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 		self.storeName = attrs.target;
 		self.docKey = attrs.docKey;
 		self.listSchemas = attrs.listSchemas;
+		self.update = (attrs.docKey && attrs.docKey!='') ? true : false;
+		self.currentPage = attrs.currentPage;
+		self.ftsFields = '';
 	},
 	
 	postCreate: function() {
@@ -88,17 +93,12 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 					// operation.response.result
 					var q = operation.response
 					if (q.result.documents[0]) {
+						self.schemaName.attr("disabled",true);
 						for(var fieldName in q.result.documents[0]) {
 							fieldValue = q.result.documents[0][fieldName];
 							if(fieldName=='apsdb.documentKey') {
 								self.documentKey.attr("value",fieldValue);
-								self.update.attr("value","true");
-							}
-							
-							// Operational field will not be passed in the response	
-							//if(fieldName=='apsdb.revisionNumber') {
-							//	self.revisionNumber.attr("value",fieldValue);
-							//}							
+							}						
 							
 							// Considering schema for future changes
 							if(fieldName=='apsdb.objectName' || fieldName=='apsdb.schema') {
@@ -107,59 +107,55 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 								}
 							}
 							
-							// Add a populated field widgit
+							// Add a populated field widget
 							if ((fieldName.indexOf('apsdb.') == -1) && (fieldName != '_type') && (fieldName != 'key')) {
-								var field = new apstrata.devConsole.DocumentsSaveField({fieldName:fieldName, fieldValue: fieldValue, fieldType:q.result.documents[0]['_type'][fieldName]});
+								//when having one single value for the field
+								if(typeof fieldValue == "string") {
+									fieldValue = [fieldValue];
+								}
+								
+								var field = new apstrata.devConsole.DocumentsSaveField({fieldName:fieldName, fieldValues: fieldValue, fieldType: q.result.documents[0]['_type'][fieldName], update: true});
 								self.fieldsList.addChild(field);
 							}
-							
-						}
+						}						
 					}
 				},
 				error: function(operation) {
 					if (keywordArgs.onError) keywordArgs.onError({errorCode: operation.response.metadata.errorCode, errorMessage: operation.response.metadata.errorMessage}, request)
 				}
 			}
-			this.container.client.call(attrs)
+			
+			this.container.client.call(attrs);
+		} else {
+			//adding one single field by default
+			this._addFieldLine();
 		}
 		
-		this.inherited(arguments)
+		this.inherited(arguments);
 	},
 
 	_save: function() {
-		var self = this
+		var docSavePanel = this;
 		if (this.saveDocumentForm.validate()) {
 			
 			var attrs
 			var apsdb = {
-				store: self.target			
+				store: docSavePanel.target			
 			}
 			
-			if(self.schemaName.attr("value")!='') {
-				apsdb.schema = self.schemaName.attr("value");								
+			if(docSavePanel.schemaName.attr("value")!='') {
+				apsdb.schema = docSavePanel.schemaName.attr("value");								
 			}
-			
-			if(self.ftsFields.attr("value")!='') {
-				apsdb.ftsFields = self.ftsFields.attr("value");								
-			}			
-			
-			if(self.multivalueAppend.attr("value")!='') {
-				apsdb.multivalueAppend = self.multivalueAppend.attr("value");								
-			}			
 	
-			if(self.documentKey.attr("value")!='') {
-				apsdb.documentKey = self.documentKey.attr("value");								
-			}			
-			
-			if(self.revisionNumber.attr("value")!='') {
-				apsdb.revisionNumber = self.revisionNumber.attr("value");								
+			if(docSavePanel.documentKey.attr("value")!='') {
+				apsdb.documentKey = docSavePanel.documentKey.attr("value");								
 			}
 			
-			if(self.runAs.attr("value")!='') {
-				apsdb.runAs = self.runAs.attr("value");								
+			if(docSavePanel.runAs.attr("value")!='') {
+				apsdb.runAs = docSavePanel.runAs.attr("value");								
 			}	
 			
-			apsdb.update = (self.update.attr("value")=='true');
+			apsdb.update = docSavePanel.update;
 			
 			attrs = {
 				action: "SaveDocument",
@@ -167,33 +163,44 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 					apsdb: apsdb
 				},
 				load: function(operation){
-//						self.getParent().reload()
-//						self.getParent().closePanel()
+					if(docSavePanel.update == true) {
+						docSavePanel.getParent()._query(null, docSavePanel.currentPage);
+					}
 				},
 				error: function(operation){
 				}
 			}
 			
-			var fields = self.fieldsList.getChildren();
+			var fields = docSavePanel.fieldsList.getChildren();
 			for(var fieldsIndex=0; fieldsIndex < fields.length; fieldsIndex++) {
 				var field = fields[fieldsIndex];
 				
-				sentVal = field.fieldValue.value;
-				if (field.fieldType.value=='date')
-					sentVal = (field.fieldDateValue.value != null) ? (dojo.date.locale.format(field.fieldDateValue.value, {datePattern:"yyyy-MM-dd", timePattern: "'T'HH:mm:ssZ"})) : null;
-				sentVal = sentVal.replace(' ','');
+				if(field.fieldValuesList.hasChildren()) {
+					var fieldValues = field.fieldValuesList.getChildren();
+					attrs.request[field.fieldName.value] = new Array();
+					for(var i=0; i<fieldValues.length; i++) {
+						sentVal = fieldValues[i].fieldValue.value;
+						if (field.fieldType.value=='date') {
+							sentVal = (fieldValues[i].fieldDateValue.value != null && fieldValues[i].fieldDateValue.value != '') ? (dojo.date.locale.format(fieldValues[i].fieldDateValue.value, {datePattern:"yyyy-MM-dd", timePattern: "'T'HH:mm:ssZ"})) : '';
+						}
+						sentVal = sentVal.replace(' ','');
+						attrs.request[field.fieldName.value].push(sentVal);
+					}
+				}
 				
-				attrs.request[field.fieldName.value] = sentVal;
+				if (field.ftsFields.attr("checked")) {
+					apsdb.ftsFields = (apsdb.ftsFields) ? field.fieldName.value+","+apsdb.ftsFields : field.fieldName.value;
+				}
+				
 				attrs.request[field.fieldName.value+".apsdb.fieldType"] = (field.fieldType.value!='')? field.fieldType.value : '';
-			}			
-			
+			}
 			this.container.client.call(attrs);
 		}
 	},	
 	
 	_addFieldLine: function() {
 		// Adds the newField node to the document
-		var newField = new apstrata.devConsole.DocumentsSaveField({fieldName:null, fieldValue:null, fieldType:null});
+		var newField = new apstrata.devConsole.DocumentsSaveField({fieldName:null, fieldValues:null, fieldType:null});
 		this.fieldsList.addChild(newField);
 	},
 	
@@ -214,41 +221,39 @@ dojo.declare("apstrata.devConsole.DocumentsSaveField", [dijit._Widget, dijit._Te
 	 */
 	constructor: function(attrs) {
 		this.fldName = attrs.fieldName;
-		this.fldValue = attrs.fieldValue;	
+		this.fldValues = attrs.fieldValues;	
 		this.fldType = attrs.fieldType;
+		this.update = attrs.update;
 	},
 	
 	postCreate: function() {
 		this.fieldName.attr("value", this.fldName);
-		if(this.fldType=='date' && this.fldValue!=null && this.fldValue!='') {
-			this.fieldDateValue.attr("value", this._parseDate(this.fldValue));
-		} else {
-			this.fieldValue.attr("value", this.fldValue);
-		}
 		this.fieldType.attr("value", this.fldType);
-		this._typeChanged();
+		if (this.update) {
+			this.fieldType.attr("disabled",true);
+		}
+		if(this.fldValues) {
+			for(var i=0; i<this.fldValues.length; i++) {
+				this.fieldValuesList.addChild(new apstrata.devConsole.DocumentsSaveFieldValue({fieldValue: this.fldValues[i], referencedField: this}));
+			}	
+		} else {
+			this._addFieldValue();
+		}
 	},
 	
 	_typeChanged: function() {
-		if(this.fieldType.attr("value")=="date") {
-			dojo.style(this.dateTypeInput, "display", "inline");
-			dojo.style(this.otherTypeInput, "display", "none");
-//			if(this.fieldDateValue.attr("value")==null) {
-//				this.fieldDateValue.attr("value", new Date());
-//			}
-		} else {
-			dojo.style(this.otherTypeInput, "display", "inline");
-			dojo.style(this.dateTypeInput, "display", "none");
+		if(this.fieldValuesList.hasChildren()) {
+			for(var i=0; i<this.fieldValuesList.getChildren().length; i++) {
+				this.fieldValuesList.getChildren()[i]._typeChanged();
+			}
 		}
+		console.dir(this.fieldValuesList);
 	},
 	
-	_parseDate: function(value) {
-		var dateVal = dojo.date.locale.parse(value.split('T')[0], {datePattern:'yyyy-MM-dd', selector: 'date'});
-		var timeVal = dojo.date.locale.parse(value.substring(value.indexOf('T')), {timePattern: "'T'HH:mm:ssZ", selector: 'time'});
-		dateVal.setUTCHours(timeVal.getUTCHours());
-		dateVal.setUTCMinutes(timeVal.getUTCMinutes());
-		dateVal.setUTCSeconds(timeVal.getUTCSeconds());
-	    return dateVal;
+	_addFieldValue: function() {
+		// Adds the newField node to the document
+		var newFieldValue = new apstrata.devConsole.DocumentsSaveFieldValue({fieldValue:null, referencedField: this});
+		this.fieldValuesList.addChild(newFieldValue);		
 	},	
 	
 	_removeFieldLine: function() {
@@ -258,3 +263,59 @@ dojo.declare("apstrata.devConsole.DocumentsSaveField", [dijit._Widget, dijit._Te
 	}	
 })
 
+dojo.declare("apstrata.devConsole.DocumentsSaveFieldValue", [dijit._Widget, dijit._Templated], 
+{
+	widgetsInTemplate: true,
+	templateString: "<div dojoAttachPoint=\"valuesDiv\">"+
+					"<button dojoAttachEvent='onClick: _removeFieldValue' dojoType='dijit.form.Button'>-</button>"+
+	                "<div dojoAttachPoint=\"otherTypeInput\" style=\"display:none;\"><input dojoAttachPoint=\"fieldValue\" type=\"text\" dojoType=\"dijit.form.ValidationTextBox\" required=\"false\" class=\"rounded-xsml\"/></div>"+
+		            "<div dojoAttachPoint=\"dateTypeInput\" style=\"display:none;\"><input dojoAttachPoint=\"fieldDateValue\" constraints=\"{datePattern:'dd/MM/yyyy HH:mm:ss'}\" type=\"text\" dojoType=\"dijit.form.DateTextBox\" required=\"false\" class=\"rounded-xsml\"/></div>"+
+		            "</div>",
+	
+	/**
+	 * Constructor of the Document Field value widget.
+	 */
+	constructor: function(attrs) {
+		this.referencedField = attrs.referencedField;
+		this.fldValue = attrs.fieldValue;
+	},
+	
+	postCreate: function() {
+		if (this.fldValue!=null && this.fldValue!='') {
+			if(this.referencedField.fieldType.attr("value")=='date') {
+				this.fieldDateValue.attr("value", this._parseDate(this.fldValue));
+			} else {
+				this.fieldValue.attr("value", this.fldValue);
+			}
+		}
+		this._typeChanged();
+	},	
+	
+	_typeChanged: function() {
+		if(this.referencedField.fieldType.attr("value")=="date") {
+			dojo.style(this.dateTypeInput, "display", "inline");
+			dojo.style(this.otherTypeInput, "display", "none");
+			if(this.fieldDateValue.attr("value")==null) {
+				this.fieldDateValue.attr("value", new Date());
+			}
+		} else {
+			dojo.style(this.otherTypeInput, "display", "inline");
+			dojo.style(this.dateTypeInput, "display", "none");
+		}
+	},	
+	
+	_removeFieldValue: function() {
+		// Remove the field value container.
+		this.destroy();
+		return;			
+	},
+	
+	_parseDate: function(value) {
+		var dateVal = dojo.date.locale.parse(value.split('T')[0], {datePattern:'yyyy-MM-dd', selector: 'date'});
+		var timeVal = dojo.date.locale.parse(value.substring(value.indexOf('T')), {timePattern: "'T'HH:mm:ssZ", selector: 'time'});
+		dateVal.setUTCHours(timeVal.getUTCHours());
+		dateVal.setUTCMinutes(timeVal.getUTCMinutes());
+		dateVal.setUTCSeconds(timeVal.getUTCSeconds());
+	    return dateVal;
+	}
+})

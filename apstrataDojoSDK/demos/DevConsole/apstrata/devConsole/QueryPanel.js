@@ -104,7 +104,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 		this.inherited(arguments)
 	},
 	
-	_query: function() {
+	_query: function(event, toPage) {
 			var self = this
 			if (this.queryForm.validate()) {
 				var queryString = this.txtQuery.getValue()
@@ -134,7 +134,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 					sort: sortingString,
 					ftsQuery: FTSString,
 					columns: columnsString,
-					page: 1,
+					page: ((toPage != null)? toPage : 1),
 					editAction: self._onEditAction,
 					deleteAction: self._onDeleteAction,
 					gridRef: self,
@@ -157,34 +157,50 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 			}
 	},
 	
-	_onEditAction: function(docKey, refContainer) {
+	_onEditAction: function(docKey, refContainer, gridRefContainer) {
 		refContainer.container.client.call({
 			action: "ListSchemas",
 			request: {
 				apsdb: {}
 			},
 			load: function(operation) {
-				refContainer.openPanel(apstrata.devConsole.DocumentsSavePanel, {target: refContainer.target, docKey: docKey, listSchemas: operation.response.result.schemas});
+				refContainer.openPanel(apstrata.devConsole.DocumentsSavePanel, {target: refContainer.target, docKey: docKey, listSchemas: operation.response.result.schemas, currentPage: 1});
 			},
 			error: function(operation) {
 			}
 		});
 	},
 	
-	_onDeleteAction: function(docKey, refContainer, gridRefContainer) {
-		refContainer.container.client.call({
-			action: "DeleteDocument",
-			request: {
-				apsdb: {documentKey : docKey, store : refContainer.target}
-			},			
-			load: function(operation) {
-				if (gridRefContainer != null) {
-					gridRefContainer._refresh(true);
+	_onDeleteAction: function (docKey, refContainer, gridRefContainer) {
+			dialog3 = new apstrata.widgets.Alert({width: 280, 
+													height: 300, 
+													actions: "yes,no", 
+													message: "are you sure you want to delete the document "+docKey, 
+													clazz: "rounded-sml Alert", 
+													iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
+													modal: true })
+
+			dialog3.show()
+			dojo.connect(dialog3, "buttonPressed", function(label) {
+				if (label == 'yes') {
+					refContainer.container.client.call({
+						action: "DeleteDocument",
+						request: {
+							apsdb: {documentKey : docKey, store : refContainer.target}
+						},			
+						load: function(operation) {
+							if (gridRefContainer != null) {
+								gridRefContainer._refresh(true);
+							}
+						},
+						error: function(operation) {
+						}
+					})
+				} else {
+					//no(origin)
 				}
-			},
-			error: function(operation) {
-			}
-		})		
-	}
+				dialog3.hide()
+			})
+		},	
 	
 })

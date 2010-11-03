@@ -19,21 +19,16 @@ dojo.declare("apstrata.widgets.DynamicColumnsDataGrid", [dojox.grid.DataGrid], {
 		if(!this.scroller){ return; }
         var self = this;
 		// compute layout
+        var existingFieldNames = [];
+        for (var i=0; i<self.structure.length; i++) {
+        	existingFieldNames.push(self.structure[i].field);
+		}        
+        
 		dojo.forEach(this.store._fieldsArray, function(field) {
 			field = dojo.string.trim(field)
 			//if(!dojo.string.startsWith("apsd."))
-			if (self.structure && self.structure.length > 0) {
-				exists = false;
-				for (var i=0; i<self.structure.length; i++) {
-					if (self.structure[i].field==field) {
-						exists = true;
-						break;
-					}
-				}
-				if(!exists) {
-					self.structure.unshift({ field: field, name: field, width: 'auto' });
-				}
-			}	
+			if (dojo.indexOf(existingFieldNames, field) == -1)
+				self.structure.unshift({ field: field, name: field, width: 'auto' });
 		})
 		this.setStructure(self.structure);
 		

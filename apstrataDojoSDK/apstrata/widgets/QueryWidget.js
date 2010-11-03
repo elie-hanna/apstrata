@@ -105,6 +105,8 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 					self.page = self._spinner.value
 					self._refresh()
 				})
+				//resetting the forceCount to false after refresh
+				self.forceCount = false;
 			}
 		})	
 		
@@ -247,13 +249,13 @@ dojo.declare("apstrata.widgets.QueryWidget.ActionColumn", [dijit._Widget, dijit.
 {
 	widgetsInTemplate: true,
 	templateString: "<div dojoAttachPoint=\"actionDiv\"><button style=\"display:none;\" dojoAttachPoint=\"editButton\" dojoType=\"dijit.form.Button\">Edit</button><button style=\"display:none;\" dojoAttachPoint=\"deleteButton\" dojoType=\"dijit.form.Button\">Delete</button></div>",
-	self: null,
+	actionColumn: null,
 	
 	/**
 	 * Constructor of a grid action column.
 	 */
 	constructor: function(attrs) {
-	    self = this;
+		actionColumn = this;
 		this.actions = attrs.actions;
 		this.pk = attrs.pk;
 		
@@ -270,14 +272,14 @@ dojo.declare("apstrata.widgets.QueryWidget.ActionColumn", [dijit._Widget, dijit.
 		if(localSelf.actions.editAction) {
 			localSelf.editButton.domNode.style.display = "inline";
 			dojo.connect(localSelf.editButton, 'onClick', function() {
-				localSelf.actions.editAction(localSelf.pk, self.container, self.gridReference);
+				localSelf.actions.editAction(localSelf.pk, actionColumn.container, actionColumn.gridReference);
 			});			
 		}
 		
 		if(localSelf.actions.deleteAction) {
 			localSelf.deleteButton.domNode.style.display = "inline";
 			dojo.connect(localSelf.deleteButton, 'onClick', function() {
-				localSelf.actions.deleteAction(localSelf.pk, self.container, self.gridReference);
+				localSelf.actions.deleteAction(localSelf.pk, actionColumn.container, actionColumn.gridReference);
 			});			
 		}		
 	}
