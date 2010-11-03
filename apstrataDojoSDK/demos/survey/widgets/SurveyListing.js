@@ -135,7 +135,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 				
 			var attrs = {
 				store: store,
-				query: "apsdb.objectName=\"" + self.apsdbSchema + "\"",
+				query: "apsdb.schema=\"" + self.apsdbSchema + "\"",
 				columns: strArrFieldsToDisplay,
 				layout: layout,
 				page: 1
@@ -156,7 +156,7 @@ dojo.declare("surveyWidget.widgets.SurveyListing",
 			var queryRequest = {
 				apsdb: {
 					store: listing.storeName,
-					query: "apsdb.objectName=\"" + listing.apsdbSchema + "\"",
+					query: "apsdb.schema=\"" + listing.apsdbSchema + "\"",
 					queryFields: strArrFieldsToDisplay
 				}
 			};

@@ -123,7 +123,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			var queryRequest = {
 				apsdb: {
 					store: charting.storeName,
-					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\"",
+					query: "apsdb.schema=\"" + charting.apsdbSchema + "\"",
 					count: true
 				}
 			};
@@ -214,7 +214,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			var queryRequest = {
 				apsdb: {
 					store: charting.storeName,
-					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
+					query: "apsdb.schema=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
 					count: true
 				}
 			};
@@ -373,7 +373,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 			var queryRequest = {
 				apsdb: {
 					store: charting.storeName,
-					query: "apsdb.objectName=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
+					query: "apsdb.schema=\"" + charting.apsdbSchema + "\" AND " + fieldName + "=\"" + this.clean(fieldValue) + "\"",
 					count: true
 				}
 			};
@@ -408,7 +408,7 @@ dojo.declare("surveyWidget.widgets.SurveyCharting",
 						var countPeopleQueryRequest = {
 							apsdb: {
 								store: charting.storeName,
-								query: "apsdb.objectName=\"" + charting.apsdbSchema + "\"" + queryFields,
+								query: "apsdb.schema=\"" + charting.apsdbSchema + "\"" + queryFields,
 								count: true
 							}
 						};
