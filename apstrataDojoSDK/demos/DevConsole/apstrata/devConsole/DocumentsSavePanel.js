@@ -53,7 +53,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 				action: "ListUsers",
 				request: {
 					apsdb: {
-						query: "q12345!=\"x12345\""
+						query: ""
 					}
 				},			
 				load: function(operation) {
