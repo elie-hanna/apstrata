@@ -2,22 +2,22 @@
 <html>
     <head>
         <title>Apstrata Database JS Client</title>
-        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">        
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script>
 
 			(function()
 			{
 			    var loc = window.location.protocol + '//' + window.location.hostname + window.location.pathname;
                 loc = loc.split('\\');
-                loc = loc.join('/');					    
+                loc = loc.join('/');
 			    loc = loc.split('/');
 			    loc.pop();
 			    loc = loc.join('/');
 			    loc += '/' + '../../../../';
-			
+
 			    document.write("<base href='" + loc + "'></base>");
 			})();
-         
+
         </script>
 
         <link rel="stylesheet" type="text/css" href="jgdoc.css">
@@ -29,7 +29,7 @@
         <div class="startup" id="startup">
             <div class="banner" id="banner">
                 <h1 class="projectName">
-	               <a href=".">Apstrata Database JS Client</a>   
+	               <a href=".">Apstrata Database JS Client</a>
                 </h1>
                 <div class="bar">
 	                 version 1.0
@@ -62,7 +62,7 @@
     </H2>
         <div class="extends">
         <span class="descSection">Extends </span>
-                     apstrata.util.logger.Loggable            </div>                                      
+                     apstrata.util.logger.Loggable            </div>
 
 
     <hr/>
@@ -70,7 +70,7 @@
     <div>
        <code>
             <span class="modifiers"></span>
-            <span class="objType">class</span> 
+            <span class="objType">class</span>
             <b>apstrata.apsdb.client.Operation</b>
        </code>
     </div>
@@ -79,14 +79,14 @@
  </div>
                                             <span class="definedIn">Defined in </span>
         <a href="physical/file-Operation.js.html">Operation.js</a>
-        <hr/> 
+        <hr/>
     <p />
-    
-            	
-                                
-                    
-    
-                    
+
+
+
+
+
+
                 <div class="summaryTable constructor">
             <div class="summaryTableHeader">
                 <span class="objType">Constructor</span> Summary
@@ -98,13 +98,13 @@
                 <a href="logical/apstrata/apsdb/client/Operation.html#___Operation"><span class="elementName">Operation</span></a>
                 (<span class="type"></span>
  connection)
-            </div>          
+            </div>
                 <div class="summaryItemDesc">
-        Initializes request attributes and instance variables    </div>  
+        Initializes request attributes and instance variables    </div>
                             </div>
                 </div>
         <p/>
-        
+
                 <div class="summaryTable function">
             <div class="summaryTableHeader">
                 <span class="objType">Function</span> Summary
@@ -116,7 +116,7 @@
                 <a href="logical/apstrata/apsdb/client/Operation.html#___abort"><span class="elementName">abort</span></a>()
             </div>
         <div class="summaryItemDesc">
-        Abort the operation    </div>  
+        Abort the operation    </div>
                             </div>
                     <div class="summaryItem">
                                                            <div class="summaryItemDef">
@@ -125,7 +125,7 @@
                 <a href="logical/apstrata/apsdb/client/Operation.html#___abstrata"><span class="elementName">abstrata</span></a>()
             </div>
         <div class="summaryItemDesc">
-        function    </div>  
+        function    </div>
                             </div>
                     <div class="summaryItem">
                                                            <div class="summaryItemDef">
@@ -134,7 +134,7 @@
                 <a href="logical/apstrata/apsdb/client/Operation.html#___buildUrl"><span class="elementName">buildUrl</span></a>()
             </div>
         <div class="summaryItemDesc">
-        Allows you to build the standard URL, could be overriden when necessary    </div>  
+        Allows you to build the standard URL, could be overriden when necessary    </div>
                             </div>
                     <div class="summaryItem">
                                                            <div class="summaryItemDef">
@@ -143,7 +143,7 @@
                 <a href="logical/apstrata/apsdb/client/Operation.html#___handleError"><span class="elementName">handleError</span></a>()
             </div>
         <div class="summaryItemDesc">
-        Stop receiving the response and log the error that occurred    </div>  
+        Stop receiving the response and log the error that occurred    </div>
                             </div>
                     <div class="summaryItem">
                                                            <div class="summaryItemDef">
@@ -152,7 +152,7 @@
                 <a href="logical/apstrata/apsdb/client/Operation.html#___handleResult"><span class="elementName">handleResult</span></a>()
             </div>
         <div class="summaryItemDesc">
-        Stop receiving the response and handle what was collected    </div>  
+        Stop receiving the response and handle what was collected    </div>
                             </div>
                     <div class="summaryItem">
                                                            <div class="summaryItemDef">
@@ -161,7 +161,7 @@
                 <a href="logical/apstrata/apsdb/client/Operation.html#___requestSent"><span class="elementName">requestSent</span></a>()
             </div>
         <div class="summaryItemDesc">
-        Initiate making the request    </div>  
+        Initiate making the request    </div>
                             </div>
                     <div class="summaryItem">
                                                            <div class="summaryItemDef">
@@ -170,19 +170,19 @@
                 <a href="logical/apstrata/apsdb/client/Operation.html#___timeout"><span class="elementName">timeout</span></a>()
             </div>
         <div class="summaryItemDesc">
-        Force the operation to timeout    </div>  
+        Force the operation to timeout    </div>
                             </div>
                 </div>
         <p/>
-                
+
                     <!-- ============== Details coming here =================== -->
     	    	    	            <div class="details constructor">
             <h2 class="sectionHeader">Constructor Details</h2>
                                                                     <h3>
         <a name="___Operation">
             <span class="objType">constructor</span>
-            <span class="objName">Operation</span>            
-        </a> 
+            <span class="objName">Operation</span>
+        </a>
     </h3>
                         <div>
                 <code>
@@ -190,8 +190,8 @@
                     <span class="type"></span>
                     Operation(<span class="type"></span>
  connection)
-                </code> 
-            </div>          
+                </code>
+            </div>
                 <div class="comment">
         Initializes request attributes and instance variables
 
@@ -204,19 +204,19 @@
                                                 <div class="param paddedDetails">
         <code>
             connection        </code>
-         The underlying connection to be used when this operation calls the apstrata database server            </div>   
+         The underlying connection to be used when this operation calls the apstrata database server            </div>
                                         </div>
                 </div>
                     </div>
-                                                    <hr/>       
+                                                    <hr/>
                                     </div>
     	            <div class="details function">
             <h2 class="sectionHeader">Function Details</h2>
                                                                     <h3>
         <a name="___abort">
             <span class="objType">function</span>
-            <span class="objName">abort</span>            
-        </a> 
+            <span class="objName">abort</span>
+        </a>
     </h3>
                 <div>
                 <code>
@@ -224,17 +224,17 @@
                     <span class="type"></span>
                     abort()
                 </code>
-            </div>    
+            </div>
         <div class="comment">
         Abort the operation
 
      </div>
-                                                    <hr/>       
+                                                    <hr/>
                                                                                     <h3>
         <a name="___abstrata">
             <span class="objType">function</span>
-            <span class="objName">abstrata</span>            
-        </a> 
+            <span class="objName">abstrata</span>
+        </a>
     </h3>
                 <div>
                 <code>
@@ -242,17 +242,17 @@
                     <span class="type"></span>
                     abstrata()
                 </code>
-            </div>    
+            </div>
         <div class="comment">
         function
 
      </div>
-                                                    <hr/>       
+                                                    <hr/>
                                                                                     <h3>
         <a name="___buildUrl">
             <span class="objType">function</span>
-            <span class="objName">buildUrl</span>            
-        </a> 
+            <span class="objName">buildUrl</span>
+        </a>
     </h3>
                 <div>
                 <code>
@@ -260,7 +260,7 @@
                     <span class="type"></span>
                     buildUrl()
                 </code>
-            </div>    
+            </div>
         <div class="comment">
         Allows you to build the standard URL, could be overriden when necessary
 
@@ -270,13 +270,13 @@
 	        <div class="paddedDetails">
 	            	             The URL to be called
 	     	            	        </div>
-        </div>      
-                                                <hr/>       
+        </div>
+                                                <hr/>
                                                                                     <h3>
         <a name="___handleError">
             <span class="objType">function</span>
-            <span class="objName">handleError</span>            
-        </a> 
+            <span class="objName">handleError</span>
+        </a>
     </h3>
                 <div>
                 <code>
@@ -284,17 +284,17 @@
                     <span class="type"></span>
                     handleError()
                 </code>
-            </div>    
+            </div>
         <div class="comment">
         Stop receiving the response and log the error that occurred
 
      </div>
-                                                    <hr/>       
+                                                    <hr/>
                                                                                     <h3>
         <a name="___handleResult">
             <span class="objType">function</span>
-            <span class="objName">handleResult</span>            
-        </a> 
+            <span class="objName">handleResult</span>
+        </a>
     </h3>
                 <div>
                 <code>
@@ -302,17 +302,17 @@
                     <span class="type"></span>
                     handleResult()
                 </code>
-            </div>    
+            </div>
         <div class="comment">
         Stop receiving the response and handle what was collected
 
      </div>
-                                                    <hr/>       
+                                                    <hr/>
                                                                                     <h3>
         <a name="___requestSent">
             <span class="objType">function</span>
-            <span class="objName">requestSent</span>            
-        </a> 
+            <span class="objName">requestSent</span>
+        </a>
     </h3>
                 <div>
                 <code>
@@ -320,17 +320,17 @@
                     <span class="type"></span>
                     requestSent()
                 </code>
-            </div>    
+            </div>
         <div class="comment">
         Initiate making the request
 
      </div>
-                                                    <hr/>       
+                                                    <hr/>
                                                                                     <h3>
         <a name="___timeout">
             <span class="objType">function</span>
-            <span class="objName">timeout</span>            
-        </a> 
+            <span class="objName">timeout</span>
+        </a>
     </h3>
                 <div>
                 <code>
@@ -338,15 +338,15 @@
                     <span class="type"></span>
                     timeout()
                 </code>
-            </div>    
+            </div>
         <div class="comment">
         Force the operation to timeout
 
      </div>
-                                                    <hr/>       
+                                                    <hr/>
                                     </div>
     	    	                                    						        </div>
-        		          </div>			                    
+        		          </div>
 		                </div>
         	       </div>
              </div>
@@ -383,128 +383,128 @@
                     <li>
                                                                                 <div>
                                 <a href="physical/file-ApsdbRWStore.js.html">ApsdbRWStore.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-Client.js.html">Client.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-Connection.js.html">Connection.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-CreateGroup.js.html">CreateGroup.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-CreateStore.js.html">CreateStore.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-DeleteDocument.js.html">DeleteDocument.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-DeleteGroup.js.html">DeleteGroup.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-DeleteSavedQuery.js.html">DeleteSavedQuery.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-DeleteSchema.js.html">DeleteSchema.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-DeleteStore.js.html">DeleteStore.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-DeleteUser.js.html">DeleteUser.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-Get.js.html">Get.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-GetFile.js.html">GetFile.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-GetSchema.js.html">GetSchema.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-GetUser.js.html">GetUser.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-ItemApsdbReadStore.js.html">ItemApsdbReadStore.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-ItemApsdbWriteStore.js.html">ItemApsdbWriteStore.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
-                                <a href="physical/file-ListConfigurations.js.html">ListConfigurations.js</a>
-                            </div>                              
+                                <a href="physical/file-ListConfiguration.js.html">ListConfiguration.js</a>
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-ListGroups.js.html">ListGroups.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-ListSavedQueries.js.html">ListSavedQueries.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-ListSchemas.js.html">ListSchemas.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-ListStores.js.html">ListStores.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-ListUsers.js.html">ListUsers.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-Operation.js.html">Operation.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-Post.js.html">Post.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-Query.js.html">Query.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-SaveConfiguration.js.html">SaveConfiguration.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-SaveDocument.js.html">SaveDocument.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-SaveDocumentPost.js.html">SaveDocumentPost.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-SaveUser.js.html">SaveUser.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-SetSchema.js.html">SetSchema.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-_Item.js.html">_Item.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-widgets/ConnectionError.js.html">widgets/ConnectionError.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-widgets/ConnectionStatus.js.html">widgets/ConnectionStatus.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-widgets/Img.js.html">widgets/Img.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-widgets/Login.js.html">widgets/Login.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-widgets/LoginArea.js.html">widgets/LoginArea.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-widgets/LoginWidget.js.html">widgets/LoginWidget.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-widgets/SchemaContent.js.html">widgets/SchemaContent.js</a>
-                            </div>                              
+                            </div>
                                                                                                             <div>
                                 <a href="physical/file-widgets/UserDetails.js.html">widgets/UserDetails.js</a>
-                            </div>                              
+                            </div>
                                                                         </li>
                 </ul>
             </div>
-        </li>       
+        </li>
     </ul>
     <ul class="navContent closed">
         <li>
@@ -517,16 +517,16 @@
                                             </li>
                 </ul>
             </div>
-        </li>       
+        </li>
     </ul>
-</div>  
-    
-		</div>	
+</div>
+
+		</div>
 	</body>
     <script type="text/javascript">
         jgdoc.Searcher.start();
         jgdoc.NavTree.initialize("apstrata.apsdb.client.Operation");
-    </script>			
+    </script>
 	<script type="text/javascript" src="jsindex.js">
     </script>
 </html>
