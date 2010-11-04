@@ -83,7 +83,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 				action: "ListUsers",
 				request: {
 					apsdb: {
-						query: ""
+						query: "q12345!=\"x12345\""
 					}
 				},			
 				load: function(operation) {
@@ -117,7 +117,9 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 				var aggPageScope = (self.fldAggPScope.getValue()=="aggregatePage")?"true":"false"
 				var aggGlobalScope = (self.fldAggGScope.getValue()=="aggregateGlobal")?"true":"false"
 				var deniedFields = self.fldDeniedFields.getValue()
-				
+
+				if ((queryString == "") && (FTSString == "")) 
+					queryString = "q12345!=\"x12345\""				
 				
 				var store = new apstrata.ItemApsdbReadStore({
 					client: self.container.client,
@@ -135,6 +137,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 					ftsQuery: FTSString,
 					columns: columnsString,
 					page: ((toPage != null)? toPage : 1),
+					forceCount: ((toPage != null)? true : false),
 					editAction: self._onEditAction,
 					deleteAction: self._onDeleteAction,
 					gridRef: self,
@@ -164,7 +167,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 				apsdb: {}
 			},
 			load: function(operation) {
-				refContainer.openPanel(apstrata.devConsole.DocumentsSavePanel, {target: refContainer.target, docKey: docKey, listSchemas: operation.response.result.schemas, currentPage: 1});
+				refContainer.openPanel(apstrata.devConsole.DocumentsSavePanel, {target: refContainer.target, docKey: docKey, listSchemas: operation.response.result.schemas, currentPage: gridRefContainer.page});
 			},
 			error: function(operation) {
 			}

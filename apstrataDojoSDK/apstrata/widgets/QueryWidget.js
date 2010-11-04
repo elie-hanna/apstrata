@@ -57,6 +57,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 	    if (attrs.deniedFields) this.deniedFields = attrs.deniedFields
 	    if (attrs.sort) this.sort = attrs.sort
 	    if (attrs.ftsQuery) this.ftsQuery = attrs.ftsQuery
+	    if (attrs.forceCount) this.forceCount = attrs.forceCount
 		if (attrs.layout) {
 			this._layout= attrs.layout; 
 		} else {
@@ -98,7 +99,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 
 		dojo.connect(self.store, "totalPagesCalculated", function(pages, itemsCount) {
 			if (self._spinner == undefined || self.forceCount) {
-				self._spinner = new apstrata.widgets.PageNumberSelector({min:1, max:pages, value:1, visibleRange: 10, bigStep: 5})
+				self._spinner = new apstrata.widgets.PageNumberSelector({min:1, max:pages, value:self.page, visibleRange: 10, bigStep: 5})
 		        self.dvSpinner.appendChild(self._spinner.domNode);
 				
 				dojo.connect(self._spinner, "onChange", function() {
@@ -140,7 +141,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
         this._grid = new apstrata.widgets.DynamicColumnsDataGrid({
             query: {
 				query: self.query,
-				count: (self.page == 1),
+				count: (self.forceCount || self.page == 1),
 				pageNumber: self.page,
 		        runAs: self.runAs,
 		        aggregates: self.aggregates,
