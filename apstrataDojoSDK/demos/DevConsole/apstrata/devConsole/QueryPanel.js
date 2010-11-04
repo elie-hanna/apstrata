@@ -83,7 +83,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 				action: "ListUsers",
 				request: {
 					apsdb: {
-						query: "q12345!=\"x12345\""
+						query: ""
 					}
 				},			
 				load: function(operation) {
@@ -116,10 +116,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 				var runAs = self.fldRunAs.getValue()
 				var aggPageScope = (self.fldAggPScope.getValue()=="aggregatePage")?"true":"false"
 				var aggGlobalScope = (self.fldAggGScope.getValue()=="aggregateGlobal")?"true":"false"
-				var deniedFields = self.fldDeniedFields.getValue()
-
-				if ((queryString == "") && (FTSString == "")) 
-					queryString = "q12345!=\"x12345\""				
+				var deniedFields = self.fldDeniedFields.getValue()			
 				
 				var store = new apstrata.ItemApsdbReadStore({
 					client: self.container.client,
