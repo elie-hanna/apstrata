@@ -335,20 +335,20 @@
            elementType : "function"
        } ,         
        {
-           localName : "ListConfigurations",
-           fullName : "apstrata.apsdb.client.ListConfigurations",
-           summary : "class ListConfigurations",
-           ref : "logical/apstrata/apsdb/client/ListConfigurations.html",
+           localName : "ListConfiguration",
+           fullName : "apstrata.apsdb.client.ListConfiguration",
+           summary : "class ListConfiguration",
+           ref : "logical/apstrata/apsdb/client/ListConfiguration.html",
            parent : "apstrata.apsdb.client",
            type : "class",
            elementType : "logical_container"
        } ,         
        {
-           localName : "ListConfigurations",
-           fullName : "apstrata.apsdb.client.ListConfigurations.ListConfigurations",
-           summary : "constructor ListConfigurations()",
-           ref : "logical/apstrata/apsdb/client/ListConfigurations.html#___ListConfigurations",
-           parent : "apstrata.apsdb.client.ListConfigurations",
+           localName : "ListConfiguration",
+           fullName : "apstrata.apsdb.client.ListConfiguration.ListConfiguration",
+           summary : "constructor ListConfiguration()",
+           ref : "logical/apstrata/apsdb/client/ListConfiguration.html#___ListConfiguration",
+           parent : "apstrata.apsdb.client.ListConfiguration",
            type : "constructor",
            elementType : "function"
        } ,         

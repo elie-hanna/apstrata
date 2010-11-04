@@ -157,7 +157,7 @@ dojo.declare("apstrata.devConsole.StoresEditPanel",
 		var request = {}
 		
 		var attrs = {
-			action: "ListConfigurations",
+			action: "ListConfiguration",
 			request: request,
 			load: function(operation) {
 				var stores = operation.response.result.stores

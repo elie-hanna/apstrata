@@ -18,13 +18,13 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.devConsole.ConfigurationsPanel");
+dojo.provide("apstrata.devConsole.ConfigurationPanel");
 
-dojo.declare("apstrata.devConsole.ConfigurationsPanel", 
+dojo.declare("apstrata.devConsole.ConfigurationPanel", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
 {
 	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/ConfigurationsPanel.html"),
+	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/ConfigurationPanel.html"),
 	
 	constructor: function(attrs) {
 
@@ -35,7 +35,7 @@ dojo.declare("apstrata.devConsole.ConfigurationsPanel",
 		var request = {};
 		
 		var attrs = {
-			action: "ListConfigurations",
+			action: "ListConfiguration",
 			request: request,
 			load: function(operation) {
 				var q = operation.response.result;
@@ -52,7 +52,7 @@ dojo.declare("apstrata.devConsole.ConfigurationsPanel",
 
 	_save: function() {
 		var self = this;
-		if (this.configurationsForm.validate()) {
+		if (this.configurationForm.validate()) {
 			var request = {};
 			request["apsdb"] = {
 				createSchemaACL: self.createSchemaACL.getValue(),

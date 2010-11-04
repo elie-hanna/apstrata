@@ -25,7 +25,7 @@ dojo.require("apstrata.horizon.Login")
 dojo.require("apstrata.horizon.Preferences")
 
 dojo.require("apstrata.devConsole.HomePanel")
-dojo.require("apstrata.devConsole.ConfigurationsPanel")
+dojo.require("apstrata.devConsole.ConfigurationPanel")
 dojo.require("apstrata.devConsole.StoresPanel")
 dojo.require("apstrata.devConsole.SchemasPanel")
 dojo.require("apstrata.devConsole.ScriptsPanel")
@@ -37,7 +37,6 @@ dojo.declare("apstrata.devConsole.MainPanel",
 {
 	data: [
 		{label: "home", iconSrc: "../../apstrata/resources/images/pencil-icons/home.png"},
-		{label: "configurations", iconSrc: "../../apstrata/resources/images/pencil-icons/configuration.png"},
 		{label: "stores", iconSrc: "../../apstrata/resources/images/pencil-icons/datebase.png"},
 		{label: "schemas", iconSrc: "../../apstrata/resources/images/pencil-icons/schema.png"},
 		{label: "scripts", iconSrc: "../../apstrata/resources/images/pencil-icons/configuration.png"},
@@ -45,6 +44,7 @@ dojo.declare("apstrata.devConsole.MainPanel",
 		{label: "users", iconSrc: "../../apstrata/resources/images/pencil-icons/user-man.png"},
 //		{label: "favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/favourites.png"},
 		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"},
+		{label: "configuration", iconSrc: "../../apstrata/resources/images/pencil-icons/configuration.png"}		
 //		{label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"}
 	],
 	
@@ -54,7 +54,7 @@ dojo.declare("apstrata.devConsole.MainPanel",
 	
 	_openPanelbyLabel: function(label) {
 		switch (label) {
-			case 'configurations': this.openPanel(apstrata.devConsole.ConfigurationsPanel); break;
+			case 'configuration': this.openPanel(apstrata.devConsole.ConfigurationPanel); break;
 			case 'stores': this.openPanel(apstrata.devConsole.StoresPanel); break;
 			case 'schemas': this.openPanel(apstrata.devConsole.SchemasPanel); break;
 			case 'scripts': this.openPanel(apstrata.devConsole.ScriptsPanel); break;
