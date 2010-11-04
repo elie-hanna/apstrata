@@ -160,10 +160,6 @@ dojo.declare("apstrata.devConsole.StoresEditPanel",
 			action: "ListConfigurations",
 			request: request,
 			load: function(operation) {
-				console.dir(operation)
-				console.dir(operation.response.result.stores)
-				console.dir(operation.response.result.stores[0].configurations)
-
 				var stores = operation.response.result.stores
 
 				for(var i=0; i<stores.length; i++) {

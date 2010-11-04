@@ -1,0 +1,19 @@
+<div class='panel'>
+	{% if true %}
+	{% endif %}
+	<div dojoType="dijit.form.Form" dojoAttachPoint="configurationsForm" class="apstrataForm" encType="multipart/form-data" action="" method="" style='width: 220px;'>
+		<div class="label">Create Schema ACL:</div>
+		<input type="text" dojoAttachPoint="createSchemaACL" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
+		
+		<div class="label">Create Script ACL:</div>
+		<input type="text" dojoAttachPoint="createScriptACL" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
+		
+		<div class="label">Send Email ACL:</div>
+		<input type="text" dojoAttachPoint="sendEmailACL" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
+		
+		<br><br>
+		<div style='width: 100%; text-align: right'>
+			<button dojoAttachEvent='onClick: _save' dojoType='dijit.form.Button' >save</button>
+		</div>
+	</div>
+</div>
