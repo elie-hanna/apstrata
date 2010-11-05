@@ -251,6 +251,7 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 	
 	_goNewWindow: function() {
 		var self = this
+		var runAs = self.fldRunAs.getValue()
 		
 		console.dir(this.frmParams.attr("value"))
 		console.debug(this.scriptName)		
@@ -259,7 +260,8 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 		operation.apsdbOperation = "RunScript"
 		operation.request = {
 			apsdb: {
-				scriptName: self.scriptName
+				scriptName: self.scriptName,
+				runAs: runAs
 			}
 		}
 
@@ -290,6 +292,33 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 	},
 */	
 	postCreate: function() {
+		var self = this
+		this.userListFetched = false
+		
+		dojo.connect(self.fldRunAs, 'onClick', function () {
+			if (self.userListFetched) return
+			self.container.client.call({
+				action: "ListUsers",
+				request: {
+					apsdb: {
+						query: ""
+					}
+				},			
+				load: function(operation) {
+					var userData = []
+					self.userListFetched = true
+					dojo.forEach(operation.response.result.users, function(user) {
+						userData.push({name: user['login'], label: user['login'], abbreviation: user['login']})
+					})
+					
+					var userList = {identifier:'abbreviation',label: 'name',items: userData}
+		        	self.fldRunAs.store = new dojo.data.ItemFileReadStore({ data: userList });
+				},
+				error: function(operation) {
+				}
+			})
+	    });
+		
 		this.inherited(arguments)
-	},
+	}
 })
