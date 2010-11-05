@@ -100,8 +100,15 @@ dojo.declare("apstrata.devConsole.MainPanel",
 		// TODO: this is a temporary solution, the delay makes it work but it needs to be fixed
 //		if (this.getContainer().connection.hasCredentials()) 
 //			setTimeout(dojo.hitch(this.getContainer().connection, "login"), 500)
-		
-		this.getContainer().connection.login()
+		/*
+		if(this.getContainer().connection.hasCredentials()){
+			this.getContainer().connection.login()			
+		}else{
+			
+		}
+	*/
+		this.getContainer().connection.credentials.secret =  "";
+		this.getContainer().connection.credentials.password =  "";
 		
 		this.inherited(arguments)
 	},
