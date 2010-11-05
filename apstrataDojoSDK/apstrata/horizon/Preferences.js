@@ -49,7 +49,7 @@ dojo.declare("apstrata.horizon.Preferences",
 		this.chkHelp.attr('checked', this.preferences.showContextualHelp)
 		this.chkRest.attr('checked', this.preferences.showRestMonitor)
 
-		this.fldServiceUrl.value = this.preferences.serviceUrl?this.preferences.serviceUrl:"http://apsdb.apstrata.com/sandbox-apsdb/rest"
+		this.fldServiceUrl.value = this.preferences.serviceUrl?this.preferences.serviceUrl:"https://apsdb.apstrata.com/sandbox-apsdb/rest"
 		this.sldTimeout.attr('value', dojo.indexOf(this._TIMEOUT_VALUES, this.preferences.timeout))
 
 		this.inherited(arguments)
