@@ -78,7 +78,7 @@ dojo.declare("apstrata.devConsole.MainPanel",
 				self._openPanelbyLabel(label)
 			} else {
 				var okay = false
-				this.openPanel(apstrata.horizon.Login, {
+				this.openPanel(apstrata.devConsole.Login, {
 					success: function() {
 						okay = true
 						if (okay) self._openPanelbyLabel(label)
@@ -173,4 +173,15 @@ dojo.declare("apstrata.devConsole.DevConsole",
 		
 		this.inherited(arguments)
 	}
+}),
+
+dojo.require("apstrata.devConsole.ApConfig")
+
+dojo.declare("apstrata.devConsole.Login", 
+[apstrata.horizon.Login], 
+{
+	widgetsInTemplate: true,
+	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/Login.html"),
+
+	maximizePanel: true
 })
