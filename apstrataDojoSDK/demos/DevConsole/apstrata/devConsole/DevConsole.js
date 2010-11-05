@@ -43,8 +43,8 @@ dojo.declare("apstrata.devConsole.MainPanel",
 		{label: "groups", iconSrc: "../../apstrata/resources/images/pencil-icons/users.png"},
 		{label: "users", iconSrc: "../../apstrata/resources/images/pencil-icons/user-man.png"},
 //		{label: "favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/favourites.png"},
-		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"},
-		{label: "configuration", iconSrc: "../../apstrata/resources/images/pencil-icons/configuration.png"}		
+		{label: "configuration", iconSrc: "../../apstrata/resources/images/pencil-icons/configuration.png"},
+		{label: "preferences", iconSrc: "../../apstrata/resources/images/pencil-icons/tick.png"}
 //		{label: "logout", iconSrc: "../../apstrata/resources/images/pencil-icons/left.png"}
 	],
 	

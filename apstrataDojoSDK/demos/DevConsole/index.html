@@ -23,9 +23,27 @@
 			@import "css/devConsole.css";
 			@import "css/Toaster.css";
 			@import "css/forms.css";
-			@import "css/LoginForm.css";
+			@import "css/LoginForm.css";	
 	    </style>
-		
+<!--[if IE]>
+<style type="text/css">			
+.AlertContent{
+	font-size: .7em;
+	width: 100%;
+	height: 100%;
+	font-family: arial;
+	overflow-x: auto;
+}
+</style>		
+<![endif]-->	    
+<!--[if !IE]>
+<style type="text/css">			
+.AlertContent{
+	width: 280px;
+	height: 90px;
+}
+</style>		
+<![endif]-->		
 		<script>
 			dojo.require("dijit._Widget")
 			dojo.require("dojox.dtl._Templated")
@@ -60,8 +78,23 @@
 				dojo.require ('apstrata.devConsole.DevConsole')
 
 				connection = new apstrata.StickyConnection()
-				
+
+				try {
 				dojo.parser.parse()
+				} catch (er1) {
+					//jira 459 no support for IE
+					if(dojo.isIE) {
+						dialog3 = new apstrata.widgets.Alert({width: 540, 
+							height: 320, 
+							//actions: "yes,no", 
+							message: "<h2>Notice!</h2>"+
+							         "<p><b>ap((strata Developer Console</b> has been optimized to operate on Firefox and Google Chrome.<br/><br/> Your current browser (or browser's version) does not fully support all the functions of this console which may prevent you from viewing the full design and content.</p>", 
+							clazz: "rounded-sml Alert", 
+							iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
+							modal: true })
+						dialog3.show();				
+					}
+				}
 				
 				contextualHelp.setVisible(false)
 				restMonitor.setVisible(false)
@@ -74,6 +107,7 @@
 					connection.timeout = prefs.timeout
 				})
 			})
+			
 			
 		</script>
 	</head>

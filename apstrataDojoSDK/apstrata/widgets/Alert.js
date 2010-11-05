@@ -192,11 +192,14 @@ dojo.declare("apstrata.widgets.Alert",
 			top: (self.height - 42) + "px",
 			width: (self.width - 15) + "px"
 		})
-
-		if (this.modal) dojo.style(this._curtain, {
-			visibility: "visible",
-			"zIndex": 99998
-		})
+		
+		//jira 459 no support for IE
+		if (!dojo.isIE) {
+			if (this.modal) dojo.style(this._curtain, {
+				visibility: "visible",
+				"zIndex": 99998
+			})
+		}
 
 		self.content.innerHTML = self.message
 
