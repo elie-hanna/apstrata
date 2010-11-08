@@ -79,22 +79,7 @@
 
 				connection = new apstrata.StickyConnection()
 
-				try {
 				dojo.parser.parse()
-				} catch (er1) {
-					//jira 459 no support for IE
-					if(dojo.isIE) {
-						dialog3 = new apstrata.widgets.Alert({width: 540, 
-							height: 320, 
-							//actions: "yes,no", 
-							message: "<h2>Notice!</h2>"+
-							         "<p><b>ap((strata Developer Console</b> has been optimized to operate on Firefox and Google Chrome.<br/><br/> Your current browser (or browser's version) does not fully support all the functions of this console which may prevent you from viewing the full design and content.</p>", 
-							clazz: "rounded-sml Alert", 
-							iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
-							modal: true })
-						dialog3.show();				
-					}
-				}
 				
 				contextualHelp.setVisible(false)
 				restMonitor.setVisible(false)
@@ -106,6 +91,18 @@
 					connection.serviceUrl = prefs.serviceUrl
 					connection.timeout = prefs.timeout
 				})
+
+				if(dojo.isIE) {
+					dialog3 = new apstrata.widgets.Alert({width: 540, 
+						height: 320, 
+						//actions: "yes,no", 
+						message: "<h2>Notice!</h2>"+
+						         "<p><b>ap((strata Developer Console</b> has been optimized to operate on Firefox, Google Chrome and Safari.<br/><br/> Your current browser does not fully support all the functions of this console which may prevent you from viewing the full design and content.</p>", 
+						clazz: "rounded-sml Alert", 
+						iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
+						modal: true })
+					dialog3.show();				
+				}				
 			})
 			
 			
