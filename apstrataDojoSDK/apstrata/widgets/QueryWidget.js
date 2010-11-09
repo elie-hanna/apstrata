@@ -67,8 +67,8 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 					// compute layout
 					dojo.forEach(self.columns.split(","), function(field) {
 						field = dojo.string.trim(field)
-						self._layout.push({ field: field, name: field, width: 'auto' })
-					})		
+						self._layout.push({ field: field, noresize: false, name: field})
+					})
 				}
 				// add edit and delete button to the Actions column
 				if (attrs.editAction || attrs.deleteAction) {

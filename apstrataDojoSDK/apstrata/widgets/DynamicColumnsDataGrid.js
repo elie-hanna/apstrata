@@ -26,9 +26,9 @@ dojo.declare("apstrata.widgets.DynamicColumnsDataGrid", [dojox.grid.DataGrid], {
         
 		dojo.forEach(this.store._fieldsArray, function(field) {
 			field = dojo.string.trim(field)
-			//if(!dojo.string.startsWith("apsd."))
-			if (dojo.indexOf(existingFieldNames, field) == -1)
-				self.structure.unshift({ field: field, name: field, width: 'auto' });
+			if (field != '_type') 
+				if (dojo.indexOf(existingFieldNames, field) == -1)
+					self.structure.unshift({ field: field, noresize: false, name: field});
 		})
 		this.setStructure(self.structure);
 		
