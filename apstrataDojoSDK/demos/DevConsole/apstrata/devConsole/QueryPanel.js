@@ -175,7 +175,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 			dialog3 = new apstrata.widgets.Alert({width: 280, 
 													height: 300, 
 													actions: "yes,no", 
-													message: "are you sure you want to delete the document "+docKey, 
+													message: "Are you sure you want to delete the document "+docKey, 
 													clazz: "rounded-sml Alert", 
 													iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
 													modal: true })
