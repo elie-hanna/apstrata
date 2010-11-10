@@ -1,6 +1,11 @@
 <div class='panel'>
 	{% if true %}
 	{% endif %}
+		<style>
+		  .dijitToggleButton .dijitButtonNode {
+		    width: 205px;
+		  }
+		</style>	
 	<div dojoType="dijit.form.Form" dojoAttachPoint="configurationForm" class="apstrataForm" encType="multipart/form-data" action="" method="" style='width: 220px;'>
 		<div class="label">Create Schema ACL:</div>
 		<input type="text" dojoAttachPoint="createSchemaACL" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
@@ -11,12 +16,12 @@
 		<div class="label">Send Email ACL:</div>
 		<input type="text" dojoAttachPoint="sendEmailACL" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
 		
-		<div class="label">Disable Schemaless Documents:</div>
-		<input type="text" dojoAttachPoint="disableSchemalessDocs" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
-				
+		<br/><br/>
+		<div dojoType='dijit.form.ToggleButton' style='font-size: 0.8em; color: #0000AA' 
+		     dojoAttachPoint="disableSchemalessDocs" iconClass='dijitCheckBoxIcon'>Disable Schemaless Documents</div>
 		<br><br>
-		<div style='width: 100%; text-align: right'>
-			<button dojoAttachEvent='onClick: _save' dojoType='dijit.form.Button' >save</button>
-		</div>
 	</div>
+		<div style='width: 100%; text-align: right;'>
+			<button style="padding-right: 30px;" dojoAttachEvent='onClick: _save' dojoType='dijit.form.Button' >save</button>
+		</div>	
 </div>

@@ -42,7 +42,8 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				self.createSchemaACL.attr("value", q.createSchemaACL);
 				self.createScriptACL.attr("value", q.createScriptACL);
 				self.sendEmailACL.attr("value", q.sendEmailACL);
-				self.disableSchemalessDocs.attr("value", q.disableSchemalessDocs);
+				if(q.disableSchemalessDocs == true || q.disableSchemalessDocs=="true")
+					self.disableSchemalessDocs.attr("checked", q.disableSchemalessDocs);
 			},
 			error: function(operation) {
 			}
@@ -59,7 +60,7 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				createSchemaACL: self.createSchemaACL.getValue(),
 				createScriptACL: self.createScriptACL.getValue(),
 				sendEmailACL: self.sendEmailACL.getValue(),
-				disableSchemalessDocs: self.disableSchemalessDocs.getValue()
+				disableSchemalessDocs: self.disableSchemalessDocs.attr("checked")
 			}
 			var attrs = {
 				action: "SaveConfiguration",

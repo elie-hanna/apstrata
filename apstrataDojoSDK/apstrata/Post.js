@@ -86,7 +86,7 @@ dojo.declare("apstrata.Post",
 				
 				dojo.publish("/apstrata/operation", [{
 						id: self.operationId,
-						method: 'GET',
+						method: 'POST',
 						type: "message",
 						success: self.response.metadata.status,
 						response: dojo.toJson(self.response),
@@ -113,15 +113,19 @@ dojo.declare("apstrata.Post",
 					}
 				}
 			}			
-
-			dojo.publish("/apstrata/operation", [{
-					id: self.operationId,
-					method: 'POST',
-					type: "message", 
-					url: self.url,
-					message: message
-			}])
-
+			
+			// in case the externally published function fails log the error and continue with the actual call
+			try {
+				dojo.publish("/apstrata/operation", [{
+						id: self.operationId,
+						method: 'POST',
+						type: "message", 
+						url: self.url,
+						message: message
+				}])
+			} catch (err) {
+				self.log.error("error in POST", err);				
+			}
 			
 			self.log.debug("action url", self.url)
 			self.log.debug("request object", self.buildRequestObject())

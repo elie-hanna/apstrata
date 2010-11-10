@@ -47,7 +47,7 @@ dojo.declare("apstrata.devConsole.QueryResultsPanel",
 		var self = this
 
 		dojo.style(this.domNode, {
-			width: "800px",
+			width: "800px"
 		})
 		
 		this.grid = new apstrata.widgets.QueryWidget(this.attrs.query);
@@ -172,15 +172,15 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 	},
 	
 	_onDeleteAction: function (docKey, refContainer, gridRefContainer) {
-			dialog3 = new apstrata.widgets.Alert({width: 280, 
-													height: 300, 
+			dialog3 = new apstrata.widgets.Alert({width: 300, 
+													height: 270, 
 													actions: "yes,no", 
-													message: "Are you sure you want to delete the document "+docKey, 
+													message: "<p>Are you sure you want to delete the document with key equals to "+docKey+" ?</p>", 
 													clazz: "rounded-sml Alert", 
 													iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
 													modal: true })
 
-			dialog3.show()
+			dialog3.show();
 			dojo.connect(dialog3, "buttonPressed", function(label) {
 				if (label == 'yes') {
 					refContainer.container.client.call({
@@ -199,7 +199,7 @@ dojo.declare("apstrata.devConsole.QueryPanel",
 				} else {
 					//no(origin)
 				}
-				dialog3.hide()
+				dialog3.hide();
 			})
 		},	
 	

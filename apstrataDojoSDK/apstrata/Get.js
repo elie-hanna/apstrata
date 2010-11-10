@@ -63,13 +63,18 @@ dojo.declare("apstrata.Get",
 			//  we're using a timeout event to provide an error message if an operation takes too long to execute
 			self._setTimeout()
 
-			dojo.publish("/apstrata/operation", [{
-					id: self.operationId,
-					method: 'GET',
-					type: "message", 
-					url: self.url,
-					message: self.url
-			}])
+			// in case the externally published function fails log the error and continue with the actual call
+			try {
+				dojo.publish("/apstrata/operation", [{
+						id: self.operationId,
+						method: 'GET',
+						type: "message", 
+						url: self.url,
+						message: self.url
+				}])
+			} catch (err) {
+				self.log.error("error in GET", err);				
+			}
 
 			dojo.io.script.get({ 
 				url: self.url,

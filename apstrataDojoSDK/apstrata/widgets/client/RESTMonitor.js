@@ -56,9 +56,10 @@ dojo.declare("apstrata.widgets.client.RESTMonitor",
 					self.dvMonitorOutput
 				)
 
-				dojo.style(target, {
-					height: (target.coffsetHeight - 20) + "px"
-				})
+				// not necessary and not working for for IE
+//				dojo.style(target, {
+//					height: (target.offsetHeight - 20) + "px"
+//				})				
 				
 				style = {width: '950px', background: '#a1a1a1', color: '#222222', fontFamily: 'monospace', padding: '10px', marginBottom: '1px'}
 			}

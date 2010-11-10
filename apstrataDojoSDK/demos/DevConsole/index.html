@@ -30,7 +30,7 @@
 .AlertContent{
 	font-size: .7em;
 	width: 100%;
-	height: 100%;
+	height: 50%;
 	font-family: arial;
 	overflow-x: auto;
 }
@@ -92,16 +92,20 @@
 					connection.timeout = prefs.timeout
 				})
 
-				if(dojo.isIE) {
+				if (dojo.isIE) {
 					dialog3 = new apstrata.widgets.Alert({width: 540, 
-						height: 320, 
-						//actions: "yes,no", 
+						height: 350, 
+						actions: "Close", 
 						message: "<h2>Notice!</h2>"+
 						         "<p><b>ap((strata Developer Console</b> has been optimized to operate on Firefox, Google Chrome and Safari.<br/><br/> Your current browser does not fully support all the functions of this console which may prevent you from viewing the full design and content.</p>", 
 						clazz: "rounded-sml Alert", 
 						iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
 						modal: true })
-					dialog3.show();				
+					dialog3.show();		
+
+					dojo.connect(dialog3, "buttonPressed", function(label) {
+						dialog3.hide();
+					});						
 				}				
 			})
 			
