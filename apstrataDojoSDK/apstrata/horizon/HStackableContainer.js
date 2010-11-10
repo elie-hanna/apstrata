@@ -174,7 +174,7 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 	},
 	
 	savePreferences: function(preferences) {
-		dojo.cookie(this.applicationId + "-prefs", dojo.toJson(preferences))
+		dojo.cookie(this.applicationId + "-prefs", dojo.toJson(preferences), { expires: 365 })
 		this.preferencesChanged(preferences)
 	},
 	

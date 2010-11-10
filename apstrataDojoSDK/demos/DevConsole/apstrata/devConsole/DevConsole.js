@@ -132,7 +132,7 @@ dojo.declare("apstrata.devConsole.DevConsole",
 			} 
 		}
 
-		if (!attrs.connection) this.connection = new apstrata.StickyConnection()
+		if (!attrs.connection) this.connection = new apstrata.Connection()
 
 		this.client = new apstrata.Client({
 			connection: self.connection,
