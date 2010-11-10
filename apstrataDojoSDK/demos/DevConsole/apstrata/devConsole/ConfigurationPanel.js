@@ -42,6 +42,7 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				self.createSchemaACL.attr("value", q.createSchemaACL);
 				self.createScriptACL.attr("value", q.createScriptACL);
 				self.sendEmailACL.attr("value", q.sendEmailACL);
+				self.disableSchemalessDocs.attr("value", q.disableSchemalessDocs);
 			},
 			error: function(operation) {
 			}
@@ -57,7 +58,8 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 			request["apsdb"] = {
 				createSchemaACL: self.createSchemaACL.getValue(),
 				createScriptACL: self.createScriptACL.getValue(),
-				sendEmailACL: self.sendEmailACL.getValue()
+				sendEmailACL: self.sendEmailACL.getValue(),
+				disableSchemalessDocs: self.disableSchemalessDocs.getValue()
 			}
 			var attrs = {
 				action: "SaveConfiguration",
