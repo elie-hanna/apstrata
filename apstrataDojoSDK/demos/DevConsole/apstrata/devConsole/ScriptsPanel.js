@@ -31,6 +31,8 @@ dojo.declare("apstrata.devConsole.ScriptsPanel",
 {	
 	data: [],
 	editable: true,
+	filterable: true,
+	sortable: true,
 
 	postCreate: function() {
 		var self = this
