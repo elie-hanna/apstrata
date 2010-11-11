@@ -183,7 +183,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 						if (field.fieldType.value=='date') {
 							sentVal = (fieldValues[i].fieldDateValue.value != null && fieldValues[i].fieldDateValue.value != '') ? (dojo.date.locale.format(fieldValues[i].fieldDateValue.value, {datePattern:"yyyy-MM-dd", timePattern: "'T'HH:mm:ssZ"})) : '';
 						}
-						sentVal = sentVal.replace(' ','');
+
 						attrs.request[field.fieldName.value].push(sentVal);
 					}
 				}
