@@ -60,7 +60,8 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 	
 	
 	startup: function() {
-		setTimeout(dojo.hitch(this, 'loadPreferences'), 3000)
+		//setTimeout(dojo.hitch(this, 'loadPreferences'), 3000)
+		this.loadPreferences();
 		
 		this.inherited(arguments)
 	},
@@ -183,7 +184,15 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 
 		try {
 			var prefs = dojo.fromJson(dojo.cookie(this.applicationId + "-prefs"))
-			if (prefs) this.preferencesChanged(prefs); else prefs = {}
+			if (prefs) {
+				this.preferencesChanged(prefs);
+				if (prefs.serviceUrl)
+					this.connection.serviceUrl = prefs.serviceUrl;
+				if (prefs.timeout)
+					this.connection.timeout = prefs.timeout;
+			} else {
+				prefs = {}
+			}
 		} catch (err) {
 			
 		}
