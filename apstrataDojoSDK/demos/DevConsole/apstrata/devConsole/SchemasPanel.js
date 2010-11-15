@@ -147,7 +147,7 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 	_save: function() {
 		var self = this
 
-		if (self.schemaName=="") self.schemaName = self.fldName.value
+		if (!self.update) self.schemaName = self.fldName.value
 
 		var apsdb = {
 			schemaName: self.schemaName,
@@ -155,7 +155,7 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 			update: self.update
 		}
 
-		if (self.schemaName != self.fldName.value) apsdb.newSchemaName = self.fldName.value
+		if (self.update && self.schemaName != self.fldName.value) apsdb.newSchemaName = self.fldName.value
 		
 		this.container.client.call({
 			action: "SaveSchema",
