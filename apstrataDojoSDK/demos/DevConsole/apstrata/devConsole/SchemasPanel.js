@@ -214,6 +214,24 @@ dojo.declare("apstrata.devConsole.SchemasPanel",
 
 		self.inherited(arguments)
 	},
+	
+	onDeleteItem: function(index, label){
+		var self = this
+		
+		this.container.client.call({
+			action: "DeleteSchema",
+			request: {
+				apsdb: {
+					schemaName: label
+				}
+			},
+			load: function(operation){
+				self.reload()
+			},
+			error: function(operation){
+			}
+		})
+	},	
 
 	newItem: function() {
 		var self = this
