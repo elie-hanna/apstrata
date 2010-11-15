@@ -183,13 +183,19 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 		var prefs = {}
 
 		try {
-			var prefs = dojo.fromJson(dojo.cookie(this.applicationId + "-prefs"))
+			var prefs = dojo.fromJson(dojo.cookie(this.applicationId + "-prefs"));
+			restMonitor.setVisible(false);
+			contextualHelp.setVisible(false);
 			if (prefs) {
 				this.preferencesChanged(prefs);
 				if (prefs.serviceUrl)
 					this.connection.serviceUrl = prefs.serviceUrl;
 				if (prefs.timeout)
 					this.connection.timeout = prefs.timeout;
+				if (prefs.showContextualHelp)
+					contextualHelp.setVisible(prefs.showContextualHelp);
+				if (prefs.showRestMonitor)
+					restMonitor.setVisible(prefs.showRestMonitor);
 			} else {
 				prefs = {}
 			}
