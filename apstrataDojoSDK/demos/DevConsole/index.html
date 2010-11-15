@@ -81,9 +81,6 @@
 
 				dojo.parser.parse()
 				
-				contextualHelp.setVisible(false)
-				restMonitor.setVisible(false)
-				
 				// PreferencesChanged events handler
 				dojo.connect(devConsole, 'preferencesChanged', function(prefs) {
 					contextualHelp.setVisible(prefs.showContextualHelp)
