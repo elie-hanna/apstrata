@@ -129,7 +129,7 @@ dojo.declare("apstrata.devConsole.DevConsole",
 		if (attrs) {
 			if (attrs.connection) {
 				this.connection = attrs.connection
-			} 
+			} 		
 		}
 
 		if (!attrs.connection) this.connection = new apstrata.Connection()
@@ -179,7 +179,19 @@ dojo.declare("apstrata.devConsole.DevConsole",
 		this.addChild(this.main)
 		
 		this.inherited(arguments)
-	}
+	},
+	
+	preferencesChanged: function (prefs) {
+		restMonitor.setVisible(false);
+		contextualHelp.setVisible(false);
+		
+		if (prefs.showContextualHelp)
+			contextualHelp.setVisible(prefs.showContextualHelp);
+		if (prefs.showRestMonitor)
+			restMonitor.setVisible(prefs.showRestMonitor);
+		this.connection.serviceUrl = prefs.serviceUrl;
+		this.connection.timeout = prefs.timeout;
+	}	
 }),
 
 dojo.require("apstrata.devConsole.ApConfig")

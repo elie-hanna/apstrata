@@ -80,14 +80,6 @@
 				connection = new apstrata.StickyConnection()
 
 				dojo.parser.parse()
-				
-				// PreferencesChanged events handler
-				dojo.connect(devConsole, 'preferencesChanged', function(prefs) {
-					contextualHelp.setVisible(prefs.showContextualHelp)
-					restMonitor.setVisible(prefs.showRestMonitor)
-					connection.serviceUrl = prefs.serviceUrl
-					connection.timeout = prefs.timeout
-				})
 
 				if (dojo.isIE) {
 					dialog3 = new apstrata.widgets.Alert({width: 540, 
