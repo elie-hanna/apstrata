@@ -1,0 +1,9 @@
+<schema>
+	<aclGroups>
+		<defaultAcl>
+			<read>nobody</read>
+			<write>nobody</write>
+		</defaultAcl>
+	</aclGroups>
+	<fields></fields>
+</schema>

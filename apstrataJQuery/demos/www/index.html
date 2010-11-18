@@ -1,0 +1,630 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+
+<title>Duffy</title>
+
+<!-- Stylesheet -->
+<link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
+
+<!-- Scripts -->
+<script type="text/javascript" src="scripts/jquery.js"></script>
+<script type="text/javascript" src="scripts/apsutil.js"></script>
+<script type="text/javascript" src="scripts/md5.js"></script>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="images/png" href="images/favicon.ico" />
+
+<script type="text/javascript">
+  var username = "";
+  var password = "";
+
+  /**
+   *  Calls the Apstrata 'VerifyCredentials' API to check whether or not the email/password
+   * pair are valid.
+   */
+  function submitLoginForm() {
+    
+    var parameters = getFormValues($(this));
+    
+    
+    // Set the global username and password.
+    username = parameters['apsws.user'];
+    password = parameters['password'];
+
+    // Call the VerifyCredentials API to allow/disallow the user to login.
+    generateURLAndAjax('VerifyCredentials', {}, onLogin, parameters['apsws.user'], parameters['password']);
+
+    return false;
+  }
+  
+  function onLogin(data, parameters) {    
+    if (data.response.metadata.status == 'success') {
+      $('#message').html('');
+      
+      var loggedInHtml = '<h1>Duffy\'s Idea Board</h1><p>Welcome ' + username + '. <a href="" id="logout">Logout</a></p>';
+      loggedInHtml += '<h2><a href="" id="shareIdea">Share your idea.</a></h2>';
+      
+      $('#loggedInHeader').html(loggedInHtml);
+      
+      $('#logout').click(logout);
+
+      showBoardPanel();
+    } else {
+
+      username = "";
+      password = "";
+      $('#message').addClass('error');
+      $('#message').html('Wrong username/password');
+      setTimeout("$('#message').slideUp();", 4000);
+    }
+   }
+   
+  function submitSearchForm() {
+    var searchText = getFormValues($(this))['searchText'];
+    var parameters = {
+      "apsdb.store" : "DefaultStore",
+      "apsdb.count" : "true",
+      "apsdb.ftsQuery" : searchText,
+      "apsdb.queryFields" : "*"
+    }
+    generateURLAndAjax('Query', parameters, onSearchSuccess, username, password);    
+    return false;
+  }
+  
+  function onSearchSuccess(data, params) {
+    var output = '';
+    if (data.response.metadata.status == 'success') {
+      if (data.response.result.documents.length > 0) {
+
+        var count = data.response.result.count;
+        $('#searchResults').text(count + ' document' + (count > 1 ? 's' : '') + ' matches your search.');
+        
+        $('#searchResults').append('<ul id="searchResultList"></ul>');
+        
+        $.each(data.response.result.documents, function (k,document) {          
+          $('#searchResultList').prepend(generateIdeaSnippet(document['apsdb.creator'], decodeURIComponent(document.ideaTitle), decodeURIComponent(document.idea), document.key, document.commentCount));
+        });
+        
+      } else {
+       $('#searchResults').text('No idea matches your search of : "' + params['apsdb.ftsQuery'] + '"');
+      }
+    } else {
+      $('#searchResults').text('Whoops, something went wrong! Please try again in a few seconds.');
+    }    
+  }
+
+  /**
+   *  Calls the Apstrata 'RunScript' API call to register the user with the information he provides.
+   */
+  function submitRegisterForm() {    
+    
+    var parameters = getFormValues($(this));
+    
+    parameters["apsdb.scriptName"] = "Register";
+    
+    // Call the RunScript API to register the user.
+    generateURLAndAjax('RunScript', parameters, onRegister);
+
+    return false;
+  }
+  
+  function onRegister(data, parameters) {
+    
+    if (data.response.metadata.status == 'success') {      
+      $('#registrationPanel').slideUp('fast', function() {
+        $('#verificationPanel').slideDown();
+      });   
+    } else {
+      $('#message').addClass('error');
+      $('#message').html(data.response.metadata.errorDetail);
+      setTimeout("$('#message').slideUp();", 4000);
+    }
+  }
+  
+  function submitVerificationForm() {
+    var parameters = getFormValues($(this));
+    parameters["apsdb.scriptName"] = "Verify";
+    parameters["returnJSON"] = "true";
+    
+    generateURLAndAjax('RunScript', parameters, onVerify);
+    
+    return false;
+  }
+  
+  function onVerify(data, parameters) {
+    if (data.response.metadata.status == 'success') {
+      
+      // great we verified the account, but we need to pull the user info from the document to go on...
+      
+      
+      // Set the global username and password.
+      // username = parameters['apsws.user'];
+      // password = parameters['password'];
+      showBoardPanel();
+    } else {
+      $('#message').addClass('error');
+      $('#message').html(data.response.metadata.errorDetail);
+      setTimeout("$('#message').slideUp();", 4000);
+    }
+  }
+
+  /**
+   *  Disables the register button when mandatory fields are empty, and enables it when they are filled.
+   * Called onkeyup of any mandatory fields in the form.
+   */
+  function register_checkMandatoryFields() {
+    var missingMandatoryFields = false;
+    $.each( $('#registrationForm').find('.mandatory'), function(k,v){
+      if ($.trim($(this).val()).length < 1 || $(this).val() == v.defaultValue) {
+        missingMandatoryFields = true;
+        return false;
+      }
+    });
+
+    if (missingMandatoryFields)
+      $('#register_submit_ID').attr('disabled', true);
+    else
+      $('#register_submit_ID').attr('disabled', false);
+  }
+  
+  function showBoardPanel() {
+    $('#splashPanel').slideUp('fast', function() {
+        $('#loginPanel').hide();
+        $('#registrationPanel').hide();
+        $('#boardPanel').slideDown();
+      })
+      
+      populateIdeaBoard();
+  }
+  
+  /**
+     * Unset the username/password variables and redirect to index.html.
+     */
+    function logout() {
+      username = "";
+      password = "";
+      $('#loggedInHeader').html('');
+      location.href = 'index.html';
+    }
+
+    function addCommentDiv() {
+      
+      var ikey = $(this).attr('ideaKey');
+      
+      // 1. check if we already have a comment div for this idea
+      var commentDiv = $(this).closest('li').find('.commentDiv');
+      if (commentDiv.size() == 0) {
+        // 2. Create the comment div.
+        commentDiv = '<div id="comment' + ikey + '" class="commentDiv" ideaKey="' + ikey + '"> </div>';
+        
+        // 7. Append the whole commentDiv to the idea.
+        $(this).parent().append($(commentDiv));
+        
+        // 3. Ajax in the comments and populate the div
+        getIdeaComments(ikey);
+                          
+        // 4. Create the comment form div
+        if (isLoggedIn()) {
+          
+          var commentFormDiv = '<div class="commentFormDiv"><textarea name="comment"></textarea>';
+          commentFormDiv += '<input type="submit" name="postComment" value="comment"/>';
+          commentFormDiv += '<input type="submit" name="cancelComment" value="cancel"/>';
+          
+          // 5. Append the comment form div to the comment div
+          var d = $(this).parent().append($(commentFormDiv));
+                  
+          // 6. Bind the behavior of the cancel and post buttons
+          d.find('[name=cancelComment]').click(function() {
+            $(this).parent().hide();
+            return false;
+          });       
+          d.find('[name=postComment]').click(postComment);
+          
+        } else {
+          
+          var commentFormDiv = '<div class"commentFormDiv">Login to join in the discussion</div>'
+          $(this).parent().append($(commentFormDiv));
+        }
+      } else {
+        // 8. We have the div.. toggle its visibility
+        commentDiv.toggle();        
+      }
+      
+      return false;
+      
+    }
+    
+    function getIdeaComments(ideaKey) {
+      var params = {
+        "apsdb.store" : "DefaultStore",
+        "apsdb.count" : "false",
+        "apsdb.query" : "apsdb.schema=\"comment\" and ideaKey=\"" + ideaKey + "\"",       
+        "apsdb.queryFields" : "*",
+        "apsdb.sort" : "apsdb.creationTime"
+      };
+      generateURLAndAjax("Query", params, onGetIdeaCommentSuccess, username, password);    
+    }
+    
+    function onGetIdeaCommentSuccess(data, params) {  
+    
+      var commentHTML = '';
+      var ikey = '';
+      
+      if (data.response.metadata.status == 'success') {       
+        if (data.response.result.documents.length > 0) {      
+          ikey = data.response.result.documents[0].ideaKey;
+          var singleClass = 'singleCommentDiv';
+          var altClass = 'singleCommentDivAlt';
+          var divClass = singleClass;
+          $.each(data.response.result.documents, function (k,document) {
+            if (k % 2 == 0)
+              divClass = altClass;
+            else
+              divClass = singleClass;
+            
+            commentHTML += '<div class="'+ divClass + '"><strong><em class="apstrata-orange">' + document['apsdb.creator'] + ' sez: </em></strong>' + document.comment + '</div>';
+          });   
+        $('#comment' + ikey).html(commentHTML);
+        }
+      }     
+    }
+    
+    function postComment() {
+      
+      var commentText = $(this).parent().find('[name=comment]').val();
+      var ideaKey = $(this).parent().prevUntil('a').attr('ideaKey');
+
+      var params = {        
+        "comment" : commentText,
+        "ideaKey" : ideaKey,
+        "apsdb.scriptName" : "Comment"
+      }
+      
+      generateURLAndAjax('RunScript', params, onCommentSuccess, username, password);
+
+      return false;         
+    }
+    
+    function onCommentSuccess(data, params) {
+      
+      var ikey = params.ideaKey;
+      
+      commentHTML = '<div><strong><em class="apstrata-orange">' + username + ' sez: </em></strong>' + params.comment + '</div>';
+      $('#comment' + ikey).append(commentHTML);
+    }
+    
+    function postIdea_checkMandatoryFields() {
+      var missingMandatoryFields = false;
+      $.each($('#ideaForm').find('.mandatory'), function(k,v){
+        if ($.trim($(this).val()).length < 1 || $(this).val() == v.defaultValue) {
+          missingMandatoryFields = true;
+          return false;
+        }
+      });
+      
+      if (missingMandatoryFields)
+        $('[name=postIdea]').attr('disabled', true);
+      else
+        $('[name=postIdea]').attr('disabled', false);
+    }
+    
+    // send the contents of the idea form to the server to be added to the board.
+    // use ajax to do this asynch, and append it to the board on success.
+    function postIdeaToBoard() {
+      var params = {
+        "apsdb.schema" : "idea",
+        "commentCount" : 0        
+      };
+      $.extend(params, getFormValues($(this)));
+      generateURLAndAjax('SaveDocument', params, onPostSuccess, username, password);
+      
+      return false;
+    }
+    
+    // if it was successful... append it to the ideaboard without refreshing the whole thing
+    function onPostSuccess(data, params) {
+      if (data.response.metadata.status == 'success') {
+        addIdeaToBoard(params['apsws.user'], decodeURIComponent(params.ideaTitle), decodeURIComponent(params.idea), data.response.result.document.key);
+        $('#ideaFormDiv').hide();
+      }
+    }
+    
+    // populate the idea ul by running a query to apstrata and getting the ideas.
+    function populateIdeaBoard() {
+      var params = {
+        "apsdb.store" : "DefaultStore",
+        "apsdb.count": "false",
+        "apsdb.query" : "apsdb.schema=\"idea\"",
+        "apsdb.queryFields" : "*",
+        "apsdb.sort" : "apsdb.creationTime"
+      };
+      
+      generateURLAndAjax("Query", params, onPopulateSuccess, username, password);        
+    }
+    
+    function onPopulateSuccess(data) {      
+      if (data.response.metadata.status == 'success') {
+        $('#ideas').text('');
+        $.each(data.response.result.documents, function (k,document) {          
+          addIdeaToBoard(document['apsdb.creator'], decodeURIComponent(document.ideaTitle), decodeURIComponent(document.idea), document.key, document.commentCount);
+        });       
+      } else {
+        $('#ideas').text('Whoops, something went wrong! Please try again in a few seconds.');
+      }
+    }
+    
+    function addIdeaToBoard(creator, title, idea, key, commentCount) {
+      $('#ideas').prepend($(generateIdeaSnippet(creator, title, idea, key, commentCount)));
+    }
+    
+    function generateIdeaSnippet(creator, title, idea, key, commentCount) {
+      var commentLinkText = 'comment';
+      if (commentCount > 0)
+        commentLinkText = parseInt(commentCount) + ' comment' + (commentCount > 1 ? 's' : '');
+        
+      
+      var ideaLi = '<li><div><h3><em class="apstrata-orange">' + creator + ' sez: </em> ' + title + '</h3></div><div>' + idea + '</div><div><a href="" class="ideaComment" ideaKey=' + key + '>' + commentLinkText + '</a></div></li>';
+      
+      return ideaLi;
+    }
+
+  $(function() {
+    // Get all passed parameters from the URL query string.
+    var URLParameters = {};
+    var URLQueryStr = window.location.search;
+    if (URLQueryStr) {
+      // Drop the leading "?"
+      URLQueryStr = URLQueryStr.substr(1);
+      var sNVPairs = URLQueryStr.split("&");
+
+      // Now, for each name-value pair, we need to extract the name and value.
+      for (var i=0; i<sNVPairs.length; i++) {
+        var sNV = sNVPairs[i].split("=");
+        URLParameters[sNV[0]] = sNV[1];
+      }
+
+      if (typeof URLParameters['errorCode'] != 'undefined') {
+        var errorMessage = '';
+        switch (URLParameters['errorCode']) {
+          case 'MISSING_FIELDS':
+            errorMessage = 'The email and registration code are required';
+            break;
+          case 'ERROR_IN_PENDING_REGISTRATIONS':
+            errorMessage = 'An error occurred while querying for pending registrations with the same email';
+            break;
+          case 'INVALID_REGISTRATION_PAIR':
+            errorMessage = 'Invalid email/registration code pair';
+            break;
+          case 'NO_PENDING_REGISTRATION':
+            errorMessage = 'No pending registration for this email';
+            break;
+          case 'UNABLE_TO_SAVE_USER':
+            errorMessage = 'Unable to save a new user, please contact the <a href="mailto:support@apstrata.com">support@apstrata.com</a>';
+            break;
+          case 'CANNOT_DELETE_PENDING_REGISTRATION':
+            errorMessage = 'Unable to delete the pending registration document for this email';
+            break;
+          default:
+            // The error code is not identified, so just put it as it is instead of a message.
+            errorMessage = URLParameters['ERROR_CODE'];
+            break;
+        }
+        $('#message').addClass('error');
+        $('#message').html(errorMessage);
+        setTimeout("$('#message').slideUp();", 4000);
+      }
+    }
+
+    $('#loginForm').submit(submitLoginForm);
+    $('#registrationForm').submit(submitRegisterForm);
+    $('#verificationForm').submit(submitVerificationForm);
+    $('#ideaForm').submit(postIdeaToBoard);
+    $('#searchForm').submit(submitSearchForm);
+    
+    $('.ideaComment').live("click", addCommentDiv);                
+
+    // Set mandatory fields handling.
+    $('#register_submit_ID').attr('disabled', true);
+    $('#registrationForm').find('.mandatory').keyup(register_checkMandatoryFields);
+    $('[name=postIdea]').attr('disabled', true);
+    $('#ideaForm').find('.mandatory').keyup(postIdea_checkMandatoryFields);
+      
+    
+    $('#registrationPanel').hide();
+    $('#verificationPanel').hide();    
+    $('#loginPanel').hide();
+    $('#ideaFormDiv').hide();
+    $('#searchPanel').hide();
+    
+    $('#shareIdea').live('click', function() {
+      $('#ideaFormDiv').slideToggle();
+      return false;
+    });
+    
+    $('#toggleSearch').click(function() {
+     $('#board').slideToggle('fast', function() {
+        $('#searchPanel').slideToggle();
+      });
+      return false;
+    });
+    
+    $('#showReg').click(function() {
+      $('#loginPanel').slideUp('fast', function() {
+        $('#registrationPanel').slideDown();
+      });      
+      return false;
+    });
+    
+    $('#showVerify').click(function() {
+      $('#registrationPanel').slideUp('fast', function() {
+        $('#verificationPanel').slideDown();
+      });      
+      return false;
+    });    
+    
+    $('#showLogin').click(function() {
+      $('#registrationPanel').slideUp('fast', function() {
+        $('#loginPanel').slideDown();
+      });      
+      return false;
+    });
+    
+    $('#hideVerify').click(function () {
+      $('#verificationPanel').slideUp('fast', function() {
+        $('#loginPanel').slideDown();
+      });
+      return false;
+    });
+    
+    $('#closeSearch').click(function () {
+      $('#searchPanel').slideUp('fast', function() {
+        $('#board').slideDown();
+      });
+      return false;
+    });
+    
+    $('#showLoginFromSplash').click(function() {
+      $('#showLoginSpan').slideUp('fast', function() {
+        $('#loginPanel').slideDown();
+      });
+      return false;
+    });
+    
+    $('#boardPanel').show();
+    populateIdeaBoard();
+    
+  });
+</script>
+
+</head>
+<body>
+
+<div class="wrapper"><!-- START : Wrapper -->
+  <div id='disclaimer' style='background:grey;'>
+    <p>This tutorial is a working application which is not moderated.  apstrata is not responsible for any content which is uploaded.  Please keep posts and comments clean and respectful.</p>    
+    <p>This application is discussed in the apstrata <a href="http://wiki.apstrata.com/doku.php?id=tutorial">tutorial</a>. The source code is available <a href="http://developer.apstrata.com/tutorials/ideaboard.zip">here</a>.</p>
+  </div>
+
+<div id="message"></div>
+
+<div id="splashPanel">
+    <h1>Welcome to <span class="apstrata-orange">Duffy's</span> Idea Board.<h1>
+  <h3>Share your smart ideas.</h3>
+  <h3>Collaborate with others on their ideas.</h3>
+  <span id="showLoginSpan"><a id="showLoginFromSplash" href="">Login</a> to start sharing.</span>
+</div>
+
+<div id="loginPanel">
+  <p>Don't have an account? <a id="showReg" href="">Create one now!</a></p>
+  <form id="loginForm" class="form">
+    <fieldset>
+      <span>
+        <label for="email_ID">Email: </label>
+        <input type="text" name="apsws.user" id="apsws.user_ID" value="" />
+      </span>
+      <span>
+        <label for="password_ID">Password: </label>
+        <input type="password" name="password" id="password_ID" value="" />
+      </span>
+      <input type="submit" id="login_submit_ID" value="Login" />
+    </fieldset>
+  </form>
+</div>
+
+<div id="registrationPanel">
+  <p>Already registered? <a id="showLogin" href="">Login now!</a> [<a id="showVerify" href="">Verify your account</a>]</p>
+  <form id="registrationForm" class="form">
+    <fieldset>
+      <div>
+          <label for="firstname_ID">First name: </label>
+          <input class="mandatory" type="text" id="firstname_ID" name="firstname"/>
+      </div>
+      <div>
+          <label for="lastname_ID">Last name: </label>
+          <input class="mandatory" type="text" id="lastname_ID" name="lastname"/>
+      </div>
+      <div>
+          <label for="email_ID">Email: </label>
+          <input class="mandatory" type="text" id="email_ID" name="email"/>
+      </div>
+      <div>
+          <label for="password_ID">Password: </label>
+          <input class="mandatory" type="password" id="password_ID" name="password"/>
+      </div>
+      <input type="submit" name="register" id="register_submit_ID" value="Register" />
+    </fieldset>
+  </form>
+</div>
+
+<div id='verificationPanel'>
+  <p>Already verified? Just <a id="hideVerify" href="">Login</a>!
+  <form id="verificationForm" class="form">
+    <fieldset>
+      <span>
+        <label for="verifyEmail">Email: </label>
+        <input type="text" name="email" id="verifyEmail" value="" />
+      </span>
+      <span>
+        <label for="verifyKey">Verification Code:</label>
+        <input type="text" name="d" id="verifyKey" value="" />
+      </span>
+      <input type="submit" id="verifySubmit" value="Verify" />
+    </fieldset>
+  </form>
+</div>
+
+<div id='boardPanel'>
+  <div id='boardHeader'>
+      <div id='loggedInHeader'></div>
+      <h4><a href='' id='toggleSearch'>search the ideas</a></h4>
+  </div>
+  
+  <div id='ideaFormDiv'>
+    <form id='ideaForm' class='form' action='' method='post'>
+      <fieldset>
+        <div>
+          <label for='ideaTitle'>title:</title>
+          <input class='mandatory' type='text' name='ideaTitle' />
+        </div>
+        <div>
+          <label for='idea'>idea:</title>
+          <textarea class='mandatory' type='text' name='idea'> </textarea>
+        </div>
+        <input type='submit' id='postIdea' name='postIdea' value='post idea' />
+      </fieldset>
+    </form>   
+  </div>
+  
+  <div id='searchPanel'>
+    <form id='searchForm' class='form' action='' method='post'>
+      <fieldset>
+        <span>
+          <label for='searchText'>Find: </label>
+          <input type='text' name='searchText' id='searchText' value='' />
+        </span>
+        <input type='submit' id='searchSubmit' value='Search' />
+      </fieldset>
+    </form>
+    <div id='searchResults'>      
+    </div>
+    <div>
+      <a href='' id='closeSearch'>Close search results</a>
+    </div>
+  </div>
+
+  <div id='board'>
+    <ul id='ideas'>
+      Loading...
+    </ul>
+  </div>
+</div>
+</div><!-- END : Wrapper -->
+
+</body>
+</html>

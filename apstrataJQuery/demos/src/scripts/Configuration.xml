@@ -1,0 +1,24 @@
+<script>
+<scriptACL>
+</scriptACL>
+<code><![CDATA[
+/**
+ * This script contains all the configuration properties used by the Duffy application.
+ */
+
+var customerKey = "W09CFC4BE3";
+var duffysIdeaBoardBaseURL = "http://developer.apstrata.com/tutorials/duffy";
+var serviceURL = "http://apsdb.apstrata.com/sandbox-apsdb/rest/" + customerKey;
+
+function getConfiguration(param) {
+	// Getter for any parameter in this script.
+	if (param != null && param != "") {
+		return eval(param);
+	} else {
+		return null;
+	}
+}
+
+]]>
+</code>
+</script>

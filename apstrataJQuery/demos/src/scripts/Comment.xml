@@ -1,0 +1,82 @@
+<script>
+<scriptACL>
+	<execute>authenticated-users</execute>
+</scriptACL>
+<code><![CDATA[
+/**
+ *  This script will create a comment document, and increment the comment count on the idea document
+ * being commented on.
+ *
+ * @param comment
+ * @param ideaKey Document key of the idea being commented on.
+ *
+ * @return On success: { status: "success" }
+ *         On failure: { status: "failure", errorDetail: "[error message]" }
+ */
+
+// START: Parameter checks
+var comment = request.parameters.comment;
+var ideaKey = request.parameters.ideaKey;
+
+if (comment == null || comment == '' || ideaKey == null || ideaKey == '')
+  return { status: "error", errorDetail: "These fields are required: comment, ideaKey" };
+// END: Parameter checks
+
+// 1. We want the whole process to be transactional so we open a new transaction here.
+var transaction = apsdb.beginTransaction();
+
+try {
+  // 2. Call SaveDocument to create the comment document and save it to the db.
+  var saveCommentDocumentParams = {
+    "apsdb.schema" : "comment", 
+    "comment" : comment,
+    "ideaKey" : ideaKey
+  };
+  var saveCommentDocumentResult = apsdb.callApi("SaveDocument", saveCommentDocumentParams, null);
+  if (saveCommentDocumentResult.metadata.status == 'failure')
+    throw Error("Unable to save document [" + saveCommentDocumentResult.metadata.errorCode + "]");
+
+  // 3. Get the idea document so we can modify its count.
+  var queryDocumentParams = {
+    "apsdb.lock" : "true", //  We want to lock the document while we're modifying it so set
+                           // apsdb.lock to true.
+    "apsdb.query" : 'apsdb.documentKey = "' + ideaKey + '"',
+    "apsdb.queryFields" : "commentCount"
+  };
+  var ideaDocumentQueryResult = apsdb.callApi("Query", queryDocumentParams, null);
+  if (ideaDocumentQueryResult.metadata.status == "failure") {
+    throw Error("An error occurred while querying for the idea document ["
+                + ideaDocumentQueryResult.metadata.errorCode + "]");
+  } else if (ideaDocumentQueryResult.result.count == '0') {
+    throw Error("No idea document found for the key: " + ideaKey);
+  }
+
+  // 4. Get the commentCount field from the retrieved document.
+  var commentCount = ideaDocumentQueryResult.result.documents[0].commentCount;
+  commentCount++;
+
+  // 5. Now update the document with the incremented count.
+  var updateIdeaDocumentParams = {
+    "apsdb.documentKey" : ideaKey,
+    "apsdb.update" : "true", //  This is an update so we can only send back the field we are
+                             // modifying and set apsdb.update to true to keep the other fields
+                             // unmodified.
+    "commentCount" : commentCount,
+    "commentCount.apsdb.fieldType" : "numeric"
+  }
+
+  var udpateIdeaDocumentResult = apsdb.callApi("SaveDocument", updateIdeaDocumentParams, null);
+  if (udpateIdeaDocumentResult.metadata.status == 'failure')
+    throw Error("Unable to save document [" + udpateIdeaDocumentResult.metadata.errorDetail + "]");
+} catch (exception) {
+  // If we had any errors/exceptions we want to be sure we rollback the transaction.
+  transaction.rollback();
+  return { "status": "error", "errorDetail": exception.message };
+} 
+
+transaction.commit();
+return { "status": "success" };
+
+]]>
+</code>
+</script>
