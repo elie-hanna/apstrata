@@ -215,6 +215,48 @@ dojo.declare("apstrata.devConsole.SchemasPanel",
 		self.inherited(arguments)
 	},
 	
+	editItems: function() {
+		var self = this
+		
+		// Close any open panels
+		this.closePanel()
+		
+		if (this._editMode) {
+			var items = dojo.query('.deleteCell', this.domNode)
+			dojo.forEach(items, function(item) {
+				var icon = dojo.query('.iconDelete', item)
+				
+				if (icon) dojo.destroy(icon[0])
+			})
+			this._editMode = false
+		} else {
+			var items = dojo.query('.deleteCell', this.domNode)
+			dojo.forEach(items, function(item) {
+				var n = dojo.create("div", {innerHTML: "<img src='"+ self._apstrataRoot +"/resources/images/pencil-icons/stop-red.png'>"})
+				// no deletion possible for user schema
+				if (item.getAttribute('itemLabel') != 'apsdb_user') {
+					n.setAttribute('itemLabel', item.getAttribute('itemLabel'))
+					n.setAttribute('itemIndex', item.getAttribute('itemIndex'))
+	
+					dojo.addClass(n, 'iconDelete')
+					dojo.place(n, item)
+					
+					dojo.connect(n, 'onclick', function(e) {
+						self._alert(self.msgDelete + '[' + e.currentTarget.getAttribute('itemLabel') + "] ?", 
+									e.currentTarget, 
+									function(target) {
+										self.onDeleteItem(target.getAttribute('itemIndex'), target.getAttribute('itemLabel'), self.data[target.getAttribute('itemIndex')].attrs)
+										self._editMode = false
+									}, function(target) {
+										
+									})
+					})
+				}
+			})
+			this._editMode = true
+		}
+	},	
+	
 	onDeleteItem: function(index, label){
 		var self = this
 		
