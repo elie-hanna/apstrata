@@ -117,8 +117,11 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 			
 			var sortingProps = this.getSortProps();
 			sortingOrder = (sortingProps[0].descending == true)?"DESC":"ASC";
-			self.sort = sortingProps[0].attribute + ":" + sortingOrder;
-			
+			sortingType = "string";
+			if (self.store._fieldsTypeObject && self.store._fieldsTypeObject[sortingProps[0].attribute])
+				sortingType = self.store._fieldsTypeObject[sortingProps[0].attribute];
+			self.sort = sortingProps[0].attribute + "<" + sortingType + ":" + sortingOrder + ">";
+
 			var query = {
 				query: self.query,
 				count: (self.page == 1),

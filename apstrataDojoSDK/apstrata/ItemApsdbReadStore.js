@@ -56,6 +56,7 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 			this._fields = attrs.fields.split(' ').join('')
 			
 			this._fieldsArray = this._fields.split(",")
+			this._fieldsTypeObject = {};
 			
 			if (attrs.childrenAttrs) {
 				this._childrenAttrs = attrs.childrenAttrs
@@ -174,14 +175,18 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 					// if it's a * query, init fieldsArray with the fields from all rows
 					if (apsdb.queryFields == '*') {
 						self._fieldsArray = []
-						for(var i = 0 ; i < q.result.documents.length; i++){
-							for(var fieldName in q.result.documents[i])
-							{
-								if(dojo.indexOf(self._fieldsArray, fieldName) == -1)
-									self._fieldsArray.push(fieldName);
+					}
+					for(var i = 0 ; i < q.result.documents.length; i++) {
+						for(var fieldName in q.result.documents[i])
+						{
+							if(q.result.documents[i]['_type'][fieldName] && !self._fieldsTypeObject[fieldName]) {
+								self._fieldsTypeObject[fieldName] = q.result.documents[i]['_type'][fieldName];
 							}
+							if(apsdb.queryFields == '*' && dojo.indexOf(self._fieldsArray, fieldName) == -1) 
+								self._fieldsArray.push(fieldName);
 						}
 					}
+
 					dojo.forEach(q.result.documents, function(item) {
 						var item = new apstrata._Item({item: item, fieldNames: self._fieldsArray, childrenNames: self._childrenArray})
 						self._addItem(item)
