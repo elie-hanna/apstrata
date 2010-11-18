@@ -215,7 +215,7 @@ dojo.declare("apstrata.devConsole.DocumentsSaveField", [dijit._Widget, dijit._Te
 {
 	widgetsInTemplate: true,
 	templateString: null,
-	templatePath: dojo.moduleUrl("apstrata.devConsole.DocumentsSaveField", "../templates/DocumentsSaveField.html"),
+	templatePath: dojo.moduleUrl("apstrata.devConsole.DocumentsSaveField", "templates/DocumentsSaveField.html"),
 	
 	/**
 	 * Constructor of the Document Fields widget.
