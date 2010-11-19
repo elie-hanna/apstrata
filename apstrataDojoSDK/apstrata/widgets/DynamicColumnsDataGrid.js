@@ -33,11 +33,20 @@ dojo.declare("apstrata.widgets.DynamicColumnsDataGrid", [dojox.grid.DataGrid], {
 		
 		for (var i=0; i<self.structure.length; i++) {
 			if(self.store._fieldsTypeObject[self.structure[i].name] == 'file') {
-				self.structure[i]['formatter'] = function (fileName, rowIndex, columnObj) {
-					if (fileName && fileName != '') {
-						var params = "apsdb.documentKey="+this.grid.getItem(rowIndex).getIdentity()+"&apsdb.fieldName="+columnObj.name+"&apsdb.fileName="+fileName+"&apsdb.store="+this.grid.store._store;
-						var href = connection.signUrl("GetFile", params, "json").url;
-						return "<a title=\"fileName\" href=\"" + href + "\">"+fileName+"</a>";
+				self.structure[i]['formatter'] = function (fileNames, rowIndex, columnObj) {
+					if (fileNames && fileNames != '') {
+						var fileNamesArray = [];
+						if (typeof fileNames == 'string')
+							fileNamesArray.push(fileNames);
+						else
+							fileNamesArray = fileNames;
+						var links = "";
+						for (var i=0; i< fileNamesArray.length; i++) {
+							var params = "apsdb.documentKey="+this.grid.getItem(rowIndex).getIdentity()+"&apsdb.fieldName="+columnObj.name+"&apsdb.fileName="+fileNamesArray[i]+"&apsdb.store="+this.grid.store._store;
+							var href = connection.signUrl("GetFile", params, "json").url;
+							links += "<a title='"+fileNamesArray[i]+"' href=\"" + href + "\">"+fileNamesArray[i]+"</a>&nbsp;";
+						}
+						return links;
 					} else {
 						return "...";
 					}
