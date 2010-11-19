@@ -30,6 +30,21 @@ dojo.declare("apstrata.widgets.DynamicColumnsDataGrid", [dojox.grid.DataGrid], {
 				if (dojo.indexOf(existingFieldNames, field) == -1)
 					self.structure.unshift({ field: field, noresize: false, name: field});
 		})
+		
+		for (var i=0; i<self.structure.length; i++) {
+			if(self.store._fieldsTypeObject[self.structure[i].name] == 'file') {
+				self.structure[i]['formatter'] = function (fileName, rowIndex, columnObj) {
+					if (fileName && fileName != '') {
+						var params = "apsdb.documentKey="+this.grid.getItem(rowIndex).getIdentity()+"&apsdb.fieldName="+columnObj.name+"&apsdb.fileName="+fileName+"&apsdb.store="+this.grid.store._store;
+						var href = connection.signUrl("GetFile", params, "json").url;
+						return "<a title=\"fileName\" href=\"" + href + "\">"+fileName+"</a>";
+					} else {
+						return "...";
+					}
+				};
+			}
+		}
+
 		this.setStructure(self.structure);
 		
 		if(req.isRender){
