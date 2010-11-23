@@ -27,6 +27,7 @@ dojo.require("dijit.form.ToggleButton");
 dojo.require("dojo.data.ItemFileReadStore");
 dojo.require("dijit.form.FilteringSelect");
 dojo.require("dojo.date.locale");
+dojo.require("dojox.form.FileInput");
 
 dojo.declare("apstrata.devConsole.DocumentsSavePanel", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
@@ -114,7 +115,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 									fieldValue = [fieldValue];
 								}
 								
-								var field = new apstrata.devConsole.DocumentsSaveField({fieldName:fieldName, fieldValues: fieldValue, fieldType: q.result.documents[0]['_type'][fieldName], update: true});
+								var field = new apstrata.devConsole.DocumentsSaveField({fieldName:fieldName, fieldValues: fieldValue, fieldType: q.result.documents[0]['_type'][fieldName], update: true, documentForm: self});
 								self.fieldsList.addChild(field);
 							}
 						}						
@@ -162,6 +163,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 				request: {
 					apsdb: apsdb
 				},
+
 				load: function(operation){
 					if(docSavePanel.update == true) {
 						docSavePanel.getParent()._query(null, docSavePanel.currentPage);
@@ -175,7 +177,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 			for(var fieldsIndex=0; fieldsIndex < fields.length; fieldsIndex++) {
 				var field = fields[fieldsIndex];
 				
-				if(field.fieldValuesList.hasChildren()) {
+				if (field.fieldValuesList.hasChildren() && field.fieldType.value != 'file') {
 					var fieldValues = field.fieldValuesList.getChildren();
 					attrs.request[field.fieldName.value] = new Array();
 					for(var i=0; i<fieldValues.length; i++) {
@@ -187,13 +189,19 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 
 						attrs.request[field.fieldName.value].push(sentVal);
 					}
+				} else if (field.fieldType.value == 'file') {
+					if (this.update) {
+						apsdb['multivalueAppend'] = field.fieldName.value;
+					}
+					attrs['formNode'] = this.saveDocumentForm.domNode;
+					attrs['useHttpMethod'] = "POST";
 				}
 				
 				if (field.ftsFields.attr("checked")) {
-					apsdb.ftsFields = (apsdb.ftsFields) ? field.fieldName.value+","+apsdb.ftsFields : field.fieldName.value;
+					apsdb.ftsFields = (apsdb.ftsFields) ? field.fieldName.value + "," + apsdb.ftsFields : field.fieldName.value;
 				}
 				
-				attrs.request[field.fieldName.value+".apsdb.fieldType"] = (field.fieldType.value!='')? field.fieldType.value : '';
+				attrs.request[field.fieldName.value+".apsdb.fieldType"] = (field.fieldType.value!='') ? field.fieldType.value : '';
 			}
 			this.container.client.call(attrs);
 		}
@@ -201,8 +209,21 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 	
 	_addFieldLine: function() {
 		// Adds the newField node to the document
-		var newField = new apstrata.devConsole.DocumentsSaveField({fieldName:null, fieldValues:null, fieldType:null});
+		var newField = new apstrata.devConsole.DocumentsSaveField({fieldName:null, fieldValues:null, fieldType:null, documentForm: this});
 		this.fieldsList.addChild(newField);
+	},
+	
+	_schemaChanged: function() {
+		for (var i=0; i<this.fieldsList.getChildren().length; i++) {
+			if (this.fieldsList.getChildren()[i].fieldType.attr("value") == "file") {
+				if (this.schemaName.attr("value") == "") {
+					this.fieldsList.getChildren()[i].fieldName.attr("disabled", true);
+					this.fieldsList.getChildren()[i].fieldName.attr("value", "apsdb_attachments");
+				} else {
+					this.fieldsList.getChildren()[i].fieldName.attr("disabled", false);
+				}
+			}
+		}
 	},
 	
 	_cancel: function() {
@@ -225,6 +246,7 @@ dojo.declare("apstrata.devConsole.DocumentsSaveField", [dijit._Widget, dijit._Te
 		this.fldValues = attrs.fieldValues;	
 		this.fldType = attrs.fieldType;
 		this.update = attrs.update;
+		this.documentForm = attrs.documentForm
 	},
 	
 	postCreate: function() {
@@ -243,13 +265,30 @@ dojo.declare("apstrata.devConsole.DocumentsSaveField", [dijit._Widget, dijit._Te
 	},
 	
 	_typeChanged: function() {
-		if(this.fieldValuesList.hasChildren()) {
+		var selectedType = this.fieldType.attr("value");
+		if (selectedType == 'file' && this.documentForm.schemaName == '') {
+			this.fieldName.attr("value", "apsdb_attachments");
+			this.fieldName.attr("disabled",true);
+		} else {
+			this.fieldName.attr("disabled",false);
+		}
+		
+		if (this.fieldValuesList.hasChildren()) {
 			for(var i=0; i<this.fieldValuesList.getChildren().length; i++) {
 				this.fieldValuesList.getChildren()[i]._typeChanged();
 			}
 		}
-		console.dir(this.fieldValuesList);
 	},
+	
+	
+	_fieldNameChanged: function() {
+		var selectedType = this.fieldType.attr("value");
+		if (selectedType == 'file' && this.fieldName.attr("value") != this.fldName) {
+			for(var i=0; i<this.fieldValuesList.getChildren().length; i++) {
+				this.fieldValuesList.getChildren()[i].apsdb_attachments.domNode.getElementsByTagName("input")[0].setAttribute("name", this.fieldName.attr("value"));
+			}			
+		}
+	},	
 	
 	_addFieldValue: function() {
 		// Adds the newField node to the document
@@ -269,6 +308,7 @@ dojo.declare("apstrata.devConsole.DocumentsSaveFieldValue", [dijit._Widget, diji
 	widgetsInTemplate: true,
 	templateString: "<div dojoAttachPoint=\"valuesDiv\">"+
 					"<button dojoAttachEvent='onClick: _removeFieldValue' dojoType='dijit.form.Button'>-</button>"+
+	                "<div dojoAttachPoint=\"fileTypeInput\" style=\"display:none;\"><input dojoAttachEvent='onClick: _fileChanged' dojoAttachPoint=\"apsdb_attachments\" style=\"width:180px\" dojoType=\"dojox.form.FileInput\" class=\"rounded-xsml dijitInlineTable\" /></div>"+
 	                "<div dojoAttachPoint=\"otherTypeInput\" style=\"display:none;\"><input dojoAttachPoint=\"fieldValue\" type=\"text\" dojoType=\"dijit.form.ValidationTextBox\" required=\"false\" class=\"rounded-xsml\"/></div>"+
 		            "<div dojoAttachPoint=\"dateTypeInput\" style=\"display:none;\"><input dojoAttachPoint=\"fieldDateValue\" constraints=\"{datePattern:'dd/MM/yyyy HH:mm:ss'}\" type=\"text\" dojoType=\"dijit.form.DateTextBox\" required=\"false\" class=\"rounded-xsml\"/></div>"+
 		            "</div>",
@@ -281,29 +321,42 @@ dojo.declare("apstrata.devConsole.DocumentsSaveFieldValue", [dijit._Widget, diji
 		this.fldValue = attrs.fieldValue;
 	},
 	
+	_fileChanged: function() {
+			this.apsdb_attachments.domNode.getElementsByTagName("input")[0].setAttribute("name", this.referencedField.fieldName.attr("value"));
+	},
+	
 	postCreate: function() {
+		var self = this;
+		this.apsdb_attachments.domNode.getElementsByTagName("input")[0].setAttribute("name", "");
+		
 		if (this.fldValue!=null && this.fldValue!='') {
-			if(this.referencedField.fieldType.attr("value")=='date') {
+			if (this.referencedField.fieldType.attr("value")=='date') {
 				this.fieldDateValue.attr("value", this._parseDate(this.fldValue));
+			} else if (this.referencedField.fieldType.attr("value")=='file') {
+				this.apsdb_attachments.attr("value", this.fldValue);
 			} else {
 				this.fieldValue.attr("value", this.fldValue);
 			}
 		}
+		
 		this._typeChanged();
 	},	
 	
 	_typeChanged: function() {
-		if(this.referencedField.fieldType.attr("value")=="date") {
+		dojo.style(this.dateTypeInput, "display", "none");
+		dojo.style(this.fileTypeInput, "display", "none");
+		dojo.style(this.otherTypeInput, "display", "none");
+		if (this.referencedField.fieldType.attr("value") == "file") {
+			dojo.style(this.fileTypeInput, "display", "inline");
+		} else if (this.referencedField.fieldType.attr("value") == "date") {
 			dojo.style(this.dateTypeInput, "display", "inline");
-			dojo.style(this.otherTypeInput, "display", "none");
 			if(this.fieldDateValue.attr("value")==null) {
 				this.fieldDateValue.attr("value", new Date());
 			}
 		} else {
 			dojo.style(this.otherTypeInput, "display", "inline");
-			dojo.style(this.dateTypeInput, "display", "none");
 		}
-	},	
+	},
 	
 	_removeFieldValue: function() {
 		// Remove the field value container.

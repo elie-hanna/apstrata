@@ -5,6 +5,9 @@
 		    width: 60px;
 		    padding-left:7px;
 		  }
+		  .dijitFileInputVisible {
+		  	width: 180px !important;
+		  }
 		</style>
         <div style="float:left">
 		<div class="label" style="height:25px;"></div>
@@ -13,7 +16,7 @@
 
         <div style="float:left">
 		<div class="label" style="height:25px;">Name:</div>
-		<input dojoAttachPoint="fieldName" type="text" dojoType="dijit.form.ValidationTextBox" required="true" class="rounded-xsml"/>
+		<input dojoAttachPoint="fieldName" dojoAttachEvent='onChange: _fieldNameChanged' type="text" dojoType="dijit.form.ValidationTextBox" required="true" class="rounded-xsml"/>
 		</div>		
 		
         <div style="float:left">
@@ -28,6 +31,7 @@
 			<option value="numeric">numeric</option>
 			<option value="date">date</option>
 			<option value="text">text</option>
+			<option value="file">file</option>
 		</select>
 		</div>	
 		

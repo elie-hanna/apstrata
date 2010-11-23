@@ -10,9 +10,9 @@
 		    height: 26px;
 		  }				
 	</style>
-	<div dojoType="dijit.form.Form" dojoAttachPoint="saveDocumentForm" class="apstrataForm narrowForm" encType="multipart/form-data" action="" method="" style="width:820px;">
+	<div dojoType="dijit.form.Form" dojoAttachPoint="saveDocumentForm" class="apstrataForm narrowForm" encType="multipart/form-data" action="" method="" style="width:950px;">
 		<div class="label">Schema:</div>
-		<select dojoType="dijit.form.FilteringSelect" required="false" autocomplete="true" dojoAttachPoint="schemaName" class="rounded-xsml">
+		<select dojoAttachEvent='onChange: _schemaChanged' dojoType="dijit.form.FilteringSelect" required="false" autocomplete="true" dojoAttachPoint="schemaName" class="rounded-xsml">
 			<option value=""></option>
 			{% for o in listSchemas %} 
 				<option value="{{ o.name }}">{{ o.name }}</option>
