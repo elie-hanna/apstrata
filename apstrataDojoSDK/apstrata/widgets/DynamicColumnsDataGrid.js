@@ -44,7 +44,7 @@ dojo.declare("apstrata.widgets.DynamicColumnsDataGrid", [dojox.grid.DataGrid], {
 						for (var i=0; i< fileNamesArray.length; i++) {
 							var params = "apsdb.documentKey="+this.grid.getItem(rowIndex).getIdentity()+"&apsdb.fieldName="+columnObj.name+"&apsdb.fileName="+fileNamesArray[i]+"&apsdb.store="+this.grid.store._store;
 							var href = connection.signUrl("GetFile", params, "json").url;
-							links += "<a title='"+fileNamesArray[i]+"' href=\"" + href + "\">"+fileNamesArray[i]+"</a>&nbsp;";
+							links += ((i>0)?"<br/>":"")+"<a title='"+fileNamesArray[i]+"' href=\"" + href + "\">"+fileNamesArray[i]+"</a>";
 						}
 						return links;
 					} else {
