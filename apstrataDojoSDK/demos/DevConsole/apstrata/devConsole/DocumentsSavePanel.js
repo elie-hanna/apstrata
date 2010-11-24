@@ -308,7 +308,7 @@ dojo.declare("apstrata.devConsole.DocumentsSaveFieldValue", [dijit._Widget, diji
 	widgetsInTemplate: true,
 	templateString: "<div dojoAttachPoint=\"valuesDiv\">"+
 					"<button dojoAttachEvent='onClick: _removeFieldValue' dojoType='dijit.form.Button'>-</button>"+
-	                "<div dojoAttachPoint=\"fileTypeInput\" style=\"display:none;\"><input dojoAttachEvent='onClick: _fileChanged' dojoAttachPoint=\"apsdb_attachments\" style=\"width:180px\" dojoType=\"dojox.form.FileInput\" class=\"rounded-xsml dijitInlineTable\" /></div>"+
+	                "<div dojoAttachPoint=\"fileTypeInput\" style=\"display:none;\"><input dojoAttachEvent='onClick: _fileChanged' dojoAttachPoint=\"apsdb_attachments\" style=\"width:144px\" dojoType=\"dojox.form.FileInput\" class=\"rounded-xsml dijitInlineTable\" /></div>"+
 	                "<div dojoAttachPoint=\"otherTypeInput\" style=\"display:none;\"><input dojoAttachPoint=\"fieldValue\" type=\"text\" dojoType=\"dijit.form.ValidationTextBox\" required=\"false\" class=\"rounded-xsml\"/></div>"+
 		            "<div dojoAttachPoint=\"dateTypeInput\" style=\"display:none;\"><input dojoAttachPoint=\"fieldDateValue\" constraints=\"{datePattern:'dd/MM/yyyy HH:mm:ss'}\" type=\"text\" dojoType=\"dijit.form.DateTextBox\" required=\"false\" class=\"rounded-xsml\"/></div>"+
 		            "</div>",
