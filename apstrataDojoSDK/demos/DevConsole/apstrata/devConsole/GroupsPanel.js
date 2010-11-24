@@ -25,7 +25,6 @@ dojo.declare("apstrata.devConsole.GroupsPanel",
 {	
 	data: [],
 	editable: true,
-	noEdit: true,
 	
 	reload: function() {
 		var self = this
@@ -41,6 +40,10 @@ dojo.declare("apstrata.devConsole.GroupsPanel",
 	
 				// Cause the DTL to rerender with the fresh self.data
 				self.render()
+
+				dojo.connect(self, 'onClick', function(index, label) {
+					self.openPanel(apstrata.devConsole.GroupEditPanel, {target: label})
+				})
 			},
 			error: function(operation) {
 			}
@@ -81,22 +84,68 @@ dojo.declare("apstrata.devConsole.GroupEditPanel",
 {
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/GroupEditPanel.html"),
+	groupName: '',
+	update: false,
+	newGroupName: '',
+
+	constructor: function(attrs) {
+		if (typeof attrs != 'undefined') {
+			if (attrs.target) {
+				this.groupName = attrs.target;
+			} else {
+				this.groupName = '';
+			}
+
+			if (attrs.target) {
+				this.update = true;
+			} else {
+				this.update = false;
+			}
+		}
+	},
 	
+	postCreate: function() {
+		var self = this;
+		self.groupNameField.value = self.groupName;
+		this.inherited(arguments);
+	},
+
 	_save: function() {
 		var self = this
-		
-		this.container.client.call({
-			action: "CreateGroup",
-			request: {
-				groupName: self.groupName.value
-			},
-			load: function(operation) {
-				self.getParent().reload()
-				self.getParent().closePanel()
-			},
-			error: function(operation) {
-			}
-		})
+		if (self.update) self.newGroupName = self.groupNameField.value;
+
+		// Do not update the group if the group name has not been changed.
+		if (self.groupName == self.newGroupName) {
+			dialog = new apstrata.widgets.Alert({width: 200, 
+				height: 250, 
+				actions: "Close", 
+				message: "<p>Group name not changed.</p>", 
+				clazz: "rounded-sml Alert", 
+				iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
+				modal: true })
+			dialog.show();		
+
+			dojo.connect(dialog, "buttonPressed", function(label) {
+				dialog.hide();
+			});	
+		} else {
+			this.container.client.call({
+				action: "SaveGroup",
+				request: {
+					"apsdb": {
+						update: self.update
+					},
+					groupName: self.groupName,
+					newGroupName: self.newGroupName
+				},
+				load: function(operation) {
+					self.getParent().reload()
+					self.getParent().closePanel()
+				},
+				error: function(operation) {
+				}
+			})
+		}
 	},
 	
 	_cancel: function() {
