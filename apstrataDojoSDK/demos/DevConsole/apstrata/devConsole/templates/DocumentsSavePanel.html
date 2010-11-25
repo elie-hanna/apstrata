@@ -1,13 +1,12 @@
-<div class='panel'>
+<div class='panel' style='overflow-y: auto;'>
 	{% if true %}
 	{% endif %}
 	<style>
-		#apstrata_devConsole_DocumentsSavePanel_0 {overflow-y:auto;}
 		.dijitArrowButtonInner {
 		    height: 26px;
 		}				
 	</style>
-	<div dojoType="dijit.form.Form" dojoAttachPoint="saveDocumentForm" id="saveDocumentForm" class="apstrataForm narrowForm" encType="multipart/form-data" action="" method="" style="width:950px;">
+	<div dojoType="dijit.form.Form" dojoAttachPoint="saveDocumentForm" class="apstrataForm narrowForm" encType="multipart/form-data" action="" method="" style="width:950px;">
 		<div class="label">Schema:</div>
 		<select dojoAttachEvent='onChange: _schemaChanged' dojoType="dijit.form.FilteringSelect" required="false" autocomplete="true" dojoAttachPoint="schemaName" class="rounded-xsml">
 			<option value=""></option>
