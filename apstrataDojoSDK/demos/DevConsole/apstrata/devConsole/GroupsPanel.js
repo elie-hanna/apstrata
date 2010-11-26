@@ -141,6 +141,7 @@ dojo.declare("apstrata.devConsole.GroupEditPanel",
 				},
 				load: function(operation) {
 					self.getParent().reload();
+					self.getParent().closePanel();
 				},
 				error: function(operation) {
 				}
