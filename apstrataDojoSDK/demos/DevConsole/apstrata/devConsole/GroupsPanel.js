@@ -103,7 +103,7 @@ dojo.declare("apstrata.devConsole.GroupEditPanel",
 			}
 		}
 	},
-	
+
 	postCreate: function() {
 		var self = this;
 		self.groupNameField.value = self.groupName;
@@ -113,21 +113,22 @@ dojo.declare("apstrata.devConsole.GroupEditPanel",
 	_save: function() {
 		var self = this
 		if (self.update) self.newGroupName = self.groupNameField.value;
+		else self.groupName = self.groupNameField.value;
 
 		// Do not update the group if the group name has not been changed.
 		if (self.groupName == self.newGroupName) {
-			dialog = new apstrata.widgets.Alert({width: 200, 
-				height: 250, 
-				actions: "Close", 
-				message: "<p>Group name not changed.</p>", 
-				clazz: "rounded-sml Alert", 
-				iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png", 
+			dialog = new apstrata.widgets.Alert({width: 200,
+				height: 250,
+				actions: "Close",
+				message: "<p>Group name not changed.</p>",
+				clazz: "rounded-sml Alert",
+				iconSrc: apstrata.baseUrl + "/resources/images/pencil-icons/alert.png",
 				modal: true })
-			dialog.show();		
+			dialog.show();
 
 			dojo.connect(dialog, "buttonPressed", function(label) {
 				dialog.hide();
-			});	
+			});
 		} else {
 			this.container.client.call({
 				action: "SaveGroup",
@@ -139,8 +140,7 @@ dojo.declare("apstrata.devConsole.GroupEditPanel",
 					newGroupName: self.newGroupName
 				},
 				load: function(operation) {
-					self.getParent().reload()
-					self.getParent().closePanel()
+					self.getParent().reload();
 				},
 				error: function(operation) {
 				}

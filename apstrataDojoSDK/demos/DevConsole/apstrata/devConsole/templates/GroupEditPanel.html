@@ -1,8 +1,11 @@
 <div class='panel'>
+	{% if true %} 
+	{% endif %}
 
-	<div class="apstrataForm" style='width: 220px;'>
+	<div dojoType="dijit.form.Form" class="apstrataForm rounded-top-sml rounded-bottom-sml" style="width: 220px;"
+	    action="" method="">
 		<div class="label">Groupname:</div>
-		<input type="text" dojoAttachPoint="groupNameField">
+		<input class="input" type="text" dojoAttachPoint="groupNameField">
 		
 		<br><br>
 		<div style='width: 100%; text-align: right'>
