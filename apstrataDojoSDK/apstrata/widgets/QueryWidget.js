@@ -61,10 +61,12 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 		if (attrs.layout) {
 			this._layout= attrs.layout; 
 		} else {
-				this._layout = []
+				this._layout = [];
+				this.actionColWidth = "120px";
 				if(self.columns != "*"){
 					//this is a * query, do not bother adding the * column to the structure
 					// compute layout
+					this.actionColWidth = "15%";
 					dojo.forEach(self.columns.split(","), function(field) {
 						field = dojo.string.trim(field)
 						self._layout.push({ field: field, noresize: false, name: field})
@@ -72,7 +74,7 @@ dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], 
 				}
 				// add edit and delete button to the Actions column
 				if (attrs.editAction || attrs.deleteAction) {
-					self._layout.push({name: "Actions", field: attrs.theRowId, width: '15%', formatter: function (pk) {
+					self._layout.push({name: "Actions", field: attrs.theRowId, width: self.actionColWidth, formatter: function (pk) {
 						var zActions = new Object();
 						if (attrs.editAction) {
 							zActions["editAction"] = attrs.editAction;
