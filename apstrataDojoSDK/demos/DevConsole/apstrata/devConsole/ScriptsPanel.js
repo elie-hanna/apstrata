@@ -142,8 +142,7 @@ dojo.declare("apstrata.devConsole.ScriptEditorPanel",
 		} else {
 			self.fldName.attr("value", "")
 			self.txtScript.attr("value", "")
-			
-			dojo.attr(this.btnRun, {'disabled': 'disabled'})
+			self.btnRun.setDisabled(true);
 			
 			// TODO: find a more elegant solution, initializing CodeEditor is giving an error, 
 			//  unless some delay is provided
@@ -170,11 +169,22 @@ dojo.declare("apstrata.devConsole.ScriptEditorPanel",
 		var self = this
 
 		var apsdb = {
-			scriptName: self.fldName.value,
 			script: editAreaLoader.getValue(self.txtScript.id),
 			update: self.update
+		};
+
+		// Make sure that the script name is updated if it has changed.
+		if (self.update) {
+			if (self.scriptName != self.fldName.value) {
+				apsdb.scriptName = self.scriptName;
+				apsdb.newScriptName = self.fldName.value;
+			} else {
+				apsdb.scriptName = self.fldName.value;
+			}
+		} else {
+			apsdb.scriptName = self.fldName.value;
 		}
-		
+
 		this.container.client.call({
 			action: "SaveScript",
 			request: {
@@ -182,12 +192,12 @@ dojo.declare("apstrata.devConsole.ScriptEditorPanel",
 			},
 			formNode: self.frmScript.domNode,
 			load: function(operation) {
-//				self.btnRun.removeAttribute('disabled')
-//				dojo.attr(self.btnRun, {'disabled': ''})
-				if (self.scriptName!=self.fldName.value) {
-					self.scriptName = self.fldName.value
-					self.getParent().reload()
+				self.btnRun.setDisabled(false);
+				if (self.scriptName != self.fldName.value) {
+					self.scriptName = self.fldName.value;
+					self.getParent().reload();
 				}
+				self.update = true;
 			},
 			error: function(operation) {
 			}
