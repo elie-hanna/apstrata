@@ -136,6 +136,7 @@ dojo.declare("apstrata.ItemApsdbReadStore",
 				queryFields: self._fields, 
 				resultsPerPage: self._resultsPerPage,
 				pageNumber: pageNumber,
+				includeFieldType: true,
 				count: count
 			}
 

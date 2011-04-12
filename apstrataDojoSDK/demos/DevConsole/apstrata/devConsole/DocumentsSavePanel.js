@@ -82,6 +82,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 			var apsdb = {
 				store: self.storeName,
 				query: 'apsdb.documentKey="' + self.docKey + '"',
+				includeFieldType: true,
 				queryFields: '*'
 			}
 			
