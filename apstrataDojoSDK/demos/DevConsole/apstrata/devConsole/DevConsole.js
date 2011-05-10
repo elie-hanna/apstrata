@@ -28,6 +28,7 @@ dojo.require("apstrata.devConsole.HomePanel")
 dojo.require("apstrata.devConsole.ConfigurationPanel")
 dojo.require("apstrata.devConsole.StoresPanel")
 dojo.require("apstrata.devConsole.SchemasPanel")
+dojo.require("apstrata.devConsole.SavedQueriesPanel")
 dojo.require("apstrata.devConsole.ScriptsPanel")
 dojo.require("apstrata.devConsole.GroupsPanel")
 dojo.require("apstrata.devConsole.UsersPanel")
@@ -40,6 +41,7 @@ dojo.declare("apstrata.devConsole.MainPanel",
 		{label: "stores", iconSrc: "../../apstrata/resources/images/pencil-icons/datebase.png"},
 		{label: "schemas", iconSrc: "../../apstrata/resources/images/pencil-icons/schema.png"},
 		{label: "scripts", iconSrc: "../../apstrata/resources/images/pencil-icons/configuration.png"},
+		{label: "saved queries", iconSrc: "../../apstrata/resources/images/pencil-icons/favourites.png"},
 		{label: "groups", iconSrc: "../../apstrata/resources/images/pencil-icons/users.png"},
 		{label: "users", iconSrc: "../../apstrata/resources/images/pencil-icons/user-man.png"},
 //		{label: "favourites", iconSrc: "../../apstrata/resources/images/pencil-icons/favourites.png"},
@@ -60,6 +62,7 @@ dojo.declare("apstrata.devConsole.MainPanel",
 			case 'scripts': this.openPanel(apstrata.devConsole.ScriptsPanel); break;
 			case 'groups': this.openPanel(apstrata.devConsole.GroupsPanel); break;
 			case 'users': this.openPanel(apstrata.devConsole.UsersPanel); break;
+			case 'saved queries': this.openPanel(apstrata.devConsole.SavedQueriesPanel); break;
 			case 'favourites': this.openPanel(apstrata.devConsole.FavouritesPanel); break;
 			case 'logout':  this.getContainer().connection.logout(); break;
 		}
