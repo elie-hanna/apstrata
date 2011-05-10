@@ -1,0 +1,135 @@
+<div class='panel'>
+	{% if true %}
+	{% endif %}
+	<div class="apstrataForm rounded-top-sml rounded-bottom-sml">
+		<form action="#" dojoType="dijit.form.Form" dojoAttachPoint="frmParams">
+			<table>
+				<tr>
+					<td>
+						Request Param
+					</td>
+					<td>
+						Value
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param1"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value1"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param2"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value2"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param3"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value3"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param4"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value4"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param5"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value5"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param6"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value6"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param7"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value7"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param8"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value8"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param9"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value9"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="param10"></input>
+					</td>
+					<td>
+						<input type="text" dojoType="dijit.form.TextBox" style="width: 120px;" name="value10"></input>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="label">Store:</div>
+						<select dojoType="dijit.form.FilteringSelect" dojoAttachPoint="fldStore"  name="store" searchAttr="label" required="false"  class="rounded-xsml ext fdText"  > </select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div class="label">Run As:</div>
+						<select dojoType="dijit.form.FilteringSelect" dojoAttachPoint="fldRunAs"  name="runAs" searchAttr="label" required="false"  class="rounded-xsml ext fdText"  > </select>
+					</td>
+				</tr>
+			</table>
+		</form>
+
+		<br>
+		<table style='font-size: small;'>
+			<tr>
+				<td>
+					<!-- The script returns an attachment or an HTML page -->
+					The script's result will open in a new window
+				</td>
+				<td>
+					<input type="submit" dojoAttachEvent='onclick: _goNewWindow' value='Go' style='width: 50px;'></input>
+				</td>
+			</tr>
+			<!--
+			<tr>
+				<td>
+					The script returns a JSON string
+				</td>
+				<td>
+					<input type="submit" dojoAttachEvent='onclick: _go' value='Go' style='width: 50px;'></input>
+				</td>
+			</tr>
+			 -->
+		</table>
+		<div style='width: 100%; text-align: center'>
+		</div>
+	</div>
+</div>
