@@ -260,7 +260,6 @@ dojo.declare("apstrata.devConsole.RunSavedQueryPanel",
 
 	_goNewWindow: function() {
 		var self = this
-		var store = self.fldStore.getValue()
 		var runAs = self.fldRunAs.getValue()
 
 		var operation = new apstrata.Operation(this.container.connection)
@@ -268,7 +267,6 @@ dojo.declare("apstrata.devConsole.RunSavedQueryPanel",
 		operation.request = {
 			apsdb: {
 				queryName: self.queryName,
-        store: store,
 				runAs: runAs
 			}
 		}
@@ -302,31 +300,6 @@ dojo.declare("apstrata.devConsole.RunSavedQueryPanel",
 	postCreate: function() {
 		var self = this
 		this.storeListFetched = false
-
-    // Get the list of stores
-		dojo.connect(self.fldStore, 'onClick', function () {
-			if (self.storeListFetched) return
-			self.container.client.call({
-				action: "ListStores",
-				request: {
-					apsdb: {
-					}
-				},
-				load: function(operation) {
-					var storeData = []
-					self.storeListFetched = true
-					dojo.forEach(operation.response.result.stores, function(store) {
-            
-						storeData.push({name: store['name'], label: store['name'], abbreviation: store['name']})
-					})
-
-					var storeList = {identifier:'abbreviation',label: 'name',items: storeData}
-		        	self.fldStore.store = new dojo.data.ItemFileReadStore({ data: storeList });
-				},
-				error: function(operation) {
-				}
-			})
-	    });
 
     // Get the list of users
 		dojo.connect(self.fldRunAs, 'onClick', function () {
