@@ -42,6 +42,17 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 		var self = this;
 		self.storeName = attrs.target;
 		self.docKey = attrs.docKey;
+		
+    // remove apsdb_user from the schemas list
+		var max = attrs.listSchemas.length;
+		for (var i = 0; i < max; i++){
+		  if (attrs.listSchemas[i].name == "apsdb_user")
+		  {
+		    attrs.listSchemas.splice(i,1);
+		    break;
+		  }
+		};
+		
 		self.listSchemas = attrs.listSchemas;
 		self.update = (attrs.docKey && attrs.docKey!='') ? true : false;
 		self.currentPage = attrs.currentPage;
