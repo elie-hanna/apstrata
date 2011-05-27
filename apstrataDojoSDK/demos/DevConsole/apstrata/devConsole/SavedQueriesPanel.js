@@ -190,6 +190,7 @@ dojo.declare("apstrata.devConsole.SavedQueryEditorPanel",
 			load: function(operation) {
 				self.btnRun.setDisabled(false);
 				if (!self.update) {
+				  self.queryName = apsdb.queryName
 					self.getParent().reload();
 				}
 				self.update = true;
@@ -203,9 +204,8 @@ dojo.declare("apstrata.devConsole.SavedQueryEditorPanel",
 	_run: function() {
 		var self = this
 
-console.log(self);
 		this.openPanel(apstrata.devConsole.RunSavedQueryPanel, {
-			queryName: self.queryName,
+			queryName: self.queryName
 		})
 	},
 
@@ -244,17 +244,97 @@ dojo.declare("apstrata.devConsole.RunSavedQueryPanel",
 		var frm = this.frmParams.attr('value')
 		var params = {}
 
-		if (frm.param1) params[frm.param1] = frm.value1
-		if (frm.param2) params[frm.param2] = frm.value2
-		if (frm.param3) params[frm.param3] = frm.value3
-		if (frm.param4) params[frm.param4] = frm.value4
-		if (frm.param5) params[frm.param5] = frm.value5
-		if (frm.param6) params[frm.param6] = frm.value6
-		if (frm.param7) params[frm.param7] = frm.value7
-		if (frm.param8) params[frm.param8] = frm.value8
-		if (frm.param9) params[frm.param9] = frm.value9
-		if (frm.param10) params[frm.param10] = frm.value10
+    // if (frm.param1) params[frm.param1] = frm.value1
+    // if (frm.param2) params[frm.param2] = frm.value2
+    // if (frm.param3) params[frm.param3] = frm.value3
+    // if (frm.param4) params[frm.param4] = frm.value4
+    // if (frm.param5) params[frm.param5] = frm.value5
+    // if (frm.param6) params[frm.param6] = frm.value6
+    // if (frm.param7) params[frm.param7] = frm.value7
+    // if (frm.param8) params[frm.param8] = frm.value8
+    // if (frm.param9) params[frm.param9] = frm.value9
+    // if (frm.param10) params[frm.param10] = frm.value10
 
+    if (frm.param1) {
+      if (typeof params[frm.param1] != 'undefined') {
+        params[frm.param1].push(frm.value1);
+      } else {
+        params[frm.param1] = [frm.value1];
+      }
+    }
+    
+    if (frm.param2) {
+      if (typeof params[frm.param2] != 'undefined') {
+        params[frm.param2].push(frm.value2);
+      } else {
+        params[frm.param2] = [frm.value2];
+      }
+    }
+    
+    if (frm.param3) {
+      if (typeof params[frm.param3] != 'undefined') {
+        params[frm.param3].push(frm.value3);
+      } else {
+        params[frm.param3] = [frm.value3];
+      }
+    }
+    
+    if (frm.param4) {
+      if (typeof params[frm.param2] != 'undefined') {
+        params[frm.param4].push(frm.value4);
+      } else {
+        params[frm.param4] = [frm.value4];
+      }
+    }
+    
+    if (frm.param5) {
+      if (typeof params[frm.param5] != 'undefined') {
+        params[frm.param5].push(frm.value5);
+      } else {
+        params[frm.param5] = [frm.value5];
+      }
+    }
+    
+    if (frm.param6) {
+      if (typeof params[frm.param6] != 'undefined') {
+        params[frm.param6].push(frm.value6);
+      } else {
+        params[frm.param6] = [frm.value6];
+      }
+    }
+    
+    if (frm.param7) {
+      if (typeof params[frm.param7] != 'undefined') {
+        params[frm.param7].push(frm.value7);
+      } else {
+        params[frm.param7] = [frm.value7];
+      }
+    }
+
+    if (frm.param8) {
+      if (typeof params[frm.param8] != 'undefined') {
+        params[frm.param8].push(frm.value8);
+      } else {
+        params[frm.param8] = [frm.value8];
+      }
+    }
+    
+    if (frm.param9) {
+      if (typeof params[frm.param9] != 'undefined') {
+        params[frm.param9].push(frm.value9);
+      } else {
+        params[frm.param9] = [frm.value9];
+      }
+    }
+    
+    if (frm.param10) {
+      if (typeof params[frm.param10] != 'undefined') {
+        params[frm.param10].push(frm.value10);
+      } else {
+        params[frm.param10] = [frm.value10];
+      }
+    }
+    
 		return params
 	},
 
@@ -274,7 +354,7 @@ dojo.declare("apstrata.devConsole.RunSavedQueryPanel",
 		dojo.mixin(operation.request, this._getParams())
 
 		var url = operation.buildUrl().url;
-		window.open(url, 'Script Output:' + self.scriptName)
+		window.open(url, 'Query Output:' + self.queryName)
 	},
 /*
 	_go: function() {
