@@ -4,8 +4,8 @@
 
 // Credentials, domain, and context for Apstrata.
 var APSDB_AUTH_KEY = 'W09CFC4BE3';
-var APSDB_DOMAIN = 'apsdb.apstrata.com';
-var APSDB_CONTEXT = 'sandbox-apsdb';
+var APSDB_DOMAIN = 'sandbox.apstrata.com';
+var APSDB_CONTEXT = 'apsdb';
 
 /**
  * Generate and sign an HTTP request to Apstrata, then call a success function.
