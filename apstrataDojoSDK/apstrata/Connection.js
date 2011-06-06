@@ -29,7 +29,7 @@ dojo.declare("apstrata.Connection",
 		LOGIN_MASTER: "master",
 			
 		constructor: function(attrs) {
-			this._DEFAULT_SERVICE_URL= "https://apsdb.apstrata.com/sandbox-apsdb/rest"
+			this._DEFAULT_SERVICE_URL= "https://sandbox.apstrata.com/apsdb/rest"
 			this.timeout = 10000
 			this.serviceUrl= this._DEFAULT_SERVICE_URL
 			this.defaultStore = ""
