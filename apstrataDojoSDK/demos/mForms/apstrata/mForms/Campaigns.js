@@ -513,7 +513,7 @@ dojo.declare("apstrata.mForms.EmbedCode",
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.mForms", "templates/EmbedCode.html"),
 	maximizePanel: true,
-	apServiceURL : "http://apsdb.apstrata.com/sandbox-apsdb/rest",
+	apServiceURL : "http://sandbox.apstrata.com/apsdb/rest",
 	apSourceURL : "http://developer.apstrata.com/apstrataSDK/",
 
 	constructor: function(attrs) {
