@@ -8,7 +8,7 @@
 
 var customerKey = "W09CFC4BE3";
 var duffysIdeaBoardBaseURL = "http://developer.apstrata.com/tutorials/duffy";
-var serviceURL = "http://apsdb.apstrata.com/sandbox-apsdb/rest/" + customerKey;
+var serviceURL = "http://sandbox.apstrata.com/apsdb/rest/" + customerKey;
 
 function getConfiguration(param) {
 	// Getter for any parameter in this script.
