@@ -38,7 +38,7 @@ dojo.declare("apstrata.mForms.ApConfig", [], {
 		secret: '',
 		username: '',
 		password: '',
-		serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest',
+		serviceURL: 'http://sandbox.apstrata.com/apsdb/rest',
 		defaultStore: 'DefaultStore',
 		timeout: 10000	
 	},
