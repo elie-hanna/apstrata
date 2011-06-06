@@ -29,7 +29,7 @@ if (!apstrata) apstrata = {}
  apstrata.apConfig = {
 	key:'',
 	secret:'',
-	serviceURL: 'http://apsdb.apstrata.com/sandbox-apsdb/rest',
+	serviceURL: 'http://sandbox.apstrata.com/apsdb/rest',
 	blogStore: 'default',
 	timeout: 10000	
 }
