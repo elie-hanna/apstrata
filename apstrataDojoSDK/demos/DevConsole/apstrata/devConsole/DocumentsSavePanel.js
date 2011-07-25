@@ -379,9 +379,12 @@ dojo.declare("apstrata.devConsole.DocumentsSaveFieldValue", [dijit._Widget, diji
 	_parseDate: function(value) {
 		var dateVal = dojo.date.locale.parse(value.split('T')[0], {datePattern:'yyyy-MM-dd', selector: 'date'});
 		var timeVal = dojo.date.locale.parse(value.substring(value.indexOf('T')), {timePattern: "'T'HH:mm:ssZ", selector: 'time'});
-		dateVal.setUTCHours(timeVal.getUTCHours());
-		dateVal.setUTCMinutes(timeVal.getUTCMinutes());
-		dateVal.setUTCSeconds(timeVal.getUTCSeconds());
+//		dateVal.setUTCHours(timeVal.getUTCHours());
+//		dateVal.setUTCMinutes(timeVal.getUTCMinutes());
+//		dateVal.setUTCSeconds(timeVal.getUTCSeconds());
+		dateVal.setHours(timeVal.getHours());
+		dateVal.setMinutes(timeVal.getMinutes());
+		dateVal.setSeconds(timeVal.getSeconds());
 	    return dateVal;
 	}
 })
