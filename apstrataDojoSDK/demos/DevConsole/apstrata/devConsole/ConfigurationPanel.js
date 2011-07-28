@@ -48,8 +48,8 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				self.maximumTokenLifeTime.attr("value", q.maximumTokenLifeTime);		
 				if(q.disableSchemalessDocs == true || q.disableSchemalessDocs=="true")
 					self.disableSchemalessDocs.attr("checked", q.disableSchemalessDocs);
-				if(q.optionalBindReferrer == true || q.optionalBindReferrer=="true")
-					self.optionalBindReferrer.attr("checked", q.optionalBindReferrer);				
+				if(q.optionalBindReferrer == null || q.optionalBindReferrer == true || q.optionalBindReferrer=="true")
+					self.optionalBindReferrer.attr("checked", true);				
 			},
 			error: function(operation) {
 			}
