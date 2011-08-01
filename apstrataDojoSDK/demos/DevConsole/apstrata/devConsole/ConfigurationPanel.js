@@ -43,11 +43,13 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				self.createScriptACL.attr("value", q.createScriptACL);
 				self.sendEmailACL.attr("value", q.sendEmailACL);
 				self.defaultTokenExpires.attr("value", q.defaultTokenExpires);
+				self.defaultTokenLifeTime.attr("value", q.defaultTokenLifeTime);
+				self.maximumTokenExpires.attr("value", q.maximumTokenExpires);
 				self.maximumTokenLifeTime.attr("value", q.maximumTokenLifeTime);		
 				if(q.disableSchemalessDocs == true || q.disableSchemalessDocs=="true")
 					self.disableSchemalessDocs.attr("checked", q.disableSchemalessDocs);
 				if(q.optionalBindReferrer == null || q.optionalBindReferrer == true || q.optionalBindReferrer=="true")
-					self.optionalBindReferrer.attr("checked", true);				
+					self.optionalBindReferrer.attr("checked", true);
 			},
 			error: function(operation) {
 			}
@@ -65,6 +67,8 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				createScriptACL: self.createScriptACL.getValue(),
 				sendEmailACL: self.sendEmailACL.getValue(),
 				defaultTokenExpires: self.defaultTokenExpires.getValue(),
+				defaultTokenLifeTime: self.defaultTokenLifeTime.getValue(),
+				maximumTokenExpires: self.maximumTokenExpires.getValue(),
 				maximumTokenLifeTime: self.maximumTokenLifeTime.getValue(),
 				disableSchemalessDocs: self.disableSchemalessDocs.attr("checked"),
 				optionalBindReferrer: self.optionalBindReferrer.attr("checked")
