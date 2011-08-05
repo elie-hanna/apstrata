@@ -44,6 +44,7 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				self.sendEmailACL.attr("value", q.sendEmailACL);
 				self.defaultTokenExpires.attr("value", q.defaultTokenExpires);
 				self.maximumTokenExpires.attr("value", q.maximumTokenExpires);
+				self.defaultTokenLifeTime.attr("value", q.defaultTokenLifeTime);
 				self.maximumTokenLifeTime.attr("value", q.maximumTokenLifeTime);		
 				if(q.disableSchemalessDocs == true || q.disableSchemalessDocs=="true")
 					self.disableSchemalessDocs.attr("checked", q.disableSchemalessDocs);
@@ -67,6 +68,7 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				sendEmailACL: self.sendEmailACL.getValue(),
 				defaultTokenExpires: self.defaultTokenExpires.getValue(),
 				maximumTokenExpires: self.maximumTokenExpires.getValue(),
+				defaultTokenLifeTime: self.defaultTokenLifeTime.getValue(),
 				maximumTokenLifeTime: self.maximumTokenLifeTime.getValue(),
 				disableSchemalessDocs: self.disableSchemalessDocs.attr("checked"),
 				optionalBindReferrer: self.optionalBindReferrer.attr("checked")
