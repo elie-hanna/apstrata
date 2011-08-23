@@ -625,8 +625,7 @@ dojo.declare("apstrata.TokenConnection",
 		 */
 		_publishFailureAuthentication: function () {
 			var self = this;
-			dojo.publish("/apstrata/connection/login/failure", [{
-				key: ((self.credentials && self.credentials.key) ? self.credentials.key : "")
+			dojo.publish("/apstrata/connection/logout/success", [{
 			}]);
 		}
 	});
