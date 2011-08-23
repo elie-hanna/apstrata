@@ -99,8 +99,8 @@ dojo.declare("apstrata.horizon.Login",
 			if (!apstrata.apConfig) 
 				apstrata.apConfig = {};
 
-			this.getContainer().connection.loginUser({
-				success: function() {
+			self.getContainer().connection.loginUser({
+				success: function () {
 					apstrata.apConfig.key = connection.credentials.key;
 					apstrata.apConfig.username = connection.credentials.username;
 					apstrata.apConfig.password = connection.credentials.password;
@@ -109,14 +109,14 @@ dojo.declare("apstrata.horizon.Login",
 						self._success();
 				},
 
-				failure: function(error, message) {
+				failure: function (error, message) {
 					if (self._failure)
 						self._failure();
 					var msg = "";
 					if(error == "INVALID_SIGNATURE")
 						msg = "Invalid credentials.";
 					else
-						msg = error + " - " + message;
+						msg = error + ((message) ? " - " + message : "");
 					apstrata.alert(msg, self);
 				},
 

@@ -133,7 +133,11 @@ dojo.declare("apstrata.TokenConnection",
 				// then try to set the one from the current "apConfig" in the global "apstrata" object.
 				var config = apstrata.apConfig.get();
 				if (self.serviceUrl == '' || (self.serviceUrl == self._DEFAULT_SERVICE_URL)) {
-					self.serviceUrl = config.serviceURL;
+					// The service URL in the config has two different names "serviceUrl" and "serviceURL".
+					if (config.serviceUrl)
+						self.serviceUrl = config.serviceUrl;
+					else if (config.serviceURL)
+						self.serviceUrl = config.serviceURL;
 				}
 
 				// 4b. If we still don't have a default store, then try to set the one from the current apConfig.
@@ -245,7 +249,7 @@ dojo.declare("apstrata.TokenConnection",
 
 			// 3. Create the Apstrata client and use a regular connection that will generate a signature
 			// and verify the user's credentials instead of this one that will try to use a token.
-			var connectionAttributes = { "credentials": self.credentials, "serviceUrl": apstrata.apConfig.get().serviceURL };
+			var connectionAttributes = { "credentials": self.credentials, "serviceUrl": self.serviceUrl };
 			var authenticatingConnection = new apstrata.Connection(connectionAttributes);
 			var client = new apstrata.Client({ "connection": authenticatingConnection });
 			client.call({
