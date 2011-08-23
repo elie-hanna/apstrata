@@ -84,39 +84,44 @@ dojo.declare("apstrata.horizon.Login",
 			})
 		}
 	},
-	
-	loginUser: function(){
-		var self = this
-		if (this.userForm.validate()) {
-			connection.credentials.key = this.key.value
-			connection.credentials.secret = ""
-			connection.credentials.username = this.un.value
-			connection.credentials.password = this.pw.value
-			
+
+	/**
+	 * Calls the existing connection's loginUser function and passes the extra parameters to it.
+	 */
+	loginUser: function() {
+		var self = this;
+		if (self.userForm.validate()) {
+			connection.credentials.key = self.key.value;
+			connection.credentials.secret = "";
+			connection.credentials.username = self.un.value;
+			connection.credentials.password = self.pw.value;
+
 			if (!apstrata.apConfig) 
 				apstrata.apConfig = {};
-			
+
 			this.getContainer().connection.loginUser({
-				success: function(){
-					apstrata.apConfig.key = connection.credentials.key
-					apstrata.apConfig.username = connection.credentials.username
-					apstrata.apConfig.password = connection.credentials.password
-					
+				success: function() {
+					apstrata.apConfig.key = connection.credentials.key;
+					apstrata.apConfig.username = connection.credentials.username;
+					apstrata.apConfig.password = connection.credentials.password;
+
 					if (self._success) 
-						self._success()
+						self._success();
 				},
-				
-				failure: function(error, message){
-					if (self._failure) 
-						self._failure()
-					var msg = ""
+
+				failure: function(error, message) {
+					if (self._failure)
+						self._failure();
+					var msg = "";
 					if(error == "INVALID_SIGNATURE")
-						msg = "Invalid credentials."
+						msg = "Invalid credentials.";
 					else
-						msg = "Invalid username or password."
-					apstrata.alert(msg, self)
-				}
-			})
+						msg = error + " - " + message;
+					apstrata.alert(msg, self);
+				},
+
+				extraParameters: arguments[0]
+			});
 		}
 	}
 })

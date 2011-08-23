@@ -53,6 +53,11 @@ dojo.declare("apstrata.horizon._ControlToolbar",
 			self._loginMessage = self.LOGGED_OUT_MSG
 			self.render()
 		})
+
+		dojo.subscribe("/apstrata/connection/logout/success", function(data) {
+			self._loginMessage = self.LOGGED_OUT_MSG;
+			self.render();
+		})
 	},
 	
 	setPosition: function(top, left) {

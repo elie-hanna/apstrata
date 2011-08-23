@@ -25,16 +25,17 @@ dojo.require("apstrata.Client")
 dojo.declare("apstrata.Connection",
 	null,
 	{
+		_DEFAULT_SERVICE_URL: "https://sandbox.apstrata.com/apsdb/rest",
+		_DEFAULT_TIMEOUT: 10000,
 		LOGIN_USER: "user",
 		LOGIN_MASTER: "master",
-			
+
 		constructor: function(attrs) {
-			this._DEFAULT_SERVICE_URL= "https://sandbox.apstrata.com/apsdb/rest"
-			this.timeout = 10000
-			this.serviceUrl= this._DEFAULT_SERVICE_URL
-			this.defaultStore = ""
-			this.credentials= {key: "", secret: "", username: "", password: ""}
-			this._urlSigner = new apstrata.URLSignerMD5()				
+			this.timeout = this._DEFAULT_TIMEOUT;
+			this.serviceUrl= this._DEFAULT_SERVICE_URL;
+			this.defaultStore = "";
+			this.credentials= { key: "", secret: "", username: "", password: "" };
+			this._urlSigner = new apstrata.URLSignerMD5();
 
 			if (attrs) {
 				if (attrs.timeout) this.timeout =  attrs.timeout
@@ -59,10 +60,23 @@ dojo.declare("apstrata.Connection",
 			return this._urlSigner.sign(this, operation, params, responseType)
 		},
 
+		/**
+		 * Please use the isLoggedIn method since credentials are not the only things that authenticate requests.
+		 *
+		 * @deprecated
+		 */
 		hasCredentials: function() {
-			// Assume that we have a session if either the secret or password are present
+			return this.isLoggedIn(); 
+		},
+
+		/**
+		 * Returns true if this connection can make authenticated requests to apstratabase either with an account
+		 * secret or with a user password.
+		 */
+		isLoggedIn: function () {
+			// Assume that we have a session if either the secret or password are present.
 			return ((this.credentials.secret != undefined) && (this.credentials.secret != null) && (this.credentials.secret != "")) 
-					|| ((this.credentials.password != undefined) && (this.credentials.password != null) && (this.credentials.password != "")) 
+				|| ((this.credentials.password != undefined) && (this.credentials.password != null) && (this.credentials.password != ""));
 		},
 
 		save: function() {},
@@ -100,7 +114,7 @@ dojo.declare("apstrata.Connection",
 				error: function(operation) {
 					// Clear the secret and password so hasCredentials() functions
 					self.credentials.secret=""
-					self.credentials.pw=""
+					self.credentials.password=""
 
 					dojo.publish("/apstrata/connection/login/failure", [{
 						key: self.credentials.key
@@ -131,17 +145,16 @@ dojo.declare("apstrata.Connection",
 				key: self.credentials.key
 			}])
 		},
-		
-	    /**
-	     * @function getAccountId returns the account identifier (key) for master login or (username) for user logins
-	     * 
-	     */
+
 		getLoginType: function() {
 			if (this.credentials.password && this.credentials.password!="") return this.LOGIN_USER
 			if (this.credentials.secret && this.credentials.secret!="") return this.LOGIN_MASTER
 			return null			
 		},
-		
+
+	    /**
+	     * @function getAccountId returns the account identifier (key) for master login or (username) for user logins
+	     */
 		getAccountId: function() {
 			if (this.getLoginType()==this.LOGIN_USER) return this.credentials.username;
 			else if (this.getLoginType()==this.LOGIN_MASTER) return this.credentials.key;

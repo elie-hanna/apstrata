@@ -48,6 +48,12 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 			mainPanel.home()
 		})
 
+		dojo.subscribe("/apstrata/connection/logout/success", function(data) {
+			mainPanel.data.pop();
+			mainPanel.render();
+			mainPanel.home();
+		});
+
 
 /*		
 		this._connection.login({

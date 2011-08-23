@@ -54,7 +54,6 @@ dojo.declare("apstrata.Get",
     
 			var buildUrl = self.buildUrl();
 			self.url = buildUrl.url
-			self.signature = buildUrl.signature
 
 			self.log.info("Operation", self.apsdbOperation);
 			self.log.debug("GET", self.url);

@@ -104,7 +104,9 @@ dojo.declare("apstrata.Post",
 
 			var message = self.url
 
-			if (attrs.formNode) {
+			// 1. Attempt to use the form node from the attributes.
+			var formNode = attrs.formNode;
+			if (formNode) {
 				if (dijit.byId(attrs.formNode.id)) {
 					var fields = dijit.byId(attrs.formNode.id).getValues()
 					message += "<br>" 
@@ -112,7 +114,23 @@ dojo.declare("apstrata.Post",
 						message += "<br>" + k + ":" + fields[k] 
 					}
 				}
-			}			
+			}
+			// 2. In case the attributes did not contain a form node, then use the generic form node because
+			// dojo.io.iframe only makes a POST request when there is a form, otherwise, it makes a GET request.
+			else {
+				var formId = 'apstrataGenericForm';
+				formNode = document.getElementById(formId);
+				if (formNode == null) {
+					formNode = document.createElement('FORM');
+					formNode.method = "post";
+					// TODO We might want the enctype to be configurable in the request, but multipart forms work with or without files.
+					formNode.enctype = "multipart/form-data";
+					formNode.id = formId;
+
+					// We need to append the form to the document or it will not be valid.
+					document.body.appendChild(formNode);
+				}
+			}
 			
 			// in case the externally published function fails log the error and continue with the actual call
 			try {
@@ -135,9 +153,9 @@ dojo.declare("apstrata.Post",
 				url: self.url,
 				
 				// The HTTP method to use:
-				method: "POST",
+				method: "post",
 				
-				form: attrs.formNode,
+				form: formNode,
 				
 //				content: attrs.fields,
 				

@@ -50,11 +50,30 @@ dojo.declare("apstrata.StickyConnection",
 					if (!o.credentials.password) o.credentials.password=""
 				}
 
-				this.credentials = o.credentials
-				if (o.serviceUrl) this.serviceUrl = o.serviceUrl
-				if (o.defaultStore) this.defaultStore = o.defaultStore
+				this.credentials = o.credentials;
 
-				apstrata.apConfig = o.credentials
+				// Set credentials in this connection object as well as the global apConfig attribute.
+				if (o.serviceUrl) {
+					this.serviceUrl = o.serviceUrl;
+					apstrata.apConfig.config.serviceUrl = o.serviceUrl;
+				}
+				if (o.defaultStore) {
+					this.defaultStore = o.defaultStore;
+					apstrata.apConfig.config.defaultStore = o.defaultStore;
+				}
+				if (apstrata.apConfig) {
+					// Create empty apConfig and config objects if they are empty.
+					apstrata.apConfig = {};
+					apstrata.apConfig.config = {};
+				}
+				if (o.timeout)
+					apstrata.apConfig.config.timeout = o.timeout;
+
+				// Set the loaded configuration settings on the global apConfig attribute.
+				apstrata.apConfig.config.key = o.credentials.key;
+				apstrata.apConfig.config.secret = o.credentials.secret;
+				apstrata.apConfig.config.username = o.credentials.username;
+				apstrata.apConfig.config.password = o.credentials.password;
 
 				apstrata.logger.log("debug", "apstrata.StickyConnection" ,"Credentials set to:", this.credentials)
 
