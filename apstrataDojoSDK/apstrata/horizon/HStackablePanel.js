@@ -38,8 +38,17 @@ dojo.declare("apstrata.horizon.HStackableMainPanel",
 
 
 		dojo.subscribe("/apstrata/connection/login/success", function(data) {
-			mainPanel.data.push({label: "logout", iconSrc: mainPanel.logoutIcon})
-			mainPanel.render()
+			var addLogout = true;
+			for(var i=mainPanel.data.length-1;i>-1;i--) {
+				if(mainPanel.data[i].label == "Logout" || mainPanel.data[i].label == "logout") {
+					addLogout = false;
+					break;
+				}
+			}
+			if(addLogout) {		
+				mainPanel.data.push({label: "logout", iconSrc: mainPanel.logoutIcon});
+				mainPanel.render();
+			}
 		})
 		
 		dojo.subscribe("/apstrata/connection/logout", function(data) {
