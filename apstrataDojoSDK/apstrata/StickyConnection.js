@@ -61,7 +61,7 @@ dojo.declare("apstrata.StickyConnection",
 					this.defaultStore = o.defaultStore;
 					apstrata.apConfig.config.defaultStore = o.defaultStore;
 				}
-				if (apstrata.apConfig) {
+				if (!apstrata.apConfig) {
 					// Create empty apConfig and config objects if they are empty.
 					apstrata.apConfig = {};
 					apstrata.apConfig.config = {};
