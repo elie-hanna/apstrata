@@ -166,8 +166,11 @@ dojo.declare("apstrata.horizon.HStackableContainer",
 		dojo.addClass(this.background, "horizonBackground")
 		dojo.addClass(this.background, "rounded-sml")
 		
-		this._controlToolbar = new apstrata.horizon._ControlToolbar({container: self})
-		dojo.place(this._controlToolbar.domNode, dojo.body())
+		// Only add the control toolbar if it is not already set by the user-application.
+		if (!self._controlToolbar) {
+			self._controlToolbar = new apstrata.horizon._ControlToolbar({container: self});
+			dojo.place(self._controlToolbar.domNode, dojo.body());
+		}
 		
 		this.layout()
 		
