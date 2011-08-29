@@ -49,10 +49,20 @@ dojo.declare("apstrata.Connection",
 				this.credentials.username = attrs.credentials.username
 				this.credentials.password = attrs.credentials.password
 			} else if (apstrata.apConfig) {
-				this.credentials.key = apstrata.apConfig.key
-				this.credentials.secret = apstrata.apConfig.secret
-				this.credentials.username = apstrata.apConfig.username
-				this.credentials.password = apstrata.apConfig.password
+				// 1. Old way of setting the apConfig object.
+				if (apstrata.apConfig.key) this.credentials.key = apstrata.apConfig.key;
+				if (apstrata.apConfig.secret) this.credentials.secret = apstrata.apConfig.secret;
+				if (apstrata.apConfig.username) this.credentials.username = apstrata.apConfig.username;
+				if (apstrata.apConfig.password) this.credentials.password = apstrata.apConfig.password;
+
+				// 2. new way of setting the apConfig object.
+				if (!this.credentials.key || !this.credentials.secret || !this.credentials.username || !this.credentials.password) {
+					var config = apstrata.apConfig.get();
+					if (!this.credentials.key && config.key) this.credentials.key = config.key;
+					if (!this.credentials.secret && config.secret) this.credentials.secret = config.secret;
+					if (!this.credentials.username && config.username) this.credentials.username = config.username;
+					if (!this.credentials.password && config.password) this.credentials.password = config.password;
+				}
 			}
 		},
 		
