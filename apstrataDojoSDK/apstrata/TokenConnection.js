@@ -122,7 +122,7 @@ dojo.declare("apstrata.TokenConnection",
 			
 				// Broadcast that a successful authentication has happened after 1 second because the
 				// connection object is usually loaded before other objects that might want to subscribe
-				// on this channel.
+				// to this channel.
 				setTimeout(function () { self._publishSuccessfulAuthentication(); }, 1000);
 			}
 
@@ -172,10 +172,11 @@ dojo.declare("apstrata.TokenConnection",
 		 * @param operation The Apstrata API to be called, eg. "SaveDocument", "RunScript".
 		 * @param params A URL query string containing URL parameters to be included in the returned URL. Must not start with "?".
 		 * @param responseType A string that is expected to be either "xml" or "json".
+		 * @param isForce200ResponseStatus Adds the "apsdb.force200ResponseStatus" parameter to the request with a value of "true".
 		 *
 		 * @return An object that has a "url" attribute, that is the URL to the Apstrata REST API, and an empty "signature" attribute.
 		 */
-		signUrl: function (operation, params, responseType) {
+		signUrl: function (operation, params, responseType, isForce200ResponseStatus) {
 			var self = this;
 
 			var timestamp = new Date().getTime() + "";
@@ -192,6 +193,7 @@ dojo.declare("apstrata.TokenConnection",
 					+ "?" + self.PARAMETER_TIME + "=" + timestamp
 					+ "&" + self.PARAMETER_RESPONSE_TYPE + "=" + responseType
 					+ ((username != "") ? "&" + self.PARAMETER_USER + "=" + username : "")
+					+ ((isForce200ResponseStatus) ? "&apsdb.force200ResponseStatus=true" : "")
 					+ ((params != "") ? "&" : "") + params;
 
 			return { url: apswsReqUrl, signature: "" };

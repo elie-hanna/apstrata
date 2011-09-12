@@ -100,7 +100,13 @@ dojo.declare("apstrata.Post",
 			//  we're using a timeout event to provide an error message if an operation takes too long to execute
 			self._setTimeout()
 
-			self.url = self.buildActionUrl("jsoncdp")
+			// Force the response status to always be 200 even on error when we are on an IE browser, making a
+			// POST request, and the connection configuration for this parameter is set to allow sending it.
+			var isForce200ResponseStatus = false;
+			if (dojo.isIE && self.connection.isForce200ResponseStatusOnPOSTRequestsInIE) {
+				isForce200ResponseStatus = true;
+			}
+			self.url = self.buildActionUrl("jsoncdp", isForce200ResponseStatus)
 
 			var message = self.url
 
@@ -167,27 +173,33 @@ dojo.declare("apstrata.Post",
 				
 				// Callback on successful call:
 				load: function(response, ioArgs) {
-					self.responseTime = (new Date().getTime()) - timestamp;
-					self.connection.registerConnectionTime(self.responseTime)
+					self.responseTime = (new Date().getTime()) - self._timestamp;
+					//self.connection.registerConnectionTime(self.responseTime)
 					self.log.info("response time (ms)", self.responseTime);
-					
-					// Clear the timeout since we received a response from apstrata
+
+					// Clear the timeout since we received a response from apstrata.
 					self._clearTimeout();
-					
+
 					// we can't do a real abort or timeout operation
-					//  we're just using a flag to artificially ignore the result if the user requests an abort
-					//  or if after a timeout, a response was received anyway
+					// we're just using a flag to artificially ignore the result if the user requests an abort
+					// or if after a timeout, a response was received anyway
 					if (self.operationAborted) self.log.info("Aborted", self.operationAborted);
 					if (self.operationTimeout) self.log.warn("Timed out", self.operationTimeout);
-					
-					// Here we know that apstrata has responded
-					// The callback will handle parsing the response and calling proper handlers 
 
+					// Here we know that apstrata has responded
+					// The callback will handle parsing the response and calling proper handlers
+					if (self.response && self.response.metadata && self.response.metadata.status == 'success') {
+						self.handleResult();
+					} else {
+						// Could only reach this point on IE and not on any other browser because we would have
+						// forced the response status to be 200 even on a failed request.
+						self.handleError();
+					}
 				},
 				
-				// Callback on errors:
+				// Callback on errors. This function will NOT get called on IE since we force the response status to be 200 on IE.
 				error: function(response, ioArgs){
-					this.handleError()
+					self.handleError();
 					
 					// return the response for succeeding callbacks
 					return response;

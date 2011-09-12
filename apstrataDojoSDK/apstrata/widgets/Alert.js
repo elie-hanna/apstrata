@@ -118,9 +118,11 @@ dojo.declare("apstrata.widgets.Alert",
 
 
 		if (this.originNode) {
+			var offsetTop = (self.originNode.offsetTop) ? self.originNode.offsetTop : 0;
+			var offsetLeft = (self.originNode.offsetLeft) ? self.originNode.offsetLeft : 0;
 			this.origin = {
-				t: self.originNode.offsetTop,
-				l: self.originNode.offsetLeft,
+				t: offsetTop,
+				l: offsetLeft,
 				w: self.width * self._factor,
 				h: self.height * self._factor
 			}

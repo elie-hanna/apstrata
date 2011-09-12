@@ -22,35 +22,36 @@ dojo.provide("apstrata.URLSignerMD5")
 dojo.require("dojox.encoding.digests.MD5");
 
 dojo.declare("apstrata.URLSignerMD5", [], {	
-	sign: function (connection, operation, params, responseType) {
-					var timestamp = new Date().getTime() + '';
-					
-					responseType = responseType || "json"
-					
-					var signature = ''
-					var userName =''
-					var valueToHash = ''
-					
-					if (connection.credentials.username && connection.credentials.password && connection.credentials.username != '' && connection.credentials.password != '') {
-						valueToHash = timestamp + connection.credentials.username + operation + dojox.encoding.digests.MD5(connection.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
-						signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-						userName = connection.credentials.username;
-					} else if(connection.credentials.secret && connection.credentials.secret != ''){
-						valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
-						signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-					}
+	sign: function (connection, operation, params, responseType, isForce200ResponseStatus) {
+		var timestamp = new Date().getTime() + '';
+
+		responseType = responseType || "json"
 		
-					var apswsReqUrl = connection.serviceUrl
-							+ "/" + connection.credentials.key
-							+ "/" + operation
-							+ "?apsws.time=" + timestamp
-							+ ((signature!="")?"&apsws.authSig=":"") + signature
-							+ ((userName!="")?"&apsws.user=":"") + userName
-							+ "&apsws.responseType=" + responseType
-							+ "&apsws.authMode=simple"
-							+ ((params!="")?"&":"") + params
+		var signature = '';
+		var userName = '';
+		var valueToHash = '';
 		
-					return {url: apswsReqUrl, signature: signature};
-			}
+		if (connection.credentials.username && connection.credentials.password && connection.credentials.username != '' && connection.credentials.password != '') {
+			valueToHash = timestamp + connection.credentials.username + operation + dojox.encoding.digests.MD5(connection.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
+			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+			userName = connection.credentials.username;
+		} else if(connection.credentials.secret && connection.credentials.secret != ''){
+			valueToHash = timestamp + connection.credentials.key + operation + connection.credentials.secret
+			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+		}
+
+		var apswsReqUrl = connection.serviceUrl
+				+ "/" + connection.credentials.key
+				+ "/" + operation
+				+ "?apsws.time=" + timestamp
+				+ ((signature!="")?"&apsws.authSig=":"") + signature
+				+ ((userName!="")?"&apsws.user=":"") + userName
+				+ "&apsws.responseType=" + responseType
+				+ "&apsws.authMode=simple"
+				+ ((isForce200ResponseStatus) ? "&apsdb.force200ResponseStatus=true" : "")
+				+ ((params!="")?"&":"") + params;
+
+		return {url: apswsReqUrl, signature: signature};
+	}
 })
 

@@ -78,9 +78,9 @@ dojo.declare("apstrata.Operation",
 			
 		},
 		
-		buildActionUrl: function(responseType) {
+		buildActionUrl: function(responseType, isForce200ResponseStatus) {
 			params = ""
-		    return this.connection.signUrl(this.apsdbOperation, params, responseType).url;
+		    return this.connection.signUrl(this.apsdbOperation, params, responseType, isForce200ResponseStatus).url;
 		},
 
 		/*
@@ -156,7 +156,7 @@ dojo.declare("apstrata.Operation",
 		},
 		
 	    /**
-	     * @function abstrata function
+	     * @function Abstract function.
 	     */
 		execute: function () {},
 

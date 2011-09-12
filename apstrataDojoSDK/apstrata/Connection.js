@@ -27,27 +27,50 @@ dojo.declare("apstrata.Connection",
 	{
 		_DEFAULT_SERVICE_URL: "https://sandbox.apstrata.com/apsdb/rest",
 		_DEFAULT_TIMEOUT: 10000,
+		_IS_FORCE_200_RESPONSE_STATUS_ON_POST_REQUESTS_IN_IE: true,
 		LOGIN_USER: "user",
 		LOGIN_MASTER: "master",
 
 		constructor: function(attrs) {
 			this.timeout = this._DEFAULT_TIMEOUT;
 			this.serviceUrl= this._DEFAULT_SERVICE_URL;
+			this.isForce200ResponseStatusOnPOSTRequestsInIE = this._IS_FORCE_200_RESPONSE_STATUS_ON_POST_REQUESTS_IN_IE;
 			this.defaultStore = "";
 			this.credentials= { key: "", secret: "", username: "", password: "" };
 			this._urlSigner = new apstrata.URLSignerMD5();
 
 			if (attrs) {
-				if (attrs.timeout) this.timeout =  attrs.timeout
-				if (attrs.serviceUrl) this.serviceUrl = attrs.serviceUrl
-				if (attrs.defaultStore) this.defaultStore = attrs.defaultStore
-			} 
+				if (attrs.timeout) this.timeout =  attrs.timeout;
+				if (attrs.serviceUrl) this.serviceUrl = attrs.serviceUrl;
+				if (attrs.defaultStore) this.defaultStore = attrs.defaultStore;
+			}
+
+			// Set this connection's "isForce200ResponseStatusOnPOSTRequestsInIE" variable if it was set in the passed attributes or apConfig or apConfig.config.
+			if (attrs && attrs.isForce200ResponseStatusOnPOSTRequestsInIE) {
+				this.isForce200ResponseStatusOnPOSTRequestsInIE = attrs.isForce200ResponseStatusOnPOSTRequestsInIE;
+			} else if (apstrata.apConfig) {
+				var config = null;
+				try {
+					config = apstrata.apConfig.get();
+				} catch (e) {
+					// Do nothing.
+				}
+
+				// 1. Old way of setting the apConfig object.
+				if (typeof apstrata.apConfig.isForce200ResponseStatusOnPOSTRequestsInIE != "undefined") {
+					this.isForce200ResponseStatusOnPOSTRequestsInIE = apstrata.apConfig.isForce200ResponseStatusOnPOSTRequestsInIE;
+				}
+				// 2. New way of setting the apConfig object.
+				else if (typeof config.isForce200ResponseStatusOnPOSTRequestsInIE != "undefined") {
+					this.isForce200ResponseStatusOnPOSTRequestsInIE = config.isForce200ResponseStatusOnPOSTRequestsInIE;
+				}
+			}
 
 			if (attrs && attrs.credentials) {
-				this.credentials.key = attrs.credentials.key
-				this.credentials.secret = attrs.credentials.secret
-				this.credentials.username = attrs.credentials.username
-				this.credentials.password = attrs.credentials.password
+				this.credentials.key = attrs.credentials.key;
+				this.credentials.secret = attrs.credentials.secret;
+				this.credentials.username = attrs.credentials.username;
+				this.credentials.password = attrs.credentials.password;
 			} else if (apstrata.apConfig) {
 				// 1. Old way of setting the apConfig object.
 				if (apstrata.apConfig.key) this.credentials.key = apstrata.apConfig.key;
@@ -55,7 +78,7 @@ dojo.declare("apstrata.Connection",
 				if (apstrata.apConfig.username) this.credentials.username = apstrata.apConfig.username;
 				if (apstrata.apConfig.password) this.credentials.password = apstrata.apConfig.password;
 
-				// 2. new way of setting the apConfig object.
+				// 2. New way of setting the apConfig object.
 				if (!this.credentials.key || !this.credentials.secret || !this.credentials.username || !this.credentials.password) {
 					var config = apstrata.apConfig.get();
 					if (!this.credentials.key && config.key) this.credentials.key = config.key;
@@ -66,8 +89,8 @@ dojo.declare("apstrata.Connection",
 			}
 		},
 		
-		signUrl: function(operation, params, responseType) {
-			return this._urlSigner.sign(this, operation, params, responseType)
+		signUrl: function(operation, params, responseType, isForce200ResponseStatus) {
+			return this._urlSigner.sign(this, operation, params, responseType, isForce200ResponseStatus);
 		},
 
 		/**
