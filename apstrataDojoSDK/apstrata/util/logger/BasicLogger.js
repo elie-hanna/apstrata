@@ -17,7 +17,7 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.util.logger.BasicLogger");
+dojo.provide('apstrata.util.logger.BasicLogger');
 
 /**
  * This uses firebug to output log messages that provide additional information than plain firebug 'console' methods

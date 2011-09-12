@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata._Item");
+dojo.provide('apstrata._Item');
 /**
  * Represents a data tuple/row/field that is used by item apsdb read/write stores
  * @class apstrata.apsdb.client._Item

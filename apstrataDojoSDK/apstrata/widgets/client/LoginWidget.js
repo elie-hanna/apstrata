@@ -1,18 +1,18 @@
-dojo.provide("apstrata.widgets.client.LoginWidget");
+dojo.provide('apstrata.widgets.client.LoginWidget');
 
-dojo.require("apstrata.widgets.SlidingPanel")
+dojo.require('apstrata.widgets.SlidingPanel');
 
-dojo.require("dijit.form.Button")
-dojo.require("dijit.form.Form");
-dojo.require("dijit.form.ValidationTextBox");
+dojo.require('dijit.form.Button');
+dojo.require('dijit.form.Form');
+dojo.require('dijit.form.ValidationTextBox');
 
-dojo.require("apstrata.Connection")
+dojo.require('apstrata.Connection');
 
-dojo.require("dijit.layout.TabContainer")
-dojo.require("dijit.layout.ContentPane")
-dojo.require("dojox.layout.RadioGroup");
+dojo.require('dijit.layout.TabContainer');
+dojo.require('dijit.layout.ContentPane');
+dojo.require('dojox.layout.RadioGroup');
 
-dojo.require("dojox.dtl._Templated")
+dojo.require('dojox.dtl._Templated');
 
 dojo.declare("apstrata.widgets.client.LoginWidget", 
 	[dijit._Widget, dojox.dtl._Templated, apstrata.util.logger.Loggable], 

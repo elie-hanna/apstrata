@@ -17,11 +17,11 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.TokenConnection");
+dojo.provide('apstrata.TokenConnection');
 
-dojo.require("apstrata.Client");
-dojo.require("apstrata.Connection");
-dojo.require("dojo.cookie");
+dojo.require('apstrata.Client');
+dojo.require('apstrata.Connection');
+dojo.require('dojo.cookie');
 
 // TODO Review whether or not we should add a parameter to make the token be stored without the apstratabase cookie and instead, be stored in the client domain's cookie
 dojo.declare("apstrata.TokenConnection",

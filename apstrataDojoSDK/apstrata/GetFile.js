@@ -10,9 +10,9 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.GetFile");
+dojo.provide('apstrata.GetFile');
 
-dojo.require("apstrata.Operation")
+dojo.require('apstrata.Operation');
 
 dojo.declare("apstrata.GetFile",
 [apstrata.Operation],

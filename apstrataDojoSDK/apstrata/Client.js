@@ -17,13 +17,13 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.Client");
+dojo.provide('apstrata.Client');
 
-dojo.require("apstrata.Connection")
-dojo.require("apstrata.Get")
-dojo.require("apstrata.Post")
+dojo.require('apstrata.Connection');
+dojo.require('apstrata.Get');
+dojo.require('apstrata.Post');
 
-dojo.declare("apstrata.Client", 
+dojo.declare('apstrata.Client', 
 	null, 
 	{
 		

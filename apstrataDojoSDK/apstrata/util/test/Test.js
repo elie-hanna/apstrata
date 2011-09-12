@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.util.test.Test")
+dojo.provide('apstrata.util.test.Test');
 
 dojo.declare("apstrata.util.test.Test", 
 				[],

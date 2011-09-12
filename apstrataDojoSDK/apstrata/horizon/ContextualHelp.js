@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.horizon.ContextualHelp")
+dojo.provide('apstrata.horizon.ContextualHelp');
 
 dojo.declare("apstrata.horizon.ContextualHelp", 
 [dijit._Widget, dojox.dtl._Templated], 

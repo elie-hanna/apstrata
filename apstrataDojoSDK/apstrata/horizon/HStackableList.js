@@ -18,9 +18,9 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.horizon.HStackableList")
+dojo.provide('apstrata.horizon.HStackableList');
 
-dojo.require("apstrata.horizon._ListContent")
+dojo.require('apstrata.horizon._ListContent');
 
 
 /*

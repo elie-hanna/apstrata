@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.horizon.Login")
+dojo.provide('apstrata.horizon.Login');
 
 
 dojo.declare("apstrata.horizon.Login", 

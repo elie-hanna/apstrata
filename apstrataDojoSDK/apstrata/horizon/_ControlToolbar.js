@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.horizon._ControlToolbar")
+dojo.provide('apstrata.horizon._ControlToolbar');
 
 dojo.declare("apstrata.horizon._ControlToolbar", 
 [dijit._Widget, dojox.dtl._Templated], 

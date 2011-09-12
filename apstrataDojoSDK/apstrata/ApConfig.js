@@ -19,7 +19,7 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.ApConfig")
+dojo.provide('apstrata.ApConfig');
 
 if (!apstrata) apstrata = {}
 

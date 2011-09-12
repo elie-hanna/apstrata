@@ -18,14 +18,14 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.ItemApsdbReadStore");
+dojo.provide('apstrata.ItemApsdbReadStore');
 
-dojo.require("dojo.data.api.Request")
+dojo.require('dojo.data.api.Request');
 
-dojo.require("apstrata.Connection")
-dojo.require("apstrata.Client")
+dojo.require('apstrata.Connection');
+dojo.require('apstrata.Client');
 
-dojo.require("apstrata._Item")
+dojo.require('apstrata._Item');
 
 dojo.declare("apstrata.ItemApsdbReadStore", 
 	[],

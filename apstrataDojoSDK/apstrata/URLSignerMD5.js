@@ -17,9 +17,9 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.URLSignerMD5")
+dojo.provide('apstrata.URLSignerMD5');
 
-dojo.require("dojox.encoding.digests.MD5");
+dojo.require('dojox.encoding.digests.MD5');
 
 dojo.declare("apstrata.URLSignerMD5", [], {	
 	sign: function (connection, operation, params, responseType, isForce200ResponseStatus) {

@@ -10,10 +10,10 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.widgets.client.ConnectionStatus");
+dojo.provide('apstrata.widgets.client.ConnectionStatus');
 
-dojo.require("dijit.Dialog");
-dojo.require("dijit.form.Button");
+dojo.require('dijit.Dialog');
+dojo.require('dijit.form.Button');
 
 dojo.declare("apstrata.widgets.client.ConnectionStatus",
 	[dijit._Widget, dijit._Templated],

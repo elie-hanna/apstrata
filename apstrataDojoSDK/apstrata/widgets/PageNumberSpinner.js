@@ -18,10 +18,10 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.widgets.PageNumberSpinner")
+dojo.provide('apstrata.widgets.PageNumberSpinner');
 
-dojo.require ("dijit.form.Button")
-dojo.require ("dijit.form.NumberTextBox")
+dojo.require('dijit.form.Button');
+dojo.require('dijit.form.NumberTextBox');
 
 
 dojo.declare("apstrata.widgets.PageNumberSpinner", [dijit._Widget, dijit._Templated], {

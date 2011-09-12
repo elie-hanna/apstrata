@@ -155,13 +155,12 @@ if (typeof apstrata == "undefined" || !apstrata.configured) {
 	}
 
 	dojo.registerModulePath("apstrata", apstrata.baseUrl)
-	dojo.require ("apstrata.util.logger.BasicLogger")
+	dojo.require('apstrata.util.logger.BasicLogger');
 	
 	dojo.registerModuleRelative = function(module, string) {
 		dojo.registerModulePath (module, apstrata.pathFromDojo + string)
 	}
-	
-	dojo.require("dijit._Widget")
+	dojo.require('dijit._Widget');
 	
 	dojo.addOnLoad(function() {
 		// Init default logger apstrata.logger: This is happening in BasicLogger to guarantee that

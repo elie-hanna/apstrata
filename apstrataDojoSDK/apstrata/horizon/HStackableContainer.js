@@ -18,15 +18,15 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.horizon.HStackableContainer")
+dojo.provide('apstrata.horizon.HStackableContainer');
 
-dojo.require("apstrata.horizon._HStackableMixin")
-dojo.require("apstrata.horizon.HStackableList")
-dojo.require("apstrata.horizon.HStackablePanel")
+dojo.require('apstrata.horizon._HStackableMixin');
+dojo.require('apstrata.horizon.HStackableList');
+dojo.require('apstrata.horizon.HStackablePanel');
 
-dojo.require("apstrata.horizon._ControlToolbar")
+dojo.require('apstrata.horizon._ControlToolbar');
 
-dojo.require("dojo.cookie")
+dojo.require('dojo.cookie');
 
 /*
  * Layout widget container of the HStackable widgets

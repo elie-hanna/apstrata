@@ -17,7 +17,7 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.widgets.DomUtils")
+dojo.provide('apstrata.widgets.DomUtils');
 
 dojo.declare("apstrata.widgets.DomUtils", [], {})
 

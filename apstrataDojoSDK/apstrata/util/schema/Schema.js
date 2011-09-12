@@ -1,4 +1,4 @@
-dojo.provide("apstrata.util.schema.Schema")
+dojo.provide('apstrata.util.schema.Schema');
 
 dojo.declare("apstrata.util.schema.Schema", [], {})
 

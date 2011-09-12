@@ -18,10 +18,10 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.widgets.PageNumberSelector")
+dojo.provide('apstrata.widgets.PageNumberSelector');
 
-        dojo.require("dojo.parser")
-		dojo.require("dijit.form.Button")
+        dojo.require('dojo.parser');
+		dojo.require('dijit.form.Button');
 
 
 		dojo.declare("apstrata.widgets.PageNumberSelector", [dijit._Widget, dijit._Templated], {

@@ -18,9 +18,9 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.widgets.client.RESTMonitor")
+dojo.provide('apstrata.widgets.client.RESTMonitor');
 
-dojo.require("dojox.dtl._Templated")
+dojo.require('dojox.dtl._Templated');
 
 dojo.declare("apstrata.widgets.client.RESTMonitor", 
 [dijit._Widget, dojox.dtl._Templated], 

@@ -17,10 +17,10 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.StickyConnection")
+dojo.provide('apstrata.StickyConnection');
 
-dojo.require("apstrata.Client")
-dojo.require("dojo.cookie")
+dojo.require('apstrata.Client');
+dojo.require('dojo.cookie');
 
 dojo.declare("apstrata.StickyConnection",
 	[apstrata.Connection],

@@ -1,7 +1,7 @@
-dojo.provide("apstrata.widgets.SlidingPanel")
+dojo.provide('apstrata.widgets.SlidingPanel');
 
-dojo.require("dijit.layout._LayoutWidget")
-dojo.require("dojo.fx.easing");
+dojo.require('dijit.layout._LayoutWidget');
+dojo.require('dojo.fx.easing');
 
 dojo.declare("apstrata.widgets.SlidingPanel", [dijit.layout._LayoutWidget], {
 	visibleWidth: 10,		// pixels visible when the panel is closed

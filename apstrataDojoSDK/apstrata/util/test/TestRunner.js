@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.util.test.TestRunner")
+dojo.provide('apstrata.util.test.TestRunner');
 
 dojo.declare("apstrata.util.test.TestRunner", 
 		[], 

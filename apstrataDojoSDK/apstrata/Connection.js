@@ -17,12 +17,12 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.Connection")
+dojo.provide('apstrata.Connection');
 
-dojo.require("apstrata.URLSignerMD5")
-dojo.require("apstrata.Client")
+dojo.require('apstrata.URLSignerMD5');
+dojo.require('apstrata.Client');
 
-dojo.declare("apstrata.Connection",
+dojo.declare('apstrata.Connection',
 	null,
 	{
 		_DEFAULT_SERVICE_URL: "https://sandbox.apstrata.com/apsdb/rest",

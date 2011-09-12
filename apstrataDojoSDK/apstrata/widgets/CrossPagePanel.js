@@ -18,11 +18,11 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.widgets.CrossPagePanel")
+dojo.provide('apstrata.widgets.CrossPagePanel');
  
-dojo.require("dijit.layout._LayoutWidget")
-dojo.require("dojox.dtl._Templated")
-dojo.require("dojo.fx.easing");
+dojo.require('dijit.layout._LayoutWidget');
+dojo.require('dojox.dtl._Templated');
+dojo.require('dojo.fx.easing');
 
  
 dojo.declare("apstrata.widgets.CrossPagePanel", 

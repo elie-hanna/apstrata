@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.util.Request") 
+dojo.provide('apstrata.util.Request'); 
 
 dojo.declare("apstrata.util.Request", 
 [], 

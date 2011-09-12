@@ -18,12 +18,12 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.widgets.QueryWidget")
-dojo.provide("apstrata.widgets.QueryWidget.ActionColumn")
+dojo.provide('apstrata.widgets.QueryWidget');
+dojo.provide('apstrata.widgets.QueryWidget.ActionColumn');
 
-dojo.require("apstrata.widgets.DynamicColumnsDataGrid")
+dojo.require('apstrata.widgets.DynamicColumnsDataGrid');
 
-dojo.require ("apstrata.widgets.PageNumberSelector")
+dojo.require('apstrata.widgets.PageNumberSelector');
 
 dojo.declare("apstrata.widgets.QueryWidget", [dijit._Widget, dijit._Templated], {
 	widgetsInTemplate: true,

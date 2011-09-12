@@ -1,10 +1,10 @@
-dojo.provide("apstrata.widgets.forms.DataControl")
+dojo.provide('apstrata.widgets.forms.DataControl');
 
-dojo.require("dijit.form.Button")
-dojo.require("dojo.fx")
+dojo.require('dijit.form.Button');
+dojo.require('dojo.fx');
 
-dojo.require("apstrata.widgets.EmbeddedAlert")
-dojo.require("apstrata.widgets.Curtain")
+dojo.require('apstrata.widgets.EmbeddedAlert');
+dojo.require('apstrata.widgets.Curtain');
 
 dojo.declare("apstrata.widgets.forms.DataControl", 
 [dijit._Widget, dijit._Templated], 

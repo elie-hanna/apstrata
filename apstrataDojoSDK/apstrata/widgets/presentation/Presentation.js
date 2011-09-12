@@ -1,12 +1,12 @@
-dojo.provide("apstrata.widgets.presentation.Presentation")
+dojo.provide('apstrata.widgets.presentation.Presentation');
 
-dojo.require("dojox.dtl._Templated")
-dojo.require("dijit.form.Button")
-dojo.require("dojo.fx.easing")
+dojo.require('dojox.dtl._Templated');
+dojo.require('dijit.form.Button');
+dojo.require('dojo.fx.easing');
 
-dojo.require("apstrata.widgets.Alert")
+dojo.require('apstrata.widgets.Alert');
 
-dojo.require("apstrata.apsdb.client.Connection")
+dojo.require('apstrata.apsdb.client.Connection');
 
 dojo.declare("apstrata.widgets.presentation.Presentation", 
 	[dijit._Widget, dojox.dtl._Templated], 

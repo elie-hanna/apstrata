@@ -18,10 +18,10 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.horizon._HStackableMixin")
+dojo.provide('apstrata.horizon._HStackableMixin');
 
-dojo.require("dojox.dtl._Templated")
-dojo.require("dijit.layout._LayoutWidget")
+dojo.require('dojox.dtl._Templated');
+dojo.require('dijit.layout._LayoutWidget');
 
 /*
  * This mixin class insures that a HStackable Widget animates/opens in the appropriate position in the Stackable Container

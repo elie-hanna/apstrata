@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.horizon._ListContent")
+dojo.provide('apstrata.horizon._ListContent');
 
 dojo.declare("apstrata.horizon._ListContent", 
 [dijit._Widget, dojox.dtl._Templated], 

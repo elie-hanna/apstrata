@@ -1,6 +1,6 @@
-dojo.provide("apstrata.widgets.client.Img");
+dojo.provide('apstrata.widgets.client.Img');
 
-dojo.require("dojox.dtl._Templated")
+dojo.require('dojox.dtl._Templated');
 
 dojo.declare("apstrata.widgets.client.Img",
 	[dijit._Widget, dojox.dtl._Templated],

@@ -1,5 +1,5 @@
-dojo.provide("apstrata.widgets.DynamicColumnsDataGrid");
-dojo.require("dojox.grid.DataGrid");
+dojo.provide('apstrata.widgets.DynamicColumnsDataGrid');
+dojo.require('dojox.grid.DataGrid');
 
 dojo.declare("apstrata.widgets.DynamicColumnsDataGrid", [dojox.grid.DataGrid], {
 	_onFetchBegin: function(size, req){

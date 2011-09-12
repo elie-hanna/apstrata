@@ -18,15 +18,15 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.horizon.Preferences")
+dojo.provide('apstrata.horizon.Preferences');
 
-dojo.require("dijit.form.Form")
-dojo.require("dijit.form.Button")
-dojo.require("dijit.form.ToggleButton")
-dojo.require("dijit.form.ValidationTextBox")
-dojo.require("dijit.form.DateTextBox")
-dojo.require("dijit.form.HorizontalSlider")
-dojo.require("dijit.form.HorizontalRuleLabels")
+dojo.require('dijit.form.Form');
+dojo.require('dijit.form.Button');
+dojo.require('dijit.form.ToggleButton');
+dojo.require('dijit.form.ValidationTextBox');
+dojo.require('dijit.form.DateTextBox');
+dojo.require('dijit.form.HorizontalSlider');
+dojo.require('dijit.form.HorizontalRuleLabels');
 
 dojo.declare("apstrata.horizon.Preferences", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 

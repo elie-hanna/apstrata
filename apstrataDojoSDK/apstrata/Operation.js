@@ -10,11 +10,11 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.Operation")
+dojo.provide('apstrata.Operation');
 
-dojo.require ("dojo.io.script")
-dojo.require ("dojox.encoding.digests.MD5")
-dojo.require ("apstrata.util.logger.BasicLogger")
+dojo.require('dojo.io.script');
+dojo.require('dojox.encoding.digests.MD5');
+dojo.require('apstrata.util.logger.BasicLogger');
 
 /**
  * Extends the apstrata database logger to include request and response features

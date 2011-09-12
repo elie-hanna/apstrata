@@ -18,10 +18,10 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.Get");
+dojo.provide('apstrata.Get');
 
-dojo.require ("dojo.io.script");
-dojo.require ("apstrata.Operation");
+dojo.require('dojo.io.script');
+dojo.require('apstrata.Operation');
 
 /**
  * Base class used as an abstract class for all other APIs

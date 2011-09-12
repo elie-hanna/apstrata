@@ -18,8 +18,8 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.horizon.HStackablePanel")
-dojo.provide("apstrata.horizon.HStackableMainPanel")
+dojo.provide('apstrata.horizon.HStackablePanel');
+dojo.provide('apstrata.horizon.HStackableMainPanel');
 
 dojo.declare("apstrata.horizon.HStackableMainPanel", 
 [apstrata.horizon.HStackableList], 

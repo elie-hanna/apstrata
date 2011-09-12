@@ -17,12 +17,12 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.widgets.Alert")
+dojo.provide('apstrata.widgets.Alert');
 
-dojo.require("dijit._Templated")
-dojo.require("dijit._Widget")
+dojo.require('dijit._Templated');
+dojo.require('dijit._Widget');
 
-dojo.require("dojo.fx.easing")
+dojo.require('dojo.fx.easing');
 
 dojo.declare("apstrata.widgets.Alert", 
 [dijit._Widget, dijit._Templated], 

@@ -18,11 +18,11 @@
  * *****************************************************************************
  */
 
-dojo.provide("apstrata.Post");
+dojo.provide('apstrata.Post');
 
-dojo.require ("dojo.io.iframe");
-dojo.require ("dojox.encoding.digests.MD5");
-dojo.require ("apstrata.Operation");
+dojo.require('dojo.io.iframe');
+dojo.require('dojox.encoding.digests.MD5');
+dojo.require('apstrata.Operation');
 
 /**
  * Base class used as an abstract class for all other APIs
