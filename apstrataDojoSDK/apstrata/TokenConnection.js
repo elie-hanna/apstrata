@@ -429,7 +429,7 @@ dojo.declare("apstrata.TokenConnection",
 					apstrata.logger.debug("Token deleted");
 
 					// 1a. Delete the cookie.
-					self._deleteCookie();
+					self.deleteCookie();
 
 					// 1b. Delete this connection's token and empty the username.
 					delete self.token;
@@ -585,7 +585,7 @@ dojo.declare("apstrata.TokenConnection",
 		/**
 		 * Delete the token and credentials cookie. Expected to be called on logout.
 		 */
-		_deleteCookie: function () {
+		deleteCookie: function () {
 			dojo.cookie(this._COOKIE_NAME, null, { expires: -1, path: "/"});
 		},
 
