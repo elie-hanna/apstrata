@@ -73,6 +73,7 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				defaultTokenLifeTime: self.defaultTokenLifeTime.getValue(),
 				maximumTokenLifeTime: self.maximumTokenLifeTime.getValue(),
 				disableSchemalessDocs: self.disableSchemalessDocs.attr("checked"),
+        optionalBindReferrer: self.optionalBindReferrer.attr("checked"),
 				allowForce200ResponseStatus: self.allowForce200ResponseStatus.attr("checked")
 			}
 			var attrs = {
