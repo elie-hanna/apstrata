@@ -46,11 +46,11 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				self.maximumTokenExpires.attr("value", q.maximumTokenExpires);
 				self.defaultTokenLifeTime.attr("value", q.defaultTokenLifeTime);
 				self.maximumTokenLifeTime.attr("value", q.maximumTokenLifeTime);		
-				if(q.disableSchemalessDocs == true || q.disableSchemalessDocs=="true")
+				if(q.disableSchemalessDocs == null || q.disableSchemalessDocs == true || q.disableSchemalessDocs=="true")
 					self.disableSchemalessDocs.attr("checked", q.disableSchemalessDocs);
-				if(q.optionalBindReferrer == true || q.optionalBindReferrer=="true")
+				if(q.optionalBindReferrer == null || q.optionalBindReferrer == true || q.optionalBindReferrer=="true")
 					self.optionalBindReferrer.attr("checked", q.optionalBindReferrer);
-				if(q.allowForce200ResponseStatus == true || q.allowForce200ResponseStatus=="true")
+				if(q.allowForce200ResponseStatus == null || q.allowForce200ResponseStatus == true || q.allowForce200ResponseStatus=="true")
 					self.allowForce200ResponseStatus.attr("checked", q.allowForce200ResponseStatus);
 			},
 			error: function(operation) {
@@ -73,7 +73,7 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				defaultTokenLifeTime: self.defaultTokenLifeTime.getValue(),
 				maximumTokenLifeTime: self.maximumTokenLifeTime.getValue(),
 				disableSchemalessDocs: self.disableSchemalessDocs.attr("checked"),
-        optionalBindReferrer: self.optionalBindReferrer.attr("checked"),
+				optionalBindReferrer: self.optionalBindReferrer.attr("checked"),
 				allowForce200ResponseStatus: self.allowForce200ResponseStatus.attr("checked")
 			}
 			var attrs = {
