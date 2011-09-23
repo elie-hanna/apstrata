@@ -89,7 +89,8 @@ dojo.declare('apstrata.Client',
 					success: true,
 					message: "Call to apstrata API: <b>" + attrs.action + "</b> successful", 					
 					type: "message", 
-					duration: self._MESSAGE_DURATION
+					duration: self._MESSAGE_DURATION,
+					operation: operation
 				}]);
 			})
 
@@ -105,7 +106,8 @@ dojo.declare('apstrata.Client',
 					success: false,
 					message: "Call to apstrata API: <b>" + attrs.action + "</b> failed", 					
 					type: "warning", 
-					duration: self._MESSAGE_DURATION
+					duration: self._MESSAGE_DURATION,
+					operation: operation
 				}]);
 			})
 

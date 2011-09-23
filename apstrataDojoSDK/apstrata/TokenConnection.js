@@ -428,28 +428,12 @@ dojo.declare("apstrata.TokenConnection",
 				load: function (operation) {
 					apstrata.logger.debug("Token deleted");
 
-					// 1a. Delete the cookie.
-					self.deleteCookie();
-
-					// 1b. Delete this connection's token and empty the username.
-					delete self.token;
-					self.credentials.username = "";
-
-					// 1c. Broadcast that a successful login has happened.
-					dojo.publish("/apstrata/connection/logout/success", [{
-					}]);
-// TODO The success and failure handlers r not set upon renew when the token is retrieved from the cookie. Make sure to check that a handler is set when
-// the page is loaded and a token is retrieved from the cookie
-					// 1d. Remove the defined authentication failure handler so that any future timers that
-					// attempt to renew this token do not trigger this handler and silently fail to renew.
-					self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER = null;
-
-					// 1e. Remove the defined authentication success handler so that future valid connections don't find it.
-					self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER = null;
-
-					// 1f. Trigger the user-application's success function if one is defined.
-					if (args && args.success)
-						args.success();
+					// Cleanup the connection and its cookie.
+					if (args && args.success) {
+						self.close(args.success);
+					} else {
+						self.close();
+					}
 				},
 				error: function (operation) {
 					// 1a. Broadcast that a failed login attempt has happened.
@@ -462,6 +446,39 @@ dojo.declare("apstrata.TokenConnection",
 						args.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage);
 				}
 			});
+		},
+
+		/**
+		 * Closes the connection by deleting the token metadata from it, as well as the cookie,
+		 * then calls the successful-logout function if it is passed.
+		 *
+		 * @param successHandler A function to be called after the connection is closed.
+		 */
+		close: function (successHandler) {
+			var self = this;
+
+			// 1a. Delete the cookie.
+			self.deleteCookie();
+
+			// 1b. Delete this connection's token and empty the username.
+			delete self.token;
+			self.credentials.username = "";
+
+			// 1c. Broadcast that a successful login has happened.
+			dojo.publish("/apstrata/connection/logout/success", [{
+			}]);
+//TODO The success and failure handlers r not set upon renew when the token is retrieved from the cookie. Make sure to check that a handler is set when
+//the page is loaded and a token is retrieved from the cookie
+			// 1d. Remove the defined authentication failure handler so that any future timers that
+			// attempt to renew this token do not trigger this handler and silently fail to renew.
+			self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER = null;
+
+			// 1e. Remove the defined authentication success handler so that future valid connections don't find it.
+			self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER = null;
+
+			// 1f. Trigger the user-application's success function if one is defined.
+			if (successHandler)
+				successHandler();
 		},
 
 		/**
