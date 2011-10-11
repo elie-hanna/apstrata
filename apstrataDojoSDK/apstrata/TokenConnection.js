@@ -464,7 +464,7 @@ dojo.declare("apstrata.TokenConnection",
 			delete self.token;
 			self.credentials.username = "";
 
-			// 1c. Broadcast that a successful login has happened.
+			// 1c. Broadcast that a successful logout has happened.
 			dojo.publish("/apstrata/connection/logout/success", [{
 			}]);
 //TODO The success and failure handlers r not set upon renew when the token is retrieved from the cookie. Make sure to check that a handler is set when
