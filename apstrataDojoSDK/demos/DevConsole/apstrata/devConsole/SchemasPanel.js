@@ -92,7 +92,7 @@ dojo.declare("apstrata.devConsole.SchemaEditorPanel",
 							+ 'This is the default user schema. Feel free to modify it to your liking.\r\n'
 							+ 'This schema follows all rules and restrictions as all other schemas, as do the documents (users) created out of it.\r\n'
 							+ 'However, it imposes the following restrictions of its own:\r\n'
-							+ '1. The five default fields (email, name, login, password and locale) are required.\r\n'
+							+ '1. The five default fields (groups, name, login, password and locale) are required.\r\n'
 							+ '2. This schema cannot be deleted.\r\n'
 							+ '\r\n'
 							+ 'Additionally, since this schema is used for user management, the following ACLs are set by default upon creation of each new user document:\r\n'
