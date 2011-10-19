@@ -44,7 +44,7 @@ dojo.declare("apstrata.widgets.Curtain",
 			if (attrs.animationURL) this.animationURL = attrs.animationURL
 		}
 		
-		this.animationURL = this._apstrataRoot + "/resources/images/ajax-loader-orange-on-grey"
+		this.animationURL = this._apstrataRoot + "/resources/images/ajax-loader.gif"//-orange-on-grey"
 	},
 	
 	postCreate: function() {
@@ -61,7 +61,7 @@ dojo.declare("apstrata.widgets.Curtain",
 		dojo.style(this.domNode, {
 		    left: pos.x + "px",
 		    top: pos.y + "px",
-		    width: pos.w + "px",
+		    width: (pos.w+5) + "px",
 		    height: pos.h + "px",
 			visibility: "visible"
 		})
@@ -89,6 +89,9 @@ dojo.declare("apstrata.widgets.Curtain",
 				dojo.style(self.domNode, {
 										visibility: "hidden"
 									})
+				dojo.style(self.icon, {
+										visibility: "hidden"
+									})                           
 			}
 		)
 	}
