@@ -47,13 +47,10 @@ dojo.declare("apstrata.Post",
 
 
 			// ADD a dynamic callback that will be invoked by the code in PostIframeHandler.html
-			window[this.request.apsws.callback] = function(jsonTxt) {
+			window[this.request.apsws.callback] = function(jsonObj) {
 				self.responseTime = (new Date().getTime()) - self._timestamp
 		
-					self.log.info("raw response", jsonTxt);
-					var json = dojo.fromJson(jsonTxt)
-	
-					self.log.info("response object", json);
+					self.log.info("response object", jsonObj);
 
 					self.log.debug("response time (ms)", self.responseTime);
 					if (self.operationAborted) self.log.debug("POST Aborted");
@@ -62,10 +59,8 @@ dojo.declare("apstrata.Post",
 				// Clear the timeout since we received a response from apstrata
 				self._clearTimeout();
 
-//				var jsonTxt = dojo.byId("dojoIoIframe").contentWindow.name
-
-                if (json.response) {
-					self.response = json.response
+                if (jsonObj.response) {
+					self.response = jsonObj.response
 					
 					self.log.info("requestId", self.response.metadata.requestId)
                     self.log.info("status", self.response.metadata.status);
