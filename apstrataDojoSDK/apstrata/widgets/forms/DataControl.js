@@ -19,7 +19,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	successMessageDiv: null,
 	errorMessageDiv: null,
 	store: null,
-  customValidateForm: null, 
+	customValidateForm: null,
+	submitLabel: null,
 	
 	constructor: function(attrs) {
 		var self = this
@@ -43,7 +44,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 				this.errorMessageHTML = self._getDivInnerHTML(attrs.errorMessageDiv)
 			}
 			
-			if (attrs.customValidateForm) this.customValidateForm = attrs.customValidateForm;         
+			if (attrs.customValidateForm) this.customValidateForm = attrs.customValidateForm;
+			if (attrs.submitLabel) this.submitLabel = attrs.submitLabel;
 
 			if (attrs.connection) {
 				this.connection = attrs.connection
@@ -88,7 +90,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 
 				switch(action) {
 					case "submit":
-						label = "Submit"
+						if(self.submitLabel) label = self.submitLabel;
+						else label = "Submit";
 						break;
 					case "reset":
 						label = "Reset"
