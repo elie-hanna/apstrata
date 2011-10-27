@@ -21,6 +21,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	store: null,
 	customValidateForm: null,
 	submitLabel: null,
+	onErrorDoBlink: true,
 	
 	constructor: function(attrs) {
 		var self = this
@@ -46,6 +47,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			
 			if (attrs.customValidateForm) this.customValidateForm = attrs.customValidateForm;
 			if (attrs.submitLabel) this.submitLabel = attrs.submitLabel;
+			if (attrs.onErrorDoBlink) this.onErrorDoBlink = attrs.onErrorDoBlink;
 
 			if (attrs.connection) {
 				this.connection = attrs.connection
@@ -143,7 +145,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	},
 
 	_flashNotValid: function() {
-		var self = this
+		var self = this;
+		if (!self.onErrorDoBlink) return; 
 		var backgroundColor = dojo.style(self.bindForm.domNode, "backgroundColor")
 
 		self._disableInputs(true)
