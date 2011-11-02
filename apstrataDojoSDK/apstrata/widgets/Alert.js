@@ -27,7 +27,7 @@ dojo.require('dojo.fx.easing');
 dojo.declare("apstrata.widgets.Alert", 
 [dijit._Widget, dijit._Templated], 
 {
-	templateString:"<div class='Alert'><div class='AlertIcon' dojoAttachPoint='icon'></div><div class='AlertContent' dojoAttachPoint='content' dojoAttachEvent='onmouseover: _showButtons, onmouseout: _hideButtons'>Content</div><div class='AlertControl' dojoAttachEvent='onmouseover: _showButtons' dojoAttachPoint='control'></div></div>",
+	templateString:"<div class='Alert'><div class='alertContent'><div class='AlertIcon' dojoAttachPoint='icon'></div><div class='AlertContent' dojoAttachPoint='content' dojoAttachEvent='onmouseover: _showButtons, onmouseout: _hideButtons'>Content</div><div class='AlertControl' dojoAttachEvent='onmouseover: _showButtons' dojoAttachPoint='control'></div></div></div>",
 	width: 200,
 	height: 200,
 	animation: null,
