@@ -12,6 +12,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	templateString: "<div></div>",
 	actions: '',
 	bindForm: null,
+	bindFormData: null,
 	connection: null,
 	additionalData: null,
 	scriptName: null,
@@ -31,6 +32,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			if (attrs.store) this.store = attrs.store;
 			if (attrs.actions) this.actions = attrs.actions;
 			if (attrs.bindForm) this.bindForm = attrs.bindForm;
+			if (attrs.bindFormData) this.bindFormData = attrs.bindFormData;
 			if (attrs.scriptName) this.scriptName = attrs.scriptName;
 			if (attrs.additionalData) this.additionalData = attrs.additionalData;
 			if (attrs.additionalFields) this.additionalFields = attrs.additionalFields;
@@ -114,6 +116,15 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 				
 				dojo.place(button.domNode, self.domNode)
 			})
+		}
+		
+		if (this.bindFormData) {
+			var prop = null
+			for (prop in this.bindFormData) {
+				if (prop in this.bindForm.domNode) {
+					this.bindForm.domNode[prop].value = this.bindFormData[prop];
+				}
+			}
 		}
 	},
 	
