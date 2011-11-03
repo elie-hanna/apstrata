@@ -22,6 +22,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	store: null,
 	customValidateForm: null,
 	submitLabel: null,
+	submitCallBack: null,
 	onErrorDoBlink: true,
 	
 	constructor: function(attrs) {
@@ -48,6 +49,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			}
 			
 			if (attrs.customValidateForm) this.customValidateForm = attrs.customValidateForm;
+			if (attrs.submitCallBack) this.submitCallBack = attrs.submitCallBack;
 			if (attrs.submitLabel) this.submitLabel = attrs.submitLabel;
 			if (attrs.onErrorDoBlink) this.onErrorDoBlink = attrs.onErrorDoBlink;
 
@@ -230,7 +232,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 						self._undimForm()
 						
 						if (self.successMessageHTML) self.bindForm.domNode.innerHTML = self.successMessageHTML;
-						else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>"
+						else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>";
+						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData);
 					} else {
 						self.showMessage(self.errorMessageHTML)					
 					}
@@ -251,7 +254,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 				load: function(operation) {
 					self._undimForm()
 					if (self.successMessageHTML) self.bindForm.domNode.innerHTML = self.successMessageHTML;
-					else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>"
+					else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>";
+					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData);
 				},
 				error: function(operation) {
 					self.showMessage(self.errorMessageHTML)
