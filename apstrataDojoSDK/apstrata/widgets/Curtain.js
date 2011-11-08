@@ -27,7 +27,7 @@ dojo.require('dojo.fx.easing');
 dojo.declare("apstrata.widgets.Curtain", 
 [dijit._Widget, dijit._Templated], 
 {
-	templateString:"<div style='background: #000; opacity: 1;'><img style='position:relative;' dojoAttachPoint='icon' src='${animationURL}'></div>",
+	templateString:"<div class='apstrataCurtain' style='background: #000; opacity: 1;'><img style='position:relative;' dojoAttachPoint='icon' src='${animationURL}'></div>",
 	
 	container: null,
 	width: null,

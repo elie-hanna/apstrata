@@ -24,6 +24,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	submitLabel: null,
 	submitCallBack: null,
 	onErrorDoBlink: true,
+	curtainContainer: null,
 	
 	constructor: function(attrs) {
 		var self = this
@@ -37,6 +38,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			if (attrs.scriptName) this.scriptName = attrs.scriptName;
 			if (attrs.additionalData) this.additionalData = attrs.additionalData;
 			if (attrs.additionalFields) this.additionalFields = attrs.additionalFields;
+			if (attrs.curtainContainer) this.curtainContainer = attrs.curtainContainer;
 			
 			if (attrs.successMessageDiv) {
 				this.successMessageDiv = attrs.successMessageDiv 
@@ -83,7 +85,14 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	postCreate: function() {
 		var self = this;
 
-		this._curtain = new apstrata.widgets.Curtain({container: self.bindForm.domNode})
+		// Set the containing node of the posting curtain to the one in the settings or the form if it is not set.
+		var curtainContainer = null;
+		if (self.curtainContainer) {
+			curtainContainer = self.curtainContainer.domNode;
+		} else {
+			curtainContainer = self.bindForm.domNode;
+		}
+		this._curtain = new apstrata.widgets.Curtain({container: curtainContainer});
 
 		if (this.actions) {
 			var actions = self.actions.split(",")
@@ -124,7 +133,21 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			var prop = null
 			for (prop in this.bindFormData) {
 				if (prop in this.bindForm.domNode) {
-					this.bindForm.domNode[prop].value = this.bindFormData[prop];
+					var field = this.bindForm.domNode[prop];
+					if (field.length > 1) {
+						// FIXME This does not work because Dojo does not take the value of the
+						// radio/checkbox field even if it is set to "checked". We need to set the
+						// value of the Dojo widget instead of the domNode field itself.
+						for (var i=0; i<field.length; i++) {
+							if (field[i].type == 'radio' || field[i].type == 'checkbox') {
+								if (field[i].value == this.bindFormData[prop]) {
+									field[i].checked = "checked";
+								}
+							}
+						}
+					} else {
+						field.value = this.bindFormData[prop];
+					}
 				}
 			}
 		}
