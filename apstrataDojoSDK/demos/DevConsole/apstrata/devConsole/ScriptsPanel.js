@@ -24,7 +24,7 @@ dojo.provide("apstrata.devConsole.ScriptEditorPanel")
 dojo.require("dijit.form.Form")
 dojo.require("dijit.form.Button")
 dojo.require("dijit.form.ValidationTextBox")
-dojo.require("dijit.form.SimpleTextarea")
+dojo.require("dijit.form.Textarea")
 
 dojo.declare("apstrata.devConsole.ScriptsPanel", 
 [apstrata.horizon.HStackableList], 
@@ -243,72 +243,57 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 		if (attrs.scriptName) this.scriptName = attrs.scriptName
 	},
 	
-	_getParams: function() {
-		var frm = this.frmParams.attr('value')
-		var params = {}
- 
-		if (frm.param1) params[frm.param1] = frm.value1 
-		if (frm.param2) params[frm.param2] = frm.value2 
-		if (frm.param3) params[frm.param3] = frm.value3 
-		if (frm.param4) params[frm.param4] = frm.value4 
-		if (frm.param5) params[frm.param5] = frm.value5
-		if (frm.param6) params[frm.param6] = frm.value6
-		if (frm.param7) params[frm.param7] = frm.value7
-		if (frm.param8) params[frm.param8] = frm.value8
-		if (frm.param9) params[frm.param9] = frm.value9
-		if (frm.param10) params[frm.param10] = frm.value10
-		
-		return params 
-	},
-	
-	_goNewWindow: function() {
-		var self = this
+	_runScript: function() {
+		var self = this ;
 		var runAs = self.fldRunAs.getValue()
 		
-		console.dir(this.frmParams.attr("value"))
-		console.debug(this.scriptName)		
-
-		var operation = new apstrata.Operation(this.container.connection)
-		operation.apsdbOperation = "RunScript"
-		operation.request = {
+		var requestParams = {
 			apsdb: {
 				scriptName: self.scriptName,
 				runAs: runAs
 			}
 		}
+				
+		dojo.query('.paramName').forEach(function(node, index, arr){
+			var nodeId = dojo.attr(node,"id");
+			var nodeValue = dojo.attr(node,"value");
+			
+			var fieldNode ;
+			
+			if (self[nodeId].declaredClass == "dojox.form.FileInput")
+				fieldNode = self[nodeId].domNode.getElementsByTagName("input")[0];
+			else
+				fieldNode = self[nodeId].domNode;
+			
+			if(nodeValue && nodeValue != ""){
+				fieldNode.setAttribute("name", nodeValue);
+			}else{
+				fieldNode.removeAttribute("name");
+			}
+		})
 
-		dojo.mixin(operation.request, this._getParams())
+		self.container.client.call({
+			action: "RunScript",
+			useHttpMethod: "POST",
+			formNode: self.frmParams.domNode,
+			request: requestParams,			
+			load: function(operation) {
+				self.openPanel(apstrata.devConsole.ScriptResultPanel, {
+					scriptOutput: operation.response
+				})
+			},
+			error: function(operation) {
+			}
+		})
 
-		var url = operation.buildUrl().url;
-		window.open(url, 'Script Output:' + self.scriptName) 
 	},
-/*
-	_go: function() {
-		var self = this
-		
-		if (self.scriptName) {
-			this.container.client.call({
-				action: "RunScript",
-				request: {
-					apsdb: {
-						scriptName: self.scriptName
-					}
-				},
-				load: function(operation) {
-					console.dir(operation)
-				},
-				error: function(operation) {
-				}
-			})
-		}
-	},
-*/	
+
 	postCreate: function() {
-		var self = this
-		this.userListFetched = false
+		var self = this ;
+		this.userListFetched = false ;
 		
 		dojo.connect(self.fldRunAs, 'onClick', function () {
-			if (self.userListFetched) return
+			if (self.userListFetched) return ;
 			self.container.client.call({
 				action: "ListUsers",
 				request: {
@@ -331,6 +316,30 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 			})
 	    });
 		
+		this.inherited(arguments)
+	},
+		
+	destroy: function() {
+		this.frmParams.destroyDescendants(false);
+		this.inherited(arguments);
+	}
+})
+
+dojo.declare("apstrata.devConsole.ScriptResultPanel", 
+[dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
+{	
+	widgetsInTemplate: true,
+	templatePath: dojo.moduleUrl("apstrata.devConsole", "templates/ScriptOutputPanel.html"),
+	maximizePanel: false,
+	
+	constructor: function(attrs) {		
+		if (attrs.scriptOutput) this.scriptOutput = attrs.scriptOutput ;
+	},
+	
+	postCreate: function() {
+		var self = this ;
+		
+		self.scriptOutputField.attr("value", JSON.stringify(self.scriptOutput, null, '\t'));	
 		this.inherited(arguments)
 	}
 })
