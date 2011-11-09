@@ -10,6 +10,7 @@ dependencies = {
 				"dijit.form.Button",
 				"dijit.form.ValidationTextBox",
 				"dijit.form.SimpleTextarea",
+				"dijit.form.Textarea",
 				"dijit.form.DateTextBox",
 				"dijit.form.HorizontalSlider",
 				"dijit.form.HorizontalRuleLabels",
