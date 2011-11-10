@@ -52,6 +52,7 @@ dojo.declare("apstrata.ObjectStore",
 
 		var queryAttrs = {
 			action: "Query",
+			useHttpMethod: "POST",
 			request: {
 				apsdb: apsdb
 			},
@@ -82,6 +83,7 @@ dojo.declare("apstrata.ObjectStore",
 		
 		var queryAttrs = {
 			action: "Query",
+			useHttpMethod: "POST",
 			request: {
 				apsdb: apsdb
 			},
