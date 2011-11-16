@@ -22,9 +22,11 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	store: null,
 	customValidateForm: null,
 	submitLabel: null,
+	resetLabel: null,
 	submitCallBack: null,
 	onErrorDoBlink: true,
 	curtainContainer: null,
+	containingPanel: null,
 	
 	constructor: function(attrs) {
 		var self = this
@@ -39,6 +41,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			if (attrs.additionalData) this.additionalData = attrs.additionalData;
 			if (attrs.additionalFields) this.additionalFields = attrs.additionalFields;
 			if (attrs.curtainContainer) this.curtainContainer = attrs.curtainContainer;
+			if (attrs.containingPanel) this.containingPanel = attrs.containingPanel;
 			
 			if (attrs.successMessageDiv) {
 				this.successMessageDiv = attrs.successMessageDiv 
@@ -53,6 +56,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			if (attrs.customValidateForm) this.customValidateForm = attrs.customValidateForm;
 			if (attrs.submitCallBack) this.submitCallBack = attrs.submitCallBack;
 			if (attrs.submitLabel) this.submitLabel = attrs.submitLabel;
+			if (attrs.resetLabel) this.resetLabel = attrs.resetLabel;
 			if (attrs.onErrorDoBlink) this.onErrorDoBlink = attrs.onErrorDoBlink;
 
 			if (attrs.connection) {
@@ -109,7 +113,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 						else label = "Submit";
 						break;
 					case "reset":
-						label = "Reset"
+						if(self.resetLabel) label = self.resetLabel;
+						else label = "Reset";
 						break;
 					default:
 				}
@@ -272,6 +277,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			
 			var attrs = {
 				action: "SaveDocument",
+				useHttpMethod: "POST",
 				request: request,
 				formNode: self.bindForm.domNode,
 				load: function(operation) {
@@ -292,3 +298,4 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 		if (this.bindForm) this.bindForm.reset()
 	}
 })
+
