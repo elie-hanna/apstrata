@@ -261,13 +261,15 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 						
 						if (self.successMessageHTML) self.bindForm.domNode.innerHTML = self.successMessageHTML;
 						else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>";
-						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData);
+						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 					} else {
-						self.showMessage(self.errorMessageHTML)					
+						self.showMessage(self.errorMessageHTML)
+						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 					}
 				},
 				error: function(operation) {
-					self.showMessage(self.errorMessageHTML)					
+					self.showMessage(self.errorMessageHTML)
+					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 				}
 			}
 		} else {
@@ -284,10 +286,11 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 					self._undimForm()
 					if (self.successMessageHTML) self.bindForm.domNode.innerHTML = self.successMessageHTML;
 					else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>";
-					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData);
+					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 				},
 				error: function(operation) {
 					self.showMessage(self.errorMessageHTML)
+					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 				}
 			}
 		}
