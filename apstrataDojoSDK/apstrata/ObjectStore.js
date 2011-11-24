@@ -45,10 +45,11 @@ dojo.declare("apstrata.ObjectStore",
 	query: function(attrs, options) {
 		var deferred = new dojo.Deferred();
 
-		var apsdb = attrs || {}
-		apsdb.store = this.store
-		apsdb.queryFields = this.queryFields
-		if (this.resultsPerPage) apsdb.resultsPerPage = this.resultsPerPage
+		var apsdb = attrs || {};
+		apsdb.store = this.store;
+		apsdb.queryFields = this.queryFields;
+		apsdb.query = this.queryFilter;
+		if (this.resultsPerPage) apsdb.resultsPerPage = this.resultsPerPage;
 
 		var queryAttrs = {
 			action: "Query",
