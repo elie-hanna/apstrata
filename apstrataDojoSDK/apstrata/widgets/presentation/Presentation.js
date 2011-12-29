@@ -6,8 +6,6 @@ dojo.require('dojo.fx.easing');
 
 dojo.require('apstrata.widgets.Alert');
 
-dojo.require('apstrata.apsdb.client.Connection');
-
 dojo.declare("apstrata.widgets.presentation.Presentation", 
 	[dijit._Widget, dojox.dtl._Templated], 
 	{

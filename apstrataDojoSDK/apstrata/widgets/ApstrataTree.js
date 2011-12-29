@@ -22,10 +22,6 @@ dojo.provide('apstrata.widgets.ApstrataTree');
 dojo.require('dijit.Tree');
 dojo.require('dijit.tree.ForestStoreModel');
 
-dojo.require('apstrata.apsdb.client.Client');
-dojo.require('apstrata.apsdb.client.ItemApsdbWriteStore');
-dojo.require('apstrata.apsdb.client.widgets.ConnectionStatus');
-
 dojo.declare("apstrata.widgets.ApstrataTree", 
 				[dijit._Widget, dijit._Templated], 
 				{
