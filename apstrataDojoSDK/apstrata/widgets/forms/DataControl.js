@@ -24,6 +24,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	submitLabel: null,
 	resetLabel: null,
 	submitCallBack: null,
+	errorCallBack: null,
 	onErrorDoBlink: true,
 	curtainContainer: null,
 	containingPanel: null,
@@ -55,6 +56,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			
 			if (attrs.customValidateForm) this.customValidateForm = attrs.customValidateForm;
 			if (attrs.submitCallBack) this.submitCallBack = attrs.submitCallBack;
+			if (attrs.errorCallBack) this.errorCallBack = attrs.errorCallBack;
 			if (attrs.submitLabel) this.submitLabel = attrs.submitLabel;
 			if (attrs.resetLabel) this.resetLabel = attrs.resetLabel;
 			if (attrs.onErrorDoBlink) this.onErrorDoBlink = attrs.onErrorDoBlink;
@@ -263,13 +265,15 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 						else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>";
 						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 					} else {
-						self.showMessage(self.errorMessageHTML)
 						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
+						if (self.errorCallBack) self.errorCallBack(self.bindForm, self.bindFormData, operation);
+						else self.showMessage(self.errorMessageHTML);
 					}
 				},
 				error: function(operation) {
-					self.showMessage(self.errorMessageHTML)
 					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
+					if (self.errorCallBack) self.errorCallBack(self.bindForm, self.bindFormData, operation);
+					else self.showMessage(self.errorMessageHTML);
 				}
 			}
 		} else {
@@ -289,8 +293,9 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 				},
 				error: function(operation) {
-					self.showMessage(self.errorMessageHTML)
 					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
+					if (self.errorCallBack) self.errorCallBack(self.bindForm, self.bindFormData, operation);
+					else self.showMessage(self.errorMessageHTML);
 				}
 			}
 		}
