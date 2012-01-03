@@ -15,7 +15,7 @@ dojo.require('dojox.layout.RadioGroup');
 dojo.require('dojox.dtl._Templated');
 
 dojo.declare("apstrata.widgets.client.LoginWidget", 
-	[dijit._Widget, dojox.dtl._Templated, apstrata.util.logger.Loggable], 
+	[dijit._Widget, dojox.dtl._Templated], 
 {
 	widgetsInTemplate: true,
     templatePath: dojo.moduleUrl("apstrata.widgets.client","templates/LoginWidget.html"),
