@@ -1,0 +1,20 @@
+
+.horizonBackground {
+	background: #eeeeff;
+	border: solid 5px #ddddee;
+	opacity: .45;
+	overflow: hidden;
+	position: absolute;
+
+    -o-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+div.horizon {
+	overflow-x: auto;
+	overflow-y: hidden;
+	position: absolute;
+}
+
