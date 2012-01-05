@@ -265,15 +265,15 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 						else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>";
 						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 					} else {
-						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 						if (self.errorCallBack) self.errorCallBack(self.bindForm, self.bindFormData, operation);
 						else self.showMessage(self.errorMessageHTML);
+						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);						
 					}
 				},
 				error: function(operation) {
-					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 					if (self.errorCallBack) self.errorCallBack(self.bindForm, self.bindFormData, operation);
 					else self.showMessage(self.errorMessageHTML);
+					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);					
 				}
 			}
 		} else {
@@ -293,9 +293,9 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 				},
 				error: function(operation) {
-					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 					if (self.errorCallBack) self.errorCallBack(self.bindForm, self.bindFormData, operation);
 					else self.showMessage(self.errorMessageHTML);
+					if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);					
 				}
 			}
 		}
