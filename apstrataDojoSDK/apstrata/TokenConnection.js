@@ -585,6 +585,14 @@ dojo.declare("apstrata.TokenConnection",
 			apstrata.logger.debug("Saving credentials and token in a cookie.");
 
 			dojo.cookie(self._COOKIE_NAME, dojo.toJson(cookieObject), { expires: self._fromSecondToDateString(self.token.expires), path: "/" });
+
+			// Try to set the cookie the old-fashioned way if Dojo could not set it.
+			if (!dojo.cookie(self._COOKIE_NAME)) {
+				var expirationDate = new Date();
+				expirationDate.setUTCSeconds(expirationDate.getUTCSeconds() + parseInt(self.token.expires));
+				var cookieValue = escape(dojo.toJson(cookieObject)) + ("; expires=" + expirationDate.toUTCString());
+				document.cookie = self._COOKIE_NAME + "=" + cookieValue;
+			}
 		},
 
 		/**
