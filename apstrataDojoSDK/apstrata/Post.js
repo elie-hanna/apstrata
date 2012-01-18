@@ -44,6 +44,11 @@ dojo.declare("apstrata.Post",
 
 			if (attrs.redirectHref) this.request.apsws.redirectHref = attrs.redirectHref;
 			else this.request.apsws.redirectHref = apstrata.baseUrl + "/resources/PostIframeHandler.html"
+			// This is a temporary fix for the P3P compact policy IE (should be removed asap) 
+			if (this.apsdbOperation == "RunScript" && this.request["apsdb.scriptName"] == "VerifyCredentials" && (this.request["apsdb.action"] == "renew" || this.request["apsdb.action"] == "generate")) {
+				this.request["renewCallback"] = this.request.apsws.callback;
+				this.request["renewRedirectHref"] = this.request.apsws.redirectHref;
+			}
 
 
 			// ADD a dynamic callback that will be invoked by the code in PostIframeHandler.html
