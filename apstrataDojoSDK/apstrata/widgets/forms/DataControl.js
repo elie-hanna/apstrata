@@ -152,7 +152,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 								}
 							}
 						}
-					} else {
+					} else if (typeof this.bindFormData[prop] == 'string') {
 						field.value = this.bindFormData[prop];
 					}
 				}
