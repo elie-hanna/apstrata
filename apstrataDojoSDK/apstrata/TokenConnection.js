@@ -507,7 +507,7 @@ dojo.declare("apstrata.TokenConnection",
 		_loadCredentialsFromCookie: function () {
 			var jsonStr = dojo.cookie(this._COOKIE_NAME);
 
-			if (jsonStr) {
+			if (jsonStr && jsonStr != "") {
 				// 1. Create the object from the cookie.
 				var cookieObject = dojo.fromJson(jsonStr);
 				apstrata.logger.info("Loaded connection from cookie", cookieObject);
@@ -590,7 +590,7 @@ dojo.declare("apstrata.TokenConnection",
 			if (!dojo.cookie(self._COOKIE_NAME)) {
 				var expirationDate = new Date();
 				expirationDate.setUTCSeconds(expirationDate.getUTCSeconds() + parseInt(self.token.expires));
-				var cookieValue = escape(dojo.toJson(cookieObject)) + ("; expires=" + expirationDate.toUTCString());
+				var cookieValue = escape(dojo.toJson(cookieObject)) + ("; expires=" + expirationDate.toUTCString() + "; path=/;");
 				document.cookie = self._COOKIE_NAME + "=" + cookieValue;
 			}
 		},
@@ -612,6 +612,10 @@ dojo.declare("apstrata.TokenConnection",
 		 */
 		deleteCookie: function () {
 			dojo.cookie(this._COOKIE_NAME, null, { expires: -1, path: "/"});
+			// Try to delete the cookie the old-fashioned way if Dojo could not delete it.
+			if (typeof dojo.cookie(this._COOKIE_NAME) != "undefined") {
+				document.cookie = this._COOKIE_NAME + "=; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/;";
+			}
 		},
 
 		/**
