@@ -28,27 +28,42 @@ dojo.declare('apstrata.Client',
 	{
 		
 		_MESSAGE_DURATION: 1000,
-		
-		constructor: function(attrs) {
-			var self = this
 
+		/**
+		 * This constructor will generate a new connection object if one is not sent as a parameter.
+		 *
+		 * @param connection
+		 * 			A connection object that is expected to be an "apstrata.Connection" or an instance
+		 * 			of an object that extends it.
+		 * @param handleResult (Optional)
+		 * 			A generic handler function to be called after receiving a successful response.
+		 * @param handleError (Optional)
+		 * 			A generic handler function to be called after receiving a failure response.
+		 * @param handleJSErrors (Optional)
+		 * 			A generic handler function to be called when the provided success or failure
+		 * 			handlers break and throw an exception.
+		 */
+		constructor: function(attrs) {
 			if (attrs) {
 				if (attrs.connection) {
-					this.connection = attrs.connection
+					this.connection = attrs.connection;
 				}
 				if (attrs.handleResult) {
-					this.handleResult = attrs.handleResult
+					this.handleResult = attrs.handleResult;
 				}
 				if (attrs.handleError) {
-					this.handleError = attrs.handleError
+					this.handleError = attrs.handleError;
+				}
+				if (attrs.handleJSErrors) {
+					this.handleJSErrors = attrs.handleJSErrors;
 				}
 			}
-			
+
 			if (!this.connection) {
-				this.connection = new apstrata.Connection()
+				this.connection = new apstrata.Connection();
 			}
 		},
-		
+
 		call: function(attrs) {
 			var self = this
 			
@@ -78,8 +93,13 @@ dojo.declare('apstrata.Client',
 			operation.request = attrs.request
 
 			var handle1 = dojo.connect(operation, "handleResult", function() {
-				if (self.handleResult) self.handleResult(operation)
-				attrs.load(operation)
+				if (self.handleResult) self.handleResult(operation);
+				var possibleException = null;
+				try {
+					attrs.load(operation);
+				} catch (e) {
+					possibleException = e;
+				}
 				
 				dojo.disconnect(handle1)
 				dojo.disconnect(handle2)
@@ -92,11 +112,27 @@ dojo.declare('apstrata.Client',
 					duration: self._MESSAGE_DURATION,
 					operation: operation
 				}]);
+
+				if (possibleException) {
+					if (attrs.JSErrors) {
+						attrs.JSErrors(possibleException);
+					} else if (self.handleJSErrors) {
+						self.handleJSErrors(possibleException);
+					} else if (console) {
+						console.error(possibleException);
+						console.dir(possibleException);
+					}
+				}
 			})
 
 			var handle2 = dojo.connect(operation, "handleError", function() {
-				if (self.handleError) self.handleError(operation)
-				attrs.error(operation)
+				if (self.handleError) self.handleError(operation);
+				var possibleException = null;
+				try {
+					attrs.error(operation);
+				} catch (e) {
+					possibleException = e;
+				}
 
 				dojo.disconnect(handle1)
 				dojo.disconnect(handle2)
@@ -109,6 +145,17 @@ dojo.declare('apstrata.Client',
 					duration: self._MESSAGE_DURATION,
 					operation: operation
 				}]);
+
+				if (possibleException) {
+					if (attrs.JSErrors) {
+						attrs.JSErrors(possibleException);
+					} else if (self.handleJSErrors) {
+						self.handleJSErrors(possibleException);
+					} else if (console) {
+						console.error(possibleException);
+						console.dir(possibleException);
+					}
+				}
 			})
 
 			operation.execute(attrs)				
