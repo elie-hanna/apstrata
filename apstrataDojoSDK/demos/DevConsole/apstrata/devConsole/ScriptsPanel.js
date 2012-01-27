@@ -283,6 +283,9 @@ dojo.declare("apstrata.devConsole.RunScriptPanel",
 				})
 			},
 			error: function(operation) {
+				self.openPanel(apstrata.devConsole.ScriptResultPanel, {
+				scriptOutput: ""
+			})
 			}
 		})
 

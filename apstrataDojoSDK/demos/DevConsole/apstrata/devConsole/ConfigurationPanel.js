@@ -45,7 +45,8 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				self.defaultTokenExpires.attr("value", q.defaultTokenExpires);
 				self.maximumTokenExpires.attr("value", q.maximumTokenExpires);
 				self.defaultTokenLifeTime.attr("value", q.defaultTokenLifeTime);
-				self.maximumTokenLifeTime.attr("value", q.maximumTokenLifeTime);		
+				self.maximumTokenLifeTime.attr("value", q.maximumTokenLifeTime);	
+				self.p3p.attr("value", q.P3P);			
 				if(q.disableSchemalessDocs == null || q.disableSchemalessDocs == true || q.disableSchemalessDocs=="true")
 					self.disableSchemalessDocs.attr("checked", q.disableSchemalessDocs);
 				if(q.optionalBindReferrer == null || q.optionalBindReferrer == true || q.optionalBindReferrer=="true")
@@ -72,6 +73,7 @@ dojo.declare("apstrata.devConsole.ConfigurationPanel",
 				maximumTokenExpires: self.maximumTokenExpires.getValue(),
 				defaultTokenLifeTime: self.defaultTokenLifeTime.getValue(),
 				maximumTokenLifeTime: self.maximumTokenLifeTime.getValue(),
+				P3P: self.p3p.getValue(),
 				disableSchemalessDocs: self.disableSchemalessDocs.attr("checked"),
 				optionalBindReferrer: self.optionalBindReferrer.attr("checked"),
 				allowForce200ResponseStatus: self.allowForce200ResponseStatus.attr("checked")
