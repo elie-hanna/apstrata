@@ -97,6 +97,8 @@ dojo.declare("apstrata.ObjectStore",
 				deferred.callback(null)
 			}
 		}
+		
+		if (this.useHttpMethod) queryAttrs.useHttpMethod = this.useHttpMethod
 	
 		this.client.call(queryAttrs)
 		
