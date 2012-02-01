@@ -47,6 +47,7 @@ dojo.declare("apstrata.ObjectStore",
 		var self = this
 		
 		dojo.mixin(this, options);
+		this.action = "Query"
 
 		this.client = new apstrata.Client({
 			connection: self.connection,
@@ -56,10 +57,12 @@ dojo.declare("apstrata.ObjectStore",
 	},
 	
 	query: function(attrs, options) {
+		var self = this
+		
 		var deferred = new dojo.Deferred();
 
 		var apsdb = attrs || {}
-		apsdb.store = this.store
+		if (this.store) apsdb.store = this.store
 		if (this.ftsQuery) apsdb.ftsQuery = this.ftsQuery
 		if (this.queryExpression) apsdb.query = this.queryExpression
 		if (this.queryFields) apsdb.queryFields = this.queryFields
@@ -71,7 +74,11 @@ dojo.declare("apstrata.ObjectStore",
 			
 			if (this.fieldTypes && this.fieldTypes[options.sort[0].attribute]) type = this.fieldTypes[options.sort[0].attribute]
 			
-			apsdb.sort = options.sort[0].attribute + " <" + type +":" + (options.sort[0].descending?"DESC":"ASC") + ">"
+			if (type.toLowerCase()=='string') {
+				apsdb.sort = options.sort[0].attribute + " <" + type +":" + (options.sort[0].descending?"ci:DESC":"ci:ASC") + ">"
+			} else {
+				apsdb.sort = options.sort[0].attribute + " <" + type +":" + (options.sort[0].descending?"DESC":"ASC") + ">"
+			}
 		}
 		
 		
@@ -84,8 +91,10 @@ dojo.declare("apstrata.ObjectStore",
 		// TODO: this needs to be managed smarter so we don't ask the count on each query
 		apsdb.count = true//(apsdb.pageNumber == 1)
 	
+		if (this.action == "RunScript") apsdb.scriptName = this.scriptName
+	
 		var queryAttrs = {
-			action: "Query",
+			action: self.action,
 			request: {
 				apsdb: apsdb
 			},
@@ -99,14 +108,14 @@ dojo.declare("apstrata.ObjectStore",
 		}
 		
 		if (this.useHttpMethod) queryAttrs.useHttpMethod = this.useHttpMethod
-	
+
 		this.client.call(queryAttrs)
 		
 		return this.queryResults(deferred)
 	},
 	
 	getIdentity: function(object) {
-		return object["apsdb.documentKey"]
+		return object[idProperty]
 	},
 	
 	get: function(id) {
