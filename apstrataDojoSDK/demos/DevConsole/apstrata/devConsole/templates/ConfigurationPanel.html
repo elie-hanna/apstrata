@@ -29,10 +29,10 @@
 		<div class="label">Maximum Token Life Time:</div>
 		<input type="text" dojoAttachPoint="maximumTokenLifeTime" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">		
 		
-		<div class="label">P3P:</div>
-		<input type="text" dojoAttachPoint="p3p" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">			
-		
-		<br/><br/>
+		<div class="label">P3P Compact Policy: (<a target="_blank" href="http://wiki.apstrata.com/doku.php?id=home:api:saveconfiguration#specific_request_parameters" title="Click here for more details">What's this?</a>)</div>
+		<input type="text" dojoAttachPoint="p3p" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">		
+		<br/>
+		<br/>
 		<div dojoType='dijit.form.ToggleButton' style='font-size: 0.8em; color: #0000AA' 
 		     dojoAttachPoint="disableSchemalessDocs" iconClass='dijitCheckBoxIcon'>Disable Schemaless Documents</div>
 		     
@@ -46,7 +46,7 @@
 
 		<br><br>
 	</div>
-		<div style='width: 100%; text-align: right;'>
-			<button style="padding-right: 30px;" dojoAttachEvent='onClick: _save' dojoType='dijit.form.Button' >save</button>
-		</div>	
+	<div style='width: 100%; text-align: right;'>
+		<button style="padding-right: 30px;" dojoAttachEvent='onClick: _save' dojoType='dijit.form.Button' >save</button>
+	</div>	
 </div>
