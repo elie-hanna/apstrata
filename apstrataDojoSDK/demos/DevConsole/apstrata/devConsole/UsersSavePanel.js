@@ -209,20 +209,7 @@ dojo.declare("apstrata.devConsole.UsersSavePanel",
     var newField = new apstrata.devConsole.UsersSaveField({fieldName:null, fieldValues:null, fieldType:null, documentForm: this});
     this.fieldsList.addChild(newField);
   },
-  
-  _schemaChanged: function() {
-    for (var i=0; i<this.fieldsList.getChildren().length; i++) {
-      if (this.fieldsList.getChildren()[i].fieldType.attr("value") == "file") {
-        if (this.schemaName.attr("value") == "") {
-          this.fieldsList.getChildren()[i].fieldName.attr("disabled", true);
-          this.fieldsList.getChildren()[i].fieldName.attr("value", "apsdb_attachments");
-        } else {
-          this.fieldsList.getChildren()[i].fieldName.attr("disabled", false);
-        }
-      }
-    }
-  },
-  
+    
   _cancel: function() {
     this.panel.destroy();
   }
@@ -249,14 +236,14 @@ dojo.declare("apstrata.devConsole.UsersSaveField", [dijit._Widget, dijit._Templa
   postCreate: function() {
     this.fieldName.attr("value", this.fldName);
     // this.fieldType.attr("value", this.fldType);
-    // SaveUser doesn't support typed fields for now...so we made the type string and disabled
+    // SaveUser doesn't support typed fields for now...so we made the type string and readOnly
     this.fieldType.attr("value", "string");
-    this.fieldType.attr("disabled",true);
+    this.fieldType.attr("readOnly",true);
     
-    this.ftsFields.attr("disabled", true);
+    this.ftsFields.attr("readOnly", true);
     if (this.update) {
-      this.fieldName.attr("disabled",true);
-      // this.fieldType.attr("disabled",true);
+      this.fieldName.attr("readOnly",true);
+      // this.fieldType.attr("readOnly",true);
     }
     if(this.fldValues) {
       for(var i=0; i<this.fldValues.length; i++) {
@@ -271,9 +258,9 @@ dojo.declare("apstrata.devConsole.UsersSaveField", [dijit._Widget, dijit._Templa
     var selectedType = this.fieldType.attr("value");
     if (selectedType == 'file' && this.documentForm.schemaName == '') {
       this.fieldName.attr("value", "apsdb_attachments");
-      this.fieldName.attr("disabled",true);
+      this.fieldName.attr("readOnly",true);
     } else {
-      this.fieldName.attr("disabled",false);
+      this.fieldName.attr("readOnly",false);
     }
     
     if (this.fieldValuesList.hasChildren()) {
