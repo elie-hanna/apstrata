@@ -106,7 +106,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 					// operation.response.result
 					var q = operation.response
 					if (q.result.documents[0]) {
-						self.schemaName.attr("disabled",true);
+						self.schemaName.attr("readOnly",true);
 						for(var fieldName in q.result.documents[0]) {
 							fieldValue = q.result.documents[0][fieldName];
 							if(fieldName=='apsdb.documentKey') {
@@ -229,10 +229,10 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 		for (var i=0; i<this.fieldsList.getChildren().length; i++) {
 			if (this.fieldsList.getChildren()[i].fieldType.attr("value") == "file") {
 				if (this.schemaName.attr("value") == "") {
-					this.fieldsList.getChildren()[i].fieldName.attr("disabled", true);
+					this.fieldsList.getChildren()[i].fieldName.attr("readOnly", true);
 					this.fieldsList.getChildren()[i].fieldName.attr("value", "apsdb_attachments");
 				} else {
-					this.fieldsList.getChildren()[i].fieldName.attr("disabled", false);
+					this.fieldsList.getChildren()[i].fieldName.attr("readOnly", false);
 				}
 			}
 		}
@@ -265,7 +265,7 @@ dojo.declare("apstrata.devConsole.DocumentsSaveField", [dijit._Widget, dijit._Te
 		this.fieldName.attr("value", this.fldName);
 		this.fieldType.attr("value", this.fldType);
 		if (this.update) {
-			this.fieldType.attr("disabled",true);
+			this.fieldType.attr("readOnly",true);
 		}
 		if(this.fldValues) {
 			for(var i=0; i<this.fldValues.length; i++) {
@@ -280,9 +280,9 @@ dojo.declare("apstrata.devConsole.DocumentsSaveField", [dijit._Widget, dijit._Te
 		var selectedType = this.fieldType.attr("value");
 		if (selectedType == 'file' && this.documentForm.schemaName == '') {
 			this.fieldName.attr("value", "apsdb_attachments");
-			this.fieldName.attr("disabled",true);
+			this.fieldName.attr("readOnly",true);
 		} else {
-			this.fieldName.attr("disabled",false);
+			this.fieldName.attr("readOnly",false);
 		}
 		
 		if (this.fieldValuesList.hasChildren()) {
