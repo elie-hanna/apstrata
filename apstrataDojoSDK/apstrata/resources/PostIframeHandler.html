@@ -3,7 +3,9 @@
 <head>
 	<script>
 		var callback = (location.href).substring((location.href).indexOf("callback") + 9)
-		eval ("window.parent."+ callback + "("+ window.name +")")
+//		response = JSON.parse(window.name);
+		window.parent[callback](window.name);
+//		eval ("window.parent."+ callback + "("+ window.name +")")
 		
 		// Return the frame name to what dojo.io.iframe expects it,  
 		//  so we can make another dojo.io.iframe.send call on the same page
