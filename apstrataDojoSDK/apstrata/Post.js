@@ -52,7 +52,8 @@ dojo.declare("apstrata.Post",
 
 
 			// ADD a dynamic callback that will be invoked by the code in PostIframeHandler.html
-			window[this.request.apsws.callback] = function(jsonObj) {
+			window[this.request.apsws.callback] = function(jsonObjj) {
+				var jsonObj = dojo.fromJson(jsonObjj);
 				self.responseTime = (new Date().getTime()) - self._timestamp
 		
 					self.log.info("response object", jsonObj);
