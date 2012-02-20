@@ -261,8 +261,11 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 					if (operation.response.result.status == "success") {
 						self._undimForm()
 						
-						if (self.successMessageHTML) self.bindForm.domNode.innerHTML = self.successMessageHTML;
-						else self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>";
+						if (self.successMessageHTML) { 
+							dojo.place(self.successMessageHTML, self.bindForm.domNode, "replace");
+						} else {
+							self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>";
+						}
 						if (self.submitCallBack) self.submitCallBack(self.bindForm, self.bindFormData, operation);
 					} else {
 						if (self.errorCallBack) self.errorCallBack(self.bindForm, self.bindFormData, operation);
