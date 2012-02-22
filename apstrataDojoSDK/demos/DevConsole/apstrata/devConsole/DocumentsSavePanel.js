@@ -106,7 +106,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 					// operation.response.result
 					var q = operation.response
 					if (q.result.documents[0]) {
-						self.schemaName.attr("readOnly",true);
+						self.schemaName.attr("readOnly",true);  // Disable the schema drop down
 						for(var fieldName in q.result.documents[0]) {
 							fieldValue = q.result.documents[0][fieldName];
 							if(fieldName=='key') {
@@ -144,6 +144,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 			
 			this.container.client.call(attrs);
 		} else {
+			this.versionNumberDiv.style.display = 'none'; // Hide the versionNumber field
 			//adding one single field by default
 			this._addFieldLine();
 		}

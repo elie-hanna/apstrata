@@ -18,8 +18,10 @@
 		<div class="label">Document Key:</div>
 		<input type="text" dojoAttachPoint="documentKey" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
 		
-		<div class="label">VersionNumber:</div>
-		<input readonly="readonly" type="text" dojoAttachPoint="versionNumber" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
+		<div dojoAttachPoint="versionNumberDiv">
+			<div class="label">VersionNumber:</div>
+			<input readonly="readonly" type="text" dojoAttachPoint="versionNumber" dojoType="dijit.form.ValidationTextBox" class="rounded-xsml">
+		</div>
 
 		<div class="label">Run as:</div>
 		<select dojoType="dijit.form.FilteringSelect" autocomplete="true" dojoAttachPoint="runAs" searchAttr="label" required="false"  class="rounded-xsml"> </select>
