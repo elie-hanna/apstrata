@@ -109,10 +109,14 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 						self.schemaName.attr("readOnly",true);
 						for(var fieldName in q.result.documents[0]) {
 							fieldValue = q.result.documents[0][fieldName];
-							if(fieldName=='apsdb.documentKey') {
+							if(fieldName=='key') {
 								self.documentKey.attr("value",fieldValue);
-							}						
+							}
 							
+							if(fieldName=='versionNumber') {
+								self.versionNumber.attr("value",fieldValue);
+							}			
+														
 							// Considering schema for future changes
 							if(fieldName=='apsdb.objectName' || fieldName=='apsdb.schema') {
 								if(fieldValue != '' && fieldValue != 'templateForm') {
@@ -121,7 +125,7 @@ dojo.declare("apstrata.devConsole.DocumentsSavePanel",
 							}
 							
 							// Add a populated field widget
-							if ((fieldName.indexOf('apsdb.') == -1) && (fieldName != '_type') && (fieldName != 'key')) {
+							if ((fieldName.indexOf('apsdb.') == -1) && (fieldName != '_type') && (fieldName != 'key') && (fieldName != 'versionNumber')) {
 								//when having one single value for the field
 								if(typeof fieldValue == "string") {
 									fieldValue = [fieldValue];
