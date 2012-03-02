@@ -37,7 +37,39 @@ dojo.declare("apstrata.widgets.Alert",
 	actions: "close",
 	iconSrc: "",
 	modal: false,
-	
+
+	/**
+	 * Creates a popup alert widget. To show the popup, call the "show" method.
+	 *
+	 * @param attrs
+	 * 			An object containing these parameters:
+	 * 		width
+	 * 			A number representing the width of the popup.
+	 * 		height
+	 * 			A number representing the height of the popup.
+	 * 		title
+	 * 			A string that will be shown as the title of the popup.
+	 * 		actions
+	 * 			A comma-separated string of actions that will be used as labels to the popup buttons.
+	 * 		message
+	 * 			A string that will be shown as the message of the popup.
+	 * 		iconSrc
+	 * 			A string that is the path to the icon of the popup.
+	 * 		startFocus
+	 * 			A string representing the action that will be focused on once the popup is shown.
+	 * 			By default, the button that is focused on is the last one in the set of actions if
+	 * 			the popup is modal.
+	 * 		animation
+	 * 			An object containing "from" and "bounding" attributes that will be used to animate
+	 * 			the popup in order to show it.
+	 * 		modal
+	 * 			A boolean that represents whether or not other focusable fields on the page will be
+	 * 			accessible once the popup is shown. If the popup is modal, then the user cannot
+	 * 			click anywhere else.
+	 * 		clazz
+	 * 			A space-separated string of classes that will be added to the popup's main dom
+	 * 			Node. If none are passed, then only the "rounded" class will be added.
+	 */
 	constructor: function(attrs) {
 		var self = this
 		if (attrs) {
@@ -46,6 +78,7 @@ dojo.declare("apstrata.widgets.Alert",
 			if (attrs.title) this.titleStr = attrs.title;
 			if (attrs.message) this.message = attrs.message
 			if (attrs.iconSrc) this.iconSrc = attrs.iconSrc
+			if (attrs.startFocus) this.startFocus = attrs.startFocus
 			
 			if (attrs.animation) {
 				this._animation = attrs.animation
@@ -201,6 +234,22 @@ dojo.declare("apstrata.widgets.Alert",
 				visibility: "visible",
 				"zIndex": 99998
 			});
+		}
+
+		// Set the focus on the action button in the alert if an action was set to be focused on.
+		var isFocusedOnAnAction = false;
+		if (self.startFocus) {
+			for (var i=0; i<self._buttons.length; i++) {
+				if (self.startFocus == self._buttons[i].label) {
+					self._buttons[i].focus();
+					isFocusedOnAnAction = true;
+					break;
+				}
+			}
+		}
+		// Make sure that the focus is on an action in the Alert if it is a modal alert.
+		if (!isFocusedOnAnAction && this.modal && self._buttons && self._buttons.length > 0) {
+			self._buttons[self._buttons.length - 1].focus();
 		}
 
 		if (self.titleStr) {
