@@ -66,7 +66,6 @@ dojo.declare("apstrata.util.logger.BasicLogger",
 	},
 
 	log: function(method, className, args) {
-		return
 		var block = false
 		for (var i=0; i<this._blockLevels.length; i++) {
 			if (method == this._blockLevels[i]) {
