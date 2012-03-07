@@ -17,7 +17,7 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide('apstrata.util.logger.BasicLogger');
+dojo.provide("apstrata.util.logger.BasicLogger");
 
 /**
  * This uses firebug to output log messages that provide additional information than plain firebug 'console' methods
@@ -66,6 +66,7 @@ dojo.declare("apstrata.util.logger.BasicLogger",
 	},
 
 	log: function(method, className, args) {
+		return
 		var block = false
 		for (var i=0; i<this._blockLevels.length; i++) {
 			if (method == this._blockLevels[i]) {
@@ -105,11 +106,7 @@ dojo.declare("apstrata.util.logger.BasicLogger",
 					if (this._isObject(args[i])) {
 						
 						// If I have to output a complex object, display contents of bfr first
-						if (bfr.length>1) {
-							if (window._firebug) window._firebug.notifyFirebug(bfr, method, "firebugAppendConsole")
-							bfr = []
-							bfr.push(msg)
-						} 
+						this.notifyFirebug(bfr, method)
 	
 						// display complex object args[i]
 						var o = {}
@@ -124,13 +121,30 @@ dojo.declare("apstrata.util.logger.BasicLogger",
 			}
 	
 			if (bfr.length>1) {
-				if (window._firebug) window._firebug.notifyFirebug(bfr, method, "firebugAppendConsole")
+				this.notifyFirebug(bfr, method)
 			} 
 		}
 		
 		
 
 		if (this.messages) this.messages.push({t: time.getTime(), c:className, l:method, a: args});
+	},
+
+	/**
+	 * To replace deprecated window._firebug.notifyFirebug
+	 * @param {Object} bfr
+	 * @param {Object} method
+	 */
+	notifyFirebug: function(bfr, method) {
+		if (window.console) {
+			var command = 'console.' + method + '('
+			for (var i=0; i<bfr.length; i++) {
+				command += '"' + bfr[i] + '",'
+			}
+			command += "'')"
+			
+			eval (command)
+		}
 	},
 	
 	_className: function(object) {
