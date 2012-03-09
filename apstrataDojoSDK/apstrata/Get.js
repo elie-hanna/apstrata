@@ -79,7 +79,7 @@ dojo.declare("apstrata.Get",
 				url: self.url,
 				callbackParamName : "apsws.jc",
 				load: function(json) {
-
+					self.rawResponse = dojo.toJson(json, true)
 					self.responseTime = (new Date().getTime()) - timestamp;
 	
 						self.log.debug("response object", json);

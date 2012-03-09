@@ -158,6 +158,7 @@ dojo.declare('apstrata.Client',
 				}
 			})
 
-			operation.execute(attrs)				
+			operation.execute(attrs)		
+			this.url = operation.url		
 		} 
 	})
