@@ -153,7 +153,71 @@ dojo.declare("apstrata.AdminStore",
 		}
 
 		return this.queryResults(deferred)
-	}
+	},
 	
+	put: function(object, options) {
+		var self = this
+		var deferred = new dojo.Deferred()
+		
+		switch (this.type) {
+			case 'scripts':
+				
+				break;
+			case 'documents':
+				return this.inherited(arguments)
+				break;
+		}
+		
+		return deferred
+	},
+	
+	_put: function(object, options) {
+		var self = this
+		var deferred = new dojo.Deferred();
+		
+		var overwrite = true
+		
+		var request = {
+			apsdb: {
+				store: self.store,
+				update: false
+			}
+		}
+
+		if (options.id) request.apsdb.documentKey = options.id
+		if (options.overwrite) request.apsdb.update = options.overwrite
+		
+		dojo.mixin(request, object)
+		
+		// Create temporary form node that the POST needs
+		var form = dojo.create('form')
+		dojo.place(form, dojo.body())
+
+		var attrs = {
+			action: "SaveDocument",
+			request: request,
+			formNode: form, // dojo.byId('noForm'),
+			useHttpMethod: "GET",
+			load: function(operation) {
+				// remove temporary form node 
+				form.parentNode.removeChild(form)
+				deferred.resolve(operation.response.result.document.key)
+			},
+			error: function(operation) {
+				// remove temporary form node 
+				form.parentNode.removeChild(form)
+				deferred.reject(operation.response.metadata)
+			}
+		}
+	
+		this.client.call(attrs)
+		
+		return deferred
+	},
+
+	add: function(object, options) {
+		var newOptions = dojo.mixin(options, {overwrite: false})
+		return this.put(object, newOptions)
+	}
 
 })
