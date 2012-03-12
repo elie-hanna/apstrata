@@ -126,6 +126,22 @@ dojo.declare("apstrata.AdminStore",
 			case 'stores':
 				this.inherited(arguments)
 				break; 
+
+			case 'users': 
+				this.client.call({
+					action: "GetUser",
+					request: {
+						login: id
+					},
+					load: function(operation) {
+						deferred.resolve({id: id, user: operation.response.result.user})
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				})
+				break;
+
 			case 'scripts': 
 				this.client.call({
 					action: "GetScript",
@@ -136,8 +152,23 @@ dojo.declare("apstrata.AdminStore",
 					},
 					load: function(operation) {
 						deferred.resolve({id: id, script: operation.response.result})
-						
-	//					self._initCodeEditor()
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				})
+				break;
+
+			case 'schemas': 
+				this.client.call({
+					action: "GetSchema",
+					request: {
+						apsdb: {
+							schemaName: id
+						}
+					},
+					load: function(operation) {
+						deferred.resolve({id: id, schema: operation.response.result})
 					},
 					error: function(operation) {
 						deferred.reject(operation.response.metadata)
@@ -161,6 +192,7 @@ dojo.declare("apstrata.AdminStore",
 		
 		switch (this.type) {
 			case 'scripts':
+				this._put(object, options)
 				
 				break;
 			case 'documents':
@@ -173,43 +205,27 @@ dojo.declare("apstrata.AdminStore",
 	
 	_put: function(object, options) {
 		var self = this
+
 		var deferred = new dojo.Deferred();
 		
-		var overwrite = true
-		
-		var request = {
-			apsdb: {
-				store: self.store,
-				update: false
-			}
-		}
-
-		if (options.id) request.apsdb.documentKey = options.id
-		if (options.overwrite) request.apsdb.update = options.overwrite
-		
-		dojo.mixin(request, object)
-		
-		// Create temporary form node that the POST needs
-		var form = dojo.create('form')
-		dojo.place(form, dojo.body())
-
 		var attrs = {
-			action: "SaveDocument",
-			request: request,
-			formNode: form, // dojo.byId('noForm'),
-			useHttpMethod: "GET",
+			action: "SaveScript",
+			request: {
+				apsdb: {
+					scriptName: object.scriptName,
+					script: object.script,
+					update: options.update
+				}
+			},
 			load: function(operation) {
-				// remove temporary form node 
-				form.parentNode.removeChild(form)
-				deferred.resolve(operation.response.result.document.key)
+console.dir(operation)
+				deferred.resolve(operation.response.metadata.status)
 			},
 			error: function(operation) {
-				// remove temporary form node 
-				form.parentNode.removeChild(form)
 				deferred.reject(operation.response.metadata)
 			}
 		}
-	
+		
 		this.client.call(attrs)
 		
 		return deferred
