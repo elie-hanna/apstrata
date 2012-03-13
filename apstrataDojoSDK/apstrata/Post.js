@@ -174,7 +174,7 @@ dojo.declare("apstrata.Post",
 				
 				// Callback on successful call:
 				load: function(response, ioArgs) {
-					self.rawResponse = dojo.toJson(response, true)
+					self.rawResponse = dojo.toJson(self.response, true)
 					self.responseTime = (new Date().getTime()) - self._timestamp;
 					//self.connection.registerConnectionTime(self.responseTime)
 					self.log.info("response time (ms)", self.responseTime);
