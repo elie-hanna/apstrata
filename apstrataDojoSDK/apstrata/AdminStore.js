@@ -152,23 +152,8 @@ dojo.declare("apstrata.AdminStore",
 					},
 					load: function(operation) {
 						deferred.resolve({id: id, script: operation.response.result})
-					},
-					error: function(operation) {
-						deferred.reject(operation.response.metadata)
-					}
-				})
-				break;
-
-			case 'schemas': 
-				this.client.call({
-					action: "GetSchema",
-					request: {
-						apsdb: {
-							schemaName: id
-						}
-					},
-					load: function(operation) {
-						deferred.resolve({id: id, schema: operation.response.result})
+						
+	//					self._initCodeEditor()
 					},
 					error: function(operation) {
 						deferred.reject(operation.response.metadata)
@@ -192,8 +177,7 @@ dojo.declare("apstrata.AdminStore",
 		
 		switch (this.type) {
 			case 'scripts':
-				this._put(object, options)
-				
+			return this._putScript(object)			
 				break;
 			case 'documents':
 				return this.inherited(arguments)
@@ -203,29 +187,47 @@ dojo.declare("apstrata.AdminStore",
 		return deferred
 	},
 	
-	_put: function(object, options) {
+	_putScript: function(object, options) {
 		var self = this
-
 		var deferred = new dojo.Deferred();
 		
-		var attrs = {
-			action: "SaveScript",
-			request: {
-				apsdb: {
-					scriptName: object.scriptName,
-					script: object.script,
-					update: options.update
-				}
-			},
-			load: function(operation) {
-console.dir(operation)
-				deferred.resolve(operation.response.metadata.status)
-			},
-			error: function(operation) {
-				deferred.reject(operation.response.metadata)
+		var overwrite = true
+		
+		var request = {
+			apsdb: {
+				scriptName: self.store,
+				update: false
 			}
 		}
 		
+		dojo.mixin(request, object)
+
+		if (options.id) request.apsdb.documentKey = options.id
+		if (options.overwrite) request.apsdb.update = options.overwrite
+		
+		dojo.mixin(request, object)
+		
+		// Create temporary form node that the POST needs
+		var form = dojo.create('form')
+		dojo.place(form, dojo.body())
+
+		var attrs = {
+			action: "SaveScript",
+			request: request,
+			formNode: form, // dojo.byId('noForm'),
+			useHttpMethod: "POST",
+			load: function(operation) {
+				// remove temporary form node 
+				form.parentNode.removeChild(form)
+				deferred.resolve(operation.response.result.document.key)
+			},
+			error: function(operation) {
+				// remove temporary form node 
+				form.parentNode.removeChild(form)
+				deferred.reject(operation.response.metadata)
+			}
+		}
+	
 		this.client.call(attrs)
 		
 		return deferred
