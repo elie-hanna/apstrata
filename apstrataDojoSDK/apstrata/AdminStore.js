@@ -124,7 +124,7 @@ dojo.declare("apstrata.AdminStore",
 
 		switch (this.type) {
 			case 'stores':
-				this.inherited(arguments)
+				deferred.resolve({id: id})
 				break; 
 
 			case 'users': 
@@ -177,10 +177,24 @@ dojo.declare("apstrata.AdminStore",
 		
 		switch (this.type) {
 			case 'scripts':
-			return this._putScript(object)			
+				return this._putScript(object)			
 				break;
 			case 'documents':
 				return this.inherited(arguments)
+				break;
+			case 'stores':
+				var callAttrs = {
+					action: "CreateStore",
+					request: object,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
 				break;
 		}
 		
@@ -236,6 +250,34 @@ dojo.declare("apstrata.AdminStore",
 	add: function(object, options) {
 		var newOptions = dojo.mixin(options, {overwrite: false})
 		return this.put(object, newOptions)
+	},
+	
+	remove: function(id) {
+		var deferred = new dojo.Deferred();
+
+		switch (this.type) {
+			case 'stores':
+				var attrs = {
+					action: "DeleteStore",
+					request: {
+						apsdb: {
+							store: id
+						}
+					},
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				}
+			
+				this.client.call(attrs)
+			
+				break;
+		}		
+		
+		return deferred
 	}
 
 })
