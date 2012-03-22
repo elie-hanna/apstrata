@@ -34,6 +34,10 @@ dojo.declare("apstrata.AdminStore",
 	constructor: function(attrs) {
 	},
 	
+	setType: function(type) {
+		this.type = type
+	},
+	
 	queryStores: function(attrs, options) {
 		var self = this
 		
@@ -183,18 +187,24 @@ dojo.declare("apstrata.AdminStore",
 				return this.inherited(arguments)
 				break;
 			case 'stores':
-				var callAttrs = {
-					action: "CreateStore",
-					request: object,
-					load: function(operation) {
-						deferred.resolve(true)
+				var request = {}
+				request["apsdb." + object.apsdb.store] = object.apsdb
+				delete request["apsdb." + object.apsdb.store].store
+				
+				attrs = {
+					action: "SaveConfiguration",
+					request: request,
+					load: function(operation){
+						deferred.resolve()
 					},
-					error: function(operation) {
-						deferred.reject(operation)
+					error: function(operation){
+						deferred.reject(operation.response.metadata)
 					}
 				}
-		
-				self.client.call(callAttrs)
+				
+				console.dir(attrs)
+
+				this.client.call(attrs)
 				break;
 		}
 		
@@ -242,14 +252,35 @@ dojo.declare("apstrata.AdminStore",
 			}
 		}
 	
-		this.client.call(attrs)
 		
 		return deferred
 	},
 
 	add: function(object, options) {
-		var newOptions = dojo.mixin(options, {overwrite: false})
-		return this.put(object, newOptions)
+		var self = this
+		var deferred = new dojo.Deferred()
+
+		switch (this.type) {
+			case 'stores':
+				var callAttrs = {
+					action: "CreateStore",
+					request: object,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
+				return deferred
+				break;
+
+			default:
+				var newOptions = dojo.mixin(options, {overwrite: false})
+				return this.put(object, newOptions)
+		}
 	},
 	
 	remove: function(id) {
