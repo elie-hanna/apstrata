@@ -156,8 +156,23 @@ dojo.declare("apstrata.AdminStore",
 					},
 					load: function(operation) {
 						deferred.resolve({id: id, script: operation.response.result})
-						
-	//					self._initCodeEditor()
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				})
+				break;
+
+			case 'schemas': 
+				this.client.call({
+					action: "GetSchema",
+					request: {
+						apsdb: {
+							schemaName: id
+						}
+					},
+					load: function(operation) {
+						deferred.resolve({id: id, schema: operation.response.result})
 					},
 					error: function(operation) {
 						deferred.reject(operation.response.metadata)
@@ -185,6 +200,9 @@ dojo.declare("apstrata.AdminStore",
 				break;
 			case 'documents':
 				return this.inherited(arguments)
+				break;
+			case 'group':
+				
 				break;
 			case 'stores':
 				var request = {}
@@ -264,6 +282,22 @@ dojo.declare("apstrata.AdminStore",
 			case 'stores':
 				var callAttrs = {
 					action: "CreateStore",
+					request: object,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
+				return deferred
+				break;
+			
+			case 'groups':
+				var callAttrs = {
+					action: "SaveGroup",
 					request: object,
 					load: function(operation) {
 						deferred.resolve(true)
