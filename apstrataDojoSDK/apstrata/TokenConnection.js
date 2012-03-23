@@ -37,9 +37,11 @@ dojo.declare("apstrata.TokenConnection",
 		PARAMETER_USER: "apsws.user",
 		PARAMETER_TIME: "apsws.time",
 		PARAMETER_RESPONSE_TYPE: "apsws.responseType",
+		PARAMETER_AUTH_TOKEN: "apsdb.authToken",
 		PARAMETER_TOKEN_EXPIRES: "apsdb.tokenExpires",
 		PARAMETER_TOKEN_LIFETIME: "apsdb.tokenLifetime",
 		PARAMETER_TOKEN_IN_COOKIE: "apsdb.tokenInCookie",
+		isUseParameterToken: false,
 
 		/**
 		 * Creates a TokenConnection that allows the creation and automatic renewal of an Apstrata token
@@ -57,6 +59,7 @@ dojo.declare("apstrata.TokenConnection",
 		 * 					"password": "value"
 		 * 				},
 		 * 				"token": {
+		 * 					"authToken": "value",
 		 * 					"expires": "value",
 		 * 					"lifetime": "value",
 		 * 					"creationTime": "value"
@@ -90,6 +93,7 @@ dojo.declare("apstrata.TokenConnection",
 					isTokenMetadataLoaded = self._loadTokenMetadataFromCookie();
 				} else {
 					self.token = {};
+					self.token.authToken = (!attrs.token.authToken) ? "" : attrs.token.authToken;
 					self.token.expires = (!attrs.token.expires) ? "" : attrs.token.expires;
 					self.token.lifetime = (!attrs.token.lifetime) ? "" : attrs.token.lifetime;
 					self.token.creationTime = (!attrs.token.creationTime) ? "" : attrs.token.creationTime;
@@ -104,6 +108,11 @@ dojo.declare("apstrata.TokenConnection",
 				// 1d. Handle setting the failure authentication handler if one is defined.
 				if (attrs.failure) {
 					self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER = attrs.failure;
+				}
+
+				// 1e. This parameter signifies the manner of using the token, either from the apstratabase cookie or sending it in the request as a parameter.
+				if (attrs.isUseParameterToken && attrs.isUseParameterToken === true) {
+					self.isUseParameterToken = attrs.isUseParameterToken;
 				}
 			}
 			// 2. If credentials are not passed to the constructor, then load from cookie.
@@ -194,6 +203,7 @@ dojo.declare("apstrata.TokenConnection",
 					+ "&" + self.PARAMETER_RESPONSE_TYPE + "=" + responseType
 					+ ((username != "") ? "&" + self.PARAMETER_USER + "=" + username : "")
 					+ ((isForce200ResponseStatus) ? "&apsdb.force200ResponseStatus=true" : "")
+					+ ((self.isUseParameterToken) ? "&apsdb.authToken=" + self.token.authToken : "")
 					+ ((params != "") ? "&" : "") + params;
 
 			return { url: apswsReqUrl, signature: "" };
@@ -245,9 +255,14 @@ dojo.declare("apstrata.TokenConnection",
 			// arguments to this method from the user's application.
 			data = {};
 			data[self.PARAMETER_ACTION] = self.PARAMETER_ACTION_VALUE_GENERATE;
-			data[self.PARAMETER_TOKEN_IN_COOKIE] = "true";
-			if (args && args.extraParameters)
+			if (self.isUseParameterToken) {
+				data[self.PARAMETER_TOKEN_IN_COOKIE] = "false";
+			} else {
+				data[self.PARAMETER_TOKEN_IN_COOKIE] = "true";
+			}
+			if (args && args.extraParameters) {
 				dojo.mixin(data, args.extraParameters);
+			}
 
 			// 3. Create the Apstrata client and use a regular connection that will generate a signature
 			// and verify the user's credentials instead of this one that will try to use a token.
@@ -269,6 +284,10 @@ dojo.declare("apstrata.TokenConnection",
 					self.token.expires = tokenExpires;
 					self.token.lifetime = tokenLifetime;
 					self.token.creationTime = new Date().getTime();
+					if (self.isUseParameterToken) {
+						var authToken = operation.response.result[self.PARAMETER_AUTH_TOKEN];
+						self.token.authToken = authToken;
+					}
 
 					// 3b. Save the cookie without the password.
 					self.credentials.password = "";
@@ -357,6 +376,10 @@ dojo.declare("apstrata.TokenConnection",
 						self.token.expires = tokenExpires;
 						self.token.lifetime = tokenLifetime;
 						self.token.creationTime = new Date().getTime();
+						if (self.isUseParameterToken) {
+							var authToken = operation.response.result[self.PARAMETER_AUTH_TOKEN];
+							self.token.authToken = authToken;
+						}
 
 						// 2. Save the cookie.
 						self._saveCookie();
