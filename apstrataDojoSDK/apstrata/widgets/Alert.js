@@ -137,7 +137,7 @@ dojo.declare("apstrata.widgets.Alert",
 				left: 0 + "px",
 				width: w.w + "px",
 				height: w.h + "px",
-				visibility: "hidden",
+				display: "none",
 //				background: "grey",
 //				opacity: ".50",
 				"zIndex": 99998
@@ -220,7 +220,7 @@ dojo.declare("apstrata.widgets.Alert",
 			left: self.origin.l + "px",
 			width: (self.origin.w) + "px",
 			height: (self.origin.h) + "px",
-			visibility: "visible",
+			display: "block",
 			"zIndex": 99999
 		})
 
@@ -231,7 +231,7 @@ dojo.declare("apstrata.widgets.Alert",
 		
 		if (this.modal) {
 			dojo.style(this._curtain, {
-				visibility: "visible",
+				display: "block",
 				"zIndex": 99998
 			});
 		}
@@ -282,7 +282,7 @@ dojo.declare("apstrata.widgets.Alert",
 		var w = dijit.getViewport()
 
 		if (this.modal) dojo.style(this._curtain, {
-			visibility: "hidden"
+			display: "none"
 		})
 
 		this._animation = {
@@ -291,7 +291,7 @@ dojo.declare("apstrata.widgets.Alert",
 			duration: 200,
 			onEnd: function() {
 				if (self.domNode) dojo.style(self.domNode, {
-					visibility: "hidden"
+					display: "none"
 				})
 				if (handler) handler()
 			}
@@ -319,7 +319,7 @@ dojo.declare("apstrata.widgets.Alert",
 		
 		dojo.forEach(this._buttons, function(button) {
 			dojo.style(button, {
-				visibility: 'visible'
+				display: 'block'
 			})
 		})
 	},
@@ -329,7 +329,7 @@ dojo.declare("apstrata.widgets.Alert",
 		
 		dojo.forEach(this._buttons, function(button) {
 			dojo.style(button, {
-				visibility: 'hidden'
+				display: 'none'
 			})
 		})
 	}
