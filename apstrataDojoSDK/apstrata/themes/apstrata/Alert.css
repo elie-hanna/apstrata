@@ -3,7 +3,7 @@
 			border:  solid 1px grey;
 			padding: 5px;
 			overflow: hidden;
-			display:none;
+			visibility: hidden;
 			font-family: serif, Georgia;
 			font-size: 15pt;
 			color: black;
