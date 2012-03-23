@@ -190,45 +190,6 @@ dojo.declare("apstrata.AdminStore",
 		return this.queryResults(deferred)
 	},
 	
-	put: function(object, options) {
-		var self = this
-		var deferred = new dojo.Deferred()
-		
-		switch (this.type) {
-			case 'scripts':
-				return this._putScript(object)			
-				break;
-			case 'documents':
-				return this.inherited(arguments)
-				break;
-			case 'group':
-				
-				break;
-			case 'stores':
-				var request = {}
-				request["apsdb." + object.apsdb.store] = object.apsdb
-				delete request["apsdb." + object.apsdb.store].store
-				
-				attrs = {
-					action: "SaveConfiguration",
-					request: request,
-					load: function(operation){
-						deferred.resolve()
-					},
-					error: function(operation){
-						deferred.reject(operation.response.metadata)
-					}
-				}
-				
-				console.dir(attrs)
-
-				this.client.call(attrs)
-				break;
-		}
-		
-		return deferred
-	},
-	
 	_putScript: function(object, options) {
 		var self = this
 		var deferred = new dojo.Deferred();
@@ -274,6 +235,89 @@ dojo.declare("apstrata.AdminStore",
 		return deferred
 	},
 
+
+	put: function(object, options) {
+		var self = this
+		var deferred = new dojo.Deferred()
+		
+		switch (this.type) {
+			case 'documents':
+				return this.inherited(arguments)
+				break;
+			case 'groups':
+				var callAttrs = {
+					action: "SaveGroup",
+					request: object,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
+				return deferred
+				break;
+
+			case 'stores':
+				var request = {}
+				request["apsdb." + object.apsdb.store] = object.apsdb
+				delete request["apsdb." + object.apsdb.store].store
+				
+				attrs = {
+					action: "SaveConfiguration",
+					request: request,
+					load: function(operation){
+						deferred.resolve()
+					},
+					error: function(operation){
+						deferred.reject(operation.response.metadata)
+					}
+				}
+				
+				console.dir(attrs)
+
+				this.client.call(attrs)
+				break;
+				
+			case 'schemas':
+				var callAttrs = {
+					action: "SaveSchema",
+					request: object,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
+				return deferred
+				break;
+				
+			case 'scripts':
+				var callAttrs = {
+					action: "SaveScript",
+					request: object,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
+				return deferred
+				break;
+			
+		}
+		
+		return deferred
+	},
+	
 	add: function(object, options) {
 		var self = this
 		var deferred = new dojo.Deferred()
@@ -296,19 +340,15 @@ dojo.declare("apstrata.AdminStore",
 				break;
 			
 			case 'groups':
-				var callAttrs = {
-					action: "SaveGroup",
-					request: object,
-					load: function(operation) {
-						deferred.resolve(true)
-					},
-					error: function(operation) {
-						deferred.reject(operation)
-					}
-				}
-		
-				self.client.call(callAttrs)
-				return deferred
+				return this.put(object)
+				break;
+				
+			case 'schemas':
+				return this.put(object)
+				break;
+			
+			case 'scripts':
+				return this.put(object)
 				break;
 
 			default:
@@ -340,7 +380,44 @@ dojo.declare("apstrata.AdminStore",
 				this.client.call(attrs)
 			
 				break;
-		}		
+			case 'schemas':
+				var attrs = {
+					action: "DeleteSchema",
+					request: {
+						apsdb: {
+							schemaName: id
+						}
+					},
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				}
+			
+				this.client.call(attrs)
+				break;
+			
+			case 'scripts': 
+				var attrs = {
+					action: "DeleteScript",
+					request: {
+						apsdb: {
+							scriptName: id
+						}
+					},
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				}
+			
+				this.client.call(attrs)
+				break;	
+		}
 		
 		return deferred
 	}
