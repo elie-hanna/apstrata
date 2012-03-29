@@ -57,6 +57,7 @@ dojo.declare("apstrata.Operation",
 			this.response.responseTime= -1;
 			this.response.operationAborted= false;
 			this.response.operationTimeout= false;
+			this.isSetTimeout = false;
 						
 			this.log = {
 				warn: function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10) {
@@ -160,12 +161,24 @@ dojo.declare("apstrata.Operation",
 	     */
 		execute: function () {},
 
-	    // Sets the timeout of the operation to the timeout of the connection
-		_setTimeout: function() {
+	    /**
+	     * Sets the timeout of the operation. Use the timeout of the connection if a timeout is not sent.
+	     *
+	     * @param timeout
+	     * 			The number of milliseconds to wait before declaring this call a failure with no response.
+	     */
+		setTimeout: function (timeout) {
 			var self = this;
-			if (self.connection.timeout>0) {
-				self._timeoutHandler = setTimeout (dojo.hitch(self, "timeout"), self.connection.timeout);
-				this.log.debug('timeout handler set:', self.connection.timeout, ",", self._timeoutHandler)
+			if (!self.isSetTimeout) {
+				if (timeout && timeout > 0) {
+					self._timeoutHandler = setTimeout(dojo.hitch(self, "timeout"), timeout);
+					self.log.debug('Timeout handler set:', timeout, ",", self._timeoutHandler);
+				} else if (self.connection.timeout > 0) {
+					self._timeoutHandler = setTimeout(dojo.hitch(self, "timeout"), self.connection.timeout);
+					self.log.debug('Timeout handler set:', self.connection.timeout, ",", self._timeoutHandler);
+				}
+
+				self.isSetTimeout = true;
 			}
 		},
 
@@ -181,7 +194,7 @@ dojo.declare("apstrata.Operation",
 	    /**
 	     * @function timeout Force the operation to timeout
 	     */
-		timeout: function() {
+		timeout: function() { console.debug('timeout triggered');
 			var self=this
 			this.log.warn("Timeout or communication error")
 			

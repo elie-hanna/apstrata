@@ -43,6 +43,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			if (attrs.additionalFields) this.additionalFields = attrs.additionalFields;
 			if (attrs.curtainContainer) this.curtainContainer = attrs.curtainContainer;
 			if (attrs.containingPanel) this.containingPanel = attrs.containingPanel;
+			if (attrs.timeout) this.timeout = attrs.timeout;
 			
 			if (attrs.successMessageDiv) {
 				this.successMessageDiv = attrs.successMessageDiv 
@@ -255,6 +256,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			var attrs = {
 				action: "RunScript",
 				request: request,
+				timeout: ((self.timeout) ? self.timeout : null),
 				formNode: self.bindForm.domNode,
 				useHttpMethod: "POST",
 				load: function(operation) {
@@ -288,6 +290,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 				action: "SaveDocument",
 				useHttpMethod: "POST",
 				request: request,
+				timeout: ((self.timeout) ? self.timeout : null),
 				formNode: self.bindForm.domNode,
 				load: function(operation) {
 					self._undimForm()

@@ -88,6 +88,11 @@ dojo.declare('apstrata.Client',
 				}
 			}
 
+			// If a timeout is sent, then set it on the operation.
+			if (attrs.timeout) {
+				operation.setTimeout(attrs.timeout);
+			}
+
 			operation.apsdbOperation = attrs.action
 
 			operation.request = attrs.request

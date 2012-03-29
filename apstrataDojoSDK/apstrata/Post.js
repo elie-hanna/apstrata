@@ -99,7 +99,7 @@ dojo.declare("apstrata.Post",
     
 			// Since the hack for JSONP doesn't really allow for communication errors to be caught,
 			//  we're using a timeout event to provide an error message if an operation takes too long to execute
-			self._setTimeout()
+			self.setTimeout()
 
 			// Force the response status to always be 200 even on error when we are on an IE browser, making a
 			// POST request, and the connection configuration for this parameter is set to allow sending it.

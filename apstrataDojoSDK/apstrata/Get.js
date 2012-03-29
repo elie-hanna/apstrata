@@ -60,7 +60,7 @@ dojo.declare("apstrata.Get",
 
 			// Since the hack for JSONP doesn't really allow for communication errors to be caught,
 			//  we're using a timeout event to provide an error message if an operation takes too long to execute
-			self._setTimeout()
+			self.setTimeout()
 
 			// in case the externally published function fails log the error and continue with the actual call
 			try {
