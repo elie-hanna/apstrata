@@ -99,7 +99,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 		this.operation = operation
 		this.deferred = new dojo.Deferred()
 			
-		self.timestamp = new Date().getTime();
+		self.timestamp = new Date().getTime()
 
 			// This is a temporary fix for the P3P compact policy IE (should be removed asap) 
 //			if (operation == "RunScript" && requestParams["apsdb.scriptName"] == "VerifyCredentials" && (requestParams["apsdb.action"] == "renew" || requestParams["apsdb.action"] == "generate")) {
@@ -202,6 +202,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 		})
 		
 		console.groupCollapsed("apstrata."+this.operation+" [success] signature: "+ this.signature)
+		console.info("response time: " + (new Date().getTime() - self.timestamp) + "ms")
 		console.info("response:\n" + dojo.toJson(json.response, true))
 		console.dir(json)
 		console.groupEnd()
