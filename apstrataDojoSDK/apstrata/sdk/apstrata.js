@@ -123,37 +123,6 @@ if (typeof apstrata == "undefined" || !apstrata.configured) {
 		}
 	}
 
-	/**
-	 * Returns the first parent that has the specified class.
-	 *
-	 * @param element The root element to start from.
-	 * @param clazz The class of the targeted parent.
-	 *
-	 * @return The first parent that has the specified class.
-	 */
-	apstrata.getParent = function (element, clazz) {
-	  // 1. Return null if we are starting at the BODY element.
-	  if (element.nodeName == 'BODY') {
-	    return null;
-	  }
-
-	  // 2. loop over all the parents to get the one that has the specified class.
-	  var target = element.parentNode;
-	  while (target.nodeName != 'BODY') {
-	    if (dojo.hasClass(target, clazz)) {
-	      return target;
-	    }
-	    target = target.parentNode;
-	  }
-
-	  // 3. Return the BODY element if it has the class.
-	  if (dojo.hasClass(target, clazz)) {
-	    return target;
-	  }
-
-	  return null;
-	}
-
 	dojo.registerModulePath("apstrata", apstrata.baseUrl + "/..")
 	dojo.require('apstrata.util.logger.BasicLogger');
 	
