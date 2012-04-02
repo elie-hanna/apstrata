@@ -4,8 +4,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>apstrataDojoSDK client test suite</title>
 		
-		<script type="text/javascript" src="../../../lib/dojo/1.6.1-src/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
-		<script type="text/javascript" src="../../apstrata.js"></script>
+		<script type="text/javascript" src="../../../lib/dojo/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+		<script type="text/javascript" src="../apstrata.js"></script>
 	
 	    <script type="text/javascript">
 			dojo.require("apstrata.sdk.Client")
@@ -17,20 +17,42 @@
 			var connection
 	
 			dojo.ready(function() {
+				
+				
+				if (apstrata.customDebugger) {
+					dojo.require("apstrata.util.BasicLogger")
+					
+				}
+				
+				connection = new apstrata.sdk.Connection({
+					timeout: 2000,
+					serviceUrl: "https://sandbox.apstrata.com/apsdb/rest",
+					force200Status: true,
+					defaultStore: "storeTest",
+					loginType: apstrata.sdk.Connection.prototype._LOGIN_TYPE_MASTER,
+					credentials: { key: "RA422AED62", secret: "QC8EDBE4ABCD5F97074B8B59B21C5C65", user: "", password: "" }
+				}) 
+
+				dojo.require("apstrata.sdk.TokenConnection")
+
+				var tc = new apstrata.sdk.TokenConnection({
+					timeout: 2000,
+					serviceUrl: "https://sandbox.apstrata.com/apsdb/rest",
+					force200Status: true,
+					defaultStore: "storeTest",
+					loginType: apstrata.sdk.Connection.prototype._LOGIN_TYPE_MASTER,
+					credentials: { key: "RA422AED62", user: "rabih", password: "test"}
+				})
+
+				tc.loginUser ({})
+/*	
+
 				doh.register("apstrata.sdk.tests.Client", [
 						{
 			                name : "login",
 			                timeout : 10000,
 				
 							runTest: function login() {
-								connection = new apstrata.sdk.Connection({
-									timeout: 2000,
-									serviceUrl: "https://sandbox.apstrata.com/apsdb/rest",
-									force200Status: true,
-									defaultStore: "storeTest",
-									loginType: apstrata.sdk.Connection.prototype._LOGIN_TYPE_MASTER,
-									credentials: { key: "RA422AED62", secret: "K9FA79E7A36E13A828FE78C1F93E0B33", username: "", password: "" }
-								}) 
 								
 								var testDeferred = new doh.Deferred()
 								
@@ -46,24 +68,21 @@
 						}
 				])			
 				
-				doh.run()
+				//doh.run()
 
 							
-/*
 
-							function saveDocument() {
+
 								var client = new apstrata.sdk.Client(connection)
-								var testDeferred = new doh.Deferred()
 	
 								client.post("SaveDocument", {"apsdb.store": "Store","number": Math.floor(Math.random()*9999)}).then(
 									function(o) {
-										testDeferred.callback(true)
+										//testDeferred.callback(true)
 									}, 
 									function(o) {
-										testDeferred.callback(false)
+										//testDeferred.callback(false)
 									}
 								)							
-							}
 				
 				
 				miniClient = new apstrata.sdk.CompactClient({
@@ -72,7 +91,7 @@
 				})
 				
 				miniClient.get("ListStores", {}).then(function(o) {console.debug('ok')}, function(o) {console.debug('not ok')})
-*/												
+	*/									
 			})
 		</script>
 	</head>

@@ -50,7 +50,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 	 *
 	 * @constructs
 	 */
-	get: function(operation, requestParams) {
+	get: function(operation, requestParams, options) {
 		var self = this;
 
 		this.operation = operation
@@ -61,7 +61,9 @@ dojo.declare("apstrata.sdk.Client", null, {
 		self.url = sign.url
 		self.signature = sign.signature
 		
-		self._setTimeout()
+		// Since the hack for JSONP doesn't really allow for communication errors to be caught,
+		//  we're using a timeout event to provide an error message if an operation takes too long to execute
+		if (options && options.timeout) self._setTimeout(options.timeout); else self._setTimeout()
 		
 		this._publish({
 			method: "GET",
@@ -87,11 +89,11 @@ dojo.declare("apstrata.sdk.Client", null, {
 	
 	/**
 	 * 
-	 * @param {apstrata.Connection} connection Connection object used for the call 
-	 * @param {object} requestParams call params sent to apstrata 
-	 * @param {object} options
-	 *
-	 * @constructs
+	 * @param {string} operation			apstrata action name
+	 * @param {Object} requestParams		js object with request params including those with "apsdb" prefix
+	 * @param {Object} formNode				optional HTML form 
+	 * @param {number} options.timeout		optional specific timeout for this call
+	 * @param {number} options.redirectHref optional different PostIframeHandler URL 
 	 */
 	post: function(operation, requestParams, formNode, options) {
 		var self = this
@@ -108,9 +110,10 @@ dojo.declare("apstrata.sdk.Client", null, {
 //			}
 
 
+
 		// Since the hack for JSONP doesn't really allow for communication errors to be caught,
 		//  we're using a timeout event to provide an error message if an operation takes too long to execute
-		self._setTimeout()
+		if (options && options.timeout) self._setTimeout(options.timeout); else self._setTimeout()
 
 		var sign = self.connection.sign(operation, dojo.objectToQuery(requestParams), "jsoncdp")
 		self.url = sign.url
@@ -125,7 +128,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 		}
 
 		if (options && options.redirectHref) requestParams["apsws.redirectHref"] = options.redirectHref;
-		else requestParams["apsws.redirectHref"] = apstrata.baseUrl + "/resources/PostIframeHandler.html"
+		else requestParams["apsws.redirectHref"] = apstrata.baseUrl + "/../resources/PostIframeHandler.html"
 		requestParams["apsws.callback"] = "apstrataSaveDocumentCallback" + self.timestamp
 
 		var callAttrs = {
@@ -144,7 +147,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 		} 
 
 		console.groupCollapsed("apstrata."+operation+" [POST] signature: " + this.signature)
-		console.info("url: " + self.url)
+		console.info("url:\n" + self.url)
 		console.info("request params:\n" + dojo.toJson(requestParams, true))
 		console.groupEnd()
 
@@ -161,9 +164,14 @@ dojo.declare("apstrata.sdk.Client", null, {
 		return this.deferred
 	},
 	
-	call: function(operation, requestParams, formNode, method) {
-		if (method=="get") this.get(operation, requestParams);
-		else this.post(operation, requestParams, formNode)
+	call: function(operation, requestParams, formNode, options) {
+		var client = new apstrata.sdk.Client(this.connection)
+
+		if (options && options.method.toLowerCase() == "get") {
+			return client.get(operation, requestParams, options)
+		} else {
+			return client.post(operation, requestParams, formNode, options)
+		}
 	},
 
    /**
@@ -201,12 +209,6 @@ dojo.declare("apstrata.sdk.Client", null, {
 			success: json.response.metadata.status
 		})
 		
-		console.groupCollapsed("apstrata."+this.operation+" [success] signature: "+ this.signature)
-		console.info("response time: " + (new Date().getTime() - self.timestamp) + "ms")
-		console.info("response:\n" + dojo.toJson(json.response, true))
-		console.dir(json)
-		console.groupEnd()
-
 		// we can't do a real abort or timeout operation
 		//  we're just using a flag to artificially ignore the result if the user requests an abort
 		//  or if after a timeout, a response was received anyway
@@ -219,10 +221,30 @@ dojo.declare("apstrata.sdk.Client", null, {
         if (json.response) {
 			self.response = json.response
 
-            if (json.response.metadata.status==self._SUCCESS) {
-                this.deferred.resolve(this)
+            if (json.response.metadata.status==self._SUCCESS) { 
+				console.groupCollapsed("apstrata."+this.operation+" [success] signature: "+ this.signature)
+				console.info("response time: " + (new Date().getTime() - self.timestamp) + "ms")
+				console.info("response:\n" + dojo.toJson(json.response, true))
+				console.dir(json)
+				console.groupEnd()
+
+				try {
+	                this.deferred.resolve(this)
+				} catch (e) {
+					console.exception(e)
+				}
             } else {
-                this.deferred.reject(this)
+				console.groupCollapsed("apstrata."+this.operation+" [failure] signature: "+ this.signature)
+				console.warn("response time: " + (new Date().getTime() - self.timestamp) + "ms")
+				console.warn("response:\n" + dojo.toJson(json.response, true))
+				console.dir(json)
+				console.groupEnd()
+
+				try {
+	                this.deferred.reject(this)
+				} catch (e) {
+					console.exception(e)
+				}
             }
         } else {
 			dojo.setObject("this.response.metadata", {})
@@ -234,9 +256,11 @@ dojo.declare("apstrata.sdk.Client", null, {
         }
 	},
 	
-	_setTimeout: function() {
-		if (this.connection.timeout>0) {
-			this._timeoutHandler = setTimeout (dojo.hitch(this, "_timeout"), this.connection.timeout);
+	_setTimeout: function(timeout) {
+		if (timeout) {
+			this._timeoutHandler = setTimeout(dojo.hitch(this, "_timeout"), timeout)
+		} else if (this.connection.timeout > 0) {
+			this._timeoutHandler = setTimeout(dojo.hitch(this, "_timeout"), this.connection.timeout);
 		}
 	},
 	

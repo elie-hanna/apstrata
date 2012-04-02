@@ -152,7 +152,7 @@ dojo.declare("apstrata.sdk.Connection", null, {
 	},
 
 	isAuthenticated: function() {
-	},
+	}
 
 	//
 	// Private functions
