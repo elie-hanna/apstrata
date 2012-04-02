@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>apstrata.widgets.FormGenerator test suite</title>
+		
+		<script type="text/javascript" src="../../../../lib/dojo/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+		<script type="text/javascript" src="../../../sdk/apstrata.js"></script>
+
+		<style>
+			@import "../../../../lib/dojo/dojo/dijit/themes/claro/claro.css";
+		</style>	
+		<style>
+			.FormGenerator {
+				
+			}
+			
+			.FormGenerator .FieldSet {
+				border: 1px solid black;
+				background: #eee;
+				margin: 5px;
+			}
+			
+		</style>
+	
+	    <script type="text/javascript">
+			dojo.require("apstrata.sdk.Client")
+
+			dojo.require("dojo.parser");
+			dojo.require("doh.runner");
+
+			dojo.require("apstrata.widgets.forms.FormGenerator")
+
+			var connection
+	
+			dojo.ready(function() {
+				
+			})
+			
+			var definition = {
+				label: "User",
+				fieldset: [
+					{name: "login", type: "string", required: true},
+					{name: "password", type: "password"},
+					{name: "name", type: "string"},
+					{name: "email", type: "string"},
+					{name: "groups", type: "string"},
+					{name: "attributes", type: "subform", style: "rows", 
+						cardinality: {
+							minimum: 0,
+							maximum: 10
+						},
+						fieldset: [
+							{name: "name", type: "string"},
+							{name: "type", type: "dijit.form.ComboBox", options: ["string", "numeric", "date", "text"]},
+							{name: "value", type: "string"},
+						]
+					},
+					{name: "attributes2", type: "subform", style: "rows", 
+						cardinality: {
+							minimum: 0,
+							maximum: 10
+						},
+						fieldset: [
+							{name: "name", type: "string"},
+							{name: "type", type: "dijit.form.ComboBox", options: ["string", "numeric", "date", "text"]},
+							{name: "value", type: "string"},
+						]
+					}
+				]
+			}
+
+		</script>
+	</head>
+	<body class='claro'>
+		<div dojoType='apstrata.widgets.forms.FormGenerator' 
+			definition='definition' 
+			definitionPath='path/path/path'></div>
+	</body>
+</html>
