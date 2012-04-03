@@ -277,7 +277,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			var connectionAttributes = { "credentials": self.credentials, "serviceUrl": self.serviceUrl };
 			var authenticatingConnection = new apstrata.sdk.Connection(connectionAttributes);
 			var client = new apstrata.sdk.Client(authenticatingConnection);
-			client.call("VerifyCredentials", {"apsdb.action": "generate"}).then(
+			client.call("VerifyCredentials", data).then(
 				function (operation) {
 					console.debug("Credentials verified");
 
@@ -366,7 +366,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 				// Create the Apstrata client that will verify the user's credentials.
 				var client = new apstrata.sdk.Client({connection: self});
-				client.call("VerifyCredentials", {}).then(
+				client.call("VerifyCredentials", data).then(
 					function (operation) {
 						console.debug("Token renewed");
 
