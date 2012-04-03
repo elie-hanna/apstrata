@@ -50,6 +50,8 @@ dojo.declare("apstrata.widgets.forms.FieldSet",
 			if (options.cardinality.max < options.cardinality.min) this.cardinality.max = this.cardinality.min 
 		} else this.cardinality = {min:1, max:1}
 		
+		this.name = options.name
+		
 		this.type = options.type
 		if (options.style) this.style = options.style; else this.style = this._FORM
 		
@@ -67,8 +69,11 @@ dojo.declare("apstrata.widgets.forms.FieldSet",
 		}
 	},
 	
-	postCreate: function(options) {
+	postCreate: function() {
 		var self = this
+		
+		// add class dynamically based on the fieldset name
+		dojo.addClass(this.domNode, this.name)
 		
 		// If this fieldset is to be represented as a row, let's add a header for labels
 		if (this.style == this._ROW) this._addHeaderRow()
