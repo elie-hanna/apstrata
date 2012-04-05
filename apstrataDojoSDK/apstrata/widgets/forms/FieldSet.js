@@ -74,9 +74,15 @@ dojo.declare("apstrata.widgets.forms.FieldSet",
 		
 		// add class dynamically based on the fieldset name
 		dojo.addClass(this.domNode, this.name)
+		this.inherited(arguments)
+	},
+
+	generate: function(autoWidth) {
+		this._width = dojo.marginBox(this.domNode).w
+		if (!autoWidth) autoWidth="100%"
 		
 		// If this fieldset is to be represented as a row, let's add a header for labels
-		if (this.style == this._ROW) this._addHeaderRow()
+		if (this.style == this._ROW) this._addHeaderRow(autoWidth)
 		
 		// Calculate startRows number of rows depending on min or the amount of values of each multi value field
 		var startRows
@@ -89,10 +95,10 @@ dojo.declare("apstrata.widgets.forms.FieldSet",
 		} else startRows = this.cardinality.min
 
 		// Add the rows
-		for (var i=0; i<startRows; i++) this._addSet(i)
+		for (var i=0; i<startRows; i++) this._addSet(i, false, autoWidth)
 
 		// Add the bottom disabled row used as a place holder
-		if (this.style == this._ROW) this._addSet(0, true)
+		if (this.style == this._ROW) this._addSet(0, true, autoWidth)
 	},
 
 	//
@@ -110,7 +116,9 @@ dojo.declare("apstrata.widgets.forms.FieldSet",
 	/**
 	 * Add the label row for multivalue fields
 	 */
-	_addHeaderRow: function() {
+	_addHeaderRow: function(autoWidth) {
+		var self = this
+		
 		// only if there are more than 1 columns
 		if (this.fieldset.length>1) {
 			var dv = dojo.create("div")
@@ -118,9 +126,10 @@ dojo.declare("apstrata.widgets.forms.FieldSet",
 			dojo.place(dv, this.dvFields)
 	
 			dojo.forEach(this.fieldset, function(definition) {
-				var label = dojo.create("div", {innerHTML: definition.name}) 
+				var label = dojo.create("div", {innerHTML: definition.label?definition.label:definition.name}) 
 				dojo.addClass(label, "label")
 				if (definition.cssClass) dojo.addClass(label, definition.cssClass + "-label")
+				if (self.formGenerator.autoWidth) dojo.style(label, "width", autoWidth)
 				dojo.place(label, dv)
 			})
 		}
@@ -131,85 +140,50 @@ dojo.declare("apstrata.widgets.forms.FieldSet",
 	 * @param {integer} rowNumber	serial number of the row
 	 * @param {true} bottomRow		true if this is the placeholder bottom row
 	 */
-	_addSet: function(rowNumber, bottomRow) {
+	_addSet: function(rowNumber, bottomRow, autoWidth) {
 		var self = this
+		var dv, dvFields, dvActions
 		
 		if (this.type == this._SUBFORM) 
 			if (!bottomRow)
 			 if (rowNumber>=(this.cardinality.max-1)) this._hideAddButton(true)
 		
-		var dv
-		if (bottomRow) dv = this.dvActions;
-		else {
+		if (bottomRow) {
+			dv = this.dvActions
+		} else {
 			this._rows++
-			var dv = dojo.create("div")
-			dojo.addClass(dv, "set")
-			dojo.addClass(dv, this.style)
+			dv = dojo.create("div")
 			dojo.place(dv, this.dvFields)
-			
+		}		
+		
+		dojo.addClass(dv, "set")
+		dojo.addClass(dv, this.style)
+		
+		if (!bottomRow) {
 			self._animationInProgress = true
-
-			dojo.style(dv, "opacity", "0")
-			dojo.animateProperty({
-				node: dv, 
-				duration: 500,
-				properties: {
-					opacity: 1			
-				},
-				onEnd: function() {
-					self._animationInProgress = false
-				}
-			}).play()
+			
+			if (true) {
+				dojo.style(dv, "opacity", "0")
+				dojo.animateProperty({
+					node: dv,
+					duration: 500,
+					properties: {
+						opacity: 1
+					},
+					onEnd: function(){
+						self._animationInProgress = false
+					}
+				}).play()
+			}
 		}
+
 		
 		dojo.forEach(this.fieldset, function(definition) {
-			var field 			
-
-			attr = {
-				name: definition.name
+			var field
+			if (self.formGenerator.shouldDisplay(definition.displayGroup)) {
+				field = self._addField(dv, definition) 	
+				if (bottomRow) field.set("disabled", "disabled")
 			}
-			
-			if (definition.type == self._SUBFORM) {
-				definition.formGenerator = self.formGenerator
-				field = new apstrata.widgets.forms.FieldSet(definition)
-			} else if (definition.widget) {
-				switch (definition.widget) {
-					case "dijit.form.ComboBox":
-					
-						var choices = []
-						dojo.forEach(definition.options, function(option) {
-							choices.push({name: option, id: option})
-						})
-						dojo.mixin(attr, {
-				            value: choices[0].id,
-				            store: new  dojo.data.ObjectStore({objectStore: new dojo.store.Memory({data: choices})}),
-				        })			
-						
-						field = new dijit.form.ComboBox(attr)
-						break;
-									
-					default:
-						field = new dijit.form.TextBox(attr)
-						break;
-				}
-				
-				//field.set("name", definition.name)
-			} else {
-				field = new dijit.form.TextBox(attr)
-				//field.set("name", definition.name)
-			}
-			
-			// If this is not a tabular format add a label before each field
-			if (self.style == self._FORM) {
-				var label = dojo.create("div", {innerHTML: definition.name}) 
-				dojo.addClass(label, "label")
-				dojo.place(label, dv)
-			}
-			
-			if (definition.cssClass) dojo.addClass(field.domNode, definition.cssClass)
-			if (bottomRow) field.set("disabled", "disabled")
-			
-			dojo.place(field.domNode, dv)
 		})
 		
 		if (!bottomRow && (this.type == this._SUBFORM)) {
@@ -230,13 +204,71 @@ dojo.declare("apstrata.widgets.forms.FieldSet",
 					self._addButton = new dijit.form.Button({
 						label: "+",
 						onClick: function(){
-							self._addSet(self._rows)
+							self._addSet(self._rows, false, autoWidth)
 						}
 					})
 					dojo.place(self._addButton.domNode, dv)
 				}
 			}
 		}
+	},
+
+	_addField: function(dv, definition) {
+		var self = this
+		
+		// If this is not a tabular format add a label before each field
+		if ((self.style == self._FORM) && (definition.type != "hidden")) {
+			var label = dojo.create("div", {innerHTML: definition.label?definition.label:definition.name}) 
+			dojo.addClass(label, "label")
+			dojo.place(label, dv)
+		}
+
+		attr = {
+			name: definition.name
+		}
+		
+		if (definition.type == self._SUBFORM) {
+			definition.formGenerator = self.formGenerator
+			var fieldset = new apstrata.widgets.forms.FieldSet(definition)
+			if (definition.cssClass) dojo.addClass(fieldset.domNode, definition.cssClass)
+
+			dojo.place(fieldset.domNode, dv)
+			
+			fieldset.generate()
+			return fieldset
+			//if (bottomRow) fieldset.set("disabled", "disabled")
+
+		} else {
+			var field
+
+			switch (definition.widget) {
+				case "dijit.form.ComboBox":
+				
+					var choices = []
+					dojo.forEach(definition.options, function(option) {
+						choices.push({name: option, id: option})
+					})
+					dojo.mixin(attr, {
+			            value: choices[0].id,
+			            store: new  dojo.data.ObjectStore({objectStore: new dojo.store.Memory({data: choices})}),
+			        })			
+					
+					field = new dijit.form.ComboBox(attr)
+					break;
+								
+				default:
+					if (definition.type == "hidden") attr.type="hidden"
+					if (definition.type == "password") attr.type="password"
+				
+					field = new dijit.form.TextBox(attr)
+					break;
+			}
+			
+			dojo.place(field.domNode, dv)
+			if (definition.cssClass) dojo.addClass(field.domNode, definition.cssClass)
+			
+			return field
+		} 
 	},
 
 	/**

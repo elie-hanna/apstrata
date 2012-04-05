@@ -4,6 +4,8 @@ dojo.require("dojox.dtl._Templated")
 
 dojo.require("dijit.form.Form")
 
+dojo.require("apstrata.widgets.Curtain")
+
 dojo.require("apstrata.widgets.forms.FieldSet")
 
 /**
@@ -17,10 +19,14 @@ dojo.declare("apstrata.widgets.forms.FormGenerator",
 	templatePath: dojo.moduleUrl("apstrata.widgets.forms","templates/FormGenerator.html"),
 	
 	widgetsInTemplate: true,
+	label: "",
+
+	// Instantiation attributes
+	value: null,
 	definition: null,
 	definitionPath: "",
-	label: "",
-	value: null,
+	autoWidth: false,
+	displayGroups: "",
 	
 	/**
 	 * Instantiates a FormGenerator that will generate a dynamic form widget based on options.definition 
@@ -31,21 +37,46 @@ dojo.declare("apstrata.widgets.forms.FormGenerator",
 	 * @construct
 	 */
 	constructor: function(options) {
+		this.autoWidth = options.autoWidth
 		if (options.definition) {
 			this.definition = options.definition
 		} else {
 			this.definitionPath = options.definitionPath 
 		}
+		
+		this.options = options
+		if (options.displayGroups) this._groups = options.displayGroups.split(",")
+		
 	},
 	
 	postCreate: function() {
+		var self = this
+		
 		// Build the form only after loading the definition
 		this._getdefinition().then(dojo.hitch(this,"_buildForm"), dojo.hitch(this,"_error"))
+		this._curtain = new apstrata.widgets.Curtain({container: self.domNode})
+
+		this.inherited(arguments)
 	},
 	
 	//
 	// Publich methods
 	//
+	
+	shouldDisplay: function(displayGroup) {
+		if (!this._groups) return true
+		if (!displayGroup) return true
+		
+		var found = false
+		for (var i=0; i<this._groups.length; i++) {
+			if (this._groups[i] == displayGroup) {
+				found = true
+				break;
+			}
+		}
+		
+		return found
+	},
 	
 	/**
 	 * This method disables all buttons on a form, 
@@ -58,6 +89,21 @@ dojo.declare("apstrata.widgets.forms.FormGenerator",
 		dojo.query(".dijitButton", this.domNode).forEach(function(node, index, arr){
 		    dijit.byId(dojo.attr(node, "widgetid")).set("disabled", disabled?"disabled":"")
 		})
+	},
+	
+	/**
+	 * 
+	 * 
+	 * @param {Object} busy
+	 */
+	showAsBusy: function(busy) {
+		var self = this
+		
+		if (busy) this._curtain.hide(); else this._curtain.show()
+		
+//		dojo.query(".dijit", this.domNode).forEach(function(node, index, arr){
+//			dijit.byId(dojo.attr(node, "widgetid")).set("disabled", busy?"disabled":"")
+//		})
 	},
 
 	//
@@ -97,6 +143,7 @@ dojo.declare("apstrata.widgets.forms.FormGenerator",
 		
 		// If the user has provided a label show it
 		if (this.definition.label) this.label = this.definition.label
+		if (this.options.label) this.label = this.options.label
 		this.render()
 
 		// This is important to set the appropriate number of rows in a multivalue field
@@ -104,7 +151,7 @@ dojo.declare("apstrata.widgets.forms.FormGenerator",
 		this.cardinalityValues = {}
 		for (key in this.value) {
 			// The starting cardinality depends on how many values were set for each attribute 
-			if (dojo.isArray(value[key])) this.cardinalityValues[key] = value[key].length; 
+			if (dojo.isArray(this.value[key])) this.cardinalityValues[key] = this.value[key].length; 
 				// if it's not an array then the cardinaltity value is 1
 				else this.cardinalityValues[key] = 1
 		}		
@@ -116,6 +163,8 @@ dojo.declare("apstrata.widgets.forms.FormGenerator",
 			value: self.value,
 			formGenerator: self
 		}, this.dvFieldset)
+		
+		this._rootFieldSet.generate()
 		
 		this._addActions()
 		
@@ -141,8 +190,10 @@ dojo.declare("apstrata.widgets.forms.FormGenerator",
 					for (k in values) {
 						if (values[k] == undefined) delete values[k]
 					}
-					console.dir(values)
-					self.onAction(action, values)
+					self.onAction(action, values, self)
+					if (self.options[action] && dojo.isFunction(self.options[action])) self.options[action](values, self)
+
+console.dir(values)
 				}
 			})
 			
@@ -154,7 +205,6 @@ dojo.declare("apstrata.widgets.forms.FormGenerator",
 	 * Display an error in case we can't load the definition
 	 */
 	_error: function() {
-	}
-
+	}	
 	
 })

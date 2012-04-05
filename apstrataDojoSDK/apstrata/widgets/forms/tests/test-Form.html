@@ -9,100 +9,9 @@
 
 		<style>
 			@import "../../../../lib/dojo/dojo/dijit/themes/claro/claro.css";
+			@import "../../../themes/apstrata/FormGenerator.css";
 		</style>	
 		<style>
-			.FormGenerator {
-				background: #eee;
-				font-family: sans-serif;
-				padding: 5px;
-
-			    -o-border-radius: 10px;
-			    -moz-border-radius: 10px;
-			    -webkit-border-radius: 10px;
-			    border-radius: 10px;
-				
-			    -moz-box-sizing: border-box;
-			    -opera-sizing: border-box;
-			    -webkit-box-sizing: border-box;
-			    -khtml-box-sizing: border-box;
-			    box-sizing: border-box;
-			}
-
-			.FormGenerator .form .dijitTextBox {
-				font-size: .9em;
-				padding: 3px;
-
-			    -o-border-radius: 4px;
-			    -moz-border-radius: 4px;
-			    -webkit-border-radius: 4px;
-			    border-radius: 4px;
-				
-			    -moz-box-sizing: border-box;
-			    -opera-sizing: border-box;
-			    -webkit-box-sizing: border-box;
-			    -khtml-box-sizing: border-box;
-			    box-sizing: border-box;
-			}
-
-			.FormGenerator form {
-				
-			}
-
-			.FormGenerator .set {
-				
-			}
-						
-			.FormGenerator .form {
-				
-			}
-			
-			.FormGenerator .set .label {
-				padding-top: 8px;
-			}
-			
-			.FormGenerator.row.dijiTextBox {
-				background: green;
-				
-			    -o-border-radius: 0px;
-			    -moz-border-radius: 0px;
-			    -webkit-border-radius: 0px;
-			    border-radius: 0px;
-			}
-			
-			.FormGenerator form .headerRow {
-			}
-			
-			.FormGenerator form .headerRow .label {
-				font-size: 0.8em;
-				display: inline-block;
-				padding-top: 0px;
-				width: 215px;
-			}
-
-			.FormGenerator form .set {
-				
-			}
-			
-			.FormGenerator form .row {
-				
-			}
-
-			.FormGenerator .FieldSet {
-			}
-
-			.FormGenerator .FieldSet .set {
-			}
-			
-			/* custom classes */
-			.redInput {
-				color: red;
-				background: yellow !important;
-			}
-
-			.redInput-label {
-				color: red;
-			}
-			
 			
 		</style>
 	
@@ -124,7 +33,8 @@
 				label: "User",
 				cssClass: "newClass",
 				fieldset: [
-					{name: "login", type: "string", required: true},
+					{name: "login", required: true, displayGroup: "newUser"},
+					{name: "login", type:"hidden", required: true, displayGroup: "editUser"},
 					{name: "password", type: "password"},
 					{name: "name", type: "string"},
 					{name: "email", type: "string"},
@@ -145,9 +55,9 @@
 							max: 5
 						},
 						fieldset: [
-							{name: "attributeName", type: "string"},
-							{name: "attributeType", type: "string", widget: "dijit.form.ComboBox", options: ["string", "numeric", "date", "text"]},
-							{name: "attributeValue", type: "string"}
+							{name: "attributeName", label: "name", type: "string"},
+							{name: "attributeType", label: "type", type: "string", widget: "dijit.form.ComboBox", options: ["string", "numeric", "date", "text"]},
+							{name: "attributeValue", label: "value", type: "string"}
 						]
 					},
 					
@@ -172,6 +82,6 @@
 	<body class='claro'>
 		<div dojoType='apstrata.widgets.forms.FormGenerator' 
 			definition='definition' 
-			definitionPath='path/path/path' value='value'></div>
+			definitionPath='path/path/path' value='value' autoWidth='false' displayGroups='editUser'></div>			
 	</body>
 </html>
