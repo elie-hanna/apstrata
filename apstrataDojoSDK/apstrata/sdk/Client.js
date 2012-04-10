@@ -229,7 +229,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 				console.groupEnd()
 
 				try {
-	                this.deferred.resolve(this)
+	                this.deferred.resolve(self.response, this)
 				} catch (e) {
 					console.exception(e)
 				}
@@ -241,7 +241,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 				console.groupEnd()
 
 				try {
-	                this.deferred.reject(this)
+	                this.deferred.reject(self.response, this)
 				} catch (e) {
 					console.exception(e)
 				}
@@ -252,7 +252,7 @@ dojo.declare("apstrata.sdk.Client", null, {
             this.response.metadata.errorCode = "CLIENT_BAD_RESPONSE"
             this.response.metadata.errorMessage = "apstrata SDK client: bad response from apstrata or communication error"
 
-            this.deferred.reject(this)
+            this.deferred.reject(null, this)
         }
 	},
 	

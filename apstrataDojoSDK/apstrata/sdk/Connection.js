@@ -115,11 +115,24 @@ dojo.declare("apstrata.sdk.Connection", null, {
 		var user = '';
 		var valueToHash = '';
 		
+		if (!this.credentials.key) {
+			console.warn (this.declaredClass + ": Account key not provided in credentials, operation will fail!")
+			return {url: "", signature: ""}		
+		}
+		
 		if (this.loginType == this._LOGIN_TYPE_USER) {
+			if (!this.credentials.user) {
+				console.warn (this.declaredClass + ": User id not provided in credentials, operation will fail!")
+				return {url: "", signature: ""}		
+			}
 			valueToHash = timestamp + this.credentials.user + operation + dojox.encoding.digests.MD5(this.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
 			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 			user = this.credentials.user
 		} else {
+			if (!this.credentials.secret) {
+				console.warn (this.declaredClass + ": Account secret not provided in credentials, operation will fail!")
+				return {url: "", signature: ""}		
+			}
 			valueToHash = timestamp + this.credentials.key + operation + this.credentials.secret
 			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 		}

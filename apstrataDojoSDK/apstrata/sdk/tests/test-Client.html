@@ -10,6 +10,8 @@
 	    <script type="text/javascript">
 			dojo.require("apstrata.sdk.Client")
 			dojo.require("apstrata.sdk.CompactClient")
+			dojo.require("apstrata.sdk.ApConfig")
+
 
 			dojo.require("dojo.parser");
 			dojo.require("doh.runner");
@@ -29,8 +31,7 @@
 					serviceUrl: "https://sandbox.apstrata.com/apsdb/rest",
 					force200Status: true,
 					defaultStore: "storeTest",
-					loginType: apstrata.sdk.Connection.prototype._LOGIN_TYPE_MASTER,
-					credentials: { key: "RA422AED62", secret: "QC8EDBE4ABCD5F97074B8B59B21C5C65", user: "", password: "" }
+					loginType: apstrata.sdk.Connection.prototype._LOGIN_TYPE_MASTER
 				}) 
 
 				dojo.require("apstrata.sdk.TokenConnection")
