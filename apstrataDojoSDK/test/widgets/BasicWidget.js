@@ -12,3 +12,4 @@ dojo.declare("test.widgets.BasicWidget",
 		alert('click')
 	}
 })
+ 
