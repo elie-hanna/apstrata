@@ -132,6 +132,17 @@ dojo.declare("apstrata.AdminStore",
 				break; 
 
 			case 'users': 
+				/*
+					action: "ListUsers",
+					request: {
+						apsdb: {
+							attributes: "*",
+							query: "login=\""+id+"\""
+						}
+					},
+				 
+				 */
+			
 				this.client.call({
 					action: "GetUser",
 					request: {
@@ -244,6 +255,23 @@ dojo.declare("apstrata.AdminStore",
 			case 'documents':
 				return this.inherited(arguments)
 				break;
+				
+			case 'users':
+				var callAttrs = {
+					action: "SaveUser",
+					request: object,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
+				return deferred
+				break;	
+				
 			case 'groups':
 				var callAttrs = {
 					action: "SaveGroup",
@@ -262,10 +290,15 @@ dojo.declare("apstrata.AdminStore",
 
 			case 'stores':
 				var request = {}
-				request["apsdb." + object.apsdb.store] = object.apsdb
-				delete request["apsdb." + object.apsdb.store].store
+
+				var store = object.store
+				delete object.store
+
+				for (var k in object) {
+					request["apsdb." + store + "." + k] = object[k]
+				}
 				
-				attrs = {
+				var attrs = {
 					action: "SaveConfiguration",
 					request: request,
 					load: function(operation){
@@ -276,15 +309,21 @@ dojo.declare("apstrata.AdminStore",
 					}
 				}
 				
-				console.dir(attrs)
-
 				this.client.call(attrs)
 				break;
 				
 			case 'schemas':
+				var request = {apsdb:{}}
+				if (options && options.overwrite) {
+					request.apsdb.schemaName = object.id
+					request.apsdb.newSchemaName = object["apsdb.newSchemaName"]
+					request.apsdb.schema = object.schema
+					request.apsdb.update = true
+				} else request = object
+				
 				var callAttrs = {
 					action: "SaveSchema",
-					request: object,
+					request: request,
 					load: function(operation) {
 						deferred.resolve(true)
 					},
@@ -298,9 +337,17 @@ dojo.declare("apstrata.AdminStore",
 				break;
 				
 			case 'scripts':
+				var request = {apsdb:{}}
+				if (options && options.overwrite) {
+					request.apsdb.scriptName = object.id
+					request.apsdb.newScriptName = object["apsdb.newSchemaName"]
+					request.apsdb.script = object.schema
+					request.apsdb.update = true
+				} else request = object
+
 				var callAttrs = {
 					action: "SaveScript",
-					request: object,
+					request: request,
 					load: function(operation) {
 						deferred.resolve(true)
 					},
@@ -337,6 +384,10 @@ dojo.declare("apstrata.AdminStore",
 		
 				self.client.call(callAttrs)
 				return deferred
+				break;
+			
+			case 'users':
+				return this.put(object)
 				break;
 			
 			case 'groups':
@@ -380,6 +431,41 @@ dojo.declare("apstrata.AdminStore",
 				this.client.call(attrs)
 			
 				break;
+				
+			case 'users':
+				var attrs = {
+					action: "DeleteUser",
+					request: {
+						login: id
+					},
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				}
+			
+				this.client.call(attrs)
+				break;
+			
+			case 'groups':
+				var attrs = {
+					action: "DeleteGroup",
+					request: {
+						groupName: id
+					},
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				}
+			
+				this.client.call(attrs)
+				break;
+
 			case 'schemas':
 				var attrs = {
 					action: "DeleteSchema",
