@@ -37,11 +37,6 @@
 				dojo.require("apstrata.sdk.TokenConnection")
 
 				tc = new apstrata.sdk.TokenConnection({
-					timeout: 2000,
-					serviceUrl: "https://sandbox.apstrata.com/apsdb/rest",
-					force200Status: true,
-					defaultStore: "storeTest",
-					loginType: apstrata.sdk.Connection.prototype._LOGIN_TYPE_MASTER,
 					credentials: { key: "RA422AED62", user: "rabih", password: "test"}
 				})
 
@@ -77,10 +72,10 @@
 								var client = new apstrata.sdk.Client(connection)
 	
 								client.post("SaveDocument", {"apsdb.store": "Store","number": Math.floor(Math.random()*9999)}).then(
-									function(o) {
+									function(response, o) {
 										//testDeferred.callback(true)
 									}, 
-									function(o) {
+									function(response, o) {
 										//testDeferred.callback(false)
 									}
 								)							

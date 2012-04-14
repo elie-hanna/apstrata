@@ -82,7 +82,7 @@ dojo.declare("apstrata.sdk.Connection", null, {
 		
 		var client = new apstrata.sdk.Client(self)
 		
-		return client.get("VerifyCredentials", {})
+		return client.get("VerifyCredentials")
 		
 		return deferred
 	},
