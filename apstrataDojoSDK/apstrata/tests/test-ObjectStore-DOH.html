@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>apstrataDojoSDK core client test suite</title>
+		
+		<style>
+			.label {color: black;}
+			.success {color: green;}
+			.fail {color: red;}
+			
+			.operation {
+				width: 100%;
+				margin-bottom: 2px;
+				padding: 1px;
+				background-color: #dedede
+			}
+	
+			.cell {
+				display: inline-block;
+				width: 350px;
+			}
+
+		</style>
+		
+		<script type="text/javascript" src="../../lib/dojo/1.6.1-src/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+		<script type="text/javascript" src="../apstrata.js"></script>
+	
+	    <script type="text/javascript">
+			dojo.require("apstrata.Client")
+			dojo.require("apstrata.Connection")
+			dojo.require("apstrata.ObjectStore2")			
+			dojo.require("apstrata.util.test.TestRunner")
+			
+
+
+doh.register("apstrata.tests.ObjectStore",		
+		[			 
+		 	 {
+				name : "add",
+				timeout: 5000,
+				
+				setup: function() {
+					
+				},
+				
+				/*
+		 		 * In this test we verify that filling the InvitationDetails form with valid
+		 		 * data will create a new invitation
+		 		 */
+				runTest : function (){
+					var promise = new doh.Deferred()
+					doh.assertEqual(expected, received, "failed message");
+					return promise
+				},
+				
+				cleanup: function() {}
+			},
+		])
+
+			var test, client
+			var results = {}
+			
+			var log = {}
+			
+			function setupObjectStore() {
+				var promise = new dojo.Deferred()
+
+				var credentials = {
+					key: "RA422AED62",
+					secret: "K9FA79E7A36E13A828FE78C1F93E0B33"
+				}
+
+				connection = new apstrata.Connection({credentials: credentials})
+				
+				os = new apstrata.ObjectStore2({
+					connection: connection,
+					store: "DefaultStore",
+					queryFields: "apsdb.documentKey,name",
+					queryExpression: "dataType=\"test\""
+				})
+				promise.resolve()
+
+				return promise
+			}
+			
+			function add() {
+				var promise = new dojo.Deferred()
+
+				dojo.when(
+					os.add({
+						dataType: "test",
+						name: "john doe",
+						number: "1"
+					}),
+					function(result) {
+						log.add = result
+						results.newId = result
+						test.printDecorated("apstrata.ObjectStore.add", "success", 0);
+						promise.resolve()
+					},
+					function(operation) {
+						test.printDecorated("apstrata.ObjectStore.add", "fail", 0);
+						promise.reject()
+					}
+				)
+				
+				return promise
+			}
+			
+			function put() {
+				var promise = new dojo.Deferred()
+
+				dojo.when(
+					os.put({
+						number: "2"
+					}, {
+						id: results.newId,
+						overwrite: true
+					}),
+					function(result) {
+						log.put = result
+						results.newId = result
+						test.printDecorated("apstrata.ObjectStore.put", "success", 0);
+						promise.resolve()
+					},
+					function(operation) {
+						test.printDecorated("apstrata.ObjectStore.put", "fail", 0);
+						promise.reject()
+					}
+
+				)
+				
+				return promise
+			}
+
+			function query() {
+				var promise = new dojo.Deferred()
+				
+				dojo.when(
+					os.query({},{}),
+					function(result) {
+						log.query = result
+
+						if (result) test.printDecorated("apstrata.ObjectStore.query", "success", 0); 
+						else promise.reject()
+
+						if ((result) && (result.length < 1)) {
+							test.printDecorated("Store not initialized for test", "fail", 0)
+							promise.reject()
+							return
+						}
+						results.id = result[0]['apsdb.documentKey']
+						promise.resolve()
+					},
+					function(operation) {
+						console.dir(operation)
+						test.printDecorated("apstrata.ObjectStore.query", "fail", 0);
+						promise.reject()
+					}
+
+				)
+				
+				return promise
+			}
+			
+			function get() {
+				var promise = new dojo.Deferred()
+
+				dojo.when(
+					os.get(results.id),
+					function(result) {
+						log.get = result
+						
+						results.object = result
+						
+						test.printDecorated("apstrata.ObjectStore.get", "success", 0);
+						promise.resolve()
+					},
+					function(operation) {
+						console.dir(operation)
+						test.printDecorated("apstrata.ObjectStore.get", "fail", 0);
+						promise.reject()
+					}
+
+				)
+				
+				return promise
+			}
+			
+			function getIdentity() {
+				var promise = new dojo.Deferred()
+
+
+				if (results.id == os.getIdentity(results.object)) {
+					test.printDecorated("apstrata.ObjectStore.getIdendity", "success", 0);
+					log.put = results.id
+					promise.resolve()
+				} else {
+					test.printDecorated("apstrata.ObjectStore.getIdendity", "fail", 0)
+					promise.reject()
+				}
+				
+				return promise
+			}
+			
+			function remove() {
+				var promise = new dojo.Deferred()
+
+				dojo.when(
+					os.remove(results.id),
+					function(result) {
+						log.remove = result
+						test.printDecorated("apstrata.ObjectStore.remove", "success", 0);
+						promise.resolve()
+					},
+					function(operation) {
+						console.dir(operation)
+						test.printDecorated("apstrata.ObjectStore.remove", "fail", 0);
+						promise.reject()
+					}
+				)
+				
+				return promise
+			}
+			
+
+			 
+			dojo.addOnLoad(function() {
+
+				test = new apstrata.util.test.TestRunner({id:"results"})
+
+				success = function() {
+					test.printDecorated("Test successful", "success", 0)
+					console.dir(log)
+				}
+
+				fail = function() {
+					test.printDecorated("Test failed", "fail", 0)
+				}
+				
+				
+//				results.id = "E47A8F313F3C20FD4479480261FB4AFD"
+
+				// array of functions to be chained
+				var queue = [
+					setupObjectStore,
+					add,
+					put,
+					query,
+					get,
+					getIdentity,
+					remove
+				]
+				
+				// empty deferred, calling start.resolve() will kick the queue
+				var start = new dojo.Deferred()
+
+				var tmp = start
+				for (var i=0; i<queue.length; i++) {
+					tmp = tmp.then(queue[i], fail)
+				}
+
+				tmp.then(success, fail)
+								
+				start.resolve()
+			})
+		</script>
+	</head>
+	<body>
+		<h2>apstrataDojoSDK core client test suite</h2>
+		<div id="results"></div>
+	</body>
+</html>
