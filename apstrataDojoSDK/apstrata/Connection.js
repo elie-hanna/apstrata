@@ -111,6 +111,10 @@ dojo.declare('apstrata.Connection',
 			return ((this.credentials.secret != undefined) && (this.credentials.secret != null) && (this.credentials.secret != "")) 
 				|| ((this.credentials.password != undefined) && (this.credentials.password != null) && (this.credentials.password != ""));
 		},
+		
+		setTimeout: function(timeout) {
+			this.timeout = timeout
+		},
 
 		save: function() {},
 
