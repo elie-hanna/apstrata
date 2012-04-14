@@ -20,11 +20,10 @@
 dojo.provide("apstrata.ui.forms.FormGenerator")
 
 dojo.require("dojox.dtl._Templated")
-
 dojo.require("dijit.form.Form")
+dojo.require("dojo.fx");
 
 dojo.require("apstrata.ui.Curtain")
-
 dojo.require("apstrata.ui.forms.FieldSet")
 
 /**
@@ -121,20 +120,53 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	 * 
 	 * @param {Object} busy
 	 */
-	showAsBusy: function(busy) {
+	showAsBusy: function(busy, node) {
 		var self = this
 		
-		if (busy) this._curtain.show(); else this._curtain.hide()
-		
+		if (busy) {
+			if (node) this._curtain.show("", node); else this._curtain.show()
+		} else {
+			this._curtain.hide()
+		}
 //		dojo.query(".dijit", this.domNode).forEach(function(node, index, arr){
 //			dijit.byId(dojo.attr(node, "widgetid")).set("disabled", busy?"disabled":"")
 //		})
 	},
 	
+	/**
+	 * return the dijit associated with a field
+	 * 
+	 * @param {string} name field name
+	 */
 	getField: function(name) {
 		return this._fields[name]
 	},
 	
+	/**
+	 * Intercepts set method calls for name="value" and sets the form with value
+	 * 
+	 * @param {string} name
+	 * @param {Object} value
+	 */
+	set: function(name, value) {
+		if (name=="value") this.frmMain.set("value", value) 
+		
+		this.inherited(arguments)
+	},
+	
+	/**
+	 * Intercepts get method calls for name="value" and returns the form value
+	 * 
+	 * @param {Object} name
+	 */
+	get: function(name) {
+		if (name=="value") return this.frmMain.get("value"); 
+		else return this.inherited(arguments)
+	},
+	
+	/**
+	 * Causes the validation method of the form to be called
+	 */
 	validate: function() {
 		return this.frmMain.validate()
 	},
@@ -148,16 +180,19 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	 */
     vibrate: function (n) {
         var chain = []
-        var amplitude = 12
+        var amplitude = 16
         var duration = 30
 		
 		if (!n) n = this.domNode
 
-        for (var i=0; i<5; i++) {
+		var p = dojo.marginBox(n)
+
+        for (var i=0; i<7; i++) {
             chain.push(
                 dojo.fx.slideTo({
                     node: n,
-                    left: amplitude,
+					top: p.t,
+                    left: p.l + amplitude,
                     unit: "px",
                     duration: duration
                 })
@@ -165,7 +200,8 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
             chain.push(
                 dojo.fx.slideTo({
                     node: n,
-                    left: -1*amplitude,
+					top: p.t,
+                    left: p.l - amplitude,
                     unit: "px",
                     duration: duration
                 })
@@ -174,7 +210,8 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
         chain.push(
             dojo.fx.slideTo({
                 node: n,
-                left: "0",
+				top: p.t,
+                left: p.l,
                 unit: "px",
                 duration: duration
             })

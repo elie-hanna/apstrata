@@ -32,11 +32,13 @@ dojo.declare('apstrata.ui.Curtain',
 		this.options = options
 	},
 	
-	show: function(message) {
+	show: function(message, node) {
 		if (this._curtain) return
 		
-		var c = dojo.marginBox(this.options.node)
-		this._curtain = dojo.create("div", {}, this.options.node)
+		if (!node) node = this.options.node
+		
+		var c = dojo.marginBox(node)
+		this._curtain = dojo.create("div", {}, node)
 		dojo.style(this._curtain, {
 			top: c.t+"px", left: c.l+"px",
 			width: c.w + "px", height: c.h + "px"

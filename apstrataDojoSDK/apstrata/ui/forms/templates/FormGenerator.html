@@ -1,5 +1,5 @@
 <div class="FormGenerator">
-	<h2>{{ label }}</h2>
+	<h2>{{ label|default:"" }}</h2>
 	<form dojoType="dijit.form.Form" dojoAttachPoint="frmMain">
 		<div dojoAttachPoint="dvFieldset"></div>
 		<div dojoAttachPoint="dvActions"></div>

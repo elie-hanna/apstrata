@@ -314,12 +314,14 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						}
 					}
 					this.formGenerator._fields[definition.name] = field
-					
 					break;
 			}
 			
 			dojo.place(field.domNode, dv)
 			if (definition.cssClass) dojo.addClass(field.domNode, definition.cssClass)
+			
+			// Hide hidden fields
+			if (definition.type=="hidden") dojo.style(field.domNode, "display", "none")
 			
 			return field
 		} 
