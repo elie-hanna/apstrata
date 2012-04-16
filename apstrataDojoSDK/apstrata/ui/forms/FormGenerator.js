@@ -102,6 +102,24 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		return found
 	},
 	
+	disable: function() {
+		var self = this
+		this._saveDisabledState = []
+		this.frmMain.getDescendants().forEach(function(dijit) {
+			self._saveDisabledState.push ({
+				dijit: dijit,
+				state: dijit.get("disabled")
+			})
+			dijit.set("disabled", "disabled")
+		})
+	},
+	
+	enable: function() {
+		this._saveDisabledState.forEach(function(item) {
+			item.dijit.set("disabled", item.state)
+		})
+	},
+	
 	/**
 	 * This method disables all buttons on a form, 
 	 * 	it is useful when doing an async operation or animation and need to stop the user from doing any
