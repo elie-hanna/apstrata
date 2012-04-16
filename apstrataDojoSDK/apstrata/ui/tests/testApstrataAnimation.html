@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>apstrata.ui.widgets.RegistrationWidget test page</title>
+		
+		<script type="text/javascript" src="../../../lib/dojo/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+		<script type="text/javascript" src="../../sdk/apstrata.js"></script>
+
+		<style>
+			@import "../../../../lib/dojo/dojo/dijit/themes/claro/claro.css";
+			@import "../../ui/themes/apstrata/apstrata.css";
+			@import "../../ui/themes/apstrata/ApstrataAnimation.css";
+		</style>	
+	
+	    <script type="text/javascript">
+			dojo.require("dojo.parser");
+			dojo.require("doh.runner");
+
+			dojo.require("apstrata.ui.ApstrataAnimation")
+
+			var connection
+	
+			dojo.ready(function() {
+				var rw = new apstrata.ui.ApstrataAnimation({node: "target"})
+				
+				rw.show()
+				
+				setTimeout(dojo.hitch(rw, "hide"), 1000)
+			})
+		</script>
+	</head>
+	<body class='claro apstrata'>
+		<div style='margin: 40px; width: 600px; height: 400px; background: #dedede;' id='target'>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis et gravida lacus. Morbi tincidunt, nulla sit amet blandit consectetur, lectus risus aliquam lectus, ac sodales dolor erat non arcu. Aenean blandit pulvinar dolor, sed fermentum tortor bibendum eget. Aenean ultrices, neque nec tempus scelerisque, velit ante adipiscing ligula, eu rutrum mauris quam quis arcu. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras venenatis congue purus nec condimentum. Fusce ut mauris nunc. Etiam non arcu vitae odio viverra porttitor. Quisque nunc ante, cursus eget posuere id, pulvinar id dui. Sed aliquet, tellus non aliquam ultrices, tellus lorem vestibulum sapien, in euismod nunc lectus a elit. Vestibulum non tortor a ante tempus fermentum a ac lacus. Phasellus nec purus eget lacus condimentum aliquam id quis libero. Cras eu velit lacus. 		
+		</div>
+	</body>
+</html>
