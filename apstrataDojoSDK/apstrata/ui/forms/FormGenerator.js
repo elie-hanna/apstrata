@@ -146,9 +146,6 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		} else {
 			this._curtain.hide()
 		}
-//		dojo.query(".dijit", this.domNode).forEach(function(node, index, arr){
-//			dijit.byId(dojo.attr(node, "widgetid")).set("disabled", busy?"disabled":"")
-//		})
 	},
 	
 	/**
@@ -178,8 +175,18 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	 * @param {Object} name
 	 */
 	get: function(name) {
-		if (name=="value") return this.frmMain.get("value"); 
-		else return this.inherited(arguments)
+		if (name=="value") {
+			var newValue = {}
+			var value = this.frmMain.get("value")
+			
+			for (k in value) {
+				if (value[k]) newValue[k] = value[k]
+			}
+			
+			if (newValue.dijit) delete newValue.dijit
+			
+			return newValue
+		} else return this.inherited(arguments)
 	},
 	
 	/**

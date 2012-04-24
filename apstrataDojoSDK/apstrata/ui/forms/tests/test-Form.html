@@ -36,9 +36,9 @@
 					{name: "password", type: "password"},
 					{name: "name", type: "string"},
 					{name: "email", type: "string"},
+					{name: "enable", type: "boolean"},
 
-					
-					{name: "groups", type: "subform", style: "row",
+					{name: "groups", label:"group", type: "subform", style: "row",
 						cardinality: {
 							min: 0
 						},
@@ -56,7 +56,7 @@
 						},
 						fieldset: [
 							{name: "attributeName", label: "name", type: "string"},
-							{name: "attributeType", label: "type", type: "string", widget: "dijit.form.ComboBox", options: ["string", "numeric", "date", "text"]},
+							{name: "attributeType", label: "type", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["string", "numeric", "date", "text"]},
 							{name: "attributeValue", label: "value", type: "string"}
 						]
 					},
@@ -105,6 +105,10 @@
 	<body class='claro apstrata'>
 		<div dojoType='apstrata.ui.forms.FormGenerator' 
 			definition='definition' 
-			definitionPath='path/path/path' value='value' displayGroups='editUser'></div>			
+			definitionPath='path/path/path' value='value' displayGroups='editUser'>
+		    <script type="dojo/connect" data-dojo-event="onAction">
+		    	console.dir(this.get("value"))
+		    </script>
+		</div>			
 	</body>
 </html>

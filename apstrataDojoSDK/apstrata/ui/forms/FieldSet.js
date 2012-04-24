@@ -21,6 +21,8 @@ dojo.provide("apstrata.ui.forms.FieldSet")
 
 dojo.require("dijit.form.ValidationTextBox")
 dojo.require("dijit.form.SimpleTextarea")
+dojo.require("dijit.form.CheckBox")
+dojo.require("dijit.form.DateTextBox")
 dojo.require("dijit.form.ComboBox")
 dojo.require("dijit.form.Button")
 
@@ -238,20 +240,20 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 	_addField: function(dv, definition) {
 		var self = this
 		
+		var label
+		
 		// If this is not a tabular format add a label before each field
 		if ((self.style == self._FORM) && (definition.type != "hidden")) {
 			if (definition.label != undefined) { // if definition has a label
 				if (definition.label!="") { // and it's not empty
 					// show label
-					var label = dojo.create("div", {innerHTML: definition.label + (definition.required?"*":"")}) 
+					label = dojo.create("div", {innerHTML: definition.label + (definition.required?"*":"")}) 
 					dojo.addClass(label, "label")
-					dojo.place(label, dv)
 				}
 			} else {
 				// if label hasn't been set show name as label
-				var label = dojo.create("div", {innerHTML: definition.name + (definition.required?"*":"")}) 
+				label = dojo.create("div", {innerHTML: definition.name + (definition.required?"*":"")}) 
 				dojo.addClass(label, "label")
-				dojo.place(label, dv)
 			}
 		}
 
@@ -259,11 +261,15 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 			name: definition.name
 		}
 		
+		// places the label before the dijit in the dom
+		var inlineLabel = true
+		
 		if (definition.type == self._SUBFORM) {
 			definition.formGenerator = self.formGenerator
 			var fieldset = new apstrata.ui.forms.FieldSet(definition)
 			if (definition.cssClass) dojo.addClass(fieldset.domNode, definition.cssClass)
 
+			if (label) dojo.place(label, dv)
 			dojo.place(fieldset.domNode, dv)
 			this._fields[definition.name] = fieldset
 			
@@ -274,51 +280,84 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 		} else {
 			var field
 
-			switch (definition.widget) {
-				case "dijit.form.ComboBox":
-				
-					var choices = []
-					dojo.forEach(definition.options, function(option) {
-						choices.push({name: option, id: option})
-					})
-					dojo.mixin(attr, {
-			            value: choices[0].id,
-			            store: new  dojo.data.ObjectStore({objectStore: new dojo.store.Memory({data: choices})}),
-			        })			
-					
-					field = new dijit.form.ComboBox(attr)
-					break;
-								
-				default:
-					if (definition.type == "hidden") attr.type="hidden"
-					if (definition.type == "password") attr.type="password"
-					if (definition.required) attr.required="true"
-					
-					if (definition.attrs) dojo.mixin(attr, definition.attrs)
-				
-					field = new dijit.form.ValidationTextBox(attr)
-					this._fields[definition.name] = field
-					
-					// This is useful for multi value fields
-					if (this.formGenerator._fields[definition.name]) {
-						// If the map already has an array
-						if (dojo.isArray(this.formGenerator._fields[definition.name])) {
-							// just add this new field to it
-							this.formGenerator._fields[definition.name].push(field)
-						} else {
-							// We've added this field name before, so let's make it an array
-							var f = this.formGenerator._fields[definition.name]
-							
-							// Create an array and push the 2 fields in it
-							this.formGenerator._fields[definition.name] = [f, field]
-						}
-					}
-					this.formGenerator._fields[definition.name] = field
-					break;
+			// copy attributes from definition into attr
+			for (k in definition) {
+				if ((k!="name") || (k!="type") || (k!="widget")) {
+					attr[k] = definition[k]
+				}
 			}
+
+			if (definition.widget) {
+				switch (definition.widget) {
+					case "dijit.form.ComboBox":
+	
+						if (definition["formGenerator-options"]) {
+							var choices = []
+							dojo.forEach(definition["formGenerator-options"], function(option) {
+								choices.push({name: option, id: option})
+							})
+							dojo.mixin(attr, {
+					            value: choices[0].id,
+					            store: new  dojo.data.ObjectStore({objectStore: new dojo.store.Memory({data: choices})}),
+					        })			
+						}				
+						
+						break;
+				}
+
+				field = new dojo.getObject(definition.widget)(attr)
+			} else {
+				var defaultWidget = dijit.form.ValidationTextBox
 			
-			dojo.place(field.domNode, dv)
-			if (definition.cssClass) dojo.addClass(field.domNode, definition.cssClass)
+				if (definition.type == "hidden") attr.type="hidden"
+				if (definition.type == "password") attr.type="password"
+				if (definition.required) attr.required="true"
+				
+				if (definition.type == "boolean") {
+					defaultWidget = dijit.form.CheckBox
+					inlineLabel = false
+				}
+				if (definition.type == "dateTime") defaultWidget = dijit.form.DateTextBox
+				
+				if (definition.attrs) dojo.mixin(attr, definition.attrs)
+			
+				field = new defaultWidget(attr)
+				this._fields[definition.name] = field
+				
+				// This is useful for multi value fields
+				if (this.formGenerator._fields[definition.name]) {
+					// If the map already has an array
+					if (dojo.isArray(this.formGenerator._fields[definition.name])) {
+						// just add this new field to it
+						this.formGenerator._fields[definition.name].push(field)
+					} else {
+						// We've added this field name before, so let's make it an array
+						var f = this.formGenerator._fields[definition.name]
+						
+						// Create an array and push the 2 fields in it
+						this.formGenerator._fields[definition.name] = [f, field]
+					}
+				}
+				this.formGenerator._fields[definition.name] = field
+			}
+
+			
+			if (inlineLabel) {
+				if (label) dojo.place(label, dv)
+	
+				dojo.place(field.domNode, dv)
+				if (definition.cssClass) dojo.addClass(field.domNode, definition.cssClass)
+			} else {
+				var div = dojo.create("div")
+				dojo.addClass(div, "inlineLabel")
+				dojo.place(div, dv)
+				
+				dojo.place(field.domNode, div)
+				if (definition.cssClass) dojo.addClass(field.domNode, definition.cssClass)
+				
+				if (label) dojo.place(label, div)
+				dojo.style(label, "display", "inline-block")
+			}
 			
 			// Hide hidden fields
 			if (definition.type=="hidden") dojo.style(field.domNode, "display", "none")
