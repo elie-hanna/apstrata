@@ -346,7 +346,14 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				if (label) dojo.place(label, dv)
 	
 				dojo.place(field.domNode, dv)
-				if (definition.cssClass) dojo.addClass(field.domNode, definition.cssClass)
+				
+				// if a custom class has been set in the field definition
+				if (definition.cssClass) {
+					// add it to the label with the suffix -label
+					dojo.addClass(label, definition.cssClass+"-label")
+					// add it to the field
+					dojo.addClass(field.domNode, definition.cssClass)
+				}
 			} else {
 				var div = dojo.create("div")
 				dojo.addClass(div, "inlineLabel")
@@ -361,6 +368,9 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 			
 			// Hide hidden fields
 			if (definition.type=="hidden") dojo.style(field.domNode, "display", "none")
+			
+			if (label) dojo.addClass(label, definition.name+"-label")
+			dojo.addClass(field.domNode, definition.name)
 			
 			return field
 		} 

@@ -164,6 +164,10 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	 * @param {Object} value
 	 */
 	set: function(name, value) {
+		for (k in value) {
+			// replace . in keys with !
+		}
+		
 		if (name=="value") this.frmMain.set("value", value) 
 		
 		this.inherited(arguments)
@@ -179,7 +183,14 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 			var newValue = {}
 			var value = this.frmMain.get("value")
 			
+			// get rid of the undefined values,
+			//  TODO: don't know why we're getting undefined values by the name of the FieldSets					
+//			for (k in values) {
+//				if (values[k] == undefined) delete values[k]
+//			}
+
 			for (k in value) {
+				// replace ! in keys with .
 				if (value[k]) newValue[k] = value[k]
 			}
 			
@@ -323,12 +334,7 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 				label: action,
 				onClick: function() {
 					if (self.frmMain.validate()) {
-						var values = self.frmMain.get("value")
-						// get rid of the undefined values,
-						//  TODO: don't know why we're getting undefined values by the name of the FieldSets					
-						for (k in values) {
-							if (values[k] == undefined) delete values[k]
-						}
+						var values = self.get("value") //.frmMain.get("value")
 						self.onAction(action, values, self)
 						if (self.options[action] && dojo.isFunction(self.options[action])) self.options[action](values, self)
 					}
