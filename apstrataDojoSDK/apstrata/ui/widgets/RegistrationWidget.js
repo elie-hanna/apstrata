@@ -26,7 +26,7 @@ dojo.require("apstrata.ui.FlashAlert")
 dojo.require("apstrata.sdk.Client")
 dojo.require("apstrata.sdk.Connection")
 
-dojo.requireLocalization("apstrata.ui.widgets", "login-widget")
+dojo.requireLocalization("apstrata.ui.widgets", "registration-widget")
 
 /**
  * Instantiates a User registration widgets. 
@@ -57,7 +57,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 					{name: "jobTitle", label: "Job title", type: "string"},
 					{name: "website", label: "Website", type: "string"},
 					{name: "company", label: "Company", type: "string"},
-					{name: "phone", label: "Phone", type: "string"},
+					{name: "phone", label: "Phone", type: "string"}
 				]
 			},
 		],
@@ -76,7 +76,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		this.client = new apstrata.sdk.Client(new apstrata.sdk.Connection({
 			loginType: apstrata.sdk.Client.prototype._LOGIN_TYPE_MASTER
 		}))
-		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "login-widget")
+		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "registration-widget")
 	},
 	
 	postCreate: function() {

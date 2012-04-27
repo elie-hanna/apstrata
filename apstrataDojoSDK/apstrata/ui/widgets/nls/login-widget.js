@@ -1,9 +1,7 @@
 define({ root:
 //begin v1.x content
 ({
-	ENTER_VALID_EMAIL: "Enter valid email address",
-	EMAIL_ALREADY_REGISTERED: "Email already registered",
-	LOGIN: "login?"
+	BAD_CREDENTIALS: "BAD CREDENTIALS"
 })
 //end v1.x content
 ,
