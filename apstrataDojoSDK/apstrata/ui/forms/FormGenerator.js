@@ -86,6 +86,22 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	//
 	// Publich methods
 	//
+
+	/**
+	 * The form might be read asynchronously sometimes and generated  
+	 *  
+	 * @param {function} func
+	 * 
+	 * @function
+	 */	
+	ready: function(func) {
+		if (this._formReady) {
+			func()
+			return
+		}
+		if (!this._readyFuncs) this._readyFuncs = []
+		this._readyFuncs.push(func)
+	},
 	
 	shouldDisplay: function(displayGroup) {
 		if (!this._groups) return true
@@ -168,7 +184,11 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 			// replace . in keys with !
 		}
 		
-		if (name=="value") this.frmMain.set("value", value) 
+		if (name == "value") {
+			this.value = value
+			this.render()
+			this._buildForm()
+		} 
 		
 		this.inherited(arguments)
 	},
@@ -191,7 +211,7 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 
 			for (k in value) {
 				// replace ! in keys with .
-				if (value[k]) newValue[k] = value[k]
+				if (value[k]) newValue[k.replace("!", ".")] = value[k]
 			}
 			
 			if (newValue.dijit) delete newValue.dijit
@@ -301,10 +321,22 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		//	based on this.value
 		this.cardinalityValues = {}
 		for (key in this.value) {
-			// The starting cardinality depends on how many values were set for each attribute 
-			if (dojo.isArray(this.value[key])) this.cardinalityValues[key] = this.value[key].length; 
-				// if it's not an array then the cardinaltity value is 1
-				else this.cardinalityValues[key] = 1
+			// The cardinality setting is only needed for fields in a subform
+			//  try to determin if the field [key] is in a subform
+			var isInSubform = true
+			for (var j=0; j<this.definition.fieldset.length; j++) {
+				var fieldDef = this.definition.fieldset[j]
+				if ((key==fieldDef.name) && (fieldDef.type != "subform")) {
+					isInSubform = false
+					break
+				}
+			}
+			if (isInSubform) {
+				// The starting cardinality depends on how many values were set for each attribute 
+				if (dojo.isArray(this.value[key])) this.cardinalityValues[key] = this.value[key].length; 
+					// if it's not an array then the cardinaltity value is 1
+					else this.cardinalityValues[key] = 1
+			}
 		}		
 		
 		// Start building the form
@@ -319,8 +351,17 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		
 		this._addActions()
 		
+		var tmp = {}
+		for (k in this.value) {
+			tmp[k.replace(".", "!")] = this.value[k]
+		}
+		
 		// Dijit.form.Form will do the heavylifting to set the values on all fields
-		if (this.value) this.frmMain.set("value", this.value)
+		if (this.value) this.frmMain.set("value", tmp) 
+		
+		
+console.dir(this.value)		
+		this._fireReadyEvent()
 	},
 	
 	/**
@@ -349,6 +390,17 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	 * Display an error in case we can't load the definition
 	 */
 	_error: function() {
-	}	
+	},
+
+	
+	/**
+	 * Fires ready events registered with ready(function)
+	 */	
+	_fireReadyEvent: function() {
+		this._formReady = true
+		dojo.forEach(this._readyFuncs, function(func) {
+			func()
+		})
+	}
 	
 })

@@ -37,12 +37,16 @@
 				label: "User",
 				cssClass: "newClass",
 				fieldset: [
+					{name: "apsdb.docKey", type: "string"},
 					{name: "title", type: "string"},
 					{name: "body", type: "string", widget: "dijit.Editor", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
 					{name: "tags", label:"tags", type: "string", widget: "dojox.form.ListInput"}
 				],
 				actions: ['save', 'cancel']
 			}
+			
+			value = {"apsdb.docKey":"12345", "title":"Title", "body":"The body", tags: ["a", "b"]}
+		
 			
 //			var form = new apstrata.ui.forms.FormGenerator
 
@@ -52,6 +56,7 @@
 		<div id='form'></div>
 		<div dojoType='apstrata.ui.forms.FormGenerator' 
 			definition='definition' 
+			value='value'
 			definitionPath='path/path/path'>
 
 		    <script type="dojo/connect" data-dojo-event="onAction">

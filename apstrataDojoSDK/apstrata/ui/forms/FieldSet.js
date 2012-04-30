@@ -239,9 +239,9 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 
 	_addField: function(dv, definition) {
 		var self = this
-		
+		var attr = {}
 		var label
-		
+				
 		// If this is not a tabular format add a label before each field
 		if ((self.style == self._FORM) && (definition.type != "hidden")) {
 			if (definition.label != undefined) { // if definition has a label
@@ -257,10 +257,7 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 			}
 		}
 
-		attr = {
-			name: definition.name
-		}
-		
+
 		// places the label before the dijit in the dom
 		var inlineLabel = true
 		
@@ -289,6 +286,20 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 
 			if (definition.widget) {
 				switch (definition.widget) {
+					case "apstrata.ui.forms.FormGenerator.ComboBox":
+						if (definition["formGenerator-options"]) {
+							var choices = []
+							dojo.forEach(definition["formGenerator-options"], function(option) {
+								choices.push({name: option, id: option})
+							})
+							dojo.mixin(attr, {
+					            value: choices[0].id,
+					            store: new  dojo.data.ObjectStore({objectStore: new dojo.store.Memory({data: choices})}),
+					        })			
+						}				
+						
+						break;
+	
 					case "dijit.form.ComboBox":
 	
 						if (definition["formGenerator-options"]) {
@@ -320,6 +331,9 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				if (definition.type == "dateTime") defaultWidget = dijit.form.DateTextBox
 				
 				if (definition.attrs) dojo.mixin(attr, definition.attrs)
+			
+				if (attr.name) attr.name = attr.name.replace(".", "!")
+
 			
 				field = new defaultWidget(attr)
 				this._fields[definition.name] = field
@@ -371,7 +385,7 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 			
 			if (label) dojo.addClass(label, definition.name+"-label")
 			dojo.addClass(field.domNode, definition.name)
-			
+						
 			return field
 		} 
 	},
