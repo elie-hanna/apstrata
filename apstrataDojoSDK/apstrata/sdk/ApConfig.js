@@ -27,9 +27,8 @@ dojo.provide('apstrata.sdk.ApConfig');
 dojo.setObject("apstrata.apConfig", {
 	get: function() {return this},
 	credentials: {
-		key:'RA422AED62',
-//		key:'E83D22E93F',
-		secret:'QC8EDBE4ABCD5F97074B8B59B21C5C65'
+		key:'',
+		secret:''
 	},
 	serviceURL: 'http://sandbox.apstrata.com/apsdb/rest',
 	defaultStore: '',
