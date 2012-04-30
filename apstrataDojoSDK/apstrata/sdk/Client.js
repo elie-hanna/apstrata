@@ -132,7 +132,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 		}
 
 		if (options && options.redirectHref) requestParams["apsws.redirectHref"] = options.redirectHref;
-		else requestParams["apsws.redirectHref"] = apstrata.baseUrl + "/sdk/PostIframeHandler.html"
+		else requestParams["apsws.redirectHref"] = apstrata.baseUrl + "/PostIframeHandler.html"
 		requestParams["apsws.callback"] = "apstrataSaveDocumentCallback" + self.timestamp
 
 		var callAttrs = {
@@ -161,7 +161,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 			url: self.url,
 			type: "request"
 		})
-console.dir(callAttrs)
+
 		// pass in all of the parameters manually:
 		dojo.io.iframe.send(callAttrs)
 

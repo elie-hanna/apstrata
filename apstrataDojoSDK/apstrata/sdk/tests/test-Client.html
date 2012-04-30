@@ -21,11 +21,6 @@
 			dojo.ready(function() {
 				
 				
-				if (apstrata.customDebugger) {
-					dojo.require("apstrata.util.BasicLogger")
-					
-				}
-				
 				connection = new apstrata.sdk.Connection({
 					timeout: 2000,
 					serviceUrl: "https://sandbox.apstrata.com/apsdb/rest",

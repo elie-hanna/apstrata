@@ -101,7 +101,7 @@ dojo.declare("apstrata.sdk.ObjectStore",
 				deferred.callback(response.result.documents)
 			},
 			function() {
-				deferred.callback(null)
+				deferred.callback("ERROR")
 			}
 		)
 		
@@ -114,13 +114,24 @@ dojo.declare("apstrata.sdk.ObjectStore",
 	
 	get: function(id) {
 		var self = this
+		var deferred = new dojo.Deferred()
 		var requestParams = {
 			"apsdb.query": "apsdb.documentKey=\""+id+"\"", 
 			"apsdb.queryFields": self.queryFields,
 			"apsdb.store": self.store
 		}
+		
+		this.client.call("Query", requestParams).then(function(response) {
+			if (response.result.documents.length>0) {
+				deferred.resolve(response.result.documents[0])
+			} else {
+				deferred.reject("NOT_FOUND")
+			}
+		}, function() {
+			deferred.reject("ERROR")
+		})
 			
-		return this.client.call("Query", requestParams)
+		return deferred
 	},
 	
 	put: function(object, options) {
