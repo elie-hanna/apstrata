@@ -503,6 +503,26 @@ dojo.declare("apstrata.AdminStore",
 			
 				this.client.call(attrs)
 				break;	
+				
+			case 'SavedQueries':
+				var attrs = {
+					action: "DeleteSavedQuery",
+					request: {
+						apsdb: {
+							queryName: id
+						}
+					},
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				}
+			
+				this.client.call(attrs)
+			
+				break;
 		}
 		
 		return deferred
