@@ -20,8 +20,8 @@
 			dojo.ready(function() {
 				connection = new apstrata.sdk.Connection({
 					credentials: {
-						key: "", 
-						secret: ""
+						key: "", // Provide apstrata account key
+						secret: "" // Provide apstrata account password
 					},
 					loginType: "master"
 				})
@@ -34,6 +34,7 @@
 					var def = new dojo.Deferred()
 					
 					console.debug("Let's create an object")
+					console.dir(object)
 					
 					client.call("SaveDocument", object).then(
 						function(response) {
@@ -67,7 +68,7 @@
 				function update(dockey, updatedValues) {
 					var def = new dojo.Deferred()
 
-					console.debug("Let's update the object identified by:", dockey)
+					console.debug("Let's updated the object identified by:", dockey)
 					client.call("SaveDocument", updatedValues).then(
 						function(response) {
 							def.resolve()
@@ -140,12 +141,11 @@
 						})
 					})
 				})				
-
 			})
 		</script>
 	</head>
 	<body>
-		<h2>apstrataDojoSDK core client test suite</h2>
-		<div id="results"></div>
+		<h2>apstrataDojoSDK CRUD test suite</h2>
+		<p>Opend firebug to watch the action</p>
 	</body>
 </html>
