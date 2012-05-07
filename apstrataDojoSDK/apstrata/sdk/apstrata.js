@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2009 Apstrata
+ *  Copyright 2009-2012 Apstrata
  *  
  *  This file is part of Apstrata Database Javascript Client.
  *  
@@ -17,18 +17,18 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
+
 if (typeof apstrata == "undefined" || !apstrata.configured) {
 	
-	if (typeof apstrata == "undefined")
-		apstrata = {}
+	if (typeof apstrata == "undefined") apstrata = {}
 		
 	apstrata.configured = true;
 	
 	apstrata.baseUrl = ""
 		
 	apstrata.version = {
-		major: 0,
-		minor: 1,
+		major: 1,
+		minor: 0,
 		patch: 0,
 		flag: "",
 		revision: "$revision$",
@@ -129,24 +129,17 @@ if (typeof apstrata == "undefined" || !apstrata.configured) {
 	dojo.registerModuleRelative = function(module, string) {
 		dojo.registerModulePath (module, apstrata.pathFromDojo + string)
 	}
-	dojo.require('dijit._Widget');
 	
-	dojo.addOnLoad(function() {
-		// Init default logger apstrata.logger: This is happening in BasicLogger to guarantee that
-		// it happens before any code is run
-
-		dojo.extend(dijit._Widget, {
-			_apstrataRoot: apstrata.baseUrl
-		})
-
-		/*		
-		apstrata.loadConfig = function(apConfigClass) {
-			try {
-				dojo.require(apConfigClass)		
-			} catch (error) {
-				
-			}
-		}
-		*/
-	})
+	apstrata.registry = {
+	    get: function() {
+	        var object = dojo.getObject("apstrata.apConfig", true)
+	        for (var i=0; i<arguments.length; i++) {
+	            if (object) object = object[arguments[i]]
+	
+	            if (!object) break
+	
+	        }
+			return dojo.clone(object)
+	    }
+	}
 }

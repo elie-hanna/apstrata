@@ -51,16 +51,17 @@ dojo.declare("apstrata.sdk.Connection", null, {
 		this.loginType = this._LOGIN_TYPE_USER
 
 		// see if any specific config params are available in global config object and use them
-		if (apstrata.apConfig) {
-			for (key in apstrata.apConfig) {
-				this[key] = apstrata.apConfig[key]
+		var sdkConfig = apstrata.registry.get("apstrata.sdk", "Connection")
+		if (sdkConfig) {
+			for (var key in sdkConfig) {
+				this[key] = sdkConfig[key]
 			}
 		}
 
 		// see if any specific config params are available in options and use them
 		//  config params in options here take precedence
 		if (options) {
-			for (key in options) {
+			for (var key in options) {
 				this[key] = options[key]
 			}
 		} 

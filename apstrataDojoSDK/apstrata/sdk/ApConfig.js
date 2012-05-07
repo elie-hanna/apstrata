@@ -21,18 +21,27 @@
 
 dojo.provide('apstrata.sdk.ApConfig');
 
-/*
- * Put the proper credentials here
- */
 dojo.setObject("apstrata.apConfig", {
-	get: function() {return this},
-	credentials: {
-		key:'',
-		secret:''
-	},
-	serviceURL: 'http://sandbox.apstrata.com/apsdb/rest',
-	defaultStore: '',
-	timeout: 10000    
+    // apstrata.ui related
+    "apstrata.ui": {
+        "widgets.Login" : {
+            autoLogin: false
+        }
+    },
+ 
+    // apstrata.sdk related
+    "apstrata.sdk": {
+        "Connection" : {
+            credentials: {
+                key: "RA422AED62",
+//				key:'E83D22E93F',
+                secret: "QC8EDBE4ABCD5F97074B8B59B21C5C65",
+                username: "",
+                password: ""
+            },
+            serviceURL: 'http://sandbox.apstrata.com/apsdb/rest',
+            defaultStore: '',
+            timeout: 10000
+        }
+    }
 })
-
-
