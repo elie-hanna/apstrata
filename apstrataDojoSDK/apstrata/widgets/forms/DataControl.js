@@ -179,7 +179,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	
 	showMessage: function(html) {
 		var self = this
-		new apstrata.widgets.EmbeddedAlert({container: self.bindForm.domNode, 
+		var alt = new apstrata.widgets.EmbeddedAlert({container: self.bindForm.domNode, 
 											width: 270, height: 170, 
 											content: html, 
 											actions: "close",
