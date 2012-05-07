@@ -44,93 +44,93 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		this.type = attrs.type
 		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "login-widget")
 		
-		var configRegistry = dojo.getObject("apstrata.apConfig.widgetConfig")
+		dojo.mixin(this, apstrata.registry.get("apstrata.ui", "widgets.Login"))
+	},
+	
+	_setUpLoginForm: function() {
+		var self = this
 		
-		if (configRegistry) {
-			var config = configRegistry["apstrata.ui.widgets.Login"]
-			if (config) dojo.mixin(this, config)
-		}
+		this._animation = new apstrata.ui.ApstrataAnimation({node: self.domNode})
+
+		this.form = new apstrata.ui.forms.FormGenerator({
+			definition: {
+				label: "Login",
+				cssClass: "newClass",
+				fieldset: [
+					{name: "key", required: true, displayGroup: "master"},
+					{name: "secret", required: true, type: "password", displayGroup: "master"},
+					{name: "key", required: true, displayGroup: "key"},
+					{name: "user", required: true, displayGroup: "user"},
+					{name: "password", required: true, type: "password", displayGroup: "user"},
+				],
+				actions: ['login']
+			},
+			displayGroups: self.type?self.type:"master",
+			login: function(values) {
+				self.form.disable()
+				self._animation.show()
+
+				var connection
+				
+				var credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
+				
+				dojo.mixin(credentials, values)
+
+				if (self.type == "user") {
+					connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "user"})
+				} else {
+					connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "master"})
+				}
+
+				connection.login().then(
+					function() {
+						self.form.enable()
+						self._animation.hide()
+						if (self._success) self._success(credentials)
+					},
+					function() {
+						self.form.enable()
+						self._animation.hide()
+						self.form.vibrate(self.domNode)
+						self.message(self.nls.BAD_CREDENTIALS)
+						
+						if (self._failure) self._failure()
+					}
+				)
+			}	
+		})
+		dojo.place(this.form.domNode, this.dvLogin)
+
+		// If credentials have been supplied in apConfig, show them
+		this.form.set("value", apstrata.registry.get("apstrata.sdk", "Connection").credentials)
 	},
 
 	postCreate: function() {
 		var self = this
 		
+		this._setUpLoginForm()
+
 		if (this.autoLogin) {
-			var connection
-			var values = apstrata.apConfig.credentials
+			self.form.disable()
+
+			this._animation = new apstrata.ui.ApstrataAnimation({node: self.domNode})
+			var credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials 
 
 			if (self.type == "user") {
-				connection = new apstrata.sdk.Connection({credentials: values, loginType: "user"})
+				connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "user"})
 			} else {
-				connection = new apstrata.sdk.Connection({credentials: values, loginType: "master"})
+				connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "master"})
 			}
 
 			connection.login().then(
 				function() {
 					self.form.enable()
-					self._animation.hide()
-					if (self._success) self._success(values)
+					if (self._success) self._success(credentials)
 				},
 				function() {
 					self.form.enable()
-					self._animation.hide()
-					self.form.vibrate(self.domNode)
-					self.message(self.nls.BAD_CREDENTIALS)
-					
-					if (self._failure) self._failure()
 				}
 			)
-		} else {
-			this._animation = new apstrata.ui.ApstrataAnimation({node: self.domNode})
-	
-			this.form = new apstrata.ui.forms.FormGenerator({
-				definition: {
-					label: "Login",
-					cssClass: "newClass",
-					fieldset: [
-						{name: "key", required: true, displayGroup: "master"},
-						{name: "secret", required: true, type: "password", displayGroup: "master"},
-						{name: "key", required: true, displayGroup: "key"},
-						{name: "user", required: true, displayGroup: "user"},
-						{name: "password", required: true, type: "password", displayGroup: "user"},
-					],
-					actions: ['login']
-				},
-				displayGroups: self.type?self.type:"master",
-				login: function(values) {
-					self.form.disable()
-					self._animation.show()
-	
-					var connection
-					dojo.mixin(values, apstrata.apConfig.credentials)
-	
-					if (self.type == "user") {
-						connection = new apstrata.sdk.Connection({credentials: values, loginType: "user"})
-					} else {
-						connection = new apstrata.sdk.Connection({credentials: values, loginType: "master"})
-					}
-	
-					connection.login().then(
-						function() {
-							self.form.enable()
-							self._animation.hide()
-							if (self._success) self._success(values)
-						},
-						function() {
-							self.form.enable()
-							self._animation.hide()
-							self.form.vibrate(self.domNode)
-							self.message(self.nls.BAD_CREDENTIALS)
-							
-							if (self._failure) self._failure()
-						}
-					)
-				}	
-			})
-			dojo.place(this.form.domNode, this.dvLogin)
-			
-			// If credentials have been supplied in apConfig, show them
-			if (apstrata.apConfig) this.form.set("value", apstrata.apConfig.credentials)
 		}
 
 		this.inherited(arguments)	
