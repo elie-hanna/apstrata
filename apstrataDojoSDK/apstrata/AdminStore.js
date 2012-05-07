@@ -85,7 +85,12 @@ dojo.declare("apstrata.AdminStore",
 
 		this.client.call(queryAttrs)
 		
-		return this.queryResults(deferred)
+		return dojo.when(
+			this.queryResults(deferred),
+			function(results) {
+				return dojo.store.util.SimpleQueryEngine(attrs, options)(results)
+			}
+		)		
 	},
 	
 	query: function(attrs, options) {
