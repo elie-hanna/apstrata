@@ -186,7 +186,16 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 											onClose: function() {
 												self._undimForm()
 											}})
+		// hide the curtain in case the user clicks outside the curtain area
+		dijit.focus(this._curtain.domNode);
+		dojo.connect(this._curtain, "onBlur", dojo.hitch(this, "hideCurtain", alt));
 	},
+	
+	// hide the curtain and destroy the alert
+	hideCurtain: function(alt) {
+		this._curtain.hide();
+		alt.destroyRecursive();
+    },
 
 	_flashNotValid: function() {
 		var self = this;
