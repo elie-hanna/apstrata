@@ -211,7 +211,11 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 
 			for (k in value) {
 				// replace ! in keys with .
-				if (value[k]) newValue[k.replace("!", ".")] = value[k]
+				
+				//keep values that are empty so that we can delete fields
+				// in apstrata, to delete a field, you need to send it with an empty value
+				//if (value[k]) newValue[k.replace("!", ".")] = value[k]
+				newValue[k.replace("!", ".")] = value[k]
 			}
 			
 			if (newValue.dijit) delete newValue.dijit
