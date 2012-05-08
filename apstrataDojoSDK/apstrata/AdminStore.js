@@ -74,7 +74,10 @@ dojo.declare("apstrata.AdminStore",
 			action: action,
 			load: function(operation) {
 //				operation.response.result.documents.total = operation.response.result.count
-				deferred.resolve(operation.response.result[dataProperty])
+				if (dataProperty && dataProperty != "")
+					deferred.resolve(operation.response.result[dataProperty])
+				else
+					deferred.resolve(operation.response.result)
 			},
 			error: function(operation) {
 				deferred.reject(operation.response.metadata)
@@ -117,6 +120,10 @@ dojo.declare("apstrata.AdminStore",
 
 			case 'groups': 
 				return this._query("ListGroups", "groups", attrs, options)
+				break;
+
+			case 'configuration': 
+				return this._query("ListConfiguration", "", attrs, options)
 				break;
 
 			case 'documents': 
@@ -292,8 +299,40 @@ dojo.declare("apstrata.AdminStore",
 				self.client.call(callAttrs)
 				return deferred
 				break;
-
+				
+			case 'configuration':
+				var callAttrs = {
+					action: "SaveConfiguration",
+					request: object,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
+				return deferred
+				break;
+				
 			case 'stores':
+				var callAttrs = {
+					action: "CreateStore",
+					request: object,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
+				return deferred
+				break;
+
+			case 'storesconfig':
 				var request = {}
 
 				var store = object.store
