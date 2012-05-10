@@ -80,7 +80,7 @@ dojo.declare("apstrata.AdminStore",
 					deferred.resolve(operation.response.result)
 			},
 			error: function(operation) {
-				deferred.reject(operation.response)
+				deferred.reject(operation.response.metadata)
 			}
 		}
 		
