@@ -202,6 +202,24 @@ dojo.declare("apstrata.AdminStore",
 					}
 				})
 				break;
+				
+				
+			case 'SavedQueries': 
+				this.client.call({
+					action: "GetSavedQuery",
+					request: {
+						apsdb: {
+							queryName: id
+						}
+					},
+					load: function(operation) {
+						deferred.resolve({id: id, query: operation.response.result})
+					},
+					error: function(operation) {
+						deferred.reject(operation.response.metadata)
+					}
+				})
+				break;
 
 			case 'documents': 
 				return this.inherited(arguments)
@@ -367,6 +385,30 @@ dojo.declare("apstrata.AdminStore",
 				
 				var callAttrs = {
 					action: "SaveSchema",
+					request: request,
+					load: function(operation) {
+						deferred.resolve(true)
+					},
+					error: function(operation) {
+						deferred.reject(operation)
+					}
+				}
+		
+				self.client.call(callAttrs)
+				return deferred
+				break;
+				
+			case 'SavedQueries':
+				var request = {apsdb:{}}
+				if (options && options.overwrite) {
+					request.apsdb.queryName = object.id
+					request.apsdb.newQueryName = object["apsdb.newQueryName"]
+					request.apsdb.query = object.query
+					request.apsdb.update = true
+				} else request = object
+				
+				var callAttrs = {
+					action: "SaveQuery",
 					request: request,
 					load: function(operation) {
 						deferred.resolve(true)
