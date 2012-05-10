@@ -385,7 +385,7 @@ dojo.declare("apstrata.AdminStore",
 				if (options && options.overwrite) {
 					request.apsdb.scriptName = object.id
 					request.apsdb.newScriptName = object["apsdb.newSchemaName"]
-					request.apsdb.script = object.schema
+					request.apsdb.script = object.script
 					request.apsdb.update = true
 				} else request = object
 
