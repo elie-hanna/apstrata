@@ -294,7 +294,7 @@ dojo.declare("apstrata.AdminStore",
 						deferred.resolve(true)
 					},
 					error: function(operation) {
-						deferred.reject(operation)
+						deferred.reject(operation.response)
 					}
 				}
 		
@@ -310,7 +310,7 @@ dojo.declare("apstrata.AdminStore",
 						deferred.resolve(true)
 					},
 					error: function(operation) {
-						deferred.reject(operation)
+						deferred.reject(operation.response)
 					}
 				}
 		
@@ -326,7 +326,7 @@ dojo.declare("apstrata.AdminStore",
 						deferred.resolve(true)
 					},
 					error: function(operation) {
-						deferred.reject(operation)
+						deferred.reject(operation.response)
 					}
 				}
 		
@@ -342,7 +342,7 @@ dojo.declare("apstrata.AdminStore",
 						deferred.resolve(true)
 					},
 					error: function(operation) {
-						deferred.reject(operation)
+						deferred.reject(operation.response)
 					}
 				}
 		
@@ -367,7 +367,7 @@ dojo.declare("apstrata.AdminStore",
 						deferred.resolve()
 					},
 					error: function(operation){
-						deferred.reject(operation.response.metadata)
+						deferred.reject(operation.response)
 					}
 				}
 				
@@ -390,7 +390,7 @@ dojo.declare("apstrata.AdminStore",
 						deferred.resolve(true)
 					},
 					error: function(operation) {
-						deferred.reject(operation)
+						deferred.reject(operation.response)
 					}
 				}
 		
@@ -414,7 +414,7 @@ dojo.declare("apstrata.AdminStore",
 						deferred.resolve(true)
 					},
 					error: function(operation) {
-						deferred.reject(operation)
+						deferred.reject(operation.response)
 					}
 				}
 		
@@ -438,7 +438,7 @@ dojo.declare("apstrata.AdminStore",
 						deferred.resolve(true)
 					},
 					error: function(operation) {
-						deferred.reject(operation)
+						deferred.reject(operation.response)
 					}
 				}
 		
