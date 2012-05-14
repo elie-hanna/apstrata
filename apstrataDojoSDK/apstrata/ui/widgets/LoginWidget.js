@@ -71,8 +71,9 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 				self._animation.show()
 
 				var connection
+				var credentials
 				
-				var credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
+				if (apstrata.registry.get("apstrata.sdk", "Connection")) credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
 				
 				dojo.mixin(credentials, values)
 
@@ -102,7 +103,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		dojo.place(this.form.domNode, this.dvLogin)
 
 		// If credentials have been supplied in apConfig, show them
-		this.form.set("value", apstrata.registry.get("apstrata.sdk", "Connection").credentials)
+		if (apstrata.registry.get("apstrata.sdk", "Connection")) this.form.set("value", apstrata.registry.get("apstrata.sdk", "Connection").credentials)
 	},
 
 	postCreate: function() {
