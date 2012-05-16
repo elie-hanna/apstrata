@@ -104,9 +104,9 @@ dojo.declare("apstrata.ObjectStore",
 			},
 			error: function(operation) {
 				// TODO : ABD Test code to be removed.
-				if (console.debug && console.dir) {
+				if (console && console.debug && console.dir) {
 					console.debug("ABD1 ObjectStore");
-					console.dir(request);
+					console.dir(apsdb);
 					console.dir(operation);
 				}
 				// TODO : ABD Test code to be removed.
