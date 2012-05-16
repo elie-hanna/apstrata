@@ -171,7 +171,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 	call: function(operation, requestParams, formNode, options) {
 		var client = new apstrata.sdk.Client(this.connection)
 
-		if (options && options.method.toLowerCase() == "get") {
+		if (options && options.method && options.method.toLowerCase() == "get") {
 			return client.get(operation, requestParams, options)
 		} else {
 			return client.post(operation, requestParams, formNode, options)
