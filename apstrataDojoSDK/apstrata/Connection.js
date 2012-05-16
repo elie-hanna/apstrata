@@ -87,6 +87,14 @@ dojo.declare('apstrata.Connection',
 					if (!this.credentials.password && config.password) this.credentials.password = config.password;
 				}
 			}
+
+			if (attrs && !attrs.timeout && apstrata.apConfig) {
+				this.timeout = apstrata.apConfig.timeout;
+				if (!this.timeout) {
+					var config = apstrata.apConfig.get();
+					if (config.timeout) this.timeout = config.timeout;
+				}
+			}
 		},
 		
 		signUrl: function(operation, params, responseType, isForce200ResponseStatus) {
