@@ -1,0 +1,184 @@
+.horizon .NewList {
+	padding: 0px;
+}
+
+.horizon .NewList .content {
+	overflow-x: hidden;
+	overflow-y: auto;
+	margin-left: 4px;
+}
+
+/** search widget **/
+
+
+.horizon .NewList .sortField {
+	padding: 0px;
+	border: 0px;
+	width: 26px;
+	float: left;
+}
+
+.horizon .NewList .searchField {
+	padding: 0px;
+	border: 0px;
+	text-align: left;
+	float: left;
+}
+
+.horizon .NewList .searchField .dijitTextBox {
+	font-size:0.8em;
+	width: 50px;
+
+	-moz-border-radius-topleft: 3px;
+	-webkit-border-top-left-radius: 3px;
+	border-top-left-radius: 3px;
+
+	-moz-border-radius-bottomleft: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+
+	text-align: left;
+	border-bottom: 1px solid #CECECE;
+	border-top: 1px solid #CECECE;
+	border-left: 1px solid #CECECE;
+	border-right: 0px solid #CECECE;
+	padding: 1px;
+}
+
+.horizon .NewList .sortField .on {
+	opacity: 1;
+	cursor: pointer;
+}
+
+.horizon .NewList .sortField .off {
+	opacity: .3;
+	cursor: pointer;
+}
+
+.horizon .NewList .highlightFilter {
+	background: #9999FF;
+	#color: white;
+	
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+}
+
+/** header **/
+
+.horizon .NewList .header {
+	margin-top: 5px;
+	margin-left: 9px;
+}
+
+/** footer **/
+
+.horizon .NewList .footer {
+	height: 35px;
+	text-align: center;
+}
+
+.horizon .NewList .footerCollapsed {
+	height: 15px;
+}
+
+/** List inner **/
+.horizon .NewList .item {
+	display: table;
+	
+	width: 100%;
+	height: auto;
+	cursor: pointer;
+	
+	-moz-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+	border-top-left-radius: 5px;
+
+	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+
+    -o-border-radius: 5px;
+}
+ 
+.horizon .NewList .item:hover {
+	background: #898989;
+}
+
+.horizon .NewList .itemSelected {
+	background: #8888EE;
+	color: white;
+}
+
+.horizon .NewList .itemSelected:hover {
+	background: #8888EE;
+	color: white;
+}
+ 
+.horizon .NewList .deleteCell {
+	display: none;
+	vertical-align: middle;
+	overflow: hidden;
+	width: 17px;
+}
+
+.horizon .NewList .iconCell {
+	display: table-cell;
+	vertical-align: middle;
+	overflow: hidden;
+	width: 40px;
+}
+
+.horizon .NewList .labelCell {
+	height: 40px;
+	display: table-cell;
+	vertical-align: middle;
+	overflow: hidden;
+	padding-left: 5px;
+}
+ 
+.horizon .NewList .deleteIcon {
+	vertical-align: middle;	
+
+	margin-left: 4px;
+	
+	float: left;
+
+	background-image:url('../../resources/images/pencil-icons/stop-red-sml.png');
+	width: 17px;
+	height: 17px;
+	background-size: 100% 100%;	
+} 
+
+.horizon .NewList .deleteIconDisabled {
+	background-image:url('../../resources/images/pencil-icons/stop-disabled-sml.png');
+}
+ 
+.horizon .NewList .icon {
+	display: table-cell;
+	vertical-align: middle;
+	
+	background-size: 100% 100%;
+} 
+
+.horizon .NewList .label {
+} 
+
+.horizon .NewList .labelEditDisabled {
+	color: #999;
+}
+
+.horizon .NewList .deleted {
+	color: red;
+	text-decoration: line-through;
+}
+
+.horizon .NewList .label .dijitTextBox {
+	color: black;
+}
+
+.horizon .NewList .label .dijitButton {
+	color: black;
+}
+
+

@@ -1,0 +1,11 @@
+<div>
+	<div class='sortField' dojoAttachPoint='dvSortField'>
+		<img dojoAttachPoint='imgUp' dojoAttachEvent='onmouseover: _upOn, onmouseout: _upOff, onclick: _ascending' class='off' src='{{ _horizonRoot }}/resources/images/pencil-icons/sml-up-arrow.png'><img dojoAttachPoint='imgDown' dojoAttachEvent='onmouseover: _downOn, onmouseout: _downOff, onclick: _descending' class='off' src='{{ _horizonRoot }}/resources/images/pencil-icons/sml-down-arrow.png'>
+	</div>
+	<div class='searchField'>
+		<input dojoType='dijit.form.TextBox' intermediateChanges="true" 
+			type='text' name='searchApstrata' dojoAttachPoint='fldSearch' 
+			dojoAttachEvent="onChange: change"></input>
+	</div>
+	<div style="clear:both"></div>
+</div>

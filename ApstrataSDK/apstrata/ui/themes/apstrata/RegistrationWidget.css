@@ -1,0 +1,10 @@
+@import url("FlashAlert.css");
+
+.apstrata .RegistrationWidget {
+	
+}
+
+.apstrata .RegistrationWidget .column {
+	display: inline-block;
+	width: 300px;
+}

@@ -1,0 +1,27 @@
+.apstrataAnimation {
+	position: absolute;
+	display: none;
+
+/*	
+	width: 128px;
+	height: 128px;
+	background-image: url('images/userSearch.gif');
+*/
+
+	width: 150px;
+	height: 150px;
+	background-image: url('images/apstrata-clouds.gif');
+
+	background-size: 100% 100%;	
+	opacity: .8;
+	
+	-moz-border-radius: 13px;
+	-webkit-border-radius: 13px;
+	border-radius: 13px;
+
+	-moz-box-shadow: 0 13px 24px #999;
+	box-shadow: 0 13px 24px #999;
+	-webkit-box-shadow: 0 13px 24px #999;
+}
+
+

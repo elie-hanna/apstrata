@@ -1,0 +1,150 @@
+
+.horizon .list .sortField {
+	padding: 0px;
+	border: 0px;
+	width: 26px;
+	float: left;
+}
+
+.horizon .list .searchField {
+	padding: 0px;
+	border: 0px;
+	text-align: left;
+	float: left;
+}
+
+.horizon .list .searchField .dijitTextBox {
+	font-size:0.8em;
+
+	-moz-border-radius-topleft: 3px;
+	-webkit-border-top-left-radius: 3px;
+	border-top-left-radius: 3px;
+
+	-moz-border-radius-bottomleft: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	border-bottom-left-radius: 3px;
+
+	text-align: left;
+	border-bottom: 1px solid #CECECE;
+	border-top: 1px solid #CECECE;
+	border-left: 1px solid #CECECE;
+	border-right: 0px solid #CECECE;
+	padding: 1px;
+}
+
+.horizon .list .sortField .on {
+	opacity: 1;
+	cursor: pointer;
+}
+
+.horizon .list .sortField .off {
+	opacity: .3;
+	cursor: pointer;
+}
+
+.horizon .list .highlightFilter {
+	background: #9999FF;
+	#color: white;
+	
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+}
+
+
+.horizon .list .itemMouseOver {
+	background: #898989;
+}
+
+.horizon .list .itemSelected {
+	background: #8888EE;
+	color: white;
+}
+
+.horizon .list .item {
+	height: auto;
+	position: relative;
+	top: 12px;
+	padding-left: 0px;
+	border-bottom: solid 0px #aaaaaa;
+	overflow: hidden;
+	
+	text-align: left;
+	
+	cursor: pointer;
+
+	-moz-border-radius-topleft: 5px;
+	-webkit-border-top-left-radius: 5px;
+	border-top-left-radius: 5px;
+
+	-moz-border-radius-bottomleft: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+
+    -o-border-radius: 5px;
+	
+    -moz-box-sizing: border-box;
+    -opera-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -khtml-box-sizing: border-box;
+    box-sizing: border-box;
+
+}
+
+.horizon .list .item .content {
+	height: 45px;
+}
+
+.horizon .list .item .content .deleteCell {
+	display: none;
+}
+
+.horizon .list .item .content .deleteCellEmpty {
+	width: 17px;
+}
+
+.horizon .list .item .icon img {
+	position: relative;
+	top: 2px;
+	height: 40px;
+}
+
+.horizon .list .item .iconDelete {
+	position: relative;
+	background-image:url('../../resources/images/pencil-icons/stop-red-sml.png');
+	top: 10px;
+	width: 17px;
+	height: 17px;
+	background-size: 100% 100%;
+}
+
+.horizon .list .item .iconDeleteDisabled {
+	position: relative;
+	background-image:url('../../resources/images/pencil-icons/stop-disabled-sml.png');
+	top: 10px;
+	width: 17px;
+	height: 17px;
+	background-size: 100% 100%;
+}
+
+.horizon .list .item .iconSelect img {
+	position: relative;
+	top: 15px;
+	height: 17px;
+}
+
+.horizon .list .item .label {
+	padding-left: 3px;
+	word-wrap: break-word;
+}
+
+.horizon .list .item .label .readOnly {}
+
+.horizon .list .item .label .dim {
+	color: grey;
+}
+
+.horizon .list .footer {
+	min-height: 10px;
+	xheight: 20px;
+}

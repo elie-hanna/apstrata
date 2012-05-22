@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>apstrataDojoSDK client test suite</title>
+		
+		<script type="text/javascript" src="../../../lib/dojo/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+		<script type="text/javascript" src="../../sdk/apstrata.js"></script>
+	
+	    <script type="text/javascript">
+			dojo.require("apstrata.sdk.Client")
+			dojo.require("apstrata.sdk.CompactClient")
+
+			dojo.require("dojo.parser");
+			dojo.require("doh.runner");
+
+			var connection
+	
+			dojo.ready(function() {
+				
+				
+				connection = new apstrata.sdk.Connection({
+					timeout: 2000,
+					serviceUrl: "https://sandbox.apstrata.com/apsdb/rest",
+					force200Status: true,
+					defaultStore: "storeTest",
+					loginType: apstrata.sdk.Connection.prototype._LOGIN_TYPE_MASTER
+				}) 
+
+				dojo.require("apstrata.sdk.TokenConnection")
+
+				tc = new apstrata.sdk.TokenConnection({
+					credentials: { key: "RA422AED62", user: "rabih", password: "test"}
+				})
+
+				tc.loginUser ({})
+/*	
+
+				doh.register("apstrata.sdk.tests.Client", [
+						{
+			                name : "login",
+			                timeout : 10000,
+				
+							runTest: function login() {
+								
+								var testDeferred = new doh.Deferred()
+								
+								dojo.when(connection.login(), 
+									function() {
+								        testDeferred.callback(true)
+								    },
+									function() {
+								        testDeferred.callback(false)
+								    }								
+								)
+							}
+						}
+				])			
+				
+				//doh.run()
+
+							
+
+
+								var client = new apstrata.sdk.Client(connection)
+	
+								client.post("SaveDocument", {"apsdb.store": "Store","number": Math.floor(Math.random()*9999)}).then(
+									function(response, o) {
+										//testDeferred.callback(true)
+									}, 
+									function(response, o) {
+										//testDeferred.callback(false)
+									}
+								)							
+				
+				
+				miniClient = new apstrata.sdk.CompactClient({
+					loginType: apstrata.sdk.CompactClient.prototype._LOGIN_TYPE_MASTER,
+					credentials: { key: "RA422AED62", secret: "K9FA79E7A36E13A828FE78C1F93E0B33", username: "", password: "" }
+				})
+				
+				miniClient.get("ListStores", {}).then(function(o) {console.debug('ok')}, function(o) {console.debug('not ok')})
+	*/									
+			})
+		</script>
+	</head>
+	<body>
+		<h2>apstrataDojoSDK core client test suite</h2>
+		<div id="results"></div>
+	</body>
+</html>

@@ -1,0 +1,63 @@
+<div style='overflow-y: auto; overflow-x: hidden;'>
+	<div stye='height: 100%;'>
+		{% for o in data %} 
+				
+				{% ifequal forloop.counter0 _lastSelectedIndex %}
+				{% else %}
+				{% endifequal %}
+					<div 
+						class='item'
+						style='width: 100%;' 
+ 						{% if o.title %}
+						title='{{ o.title }}'
+						{% endif %}  
+						{% if not o.title %}
+						title='{{ o.label }}'
+						{% endif %} 
+						itemIndex='{{ forloop.counter0 }}' 
+						itemId='{{ o.id }}'
+						id='{{ o.id }}'
+						dojoAttachEvent='onmouseover: _onMouseover, onmouseout: _onMouseout,onclick: _onClick'> 
+	
+					<table class='content'>
+						<tr valign='center'>
+							<td class='deleteCell' valign='top' 
+								itemIndex='{{ forloop.counter0 }}' 
+								itemId='{{ o.id }}'>
+									<div>
+							{% if o.isDeleteable %}
+										<div class='iconDelete' itemId='{{ o.id }}' dojoAttachEvent='onclick: _deleteItem'></div> 
+							{% else %}
+										<div class='iconDeleteDisabled'></div> 
+							{% endif %}
+									</div>
+							</td>
+						{% if o.iconSrc %}
+							<td width='0' valign="top">
+								<div class='icon'><img src='{{ o.iconSrc }}'></div>
+							</td>
+						{% else %}
+							{% if o.iconClass %}
+								<td width='0' valign="top">
+									<div class='{{ o.iconClass }}'></div>
+								</td>
+							{% endif %}
+						{% endif %} 
+							<td valign='center' class='label' width='100%' style="line-height: 1.3em"> 
+									{% if o.isEditable %}
+										<div dojoAttachEvent='onclick: _editLabel' itemId='{{ o.id }}'>
+									{% else %}
+										<div class='readOnly'>
+									{% endif %} 
+									
+											<div class='listInnerLabel'>{{ o.label|safe }}</div>
+									
+										</div>
+							</td>
+						</tr>
+					</table>
+	
+				</div> 
+		{% endfor %}
+	</div>
+</div> 

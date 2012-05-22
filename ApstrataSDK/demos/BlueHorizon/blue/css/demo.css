@@ -1,0 +1,97 @@
+html, body {
+	background-image: url('../images/blueHorizon.jpg');
+#	background-position: 0px -110px;
+	
+#	background: #888899;
+	background-repeat: no-repeat;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	height: 100%;
+	overflow: hidden;
+}
+
+
+.logo {
+	float: left;
+	width: 250px;
+	padding-left: 25px;	
+	padding-top: 10px;
+}
+
+.appTitle {
+	float: right;	
+
+	padding-right: 25px;
+	padding-top: 23px;
+
+	font-family: sans-serif; 
+	font-size: 2em;
+	color: #DDDDFF;
+}
+
+.Alert {
+	background: #999999;
+}
+
+.Alert .content {
+	color: white;
+	font-family: sans-serif;
+	font-size: .7em;
+}
+
+
+.logo {
+	color: #111199;
+	font-size: 2em;
+	font-family: 'Arial Rounded MT Bold';
+	font-weight: normal;
+}
+
+.homePanel {
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-top: 0px;
+}
+
+.homePanel h2 {
+	font-family: sans-serif;
+	font-size: 2em;
+	color: #111199;
+}
+
+.homePanel p {
+	font-family: sans-serif;
+	font-size: 1em;
+	color: #333333;
+	line-height: 1.5em;
+	
+}
+
+.homePanel .highlight {
+	color: #ff8833;
+	font-weight: bold;
+}
+
+
+.documentation {
+	font-family: sans-serif;
+	color: #111111;
+}
+
+.documentation h1 {
+	font-size: 2em;
+}
+.documentation p {
+	line-height: 1.4em;
+}
+
+.documentation ul {
+	line-height: 1.4em;
+}
+
+.horizon .NewList .customIcon {
+	background-image:url('../../resources/images/pencil-icons/computer.png');
+	width: 40px;
+	height: 40px;
+}

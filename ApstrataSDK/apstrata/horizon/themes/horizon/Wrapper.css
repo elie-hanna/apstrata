@@ -1,0 +1,10 @@
+.horizon .Wrapper {
+	min-width: 200px;
+}
+
+.horizon .Wrapper .header {
+}
+
+.horizon .Wrapper .footer {
+	text-align: center;
+}

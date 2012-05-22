@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>apstrata.ui.FormGenerator test suite</title>
+		
+		<script type="text/javascript" src="../../../../lib/dojo/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+		<script type="text/javascript" src="../../../sdk/apstrata.js"></script>
+
+		<style>
+			@import "../../../../lib/dojo/dojo/dijit/themes/claro/claro.css";
+			@import "../../themes/apstrata/FormGenerator.css";
+			@import "../../themes/apstrata/apstrata.css";
+			@import "../../../../lib/dojo/dojo/dojox/form/resources/ListInput.css";
+		</style>	
+	
+	    <script type="text/javascript">
+			dojo.require("apstrata.sdk.Client")
+
+			dojo.require("dojo.parser");
+			dojo.require("doh.runner");
+			dojo.require("dijit.Editor")
+			dojo.require("dijit._editor.plugins.FontChoice");  // 'fontName','fontSize','formatBlock'
+			dojo.require("dijit._editor.plugins.TextColor");
+			dojo.require("dijit._editor.plugins.LinkDialog");
+			dojo.require("dojox.form.ListInput")
+
+			dojo.require("apstrata.ui.forms.FormGenerator")
+
+			var connection
+	
+			dojo.ready(function() {
+				
+			})
+			
+			var definition = {
+				label: "User",
+				cssClass: "newClass",
+				fieldset: [
+					{name: "apsdb.docKey", type: "string"},
+					{name: "title", type: "string"},
+					{name: "body", type: "string", widget: "dijit.Editor", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
+					{name: "tags", label:"tags", type: "string", widget: "dojox.form.ListInput"}
+				],
+				actions: ['save', 'cancel']
+			}
+			
+			value = {"apsdb.docKey":"12345", "title":"Title", "body":"The body", tags: ["a", "b"]}
+		
+			
+//			var form = new apstrata.ui.forms.FormGenerator
+
+		</script>
+	</head>
+	<body class='claro apstrata'>
+		<div id='form'></div>
+		<div dojoType='apstrata.ui.forms.FormGenerator' 
+			definition='definition' 
+			value='value'
+			definitionPath='path/path/path'>
+
+		    <script type="dojo/connect" data-dojo-event="onAction">
+		    	console.dir(this.get("value"))
+		    </script>
+		</div>			
+	</body>
+</html>
