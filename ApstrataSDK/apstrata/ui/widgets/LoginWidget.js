@@ -75,21 +75,21 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 
 				var connection
 				var credentials
-				var serviceUrl
+				var serviceURL
 				var timeout
 				
 				if (apstrata.registry.get("apstrata.sdk", "Connection")) {
 					credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
-					serviceUrl = apstrata.registry.get("apstrata.sdk", "Connection").serviceURL
+					serviceURL = apstrata.registry.get("apstrata.sdk", "Connection").serviceURL
 					timeout = apstrata.registry.get("apstrata.sdk", "Connection").timeout
 				}
 				
 				dojo.mixin(credentials, values)
 
 				if (self.type == "user") {
-					connection = new apstrata.sdk.Connection({credentials: credentials, serviceUrl: serviceUrl, timeout: timeout, loginType: "user"})
+					connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
 				} else {
-					connection = new apstrata.sdk.Connection({credentials: credentials,  serviceUrl: serviceUrl, timeout: timeout, loginType: "master"})
+					connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "master"})
 				}
 
 				connection.login().then(
@@ -136,13 +136,13 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 
 			this._animation = new apstrata.ui.ApstrataAnimation({node: self.domNode})
 			var credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
-			var serviceUrl =  apstrata.registry.get("apstrata.sdk", "Connection").serviceURL
+			var serviceURL =  apstrata.registry.get("apstrata.sdk", "Connection").serviceURL
 			var timeout = apstrata.registry.get("apstrata.sdk", "Connection").timeout
 
 			if (self.type == "user") {
-				connection = new apstrata.sdk.Connection({credentials: credentials, serviceUrl: serviceUrl, timeout: timeout, loginType: "user"})
+				connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
 			} else {
-				connection = new apstrata.sdk.Connection({credentials: credentials, serviceUrl: serviceUrl, timeout: timeout, loginType: "master"})
+				connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "master"})
 			}
 
 			connection.login().then(
