@@ -44,7 +44,7 @@ dojo.declare("apstrata.sdk.Connection", null, {
 	 */
 	constructor: function(options) {
 		this.timeout = this._DEFAULT_TIMEOUT
-		this.serviceUrl= this._DEFAULT_URL
+		this.serviceURL= this._DEFAULT_URL
 		this.force200Status = true
 		this.defaultStore = ""
 		this.credentials = { key: "", secret: "", username: "", password: "" }
@@ -138,7 +138,7 @@ dojo.declare("apstrata.sdk.Connection", null, {
 			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 		}
 
-		var url = this.serviceUrl
+		var url = this.serviceURL
 				+ "/" + this.credentials.key
 				+ "/" + operation
 				+ "?apsws.time=" + timestamp
