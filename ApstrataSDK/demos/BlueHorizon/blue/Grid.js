@@ -20,6 +20,7 @@
 dojo.provide("apstrata.horizon.blue.Grid")
 
 dojo.require("dojo.store.Memory")
+dojo.require("apstrata.sdk.ObjectStore")
 dojo.require("apstrata.horizon.Grid")
 dojo.require("apstrata.horizon.blue.TestData")
 
@@ -38,7 +39,7 @@ dojo.declare("apstrata.horizon.blue.Grid",
 		this.gridParams = {
 			rowsPerPage: self.rowsPerPage,
 			
-			store:  new apstrata.ObjectStoreAdaptor({objectStore: new apstrata.ObjectStore(musicStore)}),
+			store:  new apstrata.horizon.blue.ObjectStoreAdaptor({objectStore: musicStore}),
 			
 			structure: [
 				// view 1
@@ -63,3 +64,14 @@ dojo.declare("apstrata.horizon.blue.Grid",
 	}
 
 })
+
+dojo.declare("apstrata.horizon.blue.ObjectStoreAdaptor", 
+[dojo.data.ObjectStore], 
+{
+	onSet: function(item, attribute, old, value) {
+		var object = item
+		object[attribute] = value
+		this.objectStore.put(object)
+	}
+})
+
