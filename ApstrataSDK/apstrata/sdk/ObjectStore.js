@@ -209,7 +209,7 @@ dojo.declare("apstrata.sdk.ObjectStore",
 	}		
 })
 
-dojo.declare("apstrata.ObjectStoreAdaptor", 
+dojo.declare("apstrata.sdk.ObjectStoreAdaptor", 
 [dojo.data.ObjectStore], 
 {
 	onSet: function(item, attribute, old, value) {
