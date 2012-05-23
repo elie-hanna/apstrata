@@ -75,22 +75,22 @@ dojo.declare("apstrata.horizon.Container",
 		// save the current position set in CSS
 		this._savePosition = dojo.position(this.domNode)
 		this._CSSdim = dojo.position(this.domNode)
-		
+
 		// Add the mandatory CSS class to the Layout widgets's dom node
 		dojo.addClass(this.domNode, 'horizon')
 
 		// Create the fixed left div
-		this.fixedPanelNode = dojo.create("div", null, dojo.body())
+		this.fixedPanelNode = dojo.create("div", null, this.domNode.parentNode)
 		dojo.addClass(this.fixedPanelNode, "horizon")
 
 		// Create the background transparent div
-		this.background = dojo.create("div", null, dojo.body())
+		this.background = dojo.create("div", null, this.domNode.parentNode)
 		dojo.addClass(this.background, "horizonBackground")
 		
 		// Only add the control toolbar if it is not already set by the user-application.
 		if (this.showToolbar) {
 			self._controlToolbar = new this.controlToolbarClass({container: self});
-			dojo.place(self._controlToolbar.domNode, dojo.body());
+			dojo.place(self._controlToolbar.domNode, this.domNode.parentNode);
 			dojo.connect(self._controlToolbar, "maximize", dojo.hitch(this, 'maximize'))
 			dojo.connect(self._controlToolbar, "restore", dojo.hitch(this, 'restore'))
 		}

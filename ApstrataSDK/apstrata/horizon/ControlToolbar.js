@@ -36,7 +36,7 @@ dojo.declare("apstrata.horizon.ControlToolbar",
 	constructor: function(attrs) {
 		this.container = attrs.container
 		this._loginMessage = this.LOGGED_OUT_MSG
-		this._defaultMargin = dojo.clone(this.container.margin)
+		this._defaultMargin = dojo.marginBox(this.container.domNode)
 	},
 	
 	postCreate: function() {
@@ -70,7 +70,7 @@ dojo.declare("apstrata.horizon.ControlToolbar",
 	
 	reposition: function() {
 		var self = this
-//console.debug(this.top, this.left)		
+
 		dojo.style(this.domNode, {
 			top: self.top,
 			left: self.left

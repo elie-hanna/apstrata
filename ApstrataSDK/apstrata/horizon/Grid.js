@@ -21,8 +21,6 @@ dojo.provide("apstrata.horizon.Grid")
 
 dojo.require("dojox.grid.DataGrid")
 
-dojo.require("apstrata.ObjectStore")
-
 dojo.require("apstrata.horizon.Panel")
 dojo.require("apstrata.horizon.GridFTSearch")
 
