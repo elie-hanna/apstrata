@@ -135,6 +135,7 @@ dojo.declare("apstrata.horizon.Container",
 
 		if (this.loginWidget) {
 			//this.loginWidget.set("dimension", this._boundingRectangle)
+			this.loginWidget.container = this; 
 			dojo.place(this.loginWidget.domNode, dojo.body())
 			this.showCurtain()
 			this.loginWidget.then(function(credentials) {
@@ -393,7 +394,11 @@ dojo.declare("apstrata.horizon.Container",
 
 		try {
 			var prefs = dojo.fromJson(dojo.cookie(this.applicationId + "-prefs"))
-			if (prefs) this.preferencesChanged(prefs); else prefs = {}
+			if (prefs) {
+				//this.preferencesChanged(prefs); 
+			} else {
+				prefs = {};
+			}
 		} catch (err) {
 			
 		}
@@ -401,12 +406,12 @@ dojo.declare("apstrata.horizon.Container",
 		return prefs
 	},
 	
-	savePreferences: function(preferences) {
-		dojo.cookie(this.applicationId + "-prefs", dojo.toJson(preferences), { expires: 365 })
-		this.preferencesChanged(preferences)
+	savePreferences: function(preferences, autoLogout) {
+		dojo.cookie(this.applicationId + "-prefs", dojo.toJson(preferences), { expires: 365 });
+		this.preferencesChanged(preferences, autoLogout);
 	},
 
-	preferencesChanged: function(preferences) {},
+	preferencesChanged: function(preferences, autoLogout) {},
 	
 	showCurtain: function() {
 		// Put a curtain over the entire window

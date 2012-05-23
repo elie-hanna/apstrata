@@ -38,74 +38,29 @@ dojo.declare("apstrata.horizon.Preferences",
 
 	maximizePanel: true,
 	
-	constructor: function() {
-		this.serviceUrl = ""//connection.serviceUrl
-		
-//		this._TIMEOUT_VALUES = [5000, 10000, 20000, 30000, 60000, 120000]
+	constructor: function(attrs) {
+		this.serviceUrl = ""
+		this._TIMEOUT_VALUES = [5000, 10000, 20000, 30000, 60000, 120000]
+		this.autoLogout = false;
+		dojo.mixin(this, attrs);
 
 	},
 	
 	postCreate: function() {
-//		this.preferences = this.getContainer().loadPreferences()
+		this.preferences = this.getContainer().loadPreferences();
 		
-//		this.chkHelp.attr('checked', this.preferences.showContextualHelp)
-//		this.chkRest.attr('checked', this.preferences.showRestMonitor)
+		this.fldServiceUrl.value = this.preferences.serviceUrl?this.preferences.serviceUrl:"https://sandbox.apstrata.com/apsdb/rest";
 
-//		this.fldServiceUrl.value = this.preferences.serviceUrl?this.preferences.serviceUrl:"https://sandbox.apstrata.com/apsdb/rest";
-		// if timeout has not been saved yet
-//		if(this.preferences.timeout)
-//			this.sldTimeout.attr('value', dojo.indexOf(this._TIMEOUT_VALUES, this.preferences.timeout))
+		if(this.preferences.timeout)
+			this.sldTimeout.attr('value', dojo.indexOf(this._TIMEOUT_VALUES, this.preferences.timeout))
 
 		this.inherited(arguments)
 	},
 	
-	_help: function(val) {
-//		this.preferences.showContextualHelp = val
-//		this.savePreferences()
-	},
-	
-	_rest: function(val) {
-//		this.preferences.showRestMonitor = val
-//		this.savePreferences()
-	},
-	
-	_serviceUrl: function() {
-//		this.preferences.serviceUrl = this.fldServiceUrl.value
-//		this.savePreferences()
-	},
-	
-	
-	/*
-		<div dojoType='dijit.form.ToggleButton' style='font-size: 0.8em; color: #0000AA'
-			dojoAttachPoint="chkToaster" dojoAttachEvent="onChange: _toaster"
-			iconClass='dijitCheckBoxIcon'>Enable Toaster</div><br><br>
-	_toaster: function(val) {
-		if (val) {
-			toaster.show()
-		} else {
-			toaster.hide()
-		}
-
-		this.savePreferences()
-	},
-	 */
-	
-	_timeout: function(value) {
-//		this.preferences.timeout = this._TIMEOUT_VALUES[value]
-//		this.savePreferences()
-	},
-	
 	savePreferences: function() {
-//		var self = this
-//		this.preferences.serviceUrl = this.fldServiceUrl.value
-
-//		this.getContainer().savePreferences(this.preferences)
-	},
-	
-	destroy: function() {
-//		this.savePreferences()
-//		console.dir(this.getContainer().loadPreferences())
-		
-//		this.inherited(arguments)
+		var self = this;
+		this.preferences.serviceUrl = this.fldServiceUrl.value;
+		this.preferences.timeout = this._TIMEOUT_VALUES[this.sldTimeout.value];
+		this.getContainer().savePreferences(this.preferences, this.autoLogout);
 	}
 })

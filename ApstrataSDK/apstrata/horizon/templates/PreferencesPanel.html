@@ -4,23 +4,15 @@
 	<div class="apstrataForm rounded-top-sml rounded-bottom-sml">
 		<h2>Preferences</h2>
 		
-		<div dojoType='dijit.form.ToggleButton' style='font-size: 0.8em; color: #0000AA; display: none;'
-			dojoAttachPoint="chkHelp" dojoAttachEvent="onChange: _help"	iconClass='dijitCheckBoxIcon'>Enable Contextual Help</div>
-		<div dojoType='dijit.form.ToggleButton' style='font-size: 0.8em; color: #0000AA'
-			dojoAttachPoint="chkRest" dojoAttachEvent="onChange: _rest"
-			iconClass='dijitCheckBoxIcon'>Enable REST Monitor</div><br><br>
-
-
-		<br><br>
-		
 		<div class="label">apstrata service URL:</div>
 		<input type='text' value='{{ serviceUrl }}' style='width: 500px;' 
-			dojoAttachPoint="fldServiceUrl" dojoAttachEvent='onchange: _serviceUrl'><br><br>
+			dojoAttachPoint="fldServiceUrl" >
+			
+		<br><br>
 
 		<div class="label">apstrata call timeout:</div>
         <div dojoType="dijit.form.HorizontalSlider" value="1" dojoAttachPoint="sldTimeout" 
         minimum="0" maximum="5" discreteValues="6" intermediateChanges="true"
-		dojoAttachEvent='onChange: _timeout'
         showButtons="false" class="sliders" style='width: 500px;position: relative; top: 5px;'>
             <ol dojoType="dijit.form.HorizontalRuleLabels" container="bottomDecoration"
             class="sliderLabels" style='font-size: 0.8em; color: #444444; position: relative; top: 5px;'>
@@ -30,6 +22,11 @@
 				<li>2&nbsp;mins</li>
             </ol>
         </div>
+        
+        <br><br>
+        
+        <div dojoType='dijit.form.Button' style='font-size: 0.8em; color: #0000AA'
+			dojoAttachPoint="chkHelp" dojoAttachEvent="onClick: savePreferences">Save</div>
 
 	</div>
 </div>

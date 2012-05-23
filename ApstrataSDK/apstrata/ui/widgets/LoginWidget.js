@@ -30,6 +30,8 @@ dojo.require('apstrata.ui.ApstrataAnimation')
 dojo.require('apstrata.sdk.Connection')
 dojo.require('apstrata.sdk.Client')
 
+dojo.require('apstrata.horizon.Preferences');
+
 dojo.requireLocalization("apstrata.ui.widgets", "login-widget")
 
 dojo.declare("apstrata.ui.widgets.LoginWidget", 
@@ -43,6 +45,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 	constructor: function(attrs) {
 		this.type = attrs.type
 		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "login-widget")
+		this.showPreferencesLink = false;
 		
 		dojo.mixin(this, apstrata.registry.get("apstrata.ui", "widgets.Login"))
 	},
@@ -72,15 +75,21 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 
 				var connection
 				var credentials
+				var serviceUrl
+				var timeout
 				
-				if (apstrata.registry.get("apstrata.sdk", "Connection")) credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
+				if (apstrata.registry.get("apstrata.sdk", "Connection")) {
+					credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
+					serviceUrl = apstrata.registry.get("apstrata.sdk", "Connection").serviceURL
+					timeout = apstrata.registry.get("apstrata.sdk", "Connection").timeout
+				}
 				
 				dojo.mixin(credentials, values)
 
 				if (self.type == "user") {
-					connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "user"})
+					connection = new apstrata.sdk.Connection({credentials: credentials, serviceUrl: serviceUrl, timeout: timeout, loginType: "user"})
 				} else {
-					connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "master"})
+					connection = new apstrata.sdk.Connection({credentials: credentials,  serviceUrl: serviceUrl, timeout: timeout, loginType: "master"})
 				}
 
 				connection.login().then(
@@ -104,6 +113,17 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 
 		// If credentials have been supplied in apConfig, show them
 		if (apstrata.registry.get("apstrata.sdk", "Connection")) this.form.set("value", apstrata.registry.get("apstrata.sdk", "Connection").credentials)
+		
+		//Add the preferences link
+		if (this.showPreferencesLink) {
+			var prefsButton = new dijit.form.Button({
+				label: 'Preferences',
+				onClick: function() {
+					self.showPreferences();
+				}
+			});
+			dojo.place(prefsButton.domNode, this.dvLogin);
+		}
 	},
 
 	postCreate: function() {
@@ -115,12 +135,14 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 			self.form.disable()
 
 			this._animation = new apstrata.ui.ApstrataAnimation({node: self.domNode})
-			var credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials 
+			var credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
+			var serviceUrl =  apstrata.registry.get("apstrata.sdk", "Connection").serviceURL
+			var timeout = apstrata.registry.get("apstrata.sdk", "Connection").timeout
 
 			if (self.type == "user") {
-				connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "user"})
+				connection = new apstrata.sdk.Connection({credentials: credentials, serviceUrl: serviceUrl, timeout: timeout, loginType: "user"})
 			} else {
-				connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "master"})
+				connection = new apstrata.sdk.Connection({credentials: credentials, serviceUrl: serviceUrl, timeout: timeout, loginType: "master"})
 			}
 
 			connection.login().then(
@@ -168,5 +190,26 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 				})
 		}
 		this.inherited(arguments)
+	},
+	
+	showPreferences: function() {		
+		this.dvLogin.innerHTML = '';
+		
+		var prefs = new apstrata.horizon.Preferences({container: this.container});
+		dojo.place(prefs.domNode, this.dvLogin);
+		
+		//This is a temp fix until we get the CSS for the UI updated
+		dojo.style(dojo.query('.LoginWidget .login .panel')[0], 'position', '');
+
+		/*		
+		var anim = dojox.fx.flip({ 
+			node: prefs.domNode,
+			dir: "left",
+			depth: .5,
+			duration:400
+		});		
+		
+		anim.play();
+		*/		
 	}
 })

@@ -291,7 +291,7 @@ dojo.declare("apstrata.horizon.List",
 			this.store.add(item),
 			function() {
 				self.reload()
-				self._tglEdit.set("checked", false) 
+				if (self._tglEdit) self._tglEdit.set("checked", false) 
 				if (self._filterWidget) self._filterWidget.set('enabled', true)
 			},
 			function() {
@@ -306,7 +306,7 @@ dojo.declare("apstrata.horizon.List",
 			this.store.put(item),
 			function() {
 				self.reload()
-				self._tglEdit.set("checked", false) 
+				if (self._tglEdit) self._tglEdit.set("checked", false) 
 				if (self._filterWidget) self._filterWidget.set('enabled', true)
 			},
 			function() {
@@ -322,7 +322,7 @@ dojo.declare("apstrata.horizon.List",
 			deferred,
 			function() {
 				self.reload()
-				self._tglEdit.set("checked", false) 
+				if (self._tglEdit) self._tglEdit.set("checked", false) 
 				if (self._filterWidget) self._filterWidget.set('enabled', true)
 			},
 			function() {
