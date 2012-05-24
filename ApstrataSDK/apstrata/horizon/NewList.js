@@ -299,8 +299,8 @@ dojo.declare("apstrata.horizon.NewList",
 				if (self._tglEdit) self._tglEdit.set("checked", true) 
 				if (self._filterWidget) self._filterWidget.set('enabled', true)
 			},
-			function() {
-				
+			function(responseMetadata) {
+				self.displayError(responseMetadata.errorCode, responseMetadata.errorDetail)
 			}
 		)
 		return deferred
