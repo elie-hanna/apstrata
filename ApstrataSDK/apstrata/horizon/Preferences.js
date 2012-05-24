@@ -39,7 +39,7 @@ dojo.declare("apstrata.horizon.Preferences",
 	maximizePanel: true,
 	
 	constructor: function(attrs) {
-		this.serviceUrl = ""
+		this.serviceURL = ""
 		this._TIMEOUT_VALUES = [5000, 10000, 20000, 30000, 60000, 120000]
 		this.autoLogout = false;
 		dojo.mixin(this, attrs);
@@ -49,7 +49,7 @@ dojo.declare("apstrata.horizon.Preferences",
 	postCreate: function() {
 		this.preferences = this.getContainer().loadPreferences();
 		
-		this.fldServiceUrl.value = this.preferences.serviceUrl?this.preferences.serviceUrl:"https://sandbox.apstrata.com/apsdb/rest";
+		this.fldServiceURL.value = this.preferences.serviceURL?this.preferences.serviceURL:"https://sandbox.apstrata.com/apsdb/rest";
 
 		if(this.preferences.timeout)
 			this.sldTimeout.attr('value', dojo.indexOf(this._TIMEOUT_VALUES, this.preferences.timeout))
@@ -59,7 +59,7 @@ dojo.declare("apstrata.horizon.Preferences",
 	
 	savePreferences: function() {
 		var self = this;
-		this.preferences.serviceUrl = this.fldServiceUrl.value;
+		this.preferences.serviceURL = this.fldServiceURL.value;
 		this.preferences.timeout = this._TIMEOUT_VALUES[this.sldTimeout.value];
 		this.getContainer().savePreferences(this.preferences, this.autoLogout);
 	}

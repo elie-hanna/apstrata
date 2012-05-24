@@ -65,7 +65,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 		 * 					"creationTime": "value"
 		 * 				},
 		 * 				"timeout": "value",,
-		 * 				"serviceUrl": "value",
+		 * 				"serviceURL": "value",
 		 * 				"defaultStore": "value",
 		 * 				"success": function () {},
 		 * 				"failure": function () {}
@@ -141,12 +141,12 @@ dojo.declare("apstrata.sdk.TokenConnection",
 				// 4a. If we still don't have a service URL OR the service URL is the same as the default,
 				// then try to set the one from the current "apConfig" in the global "apstrata" object.
 				var config = apstrata.apConfig.get();
-				if (self.serviceUrl == '' || (self.serviceUrl == self._DEFAULT_SERVICE_URL)) {
-					// The service URL in the config has two different names "serviceUrl" and "serviceURL".
-					if (config.serviceUrl)
-						self.serviceUrl = config.serviceUrl;
+				if (self.serviceURL == '' || (self.serviceURL == self._DEFAULT_SERVICE_URL)) {
+					// The service URL in the config has two different names "serviceURL" and "serviceURL".
+					if (config.serviceURL)
+						self.serviceURL = config.serviceURL;
 					else if (config.serviceURL)
-						self.serviceUrl = config.serviceURL;
+						self.serviceURL = config.serviceURL;
 				}
 
 				// 4b. If we still don't have a default store, then try to set the one from the current apConfig.
@@ -203,7 +203,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 			}
 	
-			var url = this.serviceUrl
+			var url = this.serviceURL
 					+ "/" + this.credentials.key
 					+ "/" + operation
 					+ "?apsws.time=" + timestamp
@@ -274,7 +274,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 			// 3. Create the Apstrata client and use a regular connection that will generate a signature
 			// and verify the user's credentials instead of this one that will try to use a token.
-			var connectionAttributes = { "credentials": self.credentials, "serviceUrl": self.serviceUrl };
+			var connectionAttributes = { "credentials": self.credentials, "serviceURL": self.serviceURL };
 			var authenticatingConnection = new apstrata.sdk.Connection(connectionAttributes);
 			var client = new apstrata.sdk.Client(authenticatingConnection);
 			client.call("VerifyCredentials", data).then(
@@ -542,7 +542,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 				// 3. Set the connection credentials and metadata from the loaded cookie.
 				this.credentials = cookieObject.credentials;
-				if (cookieObject.serviceUrl) this.serviceUrl = cookieObject.serviceUrl;
+				if (cookieObject.serviceURL) this.serviceURL = cookieObject.serviceURL;
 				if (cookieObject.defaultStore) this.defaultStore = cookieObject.defaultStore;
 
 				apstrata.apConfig.config.key = cookieObject.credentials.key;
@@ -551,7 +551,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 				console.log("debug", "apstrata.TokenConnection", "Credentials set to:", this.credentials);
 
 				console.info("Credentials set to:", this.credentials);
-				console.info("ServiceUrl:", this.serviceUrl);
+				console.info("serviceURL:", this.serviceURL);
 				console.info("defaultStore:", this.defaultStore);
 
 				return true;
@@ -600,7 +600,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 			var cookieObject = {};
 			cookieObject.credentials = self.credentials;
-			cookieObject.serviceUrl = self.serviceUrl;
+			cookieObject.serviceURL = self.serviceURL;
 			cookieObject.defaultStore = self.defaultStore;
 			cookieObject.token = self.token;
 

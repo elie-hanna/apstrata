@@ -302,7 +302,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 		try {
 			dojo.publish("/apstrata/client", [message])			
 		} catch (err) {
-			console.exception(err)
+			console.error(err)
 		}
 	}	
 })
