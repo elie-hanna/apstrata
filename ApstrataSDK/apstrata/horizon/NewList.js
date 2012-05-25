@@ -402,6 +402,7 @@ dojo.declare("apstrata.horizon.NewList",
 				actions: ['Yes', 'No'],
 				actionHandler: function(action){
 					if (action == 'Yes') {
+						self.changeItemLabel(id, newLabel)
 						self._handleSingleEditMode()
 					}
 					else {
@@ -478,6 +479,12 @@ dojo.declare("apstrata.horizon.NewList",
 	
 	setLabel: function(item, label) {
 		item[this.labelAttribute] = label
+	},
+	
+	// This function should be overriden in the subclass to implement the behavior upon changing the item label, 
+	// such as making a call to the server to make the label change
+	changeItemLabel: function(id, label) {
+		
 	},
 	
 	getId: function(item) {
