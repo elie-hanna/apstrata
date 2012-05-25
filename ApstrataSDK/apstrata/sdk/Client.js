@@ -295,7 +295,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 		this.response.metadata.errorDetail = "Timeout or communication error";
 		this.responseTime = this.connection.timeout
 		
-		self.deferred.reject(self)
+		self.deferred.reject(this.response)
 	},
 	
 	_publish: function(message) {
