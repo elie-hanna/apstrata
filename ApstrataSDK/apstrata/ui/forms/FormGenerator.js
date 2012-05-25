@@ -214,8 +214,11 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 				
 				//keep values that are empty so that we can delete fields
 				// in apstrata, to delete a field, you need to send it with an empty value
+				// hence we need to exlude undefined values but keep the empty values
 				//if (value[k]) newValue[k.replace("!", ".")] = value[k]
-				newValue[k.replace("!", ".")] = value[k]
+				if (!(typeof(value[k]) === 'undefined')) {
+					newValue[k.replace("!", ".")] = value[k]
+				}
 			}
 			
 			if (newValue.dijit) delete newValue.dijit
