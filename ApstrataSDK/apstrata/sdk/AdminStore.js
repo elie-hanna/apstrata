@@ -196,52 +196,6 @@ dojo.declare("apstrata.sdk.AdminStore",
 		return this.queryResults(deferred)
 	},
 	
-	_putScript: function(object, options) {
-		var self = this
-		var deferred = new dojo.Deferred();
-		
-		var overwrite = true
-		
-		var request = {
-			apsdb: {
-				scriptName: self.store,
-				update: false
-			}
-		}
-		
-		dojo.mixin(request, object)
-
-		if (options.id) request.apsdb.documentKey = options.id
-		if (options.overwrite) request.apsdb.update = options.overwrite
-		
-		dojo.mixin(request, object)
-		
-		// Create temporary form node that the POST needs
-		var form = dojo.create('form')
-		dojo.place(form, dojo.body())
-
-		var attrs = {
-			action: "SaveScript",
-			request: request,
-			formNode: form, // dojo.byId('noForm'),
-			useHttpMethod: "POST",
-			load: function(operation) {
-				// remove temporary form node 
-				form.parentNode.removeChild(form)
-				deferred.resolve(operation.response.result.document.key)
-			},
-			error: function(operation) {
-				// remove temporary form node 
-				form.parentNode.removeChild(form)
-				deferred.reject(operation.response.metadata)
-			}
-		}
-	
-		
-		return deferred
-	},
-
-
 	put: function(object, options) {
 		var self = this
 		var deferred = new dojo.Deferred()
