@@ -175,6 +175,7 @@ dojo.declare("apstrata.horizon.NewList",
 						else delete self._selectedId
 			},
 			function(responseMetadata) {
+				self.showAsBusy(false)
 				self.displayError(responseMetadata.errorCode, responseMetadata.errorDetail)
 			}
 		)
