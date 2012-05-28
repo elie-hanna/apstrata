@@ -63,7 +63,7 @@ dojo.declare("apstrata.horizon.Panel",
 			this._selectIds = attrs.selectIds
 		}
 		
-	
+		this._onGoingAnimation = true
 		this._fixedPanel = false
 		this.deferred = new dojo.Deferred()
 	},
@@ -204,13 +204,15 @@ dojo.declare("apstrata.horizon.Panel",
 	postCreateContent: function() {
 		
 	},
-
+	
 	/**
 	 * Panels are usually animated into place, this event gets called after the animation has ended
 	 */
 	onAnimationEnd: function() {
 		// Resize after adding a panel because the scroll bar might show on the container
 		// TODO: this should be handled differently
+		this._onGoingAnimation = false
+		if (this.doOpenPanel) this.doOpenPanel() 
 		this.container.layout()
 	},
 
@@ -246,34 +248,50 @@ dojo.declare("apstrata.horizon.Panel",
 	 * Instantiates selected panel and opens it
 	 */
 	openPanel: function(panel, args) {
-		var self = this
-		// Destroy an existing child open panel
-		this.closePanel();
 
-		// Use the parentList and container parameters if they were sent in the argument list.
-		var parentList = null;
-		var container = null;
-		if (args) {
-			if (args.parentList)
-				parentList = args.parentList;
-			if (args.container)
-				container = args.container;
+		/**
+		 * Register a funtion to open a panel that will be called upon onAnimationEnd fires
+		 */		
+		this.doOpenPanel = function() {
+
+			var self = this
+			// Destroy an existing child open panel
+			this.closePanel();
+
+
+	
+			// Use the parentList and container parameters if they were sent in the argument list.
+			var parentList = null;
+			var container = null;
+			if (args) {
+				if (args.parentList)
+					parentList = args.parentList;
+				if (args.container)
+					container = args.container;
+			}
+			if (parentList == null)
+				parentList = self;
+			if (container == null)
+				container = self.getContainer();
+	
+			// Mixin to the custom args the pointers to the parent and container		
+			var newArgs = dojo.mixin(args, {parentList: parentList, container: container})
+			
+			// Instantiate new Class 'panel'
+			this._openPanel = new panel(newArgs)
+	
+			// Add to DojoLayout container
+			this.getContainer().addChild(this._openPanel)
+					
+	//		return this._openPanel
 		}
-		if (parentList == null)
-			parentList = self;
-		if (container == null)
-			container = self.getContainer();
 
-		// Mixin to the custom args the pointers to the parent and container		
-		var newArgs = dojo.mixin(args, {parentList: parentList, container: container})
-		
-		// Instantiate new Class 'panel'
-		this._openPanel = new panel(newArgs)
-
-		// Add to DojoLayout container
-		this.getContainer().addChild(this._openPanel)
-				
-		return this._openPanel
+		// If the panel is already open, code in onAnimationEnd won't be called again, so open the 
+		//  panel here
+		if (!this._onGoingAnimation) {
+console.debug('animation already terminated, opening panel')		
+				this.doOpenPanel()			
+		}
 	},
 	
 	/*

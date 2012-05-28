@@ -36,6 +36,10 @@ dojo.declare("apstrata.horizon.Menu",
 		]
 	 */
 	
+	constructor: function() {
+		this._onGoingAnimation = false
+	},
+	
 	onClick: function(index, id, args) {
 		var self = this	
 
