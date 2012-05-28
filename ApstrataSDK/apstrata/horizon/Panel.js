@@ -289,7 +289,6 @@ dojo.declare("apstrata.horizon.Panel",
 		// If the panel is already open, code in onAnimationEnd won't be called again, so open the 
 		//  panel here
 		if (!this._onGoingAnimation) {
-console.debug('animation already terminated, opening panel')		
 				this.doOpenPanel()			
 		}
 	},
