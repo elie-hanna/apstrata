@@ -92,12 +92,39 @@ dojo.declare("apstrata.horizon.Grid",
 	editItems: function() {},
 	newItem: function() {},
 	deleteItems: function() {
-		// This just deletes the top item from the selection for now
-		var deferred = this.gridParams.store.objectStore.remove(this._grid.selection.getSelected()[0].key)
+		var self = this;
+		var finalDef = new dojo.Deferred();
 		
-		deferred.then(function(attr) {
-			if (!attr) console.debug('fail'); else console.debug('success')
-		})
+		/*
+		 * Not sure if the following logic to ensure that all documents have been deleted will work, 
+		 * due to using a shared varialble called processed which is not synchronized over multiple 
+		 * asynchronous delete calls.
+		 * May be it is better to use the publish/subscribe pattern
+		 */
+		var selection = self._grid.selection.getSelected();
+		var processed = 0;
+		self.showAsBusy(true, 'deleting document(s)...');
+		for (var i = 0; i < selection.length; i++) {
+			this.gridParams.store.objectStore.remove(selection[i].key).then(
+				function() {
+					processed = processed + 1;
+					if (processed == selection.length) {
+						self.showAsBusy(false);
+						finalDef.resolve();
+					}
+				},
+				function() {
+					processed = processed + 1;
+					if (processed == selection.length) {
+						self.showAsBusy(false);
+						finalDef.resolve();
+					}					
+				}
+			);
+		}
+				
+		return finalDef;
+		
 	},
 
 	getContentHeight: function() {
