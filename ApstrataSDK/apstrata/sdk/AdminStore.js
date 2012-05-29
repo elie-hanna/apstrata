@@ -35,7 +35,7 @@ dojo.declare("apstrata.sdk.AdminStore",
 		this.type = type
 	},
 	
-	_query: function(action, dataProperty, query, queryOptions) {
+	_queryAsList: function(action, dataProperty, query, queryOptions) {
 		var self = this
 		
 		var def = new dojo.Deferred()
@@ -70,38 +70,61 @@ dojo.declare("apstrata.sdk.AdminStore",
 		)	
 	},
 	
+	_queryDocuments: function(action, query) {
+		var self = this
+		
+		var def = new dojo.Deferred()
+
+		var options = {
+			method: 'GET',
+			timeout: self.connection.timeout	
+		}
+		
+		this.client.call(action, query, null, options).then(
+			function(response) {
+				def.resolve(response.result['documents'])
+			},
+			function(response) {
+				def.reject(response.metadata)	
+			}
+		)
+		
+		return this.queryResults(def)		
+	},
+	
+	
 	query: function(query, queryOptions) {
 		switch (this.type) {
 			case 'stores': 
-				return this._query("ListStores", "stores", query, queryOptions)
+				return this._queryAsList("ListStores", "stores", query, queryOptions)
 				break;
 
 			case 'schemas':
-				return this._query("ListSchemas", "schemas", query, queryOptions)
+				return this._queryAsList("ListSchemas", "schemas", query, queryOptions)
 			 	break;
 				
 			case 'scripts': 
-				return this._query("ListScripts", "scripts", query, queryOptions)
+				return this._queryAsList("ListScripts", "scripts", query, queryOptions)
 				break;
 
 			case 'SavedQueries': 
-				return this._query("ListSavedQueries", "savedQueries", query, queryOptions)
+				return this._queryAsList("ListSavedQueries", "savedQueries", query, queryOptions)
 				break;
 
 			case 'users':
-				return this._query("ListUsers", "users", query, queryOptions)
+				return this._queryAsList("ListUsers", "users", query, queryOptions)
 				break;
 
 			case 'groups': 
-				return this._query("ListGroups", "groups", query, queryOptions)
+				return this._queryAsList("ListGroups", "groups", query, queryOptions)
 				break;
 				
 			case 'configuration': 
-				return this._query("ListConfiguration", "", query, queryOptions)
+				return this._queryAsList("ListConfiguration", "", query, queryOptions)
 				break;
 
 			case 'documents': 
-				return this.inherited(arguments)
+				return this._queryDocuments("Query", query)
 				break;
 
 			case 'RunScript': break;

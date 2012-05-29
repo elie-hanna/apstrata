@@ -63,9 +63,9 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		if (this.queryExpression) apsdb.query = this.queryExpression
 		if (this.queryFields) apsdb.queryFields = this.queryFields
 		if (this.resultsPerPage) apsdb.resultsPerPage = this.resultsPerPage
-		if (options.count) apsdb.resultsPerPage = options.count
+		if (options && options.count) apsdb.resultsPerPage = options.count
 		
-		if (options.sort) {
+		if (options && options.sort) {
 			var type = 'string'
 			
 			if (this.fieldTypes && this.fieldTypes[options.sort[0].attribute]) type = this.fieldTypes[options.sort[0].attribute]
@@ -78,7 +78,7 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		}
 		
 		
-		if (options.start) {
+		if (options && options.start) {
 			apsdb.pageNumber = options.start/options.count + 1 	
 		} else {
 			apsdb.pageNumber = 1
