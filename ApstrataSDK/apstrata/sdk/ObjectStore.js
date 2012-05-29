@@ -63,6 +63,7 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		if (this.queryExpression) apsdb.query = this.queryExpression
 		if (this.queryFields) apsdb.queryFields = this.queryFields
 		if (this.resultsPerPage) apsdb.resultsPerPage = this.resultsPerPage
+		if (this.runAs) apsdb.runAs = this.runAs
 		if (options && options.count) apsdb.resultsPerPage = options.count
 		
 		if (options && options.sort) {
