@@ -28,6 +28,7 @@ dojo.declare("apstrata.TokenConnection",
 	[apstrata.Connection],
 	{
 		_COOKIE_NAME: "apstrata.token.connection",
+		_CREDENTIALS_CHANGED: "CREDENTIALS_CHANGED",
 		_APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER: null,
 		_APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER: null,
 		NOT_LOGGED_IN: "NOT_LOGGED_IN",
@@ -175,6 +176,17 @@ dojo.declare("apstrata.TokenConnection",
 		},
 
 		/**
+		 * Used to check the validity of the connection by comparing the cookie credentials with the credentials in this connection.
+		 */
+		checkConnection: function () {
+			if (this._haveCredentialsChanged()) {
+				return { "status": "failure", "errorDetail": this._CREDENTIALS_CHANGED };
+			} else {
+				return { "status": "success" };
+			}
+		},
+
+		/**
 		 * Instead of signing the request, expect that the token will be sent as a secure cookie in the request to the apstrata
 		 * domain. The token will allows the request to be authenticated.
 		 *
@@ -207,6 +219,31 @@ dojo.declare("apstrata.TokenConnection",
 					+ ((params != "") ? "&" : "") + params;
 
 			return { url: apswsReqUrl, signature: "" };
+		},
+
+		/**
+		 * Compares this connection's credentials with the ones in the cookie.
+		 *
+		 * @returns true of the creedentials have changed, false otherwise.
+		 */
+		_haveCredentialsChanged: function () {
+			var jsonStr = dojo.cookie(this._COOKIE_NAME);
+
+			if (jsonStr && jsonStr != "") {
+				// 1. Create the object from the cookie.
+				var cookieObject = dojo.fromJson(jsonStr);
+				apstrata.logger.info("Found connection in cookie", cookieObject);
+
+				// 2. Check if the credentials in the cookie match the credentials in this object.
+				if (   cookieObject.serviceUrl != this.serviceUrl
+					|| (   cookieObject.credentials
+						&& (   cookieObject.credentials.key != apstrata.apConfig.config.key
+							|| cookieObject.credentials.username != apstrata.apConfig.config.username))) {
+					return true;
+				} else {
+					return false;
+				}
+			}
 		},
 
 		/**
@@ -678,7 +715,6 @@ dojo.declare("apstrata.TokenConnection",
 		 * However, the token needs to be renewed.
 		 */
 		_publishFailureAuthentication: function () {
-			var self = this;
 			dojo.publish("/apstrata/connection/logout/success", [{
 			}]);
 		}

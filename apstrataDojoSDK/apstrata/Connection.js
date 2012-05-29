@@ -119,6 +119,13 @@ dojo.declare('apstrata.Connection',
 			return ((this.credentials.secret != undefined) && (this.credentials.secret != null) && (this.credentials.secret != "")) 
 				|| ((this.credentials.password != undefined) && (this.credentials.password != null) && (this.credentials.password != ""));
 		},
+
+		/**
+		 * Used to check the validity of the connection. But in this, the base class, it will always return a status of "success".
+		 */
+		checkConnection: function () {
+			return { "status": "success" };
+		},
 		
 		setTimeout: function(timeout) {
 			this.timeout = timeout

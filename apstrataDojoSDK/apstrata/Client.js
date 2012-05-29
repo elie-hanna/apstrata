@@ -66,7 +66,19 @@ dojo.declare('apstrata.Client',
 
 		call: function(attrs) {
 			var self = this
-			
+
+			// Check that the connection is still live before trying to use it to make a request.
+			var checkConnectionResult = self.connection.checkConnection();
+			if (checkConnectionResult && checkConnectionResult.status == "failure") {
+				dojo.publish("/apstrata/connection", [{
+					action: 'stopped',
+					message: checkConnectionResult.errorDetail,
+					type: "error"
+				}]);
+
+				return;
+			}
+
 			dojo.publish("/apstrata/connection", [{
 					action: 'start',
 					message: "Calling apstrata API: <b>" + attrs.action + "</b>", 
