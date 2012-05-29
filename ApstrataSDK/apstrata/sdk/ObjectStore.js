@@ -122,6 +122,10 @@ dojo.declare("apstrata.sdk.ObjectStore",
 			"apsdb.store": self.store
 		}
 		
+		if (self.runAs) {
+			requestParams["apsdb.runAs"] = self.runAs;
+		}
+		
 		this.client.call("Query", requestParams).then(function(response) {
 			if (response.result.documents.length>0) {
 				deferred.resolve(response.result.documents[0])
@@ -139,6 +143,10 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		var self = this
 		var o = {"apsdb.update": true, "apsdb.store": self.store}
 		dojo.mixin(o, object)
+		
+		if (self.runAs) {
+			o["apsdb.runAs"] = self.runAs;
+		}
 
 		return this.client.call("SaveDocument", o)
 	},
@@ -147,13 +155,26 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		var self = this
 		var o = {"apsdb.store": self.store}
 		dojo.mixin(o, object)
+		
+		if (self.runAs) {
+			o["apsdb.runAs"] = self.runAs;
+		}
 
 		return this.client.call("SaveDocument", o)
 	},
 
 	remove: function(id) {
 		var self = this
-		return this.client.call("DeleteDocument", dojo.mixin({"apsdb.store": self.store, "apsdb.documentKey": id}))
+		var requestParams = {
+			"apsdb.store": self.store,
+			"apsdb.documentKey": id
+		}
+		
+		if (self.runAs) {
+			requestParams["apsdb.runAs"] = self.runAs;
+		}
+		
+		return this.client.call("DeleteDocument", requestParams)
 	},
 	
 	queryResults: function(results){
