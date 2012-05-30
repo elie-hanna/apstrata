@@ -217,12 +217,22 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 				// hence we need to exlude undefined values but keep the empty values
 				//if (value[k]) newValue[k.replace("!", ".")] = value[k]
 				if (!(typeof(value[k]) === 'undefined')) {
-					newValue[k.replace("!", ".")] = value[k]
+					//somtimes dojo returns the value of the form with apsdb as an object
+					//remove this apsdb hierarchy and flatten it because it causes INVALID_PARAMETER error
+					//ex: {apsdb: {query:""}} will become {apsdb.query:""}
+					if (k == "apsdb") {
+						for (var j in value[k]) {
+							var tmpKey = k + "." + j
+							newValue[tmpKey.replace("!", ".")] = value[k][j]
+						}	
+					} else {
+						newValue[k.replace("!", ".")] = value[k]
+					}
 				}
 			}
 			
 			if (newValue.dijit) delete newValue.dijit
-			
+						
 			return newValue
 		} else return this.inherited(arguments)
 	},

@@ -102,30 +102,32 @@ dojo.declare("apstrata.horizon.Grid",
 		 * May be it is better to use the publish/subscribe pattern
 		 */
 		var selection = self._grid.selection.getSelected();
-		var processed = 0;
-		self.showAsBusy(true, 'deleting document(s)...');
-		for (var i = 0; i < selection.length; i++) {
-			this.gridParams.store.objectStore.remove(selection[i].key).then(
-				function() {
-					processed = processed + 1;
-					if (processed == selection.length) {
-						self.showAsBusy(false);
-						finalDef.resolve();
+		if (selection && selection.length > 0) {
+			var processed = 0;
+			self.showAsBusy(true, 'deleting document(s)...');
+			for (var i = 0; i < selection.length; i++) {
+				this.gridParams.store.objectStore.remove(selection[i].key).then(
+					function() {
+						processed = processed + 1;
+						if (processed == selection.length) {
+							self.showAsBusy(false);
+							finalDef.resolve();
+						}
+					},
+					function(response) {
+						if (response.metadata) {
+							self.displayError(response.metadata.errorCode, response.metadata.errorDetail);
+						} else if (response.errorCode) {
+							self.displayError(response.errorCode, response.errorDetail);					
+						}
+						processed = processed + 1;
+						if (processed == selection.length) {
+							self.showAsBusy(false);
+							finalDef.resolve();
+						}					
 					}
-				},
-				function(response) {
-					if (response.metadata) {
-						self.displayError(response.metadata.errorCode, response.metadata.errorDetail);
-					} else if (response.errorCode) {
-						self.displayError(response.errorCode, response.errorDetail);					
-					}
-					processed = processed + 1;
-					if (processed == selection.length) {
-						self.showAsBusy(false);
-						finalDef.resolve();
-					}					
-				}
-			);
+				);
+			}
 		}
 				
 		return finalDef;

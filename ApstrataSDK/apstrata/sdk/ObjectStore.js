@@ -35,7 +35,8 @@ dojo.declare("apstrata.sdk.ObjectStore",
 [dojo.store.api.Store], 
 {
 	
-	idProperty: "apsdb.documentKey",
+	idProperty: "key",
+	versionProperty: "versionNumber",
 	
 	/**
 	 * Instantiates a new instance of ObjectStore
@@ -101,8 +102,8 @@ dojo.declare("apstrata.sdk.ObjectStore",
 				response.result.documents.total = response.result.count
 				deferred.callback(response.result.documents)
 			},
-			function() {
-				deferred.callback("ERROR")
+			function(response) {
+				deferred.callback(response.metadata)
 			}
 		)
 		
@@ -110,16 +111,25 @@ dojo.declare("apstrata.sdk.ObjectStore",
 	},
 	
 	getIdentity: function(object) {
-		return object[idProperty]
+		return object[idProperty] + "|" + object[versionProperty] 
 	},
 	
 	get: function(id) {
 		var self = this
 		var deferred = new dojo.Deferred()
+		
+		var idElements = id.split("|")
+		var key = idElements[0]
+		var versionNumber = 1
+		if (idElements.length > 1) {
+			versionNumber = Math.floor(idElements[[1]])
+		}
+		
 		var requestParams = {
-			"apsdb.query": "apsdb.documentKey=\""+id+"\"", 
+			"apsdb.query": "apsdb.documentKey=\"" + key + "\" and apsdb.versionNumber = " + versionNumber, 
 			"apsdb.queryFields": self.queryFields,
-			"apsdb.store": self.store
+			"apsdb.store": self.store,
+			"apsdb.includeFieldType": true
 		}
 		
 		if (self.runAs) {
@@ -132,8 +142,8 @@ dojo.declare("apstrata.sdk.ObjectStore",
 			} else {
 				deferred.reject("NOT_FOUND")
 			}
-		}, function() {
-			deferred.reject("ERROR")
+		}, function(response) {
+			deferred.reject(response.metadata)
 		})
 			
 		return deferred
@@ -143,10 +153,6 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		var self = this
 		var o = {"apsdb.update": true, "apsdb.store": self.store}
 		dojo.mixin(o, object)
-		
-		if (self.runAs) {
-			o["apsdb.runAs"] = self.runAs;
-		}
 
 		return this.client.call("SaveDocument", o)
 	},
@@ -155,10 +161,6 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		var self = this
 		var o = {"apsdb.store": self.store}
 		dojo.mixin(o, object)
-		
-		if (self.runAs) {
-			o["apsdb.runAs"] = self.runAs;
-		}
 
 		return this.client.call("SaveDocument", o)
 	},

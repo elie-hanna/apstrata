@@ -132,7 +132,8 @@ dojo.declare("apstrata.sdk.AdminStore",
 		
 	},
 	
-	get: function(id) {
+	get: function(id, options) {
+		var self = this;
 		var deferred = new dojo.Deferred();
 		
 		var clientOptions = {
@@ -210,8 +211,35 @@ dojo.declare("apstrata.sdk.AdminStore",
 				break;
 
 			case 'documents': 
-				return this.inherited(arguments)
-				break;
+				var idElements = id.split("|")
+				var key = idElements[0]
+				var versionNumber = 1
+				if (idElements.length > 1) {
+					versionNumber = Math.floor(idElements[[1]])
+				}
+								
+				var requestParams = {
+					"apsdb.query": "apsdb.documentKey=\"" + key + "\" and apsdb.versionNumber = " + versionNumber,
+					"apsdb.queryFields": "*",
+					"apsdb.includeFieldType": true
+				}
+				
+				if (options && options.store) {
+					requestParams["apsdb.store"] = options.store;
+				} 
+				
+				this.client.call("Query", requestParams, null, clientOptions).then(
+					function(response) {
+						if (response.result.documents.length>0) {
+							deferred.resolve(response.result.documents[0])
+						} else {
+							deferred.reject("NOT_FOUND")
+						}
+					}, 
+					function(response) {
+						deferred.reject(response.metadata)
+					}
+				)
 
 			case 'RunScript': break;
 		}
@@ -229,8 +257,20 @@ dojo.declare("apstrata.sdk.AdminStore",
 		
 		switch (this.type) {
 			case 'documents':
-				return this.inherited(arguments)
-				break;
+				var action = "SaveDocument";
+				var request = object;
+		
+				self.client.call(action, request, null, clientOptions).then(
+					function(response) {
+						deferred.resolve(true)
+					},
+					function(response) {
+						deferred.reject(response.metadata)
+					}
+				)
+				
+				return deferred
+				break;	
 				
 			case 'users':
 				var action = "SaveUser";
@@ -420,6 +460,7 @@ dojo.declare("apstrata.sdk.AdminStore",
 	},
 	
 	remove: function(id) {
+		var self = this;
 		var deferred = new dojo.Deferred();
 		
 		var clientOptions = {
