@@ -194,6 +194,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 											width: embeddedAlertWidth, height: embeddedAlertHeight,
 											content: html,
 											actions: "close",
+											startFocus: "close",
 											onClose: function() {
 												self._undimForm()
 											}})

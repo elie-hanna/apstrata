@@ -87,6 +87,7 @@ dojo.declare("apstrata.widgets.EmbeddedAlert",
 	        })
 			
 			dojo.place(button.domNode, self.dvActions)
+			if (self.startFocus == button.label) button.focus();
 		}) 
 	}
 })
