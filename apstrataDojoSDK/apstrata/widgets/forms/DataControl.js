@@ -183,7 +183,14 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 		var marginBox = dojo.marginBox(self.bindForm.domNode);
 		var embeddedAlertHeight = (marginBox.h < 170) ? (marginBox.h - 3) : 170;
 		var embeddedAlertWidth = (marginBox.w < 270) ? (marginBox.w - 3) : 270;
-		var alt = new apstrata.widgets.EmbeddedAlert({container: self.bindForm.domNode,
+		// Set the containing node of the embedded alert to the curtain container in the settings or the form if it is not set.
+		var curtainContainer = null;
+		if (self.curtainContainer) {
+			curtainContainer = self.curtainContainer.domNode;
+		} else {
+			curtainContainer = self.bindForm.domNode;
+		}
+		var alt = new apstrata.widgets.EmbeddedAlert({container: curtainContainer,
 											width: embeddedAlertWidth, height: embeddedAlertHeight,
 											content: html,
 											actions: "close",
