@@ -117,28 +117,34 @@ dojo.declare("apstrata.horizon.Grid",
 					if (action == 'Yes') {
 						var processed = 0;
 						self.showAsBusy(true, 'deleting document(s)...');
+						var processedKeys = {}; // this is used to make sure that we delete multiple versions only once, since in apstrata deleting a document will delete all its versions
 						for (var i = 0; i < selection.length; i++) {
-							self.gridParams.store.objectStore.remove(selection[i].key).then(
-								function() {
-									processed = processed + 1;
-									if (processed == selection.length) {
-										self.showAsBusy(false);
-										finalDef.resolve();
+							if (!processedKeys[selection[i].key]) {
+								processedKeys[selection[i].key] = "processed"
+								self.gridParams.store.objectStore.remove(selection[i].key).then(
+									function() {
+										processed = processed + 1;
+										if (processed == selection.length) {
+											self.showAsBusy(false);
+											finalDef.resolve();
+										}
+									},
+									function(response) {
+										if (response.metadata) {
+											self.displayError(response.metadata.errorCode, response.metadata.errorDetail);
+										} else if (response.errorCode) {
+											self.displayError(response.errorCode, response.errorDetail);					
+										}
+										processed = processed + 1;
+										if (processed == selection.length) {
+											self.showAsBusy(false);
+											finalDef.resolve();
+										}					
 									}
-								},
-								function(response) {
-									if (response.metadata) {
-										self.displayError(response.metadata.errorCode, response.metadata.errorDetail);
-									} else if (response.errorCode) {
-										self.displayError(response.errorCode, response.errorDetail);					
-									}
-									processed = processed + 1;
-									if (processed == selection.length) {
-										self.showAsBusy(false);
-										finalDef.resolve();
-									}					
-								}
-							);
+								);
+							} else {
+								processed = processed + 1
+							}
 						}
 					}
 				}
