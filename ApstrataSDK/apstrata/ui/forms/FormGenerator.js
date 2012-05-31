@@ -222,8 +222,10 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 					//ex: {apsdb: {query:""}} will become {apsdb.query:""}
 					if (k == "apsdb") {
 						for (var j in value[k]) {
-							var tmpKey = k + "." + j
-							newValue[tmpKey.replace("!", ".")] = value[k][j]
+							if (!(typeof(value[k][j]) === 'undefined')) {
+								var tmpKey = k + "." + j
+								newValue[tmpKey.replace("!", ".")] = value[k][j]
+							}
 						}	
 					} else {
 						newValue[k.replace("!", ".")] = value[k]

@@ -103,31 +103,46 @@ dojo.declare("apstrata.horizon.Grid",
 		 */
 		var selection = self._grid.selection.getSelected();
 		if (selection && selection.length > 0) {
-			var processed = 0;
-			self.showAsBusy(true, 'deleting document(s)...');
-			for (var i = 0; i < selection.length; i++) {
-				this.gridParams.store.objectStore.remove(selection[i].key).then(
-					function() {
-						processed = processed + 1;
-						if (processed == selection.length) {
-							self.showAsBusy(false);
-							finalDef.resolve();
+			new apstrata.horizon.PanelAlert({
+				panel: self,
+				width: 320,
+				height: 150,
+				message: "Are you sure that you want to delete the selected row(s)?",
+				iconClass: "deleteIcon",
+				actions: [
+					'Yes',
+					'No'
+				],
+				actionHandler: function(action) {
+					if (action == 'Yes') {
+						var processed = 0;
+						self.showAsBusy(true, 'deleting document(s)...');
+						for (var i = 0; i < selection.length; i++) {
+							self.gridParams.store.objectStore.remove(selection[i].key).then(
+								function() {
+									processed = processed + 1;
+									if (processed == selection.length) {
+										self.showAsBusy(false);
+										finalDef.resolve();
+									}
+								},
+								function(response) {
+									if (response.metadata) {
+										self.displayError(response.metadata.errorCode, response.metadata.errorDetail);
+									} else if (response.errorCode) {
+										self.displayError(response.errorCode, response.errorDetail);					
+									}
+									processed = processed + 1;
+									if (processed == selection.length) {
+										self.showAsBusy(false);
+										finalDef.resolve();
+									}					
+								}
+							);
 						}
-					},
-					function(response) {
-						if (response.metadata) {
-							self.displayError(response.metadata.errorCode, response.metadata.errorDetail);
-						} else if (response.errorCode) {
-							self.displayError(response.errorCode, response.errorDetail);					
-						}
-						processed = processed + 1;
-						if (processed == selection.length) {
-							self.showAsBusy(false);
-							finalDef.resolve();
-						}					
 					}
-				);
-			}
+				}
+			})
 		}
 				
 		return finalDef;
