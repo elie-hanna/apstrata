@@ -82,7 +82,7 @@ dojo.declare("apstrata.horizon.Panel",
 					this._maximizeWidth = self.getContainer().getRemainingFreeWidth(self.id) - marginL - marginR +'px'		
 				}
 			} else {
-				this._maximizeWidth = self.getContainer().getRemainingFreeWidth(self.id)+'px'		
+				this._maximizeWidth = self.getContainer().getRemainingFreeWidth(self.id) - dojo.style(this.domNode, "marginRight") - dojo.style(this.domNode, "marginLeft") +'px'		
 			}
 			dojo.style(this.domNode, {width: self._maximizeWidth})
 		}

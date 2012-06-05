@@ -166,15 +166,13 @@ dojo.declare("apstrata.horizon.Container",
 		
 	getRemainingFreeWidth: function(excludeId) {
 		var w = 0
-		
 		for (id in this.__children) {
 			if (id != excludeId) {
 				var child = this.__children[id]
 				w += dojo.marginBox(child.domNode).w
 			}
 		}
-		
-		return dojo.marginBox(this.domNode).w - w
+		return dojo.contentBox(this.domNode).w - w
 	},
 	
 	layout: function() {
