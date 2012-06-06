@@ -1,0 +1,190 @@
+@import "../../lib/dojo/dojo/resources/dnd.css";
+
+.apstrataCms .MenuEditorContainer {
+	width: 1000px;
+}
+
+.apstrataCms .MenuEditor {
+	width: 100%;
+	height: 100%;
+}
+
+.apstrataCms .MenuEditor .columns {
+	display: table;
+	width: 99%;
+	height: 80%;
+}
+
+	.apstrataCms .MenuEditor .column {
+		display: table-cell;
+		width: 20%;
+		height: 80%;
+		padding: 4px;
+		overflow: auto;
+
+	    border-radius: 12px;	
+	}
+
+	.apstrataCms .MenuEditor .source {
+		background: #afb4ff;
+		
+	}
+	
+	.apstrataCms .MenuEditor h2 {
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+	
+	.apstrataCms .MenuEditor .column .description {
+		font-size: 0.7em;
+	}
+	
+	.apstrataCms .MenuEditor .trashBin {
+		position: relative;
+		top: 20px;
+		left: 50px;
+		background-image: url('resources/bin-empty.png');
+		background-size: 100% 100%;
+		width: 100px;
+		height: 128px;
+	}
+
+	.apstrataCms .MenuEditor .trashBin:hover {
+		background-image: url('resources/bin-full.png');
+	}
+	
+	
+.apstrataCms .MenuEditor .actions {
+	height: 20%;
+	min-height: 50px;
+}
+
+.apstrataCms .HierachicalDnDList {
+	height: 300px;
+	overflow: auto;
+	position: relative;
+}
+
+		.apstrataCms .HierachicalDnDList .dropArea {
+			padding-top: 0px;
+			height: 100%;
+			overflow-x: auto;
+
+		    border-radius: 10px;
+		}
+		.apstrataCms .HierachicalDnDList .dropArea:hover {
+			background: #97a0ee;
+		}
+
+
+
+
+
+.apstrataCms .MenuEditor .pagesSource {
+}
+
+.apstrataCms .HierachicalDnDList .busy {
+	background-image: url('resources/loading-animation-3lights.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.apstrataCms .HierachicalDnDList .indentControl {
+	padding: 3px;
+	height: 17px;
+	display: none;
+	position: absolute;
+	cursor: pointer;
+
+	background: #5BBDEA;
+	border-top-right-radius: 12px;	
+	border-top-left-radius: 12px;	
+}
+ 
+.apstrataCms .HierachicalDnDList .indentControl .promote {
+	background-image: url('resources/rightarrow-grey-sml.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	display: inline-block;	
+	width: 16px;
+	height: 17px;
+}
+
+.apstrataCms .HierachicalDnDList .indentControl .promote:hover {
+	background-image: url('resources/rightarrow-black-sml.png');
+}
+
+.apstrataCms .HierachicalDnDList .indentControl .demote {
+	background-image: url('resources/leftarrow-grey-sml.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	display: inline-block;	
+	width: 16px;
+	height: 17px;
+}
+
+.apstrataCms .HierachicalDnDList .indentControl .demote:hover {
+	background-image: url('resources/leftarrow-black-sml.png');
+}
+
+.apstrataCms .HierachicalDnDList .indentControl span:hover {
+	background: #dedede;
+}
+
+/*   */
+.dojoDndItem {
+	padding:13px;
+}
+
+.dojoDndItemOver {
+	background-color: #ededed;
+	cursor:pointer;
+}
+
+.dojoDndItemSelected {
+	background-color: #5bbdea; color: #444;
+}
+
+.dojoDndItemAnchor {
+	background-color: #5bbdea; color: black;
+	
+    border-radius: 5px;
+}
+
+.dojoDndItemOver .dojoDndItemSelected {
+	background-color: #ededed;
+}
+
+.dojoDndItemOver .dojoDndItemAnchor {
+	background-color: #ededed;
+}
+
+.dojoDndItemBefore, .dojoDndItemBefore > td {
+	border-top: 2px solid #369;
+}
+
+.dojoDndItemAfter, .dojoDndItemAfter > td {
+	border-bottom: 2px solid #369;
+}
+
+.dojoDndAvatar {
+	border:2px solid #ccc;
+}
+
+.dojoDndAvatarHeader {
+	background-color: #aaa;
+}
+
+.dojoDndAvatarItem {
+	background-color: #fff;
+	border-bottom:1px solid #666;
+}
+
+.dojoDndAvatarItem .itemText {
+	font-size: 120%;
+}
+
+/*   */
+
+
+ */

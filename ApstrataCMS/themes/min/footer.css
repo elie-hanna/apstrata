@@ -1,0 +1,46 @@
+/* footer */
+
+.min #footer {
+	background: #eaeaff;
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	
+	box-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) inset;
+	border-top: 1px solid #a7c7de;
+
+	z-index: 50;
+}
+	
+
+	.min #footer #shortcuts {
+		float: left;
+	}
+
+	.min #footer li {
+		display: inline-block;
+		padding-right: 20px;
+		cursor:pointer;
+	}
+	
+	.min #footer li a {
+		color: #333;
+		text-decoration: none;
+	}
+
+	.min #footer li a:hover {
+		color: #33a;
+	}
+
+	.min #footer li .selected {
+		color: #33a;
+	}
+
+	.min #footer #shortcuts {
+		display: inline-block;
+	}
+		
+	.min #footer #social {
+		float: right;
+	}
+

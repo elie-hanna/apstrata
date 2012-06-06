@@ -1,0 +1,121 @@
+.min #serviceDescription {
+	background:   #ccccff;    /* color scheme */
+	padding-top: 40px;
+	padding-bottom: 20px;
+	padding-right: 15px;
+	padding-left: 15px;
+
+			
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+
+	-moz-border-radius-bottomright: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+
+    -o-border-radius: 10px;
+
+	-moz-box-shadow: 0 1px 30px #665;
+	box-shadow: 0 1px 10px #aab;
+	-webkit-box-shadow: 0 1px 30px #665;
+}
+
+	.min #serviceDescription .previous {
+		display: table-cell;
+		width: 45px;
+		background: url('resources/leftarrow-grey.png');
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+	
+	.min #serviceDescription .next {
+		display: table-cell;
+		width: 45px;
+		background: url('resources/rightarrow-grey.png');
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	.min #serviceDescription .previous:hover {
+		background: url('resources/leftarrow-blue.png');
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+	
+	.min #serviceDescription .next:hover {
+		background: url('resources/rightarrow-blue.png');
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	.min #serviceDescription .slides {
+		display: table;
+		height: 200px;
+		overflow: hidden;
+		width: 100%;
+	}
+	
+	.min #serviceDescription .slide {
+		display: table-cell;
+		padding-right: 10px;
+		padding-left: 10px;
+	}
+	
+	.min #serviceDescription .slideContent {
+		height: 200px;
+		overflow: hidden;
+	}
+
+	.min #serviceDescription .actions {
+		display: block;
+	}
+	
+	.min #serviceDescription .actions .left { 
+		padding-left: 55px;
+		float: left;
+	}
+	.min #serviceDescription .actions .right {
+		float: right;
+	}	
+
+	.min #serviceDescription .selector {
+		display: inline-block;
+		width: 32px;
+		height: 32px;
+		background: url('resources/orange-circle.png');
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	.min #serviceDescription .selector:hover {
+		background: url('resources/orange-orange.png');
+	}
+
+	.min #serviceDescription .selectedSelector {
+		display: inline-block;
+		width: 32px;
+		height: 32px;
+		background: url('resources/orange-blue-inside.png');
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+
+	.min #serviceDescription h3 {
+		font-size: 2.4em;  
+		font-family: 'Open Sans', "Helvetica Neue",Helvetica;  
+
+		color: #000080;
+		margin-top: 0px;
+		margin-bottom: 5px;
+	}
+	.min #serviceDescription h4 {
+		font-family: 'Open Sans', "Helvetica Neue",Helvetica;  
+		font-size: 1.5em;
+		font-weight: normal;
+		margin-top: 0px;
+		margin-left: 0px;
+		margin-bottom: 0px;
+		line-height: 1.3em;
+	}
+	

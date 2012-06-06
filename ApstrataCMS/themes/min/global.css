@@ -1,0 +1,125 @@
+
+
+.min {
+	font-family: Tahoma, Geneva, sans-serif;
+	background: #fafaff;
+}
+
+.min .sideButton {
+	position: fixed;
+	top: 140px;
+	left: -80px;
+	background: #dedede;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	text-align: center;
+	
+	font-weight: bold;
+	
+	transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg); /* IE 9 */
+	-webkit-transform: rotate(-90deg); /* Safari and Chrome */
+	-o-transform: rotate(-90deg); /* Opera */
+	-moz-transform: rotate(-90deg); /* Firefox */
+
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+
+	-moz-border-radius-bottomright: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+
+	z-index: 50;
+}
+
+.min .contentFrame {
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.min .clear {
+	clear: both;
+}
+	
+/* body */
+.min #content {
+	position: relative;
+	top: 50px;
+	z-index: 10;
+}
+
+/* common */
+	.min .button {
+		display: inline-block;
+		text-align: center;
+		margin: 2px;
+		background: #003080;
+		cursor:pointer;
+		
+		font-family: 'Montserrat', sans-serif;
+		font-size: 1.4em;
+		font-weight: bolder;
+		text-decoration: none;
+		color: #eee;		
+		
+		padding: 10px;
+		margin-bottom: 5px;
+		
+	    -o-border-radius: 10px;
+	    -moz-border-radius: 10px;
+	    -webkit-border-radius: 10px;
+	    border-radius: 10px;
+	}
+
+	.min .button:hover {
+		background: #0030FF;
+	}
+
+
+	.min .smallButton {
+		display: inline-block;
+		text-align: center;
+		margin: 2px;
+		background: #003080;
+		cursor:pointer;
+		
+		font-family: 'Montserrat', sans-serif;
+		font-size: 1.3em;
+		font-weight: bolder;
+		text-decoration: none;
+		color: #eee;		
+		
+		padding: 5px;
+		margin-bottom: 2px;
+		
+	    -o-border-radius: 5px;
+	    -moz-border-radius: 5px;
+	    -webkit-border-radius: 5px;
+	    border-radius: 5px;
+	}
+
+	.min .smallButton:hover {
+		background: #0030FF;
+	}
+
+
+.min .waitAnimation {
+	background: url('resources/loading-animation-3lights.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.facebookLikeButton {
+	position: relative;
+	top: 5px;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background: url('https://fbcdn-sphotos-a.akamaihd.net/hphotos-ak-ash2/47850_437617674886_119341934886_4817206_1531554_n.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+}

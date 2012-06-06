@@ -1,0 +1,121 @@
+@import "../../lib/dojo/dijit/themes/claro/claro.css";
+@import "../../lib/dojo/dojox/grid/resources/Grid.css";
+@import "../../lib/dojo/dojox/grid/resources/claroGrid.css";
+@import "../../lib/dojo/dojox/grid/enhanced/resources/claro/EnhancedGrid.css";
+@import "../../lib/dojo/dojox/form/resources/FileInput.css";
+@import "../../lib/dojo/dojox/form/resources/ListInput.css";
+
+@import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/FormGenerator.css";
+@import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/FlashAlert.css";
+@import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/LoginWidget.css";
+
+
+@import "../../lib/ApstrataSDK/apstrata/horizon/themes/horizon.css";
+
+@import "MenuEditor.css";
+
+
+
+body {
+	background-image: url("resources/old_mathematics.png");
+    background-repeat: repeat;	
+}
+
+.apstrataCms {
+	font-family: sans-serif;
+}
+
+.apstrataCms .apstrataLogo {
+	background-image: url("resources/apstrata-big.png");
+			float: left;
+			background: url('resources/apstrata-big.png');
+			width: 211px;
+			height: 51px;
+			background-size: 100% 100%;
+			margin-left: 15px;
+			position: relative;
+}
+
+.apstrataCms .appTitle {
+	font-size: 2em;
+	color: #11B;
+	position: relative;
+	top: 10px;
+	float: right;
+}
+
+.apstrataCms .panel {
+/*	margin-left: 4px; */
+}
+
+.apstrataCms .mainPanel {
+/*	margin-left: 0px; */
+}
+
+.apstrataCms .pagesList {
+	width: 300px;
+}
+
+.apstrataCms .pageEditor {
+	width: 800px;
+	font-size: 0.8em;
+	overflow-y: hidden;
+	overflow-x: auto;
+}
+
+.apstrataCms .pageEditor .header {
+	height: 20px;
+}
+
+.apstrataCms .pageEditor .title {
+	width: 100%;
+}
+
+.apstrataCms .pageEditor .footer {
+	height: 10px;
+}
+
+.apstrataCms .pageEditor .title {
+	width: 100%;
+}
+.apstrataCms .menuEditor {
+	width: 300px;
+		
+}
+
+.apstrataCms .menuEditor .footer {
+	height: 20px;
+}
+
+.apstrataCms .menuEditor .footer {
+	height: 10px;
+}
+
+
+.apstrataCms .homePageEditor {
+	width: 700px;
+}
+
+/*
+.apstrataCms .pageEditor .pageId-label {
+	color: blue;
+}
+
+.apstrataCms .pageEditor .pageId {
+	width: 230px;
+}
+
+.apstrataCms .pageEditor .title-label {
+	color: blue;
+	left: 238px;
+	top: -45px;
+	position: relative;
+}
+
+.apstrataCms .pageEditor .title {
+	width: 520px;
+	left: 238px;
+	top: -45px;
+	position: relative;
+}
+*/

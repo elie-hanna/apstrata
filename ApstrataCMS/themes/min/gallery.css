@@ -1,0 +1,125 @@
+.min #search {
+	padding-top: 10px;
+	padding-bottom: 10px;		
+}
+
+.min #search-icon {
+	display: inline-block;
+	background: url('resources/magnifying-glass.png');
+	width: 32px;
+	height: 32px;
+}
+
+.min #search-field {
+	display: inline-block;
+	position: relative;
+	left: 0px;
+}
+
+.min #search-field .dijitTextBox {
+    border: medium none;
+	background: none repeat scroll 0 0 transparent;
+	color: rgba(40, 40, 180, 0.3);
+    display: block;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: -0.05em;
+    line-height: 39px;
+    position: relative;
+    width: 900px;
+}
+.min #search-field .dijitTextBoxFocused {
+	background: #fafaff;
+}
+
+.min #categories {
+	display: block;
+	padding: 10px;
+	border-top: 1px solid #a7c7de;
+	border-bottom: 1px solid #a7c7de;
+}
+
+.min #categories .category {
+	display: inline-block;
+	font-size: 1em;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 3px;
+	color: #333;
+	cursor:pointer;
+}
+
+.min #categories .selected {
+	color: blue;
+	background: #dedede;
+	-moz-border-radius: 4px;
+	-webkit-bordee-radius: 4px;
+	border-radius: 4px;
+}
+
+.min #categories .category:hover {
+	color: blue;
+}
+
+.min #content #searchResults {
+	display: table;
+	width: 100%;
+	padding-bottom: 120px;
+	height: 200px;
+}
+
+.min #content #searchResults .line {
+	border: 1px solid black;
+	text-align: center;
+	display: table-row;
+}
+
+.min #content #searchResults .item {
+	display: table-cell;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 16.6%;
+}
+
+.min #content #searchResults .item .type {
+	position: relative;
+	top: 10px;
+	left: 30px;
+	font-size: 0.8em;
+	color: #fff;
+	background: #f6b374;
+	padding: 3px;
+	opacity: .9;
+	width: 50px;
+	
+	z-index: 11;
+	
+	font-weight: bold;
+			
+	padding: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.min #content #searchResults .item .label {
+	position: relative;
+
+	font-size: 1.2em;
+	color: #337; 
+	width: 120px;
+	margin-right: auto;
+	margin-left: auto;
+	display: block;
+}
+
+.min #content #searchResults .item img {
+	width: 90px;
+	height: 90px;
+	opacity: .9;
+	margin-right: auto;
+	margin-left: auto;
+	display: block;
+	cursor: pointer;
+}
