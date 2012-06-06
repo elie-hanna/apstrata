@@ -206,7 +206,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 	// hide the curtain and destroy the alert
 	hideCurtain: function(alt) {
 		this._curtain.hide();
-		alt.destroyRecursive();
+		// delay the destroy of the dialog in case there is an event inside the dialog that needs to fire before
+		setTimeout(function () {alt.destroyRecursive();}, 100);
     },
 
 	_flashNotValid: function() {
