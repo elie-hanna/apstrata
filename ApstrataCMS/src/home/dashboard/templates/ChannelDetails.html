@@ -1,0 +1,31 @@
+<div>{{ }}
+	<div dojoAttachPoint='dvHeader'></div>
+	<div dojoAttachPoint="dvForm" dojoType="dijit.form.Form">
+		<div dojoAttachPoint='dvContent' >
+	    	<div class="title"><span>Channel Details</span></div> 
+	    		
+					<ul> 
+						<li>
+					          <label>Channel Id : </label>
+					          	<span dojoAttachPoint="channelID" dojoType="dijit.form.ValidationTextBox" required="true" readOnly="true"></span>
+		                 </li> 
+		                 <li>
+					          <label>Platform :
+					          <span dojoAttachPoint="platform" dojoType="dijit.form.ValidationTextBox" required="true" readOnly="true"></span>
+		                 </li> 
+		                 <li>
+					          <label>Lifetime : </label>
+					          <span dojoAttachPoint="lifetime" dojoType="dijit.form.ValidationTextBox" required="true" readOnly="true"></span>			         
+		                 </li>                
+					</ul>
+					<div dojoAttachPoint="gridDiv" style='height:200px;width:100%;overflow: auto'></div>
+					<span dojoType="dijit.form.Button" dojoAttachPoint="editChannelButton" label="Edit Properties"></span>
+					<span dojoType="dijit.form.Button" dojoAttachPoint="addTokenButton" label="+"></span>
+					<span dojoType="dijit.form.Button" dojoAttachPoint="removeTokenButton" label="-" style="visibility:hidden"></span>			
+					<span dojoType="dijit.form.Button" dojoAttachPoint="saveChangesButton" label="Save" style="visibility:hidden"></span>
+					<span dojoType="dijit.form.Button" dojoAttachPoint="cancelChangesButton" label="Cancel" style="visibility:hidden"></span>
+				
+		</div>
+	</div>
+	<div dojoAttachPoint='dvFooter'></div>
+</div>
