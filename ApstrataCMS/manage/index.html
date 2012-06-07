@@ -28,7 +28,12 @@
 				dojo.require("apstrata.cms.CMS")
 				dojo.require("apstrata.ui.widgets.LoginWidget")
 				dojo.require("apstrata.cms.ApConfig")
-				dojo.require("apstrata.cms.ApConfigSDK")
+				
+				try {
+					// try to load additional credentials for autologin if the source file is there
+					dojo.require("apstrata.cms.ApConfigSDK")
+				} catch (e) {
+				}
 
 				// These are visual properties used by the application that can not fit in a CSS file yet 			
 				apstrata.horizon.magicUIdimensions = {
