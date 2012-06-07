@@ -7,7 +7,7 @@ dojo.declare("apstrata.home.GalleryItem",
 [dijit._Widget, dojox.dtl._Templated], 
 {
 	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("apstrata.home", "templates/Item.html"),
+	templatePath: dojo.moduleUrl("apstrata.home", "templates/GalleryItem.html"),
 	
 	constructor: function(options) {
 		this.resultSet = options.resultSet

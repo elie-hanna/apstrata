@@ -52,8 +52,6 @@ dojo.declare("apstrata.home.Gallery",
 						var dv
 						
 						dojo.forEach(result, function(itemData) {
-console.dir(itemData)
-console.debug(i)							
 							if ((i % 6) == 0) dv = dojo.create("div", {"class": "line"}, self.domNode)
 							var item = new apstrata.home.GalleryItem({resultSet: result, cursor: i})
 							dojo.place(item.domNode, dv)
@@ -71,8 +69,6 @@ console.debug(i)
 		var self = this
 
 		this.refresh()
-
-
 		this.inherited(arguments)
 	},
 

@@ -1,6 +1,6 @@
 <?php 
 
-include ('../../lib/simplehtmldom/simple_html_dom.php');
+include ('../lib/simplehtmldom/simple_html_dom.php');
 
 $url = "http://wiki.apstrata.com/display/doc/" . $_GET['api'];
 $html = file_get_html ($url);

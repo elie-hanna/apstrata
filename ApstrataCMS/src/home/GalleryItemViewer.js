@@ -10,7 +10,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 [dijit._Widget, dojox.dtl._Templated],
 {
 	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("apstrata.home", "templates/DocViewer.html"),
+	templatePath: dojo.moduleUrl("apstrata.home", "templates/GalleryItemViewer.html"),
 	
 	dimension: {width: 800, height: 420},
 	
@@ -70,7 +70,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		})
 
 		var xhrArgs = {
-			url: "src/home/wikiProxy.php?api="+self.data.label,
+			url: "manage/wikiProxy.php?api="+self.data.label,
 			handleAs: "text",
 			timeout: apstrata.apConfig.timeout
 		}
