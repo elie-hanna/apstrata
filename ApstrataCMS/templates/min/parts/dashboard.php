@@ -48,11 +48,7 @@
 			"panel.finalAlpha": .95
 		}
 
-		//dojo.require('apstrata.home.dashboard.ApConfigSDK')
-
 		loginWidget = new apstrata.ui.widgets.LoginWidget({type: "user"})
-
-		dojo.require("apstrata.home.ApConfigDashboard")
 
 		dojo.parser.parse();
 	})
