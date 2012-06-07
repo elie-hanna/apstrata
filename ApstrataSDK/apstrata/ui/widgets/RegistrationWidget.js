@@ -74,7 +74,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 	constructor: function(options) {
 		this.options = options
 		this.client = new apstrata.sdk.Client(new apstrata.sdk.Connection({
-			loginType: apstrata.sdk.Client.prototype._LOGIN_TYPE_MASTER
+			loginType: apstrata.sdk.Connection.prototype._LOGIN_TYPE_MASTER
 		}))
 		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "registration-widget")
 	},
