@@ -7,12 +7,16 @@
 <code><![CDATA[
 
 /*
- * This script should be used when registering a new user who needs to create a new account
- * @param login : the login of the user for which we need to create an account
+ * This script should be used when registering a new user or when provisioning a new account.
+ * The script will consider that it is running an account provisioning scenario if one of the following is true
+ * (a) request.parameters["profileStore"] is specified
+ * (b) widgets.common/registrationType == "account"
+ * (c) request.parameters["registrationType"] == "account"
+ * @param login : the login of the user 
  * @param d : the temporary user document containing subscription information
- * @param profileStore : optional. If used, specifies the store where the profile will be created (account cretion). If not specified, will use
- * widget.common.defaultProfileStore. If not specified but widgets.common.profileStore is defined, we are in an account process
- * scenario. Otherwise, it is a simple user registration process. 
+ * @param profileStore : optional. If used, specifies the store where the profile will be created (account provisioning). 
+ * If not specified but registrationType == "account" is defined, then we are in an account provisioning
+ * scenario. In that case, the value of the profile Store will be obtained from widgets.common.defaultProfileStore. 
  */
 
 var logLevel = request.parameters["logLevel"];
@@ -53,15 +57,16 @@ try {
 			
 	// If we were able to create a new user, we now need to:
 	// 1) Check if we are in a user registration process or an account registration process.
-	//    f we are in the latter case, we will extend this process with the account creation steps.
+	//    If we are in the latter case, we extend the current script with the account creation script.
 	//    The registration process is an account registration process if one of the following is true:
 	//    a) request.parameters["profileStore"] is defined
 	//    b) configuration.registration == "account" (not "user")
+	//	  c) request.parameters["registrationType"] == "account"
 	//
 	// 2) Delete the temporary user document from the unconfirmedRegistrations store
 	// 3) Send a confirmation e-mail (if configured to do so)
 	
-	if ((configuration.registration == "account") || (request.parameters["profileStore"])) {
+	if ((configuration.registration == "account") || (request.parameters["profileStore"]) || (request.parameters["registrationType"] == "account")) {
 		
 		var accountProcess = apsdb.require("widgets.Provisioning.createAccountAndProfile");	
 		var resp = accountProcess.handleAccountCreation(request, user, configuration, apsdb, logLevel);		
