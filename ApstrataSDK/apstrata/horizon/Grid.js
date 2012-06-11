@@ -117,6 +117,7 @@ dojo.declare("apstrata.horizon.Grid",
 					if (action == 'Yes') {
 						var processed = 0;
 						self.showAsBusy(true, 'deleting document(s)...');
+						self.closePanel();
 						var processedKeys = {}; // this is used to make sure that we delete multiple versions only once, since in apstrata deleting a document will delete all its versions
 						for (var i = 0; i < selection.length; i++) {
 							if (!processedKeys[selection[i].key]) {
