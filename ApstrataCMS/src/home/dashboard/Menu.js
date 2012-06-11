@@ -26,19 +26,18 @@ dojo.declare("apstrata.home.dashboard.Menu",
 [apstrata.horizon.Menu], 
 {
 	
-	items: [
-			{	
-				id :"push", 
-				label : "Push Notifications", 
-				panelClass : "apstrata.home.dashboard.SelectAccount",
-				attrs : {}
-			},
-			
+	items: [			
 			{
 				id :"profile", 
 				label : "User Profile", 
 				panelClass : "apstrata.home.dashboard.Profile",					
-			}	
+			},
+			
+			{
+				id :"accounts", 
+				label : "View accounts", 
+				panelClass : "apstrata.home.dashboard.Accounts",					
+			}		
 			
 	],
 		
