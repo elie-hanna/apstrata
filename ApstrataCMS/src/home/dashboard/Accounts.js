@@ -1,6 +1,7 @@
 dojo.provide("apstrata.home.dashboard.Accounts")
 
 dojo.require("dijit.form.TextBox");
+dojo.require("dojox.encoding.crypto.SimpleAES");
 
 /**
  * This widget is used to display the accounts owned by the current user.
@@ -158,7 +159,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 	 */
 	_showHideSecret: function(event) {
 		
-		var buttonId = event.srcElement.id;
+		var buttonId = event.target.id;
 		
 		// the authKey of the selected account, i.e. that of which "show/hide" button was clicked
 		var selectedAuthKey = buttonId.substring(0, buttonId.lastIndexOf("_"));
@@ -196,18 +197,18 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 		
 		var self = this;	
 		
-		if (!this.currentAuthKey) {	
+		//if (!this.currentAuthKey) {	
 		
 			// if the user never clicked on "show/hide secret", we need to extract the
 			// authkey from the id of the "regenerateSecret" button		
-			var buttonId = event.srcElement.id;
+			var buttonId = event.target.id;
 				
 			// the authKey of the selected account, i.e. that of which "regenerateSecret" button was clicked
 			self.currentAuthKey = buttonId.substring(buttonId.indexOf("_") + 1, buttonId.lastIndexOf("_"));
 				
 			// the textbox information that is related to the selected authkey
 			self.currentSecret = this.secrets[this.currentAuthKey];	
-		}
+		//}
 		
 		new apstrata.horizon.PanelAlert({
 					panel: self, 
@@ -330,9 +331,96 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 		this.loadingDeferred = this.container.client.call("RunScript", params, null);
 	},
 	
-	_openWorkbench: function() {
+	_openWorkbench: function(event) {
 		
-		window.open("http://localhost/ApstrataDeveloperWorkbench/src/ui/");
+		var self = this;
+		
+		var buttonId = event.target.id;
+		
+		// the authKey of the selected account, i.e. that of which "Worbench" button was clicked
+		this.currentAuthKey = buttonId.substring("Workbench".length, buttonId.lastIndexOf("_"));
+				
+		var params = {
+					"apsdb.scriptName" : "dashboard.accountUtils",
+					"authKey" : self.currentAuthKey,
+					"function" : "getTargetEnvironmentUrl"
+				};
+					
+		this.container.client.call("RunScript", params, null).then(
+			
+			function(response){
+					
+				if (response.metadata.status == "success") {	
+					if (response.result.errorDetail) {
+						var errorMsg = response.result.errorDetail.errorDetail;
+						self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");						
+					}else {						
+						self.targetUrl = response.result["targetUrl"] + "/ApstrataDeveloperWorkbench";		
+						var secret = self.secrets[self.currentAuthKey].value;
+						
+						// if we never loaded the secret for that account, we need to load it
+						if (!secret || (secret == "")){
+							
+							var zParams = {
+									"apsdb.scriptName" : "dashboard.accountUtils",
+									"authKey" : self.currentAuthKey,
+									"function" : "getAccount"
+								};
+								
+							self.container.client.call("RunScript", zParams, null).then(
+							
+								function(response) {
+									
+									if (response.result.errorDetail) {
+										var errorMsg = response.result.errorDetail.errorDetail;
+										self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");						
+									}else {		
+
+										var secret = response.result.account.aps_authSecret;										
+										//var url = self._getHashedUrl(self.currentAuthKey, secret, self.targetUrl);
+										var url = self._getHashedUrl(self.currentAuthKey, secret, "http://localhost/ApstrataDeveloperWorkbench/src/ui/");
+										window.open(url);	
+									}
+								},
+								
+								function(response) {
+									var errorDetail = response.metadata.errorDetail;
+									var errorCode = response.metadata.errorCode;
+									this._alert(errorDetail ? errorDetail : errorCode, "errorIcon");			
+								}
+								
+							);
+							
+						}else {
+												
+							//var url = self._getHashedUrl(self.currentAuthKey, secret, self.targetUrl);
+							var url = self._getHashedUrl(self.currentAuthKey, secret, "http://localhost/ApstrataDeveloperWorkbench/src/ui/");
+							window.open(url);
+						}					
+					}						
+				}else {			
+					var errorMsg = response.metadata.errorDetail;
+					self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");					
+				}						
+			},
+			
+			function(response){
+				var errorDetail = response.metadata.errorDetail;
+				var errorCode = response.metadata.errorCode;
+				this._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
+			}
+		);		
+		
+	},
+	
+	_getHashedUrl: function(key, secret, targetUrl) {
+		
+		var minuteTimeStamp = Math.round((new Date().getTime()) / 60000);
+		var credentials = key + "," + secret;
+		var hash = dojox.encoding.crypto.SimpleAES.encrypt(credentials, key + minuteTimeStamp);	
+		hash = encodeURIComponent(hash);
+		var x = dojox.encoding.crypto.SimpleAES.decrypt(decodeURIComponent(hash), key + minuteTimeStamp);
+		return (targetUrl + "?key=" + key + "&signature=" + hash);
 	},
 	
 	_alert: function(message, iconClass) {

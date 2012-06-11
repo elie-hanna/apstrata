@@ -73,6 +73,13 @@ try {
 		var subject = request.parameters["subject"];
 		var message = request.parameters["message"];
 		var response = sendAdminMail(subject, message, zUserKey, zLoginType);
+		return response;
+	}
+	
+	if (functionName == "getTargetEnvironmentUrl") {
+	
+		var response = getTargetEnvironmentUrl();
+		return response;
 	}
 	
 	throw "Invalid function name";
@@ -264,6 +271,11 @@ function sendAdminMail(subject, message, to, loginType) {
 	apsdb.log.debug("URL", {url: zurl} );	
 	apsdb.log.debug("@@@@ RESPONSE", {response : res } );
 	return parseResultOrThrowError(res);
+}
+
+function getTargetEnvironmentUrl() {
+
+	return { "targetUrl" : configuration.accountCreationEnvironment + "/apsdb/rest"};
 }
 
 /*
