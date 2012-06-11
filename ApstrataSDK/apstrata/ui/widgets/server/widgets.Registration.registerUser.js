@@ -21,10 +21,10 @@ function generateCode() {
     return text;
 }
 
-function sendEmail() {
+function sendEmail(validationCode) {
 	var url = widgetsCommon.parseTemplate(
 		configuration.templates.verifyUrl, 
-		{login: params.login, confirmation: params.confirmationCode})
+		{login: params.login, confirmation: validationCode})
 
 	var tokens = {
 	    projectName: configuration.projectName,
@@ -42,9 +42,7 @@ function sendEmail() {
 		"apsma.htmlBody": emailBody
 	};
 	
-	return apsdb.callApi("SendEmail", sendEmailInput, null);
-	
-	//return (userSendEmailResult.metadata.status == 'failure')	
+	return apsdb.callApi("SendEmail", sendEmailInput, null);		
 }
 
 var params = {}
@@ -62,26 +60,40 @@ for (k in request.parameters) {
 	}
 }
 
-// Add the new user to the unconfirmedRegistrations group 
-params.groups = "unconfirmedRegistrations"
-params.confirmationCode = generateCode()
+// If no user.login was sent in the request, create one from the user's e-mail
+if (!params["login"]) {
+     params["login"] = params["email"];
+}
+
+// Create a temporary document for this new user
+// The account owner is the only one who can read this document
+params["document.writeACL"] = "nobody";
+params["document.readACL"] = "nobody"
+
+// Add the new user to the unconfirmedRegistrations store 
+params["apsdb.store"] = configuration.defaultUnconfirmedRegistrationStore;
 
 // Save the user
-var saveUserResult = apsdb.callApi("SaveUser", params, null)
+var transaction = apsdb.beginTransaction();
+saveUserResult = apsdb.callApi("SaveDocument", params, null);
 
 if (saveUserResult.metadata.status == "success") {
-	var sendEmailResult = sendEmail()
+	var sendEmailResult = sendEmail(saveUserResult.result.document.key)
 	if (sendEmailResult.metadata.status == 'failure') {
+		transaction.rollback();
 		return { 
 			status: "failure", 
 			errorDetail: "Unable to send email [" 
-			 + userSendEmailResult.metadata.errorCode + "]" 	
+			 + sendEmailResult.metadata.errorCode + "]",
+			 params : params 	
 		};
 	} else {
+		transaction.commit();
 		return true
 	}
 	
 } else {
+	transaction.rollback();
 	return { 
 		status: "failure", 
 		errorDetail: "Unable to register user [" 
