@@ -18,7 +18,7 @@ dojo.declare("apstrata.home.Slides",
 	
 	actions: [
 		{url: "dashboard", label: "login"},
-		{url: "registration", label: "register"}
+		{url: "register", label: "register"}
 	]
 	
 	
