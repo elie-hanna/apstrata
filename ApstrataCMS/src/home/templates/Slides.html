@@ -30,7 +30,7 @@
 
 		<div class='right'>
 			{% for action in actions %}
-				<a class='button' href='?pageId={{ action.url }}'>{{ action.label }}</a>
+				<a class='button' href='{{ action.url }}'>{{ action.label }}</a>
 			{% endfor %}
 		</div>
 		<div style='clear: both;'></div>
