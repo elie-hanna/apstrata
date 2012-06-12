@@ -8,7 +8,7 @@
 .min .sideButton {
 	position: fixed;
 	top: 140px;
-	left: -80px;
+	left: -100px;
 	background: #dedede;
 	padding-left: 20px;
 	padding-right: 20px;
@@ -34,6 +34,16 @@
 
 	z-index: 50;
 }
+
+	.min .sideButton a {
+		font-style: normal;
+		text-decoration: none;
+		color: #333;
+	}
+	
+	.min .sideButton a:hover {
+		color: #33A;
+	}
 
 .min .contentFrame {
 	width: 1000px;

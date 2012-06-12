@@ -1,4 +1,4 @@
-		<div class='sideButton'>fork this site from github</div>
+		<div class='sideButton'><a href='http://wiki.apstrata.com/display/doc/Apstrata+CMS' target='_googleCode'>fork this site from google code</a></div>
 
 		<div id='header'>
 			<div class='contentFrame'>
