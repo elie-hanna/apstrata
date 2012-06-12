@@ -48,10 +48,17 @@ dojo.declare("apstrata.cms.HomePageEditor",
 			definition: {
 				label: "Menu",
 				fieldset: [
-					{name: "slogan", label: "Slogan", type: "string", style: "width: 100%;"},
+					{name: "slogan1", label: "Slogan 1", type: "string", style: "width: 100%;"},
 					{name: "text1", label: "Slide 1: text", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
-					{name: "documentType", type: "hidden", value: "homePage"},
-					{name: "template", type:"hidden", value: "home"}
+
+					{name: "slogan1", label: "Slogan 2", type: "string", style: "width: 100%;"},
+					{name: "text2", label: "Slide 2: text", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
+
+					{name: "slogan2", label: "Slogan 3", type: "string", style: "width: 100%;"},
+					{name: "text2", label: "Slide 3: text", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
+
+					{name: "template", type:"hidden", value: "home"},
+					{name: "documentType", type: "hidden", value: "homePage"}
 				],
 				actions: ['save']
 			},

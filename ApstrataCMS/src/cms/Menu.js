@@ -55,11 +55,13 @@ dojo.declare("apstrata.cms.Menu",
 					} 
 				}
 			},
+/*
 			{
 				id:"home", 
 				label: "Home page editor",
 				panelClass: "apstrata.cms.Home"
 			},
+*/			
 			{
 				id:"homePageEditor", 
 				label: "Home",
