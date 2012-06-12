@@ -262,7 +262,7 @@ dojo.declare("apstrata.sdk.AdminStore",
 		
 				self.client.call(action, request, null, clientOptions).then(
 					function(response) {
-						deferred.resolve(true)
+						deferred.resolve(response)
 					},
 					function(response) {
 						deferred.reject(response.metadata)
