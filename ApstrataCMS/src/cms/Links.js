@@ -48,7 +48,7 @@ dojo.declare("apstrata.cms.Links",
 		label: "Link",
 		fieldset: [
 //			{name: "apsdb.documentKey", label: "Page ID", required: true, type: "string"},
-			{name: "name", type: "string", required: true},
+			{name: "title", type: "string", required: true},
 			{name: "address", type: "string", required: true},
 			{name: "description", type: "string", required: false},
 			{name: "target", label: "type", type: "string"},
@@ -60,7 +60,7 @@ dojo.declare("apstrata.cms.Links",
 	
 	// index of the essential item properties
 	idAttribute: 'apsdb.documentKey',
-	labelAttribute: 'name',
+	labelAttribute: 'title',
 	
 	constructor: function() {
 		var self = this

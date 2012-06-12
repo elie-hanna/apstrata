@@ -180,7 +180,7 @@ dojo.declare("apstrata.cms.MenuEditor",
 					connection: self.container.connection,
 					store: "apstrata",
 					queryFields: "*",
-					queryExpression: "documentType =\"page\"" 
+					queryExpression: "documentType =\"page\" OR documentType =\"link\"" 
 				}) 
 
 		var source = apstrata.cms.HierachicalDnDList({store: self.store, isFlat: true, acceptItems: false, copyOnly: true})
