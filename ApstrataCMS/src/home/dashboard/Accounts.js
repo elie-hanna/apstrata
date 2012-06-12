@@ -355,7 +355,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 						var errorMsg = response.result.errorDetail.errorDetail;
 						self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");						
 					}else {						
-						self.targetUrl = response.result["targetUrl"] + "/ApstrataDeveloperWorkbench";		
+						self.targetUrl = response.result["targetUrl"]; 		
 						var secret = self.secrets[self.currentAuthKey].value;
 						
 						// if we never loaded the secret for that account, we need to load it
@@ -377,8 +377,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 									}else {		
 
 										var secret = response.result.account.aps_authSecret;										
-										//var url = self._getHashedUrl(self.currentAuthKey, secret, self.targetUrl);
-										var url = self._getHashedUrl(self.currentAuthKey, secret, "http://localhost/ApstrataDeveloperWorkbench/src/ui/");
+										var url = self._getHashedUrl(self.currentAuthKey, secret, self.targetUrl);										
 										window.open(url);	
 									}
 								},
@@ -393,8 +392,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 							
 						}else {
 												
-							//var url = self._getHashedUrl(self.currentAuthKey, secret, self.targetUrl);
-							var url = self._getHashedUrl(self.currentAuthKey, secret, "http://localhost/ApstrataDeveloperWorkbench/src/ui/");
+							var url = self._getHashedUrl(self.currentAuthKey, secret, self.targetUrl);							
 							window.open(url);
 						}					
 					}						
@@ -419,8 +417,8 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 		var credentials = key + "," + secret;
 		var hash = dojox.encoding.crypto.SimpleAES.encrypt(credentials, key + minuteTimeStamp);	
 		hash = encodeURIComponent(hash);
-		var x = dojox.encoding.crypto.SimpleAES.decrypt(decodeURIComponent(hash), key + minuteTimeStamp);
-		return (targetUrl + "?key=" + key + "&signature=" + hash);
+		var dashboardUrl = window.location.protocol + "//" + window.location.host + "/ApstrataDeveloperWorkbench/src/ui/";
+		return (dashboardUrl + "?key=" + key + "&signature=" + hash + "&serviceUrl=" + encodeURIComponent(targetUrl));
 	},
 	
 	_alert: function(message, iconClass) {
