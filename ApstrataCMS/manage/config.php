@@ -6,7 +6,7 @@
 		"contentStore" => "apstrata",
 		"crmStore" => "",
 		"developmentMode" => true,
-		"useStub" => true,
+		"useStub" => false,
 		"apstrataConnectionTimeout" => 30000,
 		"urlPrefix" => "page.php?pageId=",
 		"template" => "min",

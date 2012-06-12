@@ -50,7 +50,40 @@
 				dojo.registerModulePath("apstrata.home", "../../../src/home")
 				dojo.registerModulePath("apstrata.cms", "../../../src/cms")
 				
-				dojo.require("apstrata.home.ApConfig")
+//				dojo.require("apstrata.home.ApConfig")
+
+				//
+				// Get apstrata configuration from config.php
+				//
+				dojo.setObject("apstrata.apConfig", {
+					"apstrata.cms": {
+						urlPrefix: '<?php print $GLOBALS["config"]["urlPrefix"]; ?>'						
+					},
+					
+				    // apstrata.ui related
+				    "apstrata.ui": {
+				        "widgets.Login" : {
+				            autoLogin: true
+				        }
+				    },
+				 
+				    // apstrata.sdk related
+				    "apstrata.sdk": {
+				        "Connection" : {
+							credentials: {
+								key: '<?php print $GLOBALS["config"]["apstrataKey"]; ?>'
+							},
+							serviceURL: '<?php print $GLOBALS["config"]["apstrataServiceURL"]; ?>',
+							defaultStore: '<?php print $GLOBALS["config"]["contentStore"]; ?>',
+							timeout: parseInt('<?php print $GLOBALS["config"]["apstrataConnectionTimeout"]; ?>')
+				        }
+				    }
+				})
+				//
+				//
+				//
+
+
 			})
 		</script>
 
