@@ -40,6 +40,30 @@ dojo.declare("apstrata.cms.CMS",
 	}
 })
 
+dojo.setObject("apstrata.cms.toPhp", function(o) {
+	var s = "array("
+	for (var k in o) {
+
+		if (dojo.isArray(o[k])) {
+			var s2 = "array("
+			if (o[k].length==0) {
+				s2 += "),"				
+			} else {
+				dojo.forEach(o[k], function(i) {
+					s2 += apstrata.cms.toPhp(i) + ","
+				})
+				
+				s2 = s2.substring(0, s2.length-1) +"),"
+			}
+			s += '"'+k+'"' + "=>" + s2
+		} else if (dojo.isObject(o[k])) {
+			s += '"'+k+'"' + "=>" + apstrata.cms.toPhp(o[k])+','
+		} else {
+			s += '"'+k+'"' + "=>" + '"'+o[k]+'",'
+		}
+	}
+	return s.substring(0, s.length-1) +")"
+})
 
 
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright 2009 Apstrata
+ *  Copyright 2009-2012 Apstrata
  *  
  *  This file is part of Apstrata Database Javascript Client.
  *  
@@ -23,15 +23,26 @@ dojo.require("dojo.store.Memory")
 dojo.require("apstrata.horizon.Menu")
 dojo.require("apstrata.ui.forms.FormGenerator")
 dojo.require("apstrata.cms.MenuEditor")
+dojo.require("apstrata.cms.Dashboard")
 
 dojo.declare("apstrata.cms.Menu", 
 [apstrata.horizon.Menu], 
 {
 	items: [
 			{
+				id:"dashboard", 
+				label: "Dashboard",
+				panelClass: "apstrata.cms.Dashboard"
+			},
+			{
 				id:"pages", 
 				label: "Pages",
 				panelClass: "apstrata.cms.Pages"
+			},
+			{
+				id:"links", 
+				label: "Links",
+				panelClass: "apstrata.cms.Links"
 			},
 			{
 				id:"menu", 
@@ -45,13 +56,14 @@ dojo.declare("apstrata.cms.Menu",
 				}
 			},
 			{
-				id:"homePage", 
-				label: "Home",
-				panelClass: "apstrata.cms.HomePageEditor"
+				id:"home", 
+				label: "Home page editor",
+				panelClass: "apstrata.cms.Home"
 			},
 			{
-				id:"dashboard", 
-				label: "Dashboard"
+				id:"homePageEditor", 
+				label: "Home",
+				panelClass: "apstrata.cms.HomePageEditor"
 			},
 			{
 				id:"posts", 
@@ -70,10 +82,6 @@ dojo.declare("apstrata.cms.Menu",
 				label: "Media"
 			},
 			{
-				id:"links", 
-				label: "Links"
-			},
-			{
 				id:"linksCategories", 
 				label: "Links Categories"
 			}
@@ -90,7 +98,7 @@ dojo.declare("apstrata.cms.Menu",
 		this.editable = false
 		
 		this.store = new dojo.store.Memory({data: self.items})
-	}
+	}	
 })
 
 
