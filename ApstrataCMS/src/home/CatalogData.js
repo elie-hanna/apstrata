@@ -99,6 +99,11 @@ null,
 			//{ name: "Data Grid", iconClass: "grid" }
 		],
 		
+		sdks: [
+			{ name: "Javascript SDK", iconClass: "userManagement", wikiDoc: "Javascript+SDK" }, 
+			{ name: "Android SDK", iconClass: "userManagement", wikiDoc: "Android" }
+		],
+		
 		addTags: function(object, tags) {
 			var t
 			var tagLabel = "tags"
@@ -172,7 +177,19 @@ null,
 				self.addTags(widget, ["widget", "HTML5"])
 				
 				services.push(widget)
-			})			
+			})	
+			
+			dojo.forEach(this.sdks, function(sdk) {
+
+				sdk.icon = iconClasses[sdk.iconClass]
+				sdk.label = sdk.name
+				sdk.type = "sdk"
+				sdk.id = i++
+
+				self.addTags(sdk, ["sdk", "mobile"])
+				
+				services.push(sdk)
+			})				
 			
 			return services
 		}

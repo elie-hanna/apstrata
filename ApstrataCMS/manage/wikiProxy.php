@@ -2,7 +2,7 @@
 
 include ('../lib/simplehtmldom/simple_html_dom.php');
 
-$url = "http://wiki.apstrata.com/display/doc/" . $_GET['api'];
+$url = "http://wiki.apstrata.com/display/doc/" . urlencode($_GET['api']);
 $html = file_get_html ($url);
 $content = $html->find('#apstrata-summary'); 
 $summary = $content[0];
