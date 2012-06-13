@@ -12,8 +12,6 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.home", "templates/GalleryItemViewer.html"),
 	
-	GALLERY_ITEM: "item",
-	
 	dimension: {width: 800, height: 420},
 	
 	constructor: function(options) {
@@ -22,7 +20,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		this.cursor = options.cursor
 		this.gallery = options.gallery
 		
-		this.gallery.setHashParam(this.GALLERY_ITEM, this.data.label)
+		this.gallery.setHashParam(this.gallery.GALLERY_ITEM, this.data.label)
 	},
 	
 	postCreate: function() {
@@ -43,7 +41,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 			self.destroyRecursive()
 			self._curtain.parentNode.removeChild(self._curtain)
 
-			self.gallery.setHashParam(self.GALLERY_ITEM, "")
+			self.gallery.setHashParam(self.gallery.GALLERY_ITEM, self.data.label)
 		})
 		
 		dojo.animateProperty({

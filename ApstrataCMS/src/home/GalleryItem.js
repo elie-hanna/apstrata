@@ -17,8 +17,12 @@ dojo.declare("apstrata.home.GalleryItem",
 	},
 	
 	postCreate: function() {
-		
 		this.inherited(arguments)
+
+		var label = this.gallery.getHashParam(this.gallery.GALLERY_ITEM)
+		if (this.data.label == label) {
+			this._click()
+		}
 	},
 	
 	_click: function() {

@@ -14,6 +14,8 @@ dojo.declare("apstrata.home.Gallery",
 	templatePath: dojo.moduleUrl("apstrata.home", "templates/Gallery.html"),
 	
 	_category: "All",
+
+	GALLERY_ITEM: "viewItem",
 	
 	constructor: function() {
 		var self = this
@@ -68,9 +70,7 @@ dojo.declare("apstrata.home.Gallery",
 	postCreate: function() {
 		var self = this
 
-		this.refresh()
-		
-		console.debug(this.getHashParam('item'))
+		//this.refresh()
 		
 		this.inherited(arguments)
 	},
@@ -152,7 +152,7 @@ dojo.declare("apstrata.home.Gallery",
 	},
 	
 	getHashParam: function(param) {
-		return this.getHashParams[param]
+		return this.getHashParams()[param]
 	}
 	
 })
