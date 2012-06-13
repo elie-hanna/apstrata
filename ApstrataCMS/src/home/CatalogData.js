@@ -88,10 +88,10 @@ null,
 		
 		widgets: [
 			{ name: "Login", iconClass: "userManagement" }, 
-			{ name: "Register", iconClass: "userManagement" }, 
-			{ name: "User profile", iconClass: "userManagement" }, 
-			{ name: "Data form", iconClass: "form" }, 
-			{ name: "Data Grid", iconClass: "grid" }
+			{ name: "Registration", iconClass: "userManagement" }, 
+			//{ name: "User profile", iconClass: "userManagement" }, 
+			//{ name: "Data form", iconClass: "form" }, 
+			//{ name: "Data Grid", iconClass: "grid" }
 		],
 		
 		addTags: function(object, tags) {
