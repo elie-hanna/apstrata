@@ -23,7 +23,6 @@ dojo.declare("apstrata.home.GalleryItem",
 	
 	_click: function() {
 		var self = this
-		new apstrata.home.GalleryItemViewer({data: self.data, resultSet: self.resultSet, cursor: self.cursor})
-		this.gallery.setHashParam("item", self.data.label)
+		new apstrata.home.GalleryItemViewer({data: self.data, resultSet: self.resultSet, cursor: self.cursor, gallery: self.gallery})
 	}
 })	

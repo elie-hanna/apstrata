@@ -69,6 +69,9 @@ dojo.declare("apstrata.home.Gallery",
 		var self = this
 
 		this.refresh()
+		
+		console.debug(this.getHashParam('item'))
+		
 		this.inherited(arguments)
 	},
 
@@ -120,7 +123,24 @@ dojo.declare("apstrata.home.Gallery",
 	},
 	
 	setHashParam: function(param, value) {
-		var paramStrings = window.location.hash.substring(1).split('&')
+		var params = this.getHashParams()
+		
+		if (value.trim().length==0) {
+			delete params[param]
+		} else {
+			params[param] = value		
+		}
+		
+		var h = ""
+		for (param in params) {
+		    h += param + "=" + params[param]
+		}
+		window.location.hash = h
+	},
+	
+	getHashParams: function() {
+		var paramStrings
+		if (window.location.hash.trim().length>0) paramStrings = window.location.hash.substring(1).split('&')
 		var params = {}
 		
 		dojo.forEach(paramStrings, function(s) {
@@ -128,15 +148,13 @@ dojo.declare("apstrata.home.Gallery",
 		    params[p[0]] = p[1]
 		})
 		
-		params[param] = value
-		
-		var h = ""
-		for (param in params) {
-		    h += param + "=" + params[param]
-		}
-		
-		window.location.hash = h
+		return params
+	},
+	
+	getHashParam: function(param) {
+		return this.getHashParams[param]
 	}
+	
 })
 
 	
