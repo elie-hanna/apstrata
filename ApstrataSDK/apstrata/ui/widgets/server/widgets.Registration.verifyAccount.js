@@ -9,14 +9,11 @@
 /*
  * This script should be used when registering a new user or when provisioning a new account.
  * The script will consider that it is running an account provisioning scenario if one of the following is true
- * (a) request.parameters["profileStore"] is specified
- * (b) widgets.common/registrationType == "account"
- * (c) request.parameters["registrationType"] == "account"
+ * (a)widgets.common/configuration.registrationType == "account"
+ * (b) request.parameters["registrationType"] == "account"
  * @param login : the login of the user 
  * @param d : the temporary user document containing subscription information
- * @param profileStore : optional. If used, specifies the store where the profile will be created (account provisioning). 
- * If not specified but registrationType == "account" is defined, then we are in an account provisioning
- * scenario. In that case, the value of the profile Store will be obtained from widgets.common.defaultProfileStore. 
+ * @param profileStore : optional. If used, specifies the store where the profile will be created (only when registrationType == "account"). 
  */
 
 var logLevel = request.parameters["logLevel"];
@@ -59,17 +56,21 @@ try {
 	// 1) Check if we are in a user registration process or an account registration process.
 	//    If we are in the latter case, we extend the current script with the account creation script.
 	//    The registration process is an account registration process if one of the following is true:
-	//    a) request.parameters["profileStore"] is defined
-	//    b) configuration.registration == "account" (not "user")
-	//	  c) request.parameters["registrationType"] == "account"
+	//   a) configuration.registration == "account" (not "user")
+	//   b) request.parameters["registrationType"] == "account"
 	//
 	// 2) Delete the temporary user document from the unconfirmedRegistrations store
 	// 3) Send a confirmation e-mail (if configured to do so)
 	
-	if ((configuration.registration == "account") || (request.parameters["profileStore"]) || (request.parameters["registrationType"] == "account")) {
+	if ((configuration.registrationType == "account") || (request.parameters["registrationType"] == "account")) {
+		// retrieve advanced configuration 
+		var advancedWidgetsCommon = apsdb.require("widgets.common.advanced");
+		var advancedConfig = advancedWidgetsCommon.getConfiguration()
 		
-		var accountProcess = apsdb.require("widgets.Provisioning.createAccountAndProfile");	
-		var resp = accountProcess.handleAccountCreation(request, user, configuration, apsdb, logLevel);		
+		// load account creation logic and run it
+		var accountProcess = apsdb.require("widgets.Registration.createAccountAndProfile");	
+		var resp = accountProcess.handleAccountCreation(request, user, advancedConfig, apsdb, logLevel);		
+		
 		if (resp.status == "failure") {		
 			deleteUser();
 			throw resp;
@@ -114,8 +115,13 @@ function saveUser() {
 		email: user.result.documents[0].email,
 		name: user.result.documents[0].name,
 		groups: user.result.documents[0].finalGroups,			
-	}
-		
+	}	
+	
+	params["company"] = user.result.documents[0].company;
+	params["jobTitle"] = user.result.documents[0].jobTitle;
+	params["phone"] = user.result.documents[0].phone;
+	params["webSite"] = user.result.documents[0].webSite;
+			
 	return apsdb.callApi("SaveUser", params, null);
 }
 

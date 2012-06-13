@@ -6,6 +6,16 @@
 </scriptACL>
 <code><![CDATA[
 
+/*
+ * This script can be used to register users or to create accounts (if the caller is entitled to do so).
+ * @param : mandatory parameters are "user.name", "user.email", "user.login", "user.password"
+ * @param : optional parameters are "user.groups" (not when creating account), "user.company",
+ * "user.webSite", "user.jobTitle", "user.phone"
+ * Parameters not prefixed with "user" will not be saved.
+ * @return { status :"success", result : "true"} in the "result" section of the response or
+ * {status : "failure", errorDetail : "xxxx"} in case of failure
+ */
+
 var widgetsCommon = apsdb.require("widgets.common")
 
 var configuration = widgetsCommon.getConfiguration()
@@ -45,12 +55,27 @@ function sendEmail(validationCode) {
 	return apsdb.callApi("SendEmail", sendEmailInput, null);		
 }
 
+function checkUser(login) {
+	var params = {
+		login: login
+	}
+
+	return apsdb.callApi("GetUser", params, null).metadata.status;
+}
+
 var params = {}
 
 for (k in request.parameters) {
 	// Only parameters sent with the "user." prefix will be saved in the user profile
 	if (k.indexOf('user.')>=0) {
-		if (k == "user.groups") 
+		if ((k == "user.login") && (checkUser(request.parameters[k]) == "success"))  {		
+			return { 
+				status: "failure", 
+				errorDetail: "Unable to register user [Login already exists]" 
+			};								
+		}	
+		
+		if (k == "user.groups")		
 		// If groups have been set, save them to a temporary user attribute
 		//  Until the registration is confirmed 
 			params["finalGroups"] = request.parameters[k];

@@ -7,47 +7,31 @@
 <code><![CDATA[
 
 /*
- * The below variables will be populated at deployment time with the correct values.
- * These variables are specific to 
+ * The below variables will be populated at deployment time with the correct values
  */
 
-// the url of the client application (user registration and/or account provisioning)
-var apstrataHomeEnvironment = 
-// the auth key of the provisioning account on the client application (user registration and/or account provisioning)
-var apstrataHomeKey = 
-// the store where temporary registration documents will be created on the client application (user registration and/or account provisioning))
-var defaultUnconfirmedRegistrationStore = 
-// the type of registration ("account" or "user") that needs to be ran (optional)
-var registrationType =
-// the url of the target cluster where accounts will be created (needed when provisioning accounts)
-var accountCreationEnvironment = 
-// the auth key of the provisioning account on the target cluster (needed when provisioning accounts)
-var accountCreationKey = 
-// the secret of the provisioning account on the target cluster (needed when provisioning accounts)
-var accountCreationSecret =
-// the store where user profiles documents will be created on the client application (needed when provisioning accounts)
-var defaultProfileStore = 
-
-/* end of deployment time variables */
-
+var projectName = "MyProject";
+var defaultUsersGroup = "users";
+var defaultUnconfirmedRegistrationStore = "DefaultStore";	
+var apstrataHomeEnvironment = ;
+var apstrataHomeKey = ;
+var registrationType = "user";
+var sendEmailOnceRegistrationConfirmed = true;
 var verifyUrl = apstrataHomeEnvironment + "/apsdb/rest/" + apstrataHomeKey + "/RunScript?apsws.authMode=simple&apsdb.scriptName=widgets.Registration.verifyAccount&login=$login&d=$confirmation";
-
+ 
 var configuration = {
-	projectName: "MyProject",
-	defaultUsersGroup: "users",
-	defaultUnconfirmedRegistrationStore: defaultUnconfirmedRegistrationStore,
-	defaultProfileStore: defaultProfileStore ,
-	accountCreationEnvironment : accountCreationEnvironment,
-	apstrataHomeEnvironment : apstrataHomeEnvironment,
-	accountCreationKey : accountCreationKey,
-	accountCreationSecret : accountCreationSecret,
-	apstrataHomeKey : apstrataHomeKey,
-	sendEmailOnceRegistrationConfirmed: true,	
+	projectName: projectName,
+	defaultUsersGroup: defaultUsersGroup,
+	defaultUnconfirmedRegistrationStore: defaultUnconfirmedRegistrationStore,	
+	apstrataHomeEnvironment: apstrataHomeEnvironment,	
+	apstrataHomeKey: apstrataHomeKey,
+	registrationType: registrationType,
+	sendEmailOnceRegistrationConfirmed: sendEmailOnceRegistrationConfirmed,	
 	templates: {
 		adminEmail: "dude@dude.com",
 		subject: "$projectName Registration - Email Verification",
 		body: "<div style='font-family:Calibri, font-size:11'>Hello $user,<br/><br/> Thank you for signing up to our $projectName <br/><br/> Please click on the link below to activate your account. If the link doesn't work, copy and paste the link directly into the address bar of your internet browser.<br/><a href='$url'>$url</a><br/><br/>Sincerely<br/><br/>The $projectName Team",		
-		verifyUrl : verifyUrl,
+		verifyUrl: verifyUrl 
 	},
 
 	templatesConfirmed: {
