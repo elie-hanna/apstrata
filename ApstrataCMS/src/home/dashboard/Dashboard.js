@@ -36,10 +36,30 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 	onCredentials: function(credentials) {
 		this.connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "user"});		
 		this.client = new apstrata.sdk.Client(this.connection);
+		
+		var item = {
+			id:"logout", 
+			label: "Logout"
+		};
+		
+		try {
+			this.main.addItem(item);
+		} catch (e) {
+			//catch the exception that results from adding the logout item when it already exists and do nothing about it
+		}	
 	},
 	
 	startup: function() {
 		this.addMainPanel(apstrata.home.dashboard.Menu);
 		this.inherited(arguments);
+	},
+	
+	logout: function() {
+		//window.location.reload();
+		
+		var href = window.location.href;
+		var urlPrefix = apstrata.registry.get("apstrata.cms", "urlPrefix");
+		window.location.assign(href.substring(0, href.indexOf(urlPrefix)));
+		
 	}
 })

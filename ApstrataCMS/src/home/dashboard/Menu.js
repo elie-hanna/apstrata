@@ -59,5 +59,13 @@ dojo.declare("apstrata.home.dashboard.Menu",
 	startup: function() {
 					
 		this.inherited(arguments)
+	},
+	
+	onClick: function(index, id, args) {
+		if (id == 'logout') {
+			this.getContainer().logout();;
+		} else {
+			this.inherited(arguments);
+		}
 	}
 })
