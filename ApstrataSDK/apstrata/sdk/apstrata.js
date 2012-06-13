@@ -123,12 +123,6 @@ if (typeof apstrata == "undefined" || !apstrata.configured) {
 		}
 	}
 
-	dojo.registerModulePath("apstrata", apstrata.baseUrl + "/..")
-	
-	dojo.registerModuleRelative = function(module, string) {
-		dojo.registerModulePath (module, apstrata.pathFromDojo + string)
-	}
-	
 	apstrata.registry = {
 	    get: function() {
 	        var object = dojo.getObject("apstrata.apConfig", true)

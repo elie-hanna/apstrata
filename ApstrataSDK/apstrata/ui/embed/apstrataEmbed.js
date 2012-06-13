@@ -15,7 +15,7 @@ dojo.ready(function() {
 		var klassName = d.attr(embedNode, "data-apstrata-embedType")
 		
 		// Make sure the class is loaded
-		dojo.require(klassName)
+		dojo['require'](klassName)
 		dojo.ready(function() {
 			var klass = dojo.getObject(klassName)
 			

@@ -52,7 +52,7 @@ dojo.declare("apstrata.horizon.Menu",
 				// in case the item has an associated class
 				if (item.panelClass) {
 					// load it dynamically
-					dojo.require(item.panelClass)
+					dojo['require'](item.panelClass)
 					// (dojo.addOnLoad will insure that the module is loaded)
 					dojo.addOnLoad(function() {
 						// open it as a child panel
