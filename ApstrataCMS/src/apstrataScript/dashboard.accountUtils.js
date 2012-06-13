@@ -7,7 +7,8 @@
 <code><![CDATA[
 
 /*
- * This script provides utility functions that call the GetAccount and ListAccounts 
+ * This script provides utility functions that call the 
+  and ListAccounts 
  * through http calls, using the account owner's credentials defined in widgets.common.
  * It also provides a function to retrieve the profile of a user, i.e. it's user info,
  * company info and list of accounts (accountId, authKey, secret)
@@ -19,16 +20,16 @@
  * @param logLevel : the logLevel (optional)
  * @param subject (only if function is "sendAdminMail")
  * @param message (only if function is "sendAdminMail")
-  * @param to (only if function is "sendAdminMail")
+ * @param to (only if function is "sendAdminMail")
  */
-var widgetsCommon = apsdb.require("widgets.common");
+var widgetsCommon = apsdb.require("widgets.common.advanced");
 var configuration = widgetsCommon.getConfiguration();
 
 var zLogLevel = request.parameters["logLevel"];
 if (zLogLevel){
 	apsdb.log.setLogLevel(zLogLevel); 
 }
-	
+
 var zLoginType = "";
 var zUserKey = "";
 
@@ -81,7 +82,7 @@ try {
 		var response = getTargetEnvironmentUrl();
 		return response;
 	}
-	
+		
 	throw "Invalid function name";
 
 }catch(error){
@@ -209,7 +210,7 @@ function getAccount(accountAuthKey){
 	var zurl = signUrl("GetAccount");			
 	zurl = zurl + "&apsdb.authKey=" + accountAuthKey + "&apsws.responseType=json";
 		
-	var res = apsdb.callHttp(zurl , 'GET', null, null, null, null, true, null, false, false);
+	var res = apsdb.callHttp(zurl , 'GET', null, null, null, null, true, null, false, false);	
 	
 	apsdb.log.debug("URL", {url: zurl} );	
 	apsdb.log.debug("@@@@ RESPONSE", {response : res } );
