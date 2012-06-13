@@ -34,6 +34,9 @@ dojo.declare("apstrata.home.Gallery",
 		}
 	},
 	
+	_items: {},
+	loaded: false,
+	
 	refresh: function() {
 		var self = this
 
@@ -56,6 +59,7 @@ dojo.declare("apstrata.home.Gallery",
 						dojo.forEach(result, function(itemData) {
 							if ((i % 6) == 0) dv = dojo.create("div", {"class": "line"}, self.domNode)
 							var item = new apstrata.home.GalleryItem({resultSet: result, cursor: i, gallery: self})
+							self._items[itemData.label] = item
 							dojo.place(item.domNode, dv)
 							i++
 						})
@@ -63,6 +67,14 @@ dojo.declare("apstrata.home.Gallery",
 						if (dv) dojo.create("div", {"style": "display:table-cell;"}, dv)
 					}
 				)
+
+				if (!self.loaded) {
+					var label = self.getHashParam(self.GALLERY_ITEM)
+					if (self._items[label]) {
+						self._items[label]._click()
+					}
+					self.loaded = true
+				}
 			}
 		}).play();
 	},
@@ -70,8 +82,6 @@ dojo.declare("apstrata.home.Gallery",
 	postCreate: function() {
 		var self = this
 
-		//this.refresh()
-		
 		this.inherited(arguments)
 	},
 
