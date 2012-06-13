@@ -34,10 +34,20 @@ dojo.setObject("apstrata.apConfig", {
         "Connection" : {
 			credentials: {
 				key:'E83D22E93F'
+				
 			},
 			serviceURL: 'http://sandbox.apstrata.com/apsdb/rest',
+			
+			
 			defaultStore: 'apstrata',
 			timeout: 10000,
         }
+    },
+    
+    
+    "apstrata.services" : {
+    	"targetClusterUrl" : 'http://sandbox.apstrata.com/apsdb/rest',
+    	"worbenchUrl" : 'http://sandbox.apstrata.com/ApstrataDeveloperWorkbench/src/ui' 
     }
+    
 })

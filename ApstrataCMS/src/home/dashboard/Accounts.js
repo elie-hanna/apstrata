@@ -332,93 +332,20 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 	},
 	
 	_openWorkbench: function(event) {
-		
-		var self = this;
-		
+				
 		var buttonId = event.target.id;
 		
 		// the authKey of the selected account, i.e. that of which "Worbench" button was clicked
 		this.currentAuthKey = buttonId.substring("Workbench".length, buttonId.lastIndexOf("_"));
-				
-		var params = {
-					"apsdb.scriptName" : "dashboard.accountUtils",
-					"authKey" : self.currentAuthKey,
-					"function" : "getTargetEnvironmentUrl"
-				};
-					
-		this.container.client.call("RunScript", params, null).then(
-			
-			function(response){
-					
-				if (response.metadata.status == "success") {	
-					if (response.result.errorDetail) {
-						var errorMsg = response.result.errorDetail.errorDetail;
-						self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");						
-					}else {						
-						self.targetUrl = response.result["targetUrl"]; 		
-						var secret = self.secrets[self.currentAuthKey].value;
-						
-						// if we never loaded the secret for that account, we need to load it
-						if (!secret || (secret == "")){
-							
-							var zParams = {
-									"apsdb.scriptName" : "dashboard.accountUtils",
-									"authKey" : self.currentAuthKey,
-									"function" : "getAccount"
-								};
-								
-							self.container.client.call("RunScript", zParams, null).then(
-							
-								function(response) {
-									
-									if (response.result.errorDetail) {
-										var errorMsg = response.result.errorDetail.errorDetail;
-										self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");						
-									}else {		
-
-										var secret = response.result.account.aps_authSecret;										
-										var url = self._getHashedUrl(self.currentAuthKey, secret, self.targetUrl);										
-										window.open(url);	
-									}
-								},
-								
-								function(response) {
-									var errorDetail = response.metadata.errorDetail;
-									var errorCode = response.metadata.errorCode;
-									this._alert(errorDetail ? errorDetail : errorCode, "errorIcon");			
-								}
-								
-							);
-							
-						}else {
-												
-							var url = self._getHashedUrl(self.currentAuthKey, secret, self.targetUrl);							
-							window.open(url);
-						}					
-					}						
-				}else {			
-					var errorMsg = response.metadata.errorDetail;
-					self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");					
-				}						
-			},
-			
-			function(response){
-				var errorDetail = response.metadata.errorDetail;
-				var errorCode = response.metadata.errorCode;
-				this._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
-			}
-		);		
-		
+		var targetUrl = apstrata.registry.get("apstrata.services", "targetClusterUrl");
+		var url = this._getWorkbenchUrl(this.currentAuthKey, targetUrl);										
+		window.open(url);	
 	},
 	
-	_getHashedUrl: function(key, secret, targetUrl) {
-		
-		var minuteTimeStamp = Math.round((new Date().getTime()) / 60000);
-		var credentials = key + "," + secret;
-		var hash = dojox.encoding.crypto.SimpleAES.encrypt(credentials, key + minuteTimeStamp);	
-		hash = encodeURIComponent(hash);
-		var dashboardUrl = window.location.protocol + "//" + window.location.host + "/ApstrataDeveloperWorkbench/src/ui/";
-		return (dashboardUrl + "?key=" + key + "&signature=" + hash + "&serviceUrl=" + encodeURIComponent(targetUrl));
+	_getWorkbenchUrl: function(key, targetUrl) {
+				
+		var workbenchUrl = apstrata.registry.get("apstrata.services", "worbenchUrl");		
+		return (workbenchUrl + "?key=" + key + "&serviceUrl=" + encodeURIComponent(targetUrl));
 	},
 	
 	_alert: function(message, iconClass) {
