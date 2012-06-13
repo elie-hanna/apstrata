@@ -8,7 +8,6 @@
 
 /*
  * Use this script in order to update the profile of a given user.
- * The script will update the user and the profile (docKey = userloginProfile) documents.
  * @param login : the login of the user (mandatory)
  * @param password : the password of the user
  * @param name : the name of the user
