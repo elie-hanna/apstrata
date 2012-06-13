@@ -53,7 +53,7 @@ dojo.declare("apstrata.home.Gallery",
 						
 						dojo.forEach(result, function(itemData) {
 							if ((i % 6) == 0) dv = dojo.create("div", {"class": "line"}, self.domNode)
-							var item = new apstrata.home.GalleryItem({resultSet: result, cursor: i})
+							var item = new apstrata.home.GalleryItem({resultSet: result, cursor: i, gallery: self})
 							dojo.place(item.domNode, dv)
 							i++
 						})
@@ -119,6 +119,24 @@ dojo.declare("apstrata.home.Gallery",
 		return _queryOptions 
 	},
 	
+	setHashParam: function(param, value) {
+		var paramStrings = window.location.hash.substring(1).split('&')
+		var params = {}
+		
+		dojo.forEach(paramStrings, function(s) {
+		    var p = s.split('=')
+		    params[p[0]] = p[1]
+		})
+		
+		params[param] = value
+		
+		var h = ""
+		for (param in params) {
+		    h += param + "=" + params[param]
+		}
+		
+		window.location.hash = h
+	}
 })
 
 	

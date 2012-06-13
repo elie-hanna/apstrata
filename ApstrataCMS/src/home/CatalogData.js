@@ -33,6 +33,11 @@ null,
 		{icon: "flickr_128px.png", name: "Flickr post"}
 	],
 	
+	social: [
+		{icon: "twitter_128px.png", name: "Twitter login", wikiDoc: "The+apsdb+object"},
+		{icon: "twitter_128px.png", name: "Twitter post"},
+	],
+	
 	apis: [ 
 			{ name: "AddCertificate", apiType: "pushNotification", icon: "Push-AddCertificate" },
 			{ name: "CreateChannel", apiType: "pushNotification", icon: "Push-CreateChannel" },
@@ -134,6 +139,7 @@ null,
 */					
 				api.label = api.name
 				api.type = "REST API"
+				api.wikiDoc = api.name
 				api.id = i++
 
 //				if (api.apiType == "pushNotification") {
