@@ -20,7 +20,7 @@
  * @param logLevel : the logLevel (optional)
  * @param subject (only if function is "sendAdminMail")
  * @param message (only if function is "sendAdminMail")
- * @param to (only if function is "sendAdminMail")
+  * @param to (only if function is "sendAdminMail")
  */
 var widgetsCommon = apsdb.require("widgets.common.advanced");
 var configuration = widgetsCommon.getConfiguration();
@@ -107,70 +107,7 @@ function getProfile(userKey, loginType) {
 	}
 	
 	// Retrieve the information on the user from the user directory	
-	var userResponse = apsdb.callApi("GetUser", {"login" : userLogin}, null);
-			
-	if (userResponse.metadata.status == "failure") {
-		throw userResponse.metadata.errorDetail;
-	}	
-	
-	// Get the accounts created by this user
-	var listAccountsResponse = listAccounts(userLogin, "login");	
-	apsdb.log.debug("LISTACCOUNTRESPONSE", {resp: listAccountsResponse} );	
-	if (listAccountsResponse.status == "failure") {
-		
-		throw listAccountsResponse.metadata.errorDetail;
-	}	
-	
-	var accountsAsIs = listAccountsResponse.accounts;
-	var accounts = new Array();
-	for (var i = 0; i < accountsAsIs .length; i++) {
-	
-		// Get the secret for this account
-		var getAccountResponse = getAccount(accountsAsIs[i].aps_authKey);
-					
-		accounts.push( {
-				accountId : accountsAsIs [i].accountId,
-				authKey : accountsAsIs[i].aps_authKey,
-				secret : getAccountResponse.account.aps_authSecret
-				}
-			);
-	}	
-	
-	// Retrieve the user profile from the profile document
-	var queryParams = {
-		"apsdb.query" : "apsdb.documentKey = \"" + userLogin.replace("@", "_at_") + "Profile\"",
-		"apsdb.queryFields" : "*"
-	}
-	
-	var userProfileResponse = apsdb.callApi("Query", queryParams, null);
-	
-	if (userProfileResponse.metadata.status == "failure") {		
-		return userProfileResponse.metadata.errorDetail ;
-	}
-	
-	if (!userProfileResponse.result.documents || userProfileResponse.result.documents.length == 0) {
-		return {
-			status: "failure",
-			errorDetail: "User profile not found"
-		}
-	}
-	
-	var userProfile = {		
-		login: userLogin,
-		email: userResponse.result.user.email,
-		name: userResponse.result.user.name,
-		groups: userResponse.result.user.groups,
-		company: userProfileResponse.result.documents[0].company,
-		webSite: userProfileResponse.result.documents[0].webSite,
-		jobTitle: userProfileResponse.result.documents[0].jobTitle,
-		phone: userProfileResponse.result.documents[0].phone,
-		availableAccounts :  accounts
-	}
-	
-	return {
-		status: "success",
-		profile: userProfile
-	}	
+	return apsdb.callApi("GetUser", {"login" : userLogin}, null);	
 }
 
 /*

@@ -12,11 +12,11 @@
  * @param login : the login of the user (mandatory)
  * @param password : the password of the user
  * @param name : the name of the user
- * @param email : (optional) the email of the user, as specified in the user document 
- * @param company : (optional) the name of the user's company -> profile document
- * @param jobTitle : (optional) the user's job title -> profile document
- * @param phone : (optional) the user's phone -> profile document
- * @param webSite : (optinal) the user's web site -> profile document
+ * @param email : the email of the user, as specified in the user document 
+ * @param company : the name of the user's company -> profile document
+ * @param jobTitle : the user's job title -> profile document
+ * @param phone : the user's phone -> profile document
+ * @param webSite : the user's web site -> profile document
  */
  
 try {
@@ -34,47 +34,41 @@ try {
 	var email = request.parameters["email"];
 	var password = request.parameters["password"];
 	
-	var saveUserParams = {
-		"login" : login,
-		"name" : name,
-		"password" : password,
+	var saveUserParams = {	
+		login : login,
 		"apsdb.update" : "true"
+	}
+		
+	
+	if (name) {
+		saveUserParams["name"] =  name;
+	}
+	
+	if (password) {
+		saveUserParams["password"] =  password;
 	}
 	
 	if (email) {
 		saveUserParams["email"] =  email;
-	}
-		
-	var saveUserResponse = apsdb.callApi("SaveUser", saveUserParams, null);
-	
-	apsdb.log.debug("SAVEUSERRESPONSE", {resp: saveUserResponse } );
-			
-	if (saveUserResponse.metadata.status == "failure") {
-		throw saveUserResponse.metadata.errorDetail;
-	}
-	
-	var saveProfileParams = {
-		"apsdb.documentKey" : login.replace("@", "_at_") + "Profile",		
-		"apsdb.update" : "true"
-	}
+	}	
 	
 	if (request.parameters["company"]) {
-		saveProfileParams["company"] = request.parameters["company"];
+		saveUserParams["company"] = request.parameters["company"];	
 	}
-	
+		
 	if (request.parameters["phone"]) {
-		saveProfileParams["phone"] = request.parameters["phone"];
+		saveUserParams["phone"] = request.parameters["phone"];
 	}
 	
 	if (request.parameters["jobTitle"]) {
-		saveProfileParams["jobTitle"] = request.parameters["jobTitle"];
+		saveUserParams["jobTitle"] = request.parameters["jobTitle"];
 	}
 	
 	if (request.parameters["webSite"]) {
-		saveProfileParams["webSite"] = request.parameters["webSite"];
+		saveUserParams["webSite"] = request.parameters["webSite"];
 	}	
 	
-	var saveProfileResponse = apsdb.callApi("SaveDocument", saveProfileParams, null);
+	var saveProfileResponse = apsdb.callApi("SaveUser", saveUserParams, null);
 	
 	apsdb.log.debug("SAVEPROFILERESPONSE", {resp: saveProfileResponse } );
 	

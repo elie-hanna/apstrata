@@ -212,8 +212,8 @@ dojo.declare("apstrata.home.dashboard.Profile",
 		this.container.client.call("RunScript", params, null).then(
 			
 			function(getAccountProfileResponse) {	
-				if (getAccountProfileResponse.result.status == "success") {
-					var profileData = getAccountProfileResponse.result.profile;
+				if (getAccountProfileResponse.result.metadata.status == "success") {
+					var profileData = getAccountProfileResponse.result.result.user;
 					
 					var accountsAsStr = "";				
 									
@@ -233,14 +233,14 @@ dojo.declare("apstrata.home.dashboard.Profile",
 					self.reload();
 					
 				}else {			
-					var errorMsg = getAccountProfileResponse.result.errorDetail;
+					var errorMsg = getAccountProfileResponse.result.metadata.errorDetail;
 					self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");					
 				}
 			},
 			
 			function(getAccountProfileResponse){
-				var errorDetail = getAcountProfileResponse.metadata.errorDetail;
-				var errorCode = getAcountProfileResponse.metadata.errorCode;
+				var errorDetail = getAccountProfileResponse.metadata.errorDetail;
+				var errorCode = getAccountProfileResponse.metadata.errorCode;
 				this._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
 			} 	
 		);		
@@ -253,7 +253,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 	_updateCredentials: function(newPassword) {
 		
 		var credentials = this.container.client.connection.credentials;
-		if (credentials.password && credentials.password != newPassword){
+		if (credentials.password && newPassword && newPassword != "" && credentials.password != newPassword){
 			this.container.client.connection.credentials.password = newPassword;
 		}
 	},
