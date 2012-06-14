@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="settings_apstrata_auth_mode_entries">
+	    <item>Simple</item>
+	    <item>Complex</item>
+	</string-array>
+	<string-array name="settings_apstrata_auth_mode_values">
+	    <item>10</item>
+	    <item>20</item>
+	</string-array>
+	<string-array name="settings_apstrata_response_type_entries">
+		<item >xml</item>
+		<item >json</item>
+	</string-array>
+	<string-array name="settings_apstrata_response_type_values">
+		<item >xml</item>
+		<item >json</item>
+	</string-array>
+</resources>
