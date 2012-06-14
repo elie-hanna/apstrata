@@ -71,7 +71,8 @@ for (k in request.parameters) {
 		if ((k == "user.login") && (checkUser(request.parameters[k]) == "success"))  {		
 			return { 
 				status: "failure", 
-				errorDetail: "Unable to register user [Login already exists]" 
+				errorDetail: "Unable to register user [Login already exists]",
+				errorCode: "DUPLICATE_USER" 
 			};								
 		}	
 		
@@ -88,6 +89,15 @@ for (k in request.parameters) {
 // If no user.login was sent in the request, create one from the user's e-mail
 if (!params["login"]) {
      params["login"] = params["email"];
+     
+     // verify that this login doesn't already exist
+     if ((checkUser(params["login"]) == "success"))  {		
+		return { 
+			status: "failure", 
+			errorDetail: "Unable to register user [email already exists]",
+			errorCode: "DUPLICATE_USER"
+		};								
+	}	
 }
 
 // Create a temporary document for this new user
