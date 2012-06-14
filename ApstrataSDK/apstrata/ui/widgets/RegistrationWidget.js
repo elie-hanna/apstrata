@@ -183,6 +183,8 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 					}
 					self.form.validate()
 				}
+				
+				window.location = response.result.url;
 			}, 
 			function(response) {
 				console.dir(response)
