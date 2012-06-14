@@ -2,7 +2,7 @@
 
 	$config = array (
 		"apstrataServiceURL" => "https://test-apps.apstrata.com/apsdb/rest",
-		"apstrataKey" => "WC7A01F4C8",
+		"apstrataKey" => "",
 		"contentStore" => "apstrata",
 		"crmStore" => "",
 		"developmentMode" => true,
@@ -12,8 +12,8 @@
 		"template" => "min",
 		"cachingHeaders" => "false",
 		"cachingAge" => 3000,
-		"targetClusterUrl" => "http://sandbox.apstrata.com/apsdb/rest",
-    	"worbenchUrl" => "http://localhost/ApstrataDeveloperWorkbench/src/ui" 
+		"targetClusterUrl" => "",
+    	"worbenchUrl" => "" 
 	);
 	
 	// Dublin Core meta-data site-wide init
