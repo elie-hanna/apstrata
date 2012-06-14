@@ -12,7 +12,7 @@ dojo.declare("apstrata.home.SearchBar",
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.home", "templates/SearchBar.html"),
 	
-	_categories: ["All", "|", "REST API", "|", "Identity", "Persistence", "Messaging", "Push Notification", "Orchestration", "Social" ,"|", "Script", "Widget", "|", "HTML5", "mobile", "|", "Application", "SDK"],
+	_categories: ["All", "|", "REST API", "|", "Identity", "Persistence", "Messaging", "Push Notification", "Orchestration", "|", "Script", "Widget", "|", "Social", "HTML5", "Mobile", "|", "Application", "SDK"],
 	
 	_emptyMessage: "search here",
 	
