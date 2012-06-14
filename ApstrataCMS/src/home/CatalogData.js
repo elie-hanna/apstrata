@@ -105,8 +105,8 @@ null,
 		],
 		
 		sdks: [
-			{ name: "Javascript SDK", iconClass: "userManagement", wikiDoc: "Javascript+SDK" }, 
-			{ name: "Android SDK", iconClass: "userManagement", wikiDoc: "Android" }
+			{ name: "Javascript SDK", iconClass: "userManagement", wikiDoc: "Javascript+SDK", tryIt: "false", getSampleCode: "false" }, 
+			{ name: "Android SDK", iconClass: "userManagement", wikiDoc: "Android", tryIt: "false", getSampleCode: "false" }
 		],
 		
 		addTags: function(object, tags) {
@@ -150,7 +150,7 @@ null,
 */					
 				api.label = api.name
 				api.type = "REST API"
-				api.wikiDoc = api.name
+				if (!api.wikiDoc) api.wikiDoc = api.name
 				api.id = i++
 
 				api.icon = "REST/" + api.name + ".png"			
@@ -162,6 +162,7 @@ null,
 			dojo.forEach(this.scripts, function(service) {
 				service.label = service.name
 				service.type = "script"
+				if (!service.wikiDoc) service.wikiDoc = service.name
 				service.id = i++
 				
 				self.addTags(service, "script")
@@ -175,6 +176,7 @@ null,
 				widget.icon = iconClasses[widget.iconClass]
 				widget.label = widget.name
 				widget.type = "widget"
+				if (!widget.wikiDoc) widget.wikiDoc = widget.name
 				widget.id = i++
 
 				self.addTags(widget, ["widget", "HTML5"])
@@ -187,6 +189,7 @@ null,
 				sdk.icon = iconClasses[sdk.iconClass]
 				sdk.label = sdk.name
 				sdk.type = "sdk"
+				if (!sdk.wikiDoc) sdk.wikiDoc = sdk.name
 				sdk.id = i++
 
 				self.addTags(sdk, ["sdk", "mobile"])
@@ -202,6 +205,7 @@ null,
 				network.icon = iconClasses[iconClass];
 				network.label = network.name;
 				network.type = "social";
+				if (!network.wikiDoc) network.wikiDoc = network.name
 				network.id = i++;
 
 				self.addTags(network, ["social", "HTML5"]);

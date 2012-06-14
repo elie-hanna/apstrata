@@ -104,10 +104,23 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		} else {
 			dojo.removeClass(this.dvNext, "disabledNavigation")
 		}
+		
+		self.setButtonsVisibility()
 
 	},
 	
-	setButtonVisibility: function() {
+	setButtonsVisibility: function() {
+		if (this.data.viewDocumentation && (this.data.viewDocumentation == "false")) { 
+			dojo.style(dojo.byId("viewDocumentation"), {display: "none"})
+		}
+		
+		if (this.data.tryIt && (this.data.tryIt == "false")) { 
+			dojo.style(dojo.byId("tryIt"), {display: "none"})
+		}
+
+		if (this.data.getSampleCode && (this.data.getSampleCode == "false")) { 
+			dojo.style(dojo.byId("getSampleCode"), {display: "none"})
+		}
 	},
 	
 	_next: function() {
