@@ -1,10 +1,10 @@
 <?php
 
 	$config = array (
-		"apstrataServiceURL" => "",
+		"apstrataServiceURL" => "https://sandbox.apstrata.com/apsdb/rest",
 		"apstrataKey" => "",
 		"apstrataSecret" => "",
-		"contentStore" => "DefaultStore",
+		"contentStore" => "apstrata",
 		"crmStore" => "",
 		"developmentMode" => true,
 		"useStub" => true,
