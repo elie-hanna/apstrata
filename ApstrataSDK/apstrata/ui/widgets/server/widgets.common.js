@@ -13,11 +13,12 @@
 var projectName = "MyProject";
 var defaultUsersGroup = "users";
 var defaultUnconfirmedRegistrationStore = "DefaultStore";	
-var apstrataHomeEnvironment = ;
-var apstrataHomeKey = ;
+var apstrataHomeEnvironment = "";
+var apstrataHomeKey = "";
 var registrationType = "user";
 var sendEmailOnceRegistrationConfirmed = true;
 var verifyUrl = apstrataHomeEnvironment + "/apsdb/rest/" + apstrataHomeKey + "/RunScript?apsws.authMode=simple&apsdb.scriptName=widgets.Registration.verifyAccount&login=$login&d=$confirmation";
+var registrationRedirectUrl = ""
  
 var configuration = {
 	projectName: projectName,
@@ -26,6 +27,7 @@ var configuration = {
 	apstrataHomeEnvironment: apstrataHomeEnvironment,	
 	apstrataHomeKey: apstrataHomeKey,
 	registrationType: registrationType,
+	registrationRedirectUrl: registrationRedirectUrl,
 	sendEmailOnceRegistrationConfirmed: sendEmailOnceRegistrationConfirmed,	
 	templates: {
 		adminEmail: "dude@dude.com",
