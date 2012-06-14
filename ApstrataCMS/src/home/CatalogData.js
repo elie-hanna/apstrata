@@ -11,8 +11,6 @@ null,
 		{icon: "apple_128px.png", name: "Apple iCloud API"},
 		{icon: "google_128px.png", name: "Google docs"},
 		{icon: "mail.png", name: "Mail API"},
-		{icon: "twitter_128px.png", name: "Twitter login"},
-		{icon: "twitter_128px.png", name: "Twitter post"},
 		{icon: "search.png", name: "FullText search API"},
 		{icon: "behance_128px.png", name: "Behance post"},
 		{icon: "lastfm_128px.png", name: "Last FM data"},
@@ -34,8 +32,15 @@ null,
 	],
 	
 	social: [
-		{icon: "twitter_128px.png", name: "Twitter login", wikiDoc: "The+apsdb+object"},
-		{icon: "twitter_128px.png", name: "Twitter post"},
+	 	{icon: "twitter_128px.png", name: "Twitter Login", wikiDoc: "Twitter"},
+		{icon: "twitter_128px.png", name: "Twitter TimeLine", wikiDoc: "Twitter"},
+		{icon: "twitter_128px.png", name: "Twitter Post", wikiDoc: "Twitter"},
+		{icon: "facebook_128px.png", name: "Facebook Login", wikiDoc: "Facebook"},
+		{icon: "facebook_128px.png", name: "Facebook", wikiDoc: "Facebook"},
+		{icon: "linkedin_128px.png", name: "LinkedIn Login", wikiDoc: "LinkedIn"},
+		{icon: "linkedin_128px.png", name: "LinkedIn", wikiDoc: "LinkedIn"},
+		{icon: "google_128px.png", name: "Google", wikiDoc: "Google"},
+		{icon: "youtube_128px.png", name: "YouTube", wikiDoc: "Google"}
 	],
 	
 	apis: [ 
@@ -129,7 +134,8 @@ null,
 				configuration: "configuration.png",
 				identity: "user-boss.png",
 				messaging: "mail.png",
-				pushNotification: "alert.png"
+				pushNotification: "alert.png",
+				social: "social.png"
 			}
 			
 			var i = 0
@@ -174,7 +180,7 @@ null,
 				self.addTags(widget, ["widget", "HTML5"])
 				
 				services.push(widget)
-			})	
+			})		
 			
 			dojo.forEach(this.sdks, function(sdk) {
 
@@ -186,7 +192,22 @@ null,
 				self.addTags(sdk, ["sdk", "mobile"])
 				
 				services.push(sdk)
-			})				
+			})	
+			
+			dojo.forEach(this.social, function(network) {
+				var iconClass = network.iconClass;
+				if(!network.iconClass){
+					iconClass = "social";
+				}
+				network.icon = iconClasses[iconClass];
+				network.label = network.name;
+				network.type = "social";
+				network.id = i++;
+
+				self.addTags(network, ["social", "HTML5"]);
+				
+				services.push(network);
+			})	
 			
 			return services
 		}
