@@ -14,6 +14,9 @@
  * @param login : the login of the user 
  * @param d : the temporary user document containing subscription information
  * @param profileStore : optional. If used, specifies the store where the profile will be created (only when registrationType == "account"). 
+ * @return : if successful and registrationRedirectUrl is defined in widgets.common, returns the url + 
+ * "&status=complete". Otherwise returns the last response
+ * If failure, returns {status: "failure", errorDetail: the_error_messag}
  */
 
 var logLevel = request.parameters["logLevel"];
@@ -92,7 +95,12 @@ try {
 	}
 					
 	response = {status : "success", result : response }; 
-	return response;
+	var url = configuration.registrationRedirectUrl;
+	if (url && url != ""){
+		apsdb.httpRedirect(url + "&status=complete");
+	}else {
+		return response;
+	}
 	
 	
 }catch(exception){
