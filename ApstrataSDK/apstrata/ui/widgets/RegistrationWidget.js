@@ -135,7 +135,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		
 		this.client.call("RunScript", request, null, {method: "get"}).then(
 			function(response) {
-				if (response.result.status == "success") {
+				if (response.result == true) {
 					deferred.resolve()
 				} else {
 					deferred.reject()
