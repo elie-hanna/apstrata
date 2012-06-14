@@ -66,6 +66,9 @@
 		height: 200px;
 		overflow: hidden;
 	}
+		.min #serviceDescription .slideContent p {
+			font-size: 1.4em;
+		}
 
 	.min #serviceDescription .actions {
 		display: block;
@@ -99,6 +102,10 @@
 		background: url('resources/orange-blue-inside.png');
 		background-repeat: no-repeat;
 		background-position: center;
+	}
+
+	.min #serviceDescription .selectedSelector:hover {
+		background: url('resources/orange-blue-inside.png');
 	}
 
 	.min #serviceDescription h3 {

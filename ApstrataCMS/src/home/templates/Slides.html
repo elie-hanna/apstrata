@@ -1,30 +1,21 @@
 <div>
 	<div class='slides'>
-		<div class="previous"></div>
-			<div class='slide'>
-				{% for slide in slides %}
-
-					{% ifequal forloop.counter0 0 %}
+		<div class="previous" dojoAttachEvent='onclick: _previous'></div>
+			<div class='slide' dojoAttachPoint='dvSlide'>
 						<div class='slideContent'>
-					{% else %}
-						<div class='slideContent' style='display: none;'>
-					{% endifequal %}
-							<h3>{{ slide.title }}</h3>
-							<h4>{{ slide.text }}</h4>
+							<h3 dojoAttachPoint='dvSlogan'>A</h3>
+							<p dojoAttachPoint='dvText'>B</p>
 						</div>
-				{% endfor %}
 			</div>
-		<div class="next"></div>
+		<div class="next" dojoAttachEvent='onclick: _next'></div>
 	</div>
 
 	<div class='actions'>
 		<div class='left'>
 			{% for slide in slides %}
-				{% ifequal forloop.counter0 0 %}
-					<div class='selectedSelector'></div>
-				{% else %}
-					<div class='selector'></div>
-				{% endifequal %}
+				<div class='selector' dojoAttachPoint='dvSelector{{ forloop.counter0 }}'  
+					dojoAttachEvent='onclick: _changeSlide' 
+					data-index='{{ forloop.counter0 }}'></div>
 			{% endfor %}
 		</div>
 

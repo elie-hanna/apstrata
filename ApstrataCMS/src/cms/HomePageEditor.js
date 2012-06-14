@@ -34,7 +34,6 @@ dojo.require("dojox.form.ListInput")
 dojo.declare("apstrata.cms.HomePageEditor", 
 [apstrata.horizon.WrapperPanel], 
 {
-	maximized: true,
 	maximizable: true,
 	
 	key: "home",
@@ -51,11 +50,11 @@ dojo.declare("apstrata.cms.HomePageEditor",
 					{name: "slogan1", label: "Slogan 1", type: "string", style: "width: 100%;"},
 					{name: "text1", label: "Slide 1: text", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
 
-					{name: "slogan1", label: "Slogan 2", type: "string", style: "width: 100%;"},
+					{name: "slogan2", label: "Slogan 2", type: "string", style: "width: 100%;"},
 					{name: "text2", label: "Slide 2: text", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
 
-					{name: "slogan2", label: "Slogan 3", type: "string", style: "width: 100%;"},
-					{name: "text2", label: "Slide 3: text", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
+					{name: "slogan3", label: "Slogan 3", type: "string", style: "width: 100%;"},
+					{name: "text3", label: "Slide 3: text", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
 
 					{name: "template", type:"hidden", value: "home"},
 					{name: "documentType", type: "hidden", value: "homePage"}
@@ -65,6 +64,15 @@ dojo.declare("apstrata.cms.HomePageEditor",
 			
 			save: function(v) {
 				v ["apsdb.documentKey"] = self.key
+				
+				// remove new lines and escape ' and "
+				for (key in v) {
+					v[key] = v[key].replace(/\n/g, '')
+					v[key] = v[key].replace(/\r/g, '')
+					v[key] = v[key].replace(/'/g, '\\\'')
+					v[key] = v[key].replace(/"/g, '\\"')
+				}
+				
 				if (self._HomePageExists) self.store.put(v);
 					else self.store.add(v)
 			}
