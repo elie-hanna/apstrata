@@ -5,7 +5,15 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-		<title><?php print $page["title"]; ?></title>
+		<title>
+			<?php 
+				if (isset($page["title"])) {
+					print $page["title"];
+				} else {
+					print "Apstrata Website";
+				} 
+			?>
+		</title>
 
 		<?php 
 			include("templates/" . $config['template'] . "/parts/head.php");
