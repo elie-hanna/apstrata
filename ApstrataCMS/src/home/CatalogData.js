@@ -39,8 +39,8 @@ null,
 	],
 	
 	apis: [ 
-			{ name: "AddCertificate", apiType: "pushNotification", icon: "Push-AddCertificate" },
-			{ name: "CreateChannel", apiType: "pushNotification", icon: "Push-CreateChannel" },
+			{ name: "AddCertificate", apiType: "push notification", icon: "Push-AddCertificate" },
+			{ name: "CreateChannel", apiType: "push notification", icon: "Push-CreateChannel" },
 			{ name: "CreateStore", apiType: "persistence", icon: "Create" }, 
 
 			{ name: "DeleteDocument", apiType: "persistence" }, 
@@ -53,9 +53,9 @@ null,
 			{ name: "DeleteStore", apiType: "persistence" }, 
 			{ name: "DeleteToken", apiType: "identity" }, 
 			{ name: "DeleteUser", apiType: "identity" }, 
-			{ name: "GetChannel", apiType: "pushNotification" },
+			{ name: "GetChannel", apiType: "push notification" },
 			{ name: "GetFile", apiType: "persistence" }, 
-			{ name: "GetInvalidTokens", apiType: "pushNotification" },
+			{ name: "GetInvalidTokens", apiType: "push notification" },
 			{ name: "GetSavedQuery", apiType: "persistence" }, 
 			{ name: "GetSchema", apiType: "persistence" }, 
 			{ name: "GetScript", apiType: "orchestration" }, 
@@ -68,10 +68,10 @@ null,
 			{ name: "ListScripts", apiType: "orchestration" }, 
 			{ name: "ListStores", apiType: "persistence" }, 
 			{ name: "ListUsers", apiType: "identity" }, 
-			{ name: "PushNotification", apiType: "pushNotification" },
+			{ name: "PushNotification", apiType: "push notification" },
 			{ name: "Query", apiType: "persistence" }, 
-			{ name: "RemoveCertificate", apiType: "pushNotification" },
-			{ name: "RemoveChannel", apiType: "pushNotification" },
+			{ name: "RemoveCertificate", apiType: "push notification" },
+			{ name: "RemoveChannel", apiType: "push notification" },
 			{ name: "RunScript", apiType: "orchestration" }, 
 			{ name: "SaveConfiguration", apiType: "configuration" }, 
 			{ name: "SaveDocument", apiType: "persistence" }, 
@@ -81,12 +81,12 @@ null,
 			{ name: "SaveScript", apiType: "orchestration" }, 
 			{ name: "SaveUser", apiType: "identity" }, 
 			{ name: "SendEmail", apiType: "messaging" }, 
-			{ name: "SubscribeTokens", apiType: "pushNotification" },
-			{ name: "TagTokensAsInvalid", apiType: "pushNotification" },
+			{ name: "SubscribeTokens", apiType: "push notification" },
+			{ name: "TagTokensAsInvalid", apiType: "push notification" },
 			{ name: "Transaction", apiType: "persistence" }, 
-			{ name: "UnsubscribeTokens", apiType: "pushNotification" },
-			{ name: "UpdateCertificate", apiType: "pushNotification" },
-			{ name: "UpdateChannel", apiType: "pushNotification" },
+			{ name: "UnsubscribeTokens", apiType: "push notification" },
+			{ name: "UpdateCertificate", apiType: "push notification" },
+			{ name: "UpdateChannel", apiType: "push notification" },
 			{ name: "VerifyCredentials", apiType: "identity" } 
 
 		],
@@ -147,9 +147,6 @@ null,
 				api.wikiDoc = api.name
 				api.id = i++
 
-//				if (api.apiType == "pushNotification") {
-//					api.apiType = "Push Notification"
-//				}
 				api.icon = "REST/" + api.name + ".png"			
 				self.addTags(api, ["REST API", api.apiType])
 				
