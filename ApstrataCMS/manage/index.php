@@ -49,7 +49,8 @@
 				    "apstrata.sdk": {
 				        "Connection" : {
 							credentials: {
-								key: '<?php print $GLOBALS["config"]["apstrataKey"]; ?>'
+								key: '<?php print $GLOBALS["config"]["apstrataKey"]; ?>',
+								secret: '<?php print $GLOBALS["config"]["apstrataSecret"]; ?>' 
 							},
 							serviceURL: '<?php print $GLOBALS["config"]["apstrataServiceURL"]; ?>',
 							defaultStore: '<?php print $GLOBALS["config"]["contentStore"]; ?>',
