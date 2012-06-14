@@ -68,7 +68,7 @@ try {
 		var advancedConfig = advancedWidgetsCommon.getConfiguration()
 		
 		// load account creation logic and run it
-		var accountProcess = apsdb.require("widgets.Registration.createAccountAndProfile");	
+		var accountProcess = apsdb.require("widgets.Registration.createAccount");	
 		var resp = accountProcess.handleAccountCreation(request, user, advancedConfig, apsdb, logLevel);		
 		
 		if (resp.status == "failure") {		
