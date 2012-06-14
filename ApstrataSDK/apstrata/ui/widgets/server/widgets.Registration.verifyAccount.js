@@ -49,7 +49,7 @@ try {
 	var response = saveUser();		
 		
 	if (response.metadata.status == "failure") {
-		fail(response);
+		return response;
 	}
 			
 	// If we were able to create a new user, we now need to:
@@ -83,7 +83,7 @@ try {
 	var deleteResponse = deleteTemporaryUserDoc();						
 	
 	if (deleteResponse.metadata.status == "failure") {
-		fail(deleteResponse, "deleteTempDocument");
+		return deleteResponse;
 	}
 	
 	// 3) Send confirmation e-mail
@@ -101,10 +101,6 @@ try {
 		status: "failure", 		
 		errorDetail: exception 	
 	}
-}
-
-function fail(specificResponse, action) {
-	response[specificResponse] = specificResponse;	
 }
 
 function saveUser() {
