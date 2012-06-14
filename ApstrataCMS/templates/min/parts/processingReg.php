@@ -11,14 +11,14 @@
 			dojo.ready(function() {
 				
 				var h1Message = "We are processing your registration request";
-				var span1Message = "A verification e-mail has been sent to the e-mail address you provided in the registration form.";
-				var span2Message = "Please click on the link contained in the e-mail to complete your registration";
+				var span1Message = "A verification e-mail message has been sent to the e-mail address you provided in the registration form.";
+				var span2Message = "Please click on the link included in the e-mail to complete your registration";
 				
 				urlParams = dojo.queryToObject(location.search.substr(1));
 				var status = urlParams["status"];
 				if (status && status == "complete") {
-					h1Message = "Welcome ! You are now registered to Apstrata";
-					span1Message = "Click on the Login link and enter you email and password to log in";
+					h1Message = "Welcome ! Your registration has successfully completed";
+					span1Message = "Click on the <a href=\"/ApstrataCMS/page.php?pageId=dashboard\">login link</a> and enter you email and password to log in";
 					span2Message = "";
 				}
 				
