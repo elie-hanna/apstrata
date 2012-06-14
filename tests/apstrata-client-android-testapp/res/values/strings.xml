@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Apstrata Client Test Application</string>
+    
+    <string name="apstrata_base_url">Apstrata Base Url</string>
+    <string name="apstrata_key">Apstrata Account Key</string>
+    <string name="apstrata_secret">Apstrata Account Secret</string>
+    <string name="apstrata_auth_mode">Apstrata Auth Mode</string>
+    <string name="apstrata_response_type">Apstrata Response Type</string>
+    
+    <string name="apstrata_run_tests">Run Tests Now</string>
+    <string name="apstrata_run_tests_help">Click the button to run the tests. The test results are displayed in this text widget.</string>
+</resources>
