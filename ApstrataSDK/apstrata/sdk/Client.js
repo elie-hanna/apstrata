@@ -115,7 +115,7 @@ dojo.declare("apstrata.sdk.Client", null, {
 		//  we're using a timeout event to provide an error message if an operation takes too long to execute
 		if (options && options.timeout) self._setTimeout(options.timeout); else self._setTimeout()
 
-		var sign = self.connection.sign(operation, dojo.objectToQuery(requestParams), "jsoncdp")
+		var sign = self.connection.sign(operation, "", "jsoncdp")
 		self.url = sign.url
 		self.signature = sign.signature
 
