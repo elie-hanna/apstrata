@@ -69,10 +69,12 @@ for (k in request.parameters) {
 	// Only parameters sent with the "user." prefix will be saved in the user profile
 	if (k.indexOf('user.')>=0) {
 		if ((k == "user.login") && (checkUser(request.parameters[k]) == "success"))  {		
-			return { 
-				status: "failure", 
-				errorDetail: "Unable to register user [Login already exists]",
-				errorCode: "DUPLICATE_USER" 
+			return {
+				metadata : { 
+					status: "failure", 
+					errorDetail: "Unable to register user [Login already exists]",
+					errorCode: "DUPLICATE_USER" 
+				}
 			};								
 		}	
 		
@@ -93,9 +95,11 @@ if (!params["login"]) {
      // verify that this login doesn't already exist
      if ((checkUser(params["login"]) == "success"))  {		
 		return { 
-			status: "failure", 
-			errorDetail: "Unable to register user [email already exists]",
-			errorCode: "DUPLICATE_USER"
+			metadata : {
+				status: "failure", 
+				errorDetail: "Unable to register user [email already exists]",
+				errorCode: "DUPLICATE_USER"
+			}
 		};								
 	}	
 }
