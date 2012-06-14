@@ -1,7 +1,7 @@
 <?php
 
 	$config = array (
-		"apstrataServiceURL" => "https://test-apps.apstrata.com/apsdb/rest",
+		"apstrataServiceURL" => "",
 		"apstrataKey" => "",
 		"contentStore" => "apstrata",
 		"crmStore" => "",
