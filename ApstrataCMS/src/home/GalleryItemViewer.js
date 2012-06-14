@@ -41,7 +41,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 			self.destroyRecursive()
 			self._curtain.parentNode.removeChild(self._curtain)
 
-			self.gallery.setHashParam(self.gallery.GALLERY_ITEM, self.data.label)
+			self.gallery.setHashParam(self.gallery.GALLERY_ITEM, "")
 		})
 		
 		dojo.animateProperty({
@@ -115,6 +115,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		this.cursor++
 		this.data = this.resultSet[this.cursor]
 		this.render()
+		this.gallery.setHashParam(this.gallery.GALLERY_ITEM, this.data.label)
 	},
 	
 	_previous: function() {
@@ -122,6 +123,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		this.cursor--
 		this.data = this.resultSet[this.cursor]		
 		this.render()
+		this.gallery.setHashParam(this.gallery.GALLERY_ITEM, this.data.label)
 	}
 })
 
