@@ -173,9 +173,14 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 			// the textbox information that is related to the selected authkey
 			this.currentSecret = this.secrets[this.currentAuthKey];
 			
-			if (dojo.style(this.currentSecret.domNode, "visibility") == "visible"){				
-				dojo.style(this.currentSecret.domNode, "visibility", "hidden");					
-			}else {
+			if (this.currentSecret.get("value") != "") {
+				if (dojo.style(this.currentSecret.domNode, "visibility") == "visible"){				
+					dojo.style(this.currentSecret.domNode, "visibility", "hidden");					
+				}else {
+					dojo.style(this.currentSecret.domNode, "visibility", "visible");					
+				}	
+			}
+			else {
 				// retrieve the account info and update the textbox value and status
 				this._callScript("getAccount");			
 			}			

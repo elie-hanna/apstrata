@@ -55,6 +55,12 @@
 							defaultStore: '<?php print $GLOBALS["config"]["contentStore"]; ?>',
 							timeout: parseInt('<?php print $GLOBALS["config"]["apstrataConnectionTimeout"]; ?>')
 				        }
+				    },
+				    
+				    // dashboard specific
+				    "apstrata.services" : {
+				    	targetClusterUrl: '<?php print $GLOBALS["config"]["targetClusterUrl"]; ?>',
+    					worbenchUrl: '<?php print $GLOBALS["config"]["worbenchUrl"]; ?>' 
 				    }
 				})
 				//
