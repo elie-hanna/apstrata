@@ -51,7 +51,17 @@
 		case "login":
 			include('templates/min/login.php');
 			break;
-
+			
+		case "processingReg":
+			$page = array (
+				"template" => $pageId,
+				"title" => "Processing Registration",
+				"apsdb.creationTime" => "",
+				 "apsdb.lastModifiedTime" =>""
+			);
+			include('templates/min/default.php');
+			break;
+	
 		case null:
 		case "":
 		case "/":
