@@ -12,8 +12,10 @@
  * @param : optional parameters are "user.groups" (not when creating account), "user.company",
  * "user.webSite", "user.jobTitle", "user.phone"
  * Parameters not prefixed with "user" will not be saved.
- * @return { status :"success", result : "true"} in the "result" section of the response or
- * {status : "failure", errorDetail : "xxxx"} in case of failure
+ * @return { metadata : { status :"success" }, url: redirection_url} if registrationRedirectURL is
+ * specified in widgets.common or true if not specified
+ *  or
+ * {metadata : {status : "failure", errorDetail : "xxxx", errorCode: "yyyy"}} in case of failure
  */
 
 var widgetsCommon = apsdb.require("widgets.common")
@@ -128,7 +130,16 @@ if (saveUserResult.metadata.status == "success") {
 		};
 	} else {
 		transaction.commit();
-		return true
+		var url = true;		
+		if ((configuration.registrationRedirectUrl) && (configuration.registrationRedirectUrl != "")){
+			url = configuration.registrationRedirectUrl;
+		}
+		return {
+			metadata: {
+				status : "success"
+			},
+			url : url				
+		}
 	}
 	
 } else {
