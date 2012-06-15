@@ -7,38 +7,38 @@ dojo.declare("apstrata.home.CatalogData",
 null, 
 {
 	scripts: [
-		{icon: "savedQuery.png", name: "Database API"},
-		{icon: "apple_128px.png", name: "Apple iCloud API"},
-		{icon: "google_128px.png", name: "Google docs"},
-		{icon: "mail.png", name: "Mail API"},
-		{icon: "search.png", name: "FullText search API"},
+		{icon: "DatabaseAPI.png", name: "Database API"},
+		{icon: "AppleICloudAPI.png", name: "Apple iCloud API"},
+		{icon: "GoogleDocs.png", name: "Google docs"},
+		{icon: "MailAPI.png", name: "Mail API"},
+		{icon: "FullTextSearchAPI.png", name: "FullText search API"},
 		{icon: "behance_128px.png", name: "Behance post"},
 		{icon: "lastfm_128px.png", name: "Last FM data"},
 		{icon: "vimeo_128px.png", name: "Vimeo post"},
-		{icon: "user-boss.png", name: "User management API"},
+		{icon: "UserManagementAPI.png", name: "User management API"},
 		{icon: "vimeo_128px.png", name: "Vimeo data"},
 		{icon: "delicious_128px.png", name: "Delicious post"},
 		{icon: "rss.png", name: "Create feed"},
 		{icon: "linkedin_128px.png", name: "Linkedin post"},
 		{icon: "digg_128px.png", name: "Digg post"},
-		{icon: "youtube_128px.png", name: "Youtube data"},
-		{icon: "youtube_128px.png", name: "Youtube post"},
-		{icon: "facebook_128px.png", name: "Facebook status"},
-		{icon: "facebook_128px.png", name: "Facebook query"},
-		{icon: "facebook_128px.png", name: "Facebook photo"},
-		{icon: "facebook_128px.png", name: "Facebook login"},
+		{icon: "YoutubeData.png", name: "Youtube data"},
+		{icon: "YoutubePost.png", name: "Youtube post"},
+		{icon: "FacebookStatus.png", name: "Facebook status"},
+		{icon: "FacebookQuery.png", name: "Facebook query"},
+		{icon: "FacebookPhoto.png", name: "Facebook photo"},
+		{icon: "FacebookLogin.png", name: "Facebook login"},
 		{icon: "flickr_128px.png", name: "Flickr data"},
 		{icon: "flickr_128px.png", name: "Flickr post"}
 	],
 	
 	social: [
-	 	{icon: "twitter_128px.png", name: "Twitter Login", wikiDoc: "Twitter"},
-		{icon: "twitter_128px.png", name: "Twitter TimeLine", wikiDoc: "Twitter"},
-		{icon: "twitter_128px.png", name: "Twitter Post", wikiDoc: "Twitter"},
-		{icon: "facebook_128px.png", name: "Facebook Login", wikiDoc: "Facebook"},
-		{icon: "facebook_128px.png", name: "Facebook", wikiDoc: "Facebook"},
-		{icon: "linkedin_128px.png", name: "LinkedIn Login", wikiDoc: "LinkedIn"},
-		{icon: "linkedin_128px.png", name: "LinkedIn", wikiDoc: "LinkedIn"},
+	 	{icon: "TwitterLogin.png", name: "Twitter Login", wikiDoc: "Twitter"},
+		{icon: "TwitterTimeline.png", name: "Twitter TimeLine", wikiDoc: "Twitter"},
+		{icon: "TwitterPost.png", name: "Twitter Post", wikiDoc: "Twitter"},
+		{icon: "FacebookLogin.png", name: "Facebook Login", wikiDoc: "Facebook"},
+		{icon: "Facebook.png", name: "Facebook", wikiDoc: "Facebook"},
+		{icon: "LinkedinLogin.png", name: "LinkedIn Login", wikiDoc: "LinkedIn"},
+		{icon: "Linkedin.png", name: "LinkedIn", wikiDoc: "LinkedIn"},
 		{icon: "google_128px.png", name: "Google", wikiDoc: "Google"},
 		{icon: "youtube_128px.png", name: "YouTube", wikiDoc: "Google"}
 	],
@@ -97,8 +97,8 @@ null,
 		],
 		
 		widgets: [
-			{ name: "Login", iconClass: "userManagement" }, 
-			{ name: "Registration", iconClass: "userManagement" }, 
+			{ icon: "Login.png", name: "Login", iconClass: "userManagement" }, 
+			{ icon: "Registration.png", name: "Registration", iconClass: "userManagement" }, 
 			//{ name: "User profile", iconClass: "userManagement" }, 
 			//{ name: "Data form", iconClass: "form" }, 
 			//{ name: "Data Grid", iconClass: "grid" }
@@ -160,6 +160,12 @@ null,
 			})			
 
 			dojo.forEach(this.scripts, function(service) {
+				
+				if (!service.icon) {
+					service.icon = iconClasses[service.iconClass]
+				}else {
+					service.icon = "/Scripts/" + service.icon;
+				}
 				service.label = service.name
 				service.type = "script"
 				if (!service.wikiDoc) service.wikiDoc = service.name
@@ -173,7 +179,11 @@ null,
 
 			dojo.forEach(this.widgets, function(widget) {
 
-				widget.icon = iconClasses[widget.iconClass]
+				if (!widget.icon) {
+					widget.icon = iconClasses[widget.iconClass]
+				}else {
+					widget.icon = "/Widgets/" + widget.icon;
+				}
 				widget.label = widget.name
 				widget.type = "widget"
 				if (!widget.wikiDoc) widget.wikiDoc = widget.name
@@ -202,7 +212,11 @@ null,
 				if(!network.iconClass){
 					iconClass = "social";
 				}
-				network.icon = iconClasses[iconClass];
+				if (!network.icon) {
+					network.icon = iconClasses[iconClass];
+				}else  {
+					network.icon = "/Social/" + network.icon;
+				}
 				network.label = network.name;
 				network.type = "social";
 				if (!network.wikiDoc) network.wikiDoc = network.name
