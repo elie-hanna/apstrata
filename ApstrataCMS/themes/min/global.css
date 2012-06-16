@@ -3,6 +3,9 @@
 .min {
 	font-family: Tahoma, Geneva, sans-serif;
 	background: #fafaff;
+
+	background-image: url('resources/paper.png');
+	background-repeat: repeat;
 }
 
 .min .sideButton {

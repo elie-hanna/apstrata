@@ -1,6 +1,11 @@
 .min #serviceDescription {
-	background:   #ccccff;    /* color scheme */
-	padding-top: 40px;
+	background: #fff;
+	opacity: .8;
+	
+	top: -65px;
+	position: relative;
+	
+	padding-top: 105px;
 	padding-bottom: 20px;
 	padding-right: 15px;
 	padding-left: 15px;
@@ -14,11 +19,10 @@
 	-webkit-border-bottom-right-radius: 10px;
 	border-bottom-right-radius: 10px;
 
-    -o-border-radius: 10px;
+ /*	box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.1) inset; */
+ 	box-shadow: 0px -1px 1px rgba(0, 0, 0, 0.2);
 
-	-moz-box-shadow: 0 1px 30px #665;
-	box-shadow: 0 1px 10px #aab;
-	-webkit-box-shadow: 0 1px 30px #665;
+    -o-border-radius: 10px;
 }
 
 	.min #serviceDescription .previous {
@@ -86,26 +90,38 @@
 		display: inline-block;
 		width: 32px;
 		height: 32px;
-		background: url('resources/orange-circle.png');
+		background: url('resources/slide-selector.png');
 		background-repeat: no-repeat;
 		background-position: center;
+		
+		position: relative;
+		top: 8px;
 	}
 
 	.min #serviceDescription .selector:hover {
-		background: url('resources/orange-orange.png');
+		background: url('resources/slide-selector-hover.png');
+		
+		position: relative;
+		top: 8px;
 	}
 
 	.min #serviceDescription .selectedSelector {
 		display: inline-block;
 		width: 32px;
 		height: 32px;
-		background: url('resources/orange-blue-inside.png');
+		background: url('resources/slide-selector-selected.png');
 		background-repeat: no-repeat;
 		background-position: center;
+		
+		position: relative;
+		top: 8px;
 	}
 
 	.min #serviceDescription .selectedSelector:hover {
-		background: url('resources/orange-blue-inside.png');
+		background: url('resources/slide-selector-selected.png');
+		
+		position: relative;
+		top: 8px;
 	}
 
 	.min #serviceDescription h3 {

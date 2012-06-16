@@ -1,3 +1,8 @@
+.min #searchBar {
+	position: relative;
+	top: -65px;
+}
+
 .min #search {
 	padding-top: 10px;
 	padding-bottom: 10px;		
@@ -62,6 +67,9 @@
 }
 
 .min #content #searchResults {
+	position: relative;
+	top: -65px;
+
 	display: table;
 	width: 100%;
 	padding-bottom: 120px;
@@ -81,15 +89,26 @@
 	width: 16.6%;
 }
 
+.min #content #searchResults .item:hover {
+	background: #fafafd;
+    -o-border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+
+ 	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1) inset;
+ }
+
 .min #content #searchResults .item .type {
 	position: relative;
-	top: 10px;
-	left: 30px;
+	top: 30px;
+	left: 10px;
 	font-size: 0.8em;
 	color: #fff;
-	background: #f6b374;
+	background: #9a9a9a;
+	display: none;
 	padding: 3px;
-	opacity: .9;
+	opacity: .7;
 	width: 50px;
 	
 	z-index: 11;
@@ -101,25 +120,38 @@
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;
+	
+	-moz-transform:rotate(-90deg);
+	-webkit-transform:rotate(-90deg);
+	-o-transform:rotate(-90deg);
+	-ms-transform:rotate(-90deg);
 }
 
 .min #content #searchResults .item .label {
 	position: relative;
 
-	font-size: 1.2em;
-	color: #337; 
+	top: 10px;
+	margin-bottom: 10px;
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #557; 
 	width: 120px;
 	margin-right: auto;
 	margin-left: auto;
 	display: block;
+
 }
 
 .min #content #searchResults .item img {
 	width: 90px;
 	height: 90px;
-	opacity: .9;
+	opacity: .8;
 	margin-right: auto;
 	margin-left: auto;
 	display: block;
 	cursor: pointer;
+}
+
+.min #content #searchResults .item img:hover {
+	opacity: 1;
 }

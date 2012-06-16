@@ -11,8 +11,8 @@
 	.min #header-inner {
 		/* border-bottom: 1px solid #a7c7de; */
 		height: 65px;
-		background:   #ccccee;  /* color scheme */
-
+		background:  #0b1c32;  /* 0b1c32 da0202 color scheme #da5a07; */
+		opacity: .9;
 		-moz-border-radius-bottomleft: 10px;
 		-webkit-border-bottom-left-radius: 10px;
 		border-bottom-left-radius: 10px;
@@ -21,16 +21,27 @@
 		-webkit-border-bottom-right-radius: 10px;
 		border-bottom-right-radius: 10px;
 
-		-moz-box-shadow: 0 1px 30px #665;
-		box-shadow: 0 1px 20px #aab;
-		-webkit-box-shadow: 0 1px 30px #665;
+		box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.7);
 	}
 		.min #logo {
 			float: left;
-			background: url('resources/apstrata-big.png');
+			background: url('resources/apstrata-big-white.png');
 			width: 211px;
 			height: 51px;
 			background-size: 100% 100%;
+			margin-left: 15px;
+			top: 6px;
+			position: relative;
+		}
+
+		.min #logoText {
+			font-family: "Arial Rounded MT Bold";
+			font-size: 2.8em;
+			text-decoration: none;
+			color: #000f69;
+			float: left;
+			width: 211px;
+			height: 51px;
 			margin-left: 15px;
 			top: 6px;
 			position: relative;
@@ -45,7 +56,7 @@
 				display: inline-block;
 			}
 			.min #menu .menu-item a {
-				color: #333;
+				color: #fff;
 				font-size: 1.6em;
 				font-weight: normal;
 				padding-left: 20px;
@@ -54,8 +65,8 @@
 				text-decoration: none;
 			}
 			.min #menu .menu-item a:hover {
-				color: #33a;
+				color: #66f;
 			}
 			.min #menu .menu-item .selected {
-				color: #33a;
+				color: #66f;
 			}

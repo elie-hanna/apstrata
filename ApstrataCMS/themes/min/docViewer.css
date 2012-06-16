@@ -15,6 +15,7 @@
 	
 	position: fixed;
 	overflow: hidden;
+	opacity: .93;
 	
     -o-border-radius: 15px;
     -moz-border-radius: 15px;
@@ -89,7 +90,7 @@
 			display: inline-block;
 			font-size: 1.2em;
 			color: #fff;
-			background: #f6b374;
+			background: #444;
 			padding: 7px;
 			opacity: .9;
 			width: 114px;
