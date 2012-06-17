@@ -105,8 +105,8 @@ null,
 		],
 		
 		sdks: [
-			{ name: "Javascript SDK", iconClass: "userManagement", wikiDoc: "Javascript+SDK", tryIt: "false", getSampleCode: "false" }, 
-			{ name: "Android SDK", iconClass: "userManagement", wikiDoc: "Android", tryIt: "false", getSampleCode: "false" }
+			{ icon: "JavascriptSDK.png", name: "Javascript SDK", iconClass: "userManagement", wikiDoc: "Javascript+SDK", tryIt: "false", getSampleCode: "false" }, 
+			{ icon: "AndroidSDK.png", name: "Android SDK", iconClass: "userManagement", wikiDoc: "Android", tryIt: "false", getSampleCode: "false" }
 		],
 		
 		addTags: function(object, tags) {
@@ -195,8 +195,12 @@ null,
 			})		
 			
 			dojo.forEach(this.sdks, function(sdk) {
-
-				sdk.icon = iconClasses[sdk.iconClass]
+				
+				if (!sdk.icon) {
+					sdk.icon = iconClasses[iconClass];
+				}else  {
+					sdk.icon = "/Sdk/" + sdk.icon;
+				}
 				sdk.label = sdk.name
 				sdk.type = "sdk"
 				if (!sdk.wikiDoc) sdk.wikiDoc = sdk.name
