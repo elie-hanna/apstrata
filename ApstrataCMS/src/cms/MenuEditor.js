@@ -52,7 +52,7 @@ dojo.declare("apstrata.cms.HierachicalDnDList",
 	refresh: function() {
 		var self = this
 		
-		self.dndList = new dojo.dnd.Source(self.dvList, {copyOnly: self.copyOnly})
+		self.dndList = dojo.dnd.Source(self.dvList, {copyOnly: self.copyOnly})
 		self.dndList.checkAcceptance = function() {
 			return self.acceptItems
 		}
@@ -93,9 +93,16 @@ dojo.declare("apstrata.cms.HierachicalDnDList",
 				dojo.removeClass(self.dvList, "busy")
 				var pages = []				
 				dojo.forEach(result, function(page) {
+console.dir(page)
+
+					var additionalParams = ''
+					if (page.documentType=='link') {
+						additionalParams = "data-link='" + page.address + "'" + "data-target='" + "_new" + "'" 
+					}
+
 					pages.push({
 						id: page.key,
-						data: "<div data-id='" + page.key + "'>" + page.title + "</div>"
+						data: "<div " + additionalParams + "data-id='" + page.key + "'>" + page.title + "</div>"
 					})
 				})
 
@@ -107,16 +114,19 @@ dojo.declare("apstrata.cms.HierachicalDnDList",
 	get: function(v) {
 		if (v == "value") {
 			var list = []
-//console.dir(this.dndList.getAllNodes())
 			this.dndList.getAllNodes().forEach(function(node){
 				
 				var level = dojo.attr(node.childNodes[0], "data-level")
 				var title = node.childNodes[0].innerHTML
+				var link = dojo.attr(node.childNodes[0], "data-link")
+				var target = dojo.attr(node.childNodes[0], "data-target")
 				
 				list.push({
 					id: dojo.attr(node.childNodes[0], "data-id"),
 					title: title,
-					level: level?parseInt(level):0
+					level: level?parseInt(level):0,
+					link: link?link:"",
+					target: target?target:""
 				})
 			})
 			return list
@@ -183,7 +193,7 @@ dojo.declare("apstrata.cms.MenuEditor",
 					queryExpression: "documentType =\"page\" OR documentType =\"link\"" 
 				}) 
 
-		var source = apstrata.cms.HierachicalDnDList({store: self.store, isFlat: true, acceptItems: false, copyOnly: true})
+		var source = new apstrata.cms.HierachicalDnDList({store: self.store, isFlat: true, acceptItems: false, copyOnly: true})
 		dojo.place(source.domNode, this.dvSource)
 
 		//
@@ -241,6 +251,9 @@ dojo.declare("apstrata.cms.MenuEditor",
 				leftFooterPhp: apstrata.cms.toPhp(leftFooter.get("value")),
 				rightFooterPhp: apstrata.cms.toPhp(rightFooter.get("value"))
 			}
+
+console.dir(leftFooter.get("value"))
+console.dir(o)
 			
 			dojo.when(
 				self.store.get("menu"),

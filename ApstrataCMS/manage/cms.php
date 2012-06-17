@@ -69,16 +69,23 @@
 			$class='';
 			$link='';
 
+			if ($item['link'] != "") { 
+				$url = $item['link'];
+			} else if (isset($item['id'])) { 
+				$url = $this->getUrl($item['id']);
+				if ($item['id'] == $this->pageId) $class="class='selected'";
+			}
+
+			if (isset($item['target'])) {
+				$url = $url . "' target='" . $item['target'];
+			}
+
 			if (isset($item['type'])) {
 				if ($item['type']=='external') {
 					$url = $item['url'] . "' target='_new";
 				}
 			} 
 			
-			if (isset($item['id'])) { 
-				$url = $this->getUrl($item['id']);
-				if ($item['id'] == $this->pageId) $class="class='selected'";
-			}
 			
 			if (isset($item['title'])) $link = "<a " . $class . " href='" . $url . "'>" .  $item['title'] . "</a>";
 			
