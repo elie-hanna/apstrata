@@ -40,10 +40,7 @@ try {
 	var user = apsdb.callApi("Query", getUserDocParams , null);
 	
 	if (!(user.result.documents) || (user.result.documents.length == 0)) {
-		return {
-			status: "failure", 		
-			errorDetail: "WRONG_CONFIRMATION_CODE" 	
-		}	
+		throw "WRONG_CONFIRMATION_CODE";		
 	}
 	
 	// If we were able to retrieve the document, prepare to save the info as a new user			
@@ -52,7 +49,7 @@ try {
 	var response = saveUser();		
 		
 	if (response.metadata.status == "failure") {
-		return response;
+		throw response.metadata.errorDetail;
 	}
 			
 	// If we were able to create a new user, we now need to:
@@ -74,9 +71,9 @@ try {
 		var accountProcess = apsdb.require("widgets.Registration.createAccount");	
 		var resp = accountProcess.handleAccountCreation(request, user, advancedConfig, apsdb, logLevel);		
 		
-		if (resp.status == "failure") {		
+		if (resp.metadata.status == "failure") {		
 			deleteUser();
-			throw resp;
+			throw resp.metadata.errorDetail;
 		}else {
 			response = resp;
 		}
@@ -86,7 +83,7 @@ try {
 	var deleteResponse = deleteTemporaryUserDoc();						
 	
 	if (deleteResponse.metadata.status == "failure") {
-		return deleteResponse;
+		throw deleteResponse.metadata.errorDetail;
 	}
 	
 	// 3) Send confirmation e-mail
@@ -105,9 +102,18 @@ try {
 	
 }catch(exception){
 	
-	return {
+	var errorDetail = exception ? exception : "An error occurred";		
+	var resp = {
 		status: "failure", 		
-		errorDetail: exception 	
+		errorDetail: encodeURIComponent(errorDetail) 
+	};
+	
+	var url = configuration.registrationRedirectUrl;
+	apsdb.log.debug("URL", {url : url});
+	if (url && url != ""){
+		apsdb.httpRedirect(url + "&status=error&error=" + resp.errorDetail);		
+	}else {
+		return resp;
 	}
 }
 
