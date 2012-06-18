@@ -22,6 +22,13 @@
 					span2Message = "";
 				}
 				
+				if (status && status == "error") {
+					var error = urlParams["error"];
+					h1Message = "An error occurred when processing your registration request.";
+					span1Message = "Please contact us at apstrata-support@apstrata.com";
+					span2Message = decodeURIComponent(error);
+				}
+				
 				var h1Node = dojo.byId("h1");
 				h1Node.innerHTML = h1Message;
 				var span1Node = dojo.byId("span1");
