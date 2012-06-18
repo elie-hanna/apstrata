@@ -69,7 +69,7 @@
 			$class='';
 			$link='';
 
-			if ($item['link'] != "") { 
+			if (isset($item['link']) && ($item['link'] != "")) { 
 				$url = $item['link'];
 			} else if (isset($item['id'])) { 
 				$url = $this->getUrl($item['id']);
