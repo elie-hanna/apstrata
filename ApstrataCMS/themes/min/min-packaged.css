@@ -1,0 +1,14 @@
+/* global definitions */
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:400,800,600");
+@import url("http://fonts.googleapis.com/css?family=Montserrat");
+@import url("../../themes/min/global.css");
+@import url("../../themes/min/header.css");
+@import url("../../themes/min/home.css");
+@import url("../../themes/min/page.css");
+@import url("../../themes/min/gallery.css");
+@import url("../../themes/min/docViewer.css");
+@import url("../../themes/min/footer.css");
+@import url("../../themes/min/dashboard.css");
+@import "../../../dijit/themes/claro/claro.css";
+@import "../../../dojo/resources/dojo.css";
+@import "../../../dojox/widget/Dialog/Dialog.css";
