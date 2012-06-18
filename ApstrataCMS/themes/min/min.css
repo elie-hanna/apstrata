@@ -9,4 +9,6 @@
 @import url("docViewer.css");
 @import url("footer.css");
 @import url("dashboard.css");
-
+@import "../../lib/dojo/dijit/themes/claro/claro.css";
+@import "../../lib/dojo/dojo/resources/dojo.css";
+@import "../../lib/dojo/dojox/widget/Dialog/Dialog.css";

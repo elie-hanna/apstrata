@@ -1,4 +1,6 @@
 @import "../../lib/dojo/dijit/themes/claro/claro.css";
+@import "../lib/dojo/dojo/resources/dojo.css";
+@import "../lib/dojo/dojox/widget/Dialog/Dialog.css";
 @import "../../lib/dojo/dojox/grid/resources/Grid.css";
 @import "../../lib/dojo/dojox/grid/resources/claroGrid.css";
 @import "../../lib/dojo/dojox/grid/enhanced/resources/claro/EnhancedGrid.css";

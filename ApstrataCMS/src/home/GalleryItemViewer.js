@@ -57,7 +57,9 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		
 		this.render()
 
-		this.inherited(arguments)
+		this.inherited(arguments);
+		gapi.plusone.go();
+		IN.init();
 	},
 	
 	render: function() {

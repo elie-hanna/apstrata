@@ -101,7 +101,7 @@
 		cursor:pointer;
 		
 		font-family: 'Montserrat', sans-serif;
-		font-size: 1.3em;
+		font-size: 1.2em;
 		font-weight: bolder;
 		text-decoration: none;
 		color: #eee;		
@@ -136,3 +136,8 @@
 	background-repeat: no-repeat;
 	background-position: center;
 }
+
+
+/*** Social Bookmarks ***/
+.social-bookmarks {float: left; width: 282px; padding: 0; margin: 6px 0 0;}
+.social-bookmarks li {float: left; margin: 0; padding: 0!important; list-style-type: none;}
