@@ -139,4 +139,14 @@ if (typeof apstrata == "undefined" || !apstrata.configured) {
 			
 		}
 	}
+	
+	/*
+	 * IE does not support console.groupCollapsed() and console.groupEnd() and console.dir() functions
+	 * Hence, override these functions with empty ones in case of IE 
+	 */
+	if (dojo.isIE) {
+		console.groupCollapsed = function(groupName) {}
+		console.groupEnd = function() {}
+		console.dir = function() {}
+	} 
 }
