@@ -123,19 +123,23 @@ dojo.declare("apstrata.sdk.Connection", null, {
 		
 		if (this.loginType == this._LOGIN_TYPE_USER) {
 			if (!this.credentials.user) {
-				console.warn (this.declaredClass + ": User id not provided in credentials, operation will fail!")
-				return {url: "", signature: ""}		
+				console.warn (this.declaredClass + ": User id not provided in credentials, operation might fail if not intended to be called anonymously!")
+				//continue to build the URL for anonymous calls
+				//return {url: "", signature: ""}		
+			} else {
+				valueToHash = timestamp + this.credentials.user + operation + dojox.encoding.digests.MD5(this.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
+				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+				user = this.credentials.user
 			}
-			valueToHash = timestamp + this.credentials.user + operation + dojox.encoding.digests.MD5(this.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
-			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-			user = this.credentials.user
 		} else {
 			if (!this.credentials.secret) {
-				console.warn (this.declaredClass + ": Account secret not provided in credentials, operation will fail!")
-				return {url: "", signature: ""}		
+				console.warn (this.declaredClass + ": Account secret not provided in credentials, operation might fail if not intended to be called anonymously!")
+				//continue to build the URL for anonymous calls
+				//return {url: "", signature: ""}		
+			} else {
+				valueToHash = timestamp + this.credentials.key + operation + this.credentials.secret
+				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 			}
-			valueToHash = timestamp + this.credentials.key + operation + this.credentials.secret
-			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 		}
 
 		var url = this.serviceURL
