@@ -8,15 +8,16 @@
 
 /*
  * This script should be used when registering a new user or when provisioning a new account.
- * The script will consider that it is running an account provisioning scenario if one of the following is true
+ * The script will consider that it is running an account provisioning scenario 
+ * if one of the following is true
  * (a)widgets.common/configuration.registrationType == "account"
  * (b) request.parameters["registrationType"] == "account"
  * @param login : the login of the user 
  * @param d : the temporary user document containing subscription information
- * @param profileStore : optional. If used, specifies the store where the profile will be created (only when registrationType == "account"). 
  * @return : if successful and registrationRedirectUrl is defined in widgets.common, returns the url + 
- * "&status=complete". Otherwise returns the last response
- * If failure, returns {status: "failure", errorDetail: the_error_messag}
+ * "&status=complete". Otherwise (if url not specified) returns the last response.
+ * If unsuccessful and redirection url defined, returns the url + "&status=error&error=error_msg".
+ * Otherwise, returns {status: "failure", errorDetail: the_error_messag}
  */
 
 var logLevel = request.parameters["logLevel"];
@@ -32,7 +33,8 @@ var configuration = widgetsCommon.getConfiguration();
 var getUserDocParams = {
 	"apsdb.store" : configuration.defaultUnconfirmedRegistrationStore,
 	"apsdb.query" : "apsdb.documentKey = \"" + request.parameters["d"] + "\"",
-	"apsdb.queryFields" : "*"
+	"apsdb.queryFields" : "*",
+	"apsdb.includeFieldType" : "true"
 }
 
 try {	
@@ -70,7 +72,7 @@ try {
 		// load account creation logic and run it
 		var accountProcess = apsdb.require("widgets.Registration.createAccount");	
 		var resp = accountProcess.handleAccountCreation(request, user, advancedConfig, apsdb, logLevel);		
-		
+		apsdb.log.debug("Create account response", {resp:resp});
 		if (resp.metadata.status == "failure") {		
 			deleteUser();
 			throw resp.metadata.errorDetail;
@@ -94,13 +96,15 @@ try {
 	response = {status : "success", result : response }; 
 	var url = configuration.registrationRedirectUrl;
 	if (url && url != ""){
-		apsdb.httpRedirect(url + "&status=complete");
+		apsdb.httpRedirect(url + "&status=complete");						
 	}else {
 		return response;
 	}
 	
 	
 }catch(exception){
+	
+	apsdb.log.debug("Exception", {exception: exception});
 	
 	var errorDetail = exception ? exception : "An error occurred";		
 	var resp = {
@@ -109,28 +113,42 @@ try {
 	};
 	
 	var url = configuration.registrationRedirectUrl;
-	apsdb.log.debug("URL", {url : url});
+	
+	apsdb.log.debug("Redirect URL", {url : url});
+	
 	if (url && url != ""){
-		apsdb.httpRedirect(url + "&status=error&error=" + resp.errorDetail);		
+		apsdb.httpRedirect(url + "&status=error&error=" + resp.errorDetail);
+					
 	}else {
 		return resp;
 	}
 }
 
 function saveUser() {
-
-	var params = {
-		login: request.parameters["login"],
-		password: user.result.documents[0].password,
-		email: user.result.documents[0].email,
-		name: user.result.documents[0].name,
-		groups: user.result.documents[0].finalGroups,			
-	}	
 	
-	params["company"] = user.result.documents[0].company;
-	params["jobTitle"] = user.result.documents[0].jobTitle;
-	params["phone"] = user.result.documents[0].phone;
-	params["webSite"] = user.result.documents[0].webSite;
+	var params = {};
+	var types = user.result.documents[0]["_type"];	
+	for (var key in user.result.documents[0]) {
+		if (key.indexOf("apsdb.") < 0 && key != ("versionNumber") && key != "key" && key != "_type") {			
+			
+			if (types[key] == "date") {
+				var strDate = user.result.documents[0][key];				
+				var d = parseDate(strDate);				
+				var day = d.getDay();
+				var month = d.getMonth() + 1;
+				var year = d.getFullYear();
+				params[key] = day + "/" + month + "/" + year;				
+				continue;
+			}
+			
+			params[key] = user.result.documents[0][key];
+			if (key == "password") {				
+				continue;
+			}			
+			
+			params[key + ".apsdb.fieldType"] = types[key];
+		}
+	}
 			
 	return apsdb.callApi("SaveUser", params, null);
 }
@@ -172,6 +190,27 @@ function sendEmail() {
 	};
 	
 	return apsdb.callApi("SendEmail", sendEmailInput, null);		
+}
+
+function parseDate (dateStr) {
+	var dateTimeArray = dateStr.split("T"); // separate the date from the time.
+	var dateArray = dateTimeArray[0].split("-"); // get individual values for year/month/day.
+
+	var outputDate = new Date();
+
+	// use setUTC since facebook returns everything in UTC time [+0000]
+	outputDate.setUTCFullYear(dateArray[0]);
+	outputDate.setUTCMonth(dateArray[1] -1); // js month count is from 0 - 11
+	outputDate.setUTCDate(dateArray[2]);
+
+	if (dateTimeArray[1]) {
+		var timeArray = dateTimeArray[1].split("+")[0].split(":"); // get individual values for hour/minute/second.
+		outputDate.setUTCHours(timeArray[0]);
+		outputDate.setUTCMinutes(timeArray[1]);
+		outputDate.setUTCSeconds(timeArray[2]);
+	}
+
+	return outputDate;
 }
 
 ]]>
