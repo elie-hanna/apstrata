@@ -8,6 +8,7 @@
 
 /*
  * Use this script in order to update the profile of a given user.
+ * The script will update the user and the profile (docKey = userloginProfile) documents.
  * @param login : the login of the user (mandatory)
  * @param password : the password of the user
  * @param name : the name of the user
@@ -22,12 +23,8 @@ try {
 	var zLogLevel = request.parameters["logLevel"];
 	if (zLogLevel){
 		apsdb.log.setLogLevel(zLogLevel); 
-	}
-	
-	var transaction = null;
-	
-	transaction = apsdb.beginTransaction();
-		
+	}	
+			
 	var login = request.parameters["login"];
 	var name = request.parameters["name"];
 	var email = request.parameters["email"];
@@ -36,8 +33,7 @@ try {
 	var saveUserParams = {	
 		login : login,
 		"apsdb.update" : "true"
-	}
-		
+	}		
 	
 	if (name) {
 		saveUserParams["name"] =  name;
@@ -68,23 +64,24 @@ try {
 	}	
 	
 	var saveProfileResponse = apsdb.callApi("SaveUser", saveUserParams, null);
-	
-	apsdb.log.debug("SAVEPROFILERESPONSE", {resp: saveProfileResponse } );
+		
+	apsdb.log.debug("SAVEPROFILERESPONSE", {resp: saveProfileResponse } );	
 	
 	if (saveProfileResponse.metadata.status == "failure") {
 		throw saveProfileResponse.metadata.errorDetail;
-	}
+	}	
+		
+	var mailParams = {		
+		"apsma.to": email,
+		"apsma.subject": "Profile update notification",
+		"apsma.body": "Your profile has been updated"
+	};
 	
-	if (transaction) {
-		transaction.commit();
-	}
-	
+	apsdb.callApi("SendEmail", mailParams, null);
+		
 	return {status : "success"}
 
-}catch(error) {
-	if (transaction) {
-		transaction.rollback();
-	}
+}catch(error) {	
 	
 	return {status : "failure", errorDetail : error};
 }	
