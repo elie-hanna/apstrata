@@ -120,7 +120,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 					"email" : this.formGenerator._fields.email.value,
 					"jobTitle" : this.formGenerator._fields.jobTitle.value,
 					"company" : this.formGenerator._fields.company.value,
-					"webSite" :  this.formGenerator._fields.website.value,
+					"website" :  this.formGenerator._fields.website.value,
 					"phone" : this.formGenerator._fields.phone.value
 				};			
 				
@@ -225,7 +225,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 						accounts : profileData.availableAccounts,
 						company : profileData.company,
 						phone : profileData.phone,
-						website : profileData.webSite,
+						website : profileData.website,
 						accounts : accountsAsStr
 					}			
 					
