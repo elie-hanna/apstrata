@@ -1,12 +1,12 @@
 <?php
 
 	$config = array (
-		"apstrataServiceURL" => "https://test-apps.apstrata.com/apsdb/rest",
+		"apstrataServiceURL" => "https://sandbox.apstrata.com/apsdb/rest",
 		"apstrataKey" => "",
 		"contentStore" => "",
 		"crmStore" => "",
 		"developmentMode" => true,
-		"useStub" => true,
+		"useStub" => false,
 		"apstrataConnectionTimeout" => 30000,
 		"urlPrefix" => "page.php?pageId=",
 		"template" => "min",
