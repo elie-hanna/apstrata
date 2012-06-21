@@ -35,28 +35,27 @@ dojo.declare("apstrata.home.dashboard.Profile",
 	
 	definition : {
 				label: "Profile",
-				cssClass: "newClass",
 				fieldset: [
-							{name: "attributes", label: "Personal information", type: "subform", style: "form", cssClass:"column",
+							{name: "attributes", label: "Personal information", type: "subform", style: "form", cssClass:"section",
 								fieldset: [
-									{name: "login", label: "Login", type: "string", readOnly:true},
-									{name: "password", label: "Update Password", type:"password", readOnly:true},
-									{name: "confirmPassword", label: "Confirm Password", type:"password", readOnly:true, attrs: {invalidMessage: "Passwords don't match"}},
-									{name: "name", label: "Name", type: "string", readOnly:true},
-									{name: "jobTitle", label: "Job Title", type: "string", readOnly:true},
-									{name: "email", label: "e-Mail", type: "string", readOnly:true}																							
+									{name: "login", label: "Login", type: "string", readOnly: true},
+									{name: "password", label: "Update Password", type:"password", readOnly: false},
+									{name: "confirmPassword", label: "Confirm Password", type:"password", readOnly: false, attrs: {invalidMessage: "Passwords don't match"}},
+									{name: "name", label: "Name", type: "string", readOnly: false},
+									{name: "jobTitle", label: "Job Title", type: "string", readOnly: false},
+									{name: "email", label: "e-Mail", type: "string", readOnly: false}																							
 								]					
 							},
-							{name: "attributes", label: "Company information", type: "subform", style: "form", cssClass:"column",
+							{name: "attributes", label: "Company information", type: "subform", style: "form", cssClass:"section",
 								fieldset: [
-									{name: "company", label: "Company Name", type: "string", readOnly:true},
-									{name: "phone", label: "Phone Number", type: "string", readOnly:true},
-									{name: "website", label: "Company Web Site", type: "string", readOnly:true}					
+									{name: "company", label: "Company Name", type: "string", readOnly: false},
+									{name: "phone", label: "Phone Number", type: "string", readOnly: false},
+									{name: "website", label: "Company Web Site", type: "string", readOnly: false}					
 								]					
 							}							
 						],	
 						
-				actions: ['edit', 'save', 'cancel']
+				actions: ['save']
 			},
 	
 	constructor: function(options) {
@@ -64,18 +63,17 @@ dojo.declare("apstrata.home.dashboard.Profile",
 	},
 
 	postCreate: function(){
-		
-		dojo.style(this.domNode, "width", "500px");
 		var self = this;
 		var zDefinition = self.definition;
+
+		dojo.addClass(this.domNode, "profile")
+
 		var formGenOptions = {
 			cssClass : "newClass",
 			width : "500px",
 			definition : zDefinition,
 			autoWidth : true,
 			save: dojo.hitch(self, "save"),
-			edit: dojo.hitch(self, "edit"),
-			cancel : dojo.hitch(self, "cancel")
 		}
 		
 		this.formGenerator = new apstrata.ui.forms.FormGenerator(formGenOptions);	
@@ -110,80 +108,72 @@ dojo.declare("apstrata.home.dashboard.Profile",
 	 */
 	save: function(values, formGenerator){
 		var self = this;
-		if (this.isEditing) { 
+		if (true) { 
+
 			if (this.formGenerator.validate()){				
-				var params = {
-					"apsdb.scriptName" : "dashboard.updateProfile",
-					"login" : this.formGenerator._fields.login.value,
-					"password" : this.formGenerator._fields.password.value,
-					"name" : this.formGenerator._fields.name.value,
-					"email" : this.formGenerator._fields.email.value,
-					"jobTitle" : this.formGenerator._fields.jobTitle.value,
-					"company" : this.formGenerator._fields.company.value,
-					"website" :  this.formGenerator._fields.website.value,
-					"phone" : this.formGenerator._fields.phone.value
-				};			
-				
-				this.container.client.call("RunScript", params).then(
-				
-					function(response) {
-						if (response.result.status == "failure") {
-							self._alert(response.result.errorDetail, "errorIcon");
-						}else {
-							
-							// reset the formGenerator's content with the data that has just been updated
-							self._loadProfileData();
-							
-							//if the password has been changed we need to modify the credentials if the user has logged in 
-							//using his login and password
-							self._updateCredentials(self.formGenerator._fields.password.value);
-														
-							self.isEditing = false;
-							self.backup = {};
-							self._alert("Your profile has been updated", "icon");	
-						}						
-					},
-					
-					function(response) {
-						self._alert(response.metadata.status, "errorIcon");
+				new apstrata.horizon.PanelAlert({
+					panel: self,
+					width: 320,
+					height: 140,
+					iconClass: "editIcon",
+					message: "Are you sure you want to save the profile changes?",
+					actions: ['OK', 'Cancel'],
+					actionHandler: function(action){
+						if (action == "OK") {
+							self._saveChanges()
+						}
 					}
-				);
+				})
+
+
+
 			}
 		}
 	},
 	
-	edit: function(values, formGenerator){
+	_saveChanges: function() {
+		var self = this
 		
-		var self = this;
-		this.isEditing = true;
-		var editableFieldsNames = ["name", "email", "jobTitle", "password", "confirmPassword", "company", "phone", "website"];
-		
-		// backup the current values and state of the editable fields in order to restore them on cancellation 
-		this.backup = dojo.clone(this.value);
-				
-		var fields = this.formGenerator._fields;
-		for (var i = 0; i < editableFieldsNames.length; i++) {
-			fields[editableFieldsNames[i]].set("readOnly", false);			
+		var params = {
+			"apsdb.scriptName" : "dashboard.updateProfile",
+			"login" : this.formGenerator._fields.login.value,
+
+			// if this is not sent it won't be changed
+			"password" : this.formGenerator._fields.password.value,
+			"name" : this.formGenerator._fields.name.value,
+			"email" : this.formGenerator._fields.email.value,
+			"jobTitle" : this.formGenerator._fields.jobTitle.value,
+			"company" : this.formGenerator._fields.company.value,
+			"webSite" :  this.formGenerator._fields.website.value,
+			"phone" : this.formGenerator._fields.phone.value
 		}
 		
-		//Attach the validator to the confirm password field
-		this.formGenerator.getField("confirmPassword").validator = function(value, constraints) {
-			
-			return self.formGenerator.getField("password").get("value") == self.formGenerator.getField("confirmPassword").get("value");		
-		}		
+		this.container.client.call("RunScript", params).then(
 		
-	},
-	
-	cancel: function(values, formGenerator){
-		if (this.isEditing) {
+			function(response) {
+				if (response.result.status == "failure") {
+					self._alert(response.result.errorDetail, "errorIcon");
+				}else {
+					
+					// reset the formGenerator's content with the data that has just been updated
+					self._loadProfileData();
+					
+					//if the password has been changed we need to modify the credentials if the user has logged in 
+					//using his login and password
+					self._updateCredentials(self.formGenerator._fields.password.value);
+												
+					self.isEditing = false;
+					self.backup = {};
+					self._alert("Your profile has been updated", "icon");	
+				}						
+			},
 			
-			// restore the initial values and state of the editable fields
-			this.value = dojo.clone(this.backup);
-			this.formGenerator.set("value", this.value);	
-			this.isEditing = false;			
-		}
+			function(response) {
+				self._alert(response.metadata.status, "errorIcon");
+			}
+		)
 	},
-	
+
 	destroy: function() {
 		this.inherited(arguments);
 	},
@@ -225,7 +215,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 						accounts : profileData.availableAccounts,
 						company : profileData.company,
 						phone : profileData.phone,
-						website : profileData.website,
+						website : profileData.webSite,
 						accounts : accountsAsStr
 					}			
 					

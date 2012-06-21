@@ -3,3 +3,37 @@
 	width: 100%;
 	height: 500px;
 }
+
+.min .dashboard .profile {
+	width: 500px;
+	font-size: 1.2em;
+}
+
+.min .dashboard .FormGenerator h2 {
+	margin-top: 0px;
+	font-size: 1.4em;
+}
+
+.min .dashboard .FormGenerator .dijitTextBox {
+	width: 95%;	
+}
+
+.min .dashboard .FormGenerator .label {
+	margin-bottom: 3px;
+	margin-top: 7px;
+	color: #555;
+}
+
+.min .dashboard .FormGenerator .setLabel {
+	margin-bottom: 5px;
+	color: #338;
+}
+
+.min .dashboard .FormGenerator .set {
+	margin-left: 25px;
+}
+
+.min .dashboard .FormGenerator .actions {
+	margin-top: 15px;
+	text-align: center;
+}
