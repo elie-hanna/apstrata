@@ -32,20 +32,18 @@
 	
 		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/dojo.js.uncompressed.js" djConfig="parseOnLoad: false"></script>
 		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
-		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/apstratacms.js"></script>
+		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/apstratacms.js.uncompressed.js"></script>
+		
 		<style type="text/css">
-	        @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css";
+	        @import "lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";
 	        @import "lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>-packaged.css";
         </style>
 		
 		<script type="text/javascript">
 			dojo.require("dojo.parser")
-		/*	
+			
 			dojo.ready(function() {
-				dojo.registerModulePath("apstrata", "../../../lib/ApstrataSDK/apstrata")
-				dojo.registerModulePath("apstrata.home", "../../../src/home")
-				dojo.registerModulePath("apstrata.cms", "../../../src/cms")
-				
+	
 //				dojo.require("apstrata.home.ApConfig")
 
 				//
@@ -67,7 +65,7 @@
 				    "apstrata.sdk": {
 				        "Connection" : {
 							credentials: {
-								key: '<?php print $GLOBALS["config"]["apstrataKey"]; ?>'						
+								key: '<?php print $GLOBALS["config"]["apstrataKey"]; ?>'								
 							},
 							serviceURL: '<?php print $GLOBALS["config"]["apstrataServiceURL"]; ?>',
 							defaultStore: '<?php print $GLOBALS["config"]["contentStore"]; ?>',
@@ -87,7 +85,6 @@
 
 
 			})
-			*/
 		</script>
 
 

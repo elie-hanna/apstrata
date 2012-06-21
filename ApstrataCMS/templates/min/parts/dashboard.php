@@ -8,12 +8,12 @@
 	@import "lib/dojo/dojox/highlight/resources/highlight.css";
 	@import "lib/dojo/dojox/highlight/resources/pygments/colorful.css";
 
-    @import "lib/apstrataSDK/apstrata/ui/themes/apstrata/FormGenerator.css";
-    @import "lib/apstrataSDK/apstrata/ui/themes/apstrata/Curtain.css";
-    @import "lib/apstrataSDK/apstrata/ui/themes/apstrata/FlashAlert.css";
-    @import "lib/apstrataSDK/apstrata/ui/themes/apstrata/ApstrataAnimation.css";
+    @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/FormGenerator.css";
+    @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/Curtain.css";
+    @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/FlashAlert.css";
+    @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/ApstrataAnimation.css";
 
-    @import "lib/apstrataSDK/apstrata/horizon/themes/horizon.css";
+    @import "lib/ApstrataSDK/apstrata/horizon/themes/horizon.css";
 
 	.blueHorizon {
 		font-family: sans-serif;
