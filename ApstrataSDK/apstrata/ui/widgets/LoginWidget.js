@@ -195,6 +195,9 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 				dojo.style(self.dvLoginWidget, "display", "block")
 				dojo.style(self.dvPreferences, "display", "block")
 			
+				apstrata.apConfig["apstrata.sdk"].Connection.serviceURL = prefs.serviceURL
+				apstrata.apConfig["apstrata.sdk"].Connection.timeout = prefs.timeout
+				
 				console.dir(prefs)
 			}
 		});
