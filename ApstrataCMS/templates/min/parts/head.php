@@ -28,28 +28,53 @@
 		
 		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 
-	    <link rel="shortcut icon" href="workbench/images/favicon.png" type="image/png" />
+		<link rel="shortcut icon" href="workbench/images/favicon.png" type="image/png" />
 	
+
+		<?php 
+			if ($config["developmentMode"]) { 
+		?>
 		<script type="text/javascript" src="lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
 		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 
 		<style type="text/css">
-			@import "lib/dojo/dojo/resources/dojo.css";
-		    @import "lib/dojo/dijit/themes/claro/claro.css";
-		    @import "lib/dojo/dojox/widget/Dialog/Dialog.css";
+			 @import "lib/dojo/dojo/resources/dojo.css";
+		   	 @import "lib/dojo/dijit/themes/claro/claro.css";
+		   	 @import "lib/dojo/dojox/widget/Dialog/Dialog.css";
 
-	        @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css";
-	        @import "themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
-        </style>
+	       		 @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css";
+	       		 @import "themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
+       		 </style>
+		
+		<?php 
+			} else { 
+		?>
+		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/dojo.js.uncompressed.js" djConfig="parseOnLoad: false"></script>
+		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/apstratacms.js.uncompressed.js"></script>
+		
+		<style type="text/css">
+		        @import "lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";
+		        @import "lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>-packaged.css";
+	        </style>
+		<?php 
+			}
+		?>
+		
 		
 		<script type="text/javascript">
 			dojo.require("dojo.parser")
 			
 			dojo.ready(function() {
+		<?php 
+			if ($config["developmentMode"]) { 
+		?>
 				dojo.registerModulePath("apstrata", "../../../lib/ApstrataSDK/apstrata")
 				dojo.registerModulePath("apstrata.home", "../../../src/home")
 				dojo.registerModulePath("apstrata.cms", "../../../src/cms")
-				
+			<?php 
+			}
+		?>	
 //				dojo.require("apstrata.home.ApConfig")
 
 				//
