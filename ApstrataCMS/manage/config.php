@@ -1,21 +1,22 @@
 <?php
 
 	$config = array (
-		"apstrataServiceURL" => "https://sandbox.apstrata.com/apsdb/rest",
+		"apstrataServiceURL" => "https://apsdb.apstrata.com/sandbox-apsdb/rest",
 		"apstrataKey" => "",
-		"contentStore" => "",
+		"apstrataSecret" => "",		
+		"contentStore" => "apstrata",
 		"crmStore" => "",
-		"developmentMode" => false,
-		"useStub" => true,
-		"developmentMode" => false,
+		"developmentMode" => true,
+		"useStub" => false,
 		"apstrataConnectionTimeout" => 30000,
 		"urlPrefix" => "page.php?pageId=",
 		"baseUrl" => "http://www.apstrata.com",
 		"template" => "min",
 		"cachingHeaders" => "false",
 		"cachingAge" => 3000,
+		"cachingAge" => 3000,
 		"targetClusterUrl" => "",
-    		"worbenchUrl" => "",
+   		"workbenchUrl" => "",
 		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS"
 	);
 	
