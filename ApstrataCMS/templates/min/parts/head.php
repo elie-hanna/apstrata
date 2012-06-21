@@ -50,7 +50,9 @@
 			} else { 
 		?>
 		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/dojo.js.uncompressed.js" djConfig="parseOnLoad: false"></script>
-		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+<script>
+	var i = 0 ;
+</script>
 		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/apstratacms.js.uncompressed.js"></script>
 		
 		<style type="text/css">
@@ -73,8 +75,12 @@
 				dojo.registerModulePath("apstrata.home", "../../../src/home")
 				dojo.registerModulePath("apstrata.cms", "../../../src/cms")
 			<?php 
-			}
+			} else {
 		?>	
+			dojo.require("apstrata.sdk.Registry");
+		<?php 
+			}
+		?>
 //				dojo.require("apstrata.home.ApConfig")
 
 				//
