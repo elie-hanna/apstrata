@@ -79,7 +79,7 @@
 							timeout: parseInt('<?php print $GLOBALS["config"]["apstrataConnectionTimeout"]; ?>')
 				        }
 				    },
-					"
+					
 				    
 				    // dashboard specific
 				    "apstrata.services" : {
