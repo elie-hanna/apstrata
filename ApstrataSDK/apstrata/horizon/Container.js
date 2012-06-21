@@ -387,30 +387,6 @@ dojo.declare("apstrata.horizon.Container",
 			this.inherited(arguments)
 	},
 
-	loadPreferences: function() {
-		var prefs = {}
-
-		try {
-			var prefs = dojo.fromJson(dojo.cookie(this.applicationId + "-prefs"))
-			if (prefs) {
-				//this.preferencesChanged(prefs); 
-			} else {
-				prefs = {};
-			}
-		} catch (err) {
-			
-		}
-		
-		return prefs
-	},
-	
-	savePreferences: function(preferences, autoLogout) {
-		dojo.cookie(this.applicationId + "-prefs", dojo.toJson(preferences), { expires: 365 });
-		this.preferencesChanged(preferences, autoLogout);
-	},
-
-	preferencesChanged: function(preferences, autoLogout) {},
-	
 	showCurtain: function() {
 		// Put a curtain over the entire window
 		var w = dijit.getViewport()

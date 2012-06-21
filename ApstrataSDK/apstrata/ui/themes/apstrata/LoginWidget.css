@@ -51,3 +51,23 @@
 .LoginWidget .login .label {
 	color: #ffffff;
 }
+
+.LoginWidget .login .preferences {
+	display: none;
+	text-align: right;
+}
+.LoginWidget .login .preferences a {
+	color: #339;	
+	font-size: 0.8em;
+    left: -24px;
+    position: relative;
+    top: -27px;
+}
+.LoginWidget .login .preferences a:visited {
+	color: #339;	
+}
+.LoginWidget .login .preferences a:hover {
+	color: #339;	
+}
+
+.LoginWidget .login .

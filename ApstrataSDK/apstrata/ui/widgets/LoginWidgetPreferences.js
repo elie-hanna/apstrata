@@ -18,7 +18,7 @@
  * *****************************************************************************
  */
 
-dojo.provide('apstrata.horizon.Preferences');
+dojo.provide('apstrata.ui.widgets.LoginWidgetPreferences');
 
 dojo.require("apstrata.horizon.Panel")
 
@@ -30,11 +30,11 @@ dojo.require('dijit.form.DateTextBox');
 dojo.require('dijit.form.HorizontalSlider');
 dojo.require('dijit.form.HorizontalRuleLabels');
 
-dojo.declare("apstrata.horizon.Preferences", 
+dojo.declare("apstrata.ui.widgets.LoginWidgetPreferences", 
 [apstrata.horizon.Panel], 
 {
 	widgetsInTemplate: true,
-	templatePath: dojo.moduleUrl("apstrata.horizon", "templates/PreferencesPanel.html"),
+	templatePath: dojo.moduleUrl("apstrata.ui.widgets", "templates/LoginWidgetPreferences.html"),
 
 	maximizePanel: true,
 	
@@ -43,24 +43,50 @@ dojo.declare("apstrata.horizon.Preferences",
 		this._TIMEOUT_VALUES = [5000, 10000, 20000, 30000, 60000, 120000]
 		this.autoLogout = false;
 		dojo.mixin(this, attrs);
-
 	},
 	
 	postCreate: function() {
-		this.preferences = this.getContainer().loadPreferences();
+		this.preferences = this.loadPreferences();
 		
 		this.fldServiceURL.value = this.preferences.serviceURL?this.preferences.serviceURL:"https://sandbox.apstrata.com/apsdb/rest";
 
 		if(this.preferences.timeout)
-			this.sldTimeout.attr('value', dojo.indexOf(this._TIMEOUT_VALUES, this.preferences.timeout))
+			this.sldTimeout.set('value', dojo.indexOf(this._TIMEOUT_VALUES, this.preferences.timeout))
 
 		this.inherited(arguments)
 	},
 	
 	savePreferences: function() {
 		var self = this;
-		this.preferences.serviceURL = this.fldServiceURL.value;
-		this.preferences.timeout = this._TIMEOUT_VALUES[this.sldTimeout.value];
-		this.getContainer().savePreferences(this.preferences, this.autoLogout);
+		
+		var preferences = {
+			serviceURL: self.fldServiceURL.value,
+			timeout: self._TIMEOUT_VALUES[self.sldTimeout.value]
+		}
+		
+		this.onChange(preferences)
+		
+		dojo.cookie(this.applicationId + "-prefs", dojo.toJson(preferences), { expires: 365 });
+		
+		// destroy the widget
+		this.destroyRecursive()
+	},
+
+	loadPreferences: function() {
+		var prefs = {}
+
+		try {
+			var prefs = dojo.fromJson(dojo.cookie(this.applicationId + "-prefs"))
+			if (prefs) {
+				//this.preferencesChanged(prefs); 
+			} else {
+				prefs = {};
+			}
+		} catch (err) {
+			
+		}
+		
+		return prefs
 	}
+
 })

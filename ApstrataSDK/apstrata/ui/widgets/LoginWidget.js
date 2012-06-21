@@ -30,7 +30,7 @@ dojo.require('apstrata.ui.ApstrataAnimation')
 dojo.require('apstrata.sdk.Connection')
 dojo.require('apstrata.sdk.Client')
 
-dojo.require('apstrata.horizon.Preferences');
+dojo.require('apstrata.ui.widgets.LoginWidgetPreferences');
 
 dojo.requireLocalization("apstrata.ui.widgets", "login-widget")
 
@@ -109,20 +109,14 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 				)
 			}	
 		})
-		dojo.place(this.form.domNode, this.dvLogin)
+		dojo.place(this.form.domNode, this.dvLoginWidget)
 
 		// If credentials have been supplied in apConfig, show them
 		if (apstrata.registry.get("apstrata.sdk", "Connection")) this.form.set("value", apstrata.registry.get("apstrata.sdk", "Connection").credentials)
 		
 		//Add the preferences link
 		if (this.showPreferencesLink) {
-			var prefsButton = new dijit.form.Button({
-				label: 'Preferences',
-				onClick: function() {
-					self.showPreferences();
-				}
-			});
-			dojo.place(prefsButton.domNode, this.dvLogin);
+			dojo.style(this.dvPreferences, "display", "block")
 		}
 	},
 
@@ -192,11 +186,22 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		this.inherited(arguments)
 	},
 	
-	showPreferences: function() {		
-		this.dvLogin.innerHTML = '';
+	_preferences: function() {
+		var self = this	
 		
-		var prefs = new apstrata.horizon.Preferences({container: this.container});
-		dojo.place(prefs.domNode, this.dvLogin);
+		var prefs = new apstrata.ui.widgets.LoginWidgetPreferences({
+			container: this.container,
+			onChange: function(prefs) {
+				dojo.style(self.dvLoginWidget, "display", "block")
+				dojo.style(self.dvPreferences, "display", "block")
+			
+				console.dir(prefs)
+			}
+		});
+
+		dojo.place(prefs.domNode, this.dvPreferencesPanel)
+		dojo.style(this.dvLoginWidget, "display", "none")
+		dojo.style(this.dvPreferences, "display", "none")
 		
 		//This is a temp fix until we get the CSS for the UI updated
 		dojo.style(dojo.query('.LoginWidget .login .panel')[0], 'position', '');
