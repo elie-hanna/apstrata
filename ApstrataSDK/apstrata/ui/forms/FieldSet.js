@@ -242,18 +242,26 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 		var attr = {}
 		var label
 				
+		var labelCss = ""
+		
+		if (definition.type == self._SUBFORM) {
+			labelCss = "setLabel"
+		} else {
+			labelCss = "label"
+		}
+				
 		// If this is not a tabular format add a label before each field
 		if ((self.style == self._FORM) && (definition.type != "hidden")) {
 			if (definition.label != undefined) { // if definition has a label
 				if (definition.label!="") { // and it's not empty
 					// show label
 					label = dojo.create("div", {innerHTML: definition.label + (definition.required?"*":"")}) 
-					dojo.addClass(label, "label")
+					dojo.addClass(label, labelCss)
 				}
 			} else {
 				// if label hasn't been set show name as label
 				label = dojo.create("div", {innerHTML: definition.name + (definition.required?"*":"")}) 
-				dojo.addClass(label, "label")
+				dojo.addClass(label, labelCss)
 			}
 		}
 

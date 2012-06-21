@@ -379,8 +379,6 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		// Dijit.form.Form will do the heavylifting to set the values on all fields
 		if (this.value) this.frmMain.set("value", tmp) 
 		
-		
-console.dir(this.value)		
 		this._fireReadyEvent()
 	},
 	

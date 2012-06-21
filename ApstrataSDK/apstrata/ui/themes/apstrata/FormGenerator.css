@@ -42,7 +42,7 @@
 	
 }
 
-.FormGenerator .set .label {
+.FormGenerator .set .fieldset-label {
 	padding-top: 8px;
 }
 
@@ -68,6 +68,12 @@
 .FormGenerator form .set {
 	
 }
+
+.FormGenerator form .setLabel {
+	margin-top: 15px;
+	font-weight: bold;
+}
+
 
 .FormGenerator form .row {
 	
