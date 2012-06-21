@@ -10,7 +10,7 @@
 		<script type="text/javascript" src="lib/apstrataSDK/apstrata/sdk/apstrata.js"></script>
 		<script type="text/javascript" src="lib/apstrataSDK/apstrata/ui/embed/apstrataEmbed.js"></script>
 
-		<div class="registrationWidget embed spinner" data-apstrata-embedType="apstrata.ui.widgets.RegistrationWidget"></div>
+		<div class="registrationWidget embed spinner" data-apstrata-embedType="apstrata.ui.widgets.RegistrationWidget" loginurl="/ApstrataCMS/page.php?pageId=dashboard"></div>
 	</div>
 </div>
 <!-- embed code: end -->
