@@ -13,7 +13,8 @@
 		"cachingHeaders" => "false",
 		"cachingAge" => 3000,
 		"targetClusterUrl" => "",
-    	"worbenchUrl" => "" 
+    		"worbenchUrl" => "",
+		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS"
 	);
 	
 	// Dublin Core meta-data site-wide init
