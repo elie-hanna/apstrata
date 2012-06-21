@@ -33,11 +33,11 @@ null,
 	],
 	
 	social: [
-//	 	{icon: "TwitterLogin.png", name: "Twitter Login", wikiDoc: "Twitter"},
-//		{icon: "TwitterTimeline.png", name: "Twitter TimeLine", wikiDoc: "Twitter"},
-//		{icon: "TwitterPost.png", name: "Twitter Post", wikiDoc: "Twitter"},
-//		{icon: "FacebookLogin.png", name: "Facebook Login", wikiDoc: "Facebook"},
-//		{icon: "Facebook.png", name: "Facebook", wikiDoc: "Facebook"},
+	 	{icon: "TwitterLogin.png", name: "Twitter Login", wikiDoc: "Twitter", tryIt: "false", getSampleCode: "false" },
+		{icon: "TwitterTimeline.png", name: "Twitter TimeLine", wikiDoc: "Twitter", tryIt: "false", getSampleCode: "false" },
+		{icon: "TwitterPost.png", name: "Twitter Post", wikiDoc: "Twitter", tryIt: "false", getSampleCode: "false" },
+		{icon: "FacebookLogin.png", name: "Facebook Login", wikiDoc: "Facebook", tryIt: "false", getSampleCode: "false" },
+		{icon: "Facebook.png", name: "Facebook", wikiDoc: "Facebook"}//,
 //		{icon: "LinkedinLogin.png", name: "LinkedIn Login", wikiDoc: "LinkedIn"},
 //		{icon: "Linkedin.png", name: "LinkedIn", wikiDoc: "LinkedIn"},
 //		{icon: "google_128px.png", name: "Google", wikiDoc: "Google"},
@@ -99,7 +99,7 @@ null,
 		
 		widgets: [
 			{ icon: "Login.png", name: "Login", iconClass: "userManagement", tryIt: "false", getSampleCode: "false"  }, 
-			{ icon: "Registration.png", name: "Registration", iconClass: "userManagement", tryIt: "false", getSampleCode: "false" }, 
+			{ icon: "Registration.png", name: "Registration", iconClass: "userManagement", tryIt: "false", getSampleCode: "false" }//, 
 			//{ name: "User profile", iconClass: "userManagement" }, 
 			//{ name: "Data form", iconClass: "form" }, 
 			//{ name: "Data Grid", iconClass: "grid" }
