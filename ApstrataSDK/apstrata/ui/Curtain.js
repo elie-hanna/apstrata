@@ -77,7 +77,7 @@ dojo.declare('apstrata.ui.Curtain',
 
 		dojo.style(this._curtainMessage, {
 			top: i.t+i.h + "px",
-			left: (c.w - m.w)/2 + "px"
+			left: i.l - (m.w - i.w)/2 + "px"
 		})
 	}
 })
