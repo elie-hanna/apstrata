@@ -154,11 +154,12 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	 * 
 	 * @param {Object} busy
 	 */
-	showAsBusy: function(busy, node) {
+	showAsBusy: function(busy, node, message) {
 		var self = this
 		
 		if (busy) {
-			if (node) this._curtain.show("", node); else this._curtain.show()
+			var msg = message ? message : "";
+			if (node) this._curtain.show(msg, node); else this._curtain.show(msg)
 		} else {
 			this._curtain.hide()
 		}
