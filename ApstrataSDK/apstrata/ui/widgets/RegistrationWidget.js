@@ -82,7 +82,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		}))
 		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "registration-widget");
 		
-		if (!this.options.loginurl) {			
+		if (this.options && !this.options.loginurl) {			
 			if (this.options.embedNode) {
 				var embedNodeAttrs = this.options.embedNode.attributes;				
 				for (attr in embedNodeAttrs) {
