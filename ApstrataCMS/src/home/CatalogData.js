@@ -37,7 +37,6 @@ null,
 		{icon: "TwitterTimeline.png", name: "Twitter TimeLine", wikiDoc: "Twitter", tryIt: "false", getSampleCode: "false" },
 		{icon: "TwitterPost.png", name: "Twitter Post", wikiDoc: "Twitter", tryIt: "false", getSampleCode: "false" },
 		{icon: "FacebookLogin.png", name: "Facebook Login", wikiDoc: "Facebook", tryIt: "false", getSampleCode: "false" },
-		{icon: "Facebook.png", name: "Facebook", wikiDoc: "Facebook"}//,
 //		{icon: "LinkedinLogin.png", name: "LinkedIn Login", wikiDoc: "LinkedIn"},
 //		{icon: "Linkedin.png", name: "LinkedIn", wikiDoc: "LinkedIn"},
 //		{icon: "google_128px.png", name: "Google", wikiDoc: "Google"},
@@ -138,6 +137,7 @@ null,
 				pushNotification: "alert.png",
 				social: "social.png"
 			}
+			var baseUrl = apstrata.registry.get("apstrata.cms", "baseUrl");
 			
 			var i = 0
 			
@@ -154,7 +154,8 @@ null,
 				if (!api.wikiDoc) api.wikiDoc = api.name
 				api.id = i++
 
-				api.icon = "REST/" + api.name + ".png"			
+				api.icon = "REST/" + api.name + ".png"		
+				api.socialPage = baseUrl+ "/gallery/REST/" + api.label;
 				self.addTags(api, ["REST API", api.apiType])
 				
 				services.push(api)
@@ -168,6 +169,7 @@ null,
 					service.icon = "/Scripts/" + service.icon;
 				}
 				service.label = service.name
+				service.socialPage = baseUrl+ "/gallery/Scripts/" + service.label;
 				service.type = "script"
 				if (!service.wikiDoc) service.wikiDoc = service.name
 				service.id = i++
@@ -188,8 +190,8 @@ null,
 				widget.label = widget.name
 				widget.type = "widget"
 				if (!widget.wikiDoc) widget.wikiDoc = widget.name
+				widget.socialPage = baseUrl+ "/gallery/Widgets/" + widget.label;
 				widget.id = i++
-
 				self.addTags(widget, ["widget", "HTML5"])
 				
 				services.push(widget)
@@ -205,6 +207,7 @@ null,
 				sdk.label = sdk.name
 				sdk.type = "sdk"
 				if (!sdk.wikiDoc) sdk.wikiDoc = sdk.name
+				sdk.socialPage = baseUrl+ "/gallery/Sdk/" + sdk.label;
 				sdk.id = i++
 
 				self.addTags(sdk, ["sdk", "mobile"])
@@ -225,6 +228,7 @@ null,
 				network.label = network.name;
 				network.type = "social";
 				if (!network.wikiDoc) network.wikiDoc = network.name
+				network.socialPage = baseUrl+ "/gallery/Social/" + network.label;
 				network.id = i++;
 
 				self.addTags(network, ["social", "HTML5"]);

@@ -1,10 +1,10 @@
 <?php
+
 	date_default_timezone_set('Etc/GMT-5');
 	
 	require_once 'manage/config.php';
 	require_once 'manage/cms.php';
 	require_once 'manage/testData.php';
-
 	global $pageId, $config;
 	if (isset($_GET['pageId'])){
 	   $pageId = $_GET['pageId'];
@@ -61,7 +61,14 @@
 			);
 			include('templates/min/default.php');
 			break;
-	
+		case "summary":
+			$page = array (
+				"title" => "API Summary",
+				"template" => $pageId,
+				"summaryMode" => "true"
+			);
+			include('templates/min/default.php');
+			break;
 		case null:
 		case "":
 		case "/":

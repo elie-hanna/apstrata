@@ -20,12 +20,13 @@ dojo.declare("apstrata.home.Slides",
 	slides: null,
 	i: 0,
 	
-	actions: [
-		{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "dashboard", label: "login"},
-		{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "register", label: "register"}
-	],
+	actions: null,
 	
 	constructor: function() {
+		this.actions =  [
+		         		{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "dashboard", label: "login"},
+		        		{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "register", label: "register"}
+		        	];
 	},
 
 	postCreate: function() {

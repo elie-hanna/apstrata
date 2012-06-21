@@ -14,9 +14,12 @@
 				} 
 			?>
 		</title>
-
 		<?php 
-			include("templates/" . $config['template'] . "/parts/head.php");
+			if(isset($page["summaryMode"]) &&  $page["summaryMode"] == "true"){
+				include("templates/" . $config['template'] . "/parts/head-summary.php");				
+			}else{
+				include("templates/" . $config['template'] . "/parts/head.php");
+			}
 		?>
 		
 		<script type="text/javascript">
@@ -26,20 +29,6 @@
 		
 	</head>
 	<body class="claro <?php print $config['template'] ?>">
-<div id="fb-root"></div>
-<script>
-
-
-(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-
-
-</script>
 <!-- Place this tag in your head or just before your close body tag -->
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
   {parsetags: 'explicit'}
