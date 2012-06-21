@@ -123,23 +123,14 @@ if (typeof apstrata == "undefined" || !apstrata.configured) {
 		}
 	}
 
-	apstrata.registry = {
-	    get: function() {
-	        var object = dojo.getObject("apstrata.apConfig", true)
-	        for (var i=0; i<arguments.length; i++) {
-	            if (object) object = object[arguments[i]]
+	dojo.registerModulePath("apstrata", apstrata.baseUrl + "/..")
 	
-	            if (!object) break
-	
-	        }
-			return (object?dojo.clone(object):null)
-	    },
-		
-		set: function() {
-			
-		}
+	dojo.registerModuleRelative = function(module, string) {
+		dojo.registerModulePath (module, apstrata.pathFromDojo + string)
 	}
 	
+	dojo.require("apstrata.sdk.Registry")
+
 	/*
 	 * IE does not support console.groupCollapsed() and console.groupEnd() and console.dir() functions
 	 * Hence, override these functions with empty ones in case of IE 
