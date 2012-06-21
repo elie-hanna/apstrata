@@ -67,7 +67,11 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 	/**
 	 * Instantiates a User registration widgets. 
 	 * Prerequisites: This widget requires the presence of the apstrata scripts: widgets.Registration.userExists and widgets.Registration.registerUser
-	 * 
+	 * "userExists" is used to verify that the email that is entered does not already exist.  If it is the case,
+	 * the widget displays a link to the login page. In order to specify the address of the login page, two options
+	 * are available:
+	 * (1) If the RegistrationWidget is created programmatically, you need to pass the "loginurl" parameter to the constructor
+	 * (2) If the RegistrationWidget is created declaratively as an embed, insert the "loginurl" attribute into the tag used to declare the widget 
 	 * @param {Object} options.value
 	 * 
 	 */
@@ -76,7 +80,21 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		this.client = new apstrata.sdk.Client(new apstrata.sdk.Connection({
 			loginType: apstrata.sdk.Connection.prototype._LOGIN_TYPE_MASTER
 		}))
-		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "registration-widget")
+		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "registration-widget");
+		
+		if (!this.options.loginurl) {			
+			if (this.options.embedNode) {
+				var embedNodeAttrs = this.options.embedNode.attributes;				
+				for (attr in embedNodeAttrs) {
+					if (embedNodeAttrs[attr].name == "loginurl") {
+						loginUrl = embedNodeAttrs[attr].value;
+						this.loginurl = loginUrl;
+						break;
+					}
+				}
+			}
+		}
+		
 	},
 	
 	postCreate: function() {
@@ -99,9 +117,11 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 				//
 				// 2nd Async Check if email is unique, disable form while you do
 				//
-				self.form.showAsBusy(true)
+				self.form.showAsBusy(true, null, "Verifying e-mail uniqueness")
 				self._userExists(self.form.getField("email").get("value")).then(function() {
-					self.form.getField("email").invalidMessage = self.nls.EMAIL_ALREADY_REGISTERED +" <a href=''>" + self.nls.LOGIN + "</a>"
+					
+					var loginUrl = self.loginurl;					
+					self.form.getField("email").invalidMessage = self.nls.EMAIL_ALREADY_REGISTERED +" <a href='" + loginUrl + "'>" + self.nls.LOGIN + "</a>"
 					self.form.getField("email").validator = function(value, constraints) {
 						return false
 					}
