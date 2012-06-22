@@ -26,7 +26,7 @@
 		//
 		"baseUrl" => "http://www.apstrata.com",
 		"urlPrefix" => "page.php?pageId=",
-		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS"
+		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS",
    		"workbenchUrl" => "",
 		"targetClusterUrl" => "",
 
