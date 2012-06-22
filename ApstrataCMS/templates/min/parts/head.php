@@ -36,6 +36,12 @@
 		?>
 		<script type="text/javascript" src="lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
 		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+		
+		<script type="text/javascript">
+			if (dojo.isIE <= 8) {
+				window.location = "browser.html";				
+			}
+		</script>
 
 		<style type="text/css">
 			 @import "lib/dojo/dojo/resources/dojo.css";
@@ -79,6 +85,7 @@
 		<?php 
 			}
 		?>
+		
 //				dojo.require("apstrata.home.ApConfig")
 
 				//
