@@ -1,23 +1,45 @@
 <?php
 
 	$config = array (
+		// 
+		// Apstrata backend connection parameters
+		//
 		"apstrataServiceURL" => "https://apsdb.apstrata.com/sandbox-apsdb/rest",
+		"apstrataConnectionTimeout" => 30000,
 		"apstrataKey" => "",
 		"apstrataSecret" => "",		
+
+		//
+		// Apstrata stores used by code
+		//
 		"contentStore" => "apstrata",
-		"crmStore" => "",
+
+		//
+		// Config params useful during development
+		//
 		"developmentMode" => true,
 		"useStub" => false,
-		"apstrataConnectionTimeout" => 30000,
-		"urlPrefix" => "page.php?pageId=",
+		"autoLogin" => false,
+
+		//
+		// URLs and other related values used to compose paths by the php CMS code 
+		//
 		"baseUrl" => "http://www.apstrata.com",
-		"template" => "min",
-		"cachingHeaders" => "false",
-		"cachingAge" => 3000,
-		"cachingAge" => 3000,
-		"targetClusterUrl" => "",
-   		"workbenchUrl" => "",
+		"urlPrefix" => "page.php?pageId=",
 		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS"
+   		"workbenchUrl" => "",
+		"targetClusterUrl" => "",
+
+		//
+		// Controls caching parameters in /page.php
+		//
+		"cachingHeaders" => "false",
+		"cachingAge" => 3000
+
+		//
+		// Controls the template folder and CSS root class used by the site
+		//
+		"template" => "min",
 	);
 	
 	// Dublin Core meta-data site-wide init
