@@ -41,7 +41,8 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 			self.destroyRecursive()
 			self._curtain.parentNode.removeChild(self._curtain)
 
-			self.gallery.setHashParam(self.gallery.GALLERY_ITEM, "")
+			//This causes the page to scroll back up to the top in case you were viewing an item towards the end of the page
+			//self.gallery.setHashParam(self.gallery.GALLERY_ITEM, "")
 		})
 		
 		dojo.animateProperty({
