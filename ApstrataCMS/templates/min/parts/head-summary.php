@@ -9,6 +9,9 @@
 	<title>"Apstrata Website"</title>
 
 	<link rel="shortcut icon" href="themes/<?php print $config['template'] ?>/resources/favicon.png" type="image/png" />
+	<?php 
+		if ($config["developmentMode"]) { 
+	?>
 	<style type="text/css">
 		@import "../../lib/dojo/dojo/resources/dojo.css";
 		@import "../../lib/dojo/dijit/themes/claro/claro.css";
@@ -18,4 +21,14 @@
 	        @import "../../themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
         </style>
 
+	<?php 
+		} else { 
+	?>
+		<style type="text/css">
+		        @import "/lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";
+		        @import "/lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>-packaged.css";
+	        </style>
 
+	<?php 
+			}
+		?>
