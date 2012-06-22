@@ -115,7 +115,7 @@
 				    // dashboard specific
 				    "apstrata.services" : {
 				    	targetClusterUrl: '<?php print $GLOBALS["config"]["targetClusterUrl"]; ?>',
-    					worbenchUrl: '<?php print $GLOBALS["config"]["worbenchUrl"]; ?>' 
+    					workbenchUrl: '<?php print $GLOBALS["config"]["workbenchUrl"]; ?>' 
 				    }
 				})
 				//
