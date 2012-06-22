@@ -169,7 +169,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 			},
 			
 			function(response) {
-				self._alert(response.metadata.status, "errorIcon");
+				self._alert(response.metadata.errorDetail, "errorIcon");
 			}
 		)
 	},
