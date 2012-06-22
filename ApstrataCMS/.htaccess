@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^gallery/(.*)/(.*) index.php?type=$1&api=$2&pageId=summary 

@@ -22,11 +22,6 @@
 			}
 		?>
 		
-		<script type="text/javascript">
-			dojo.ready(function() {
-			})
-		</script>
-		
 	</head>
 	<body class="claro <?php print $config['template'] ?>">
 <!-- Place this tag in your head or just before your close body tag -->

@@ -50,10 +50,8 @@
 			} else { 
 		?>
 		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/dojo.js.uncompressed.js" djConfig="parseOnLoad: false"></script>
-<script>
-	var i = 0 ;
-</script>
 		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/apstratacms.js.uncompressed.js"></script>
+		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 		
 		<style type="text/css">
 		        @import "lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";

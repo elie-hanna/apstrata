@@ -24,6 +24,7 @@
 		//
 		// URLs and other related values used to compose paths by the php CMS code 
 		//
+		//"baseUrl" => "http://localhost/ApstrataCMS",
 		"baseUrl" => "http://www.apstrata.com",
 		"urlPrefix" => "page.php?pageId=",
 		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS",
