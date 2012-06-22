@@ -18,6 +18,11 @@
  * {metadata : {status : "failure", errorDetail : "xxxx", errorCode: "yyyy"}} in case of failure
  */
 
+var logLevel = request.parameters["logLevel"];
+if (logLevel) {
+	apsdb.log.setLogLevel(logLevel);
+}
+
 var widgetsCommon = apsdb.require("widgets.common")
 
 var configuration = widgetsCommon.getConfiguration()
@@ -46,13 +51,15 @@ function sendEmail(validationCode) {
 	
 	var emailSubject = widgetsCommon.parseTemplate(configuration.templates.subject, tokens)
 	var emailBody = widgetsCommon.parseTemplate(configuration.templates.body, tokens)
-	
+		
 	var sendEmailInput = {
 		"apsma.from": configuration.adminEmail, 
 		"apsma.to": params.email, 
 		"apsma.subject": emailSubject, 
-		"apsma.htmlBody": emailBody
+		"apsma.htmlBody": emailBody,		
 	};
+	
+	apsdb.log.debug("Email parameters", {params:sendEmailInput});
 	
 	return apsdb.callApi("SendEmail", sendEmailInput, null);		
 }
@@ -115,40 +122,45 @@ params["document.readACL"] = "nobody"
 params["apsdb.store"] = configuration.defaultUnconfirmedRegistrationStore;
 
 // Save the user
-var transaction = apsdb.beginTransaction();
-saveUserResult = apsdb.callApi("SaveDocument", params, null);
-
-if (saveUserResult.metadata.status == "success") {
-	var sendEmailResult = sendEmail(saveUserResult.result.document.key)
-	if (sendEmailResult.metadata.status == 'failure') {
-		transaction.rollback();
+try {
+	apsdb.log.debug("Save user params", {params: params});
+	saveUserResult = apsdb.callApi("SaveDocument", params, null);
+	
+	if (saveUserResult.metadata.status == "success") {
+		var sendEmailResult = sendEmail(saveUserResult.result.document.key)
+		if (sendEmailResult.metadata.status == 'failure') {			
+			return { 
+				status: "failure", 
+				errorDetail: "Unable to send email [" 
+				 + sendEmailResult.metadata.errorDetail + "]",
+				 params : params 	
+			};
+		} else {			
+			var url = true;		
+			if ((configuration.registrationRedirectUrl) && (configuration.registrationRedirectUrl != "")){
+				url = configuration.registrationRedirectUrl;
+			}
+			return {
+				metadata: {
+					status : "success"
+				},
+				url : url				
+			}
+		}
+		
+	} else {		
 		return { 
 			status: "failure", 
-			errorDetail: "Unable to send email [" 
-			 + sendEmailResult.metadata.errorCode + "]",
-			 params : params 	
+			errorDetail: "Unable to register user [" 
+			 + saveUserResult.metadata.errorCode + "]"
 		};
-	} else {
-		transaction.commit();
-		var url = true;		
-		if ((configuration.registrationRedirectUrl) && (configuration.registrationRedirectUrl != "")){
-			url = configuration.registrationRedirectUrl;
-		}
-		return {
-			metadata: {
-				status : "success"
-			},
-			url : url				
-		}
 	}
-	
-} else {
-	transaction.rollback();
+}catch(exception) {	
 	return { 
 		status: "failure", 
 		errorDetail: "Unable to register user [" 
-		 + saveUserResult.metadata.errorCode + "]"
-	};
+		 + exception + "]"
+	};	
 }
 
 
