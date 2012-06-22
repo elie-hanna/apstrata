@@ -61,7 +61,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 				]
 			},
 		],
-		actions: ['save', 'cancel']
+		actions: ['save']
 	},
 	
 	/**
