@@ -27,6 +27,7 @@
 		//"baseUrl" => "http://localhost/ApstrataCMS",
 		"baseUrl" => "http://www.apstrata.com",
 		"urlPrefix" => "page.php?pageId=",
+		"loginUrl" => "/ApstrataCMS/page.php?pageId=dashboard",
 		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS",
    		"workbenchUrl" => "",
 		"targetClusterUrl" => "",
