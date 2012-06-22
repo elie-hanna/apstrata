@@ -38,12 +38,12 @@ dojo.declare("apstrata.home.dashboard.Profile",
 				fieldset: [
 							{name: "attributes", label: "Personal information", type: "subform", style: "form", cssClass:"section",
 								fieldset: [
-									{name: "login", label: "Login", type: "string", readOnly: true},
+									{name: "login", label: "Login", type: "string", readOnly: true, required: true},
 									{name: "password", label: "Update Password", type:"password", readOnly: false},
 									{name: "confirmPassword", label: "Confirm Password", type:"password", readOnly: false, attrs: {invalidMessage: "Passwords don't match"}},
-									{name: "name", label: "Name", type: "string", readOnly: false},
+									{name: "name", label: "Name", type: "string", readOnly: false, required: true},
 									{name: "jobTitle", label: "Job Title", type: "string", readOnly: false},
-									{name: "email", label: "e-Mail", type: "string", readOnly: false}																							
+									{name: "email", label: "e-Mail", type: "string", readOnly: false, required: true}																							
 								]					
 							},
 							{name: "attributes", label: "Company information", type: "subform", style: "form", cssClass:"section",
@@ -108,26 +108,31 @@ dojo.declare("apstrata.home.dashboard.Profile",
 	 */
 	save: function(values, formGenerator){
 		var self = this;
-		if (true) { 
-
-			if (this.formGenerator.validate()){				
-				new apstrata.horizon.PanelAlert({
-					panel: self,
-					width: 320,
-					height: 140,
-					iconClass: "editIcon",
-					message: "Are you sure you want to save the profile changes?",
-					actions: ['OK', 'Cancel'],
-					actionHandler: function(action){
-						if (action == "OK") {
-							self._saveChanges()
-						}
-					}
-				})
 
 
+		if (this.formGenerator.validate()){				
 
+			if (this.formGenerator._fields.password.value != this.formGenerator._fields.confirmPassword.value) {
+				self._alert("Passwords do not match!", "errorIcon");
+				return;
 			}
+
+			new apstrata.horizon.PanelAlert({
+				panel: self,
+				width: 320,
+				height: 140,
+				iconClass: "editIcon",
+				message: "Are you sure you want to save the profile changes?",
+				actions: ['OK', 'Cancel'],
+				actionHandler: function(action){
+					if (action == "OK") {
+						self._saveChanges()
+					}
+				}
+			})
+
+
+
 		}
 	},
 	
