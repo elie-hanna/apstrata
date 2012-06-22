@@ -3,8 +3,8 @@
 	
 	{% for account in _accounts %}
 		<h1>{{ account.aps_authKey }} | 
-			<a href='#' data-key='{{ account.aps_authKey }}' dojoAttachEvent='onclick: _view'>view secret</a> | 
-			<a href='#' data-key='{{ account.aps_authKey }}' dojoAttachEvent='onclick: _reset'>reset key</a> | 
-			<a href='#' data-key='{{ account.aps_authKey }}' dojoAttachEvent='onclick: _open'>open workbench</a></h1>
+			<a href='#' data-key='{{ account.aps_authKey }}' dojoAttachEvent='onclick: _view'>View Secret</a> | 
+			<a href='#' data-key='{{ account.aps_authKey }}' dojoAttachEvent='onclick: _reset'>Reset Secret</a> | 
+			<a href='#' data-key='{{ account.aps_authKey }}' dojoAttachEvent='onclick: _open'>Open Workbench</a></h1>
 	{% endfor %}
 </div>

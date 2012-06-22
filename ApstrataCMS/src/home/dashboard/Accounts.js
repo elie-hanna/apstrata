@@ -96,7 +96,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 						self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");						
 					}else {						
 					
-						self._alert("The account key for [" + key + "] is: " + response.result.account.aps_authSecret)
+						self._alert("The account secret for [" + key + "] is: " + response.result.account.aps_authSecret)
 					}						
 				}else {			
 					var errorMsg = response.metadata.errorDetail;
