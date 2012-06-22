@@ -93,8 +93,8 @@
 		}
 
 		public function getUrl($path) {
-			if ($path == "/") return $_SERVER["SCRIPT_NAME"] . "/../";
-			return $this->config['urlPrefix'] . $path;
+			return $this->config['baseUrl']."/".$this->config['urlPrefix'] . $path;
+			
 		}
 	}
 ?>
