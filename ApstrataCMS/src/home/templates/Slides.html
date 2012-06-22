@@ -21,7 +21,7 @@
 
 		<div class='right'>
 			{% for action in actions %}
-				<a class='button' href='{{ action.url }}'>{{ action.label }}</a>
+				<a class='button {{ action.cssClass }}' href='{{ action.url }}'>{{ action.label|safe }}</a>
 			{% endfor %}
 		</div>
 		<div style='clear: both;'></div>

@@ -23,10 +23,14 @@ dojo.declare("apstrata.home.Slides",
 	actions: null,
 	
 	constructor: function() {
-		this.actions =  [
-		         		{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "dashboard", label: "login"},
-		        		{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "register", label: "register"}
-		        	];
+		this.actions = [
+			{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "register", label: "sign up for free", cssClass:"callToAction"},
+			{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "dashboard", label: "login"}
+		]
+
+		dojo.forEach(this.actions, function(action) {
+			if (!action.cssClass) action.cssClass = ""
+		})
 	},
 
 	postCreate: function() {
