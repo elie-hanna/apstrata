@@ -35,7 +35,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 
 	/*
 	 * This function is used to build the list of accounts owned by the current user.
-	 * it mainly calls the "accountsUtil([the login], "listAccounts") scipt
+	 * it mainly calls the "accountsUtil([the login], "listAccounts") script
 	 * and it returns the Deferred that is resulting from this call.
 	 * The Deferred is used in the startup() function to render the panel.
 	 */
@@ -130,7 +130,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 						if (action == "OK"){
 							var params = {
 										"apsdb.scriptName" : "dashboard.accountUtils",
-										"authKey" : self.currentAuthKey,
+										"authKey" : key,
 										"function" : "regenerateSecret"
 							}
 							
