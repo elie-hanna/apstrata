@@ -41,7 +41,7 @@
 				    // apstrata.ui related
 				    "apstrata.ui": {
 				        "widgets.Login" : {
-				            autoLogin: true
+				            autoLogin: false
 				        }
 				    },
 				 
