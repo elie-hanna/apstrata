@@ -34,12 +34,12 @@
 		// Controls caching parameters in /page.php
 		//
 		"cachingHeaders" => "false",
-		"cachingAge" => 3000
+		"cachingAge" => 3000,
 
 		//
 		// Controls the template folder and CSS root class used by the site
 		//
-		"template" => "min",
+		"template" => "min"
 	);
 	
 	// Dublin Core meta-data site-wide init
