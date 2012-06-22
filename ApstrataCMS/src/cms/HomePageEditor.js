@@ -64,6 +64,9 @@ dojo.declare("apstrata.cms.HomePageEditor",
 			
 			save: function(v) {
 				v ["apsdb.documentKey"] = self.key
+				v["text1.apsdb.fieldType"] = "text"
+				v["text2.apsdb.fieldType"] = "text"
+				v["text3.apsdb.fieldType"] = "text"
 				
 				// remove new lines and escape ' and "
 				for (key in v) {

@@ -42,15 +42,18 @@
 	padding: 10px;
 	border-top: 1px solid #a7c7de;
 	border-bottom: 1px solid #a7c7de;
+	text-align: center;
 }
 
 .min #categories .category {
 	display: inline-block;
 	font-size: 1em;
+	font-weight: bold;
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-bottom: 3px;
-	color: #333;
+	color: #339;
+	opacity: .9;
 	cursor:pointer;
 }
 

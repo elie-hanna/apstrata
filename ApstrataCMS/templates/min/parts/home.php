@@ -43,13 +43,15 @@
 					}
 				]
 				
+				apstrata.slides = new apstrata.home.Slides({slides: slides}, dojo.byId("slides"))
+				
 				dojo.parser.parse()
 			})
 		</script>
 
 <div class='homePage'>
 	<div id="serviceDescription">
-		<div dojoType='apstrata.home.Slides' slides='slides'></div>
+		<div id='slides'></div>
 	</div>
 	<div id="searchBar"></div>
 	<div id="search-results">

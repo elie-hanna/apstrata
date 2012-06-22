@@ -84,5 +84,11 @@ dojo.declare("apstrata.home.Slides",
 		self.i++
 		self.i = self.i % self.slides.length
 		self._initSlideContent()
+	},
+	
+	openSlide: function(i) {
+		if (i==this.i) return
+		this.i = i
+		this._initSlideContent()
 	}
 })

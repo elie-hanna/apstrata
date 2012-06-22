@@ -32,6 +32,8 @@ dojo.declare("apstrata.home.SearchBar",
 	focus: function() {
 		var v = this.fldSearch.get("value")
 		if (v.trim() == this._emptyMessage) this.fldSearch.set("value", "")
+		
+		if (apstrata.slides) apstrata.slides.openSlide(2)
 	},
 	
 	blur: function() {
@@ -54,6 +56,8 @@ dojo.declare("apstrata.home.SearchBar",
 		})	
 		
 		this.onSearch(this.searchTerm, this.categories)
+
+		if (apstrata.slides) apstrata.slides.openSlide(2)
 	},
 	
 	change: function(v) {
