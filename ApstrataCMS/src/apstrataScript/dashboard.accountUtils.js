@@ -167,10 +167,16 @@ function regenerateSecret(accountAuthKey) {
 	zurl = zurl +  "&apsdb.regenerateSecret=" + true + "&apsws.responseType=json";
 		
 	var res = apsdb.callHttp(zurl , 'GET', null, null, null, null, true, null, false, false);
+		
+	parseResultOrThrowError(res);
 	
-	apsdb.log.debug("URL", {url: zurl} );	
-	apsdb.log.debug("@@@@ RESPONSE", {response : res } );
-	return parseResultOrThrowError(res);
+	sendAdminMail(
+		"Account updated notification", 
+		"The secret for account " + accountAuthKey + " has been reset",
+		accountAuthKey,
+		"authKey");
+	
+	return res;
 }
 
 /*
@@ -194,20 +200,17 @@ function sendAdminMail(subject, message, to, loginType) {
 		toEmail = userResponse.result.user.email;
 	}else {
 		var getAccountResponse = getAccount(to);				
-		var mail = getAccountResponse.account.email;
-		toEmail = mail.substring(mail.indexOf("_") + 1);
+		var toEmail = getAccountResponse.account.email;		
 		apsdb.log.debug("@@@@ TO", {to : to, EMAIL : toEmail, loginType : loginType} );
 	}		
 	
 	// Sign the request
 	var zurl = signUrl("SendEmail");
 	zurl = zurl + "&apsma.to=" + toEmail;
-	zurl = zurl + "&apsma.subject=" + subj + "&apsma.body=" + message;
+	zurl = zurl + "&apsma.subject=" + subj + "&apsma.body=" + message+"&apsws.responseType=json";
 	
 	var res = apsdb.callHttp(zurl , 'GET', null, null, null, null, true, null, false, false);
-	
-	apsdb.log.debug("URL", {url: zurl} );	
-	apsdb.log.debug("@@@@ RESPONSE", {response : res } );
+	apsdb.log.debug("email response", {response:res});
 	return parseResultOrThrowError(res);
 }
 
