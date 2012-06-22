@@ -50,7 +50,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 								fieldset: [
 									{name: "company", label: "Company Name", type: "string", readOnly: false},
 									{name: "phone", label: "Phone Number", type: "string", readOnly: false},
-									{name: "website", label: "Company Web Site", type: "string", readOnly: false}					
+									{name: "webSite", label: "Company Web Site", type: "string", readOnly: false}					
 								]					
 							}							
 						],	
@@ -144,7 +144,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 			"email" : this.formGenerator._fields.email.value,
 			"jobTitle" : this.formGenerator._fields.jobTitle.value,
 			"company" : this.formGenerator._fields.company.value,
-			"website" :  this.formGenerator._fields.website.value,
+			"webSite" :  this.formGenerator._fields.webSite.value,
 			"phone" : this.formGenerator._fields.phone.value
 		}
 		
@@ -215,7 +215,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 						accounts : profileData.availableAccounts,
 						company : profileData.company,
 						phone : profileData.phone,
-						website : profileData.webSite,
+						webSite : profileData.webSite,
 						accounts : accountsAsStr
 					}			
 					
