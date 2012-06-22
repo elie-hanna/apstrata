@@ -68,7 +68,9 @@ try {
 	apsdb.log.debug("SAVEPROFILERESPONSE", {resp: saveProfileResponse } );	
 	
 	if (saveProfileResponse.metadata.status == "failure") {
-		throw saveProfileResponse.metadata.errorDetail;
+		var errorMsg = saveProfileResponse.metadata.errorDetail;
+		errorMsg = errorMsg ? errorMsg : saveProfileResponse.metadata.errorCode;
+		throw errorMsg;
 	}	
 		
 	var mailParams = {		
