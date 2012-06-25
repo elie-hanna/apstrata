@@ -125,7 +125,9 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		
 		this._setUpLoginForm()
 		
-		this._setUpPreferencesPanel()
+		if (this.showPreferencesLink) {
+			this._setUpPreferencesPanel()
+		}
 
 		if (this.autoLogin) {
 			self.form.disable()
