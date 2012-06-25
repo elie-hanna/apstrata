@@ -87,13 +87,22 @@ for (k in request.parameters) {
 			};								
 		}	
 		
-		if (k == "user.groups")		
-		// If groups have been set, save them to a temporary user attribute
-		//  Until the registration is confirmed 
-			params["finalGroups"] = request.parameters[k];
-		else 
-		//  Otherwise save param in the user profile
-			params[k.substring(5)] = request.parameters[k]
+		if (k == "user.groups")	{	
+			// If groups have been set, save them to a temporary user attribute
+			//  Until the registration is confirmed 
+			var groupsAsStr = request.parameters[k];
+			if (groupsAsStr){
+				groupsAsStr = groupsAsStr.replace(" ", "");
+				var groups = groupsAsStr.split(",");
+				params["groups"] = groups;
+			}
+		} else {
+			//  Otherwise save param in the user profile
+			params[k.substring(5)] = request.parameters[k];
+			if (k == "user.password") {
+				params["user.password.aspdb.fieldType"] = "password";
+			}
+		}
 	}
 }
 
