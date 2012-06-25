@@ -88,8 +88,7 @@ for (k in request.parameters) {
 		}	
 		
 		if (k == "user.groups")	{	
-			// If groups have been set, save them to a temporary user attribute
-			//  Until the registration is confirmed 
+			
 			var groupsAsStr = request.parameters[k];
 			if (groupsAsStr){
 				groupsAsStr = groupsAsStr.replace(" ", "");
