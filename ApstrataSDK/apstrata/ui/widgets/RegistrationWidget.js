@@ -55,7 +55,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 			{name: "optional", label: "", type: "subform", style: "form", cssClass:"column", 
 				fieldset: [
 					{name: "jobTitle", label: "Job title", type: "string"},
-					{name: "website", label: "Website", type: "string"},
+					{name: "webSite", label: "Website", type: "string"},
 					{name: "company", label: "Company", type: "string"},
 					{name: "phone", label: "Phone", type: "string"}
 				]
