@@ -97,10 +97,7 @@ for (k in request.parameters) {
 			}
 		} else {
 			//  Otherwise save param in the user profile
-			params[k.substring(5)] = request.parameters[k];
-			if (k == "user.password") {
-				params["user.password.aspdb.fieldType"] = "password";
-			}
+			params[k.substring(5)] = request.parameters[k];			
 		}
 	}
 }
