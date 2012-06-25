@@ -67,9 +67,6 @@ dojo.declare("apstrata.ui.widgets.LoginWidgetPreferences",
 		this.onChange(preferences)
 		
 		dojo.cookie(this.applicationId + "-prefs", dojo.toJson(preferences), { expires: 365 });
-		
-		// destroy the widget
-		this.destroyRecursive()
 	},
 
 	loadPreferences: function() {
