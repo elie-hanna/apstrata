@@ -149,6 +149,11 @@ function saveUser() {
 			params[key + ".apsdb.fieldType"] = types[key];
 		}
 	}
+	
+	var groups = params["groups"];
+	if (!groups && configuration.defaultUsersGroup){
+		params["groups"] = [configuration.defaultUsersGroup];
+	}
 			
 	return apsdb.callApi("SaveUser", params, null);
 }
