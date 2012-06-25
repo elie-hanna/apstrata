@@ -77,10 +77,10 @@ dojo.declare("apstrata.ui.widgets.LoginWidgetPreferences",
 
 		try {
 			var prefs = dojo.fromJson(dojo.cookie(this.applicationId + "-prefs"))
-			if (prefs) {
-				//this.preferencesChanged(prefs); 
-			} else {
+			if (!prefs) {
 				prefs = {};
+			} else {
+				this.onChange(prefs)
 			}
 		} catch (err) {
 			

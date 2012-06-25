@@ -124,6 +124,8 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		var self = this
 		
 		this._setUpLoginForm()
+		
+		this._setUpPreferencesPanel()
 
 		if (this.autoLogin) {
 			self.form.disable()
@@ -186,12 +188,13 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		this.inherited(arguments)
 	},
 	
-	_preferences: function() {
+	_setUpPreferencesPanel: function() {
 		var self = this	
 		
-		var prefs = new apstrata.ui.widgets.LoginWidgetPreferences({
+		this.prefsPanel = new apstrata.ui.widgets.LoginWidgetPreferences({
 			container: this.container,
 			onChange: function(prefs) {
+				dojo.style(self.dvPreferencesPanel, "display", "none")
 				dojo.style(self.dvLoginWidget, "display", "block")
 				dojo.style(self.dvPreferences, "display", "block")
 			
@@ -202,22 +205,16 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 			}
 		});
 
-		dojo.place(prefs.domNode, this.dvPreferencesPanel)
+		dojo.place(self.prefsPanel.domNode, self.dvPreferencesPanel)
+		
+	},
+	
+	_preferences: function() {
 		dojo.style(this.dvLoginWidget, "display", "none")
 		dojo.style(this.dvPreferences, "display", "none")
+		dojo.style(this.dvPreferencesPanel, "display", "block")
 		
 		//This is a temp fix until we get the CSS for the UI updated
-		dojo.style(dojo.query('.LoginWidget .login .panel')[0], 'position', '');
-
-		/*		
-		var anim = dojox.fx.flip({ 
-			node: prefs.domNode,
-			dir: "left",
-			depth: .5,
-			duration:400
-		});		
-		
-		anim.play();
-		*/		
+		dojo.style(dojo.query('.LoginWidget .login .preferencesPanel .panel')[0], 'position', 'relative');
 	}
 })

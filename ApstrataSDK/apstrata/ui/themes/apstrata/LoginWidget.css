@@ -52,22 +52,26 @@
 	color: #ffffff;
 }
 
-.LoginWidget .login .preferences {
+
+.LoginWidget .login .preferencesPanel {
+	display: none;
+}
+
+.LoginWidget .login .preferencesLink {
 	display: none;
 	text-align: right;
 }
-.LoginWidget .login .preferences a {
+.LoginWidget .login .preferencesLink a {
 	color: #339;	
 	font-size: 0.8em;
     left: -24px;
     position: relative;
     top: -27px;
 }
-.LoginWidget .login .preferences a:visited {
+.LoginWidget .login .preferencesLink a:visited {
 	color: #339;	
 }
-.LoginWidget .login .preferences a:hover {
+.LoginWidget .login .preferencesLink a:hover {
 	color: #339;	
 }
 
-.LoginWidget .login .
