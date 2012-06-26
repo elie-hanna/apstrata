@@ -278,19 +278,19 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			var authenticatingConnection = new apstrata.sdk.Connection(connectionAttributes);
 			var client = new apstrata.sdk.Client(authenticatingConnection);
 			client.call("VerifyCredentials", data).then(
-				function (operation) {
+				function (response) {
 					console.debug("Credentials verified");
 
 					// 3a. Set the token data from the response.
 					self.token = {};
 					// Change the token expires and lifetime from seconds to future Date strings.
-					var tokenExpires = operation.response.result[self.PARAMETER_TOKEN_EXPIRES];
-					var tokenLifetime = operation.response.result[self.PARAMETER_TOKEN_LIFETIME];
+					var tokenExpires = response.result[self.PARAMETER_TOKEN_EXPIRES];
+					var tokenLifetime = response.result[self.PARAMETER_TOKEN_LIFETIME];
 					self.token.expires = tokenExpires;
 					self.token.lifetime = tokenLifetime;
 					self.token.creationTime = new Date().getTime();
 					if (self.isUseParameterToken) {
-						var authToken = operation.response.result[self.PARAMETER_AUTH_TOKEN];
+						var authToken = response.result[self.PARAMETER_AUTH_TOKEN];
 						self.token.authToken = authToken;
 					}
 
@@ -317,7 +317,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 						self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER();
 					}
 				},
-				function (operation) {
+				function (response) {
 					// 3a. Clear the secret and password so hasCredentials() functions
 					self.credentials.secret = "";
 					self.credentials.password = "";
@@ -327,9 +327,9 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 					// 3c. Call the user-application's login failure handler function if one is defined.
 					if (args && args.failure){
-						args.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage);
+						args.failure(response.metadata.errorCode, response.metadata.errorMessage);
 					} else if (self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER) {
-						self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER(operation.response.metadata.errorCode, operation.response.metadata.errorMessage);
+						self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER(response.metadata.errorCode, response.metadata.errorMessage);
 					}
 				}
 			);
