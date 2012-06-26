@@ -69,9 +69,22 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 				actions: ['login']
 			},
 			displayGroups: self.type?self.type:"master",
-			login: function(values) {
-				self.form.disable()
-				self._animation.show()
+			login: dojo.hitch(this, this.login)	
+		})
+		dojo.place(this.form.domNode, this.dvLoginWidget)
+
+		// If credentials have been supplied in apConfig, show them
+		if (apstrata.registry.get("apstrata.sdk", "Connection")) this.form.set("value", apstrata.registry.get("apstrata.sdk", "Connection").credentials)
+		
+		//Add the preferences link
+		if (this.showPreferencesLink) {
+			dojo.style(this.dvPreferences, "display", "block")
+		}
+	},
+
+	login: function(values) {
+				this.form.disable()
+				this._animation.show()
 
 				var connection
 				var credentials
@@ -86,7 +99,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 				
 				dojo.mixin(credentials, values)
 
-				if (self.type == "user") {
+				if (this.type == "user") {
 					connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
 				} else {
 					connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "master"})
@@ -94,40 +107,24 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 
 				connection.login().then(
 					function() {
-						self.form.enable()
-						self._animation.hide()
-						if (self._success) self._success(credentials)
+						this.form.enable()
+						this._animation.hide()
+						if (this._success) this._success(credentials)
 					},
 					function() {
-						self.form.enable()
-						self._animation.hide()
-						self.form.vibrate(self.domNode)
-						self.message(self.nls.BAD_CREDENTIALS)
+						this.form.enable()
+						this._animation.hide()
+						this.form.vibrate(this.domNode)
+						this.message(this.nls.BAD_CREDENTIALS)
 						
-						if (self._failure) self._failure()
+						if (this._failure) this._failure()
 					}
 				)
-			}	
-		})
-		dojo.place(this.form.domNode, this.dvLoginWidget)
-
-		// If credentials have been supplied in apConfig, show them
-		if (apstrata.registry.get("apstrata.sdk", "Connection")) this.form.set("value", apstrata.registry.get("apstrata.sdk", "Connection").credentials)
-		
-		//Add the preferences link
-		if (this.showPreferencesLink) {
-			dojo.style(this.dvPreferences, "display", "block")
-		}
-	},
-
+			},
 	postCreate: function() {
 		var self = this
 		
 		this._setUpLoginForm()
-		
-		if (this.showPreferencesLink) {
-			this._setUpPreferencesPanel()
-		}
 
 		if (this.autoLogin) {
 			self.form.disable()
@@ -190,13 +187,12 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		this.inherited(arguments)
 	},
 	
-	_setUpPreferencesPanel: function() {
+	_preferences: function() {
 		var self = this	
 		
-		this.prefsPanel = new apstrata.ui.widgets.LoginWidgetPreferences({
+		var prefs = new apstrata.ui.widgets.LoginWidgetPreferences({
 			container: this.container,
 			onChange: function(prefs) {
-				dojo.style(self.dvPreferencesPanel, "display", "none")
 				dojo.style(self.dvLoginWidget, "display", "block")
 				dojo.style(self.dvPreferences, "display", "block")
 			
@@ -207,16 +203,23 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 			}
 		});
 
-		dojo.place(self.prefsPanel.domNode, self.dvPreferencesPanel)
-		
-	},
-	
-	_preferences: function() {
+		dojo.place(prefs.domNode, this.dvPreferencesPanel)
 		dojo.style(this.dvLoginWidget, "display", "none")
 		dojo.style(this.dvPreferences, "display", "none")
-		dojo.style(this.dvPreferencesPanel, "display", "block")
 		
 		//This is a temp fix until we get the CSS for the UI updated
-		dojo.style(dojo.query('.LoginWidget .login .preferencesPanel .panel')[0], 'position', 'relative');
+		dojo.style(dojo.query('.LoginWidget .login .panel')[0], 'position', '');
+
+		/*		
+		var anim = dojox.fx.flip({ 
+			node: prefs.domNode,
+			dir: "left",
+			depth: .5,
+			duration:400
+		});		
+		
+		anim.play();
+		*/		
 	}
 })
+
