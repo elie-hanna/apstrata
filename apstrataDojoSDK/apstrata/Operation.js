@@ -249,6 +249,7 @@ dojo.declare("apstrata.Operation",
 		handleError: function() {
 			//this.connection.activity.stop(this)
         	this.log.warn("errorCode:", this.response.metadata.errorCode)
-        	this.log.warn("errorDetail:", this.response.metadata.errorDetail)
+        	//this is causing another error when the details contains double quotations
+        	//this.log.warn("errorDetail:", this.response.metadata.errorDetail)
 		}
 	});
