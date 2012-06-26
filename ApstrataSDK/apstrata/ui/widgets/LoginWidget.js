@@ -83,44 +83,47 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 	},
 
 	login: function(values) {
-				this.form.disable()
-				this._animation.show()
+		
+		var self = this;
+		this.form.disable()
+		this._animation.show()
 
-				var connection
-				var credentials
-				var serviceURL
-				var timeout
-				
-				if (apstrata.registry.get("apstrata.sdk", "Connection")) {
-					credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
-					serviceURL = apstrata.registry.get("apstrata.sdk", "Connection").serviceURL
-					timeout = apstrata.registry.get("apstrata.sdk", "Connection").timeout
-				}
-				
-				dojo.mixin(credentials, values)
+		var connection
+		var credentials
+		var serviceURL
+		var timeout
+		
+		if (apstrata.registry.get("apstrata.sdk", "Connection")) {
+			credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
+			serviceURL = apstrata.registry.get("apstrata.sdk", "Connection").serviceURL
+			timeout = apstrata.registry.get("apstrata.sdk", "Connection").timeout
+		}
+		
+		dojo.mixin(credentials, values)
 
-				if (this.type == "user") {
-					connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
-				} else {
-					connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "master"})
-				}
+		if (this.type == "user") {
+			connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
+		} else {
+			connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "master"})
+		}
 
-				connection.login().then(
-					function() {
-						this.form.enable()
-						this._animation.hide()
-						if (this._success) this._success(credentials)
-					},
-					function() {
-						this.form.enable()
-						this._animation.hide()
-						this.form.vibrate(this.domNode)
-						this.message(this.nls.BAD_CREDENTIALS)
-						
-						if (this._failure) this._failure()
-					}
-				)
+		connection.login().then(
+			function() {
+				self.form.enable()
+				self._animation.hide()
+				if (self._success) self._success(credentials)
 			},
+			function() {
+				self.form.enable()
+				self._animation.hide()
+				self.form.vibrate(self.domNode)
+				self.message(self.nls.BAD_CREDENTIALS)
+				
+				if (self._failure) self._failure()
+			}
+		)
+	},
+	
 	postCreate: function() {
 		var self = this
 		
@@ -222,4 +225,3 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		*/		
 	}
 })
-
