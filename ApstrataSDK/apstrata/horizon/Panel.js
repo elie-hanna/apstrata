@@ -365,7 +365,9 @@ dojo.declare("apstrata.horizon.Panel",
 			}
 			
 			var totHeight = box.h - 40 - footerHeight;
-			dojo.style(this.dvContent, "height", totHeight + "px");
+			if (this.dvContent) {
+				dojo.style(this.dvContent, "height", totHeight + "px");
+			}
 			if (this._listContent) {
 				dojo.style(this._listContent.domNode, "height", totHeight + "px");
 			}			
