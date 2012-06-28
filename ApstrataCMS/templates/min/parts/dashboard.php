@@ -1,4 +1,7 @@
 <style type="text/css">
+<?php 
+		if ($config["developmentMode"]) { 
+	?>
 	@import "lib/dojo/dojo/resources/dojo.css";
     @import "lib/dojo/dijit/themes/claro/claro.css";
     @import "lib/dojo/dojox/grid/resources/Grid.css";
@@ -14,7 +17,9 @@
     @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/ApstrataAnimation.css";
 
     @import "lib/ApstrataSDK/apstrata/horizon/themes/horizon.css";
-
+<?php 
+		} 
+	?>
 	.blueHorizon {
 		font-family: sans-serif;
 		font-size: 1.2em;
@@ -28,9 +33,14 @@
 
 <script>
 	dojo.addOnLoad(function() {
+<?php 
+		if ($config["developmentMode"]) { 
+	?>
 		dojo.registerModulePath("apstrata", "../../ApstrataSDK/apstrata")
 		dojo.registerModulePath("apstrata.cms", "../../../src/cms")
-		
+		<?php 
+		} 
+	?>
 		dojo.require("dijit._Widget");
 		dojo.extend(dijit._Widget, {
 			_apstrataRoot: apstrata.baseUrl,

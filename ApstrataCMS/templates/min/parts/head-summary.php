@@ -5,10 +5,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<meta property="og:title" content="<?php echo $_REQUEST['api'] ?>" />
 	<meta property="og:description" content="<?php echo extractTextFromWikiNode($content) ?>" />
-	<meta property="og:image" content="<?php echo "resources/icons/".$_REQUEST['type']."/".$_REQUEST['api'].".png" ?>" />
+	<meta property="og:image" content="<?php echo $config["baseUrl"]."/resources/icons/".$_REQUEST['type']."/".$_REQUEST['api'].".png" ?>" />
 	<title>"Apstrata Website"</title>
 
-	<link rel="shortcut icon" href="themes/<?php print $config['template'] ?>/resources/favicon.png" type="image/png" />
+	<link rel="shortcut icon" href="<?php print "/themes/".$config['template'] ?>/resources/favicon.png" type="image/png" />
 	<?php 
 		if ($config["developmentMode"]) { 
 	?>
@@ -25,8 +25,8 @@
 		} else { 
 	?>
 		<style type="text/css">
-		        @import "/lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";
-		        @import "/lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>-packaged.css";
+		        @import "<?php echo $config["baseUrl"]?>/lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";
+		        @import "<?php echo $config["baseUrl"]?>/lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>-packaged.css";
 	        </style>
 
 	<?php 
