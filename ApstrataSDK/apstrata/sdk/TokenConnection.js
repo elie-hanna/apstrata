@@ -55,7 +55,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 		 * 				"credentials": {
 		 * 					"key": "value",
 		 * 					"secret": "value",
-		 * 					"username": "value",
+		 * 					"user": "value",
 		 * 					"password": "value"
 		 * 				},
 		 * 				"token": {
@@ -128,7 +128,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			if (isTokenMetadataLoaded) {
 				var renewTokenDelay = self._getRenewTokenDelay(self.token.expires, self.token.creationTime);
 				setTimeout(function () { self.renewToken(); }, renewTokenDelay);
-			
+							
 				// Broadcast that a successful authentication has happened after 1 second because the
 				// connection object is usually loaded before other objects that might want to subscribe
 				// to this channel.
@@ -140,18 +140,18 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			if (apstrata.apConfig) {
 				// 4a. If we still don't have a service URL OR the service URL is the same as the default,
 				// then try to set the one from the current "apConfig" in the global "apstrata" object.
-				var config = apstrata.apConfig.get();
+				var connectionConfig = apstrata.apConfig["apstrata.sdk"].Connection;
 				if (self.serviceURL == '' || (self.serviceURL == self._DEFAULT_SERVICE_URL)) {
 					// The service URL in the config has two different names "serviceURL" and "serviceURL".
-					if (config.serviceURL)
-						self.serviceURL = config.serviceURL;
-					else if (config.serviceURL)
-						self.serviceURL = config.serviceURL;
+					if (connectionConfig.serviceURL)
+						self.serviceURL = connectionConfig.serviceURL;
+					else if (connectionConfig.serviceURL)
+						self.serviceURL = connectionConfig.serviceURL;
 				}
 
 				// 4b. If we still don't have a default store, then try to set the one from the current apConfig.
 				if (self.defaultStore == '') {
-					self.defaultStore = config.defaultStore;
+					self.defaultStore = connectionConfig.defaultStore;
 				}
 			}
 		},
@@ -186,35 +186,28 @@ dojo.declare("apstrata.sdk.TokenConnection",
 		 * @return An object that has a "url" attribute, that is the URL to the Apstrata REST API, and an empty "signature" attribute.
 		 */
 		sign: function (operation, params, responseType, isForce200ResponseStatus) {
-			var timestamp = new Date().getTime() + ''
-	
-			var responseType = responseType || "json"
 			
-			var signature = '';
-			var user = '';
-			var valueToHash = '';
-			
-			if (this.loginType == this._LOGIN_TYPE_USER) {
-				valueToHash = timestamp + this.credentials.user + operation + dojox.encoding.digests.MD5(this.credentials.password, dojox.encoding.digests.outputTypes.Hex).toUpperCase()
-				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
-				user = this.credentials.user
-			} else {
-				valueToHash = timestamp + this.credentials.key + operation + this.credentials.secret
-				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
+			var self = this;
+
+			var timestamp = new Date().getTime() + "";
+			responseType = responseType || "json";
+
+			var user = "";
+			if (self.credentials && self.credentials.user) {
+				user = self.credentials.user;
 			}
-	
-			var url = this.serviceURL
-					+ "/" + this.credentials.key
+
+			var apswsReqUrl = self.serviceURL
+					+ "/" + self.credentials.key
 					+ "/" + operation
-					+ "?apsws.time=" + timestamp
-					+ ((signature!="")?"&apsws.authSig=":"") + signature
-					+ ((user!="")?"&apsws.user=":"") + user
-					+ "&apsws.responseType=" + responseType
-					+ "&apsws.authMode=simple"
-					+ ((self.isUseParameterToken) ? "&apsdb.authToken=" + self.token.authToken : "")
-					+ ((requestParams!="")?"&":"") + requestParams
-					
-			return {url: url, signature: signature}
+					+ "?" + self.PARAMETER_TIME + "=" + timestamp
+					+ "&" + self.PARAMETER_RESPONSE_TYPE + "=" + responseType
+					+ ((user != "") ? "&" + self.PARAMETER_USER + "=" + user : "")
+					+ ((isForce200ResponseStatus) ? "&apsdb.force200ResponseStatus=true" : "")
+					+ ((self.isUseParameterToken) ? "&apsdb.authToken=" + self.token : "")
+					+ ((params != "") ? "&" : "") + params;
+
+			return { url: apswsReqUrl, signature: "" };
 		},
 
 		/**
@@ -246,6 +239,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 			// 1. Make sure that this connection is not live and that the user is logged out before attempting to login.
 			if (self.isLoggedIn()) {
+								
 				console.debug("User is already logged in");
 				// Broadcast that a successful login has happened.
 				self._publishSuccessfulAuthentication();
@@ -300,7 +294,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 					// 3c. Set a timer to attempt to renew the token after half the expiration time passes.
 					var renewTokenDelay = ((tokenExpires / 2) * 1000);
-					setTimeout(function () { self.renewToken(); }, renewTokenDelay);
+					setTimeout(function () { self.renewToken(); }, renewTokenDelay);					
 
 					// 3d. Broadcast that a successful login has happened.
 					self._publishSuccessfulAuthentication();
@@ -389,7 +383,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 						// 3. Set a timer to attempt to renew the token after half the expiration time passes.
 						var renewTokenDelay = ((tokenExpires / 2) * 1000);
 						setTimeout(function () { self.renewToken(); }, renewTokenDelay);
-
+												
 						// 4. Broadcast that a successful login has happened.
 						self._publishSuccessfulAuthentication();
 
@@ -417,7 +411,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			// check whether or not the token has already been renewed by another page.
 			else {
 				var renewTokenDelay = self._getRenewTokenDelay(self.token.expires, self.token.creationTime);
-				setTimeout(function () { self.renewToken(); }, renewTokenDelay);
+				setTimeout(function () { self.renewToken(); }, renewTokenDelay);				
 			}
 		},
 
@@ -482,9 +476,9 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			// 1a. Delete the cookie.
 			self.deleteCookie();
 
-			// 1b. Delete this connection's token and empty the username.
+			// 1b. Delete this connection's token and empty the user.
 			delete self.token;
-			self.credentials.username = "";
+			self.credentials.user = "";
 
 			// 1c. Broadcast that a successful logout has happened.
 			dojo.publish("/apstrata/connection/logout/success", [{
@@ -533,11 +527,16 @@ dojo.declare("apstrata.sdk.TokenConnection",
 				// 1. Create the object from the cookie.
 				var cookieObject = dojo.fromJson(jsonStr);
 				console.info("Loaded connection from cookie", cookieObject);
-
+				
 				// 2. Make sure that the cookie is not corrupted and correct its values if it is.
 				if (cookieObject.credentials) {
-					if (!cookieObject.credentials.key) cookieObject.credentials.key = "";
-					if (!cookieObject.credentials.username) cookieObject.credentials.username = "";
+					if (!cookieObject.credentials.key) {
+						cookieObject.credentials.key = "";
+					}
+					
+					if (!cookieObject.credentials.user) {
+						cookieObject.credentials.user = "";
+					}
 				}
 
 				// 3. Set the connection credentials and metadata from the loaded cookie.
@@ -545,8 +544,8 @@ dojo.declare("apstrata.sdk.TokenConnection",
 				if (cookieObject.serviceURL) this.serviceURL = cookieObject.serviceURL;
 				if (cookieObject.defaultStore) this.defaultStore = cookieObject.defaultStore;
 
-				apstrata.apConfig.config.key = cookieObject.credentials.key;
-				apstrata.apConfig.config.username = cookieObject.credentials.username;
+				apstrata.apConfig["apstrata.sdk"]["Connection"].credentials.key = cookieObject.credentials.key;
+				apstrata.apConfig["apstrata.sdk"]["Connection"].credentials.user = cookieObject.credentials.user;
 
 				console.log("debug", "apstrata.TokenConnection", "Credentials set to:", this.credentials);
 
@@ -682,4 +681,3 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			}]);
 		}
 	});
-
