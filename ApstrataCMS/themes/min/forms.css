@@ -1,0 +1,12 @@
+.RegistrationWidget {
+	font-size: 1.5em;
+	color: #224;	
+}
+
+.RegistrationWidget .form .dijitTextBox {
+    width: 95%;
+	margin-bottom: 12px;
+}
+
+.RegistrationWidget .form .label {
+}

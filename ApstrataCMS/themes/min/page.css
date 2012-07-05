@@ -3,21 +3,41 @@
 	margin-right: 30px;
 	padding-bottom: 35px;
 	
-	color: #333333;
+	color: #444455;
 	
-	font-family: 'Open Sans', "Helvetica Neue",Helvetica;  
+	font-family: 'Open Sans', "Helvetica Neue",Helvetica; 
+	
+	font-size: 1.2em;	
 }
 
 .min .page h2 {
 	font-size: 2.4em;
 	letter-spacing: 1px;
+	color: #444466;
+}
+
+.min .page h3 {
+	font-size: 1.4em;
+	letter-spacing: 1px;
+	margin-top: 1em;
+	margin-bottom: 0px;
+	color: #444466;
 }
 
 .min .page p {
 	font-size: 1.2em;  
 	line-height: 2em;
+	margin-bottom: 0.5em;
+	margin-top: 0px;
+}
+
+.min .page ul {
+	margin-top: 0px;
+	font-size: 1.2em;
+	margin-bottom: 0.5em;
 }
 
 .min .homePage {
 	
 }
+
