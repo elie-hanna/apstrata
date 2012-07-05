@@ -41,7 +41,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 	widgetsInTemplate: true,
 	
 	definition: {
-		label: "User",
+		label: "User Registration",
 		cssClass: "newClass",
 		fieldset: [
 			{name: "required", label: "", type: "subform", style: "form", cssClass:"column",
