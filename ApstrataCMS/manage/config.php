@@ -48,8 +48,8 @@
 	$config["DC"] = array (
 		"Title" => "apstrata",
 		"Type" => "cloud, back end as a service, BaaS, mobile cloud, HTML5 cloud",
-		"Description" => "HTML5 and mobile cloud back-end",
-		"Subject.keyword" => "elementn, element&circ;n, apstrata, html5, saas, paas, baas, cloud computing, rich client, RIA",
+		"Description" => "HTML5 and mobile cloud Back-end as a Service",
+		"Subject.keyword" => "apstrata, html5, BaaS, SaaS, PaaS, cloud computing, rich client, RIA, iOS, android",
 		"Version" => "1",
 		"Publisher" => "apstrata",
 		"Creator" => "apstrata",
