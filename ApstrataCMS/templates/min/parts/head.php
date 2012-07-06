@@ -5,8 +5,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
 		<!-- Generic Metadata -->
-		<meta name="description" content="web technology and e-services company" />
-		<meta name="author" content="element&circ;n" />
+		<meta name="description" content="<?php print $config['DC']['Description'] ?>" />
+		<meta name="author" content="apstrata" />
 		
 		<!-- Dublin Core Metadata -->
 		
