@@ -204,7 +204,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 					+ "&" + self.PARAMETER_RESPONSE_TYPE + "=" + responseType
 					+ ((user != "") ? "&" + self.PARAMETER_USER + "=" + user : "")
 					+ ((isForce200ResponseStatus) ? "&apsdb.force200ResponseStatus=true" : "")
-					+ ((self.isUseParameterToken) ? "&apsdb.authToken=" + self.token : "")
+					+ ((self.isUseParameterToken) ? "&apsdb.authToken=" + self.token.authToken : "")
 					+ ((params != "") ? "&" : "") + params;
 
 			return { url: apswsReqUrl, signature: "" };
@@ -359,7 +359,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 				data[self.PARAMETER_ACTION] = self.PARAMETER_ACTION_VALUE_RENEW;
 
 				// Create the Apstrata client that will verify the user's credentials.
-				var client = new apstrata.sdk.Client({connection: self});
+				var client = new apstrata.sdk.Client(self);
 				client.call("VerifyCredentials", data).then(
 					function (operation) {
 						console.debug("Token renewed");
@@ -439,7 +439,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 			// 2. Create the Apstrata client that will delete the user's token.
 			console.debug("Logging out");
-			var client = new apstrata.sdk.Client({connection: self});
+			var client = new apstrata.sdk.Client(self);
 			client.call("VerifyCredentials", {}).then(
 				function (operation) {
 					console.debug("Token deleted");
