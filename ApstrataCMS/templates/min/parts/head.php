@@ -49,13 +49,13 @@
 		<?php 
 			} else { 
 		?>
-		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/dojo.js.uncompressed.js" djConfig="parseOnLoad: false"></script>
-		<script type="text/javascript" src="lib/dojo/release/dojo/dojo/apstratacms.js.uncompressed.js"></script>
-		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/release/dojo/dojo/dojo.js.uncompressed.js" djConfig="parseOnLoad: false"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/release/dojo/dojo/apstratacms.js.uncompressed.js"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 		
 		<style type="text/css">
-		        @import "lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";
-		        @import "lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>-packaged.css";
+		        @import "<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";
+		        @import "<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>-packaged.css";
 	        </style>
 		<?php 
 			}

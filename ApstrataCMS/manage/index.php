@@ -11,7 +11,10 @@
 
 	    <link rel="shortcut icon" href="../themes/min/resources/favicon.png" type="image/png" />
 	
-		<script type="text/javascript" src="../lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
+		<!--script type="text/javascript" src="../lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
+		<script type="text/javascript" src="../lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script-->
+<script type="text/javascript" src="../lib/dojo/release/dojo/dojo/dojo.js.uncompressed.js" djConfig="parseOnLoad: false"></script>
+		<script type="text/javascript" src="../lib/dojo/release/dojo/dojo/apstratacms.js.uncompressed.js"></script>
 		<script type="text/javascript" src="../lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 
 		<style type="text/css">
@@ -20,8 +23,8 @@
 		
 		<script>			
 			dojo.ready(function() {
-				dojo.registerModulePath("apstrata", "../../ApstrataSDK/apstrata")
-				dojo.registerModulePath("apstrata.cms", "../../../src/cms")
+				//dojo.registerModulePath("apstrata", "../../ApstrataSDK/apstrata")
+				//dojo.registerModulePath("apstrata.cms", "../../../src/cms")
 
 				dojo.require("dijit._Widget")
 				dojo.extend(dijit._Widget, {
