@@ -440,7 +440,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			// 2. Create the Apstrata client that will delete the user's token.
 			console.debug("Logging out");
 			var client = new apstrata.sdk.Client(self);
-			client.call("VerifyCredentials", {}).then(
+			client.call("DeleteToken", {}).then(
 				function (operation) {
 					console.debug("Token deleted");
 
