@@ -28,6 +28,7 @@ dojo.require('apstrata.ui.FlashAlert')
 dojo.require('apstrata.ui.ApstrataAnimation')
 
 dojo.require('apstrata.sdk.Connection')
+dojo.require('apstrata.sdk.TokenConnection')
 dojo.require('apstrata.sdk.Client')
 
 dojo.require('apstrata.ui.widgets.LoginWidgetPreferences');
@@ -44,6 +45,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 	
 	constructor: function(attrs) {
 		this.type = attrs.type
+		this.useToken = attrs.useToken
 		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "login-widget")
 		this.showPreferencesLink = false;
 		
@@ -80,7 +82,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		if (this.showPreferencesLink) {
 			dojo.style(this.dvPreferences, "display", "block")
 		}
-	},
+	},	
 
 	login: function(values) {
 		
@@ -102,26 +104,51 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		dojo.mixin(credentials, values)
 
 		if (this.type == "user") {
-			connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
+			if (this.useToken && this.useToken == true) {
+				connection = new apstrata.sdk.TokenConnection({credentials: credentials, serviceURL: serviceURL, timeout: timeout});
+			} else {
+				connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
+			}
 		} else {
+			if (this.useToken && this.useToken == true) {
+				console.warn("Token connections cannot be used with a login widget of type 'master'")
+			}
 			connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "master"})
 		}
-
-		connection.login().then(
-			function() {
-				self.form.enable()
-				self._animation.hide()
-				if (self._success) self._success(credentials)
-			},
-			function() {
-				self.form.enable()
-				self._animation.hide()
-				self.form.vibrate(self.domNode)
-				self.message(self.nls.BAD_CREDENTIALS)
-				
-				if (self._failure) self._failure()
-			}
-		)
+		
+		if (this.useToken && this.useToken == true) {
+			connection.login({
+				success: function() {
+					self.form.enable()
+					self._animation.hide()
+					if (self._success) self._success(credentials)
+				},
+				failure: function() {
+					self.form.enable()
+					self._animation.hide()
+					self.form.vibrate(self.domNode)
+					self.message(self.nls.BAD_CREDENTIALS)
+					
+					if (self._failure) self._failure()
+				}
+			})			
+		} else {
+			connection.login().then(
+				function() {
+					self.form.enable()
+					self._animation.hide()
+					if (self._success) self._success(credentials)
+				},
+				function() {
+					self.form.enable()
+					self._animation.hide()
+					self.form.vibrate(self.domNode)
+					self.message(self.nls.BAD_CREDENTIALS)
+					
+					if (self._failure) self._failure()
+				}
+			)
+		}
 	},
 	
 	postCreate: function() {
@@ -137,25 +164,47 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 			self.form.disable()
 
 			this._animation = new apstrata.ui.ApstrataAnimation({node: self.domNode})
+			var connection = null
 			var credentials = apstrata.registry.get("apstrata.sdk", "Connection").credentials
 			var serviceURL =  apstrata.registry.get("apstrata.sdk", "Connection").serviceURL
 			var timeout = apstrata.registry.get("apstrata.sdk", "Connection").timeout
 
 			if (self.type == "user") {
-				connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
+				if (this.useToken && this.useToken == true) {
+					connection = new apstrata.sdk.TokenConnection({credentials: credentials, serviceURL: serviceURL, timeout: timeout});
+				} else {
+					connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
+				}
 			} else {
+				if (this.useToken && this.useToken == true) {
+					console.warn("Token connections cannot be used with a login widget of type 'master'")
+				}
 				connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "master"})
 			}
-
-			connection.login().then(
-				function() {
-					self.form.enable()
-					if (self._success) self._success(credentials)
-				},
-				function() {
-					self.form.enable()
-				}
-			)
+			
+			if (this.useToken && this.useToken == true) {
+				connection.login({
+					success: function() {
+						self.form.enable()
+						if (self._success) self._success(credentials)
+					},
+					failure: function() {
+						self.form.enable()
+					}
+				})			
+			} else {
+				connection.login().then(
+					function() {
+						self.form.enable()
+						if (self._success) self._success(credentials)
+					},
+					function() {
+						self.form.enable()
+					}
+				)
+			}
+			
+			
 		}
 
 		this.inherited(arguments)	

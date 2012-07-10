@@ -103,11 +103,15 @@ dojo.declare("apstrata.sdk.TokenConnection",
 				// 1c. Handle setting the successful authentication handler if one is defined.
 				if (attrs.success) {
 					self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER = attrs.success;
+				} else {
+					self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER = null;
 				}
 
 				// 1d. Handle setting the failure authentication handler if one is defined.
 				if (attrs.failure) {
 					self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER = attrs.failure;
+				} else {
+					self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER = null;
 				}
 
 				// 1e. This parameter signifies the manner of using the token, either from the apstratabase cookie or sending it in the request as a parameter.
@@ -299,17 +303,12 @@ dojo.declare("apstrata.sdk.TokenConnection",
 					// 3d. Broadcast that a successful login has happened.
 					self._publishSuccessfulAuthentication();
 
-					// 3e. Trigger the user-application's success function if one is defined and set
-					// the success and failure handlers.
-					if (args) {
-						if (args.success)
-							self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER = args.success;
-						if (args.failure)
-							self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER = args.failure;
-					}
-					if (self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER) {
+					// 3e. Call the user-application's login success handler function if one is defined.
+					if (args && args.success){
+						args.success();
+					} else if (self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER) {
 						self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER();
-					}
+					}					
 				},
 				function (response) {
 					// 3a. Clear the secret and password so hasCredentials() functions
@@ -361,19 +360,19 @@ dojo.declare("apstrata.sdk.TokenConnection",
 				// Create the Apstrata client that will verify the user's credentials.
 				var client = new apstrata.sdk.Client(self);
 				client.call("VerifyCredentials", data).then(
-					function (operation) {
+					function (response) {
 						console.debug("Token renewed");
 
 						// 1. Set the token data from the response.
 						self.token = {};
 						// Change the token expires and lifetime from seconds to a future Date strings.
-						var tokenExpires = operation.response.result[self.PARAMETER_TOKEN_EXPIRES];
-						var tokenLifetime = operation.response.result[self.PARAMETER_TOKEN_LIFETIME];
+						var tokenExpires = response.result[self.PARAMETER_TOKEN_EXPIRES];
+						var tokenLifetime = response.result[self.PARAMETER_TOKEN_LIFETIME];
 						self.token.expires = tokenExpires;
 						self.token.lifetime = tokenLifetime;
 						self.token.creationTime = new Date().getTime();
 						if (self.isUseParameterToken) {
-							var authToken = operation.response.result[self.PARAMETER_AUTH_TOKEN];
+							var authToken = response.result[self.PARAMETER_AUTH_TOKEN];
 							self.token.authToken = authToken;
 						}
 
@@ -391,7 +390,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 						if (self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER)
 							self._APPLICATION_DEFINED_AUTHENTICATION_SUCCESS_HANDLER();
 					},
-					function (operation) {
+					function (response) {
 						// 1. Delete the token.
 						delete self.token;
 
@@ -400,7 +399,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 						// 3. Call the user-application's login failure handler function if one is defined.
 						if (self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER) {
-							self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER(operation.response.metadata.errorCode, operation.response.metadata.errorMessage);
+							self._APPLICATION_DEFINED_AUTHENTICATION_FAILURE_HANDLER(response.metadata.errorCode, response.metadata.errorMessage);
 						}
 					}
 				);
@@ -441,7 +440,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			console.debug("Logging out");
 			var client = new apstrata.sdk.Client(self);
 			client.call("DeleteToken", {}).then(
-				function (operation) {
+				function (response) {
 					console.debug("Token deleted");
 
 					// Cleanup the connection and its cookie.
@@ -451,7 +450,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 						self.close();
 					}
 				},
-				function (operation) {
+				function (response) {
 					// 1a. Broadcast that a failed login attempt has happened.
 					dojo.publish("/apstrata/connection/logout/failure", [{
 						key: ((self.credentials && self.credentials.key) ? self.credentials.key : "")
@@ -459,7 +458,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 
 					// 1b. Call the user-application's login failure handler function if one is defined.
 					if (args && args.failure)
-						args.failure(operation.response.metadata.errorCode, operation.response.metadata.errorMessage);
+						args.failure(response.metadata.errorCode, response.metadata.errorMessage);
 				}
 			);
 		},

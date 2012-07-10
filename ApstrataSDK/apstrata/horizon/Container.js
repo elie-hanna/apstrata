@@ -134,10 +134,6 @@ dojo.declare("apstrata.horizon.Container",
 		//setTimeout(dojo.hitch(this, 'layout'), 100)
 
 		if (this.loginWidget) {
-			//this.loginWidget.set("dimension", this._boundingRectangle)
-			this.loginWidget.container = this; 
-			dojo.place(this.loginWidget.domNode, dojo.body())
-			this.showCurtain()
 			this.loginWidget.then(function(credentials) {
 				self.onCredentials(credentials)
 				self._instantiateMainPanel()
@@ -148,6 +144,23 @@ dojo.declare("apstrata.horizon.Container",
 			},
 			function() {
 			})
+
+			if (this.loginWidget.useToken && this.loginWidget.useToken == true) {
+				var connection = new apstrata.sdk.TokenConnection()
+				if (connection.isLoggedIn()) {
+					this.loginWidget.login(connection.credentials)	
+				} else {
+					//this.loginWidget.set("dimension", this._boundingRectangle)
+					this.loginWidget.container = this; 
+					dojo.place(this.loginWidget.domNode, dojo.body())
+					this.showCurtain()					
+				}
+			} else {
+				//this.loginWidget.set("dimension", this._boundingRectangle)
+				this.loginWidget.container = this; 
+				dojo.place(this.loginWidget.domNode, dojo.body())
+				this.showCurtain()									
+			}
 		} else {
 			self.listenToHashChange(true)
 		}
