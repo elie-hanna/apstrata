@@ -45,7 +45,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 		var credentials = this.container.client.connection.credentials;
 		var userLogin = "";
 		var loginType = "login";
-		if (credentials.password){
+		if (credentials.user){
 			userLogin = credentials.user;
 		}else {
 			userLogin = credentials.authKey;
@@ -107,7 +107,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 			function(response){
 				var errorDetail = response.metadata.errorDetail;
 				var errorCode = response.metadata.errorCode;
-				this._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
+				self._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
 			}
 		);
 		

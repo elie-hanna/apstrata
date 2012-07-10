@@ -58,7 +58,7 @@
 			"panel.finalAlpha": .95
 		}
 
-		loginWidget = new apstrata.ui.widgets.LoginWidget({type: "user"})
+		loginWidget = new apstrata.ui.widgets.LoginWidget({useToken: true, type: "user"})
 
 		dojo.parser.parse();
 	})

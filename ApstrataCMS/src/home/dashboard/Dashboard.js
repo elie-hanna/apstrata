@@ -34,7 +34,7 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 	},
 	
 	onCredentials: function(credentials) {
-		this.connection = new apstrata.sdk.Connection({credentials: credentials, loginType: "user"});		
+		this.connection = new apstrata.sdk.TokenConnection({credentials: credentials});		
 		this.client = new apstrata.sdk.Client(this.connection);
 		
 		var item = {
@@ -66,11 +66,13 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 	},
 	
 	logout: function() {
-		//window.location.reload();
-		
-		var href = window.location.href;
-		var urlPrefix = apstrata.registry.get("apstrata.cms", "urlPrefix");
-		window.location.assign(href.substring(0, href.indexOf(urlPrefix)));
-		
+		this.connection.logout({
+			success: function() {
+				window.location = apstrata.registry.get("apstrata.cms", "baseUrl");	
+			},
+			failure: function() {
+				
+			}
+		})
 	}
 })

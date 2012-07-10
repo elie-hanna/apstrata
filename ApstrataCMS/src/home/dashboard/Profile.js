@@ -160,16 +160,27 @@ dojo.declare("apstrata.home.dashboard.Profile",
 					self._alert(response.result.errorDetail, "errorIcon");
 				}else {
 					
-					// reset the formGenerator's content with the data that has just been updated
-					self._loadProfileData();
 					
 					//if the password has been changed we need to modify the credentials if the user has logged in 
-					//using his login and password
-					self._updateCredentials(self.formGenerator._fields.password.value);
-												
-					self.isEditing = false;
-					self.backup = {};
-					self._alert("Your profile has been updated", "icon");	
+					//using his login and password					
+					if (params.password) {
+						self._updateCredentials(params.password, {success: function() {
+								// reset the formGenerator's content with the data that has just been updated
+								self._loadProfileData();
+
+								self.isEditing = false;
+								self.backup = {};
+								self._alert("Your profile has been updated", "icon");									
+							}
+						});
+					} else {					
+						// reset the formGenerator's content with the data that has just been updated
+						self._loadProfileData();
+
+						self.isEditing = false;
+						self.backup = {};
+						self._alert("Your profile has been updated", "icon");
+					}	
 				}						
 			},
 			
@@ -192,7 +203,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 		var self = this;
 		var credentials = this.container.client.connection.credentials;
 		var userLogin = "";
-		if (credentials.password){
+		if (credentials.user){
 			userLogin = credentials.user;
 		}else {
 			userLogin = credentials.authKey;
@@ -236,7 +247,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 			function(getAccountProfileResponse){
 				var errorDetail = getAccountProfileResponse.metadata.errorDetail;
 				var errorCode = getAccountProfileResponse.metadata.errorCode;
-				this._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
+				self._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
 			} 	
 		);		
 	},	
@@ -245,12 +256,17 @@ dojo.declare("apstrata.home.dashboard.Profile",
 	 * If the password has been changed by the logged in user, we need to update his
 	 * current credential object
 	 */
-	_updateCredentials: function(newPassword) {
-		
+	_updateCredentials: function(newPassword, args) {
+		/*
 		var credentials = this.container.client.connection.credentials;
 		if (credentials.password && newPassword && newPassword != "" && credentials.password != newPassword){
 			this.container.client.connection.credentials.password = newPassword;
 		}
+		*/
+		this.container.client.connection.deleteCookie();
+		this.container.client.connection.credentials.password = newPassword;
+		this.container.client.connection.login(args);
+		
 	},
 	
 	_onButtonClick: function(event){
