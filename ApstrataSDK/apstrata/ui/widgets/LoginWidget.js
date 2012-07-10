@@ -247,6 +247,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		var self = this	
 		
 		this.prefsPanel = new apstrata.ui.widgets.LoginWidgetPreferences({
+			applicationId: this.applicationId,
 			container: this.container,
 			onChange: function(prefs) {
 				dojo.style(self.dvPreferencesPanel, "display", "none")
