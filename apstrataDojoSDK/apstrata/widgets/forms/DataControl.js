@@ -61,6 +61,15 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 			if (attrs.submitLabel) this.submitLabel = attrs.submitLabel;
 			if (attrs.resetLabel) this.resetLabel = attrs.resetLabel;
 			if (attrs.onErrorDoBlink) this.onErrorDoBlink = attrs.onErrorDoBlink;
+			if (attrs.disabledActions) {
+				if (typeof attrs.disabledActions == "string") {
+					this.disabledActions = attrs.disabledActions.split(',');
+				} else if (typeof attrs.disabledActions == "object") {
+					this.disabledActions = attrs.disabledActions;
+				} else {
+					this.disabledActions = [];
+				}
+			}
 
 			if (attrs.connection) {
 				this.connection = attrs.connection
@@ -124,6 +133,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 
 		        var button = new dijit.form.Button({
 		            label: label,
+		            disabled: (self.disabledActions.indexOf(label) != -1),
 		            onClick: function() {
 						
 						// fire corresponding event
