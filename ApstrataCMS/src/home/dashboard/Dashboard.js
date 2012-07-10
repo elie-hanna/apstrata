@@ -53,15 +53,17 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 		this.addMainPanel(apstrata.home.dashboard.Menu);
 		this.inherited(arguments);
 		
-		var d = dojo.query(".horizonBackground")[0];
-		if (d) {
-			var p = dojo.position(d);			
-			dojo.style(this._curtain, {
-				top: p.y + "px",
-				left: p.x + "px",
-				width: p.w + "px",
-				height: p.h + "px"
-			})
+		if (this._curtain) {
+			var d = dojo.query(".horizonBackground")[0];
+			if (d) {
+				var p = dojo.position(d);			
+				dojo.style(this._curtain, {
+					top: p.y + "px",
+					left: p.x + "px",
+					width: p.w + "px",
+					height: p.h + "px"
+				})
+			}
 		}
 	},
 	
