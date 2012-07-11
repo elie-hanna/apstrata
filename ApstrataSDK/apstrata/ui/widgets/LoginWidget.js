@@ -105,7 +105,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 
 		if (this.type == "user") {
 			if (this.useToken && this.useToken == true) {
-				connection = new apstrata.sdk.TokenConnection({credentials: credentials, serviceURL: serviceURL, timeout: timeout});
+				connection = new apstrata.sdk.TokenConnection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, isUseParameterToken: true});
 			} else {
 				connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
 			}
@@ -171,7 +171,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 
 			if (self.type == "user") {
 				if (this.useToken && this.useToken == true) {
-					connection = new apstrata.sdk.TokenConnection({credentials: credentials, serviceURL: serviceURL, timeout: timeout});
+					connection = new apstrata.sdk.TokenConnection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, isUseParameterToken: true});
 				} else {
 					connection = new apstrata.sdk.Connection({credentials: credentials, serviceURL: serviceURL, timeout: timeout, loginType: "user"})
 				}
