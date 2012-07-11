@@ -34,7 +34,7 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 	},
 	
 	onCredentials: function(credentials) {
-		this.connection = new apstrata.sdk.TokenConnection({credentials: credentials});		
+		this.connection = new apstrata.sdk.TokenConnection({credentials: credentials, isUseParameterToken: true});		
 		this.client = new apstrata.sdk.Client(this.connection);
 		
 		var item = {
