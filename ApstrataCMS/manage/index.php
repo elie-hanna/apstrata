@@ -9,17 +9,30 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>ap((strata CMS</title>
 
-	    <link rel="shortcut icon" href="../themes/min/resources/favicon.png" type="image/png" />
+	    	<link rel="shortcut icon" href="../themes/min/resources/favicon.png" type="image/png" />
 	
-		<!--script type="text/javascript" src="../lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
-		<script type="text/javascript" src="../lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script-->
-<script type="text/javascript" src="../lib/dojo/release/dojo/dojo/dojo.js.uncompressed.js" djConfig="parseOnLoad: false"></script>
-		<script type="text/javascript" src="../lib/dojo/release/dojo/dojo/apstratacms.js.uncompressed.js"></script>
+		<?php 
+			if ($config["developmentMode"]) { 
+		?>
+		<script type="text/javascript" src="../lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
 		<script type="text/javascript" src="../lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+
+		<?php 
+			} else { 
+		?>
+
+		<script type="text/javascript" src="../lib/dojo/release/dojo/dojo/dojo.js" djConfig="parseOnLoad: false"></script>
+		<script type="text/javascript" src="../lib/dojo/release/dojo/dojo/apstratacms.js"></script>
+		<script type="text/javascript" src="../lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+
+		<?php 
+			}
+		?>
+
 
 		<style type="text/css">
 			@import "../themes/cms/cms.css";
-        </style>
+        	</style>
 		
 		<script>			
 			dojo.ready(function() {
