@@ -133,7 +133,7 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 
 		        var button = new dijit.form.Button({
 		            label: label,
-		            disabled: (self.disabledActions.indexOf(label) != -1),
+		            disabled: (self.disabledActions && self.disabledActions.indexOf(label) != -1),
 		            onClick: function() {
 						
 						// fire corresponding event
