@@ -4,6 +4,8 @@ dojo.require("dojox.dtl._Templated")
 dojo.require("dojo.store.Memory")
 dojo.require("dojo.fx")
 
+dojo.require("apstrata.sdk.TokenConnection")
+
 dojo.declare("apstrata.home.Slides", 
 [dijit._Widget, dojox.dtl._Templated], 
 {
@@ -23,9 +25,10 @@ dojo.declare("apstrata.home.Slides",
 	actions: null,
 	
 	constructor: function() {
+		var connection = new apstrata.sdk.TokenConnection()
 		this.actions = [
 			{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "register", label: "sign up for free", cssClass:"callToAction"},
-			{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "dashboard", label: "login"}
+			{url: apstrata.registry.get("apstrata.cms", "urlPrefix") + "dashboard", label: connection.isLoggedIn() ? "dashboard" : "login"}
 		]
 
 		dojo.forEach(this.actions, function(action) {
