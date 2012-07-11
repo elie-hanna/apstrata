@@ -36,8 +36,14 @@
 		
 		<script>			
 			dojo.ready(function() {
-				//dojo.registerModulePath("apstrata", "../../ApstrataSDK/apstrata")
-				//dojo.registerModulePath("apstrata.cms", "../../../src/cms")
+				<?php 
+					if ($config["developmentMode"]) { 
+				?>
+					dojo.registerModulePath("apstrata", "../../ApstrataSDK/apstrata")
+					dojo.registerModulePath("apstrata.cms", "../../../src/cms")
+				<?php 
+					}
+				?>
 
 				dojo.require("dijit._Widget")
 				dojo.extend(dijit._Widget, {
