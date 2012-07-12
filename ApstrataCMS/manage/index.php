@@ -9,7 +9,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>ap((strata CMS</title>
 
-	    	<link rel="shortcut icon" href="../themes/min/resources/favicon.png" type="image/png" />
+	    <link rel="shortcut icon" href="../themes/min/resources/favicon.png" type="image/png" />
 	
 		<?php 
 			if ($config["developmentMode"]) { 
@@ -32,7 +32,7 @@
 
 		<style type="text/css">
 			@import "../themes/cms/cms.css";
-        	</style>
+        </style>
 		
 		<script>			
 			dojo.ready(function() {
