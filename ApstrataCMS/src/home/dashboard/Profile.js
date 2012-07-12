@@ -166,7 +166,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 					if (params.password) {
 						self._updateCredentials(params.password, {success: function() {
 								// reset the formGenerator's content with the data that has just been updated
-								self._loadProfileData();
+								//self._loadProfileData();
 
 								self.isEditing = false;
 								self.backup = {};
@@ -175,7 +175,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 						});
 					} else {					
 						// reset the formGenerator's content with the data that has just been updated
-						self._loadProfileData();
+						//self._loadProfileData();
 
 						self.isEditing = false;
 						self.backup = {};
