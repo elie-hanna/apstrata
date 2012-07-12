@@ -47,6 +47,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3f4c6b', end
 			position: relative;
 		}
 
+		.min #logoNormal {
+			float: left;
+			background: url('resources/apstrata-big.png');
+			width: 211px;
+			height: 51px;
+			background-size: 100% 100%;
+			margin-left: 15px;
+			top: 6px;
+			position: relative;
+		}
+
 		.min #logoText {
 			font-family: "Arial Rounded MT Bold";
 			font-size: 2.8em;
