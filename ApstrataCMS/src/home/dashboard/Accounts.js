@@ -29,6 +29,10 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 
 			self.render()
 			
+		}, function(response){
+			var errorDetail = response.metadata.errorDetail;
+			var errorCode = response.metadata.errorCode;
+			self._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
 		})
 		this.inherited(arguments)
 	},
