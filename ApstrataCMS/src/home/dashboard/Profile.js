@@ -171,6 +171,8 @@ dojo.declare("apstrata.home.dashboard.Profile",
 								self.isEditing = false;
 								self.backup = {};
 								self._alert("Your profile has been updated", "icon");									
+							}, failure: function(errorCode, errorDetail) {
+								self._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
 							}
 						});
 					} else {					
