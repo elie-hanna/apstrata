@@ -41,8 +41,24 @@ rm -f $basePath/lib/dojo/util/buildscripts/apstratacms.build.tmp.prefix.*
 rm -f $basePath/lib/dojo/util/buildscripts/apstratacms.build.tmp.suffix.*
 rm -f $basePath/lib/dojo/util/buildscripts/apstratacms.build.tmp.sorted
 cp profiles/apstratacms.profile.js $basePath/lib/dojo/util/buildscripts/profiles
+
+# backup the i18n.js file before playing around with it:
+echo "backup dojo's i18n.js file - need to edit it before building"
+i18njsfile=$basePath/lib/dojo/dojo/i18n.js
+cp $i18njsfile/lib/dojo/dojo/i18n.js `pwd`/i18n.js.tmp
+
+# fix the dojo i18n.js file for nls bundle bug
+echo "modifying dojo's i18n.js to add an nls fix..."
+sed -i '/var bundle = dojo._loadedModules\[module\];/ i\
+dojo.i18n._requireLocalization\(packageName,bundleName, locale\);' $i18njsfile
+
 # run the dojo build...
 echo "launching the dojo build process"
 cd $basePath/lib/dojo/util/buildscripts
 ./build.sh profile=apstratacms action=clean,release optimize=shrinkSafe cssOptimize=comments.keepLines
+
+
+# return the old i18n.js file
+echo "return the dojo i18n.js file to its initial state"
+cp `pwd`/i18n.js.tmp $i18njsfile
 

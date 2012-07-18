@@ -3,7 +3,7 @@
 		<div id='header'>
 			<div class='contentFrame'>
 				<div id='header-inner'>
-					<a href="<?php echo $cms->getUrl('/'); ?>" id='logo'></a><!-- ap<span style='color: #ff8000;'>((</span>strata -->
+					<a href="<?php print $GLOBALS["config"]["baseUrl"]; ?>" id='logo'></a><!-- ap<span style='color: #ff8000;'>((</span>strata -->
 					<div id='menu'>
 <?php
 		foreach ($menu["menuPhp"] as $menuItem) {

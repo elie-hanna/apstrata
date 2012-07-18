@@ -49,8 +49,8 @@
 		<?php 
 			} else { 
 		?>
-		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/release/dojo/dojo/dojo.js.uncompressed.js" djConfig="parseOnLoad: false"></script>
-		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/release/dojo/dojo/apstratacms.js.uncompressed.js"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/release/dojo/dojo/dojo.js" djConfig="parseOnLoad: false"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/release/dojo/dojo/apstratacms.js"></script>
 		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 		
 		<style type="text/css">
