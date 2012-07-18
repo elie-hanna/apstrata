@@ -25,10 +25,10 @@
 		// URLs and other related values used to compose paths by the php CMS code 
 		//
 		//"baseUrl" => "http://localhost/ApstrataCMS",
-		"baseUrl" => "http://www2.apstrata.com",
+		"baseUrl" => "http://www.apstrata.com",
 		"urlPrefix" => "page.php?pageId=",
 		"loginUrl" => "dashboard",
-		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS",
+		"docroot" => $_SERVER["DOCUMENT_ROOT"],
    		"workbenchUrl" => "http://workbench.apstrata.com",
 		"targetClusterUrl" => "https://varick.apstrata.com/apsdb/rest",
 
