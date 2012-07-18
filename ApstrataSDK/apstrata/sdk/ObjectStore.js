@@ -61,9 +61,11 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		var apsdb = attrs || {}
 		if (this.store) apsdb.store = this.store
 		if (this.ftsQuery) apsdb.ftsQuery = this.ftsQuery
-		if (this.queryExpression) apsdb.query = this.queryExpression
-		if (this.schema) {
-			this.queryExpression = this.queryExpression.concat(" and apsdb.schema=\"" + this.schema + "\"");
+		if (this.queryExpression) {
+			apsdb.query = this.queryExpression
+			if (this.schema)  {
+				this.queryExpression = this.queryExpression.concat(" and apsdb.schema=\"" + this.schema + "\"");
+			}
 		}
 		if (this.queryFields) apsdb.queryFields = this.queryFields
 		if (this.resultsPerPage) apsdb.resultsPerPage = this.resultsPerPage
