@@ -62,6 +62,9 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		if (this.store) apsdb.store = this.store
 		if (this.ftsQuery) apsdb.ftsQuery = this.ftsQuery
 		if (this.queryExpression) apsdb.query = this.queryExpression
+		if (this.schema) {
+			this.queryExpression = this.queryExpression.concat(" and apsdb.schema=\"" + this.schema + "\"");
+		}
 		if (this.queryFields) apsdb.queryFields = this.queryFields
 		if (this.resultsPerPage) apsdb.resultsPerPage = this.resultsPerPage
 		if (this.runAs) apsdb.runAs = this.runAs
@@ -152,17 +155,30 @@ dojo.declare("apstrata.sdk.ObjectStore",
 	put: function(object, options) {
 		var self = this
 		var o = {"apsdb.update": true, "apsdb.store": self.store}
-		dojo.mixin(o, object)
-
-		return this.client.call("SaveDocument", o)
+		if (self.schema){
+			o["apsdb.schema"] = self.schema;
+		}
+		
+		if (object && object.domNode) {
+			return this.client.call("SaveDocument", o, object.domNode);	
+		}else {
+			dojo.mixin(o, object)
+			return this.client.call("SaveDocument", o)
+		}
 	},
 
 	add: function(object, options) {
-		var self = this
-		var o = {"apsdb.store": self.store}
-		dojo.mixin(o, object)
-
-		return this.client.call("SaveDocument", o)
+		var self = this		
+		var o = {"apsdb.store": self.store};
+		if (self.schema){
+			o["apsdb.schema"] = self.schema;
+		}
+		if (object && object.domNode) {
+			return this.client.call("SaveDocument", o, object.domNode);	
+		}else {
+			dojo.mixin(o, object)
+			return this.client.call("SaveDocument", o)
+		}
 	},
 
 	remove: function(id) {
