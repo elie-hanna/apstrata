@@ -29,7 +29,7 @@ dojo.require("apstrata.ui.forms.FieldSet")
 /**
  * Generates a dijit.form.Form automatically based on a definition object
  * 
- * @param {Object} attrs
+ * @param {Object} attrs. 
  */
 dojo.declare("apstrata.ui.forms.FormGenerator", 
 [dijit._Widget, dojox.dtl._Templated], 
@@ -54,7 +54,10 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	 * @param {Object} options.value			Value object that will be displayed in the form
 	 * @param {string} options.displayGroups	Allows fields to be displayed selectively based on the 
 	 * 											values provided in this comma separated list
-	 * 
+	 * @param {boolean} options.submitOnEnter	set this to true if you need the form to be submitted when
+	 * 											pressing "enter". Default is false. Note that you also need
+	 * 											add the following to the form definition: 
+	 * 											submitAction: "name_of_the_action_in_the_definition_that_submits_the_form" 
 	 * @construct
 	 */
 	constructor: function(options) {
@@ -379,7 +382,26 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		// Dijit.form.Form will do the heavylifting to set the values on all fields
 		if (this.value) this.frmMain.set("value", tmp) 
 		
+		// 
+		if (this.submitOnEnter) {
+			var handleSubmitOnEnter = dojo.hitch(this, this._handleSubmitOnEnter);
+			dojo.connect(this.frmMain, "onKeyPress", handleSubmitOnEnter);
+		};
+		
 		this._fireReadyEvent()
+	},
+	
+	_handleSubmitOnEnter: function(e) {	
+		
+		if (e.keyCode == "13") {
+			dojo.stopEvent(e);
+			if (this.definition.submitAction && this.frmMain.validate()) {								
+				var action = this.options[this.definition.submitAction];
+				if (action) {
+					action(this.get("value"), this);
+				}				
+			}	
+		}		
 	},
 	
 	/**
