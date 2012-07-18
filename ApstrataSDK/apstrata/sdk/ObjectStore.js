@@ -157,9 +157,6 @@ dojo.declare("apstrata.sdk.ObjectStore",
 	put: function(object, options) {
 		var self = this
 		var o = {"apsdb.update": true, "apsdb.store": self.store}
-		if (self.schema){
-			o["apsdb.schema"] = self.schema;
-		}
 		
 		if (object && object.domNode) {
 			return this.client.call("SaveDocument", o, object.domNode);	
