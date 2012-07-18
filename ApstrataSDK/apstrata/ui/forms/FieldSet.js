@@ -24,6 +24,8 @@ dojo.require("dijit.form.SimpleTextarea")
 dojo.require("dijit.form.CheckBox")
 dojo.require("dijit.form.DateTextBox")
 dojo.require("dijit.form.ComboBox")
+dojo.require("dijit.form.FilteringSelect")
+
 dojo.require("dijit.form.Button")
 
 dojo.require("dojo.store.Memory")
@@ -298,7 +300,12 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						if (definition["formGenerator-options"]) {
 							var choices = []
 							dojo.forEach(definition["formGenerator-options"], function(option) {
-								choices.push({name: option, id: option})
+								// check if choices contains object in the form {name, id}
+								if (option.id) {
+									choices.push(option)
+								}else {
+									choices.push({name: option, id: option});
+								}
 							})
 							dojo.mixin(attr, {
 					            value: choices[0].id,
@@ -307,13 +314,19 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						}				
 						
 						break;
-	
-					case "dijit.form.ComboBox":
+										
+					case "dijit.form.FilteringSelect":
+					case "dijit.form.ComboBox": 
 	
 						if (definition["formGenerator-options"]) {
 							var choices = []
 							dojo.forEach(definition["formGenerator-options"], function(option) {
-								choices.push({name: option, id: option})
+								// check if choices contains object in the form {name, id}
+								if (option.id) {
+									choices.push(option)
+								}else {
+									choices.push({name: option, id: option});
+								}
 							})
 							dojo.mixin(attr, {
 					            value: choices[0].id,
