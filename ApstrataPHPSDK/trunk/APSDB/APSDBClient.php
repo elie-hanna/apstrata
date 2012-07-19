@@ -11,9 +11,9 @@
  * *****************************************************************************
  */
 
-require_once 'APSDB/APSDBConfig.php';
-require_once 'APSDB/Common/Constants.php';
-require_once 'APSDB/Common/KeyValue.php';
+require_once 'APSDBConfig.php';
+require_once 'Common/Constants.php';
+require_once 'Common/KeyValue.php';
 
 /**
  * APSDBClient

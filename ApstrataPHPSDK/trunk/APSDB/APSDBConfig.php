@@ -21,6 +21,6 @@ class APSDBConfig
     /**
      * Service URL. Can be modified to point to sandbox or production
      */
-    static $SERVICE_URL = "http://localhost/apstratabase/rest";
+    static $SERVICE_URL = "https://sandbox.apstrata.com/apsdb/rest";
 }
 ?>
