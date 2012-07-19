@@ -224,15 +224,19 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 					//somtimes dojo returns the value of the form with apsdb as an object
 					//remove this apsdb hierarchy and flatten it because it causes INVALID_PARAMETER error
 					//ex: {apsdb: {query:""}} will become {apsdb.query:""}
-					if (k == "apsdb") {
+										
+					if (k == "apsdb" || (k.indexOf("!") > 0)) {
 						for (var j in value[k]) {
 							if (!(typeof(value[k][j]) === 'undefined')) {
 								var tmpKey = k + "." + j
-								newValue[tmpKey.replace("!", ".")] = value[k][j]
+								newValue[tmpKey.replace(/!/g, ".")] = value[k][j]
 							}
 						}	
 					} else {
-						newValue[k.replace("!", ".")] = value[k]
+						if (typeof(value[k]) == "object" && value[k].getMonth) {
+							newValue[k.replace(/!/g, ".")] = dojo.date.locale.format(value[k], {datePattern: "yyyy-MM-dd", selector:"date"});
+						}else
+							newValue[k.replace(/!/g, ".")] = value[k]
 					}
 				}
 			}
