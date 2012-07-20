@@ -127,10 +127,10 @@ if ((this["document"]) && (this["document"]["getElementsByTagName"])) {
 }
 
 /*
- * IE does not support console.groupCollapsed() and console.groupEnd() and console.dir() functions
- * Hence, override these functions with empty ones in case of IE 
+ * IE and Safari do not support console.groupCollapsed() and console.groupEnd() and console.dir() functions
+ * Hence, override these functions with empty ones in case of IE and Safari
  */
-if (dojo.isIE) {
+if (dojo.isIE || dojo.isSafari) {
 	console.groupCollapsed = function(groupName) {}
 	console.groupEnd = function() {}
 	console.dir = function() {}
