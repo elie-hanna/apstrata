@@ -146,7 +146,8 @@ dojo.declare('apstrata.Client',
 				if (self.handleError) self.handleError(operation);
 				var possibleException = null;
 				try {
-					attrs.error(operation);
+					if (attrs && attrs.error)
+						attrs.error(operation);
 				} catch (e) {
 					possibleException = e;
 				}
