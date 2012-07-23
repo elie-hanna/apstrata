@@ -225,7 +225,7 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 					//remove this apsdb hierarchy and flatten it because it causes INVALID_PARAMETER error
 					//ex: {apsdb: {query:""}} will become {apsdb.query:""}
 										
-					if (k == "apsdb" || (k.indexOf("!") > 0)) {
+					if (k == "apsdb") {
 						for (var j in value[k]) {
 							if (!(typeof(value[k][j]) === 'undefined')) {
 								var tmpKey = k + "." + j
@@ -233,7 +233,7 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 							}
 						}	
 					} else {
-						if (typeof(value[k]) == "object" && value[k].getMonth) {
+						if (typeof(value[k]) === "object" && value[k].getMonth) {
 							newValue[k.replace(/!/g, ".")] = dojo.date.locale.format(value[k], {datePattern: "yyyy-MM-dd", selector:"date"});
 						}else
 							newValue[k.replace(/!/g, ".")] = value[k]
@@ -380,7 +380,7 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		
 		var tmp = {}
 		for (k in this.value) {
-			tmp[k.replace(".", "!")] = this.value[k]
+			tmp[k.replace(/\./g, "!")] = this.value[k]
 		}
 		
 		// Dijit.form.Form will do the heavylifting to set the values on all fields

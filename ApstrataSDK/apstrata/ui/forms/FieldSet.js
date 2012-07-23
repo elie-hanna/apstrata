@@ -204,7 +204,7 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 		}
 
 		
-		dojo.forEach(this.fieldset, function(definition) {
+		dojo.forEach(self.fieldset, function(definition) {
 			var field
 			if (self.formGenerator.shouldDisplay(definition.displayGroup)) {
 				field = self._addField(dv, definition) 	
@@ -353,7 +353,7 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				
 				if (definition.attrs) dojo.mixin(attr, definition.attrs)
 			
-				if (attr.name) attr.name = attr.name.replace(".", "!")
+				if (attr.name) attr.name = attr.name.replace(/\./g, "!")
 
 			
 				field = new defaultWidget(attr)
