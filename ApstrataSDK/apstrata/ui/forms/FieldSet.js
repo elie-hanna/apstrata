@@ -378,8 +378,11 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 							
 							// Connect to the onchange event so we can revert the color of the label back to it's original value	
 							dojo.connect(field, "onChange", function() {
-								dojo.style(field.domNode.nextElementSibling, {"color": initialLabelColor});
-							})													
+								if (field.checked)
+									dojo.style(field.domNode.nextElementSibling, {"color": initialLabelColor});
+								else
+									dojo.style(field.domNode.nextElementSibling, {"color": "red"});
+							})												
 						};
 						
 						return field.get("checked");
