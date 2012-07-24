@@ -28,21 +28,35 @@
 			dojo.ready(function() {
 				connection = new apstrata.sdk.Connection({
 					credentials: {
-						key: "PA158D8085", // Provide apstrata account key
-						secret: "O35DE365261ECD31EFCEA623B1D7B8C5", // Provide apstrata account secret
-						password: "" // Provide apstrata account secret
+						key: "", // Provide apstrata account key
+						secret: "", // Provide apstrata account secret
+						password: "" // Provide apstrata account password for a user type authentication
 					},
 					loginType: "master"
 				})
 			})
+			
+			function save() {
+				var client = new apstrata.sdk.Client(connection)
+
+				client.call("SaveDocument", {}, dijit.byId("form2")).then(
+					function(response) {
+						var docKey = response.result.document.key 
+						alert(docKey)
+					}
+				)
+
+
+				console.dir(dijit.byId("form1").get('value'));
+			}
 		</script>
 	</head>
 	<body class="claro">
 		<h2>apstrataDojoSDK test suite: Form to apstrata</h2>
 		<p>Opend firebug to watch the action</p>
 		
-		
 		<!-- example using a dijit Form -->
+		<h3>dijit.form.Form</h3>
 		<form id="form1" data-dojo-type="dijit.form.Form" data-dojo-props='action:"", name:"example", method:""'>
 			<label for="name">Name:</label> <br>
 			<input id="name" data-dojo-type="dijit.form.ValidationTextBox"
@@ -82,7 +96,22 @@
 			</button>
 		</form>
 		
+		<br><br>
+		<hr>
+		<br><br>
+		<h3>HTML form</h3>
 		<!-- example using an HTML Form -->
+		<form id="form2">
+			<label for="name">Name:</label> <br>
+			<input id="name" name="name"/>
+			<br><br>
+
+			<label for="notes">Notes (optional)</label> <br>
+			<input id="notes" name="notes" />
+			<br><br>
+		</form>
+		<button onclick='save()'>Submit</button>
+
 		
 	</body>
 </html>
