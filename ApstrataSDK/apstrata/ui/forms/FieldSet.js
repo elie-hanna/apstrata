@@ -357,6 +357,40 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 
 			
 				field = new defaultWidget(attr)
+				
+				// specific handling for checboxes
+				if (definition.type == "boolean" && definition.required) {
+					
+					// We define a validate function that will be call upon form submission					
+					field.validate = function(value, constraints) {
+						
+						// If the field is not checked and it 
+						if (!field.get("checked")) {
+							
+							// Get the initial color of the label appended to the checkbox							
+							var initialLabelColor = dojo.style(field.domNode.nextElementSibling, "color");
+							
+							// Modify the color of the label to red
+							dojo.style(field.domNode.nextElementSibling, {"color": "red"});
+							
+							// Create an ad-hoc tooltip to display before the checkbox 
+							var tooltip = new dijit.Tooltip({connectId: field.domNode, position:"before", label:"This field is required"});
+							
+							// Connect to the onchange event so we can revert the color of the label back to it's original value	
+							dojo.connect(field, "onChange", function() {
+								dojo.style(field.domNode.nextElementSibling, {"color": initialLabelColor});
+							})													
+						};
+						
+						return field.get("checked");
+					}
+					
+					field.isValid = function() {
+						return field.validate();
+					}
+				}
+				
+				
 				this._fields[definition.name] = field
 				
 				// This is useful for multi value fields
