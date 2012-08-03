@@ -127,6 +127,9 @@ dojo.declare("apstrata.Post",
 			// dojo.io.iframe only makes a POST request when there is a form, otherwise, it makes a GET request.
 			else {
 				var formId = 'apstrataGenericForm';
+				if (dojo.isSafari && dojo.isSafari >= 6) {
+					formId += Math.floor(Math.random() * 1000000);
+				}
 				formNode = document.getElementById(formId);
 				if (formNode == null) {
 					formNode = document.createElement('FORM');
@@ -175,6 +178,11 @@ dojo.declare("apstrata.Post",
 				
 				// Callback on successful call:
 				load: function(response, ioArgs) {
+					// Remove the post form on Safari 6 since we create one on every POST.
+					if (dojo.isSafari && dojo.isSafari >= 6) {
+						formNode.parentNode.removeChild(formNode);
+					}
+
 					self.rawResponse = dojo.toJson(self.response, true)
 					self.responseTime = (new Date().getTime()) - self._timestamp;
 					//self.connection.registerConnectionTime(self.responseTime)
