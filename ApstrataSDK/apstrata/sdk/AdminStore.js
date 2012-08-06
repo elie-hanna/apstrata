@@ -166,8 +166,16 @@ dojo.declare("apstrata.sdk.AdminStore",
 				break; 
 			 
 
-			case 'users': 
-				this.client.call("GetUser", {login: id}, null, clientOptions).then(
+			case 'users':
+				var params = {
+					login: id
+				} 
+				
+				if (options && options["apsdb.includeFieldType"]) {
+					params["apsdb.includeFieldType"] = options["apsdb.includeFieldType"]
+				}
+				
+				this.client.call("GetUser", params, null, clientOptions).then(
 					function(response) {
 						deferred.resolve({id: id, user: response.result.user})
 					},
