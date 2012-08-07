@@ -22,6 +22,7 @@ dojo.provide('apstrata.horizon.NewList');
 
 dojo.require('dijit.form.ToggleButton')
 dojo.require('dijit.form.Button')
+dojo.require('dojox.xmpp.util')
 dojo.require('apstrata.horizon.PanelAlert')
 
 dojo.require('apstrata.horizon.util.FilterLabelsByString')
@@ -211,7 +212,8 @@ dojo.declare("apstrata.horizon.NewList",
 	 */
 	select: function(id) {
 		this.highlight(id)
-		if (!this._tglEdit || !this._tglEdit.get('checked')) this.onClick(id, this._selectIds)
+		var cleanId = dojox.xmpp.util.stripHtml(id)
+		if (!this._tglEdit || !this._tglEdit.get('checked')) this.onClick(cleanId, this._selectIds)
 	},
 		
 	/**
