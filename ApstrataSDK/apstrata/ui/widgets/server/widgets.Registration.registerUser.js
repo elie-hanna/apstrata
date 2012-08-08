@@ -72,67 +72,69 @@ function checkUser(login) {
 	return apsdb.callApi("GetUser", params, null).metadata.status;
 }
 
-var params = {}
+try {
 
-for (k in request.parameters) {
-	// Only parameters sent with the "user." prefix will be saved in the user profile
-	if (k.indexOf('user.')>=0) {
-		if ((k == "user.login") && (checkUser(request.parameters[k]) == "success"))  {		
-			return {
-				metadata : { 
+	var params = {}
+	
+	for (k in request.parameters) {
+		// Only parameters sent with the "user." prefix will be saved in the user profile
+		if (k.indexOf('user.')>=0) {
+			if ((k == "user.login") && (checkUser(request.parameters[k]) == "success"))  {		
+				return {
+					metadata : { 
+						status: "failure", 
+						errorDetail: "Unable to register user [Login already exists]",
+						errorCode: "DUPLICATE_USER" 
+					}
+				};								
+			}	
+			
+			if (k == "user.groups")	{	
+				
+				var groupsAsStr = request.parameters[k];
+				if (groupsAsStr){
+					groupsAsStr = groupsAsStr.replace(" ", "");
+					var groups = groupsAsStr.split(",");
+					params["groups"] = groups;
+				}
+			} else {
+				//  Otherwise save param in the user profile
+				params[k.substring(5)] = request.parameters[k];			
+			}
+		}
+	}
+	
+	// If no user.login was sent in the request, create one from the user's e-mail
+	if (!params["login"]) {
+	     params["login"] = params["email"];
+	     
+	     // verify that this login doesn't already exist
+	     if ((checkUser(params["login"]) == "success"))  {		
+			return { 
+				metadata : {
 					status: "failure", 
-					errorDetail: "Unable to register user [Login already exists]",
-					errorCode: "DUPLICATE_USER" 
+					errorDetail: "Unable to register user [email already exists]",
+					errorCode: "DUPLICATE_USER"
 				}
 			};								
 		}	
-		
-		if (k == "user.groups")	{	
-			
-			var groupsAsStr = request.parameters[k];
-			if (groupsAsStr){
-				groupsAsStr = groupsAsStr.replace(" ", "");
-				var groups = groupsAsStr.split(",");
-				params["groups"] = groups;
-			}
-		} else {
-			//  Otherwise save param in the user profile
-			params[k.substring(5)] = request.parameters[k];			
-		}
 	}
-}
-
-// If no user.login was sent in the request, create one from the user's e-mail
-if (!params["login"]) {
-     params["login"] = params["email"];
-     
-     // verify that this login doesn't already exist
-     if ((checkUser(params["login"]) == "success"))  {		
-		return { 
-			metadata : {
-				status: "failure", 
-				errorDetail: "Unable to register user [email already exists]",
-				errorCode: "DUPLICATE_USER"
-			}
-		};								
-	}	
-}
-
-// Create a temporary document for this new user
-// The account owner is the only one who can read this document
-params["document.writeACL"] = "nobody";
-params["document.readACL"] = "nobody"
-
-// Add the new user to the unconfirmedRegistrations store 
-params["apsdb.store"] = configuration.defaultUnconfirmedRegistrationStore;
-
-// Save the user
-try {
+	
+	// Suspend the user account as we need him to confirm by clicking on the link sent by e-mail
+	params["isSuspended"] = "true";
+	
+	// Create a validation code and save as part of the user's profile attributes
+	// The code will be sent along the verification email and will be removed upon confirmation
+	var validationCode = generateCode();
+	params["code"] = validationCode;
+	
+	// Save the user
 	apsdb.log.debug("Save user params", {params: params});
-	saveUserResult = apsdb.callApi("SaveDocument", params, null);
+	saveUserResult = apsdb.callApi("SaveUser", params, null);
 	
 	if (saveUserResult.metadata.status == "success") {
-		var sendEmailResult = sendEmail(saveUserResult.result.document.key)
+		
+		var sendEmailResult = sendEmail(validationCode);
 		if (sendEmailResult.metadata.status == 'failure') {			
 			return { 
 				status: "failure", 

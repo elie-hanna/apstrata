@@ -29,13 +29,13 @@ var apstrataHomeKey = "";
 var apstrataHomeSecret = "";
 
 // The type of registration that is required ("user" -> for user registration, or "account" -> for account creation)
-var registrationType = "user";
+var registrationType = "account";
 
 // Specify if an email should be sent to the user upon successful registration (true/false)
 var sendEmailOnceRegistrationConfirmed = true;
 
 // The URL that is sent in the verification e-mail for the subscriber to click on (you normally should not change this)
-var verifyUrl = apstrataHomeEnvironment + "/apsdb/rest/" + apstrataHomeKey + "/RunScript?apsws.authMode=simple&apsdb.scriptName=widgets.Registration.verifyAccount&login=$login&d=$confirmation";
+var verifyUrl = apstrataHomeEnvironment + "/" + apstrataHomeKey + "/RunScript?apsws.authMode=simple&apsdb.scriptName=widgets.Registration.verifyAccount&login=$login&d=$confirmation";
 
 // The URL where to redirect the user after he submits his registration form
 var registrationRedirectUrl = ""
