@@ -285,8 +285,8 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 			//if (bottomRow) fieldset.set("disabled", "disabled")
 
 		} else {
-			var field
-
+			var field;			
+			
 			// copy attributes from definition into attr
 			for (k in definition) {
 				if ((k!="name") || (k!="type") || (k!="widget")) {
@@ -337,7 +337,10 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						break;
 				}
 
-				field = new dojo.getObject(definition.widget)(attr)
+				field = new dojo.getObject(definition.widget)(attr);
+		
+				field.set("name", definition.name.replace(/\./g, "!"));
+								
 			} else {
 				var defaultWidget = dijit.form.ValidationTextBox
 			
@@ -349,14 +352,34 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 					defaultWidget = dijit.form.CheckBox
 					inlineLabel = false
 				}
+				
+				if (definition.type == "file") {
+					
+					// Add a reference to the form generator
+					attr.formGenerator = this.formGenerator;
+					
+					// Use the FileField widget in the form
+					defaultWidget = apstrata.ui.forms.FileField;
+				}
+						
+				if (definition.type == "multiplefiles") {
+					
+					// Add a reference to the form generator
+					attr.formGenerator = this.formGenerator;
+					
+					// Use the FileField widget in the form
+					defaultWidget = apstrata.ui.forms.MultipleFileField;
+				}				
+				
 				if (definition.type == "dateTime") defaultWidget = dijit.form.DateTextBox
 				
 				if (definition.attrs) dojo.mixin(attr, definition.attrs)
-			
-				if (attr.name) attr.name = attr.name.replace(/\./g, "!")
-
-			
+							
+				//if (attr.name) attr.name = attr.name.replace(/\./g, "!")
+						
 				field = new defaultWidget(attr)
+								
+				field.set("name", definition.name.replace(/\./g, "!"));
 				
 				// specific handling for checboxes
 				if (definition.type == "boolean" && definition.required) {
@@ -392,9 +415,28 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						return field.validate();
 					}
 				}
+						
+				// this._fields[definition.name] = field
 				
-				
-				this._fields[definition.name] = field
+				// This is useful for multi value fields
+				if (this._fields[definition.name]) {
+					
+					// If the map already has an array
+					if (dojo.isArray(this._fields[definition.name])) {
+						
+						// just add this new field to it
+						this._fields[definition.name].push(field)
+					} else {
+					
+						// We've added this field name before, so let's make it an array
+						var f = this._fields[definition.name]
+												
+						// Create an array and push the 2 fields in it
+						this._fields[definition.name] = [f, field]
+					}
+				} else {
+					this._fields[definition.name] = field
+				}								
 				
 				// This is useful for multi value fields
 				if (this.formGenerator._fields[definition.name]) {
@@ -409,8 +451,9 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						// Create an array and push the 2 fields in it
 						this.formGenerator._fields[definition.name] = [f, field]
 					}
+				}else { 
+					this.formGenerator._fields[definition.name] = field;
 				}
-				this.formGenerator._fields[definition.name] = field
 			}
 
 			

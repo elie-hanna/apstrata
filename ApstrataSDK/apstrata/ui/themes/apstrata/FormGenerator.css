@@ -95,3 +95,8 @@
 	color: red;
 }
 
+.multiplefilesfield .field {clear: both; display: inline-block; margin-bottom: 8px; width: 100%;}
+.multiplefilesfield .filefieldimage {float: left;}
+.multiplefilesfield .removeFileDiv {float: left; margin-top: -3px; position: relative; z-index: 10;}
+.multiplefilesfield .dijitFileInput {float: left;}
+.multiplefilesfield .removeFileDiv .dijitButtonNode {padding: 0px 6px 4px;}
