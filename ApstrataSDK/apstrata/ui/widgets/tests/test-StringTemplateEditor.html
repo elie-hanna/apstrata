@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>apstrata.ui.widgets.RegistrationWidget test page</title>
+		
+		<script type="text/javascript" src="../../../../lib/dojo/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDesbug: true"></script>
+		<script type="text/javascript" src="../../../sdk/apstrata.js"></script>
+
+		<style>
+			@import "../../../../lib/dojo/dojo/dijit/themes/claro/claro.css";
+			@import "../../themes/apstrata/apstrata.css";
+		</style>	
+		
+	
+	    <script type="text/javascript">
+			dojo.require("dojo.parser");
+
+			dojo.require("apstrata.ui.widgets.StringTemplateEditor")
+	
+			dojo.ready(function() {
+				templateEditor = new apstrata.ui.widgets.StringTemplateEditor({template: "this is a $ not a $, be careful not to call it a $."})
+				dojo.place(templateEditor.domNode, 'testNode')
+			})
+			
+			function getValues() {
+				console.dir(templateEditor.get("value"))
+			}
+			
+			function setValues() {
+				templateEditor.set("value", ["v1", "v2", "v3"])
+			}
+			
+		</script>
+	</head>
+	<body class='claro apstrata'>
+		<div id='testNode'></div>
+		<button onClick="getValues()">get value</button>
+		<button onClick="setValues()">set values to [v1, v2, v3]</button>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+.apstrata .TemplateEditor {
+	font-size: 1em;
+}
+
+.apstrata .TemplateEditor .template {
+	margin: 15px;
+}			
+
+.apstrata .TemplateEditor .inputLabel {
+	font-weight: bolder;
+	margin-right: 2px;
+	width: 10%;
+}
+
+.apstrata .TemplateEditor .value {
+	color: blue;
+}			
+
+.apstrata .TemplateEditor .dijitTextBox {
+	width: 80%;
+	margin-bottom: 5px;
+}
