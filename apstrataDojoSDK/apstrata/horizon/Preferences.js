@@ -27,6 +27,9 @@ dojo.require('dijit.form.ValidationTextBox');
 dojo.require('dijit.form.DateTextBox');
 dojo.require('dijit.form.HorizontalSlider');
 dojo.require('dijit.form.HorizontalRuleLabels');
+dojo.require('dijit._Widget');
+dojo.require('dojox.dtl._Templated');
+dojo.require('apstrata.horizon._HStackableMixin');
 
 dojo.declare("apstrata.horizon.Preferences", 
 [dijit._Widget, dojox.dtl._Templated, apstrata.horizon._HStackableMixin], 
