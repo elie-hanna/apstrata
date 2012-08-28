@@ -68,13 +68,13 @@ dojo.declare("apstrata.ui.widgets.StringTemplateEditor",
 			self.currentValue += s;
 			if (i<self.valuesArray.length){
 				self.currentValue += self.valuesArray[i];
-				self.dvTemplate.innerHTML = self.dvTemplate.innerHTML + "<span class='value' onclick='dijit.byId(\""+self.id+"\").show("+i+")'>" + self.valuesArray[i] + "</span>"
+				self.dvTemplate.innerHTML = self.dvTemplate.innerHTML + "<span class='value' onclick='dijit.byId(\""+self.id+"\").show("+i+", event || e)'>" + self.valuesArray[i] + "</span>"
 			}
 			i++
 		})
 	},
 	
-	show: function(element){
+	show: function(element, event){
 		for(var i in this.inputs){
 			if(i == element){
 				this.inputs[i].set('style', 'display:block');
