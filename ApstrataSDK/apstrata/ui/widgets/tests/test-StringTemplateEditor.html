@@ -19,7 +19,7 @@
 			dojo.require("apstrata.ui.widgets.StringTemplateEditor")
 	
 			dojo.ready(function() {
-				templateEditor = new apstrata.ui.widgets.StringTemplateEditor({template: "this is a $ not a $, be careful not to call it a $."})
+				templateEditor = new apstrata.ui.widgets.StringTemplateEditor({template: "this is a $$first text$$ not a $$second text$$, be careful not to call it a $$simple text$$."})
 				dojo.place(templateEditor.domNode, 'testNode')
 			})
 			

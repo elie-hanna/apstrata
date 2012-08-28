@@ -9,15 +9,18 @@ dojo.declare("apstrata.ui.widgets.StringTemplateEditor",
 	templateString: "<div class='TemplateEditor'><div dojoAttachPoint='dvTemplate' class='template'></div><div dojoAttachPoint='dvInputs'></div></div>",
 	
 	template: "",
-	
+	currentValue: "",
 	postCreate: function() {
 		var self = this
 
-		this.templateArray = this.template.split("$")		
+		this.templateArray = this.template.split(/\$\$.*?\$\$/)//the string without the editable areas		
+		this.templates = this.template.match(/\$\$.*?\$\$/g);//the default text of the editable areas
 		
 		this.valuesArray = []
-		for (var i=0; i<this.templateArray.length-1; i++) {
-			self.valuesArray.push("["+i+"]")	// install placeholders
+		if(this.templates != null){
+			for (var i=0; i<this.templates.length; i++) {
+				this.valuesArray.push(this.templates[i].substr(2, this.templates[i].length -4))	// install placeholders
+			}
 		}
 
 		this.createInputs()
@@ -25,32 +28,31 @@ dojo.declare("apstrata.ui.widgets.StringTemplateEditor",
 	},
 	
 	createInputs: function() {
-		var self = this
+		var self = this;
 		
-		this.inputs = []
+		this.inputs = [];
 		
 		for(var i=0; i<this.valuesArray.length; i++) {
-			var inpt = new dijit.form.TextBox({intermediateChanges: true})
+			var inpt = new dijit.form.TextBox({intermediateChanges: true});
 				
-			this.inputs[i] = inpt
-			
-			dojo.attr(inpt.textbox, "data-index", i)
+			this.inputs[i] = inpt;
+			this.inputs[i].set('value', this.valuesArray[i]);
+			this.inputs[i].set('style', 'display:none');
+			dojo.addClass(inpt.domNode, "input-class");
+			dojo.attr(inpt.textbox, "data-index", i);
 
-			dojo.create("span", {innerHTML: i, "class":"inputLabel"}, self.dvInputs)
-			dojo.place(inpt.domNode, self.dvInputs)
-
-			dojo.create("br", null, self.dvInputs)
+			dojo.place(inpt.domNode, self.dvInputs);
 			
 			// discover the selected input index
 			dojo.connect(inpt, "onKeyPress", function(e) {
-				self.targetInputIndex = dojo.attr(e.originalTarget, "data-index")
+				self.targetInputIndex = dojo.attr(e.target, "data-index");
 			})
 
 			// on change event update the values array and the text
 			dojo.connect(inpt, "onChange", function(v) {
-				if (v=="") v = "["+self.targetInputIndex+"]"  // return the placeholder if v is empty
-				self.valuesArray[self.targetInputIndex] = v
-				self.updateText()
+				if (v=="") v = self.targetInputIndex;  // return the placeholder if v is empty
+				self.valuesArray[self.targetInputIndex] = v;
+				self.updateText();
 			})
 		}
 	},
@@ -60,21 +62,33 @@ dojo.declare("apstrata.ui.widgets.StringTemplateEditor",
 		var i = 0
 		
 		self.dvTemplate.innerHTML = ""
+		self.currentValue = "";
 		dojo.forEach(this.templateArray, function(s) {
 			self.dvTemplate.innerHTML = self.dvTemplate.innerHTML + s 
-			if (i<self.valuesArray.length) self.dvTemplate.innerHTML = self.dvTemplate.innerHTML + "<span class='value'>" + self.valuesArray[i] + "</span>"
+			self.currentValue += s;
+			if (i<self.valuesArray.length){
+				self.currentValue += self.valuesArray[i];
+				self.dvTemplate.innerHTML = self.dvTemplate.innerHTML + "<span class='value' onclick='dijit.byId(\""+self.id+"\").show("+i+")'>" + self.valuesArray[i] + "</span>"
+			}
 			i++
 		})
 	},
 	
+	show: function(element){
+		for(var i in this.inputs){
+			if(i == element){
+				this.inputs[i].set('style', 'display:block');
+			}else{
+				this.inputs[i].set('style', 'display:none');
+			}
+		}
+	},
+	
 	get: function(name) {
 		if (name=="value") {
-			var v = []
-			dojo.forEach(this.inputs, function(inpt) {
-				v.push(dojo.attr(inpt, "value"))
-			})
-			
-			return(v)
+			return this.currentValue;
+		}else{
+			return inherited(arguments);
 		}
 	},
 	
