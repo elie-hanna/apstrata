@@ -40,6 +40,9 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 	
 	widgetsInTemplate: true,
 	
+	apsdbScriptUserExists: "widgets.Registration.userExists",
+	apsdbScriptRegisterUser: "widgets.Registration.registerUser",
+
 	definition: {
 		label: "User Registration",
 		cssClass: "newClass",
@@ -149,7 +152,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		var deferred = new dojo.Deferred()
 		
 		var request = {
-			"apsdb.scriptName": "widgets.Registration.userExists",
+			"apsdb.scriptName": this.apsdbScriptUserExists,
 			"login": login
 		}
 		
@@ -182,7 +185,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		var self = this
 		
 		var request = {
-			"apsdb.scriptName": "widgets.Registration.registerUser",
+			"apsdb.scriptName": this.apsdbScriptRegisterUser,
 			"user.login": values.email,
 			"user.groups": "users"
 		}
