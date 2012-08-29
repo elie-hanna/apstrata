@@ -22,6 +22,7 @@ dojo.provide("apstrata.ui.forms.FieldSet")
 dojo.require("dijit.form.ValidationTextBox")
 dojo.require("dijit.form.SimpleTextarea")
 dojo.require("dijit.form.CheckBox")
+dojo.require("dijit.form.RadioButton")
 dojo.require("dijit.form.DateTextBox")
 dojo.require("dijit.form.ComboBox")
 dojo.require("dijit.form.FilteringSelect")
@@ -334,6 +335,8 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 					        })			
 						}				
 						
+						break;
+					case "dijit.form.RadioButton":
 						break;
 				}
 
