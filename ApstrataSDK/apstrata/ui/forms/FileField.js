@@ -12,6 +12,10 @@ dojo.declare("apstrata.ui.forms.FileField",
 {
 	templatePath: dojo.moduleUrl("apstrata.ui.forms", "templates/FileField.html"),
 	
+	displayImage: false,
+	
+	value: "",
+
 	/*
 	 * This creates an instance of a FileField. A FielField can be used to upload a file to an apstrata document
 	 * or to dislay a file (as a link or an image if it is an image) if it is already attached to a document. 
