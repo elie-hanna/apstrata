@@ -121,23 +121,23 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 				// 2nd Async Check if email is unique, disable form while you do
 				//
 				self.form.showAsBusy(true, null, "Verifying e-mail uniqueness")
-				self._userExists(self.form.getField("email").get("value")).then(function() {
-					
-					var loginUrl = self.loginurl;					
-					self.form.getField("email").invalidMessage = self.nls.EMAIL_ALREADY_REGISTERED +" <a href='" + loginUrl + "'>" + self.nls.LOGIN + "</a>"
-					self.form.getField("email").validator = function(value, constraints) {
-						return false
+				self._userExists(self.form.getField("email").get("value")).then(function(userExists) {
+					if (userExists) {
+						var loginUrl = self.loginurl;					
+						self.form.getField("email").invalidMessage = self.nls.EMAIL_ALREADY_REGISTERED +" <a href='" + loginUrl + "'>" + self.nls.LOGIN + "</a>"
+						self.form.getField("email").validator = function(value, constraints) {
+							return false
+						}
+						self.form.validate()
+						self.form.showAsBusy(false)
+					} else {
+						self.form.getField("email").validator = function(value, constraints) {
+							return true 
+						}
+						self.form.validate()
+						self.form.showAsBusy(false)
 					}
-					self.form.validate()
-					self.form.showAsBusy(false)
-				},
-				function() {
-					self.form.getField("email").validator = function(value, constraints) {
-						return true 
-					}
-					self.form.validate()
-					self.form.showAsBusy(false)
-				})
+				});
 			}
 		})
 
@@ -158,11 +158,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		
 		this.client.call("RunScript", request, null, {method: "get"}).then(
 			function(response) {
-				if (response.result == true) {
-					deferred.resolve()
-				} else {
-					deferred.reject()
-				}
+				deferred.resolve(response.result);
 			}, 
 			function(response) {
 				deferred.reject()
