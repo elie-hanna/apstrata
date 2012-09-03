@@ -26,6 +26,10 @@ dojo.require("dijit.form.RadioButton")
 dojo.require("dijit.form.DateTextBox")
 dojo.require("dijit.form.ComboBox")
 dojo.require("dijit.form.FilteringSelect")
+dojo.require("apstrata.ui.forms.MultiSelect")
+dojo.require("dijit.form.Textarea")
+dojo.require("apstrata.ui.forms.FileField");
+dojo.require("apstrata.ui.forms.MultipleFileField");
 
 dojo.require("dijit.form.Button")
 
@@ -315,7 +319,11 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						}				
 						
 						break;
-										
+					case "apstrata.ui.forms.MultiSelect":
+						if (definition["formGenerator-options"]) {
+							dojo.mixin(attr, {options: definition["formGenerator-options"]});
+						}
+						break;
 					case "dijit.form.FilteringSelect":
 					case "dijit.form.ComboBox": 
 	
@@ -357,7 +365,8 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				}
 				
 				if (definition.type == "file") {
-					
+				
+					self.formGenerator._setFormFileEncType();
 					// Add a reference to the form generator
 					attr.formGenerator = this.formGenerator;
 					
@@ -367,6 +376,7 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						
 				if (definition.type == "multiplefiles") {
 					
+					self.formGenerator._setFormFileEncType();
 					// Add a reference to the form generator
 					attr.formGenerator = this.formGenerator;
 					
@@ -418,6 +428,7 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						return field.validate();
 					}
 				}
+			}
 						
 				// this._fields[definition.name] = field
 				
@@ -457,8 +468,6 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				}else { 
 					this.formGenerator._fields[definition.name] = field;
 				}
-			}
-
 			
 			if (inlineLabel) {
 				if (label) dojo.place(label, dv)
