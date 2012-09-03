@@ -46,6 +46,8 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	autoWidth: false,
 	displayGroups: "",
 	
+	method: "GET", //By default form method is GET
+
 	/**
 	 * Instantiates a FormGenerator that will generate a dynamic form widget based on options.definition 
 	 * 
@@ -66,6 +68,10 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 			this.definition = options.definition
 		} else {
 			this.definitionPath = options.definitionPath 
+		}
+		
+		if(options.method) {
+			this.method = options.method;
 		}
 		
 		this.options = options
@@ -445,6 +451,17 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		dojo.forEach(this._readyFuncs, function(func) {
 			func()
 		})
+	},
+	
+	/**
+	 * Change the form method and encType to be compliant with file inputs
+	 */
+	_setFormFileEncType: function() {
+		if(this.method == "GET") {
+			this.method = "POST";
+			this.frmMain.set("method", "POST");
+		}
+		this.frmMain._setEncTypeAttr("multipart/form-data");
 	}
 	
 })
