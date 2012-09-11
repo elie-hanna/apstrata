@@ -21,10 +21,7 @@ dojo.declare("apstrata.ui.forms.MultiSelect",
 		if (this.options) {
 			var self = this;
 			dojo.forEach(this.options, function(option) {
-		            var c = document.createElement('option');
-		            c.innerHTML = option.name;
-		            c.value = option.id;
-		            self.domNode.appendChild(c);
+				dojo.create('option', {innerHTML: option.name, value: option.id}, self.domNode);
 			});
 		}
 		this.inherited(arguments)
