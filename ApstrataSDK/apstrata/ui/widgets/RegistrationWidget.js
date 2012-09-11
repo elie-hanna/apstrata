@@ -52,7 +52,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 					{name: "name", label: "Name", type: "string", required: true},
 					{name: "email", label: "Email", type: "string", required: true},
 					{name: "password", label: "Password", type: "password", required: true},
-					{name: "confirmPassword", label: "Confirm Password", type: "password", required: true, attrs: {invalidMessage: "Passwords don't match"}},
+					{name: "confirmPassword", label: "Confirm Password", type: "password", required: true, attrs: {invalidMessage: "Passwords don't match"}}
 				]
 			},
 			{name: "optional", label: "", type: "subform", style: "form", cssClass:"column", 

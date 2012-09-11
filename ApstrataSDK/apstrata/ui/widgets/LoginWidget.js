@@ -66,7 +66,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 					{name: "secret", required: true, type: "password", displayGroup: "master"},
 					{name: "key", required: true, displayGroup: "key"},
 					{name: "user", required: true, displayGroup: "user"},
-					{name: "password", required: true, type: "password", displayGroup: "user"},
+					{name: "password", required: true, type: "password", displayGroup: "user"}
 				],
 				actions: ['login']
 			},
