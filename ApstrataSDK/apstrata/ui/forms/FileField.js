@@ -140,8 +140,9 @@ dojo.declare("apstrata.ui.forms.FileField",
 			
 		dojo.place(this.attachedFile.domNode, this.dvNode, "last");		
 		
-		this._displayRemoveButton();
-				
+		if(this.group) { //If instance created by a MultipleFileField, show the '-' button
+			this._displayRemoveButton();
+		}	
 		// When clicking the "-" button, remove the
 		// element that is used to select a file 
 		dojo.connect(this.removeFile, "onClick", function(event){
@@ -185,8 +186,9 @@ dojo.declare("apstrata.ui.forms.FileField",
 			}
 			
 			if (!this.readonly) {				
-				
-				this._displayRemoveButton();
+				if(this.group) { //If instance created by a MultipleFileField, show the '-' button
+					this._displayRemoveButton();
+				}
 				
 				// When clicking the "-" button:
 				// - if the current instance was created by a MultipleFileField, delegate the handling
