@@ -112,7 +112,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 	_addAttachmentNode: function() {				
 		
 		var self = this;
-		this.attachedFile = new dojox.form.FileInput();
+		this.attachedFile = new dojox.form.FileInput({name: this.name ? this.name : "apsdb_attachments" });
 		
 		// Add a custom validator to make this field required (otherwise, submitting an empty input
 		// will be interpreted by apstrata as an instruction to remove all attached files
@@ -137,9 +137,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 				self.attachedFile.inputNode.value = self.attachedFile.fileInput.value;
 				self.attachedFile.cancelNode.style.visibility = 'visible';			
 		});	
-		
-		// Add the FileInput to the dom
-		this.attachedFile.fileInput.name = this.name ? this.name : "apsdb_attachments";		
+			
 		dojo.place(this.attachedFile.domNode, this.dvNode, "last");		
 		
 		this._displayRemoveButton();
