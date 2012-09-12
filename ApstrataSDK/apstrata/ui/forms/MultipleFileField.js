@@ -185,7 +185,7 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 		if (!this._gotValue) {	
 			
 			// Retrieve the names of the attached files and rebuild the dom sub-tree of the widget
-			var fileNames = this.formGenerator.value[this.name];
+		    var fileNames = this.formGenerator.getField(this.name).get("value");
 			if (typeof(fileNames) == "string") {
 
 				self.addFileField(fileNames);
