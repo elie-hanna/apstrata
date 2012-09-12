@@ -186,9 +186,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 			}
 			
 			if (!this.readonly) {				
-				if(this.group) { //If instance created by a MultipleFileField, show the '-' button
-					this._displayRemoveButton();
-				}
+				this._displayRemoveButton();
 				
 				// When clicking the "-" button:
 				// - if the current instance was created by a MultipleFileField, delegate the handling
