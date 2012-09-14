@@ -50,6 +50,7 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 		
 		var addFileBtn = new dijit.form.Button({label: "+"});
 		dojo.place(addFileBtn.domNode, this.dvNodes);
+		dojo.addClass(addFileBtn.domNode, "addFileDiv");
 		dojo.connect(addFileBtn, "onClick", this, "addFileField");
 	},	
 	
