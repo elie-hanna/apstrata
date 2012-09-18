@@ -179,10 +179,12 @@ dojo.declare("apstrata.ui.forms.FileField",
 				this.fileImage.width = this.dimensions.w;
 				this.fileImage.height = this.dimensions.h;
 				this.fileImage.src= this._getFilesUrls();
+				dojo.style(this.fileImage, "display", "");
 			}else {
 				
 				this.fileLink.href= this._getFilesUrls();
 				this.fileLink.innerHTML = this.value;
+				dojo.style(this.fileLink, "display", "");
 			}
 			
 			if (!this.readonly) {				
