@@ -4,14 +4,16 @@ dojo.require("dojox.dtl._Templated");
 dojo.require("dijit.form.TextBox");
 dojo.require("apstrata.ui.forms.FileField");
 dojo.require("apstrata.sdk.TokenConnection");
-
+dojo.require("dijit.form.Button");
 
 dojo.declare("apstrata.ui.forms.MultipleFileField", 
 [dijit._Widget, dojox.dtl._Templated], 
 {
 	templatePath: dojo.moduleUrl("apstrata.ui.forms", "templates/MultipleFileField.html"),
+	x : "toShow",
 	
-	/*
+	/* This creates an instance of a MultipleFileField. A MultipleFielField can be used to upload many files to an apstrata document
+	 * or to download files from a document (diplayed as links or images). MultipleFileField uses the FileField class.
 	 * @param formGenerator: this has to be set by the FieldSet instance, not the definition. Will be used to retrieve the field
 	 * containing the value of "apsdb.documentKey"
 	 * @param attr.name: string, the name of the field
@@ -23,35 +25,65 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 	 * @param attr.value: (optional) if set to the name of a file, indicates that a file is attached to the document (and will be displayed as an image or link)
 	 * If not specified, the FileField instance will retrieve it from the form generator once it is ready, if it exists
 	 * @param attr.readonly: (optional) set to true if you want to prevent to modify the attached file (if it exists).
+	 * @param attr.showFieldName: (optional) in certain cases, you need to allow the end user to choose the name of the field 
+	 * that will be used to attach the files. In that case, you need to pass this parameter and set its value to 'true'. 
+	 * Note that your document needs to be based on a schema for this to work. The MultipleFileField will not verify the existance of a schema.
 	 */	
 	constructor: function(attr) {
+		var self = this;
 		
 		dojo.mixin(this, attr);
 		if (this.displayImage) {
 			this.dimensions = this.dimensions ? this.dimensions : {w:100, h:100};
 		};		
 		
-		this.fileFields = new Array();
-		
 		if (this.formGenerator) {
-			
-			// Register to the ready event in the formGenerator so we can retrive the apsdb.documentKey value later on,
-			// as well as the names of the attached files (contained in the value of the current field).
-			// We need to hitch to this as _getReady will be called from the FormGenerator
-			this.formGenerator.ready(dojo.hitch(this, this._getReady));
-						
-			dojo.connect(this.formGenerator, this.formGenerator.save, function() {
-				alert("wazzup");
-			});			
-		};									
+			if (!this.formGenerator.isFormReady()) {	
+				// Register to the ready event in the formGenerator so we can retrive the apsdb.documentKey value later on,
+				// as well as the names of the attached files (contained in the value of the current field).
+				// We need to hitch to this as _getReady will be called from the FormGenerator
+				this.formGenerator.ready(dojo.hitch(this, this._getReady));
+			}			
+		};				
+		
+		
+		this.fileFields = new Array();
+								
 	},
 
-	postCreate: function() {			
+	postCreate: function() {
+		var self = this;		
+
+		// If the form definition is asking to give the user the possibility to choose the name of the file attachment field,
+		// we need to make the corresponding input field visible on the form. We also connect to changes on that field in order
+		// to update the name of the fileInput field. 
+		// Note that this will work only if the concerned document has a schema. The FiledField instance is not responsible for
+		// verifying the availability of a schema.
+		if (this.showFieldName) {
+			
+			dojo.style(this.filefieldLabel, "display", "inline");
+			dojo.style(this.filefieldName, "display", "inline");
+			
+			// set the initial value of the fieldName to the one that is currently associated to the fileInput
+			this.filefieldName.value = this.name;
+			
+			// connect to any changes on the fieldName so they are reflected on the fileInput
+			dojo.connect(this.filefieldName, "onchange", function() {
+				self.name = self.filefieldName.value; 
+				for (var i = 0; i < self.fileFields.length; i++) {
+					var setNameFunc = dojo.hitch(self.fileFields[i], self.fileFields[i].setName);
+					setNameFunc(self.name);
+				}
+			})
+		}		
 		
-		var addFileBtn = new dijit.form.Button({label: "+"});
-		dojo.place(addFileBtn.domNode, this.dvNodes);
-		dojo.addClass(addFileBtn.domNode, "addFileDiv");
-		dojo.connect(addFileBtn, "onClick", this, "addFileField");
+		if (!this._addFieldButtonDisplayed) {
+			var addFileBtn = new dijit.form.Button({"label": "+"});
+			dojo.place(addFileBtn.domNode, this.dvNodes);
+			dojo.connect(addFileBtn, "onClick", this, "addFileField");
+			this._addFieldButtonDisplayed = true;
+		}
+		
 	},	
 	
 	/*
@@ -69,6 +101,7 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 					formGenerator: this.formGenerator,
 					name: this.name,
 					store: this.store,
+					dockey: this.dockey,
 					displayImage: this.displayImage,
 					dimensions: this.dimensions,
 					connection: this.connection,
@@ -82,10 +115,12 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 		
 		this.fileFields.push(fileField);  
 		if (valueParam.target) {
-			dojo.place("<div style='margin-top:10px;margin-bottom:10px'></div>", this.files);			
+			var newField = dojo.place("<div style='margin-top:10px;margin-bottom:10px'></div>", this.files);			
 		}
-				
-		dojo.place(fileField.domNode, this.files);		
+		
+		var newField = dojo.place(fileField.domNode, this.files);	
+		
+		return fileField;	
 	},
 	
 	/*
@@ -151,8 +186,8 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 	 * a multivalueAppend field. This allows us to add new files without uploading again the other
 	 * files.  
 	 */
-	_getReady: function() {
-		
+	_getReady: function() {	
+					
 		var self = this;
 		if (!this.docKey) { 
 			
@@ -163,43 +198,55 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 					this.docKey = docKeyField.get("value");
 				}
 			}
-		};
+		};		
 		
-		// This section will either add the current field name to the list of fields
-		// that are "apsdb.multivalueAppend" if a widget with that name already exists in the
-		// form, or create a new field with that name ("apsdb.multivalueAppend") and set
-		// its value to the name of the current field
-		var multivalueAppendNode = dijit.byId("multivalueAppend");
-		if (multivalueAppendNode) {
-			
-			var currentValue = multivalueAppendNode.get("value");
-			currentValue = currentValue + "," + this.name;
-			multivalueAppendNode.set("value", currentValue);
-		}else {
-			
-			var multivalueAppendWidget = new dijit.form.TextBox( {name:"apsdb.multivalueAppend"});
-			multivalueAppendWidget.set("value", this.name);
-			dojo.style(multivalueAppendWidget.domNode, "display", "none");
-			dojo.place(multivalueAppendWidget.domNode, this.dvNodes); 
-		}
-		
-		if (!this._gotValue) {	
+		if (this.docKey) {	
 			
 			// Retrieve the names of the attached files and rebuild the dom sub-tree of the widget
-		    var fileNames = this.formGenerator.getField(this.name).get("value");
-			if (typeof(fileNames) == "string") {
-
-				self.addFileField(fileNames);
-			}else {
+			if (this.formGenerator.value) {
 				
-				dojo.forEach(fileNames, function(value, index) {				
-					self.addFileField(value);
-				});
-			}
+				if (!this.connection) {					
+					this.connection = this.formGenerator.container.connection;
+				}
+				
+				var fileNames = this.formGenerator.value[this.name];
+				
+				if (typeof(fileNames) == "string") {
+	
+					this.addFileField(fileNames);
+				}else {
+					
+					dojo.forEach(fileNames, function(value, index) {				
+						self.addFileField(value);
+					});
+				}
+			}	
 			
-			this.startup();
-		}
-	}	
+			if (!this._multivalueAppendNodeAdded) {
+			
+				// This section will either add the current field name to the list of fields
+				// that are "apsdb.multivalueAppend" if a widget with that name already exists in the
+				// form, or create a new field with that name ("apsdb.multivalueAppend") and set
+				// its value to the name of the current field
+				
+				var multivalueAppendNode = dijit.byId("multivalueAppend");
+				if (multivalueAppendNode) {
+					
+					var currentValue = multivalueAppendNode.get("value");
+					currentValue = currentValue + "," + this.name;
+					multivalueAppendNode.set("value", currentValue);
+				}else {
+					
+					var multivalueAppendWidget = new dijit.form.TextBox( {name:"apsdb.multivalueAppend"});
+					multivalueAppendWidget.set("value", this.name);
+					dojo.style(multivalueAppendWidget.domNode, "display", "none");
+					var newAppend = dojo.place(multivalueAppendWidget.domNode, this.dvNodes); 
+				}
+				
+				this._multivalueAppendNodeAdded = true;			
+			}			
+		}		
+	},
 	
 })
 

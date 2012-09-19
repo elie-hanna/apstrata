@@ -31,6 +31,12 @@ dojo.declare("apstrata.ui.forms.FileField",
 	 * If not specified, the FileField instance will retrieve it from the form generator once it is ready, if it exists
 	 * @param attr.readonly: (optional) set to true if you want to prevent to modify/remove the attached file (if it exists)
 	 * @param attr.group: (optional) the MultipleFileField instance that contains this FileField
+	 * @param attr.showFieldName: (optional) in certain cases, you need to allow the end user to choose the name of the field 
+	 * that will be used to attach the file. In that case, you need to pass this parameter and set its value to 'true'. When the
+	 * constructor is called by a MultipleFileField instance, the latter instance will take care of passing this attribute or not.
+	 * Note that your document needs to be based on a schema for this to work. The FileField will not verify the existance of a schema.
+	 * @param attr.showRemoveFieldBtn: (optional boolean) In some cases, you still want to be able to remove the file field or the widget without it being part of a MultipleFileField. 
+	 * This parameter is ignored in case the file field is part of a MultipleFileField
 	 */	
 	constructor: function(attr) {
 		
@@ -87,7 +93,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 			
 			// we need to inform apstrata about the name of the file that needs to be removed.
 			// so we add it inside an invisible text input
-			var fileToRemove = dojo.place("<input name='" + this.name + ".apsdb.delete' type='text' value='" + self.value + "'/>", self.dvNode);
+			var fileToRemove = dojo.place("<input name='" + this.name + ".apsdb.delete' type='text' value='" + self.value + "'/>", self.domNode.parentNode);
 			dojo.style(fileToRemove, "display", "none");
 		}
 		
@@ -104,6 +110,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 			self._removeAttachmentNode();		
 		}
 	},
+	
 	
 	/*
 	 * Add FileInput field and corresponding logic to the form
@@ -123,7 +130,8 @@ dojo.declare("apstrata.ui.forms.FileField",
 				if (!isValid) {
 										
 					// Create an ad-hoc tooltip  
-					var tooltip = new dijit.Tooltip({connectId: self.domNode, position:"before", label:"This field is required"});
+					self.tooltip = new dijit.Tooltip({connectId: self.domNode, position:"before", label:"This field is required"});
+					self.tooltip.open(self.domNode);
 				}
 				
 				return isValid;
@@ -137,12 +145,33 @@ dojo.declare("apstrata.ui.forms.FileField",
 				self.attachedFile.inputNode.value = self.attachedFile.fileInput.value;
 				self.attachedFile.cancelNode.style.visibility = 'visible';			
 		});	
-			
+		
+		// Add the FileInput to the dom	
 		dojo.place(this.attachedFile.domNode, this.dvNode, "last");		
 		
-		if(this.group) { //If instance created by a MultipleFileField, show the '-' button
+		// If the form definition is asking to give the user the possibility to choose the name of the file attachment field,
+		// we need to make the corresponding input field visible on the form. We also connect to changes on that field in order
+		// to update the name of the fileInput field. 
+		// Note that this will work only if the concerned document has a schema. The FiledField instance is not responsible for
+		// verifying the availability of a schema.
+		if (this.showFieldName) {
+			
+			dojo.style(this.filefieldLabel, "display", "inline");
+			dojo.style(this.filefieldName, "display", "inline");
+			
+			// set the initial value of the fieldName to the one that is currently associated to the fileInput
+			this.filefieldName.value = this.attachedFile.fileInput.name;
+			
+			// connect to any changes on the fieldName so they are reflected on the fileInput
+			dojo.connect(this.filefieldName, "onchange", function() {
+				self.attachedFile.fileInput.name = self.filefieldName.value; 
+			})
+		}		
+			
+		if(this.group || (this.showRemoveFieldBtn && this.showRemoveFieldBtn == true)) { //If instance created by a MultipleFileField or it is explicitly specified, show the '-' button
 			this._displayRemoveButton();
 		}	
+				
 		// When clicking the "-" button, remove the
 		// element that is used to select a file 
 		dojo.connect(this.removeFile, "onClick", function(event){
@@ -155,7 +184,9 @@ dojo.declare("apstrata.ui.forms.FileField",
 	 * Removes the nodes (FileInput) that allows to upload a file as well as the adjacent "-" button
 	 */
 	_removeAttachmentNode: function() {
-		
+		if (this.tooltip) {
+			this.tooltip.close();
+		}		
 		dojo.destroy(this.domNode);	
 	},
 		
@@ -168,26 +199,35 @@ dojo.declare("apstrata.ui.forms.FileField",
 	 * When this eventis triggered, we are sure that this.value will contain the value retrieved from
 	 * the document (if any) for that field (i.e. the name of the image file)
 	 */
-	_displayAttachedFile: function() {
+	_displayAttachedFile: function(isUser) {
 		
 		var self = this;
 		if (this.value) {
 			
 			this._gotValue = true;
+			
+			if (this.showFieldName) {
+				dojo.style(this.filefieldLabel, "display", "inline");
+				dojo.style(this.filefieldName, "display", "inline");				
+				this.filefieldName.value = this.name;
+			}
+			
+			
 			if (this.displayImage) {
 				
 				this.fileImage.width = this.dimensions.w;
 				this.fileImage.height = this.dimensions.h;
-				this.fileImage.src= this._getFilesUrls();
+				this.fileImage.src= this._getFilesUrls(isUser);
 				dojo.style(this.fileImage, "display", "");
 			}else {
 				
-				this.fileLink.href= this._getFilesUrls();
+				this.fileLink.href= this._getFilesUrls(isUser);
 				this.fileLink.innerHTML = this.value;
 				dojo.style(this.fileLink, "display", "");
 			}
 			
 			if (!this.readonly) {				
+				
 				this._displayRemoveButton();
 				
 				// When clicking the "-" button:
@@ -205,6 +245,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 					}					
 				});
 			}			
+			
 		}else {				
 				this._addAttachmentNode();
 		}				
@@ -221,24 +262,38 @@ dojo.declare("apstrata.ui.forms.FileField",
 	},
 	
 	
+	setName: function(aName) {
+		this.name = aName;
+		this.filefieldName.value = aName;
+		this.attachedFile.fileInput.name = aName;
+	},
+	
+	
 	
 	/*
 	 * This function retrieves the url of the the file that is attached
 	 * to the current field so it can be used to build a link or display an image
 	 * in the current form
 	 */
-	_getFilesUrls: function() {				
+	_getFilesUrls: function(isUser) {				
 			
 		var params = {
-			"apsdb.documentKey" : this.docKey,
 			"apsdb.fileName" : this.value,
 			"apsdb.fieldName" : this.name,
-			"apsdb.store" : this.store
 		};
+		
+		if (isUser && isUser == true) {
+			params.login = this.dockey;
+		} else {
+			params["apsdb.documentKey"] = this.dockey;
+			params["apsdb.store"] = this.store;
+		}
 		
 		var connection = this.connection;		
 		if (!connection) {
-			connection = new apstrata.sdk.Connection();
+			
+			// try to get the current connection from the container of the formGenerator, otherwise. create a new connection
+			connection = this.formGenerator.container.connection ? this.formGenerator.container.connection : new apstrata.sdk.Connection();
 		}
 		
 		var url = connection.sign("GetFile", dojo.objectToQuery(params)).url;
@@ -256,12 +311,12 @@ dojo.declare("apstrata.ui.forms.FileField",
 		if (!this.docKey) { 
 			
 			var docKeyField = this.formGenerator.getField("apsdb.documentKey");
-			if (docKeyField) {
-				this.docKey = docKeyField.get("value");
-				if (!this.docKey) {
-					this.docKey = docKeyField.get("value");
-				}
+			if (!docKeyField) {
+				//in case it is a user document
+				docKeyField = this.formGenerator.getField("login");
 			}
+			this.docKey = docKeyField.get("value");
+			
 		};
 		
 		if (!this._gotValue) {		

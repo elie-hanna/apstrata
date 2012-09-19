@@ -1,10 +1,14 @@
 <div>
-	<div dojoAttachPoint="dvNode" class="filefield">		
+	<div dojoAttachPoint="dvNode" class="filefield">
+		<div>	
+			<label dojoAttachPoint="filefieldLabel" style="display:none">Field name</label>
+			<input dojoAttachPoint="filefieldName" type="text" style="display:none"></input>
+		</div>
 		{% ifequal displayImage true %}
-			<img class="filefieldimage" dojoAttachPoint="fileImage" alt="{{value}}" style="display: none"/>
+			<img class="filefieldimage" dojoAttachPoint="fileImage" alt="{{value}}" />
 		{% else %} 
-				<a dojoAttachPoint="fileLink" target="_blank" style="display: none">{{value}}</a>
-		{% endifequal %}	
+				<a dojoAttachPoint="fileLink" target="_blank">{{value}}</a>
+		{% endifequal %}
 		<div dojoAttachPoint="removeFileDiv" class="removeFileDiv" style="display:none">	
 		</div>	
 	</div>

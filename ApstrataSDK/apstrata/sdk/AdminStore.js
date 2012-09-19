@@ -263,19 +263,35 @@ dojo.declare("apstrata.sdk.AdminStore",
 			timeout: self.connection.timeout
 		}
 		
+		var requestParams = {};
+		if (options)
+		 	requestParams = dojo.mixin(requestParams, options);
+		
 		switch (this.type) {
 			case 'documents':
 				var action = "SaveDocument";
 				var request = object;
-		
-				self.client.call(action, request, null, clientOptions).then(
-					function(response) {
-						deferred.resolve(response)
-					},
-					function(response) {
-						deferred.reject(response.metadata)
-					}
-				)
+						
+				if (request && request.domNode) {
+					self.client.call(action, requestParams, request.domNode, clientOptions).then(
+						function(response) {
+							deferred.resolve(response)
+						},
+						function(response) {
+							deferred.reject(response.metadata)
+						}
+					)
+				}else {
+					request = dojo.mixin(request, requestParams);
+					self.client.call(action, request, null, clientOptions).then(
+						function(response) {
+							deferred.resolve(response)
+						},
+						function(response) {
+							deferred.reject(response.metadata)
+						}
+					)
+				}
 				
 				return deferred
 				break;	
@@ -284,17 +300,30 @@ dojo.declare("apstrata.sdk.AdminStore",
 				var action = "SaveUser";
 				var request = object;
 		
-				self.client.call(action, request, null, clientOptions).then(
-					function(response) {
-						deferred.resolve(true)
-					},
-					function(response) {
-						deferred.reject(response.metadata)
-					}
-				)
+				if (request && request.domNode) {
+					self.client.call(action, requestParams, request.domNode, clientOptions).then(
+						function(response) {
+							deferred.resolve(true)
+						},
+						function(response) {
+							deferred.reject(response.metadata)
+						}
+					)
+				}else {
+					request = dojo.mixin(request, requestParams);
+					self.client.call(action, request, null, clientOptions).then(
+						function(response) {
+							deferred.resolve(true)
+						},
+						function(response) {
+							deferred.reject(response.metadata)
+						}
+					)
+				}
+				
 				
 				return deferred
-				break;	
+				break;
 				
 			case 'groups':
 				var action = "SaveGroup";

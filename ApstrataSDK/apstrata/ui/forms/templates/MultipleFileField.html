@@ -1,5 +1,9 @@
 <div>
-	<div dojoAttachPoint="dvNodes" class="multiplefilesfield">		
+{%if %}
+{%endif %}
+	<div dojoAttachPoint="dvNodes" class="multiplefilesfield">
+		<label dojoAttachPoint="filefieldLabel" style="display:none">Field name</label>
+		<input dojoAttachPoint="filefieldName" type="text" style="display:none"></input>			
 		<div dojoAttachPoint="files">
 		</div>				
 	</div>

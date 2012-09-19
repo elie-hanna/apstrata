@@ -92,6 +92,10 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		this.inherited(arguments)
 	},
 	
+	isFormReady: function() {
+		return this._formReady;
+	},
+	
 	//
 	// Publich methods
 	//
@@ -339,7 +343,9 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	 * Generate the form based on definition
 	 */
 	_buildForm: function() {
-		var self = this
+		var self = this;
+		
+		self._fields = {};
 		
 		// add custom CSS class
 		//  TODO: this is not working go figure!
