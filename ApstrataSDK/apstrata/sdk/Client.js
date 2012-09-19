@@ -161,6 +161,12 @@ dojo.declare("apstrata.sdk.Client", null, {
 			url: self.url,
 			type: "request"
 		})
+		
+		// This has been added in order to cleanup stalled deferred that prevent other deferred from being fired
+		if (dojo.io.iframe._currentDfd) {
+			dojo.io.iframe._currentDfd.cancel();
+			dojo.io.iframe._currentDfd = null;
+		}	
 
 		// pass in all of the parameters manually:
 		dojo.io.iframe.send(callAttrs)
