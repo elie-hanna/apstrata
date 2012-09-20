@@ -91,6 +91,48 @@ dojo.declare("apstrata.horizon.Grid",
 	filter: function(attr) {},
 	editItems: function() {},
 	newItem: function() {},
+	
+	
+	/*
+	 * @param processedKeys?: used to keep track of processed keys in order to make sure that we delete multiple versions only once, 
+	 * since in apstrata deleting a document will delete all its versions
+	 */
+	deleteSingleItem: function(selection, index, processedKeys, deferred) {
+		var self = this;
+		
+		if (!processedKeys[selection[index].key]) {
+			processedKeys[selection[index].key] = "processed"
+			self.gridParams.store.objectStore.remove(selection[index].key).then(
+				function() {
+					if (index + 1 < selection.length) {
+						self.deleteSingleItem(selection, index + 1, processedKeys, deferred);
+					} else {
+						deferred.resolve();
+					}
+				},
+				function(response) {
+					if (response.metadata) {
+						self.displayError(response.metadata.errorCode, response.metadata.errorDetail);
+					} else if (response.errorCode) {
+						self.displayError(response.errorCode, response.errorDetail);					
+					}
+					if (index + 1 < selection.length) {
+						self.deleteSingleItem(selection, index + 1, processedKeys, deferred);
+					} else {
+						deferred.resolve();
+					}
+				}
+			);
+		} else {
+			if (index + 1 < selection.length) {
+				self.deleteSingleItem(selection, index + 1, processedKeys, deferred);
+			} else {
+				deferred.resolve();
+			}
+		}	
+		
+	},
+	
 	deleteItems: function() {
 		var self = this;
 		var finalDef = new dojo.Deferred();
@@ -115,38 +157,19 @@ dojo.declare("apstrata.horizon.Grid",
 				],
 				actionHandler: function(action) {
 					if (action == 'Yes') {
-						var processed = 0;
 						self.showAsBusy(true, 'deleting document(s)...');
 						self.closePanel();
-						var processedKeys = {}; // this is used to make sure that we delete multiple versions only once, since in apstrata deleting a document will delete all its versions
-						for (var i = 0; i < selection.length; i++) {
-							if (!processedKeys[selection[i].key]) {
-								processedKeys[selection[i].key] = "processed"
-								self.gridParams.store.objectStore.remove(selection[i].key).then(
-									function() {
-										processed = processed + 1;
-										if (processed == selection.length) {
-											self.showAsBusy(false);
-											finalDef.resolve();
-										}
-									},
-									function(response) {
-										if (response.metadata) {
-											self.displayError(response.metadata.errorCode, response.metadata.errorDetail);
-										} else if (response.errorCode) {
-											self.displayError(response.errorCode, response.errorDetail);					
-										}
-										processed = processed + 1;
-										if (processed == selection.length) {
-											self.showAsBusy(false);
-											finalDef.resolve();
-										}					
-									}
-								);
-							} else {
-								processed = processed + 1
+						var deferred = new dojo.Deferred();
+						dojo.when(
+							deferred,
+							function() { 
+								self.showAsBusy(false);
+								finalDef.resolve();
+							},
+							function() {
 							}
-						}
+						);
+						self.deleteSingleItem(selection, 0, {}, deferred);
 					}
 				}
 			})
