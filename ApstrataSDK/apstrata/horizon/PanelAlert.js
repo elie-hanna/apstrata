@@ -121,21 +121,44 @@ dojo.declare("apstrata.horizon.PanelAlert",
 	},
 
 	_reflowContent: function() {
+		
 		// Position elements
 		var d = dojo.contentBox(this.domNode)
-		var m = dojo.position(this.dvMessage)
+		var m = dojo.position(this.dvMessage) 
 		var b = dojo.position(this.dvActions)
 		var i = dojo.position(this.dvIcon)
+		
+		var neededHeight = d.h;
+		var neededWidth = d.w + (2 * i.w);
+		var fontSize = Math.round((dojo.style(this.dvMessage, "fontSize")).replace(/px/, ""));
+		var spaceBetweenLines = Math.round(dojo.style(this.dvMessage, "lineHeight")) - fontSize;
+		var title = dojo.query(".alertTitle")[0];
+		var titleSize = Math.round((dojo.style(title, "fontSize")).replace(/px/, ""));
+		titleSize = titleSize ? titleSize * 2 : 50;	
+		if (fontSize) {
+			var msgLengthInPx = this.message.length * fontSize;
+			var approxLines = msgLengthInPx / d.w;
+			neededHeight = Math.round(approxLines * fontSize) + Math.round(approxLines * spaceBetweenLines);
+			if (neededHeight < d.h) {
+				neededHeight = d.h;
+			}
+			
+			dojo.style(this.domNode, {
+				width: neededWidth + "px",
+				height: neededHeight + Math.round(titleSize) + 10 + "px"
+			})
+		}		
 
 		// Position the actions at the center lower part
 		dojo.style(this.dvActions, {
-			left: (d.w/2 - b.w/2) + "px",
-			top: (d.h - b.h) + "px"
+			left: (neededWidth/2 - b.w/2) + "px",
+			top: (neededHeight) + "px"
 		})
+		
 		dojo.style(this.dvMessage, {
 			left: (i.w) + "px",
-			width: (d.w-i.w) + "px",
-			height: (d.h - b.h) + "px"
+			width: d.w + "px",
+			height: (neededHeight) + "px"
 		})
 	},
  	
