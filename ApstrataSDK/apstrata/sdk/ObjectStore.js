@@ -183,7 +183,7 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		}
 	},
 
-	remove: function(id) {
+	remove: function(id, options) {
 		var self = this
 		var requestParams = {
 			"apsdb.store": self.store,
@@ -194,9 +194,7 @@ dojo.declare("apstrata.sdk.ObjectStore",
 			requestParams["apsdb.runAs"] = self.runAs;
 		}
 		
-		//GET is specified as method in order to be able to delete multiple documents from the gris with chrome. 
-		//If kept as POST, chrome was having trouble deleting multiple doucments from the grid.
-		return this.client.call("DeleteDocument", requestParams, null, {method:"GET"})
+		return this.client.call("DeleteDocument", requestParams, null, options)
 	},
 	
 	queryResults: function(results){

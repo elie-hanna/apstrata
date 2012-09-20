@@ -102,7 +102,7 @@ dojo.declare("apstrata.horizon.Grid",
 		
 		if (!processedKeys[selection[index].key]) {
 			processedKeys[selection[index].key] = "processed"
-			self.gridParams.store.objectStore.remove(selection[index].key).then(
+			self.gridParams.store.objectStore.remove(selection[index].key, {method:"GET"}).then(
 				function() {
 					if (index + 1 < selection.length) {
 						self.deleteSingleItem(selection, index + 1, processedKeys, deferred);
