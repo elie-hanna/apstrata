@@ -33,6 +33,8 @@ dojo.declare("apstrata.horizon.PanelAlert",
 	width: 300,
 	height: 200,
 	
+	_curtain: null,
+	
  	constructor: function(attr) {
 		dojo.mixin(this, attr)
  	},
@@ -63,7 +65,7 @@ dojo.declare("apstrata.horizon.PanelAlert",
 		
 		dojo.style(this.dvMessage, "display", "none")
 		
-		self._getContainer().showCurtain()
+		this._curtain = self._getContainer().showCurtain()
 		
 		// Animate to full height
 		dojo.animateProperty({
@@ -169,7 +171,7 @@ dojo.declare("apstrata.horizon.PanelAlert",
 	
 	onClick: function(action) {
 		this.actionHandler(action)
-		this._getContainer().hideCurtain()
+		this._getContainer().hideCurtain(this._curtain)
 //		this._curtain.parentNode.removeChild(this._curtain)
 		this.destroyRecursive()
 	}

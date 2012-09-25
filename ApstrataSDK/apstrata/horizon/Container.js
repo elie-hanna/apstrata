@@ -412,12 +412,19 @@ dojo.declare("apstrata.horizon.Container",
 			width: w.w + "px",
 			height: w.h + "px"
 		})
+		
+		return this._curtain
 	},
 	
-	hideCurtain: function() {
-		if (this._curtain) {
-			this._curtain.parentNode.removeChild(this._curtain)
-			this._curtain = null
+	hideCurtain: function(curtain) {
+		if (curtain) {
+			curtain.parentNode.removeChild(curtain)
+			curtain = null
+		} else {
+			if (this._curtain) {
+				this._curtain.parentNode.removeChild(this._curtain)
+				this._curtain = null
+			}			
 		}
 	}
 })

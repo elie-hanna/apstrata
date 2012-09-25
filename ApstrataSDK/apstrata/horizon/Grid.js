@@ -112,9 +112,9 @@ dojo.declare("apstrata.horizon.Grid",
 				},
 				function(response) {
 					if (response.metadata) {
-						self.displayError(response.metadata.errorCode, response.metadata.errorDetail);
+						self.displayError(response.metadata.errorCode, response.metadata.errorDetail + "[Document Key: " + selection[index].key + "]");
 					} else if (response.errorCode) {
-						self.displayError(response.errorCode, response.errorDetail);					
+						self.displayError(response.errorCode, response.errorDetail + "[Document Key: " + selection[index].key + "]");					
 					}
 					if (index + 1 < selection.length) {
 						self.deleteSingleItem(selection, index + 1, processedKeys, deferred);
@@ -163,10 +163,13 @@ dojo.declare("apstrata.horizon.Grid",
 						dojo.when(
 							deferred,
 							function() { 
+								self._grid.selection.clear();
 								self.showAsBusy(false);
 								finalDef.resolve();
 							},
 							function() {
+								self.showAsBusy(false);
+								finalDef.reject();
 							}
 						);
 						self.deleteSingleItem(selection, 0, {}, deferred);
