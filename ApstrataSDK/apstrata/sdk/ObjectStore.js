@@ -162,7 +162,8 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		}
 		if (object && object.domNode) {
 			return this.client.call("SaveDocument", o, object.domNode);	
-		}else {			
+		}else {		
+			dojo.mixin(o, object)	
 			return this.client.call("SaveDocument", o)
 		}
 	},
@@ -179,6 +180,7 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		if (object && object.domNode) {
 			return this.client.call("SaveDocument", o, object.domNode);	
 		}else {			
+			dojo.mixin(o, object)
 			return this.client.call("SaveDocument", o)
 		}
 	},
