@@ -92,7 +92,9 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		}
 		
 		// TODO: this needs to be managed smarter so we don't ask the count on each query
-		apsdb.count = true//(apsdb.pageNumber == 1)
+		if (!apsdb.ftsQuery) {
+			apsdb.count = true
+		}
 	
 		if (this.action == "RunScript") apsdb.scriptName = this.scriptName
 	
@@ -104,7 +106,24 @@ dojo.declare("apstrata.sdk.ObjectStore",
 
 		this.client.call(this.action, queryAttrs, null, {method: "get"}).then (
 			function(response) {
-				response.result.documents.total = response.result.count
+				//do the page slicing in case it is an fts query, since fts search always returns resultsPerPage as the count. We also do not ask for the count in case it ia an fts query
+				if (!apsdb.ftsQuery) {
+					response.result.documents.total = response.result.count
+				} else {
+					if (apsdb.pageNumber > 1) {
+						var tmpDocuments = [];
+						for (var i = (apsdb.pageNumber - 1) * apsdb.resultsPerPage; i < response.result.documents.length; i++) {
+							tmpDocuments.push(response.result.documents[i])
+						}
+						response.result.documents = tmpDocuments;	
+					}
+					if (response.result.documents.length == apsdb.resultsPerPage) {
+						//in this case there is a possibility that we have more search results, so we add a page
+						response.result.documents.total = (apsdb.pageNumber + 1) * apsdb.resultsPerPage
+					} else {
+						response.result.documents.total = ((apsdb.pageNumber - 1) * apsdb.resultsPerPage) + response.result.documents.length 
+					}
+				}
 				deferred.callback(response.result.documents)
 			},
 			function(response) {
