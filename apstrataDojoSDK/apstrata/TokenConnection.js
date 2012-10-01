@@ -215,7 +215,7 @@ dojo.declare("apstrata.TokenConnection",
 					+ "&" + self.PARAMETER_RESPONSE_TYPE + "=" + responseType
 					+ ((username != "") ? "&" + self.PARAMETER_USER + "=" + username : "")
 					+ ((isForce200ResponseStatus) ? "&apsdb.force200ResponseStatus=true" : "")
-					+ ((self.isUseParameterToken) ? "&apsdb.authToken=" + self.token.authToken : "")
+					+ ((self.isUseParameterToken && self.token) ? "&apsdb.authToken=" + self.token.authToken : "")
 					+ ((params != "") ? "&" : "") + params;
 
 			return { url: apswsReqUrl, signature: "" };
