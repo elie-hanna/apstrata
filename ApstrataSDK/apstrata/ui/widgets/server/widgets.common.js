@@ -59,7 +59,7 @@ var configuration = {
 	templatesConfirmed: {
 		adminEmail: "dude@dude.com",
 		subject: "$projectName Registration confirmed",
-		body: "<div style='font-family:Calibri, font-size:11'>Hello $user,<br/><br/> Welcome to our $projectName <br/><br/> Your account has been activated.<br/>Sincerely<br/><br/>The $projectName Team",
+		body: "<div style='font-family:Calibri, font-size:11'>Dear $user,<br/><br/>Welcome to Apstrata.  You now have access to your Apstrata account.<br/>Please use the the email and password you provided to login to the Apstrata site.<br/><br/>The home page of the apstrata.com website is a live link into the documentation.  Simply click on an icon to find out more about that feature.<br/>In addition, here are some links you may find useful:<ul><li>Documentation can be found<a href='http://wiki.apstrata.com/'> here.</a></li><li>Language-specific API clients can be downloaded <a href='http://code.google.com/p/apstrata/source/browse/#svn'> here.</a></li><li>The Developer Workbench can be found <a href='http://workbench.apstrata.com/'>here.</a></li><br/></ul>IF YOU NEED ASSISTANCE: email us at support@apstrata.com and we will respond within one business day.<br/><br/>Thank you for using Apstrata.  We got your back.<br/>The Apstrata team"
 	}
 }
 
