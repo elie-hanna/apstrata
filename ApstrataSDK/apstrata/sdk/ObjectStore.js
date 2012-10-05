@@ -77,10 +77,14 @@ dojo.declare("apstrata.sdk.ObjectStore",
 			
 			if (this.fieldTypes && this.fieldTypes[options.sort[0].attribute]) type = this.fieldTypes[options.sort[0].attribute]
 			
-			if (type.toLowerCase()=='string') {
-				apsdb.sort = options.sort[0].attribute + " <" + type +":" + (options.sort[0].descending?"ci:DESC":"ci:ASC") + ">"
-			} else {
-				apsdb.sort = options.sort[0].attribute + " <" + type +":" + (options.sort[0].descending?"DESC":"ASC") + ">"
+			if (type.toLowerCase()!= 'geospatial') {
+				if (type.toLowerCase()=='string') {
+					apsdb.sort = options.sort[0].attribute + " <" + type +":" + (options.sort[0].descending?"ci:DESC":"ci:ASC") + ">"
+				} else if (type.toLowerCase() != "derived"){
+					apsdb.sort = options.sort[0].attribute + " <" + type +":" + (options.sort[0].descending?"DESC":"ASC") + ">"
+				} else {
+					apsdb.sort = options.sort[0].attribute + " <" + (options.sort[0].descending?"DESC":"ASC") + ">"
+				}
 			}
 		}
 		
@@ -124,6 +128,17 @@ dojo.declare("apstrata.sdk.ObjectStore",
 						response.result.documents.total = ((apsdb.pageNumber - 1) * apsdb.resultsPerPage) + response.result.documents.length 
 					}
 				}
+				
+				//mix derived fields with the regular ones so that their values get populated in the grid
+				for(var i = 0 ; i < response.result.documents.length; i++) {
+					if (response.result.documents[i]["_derivedFields"]) {
+						for(var derivedFieldName in response.result.documents[i]["_derivedFields"]) {
+							response.result.documents[i][derivedFieldName] = response.result.documents[i]["_derivedFields"][derivedFieldName];
+						}
+						
+					}
+				}
+				
 				deferred.callback(response.result.documents)
 			},
 			function(response) {
