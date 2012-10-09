@@ -106,40 +106,40 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		if (this.options && this.options.value) this.form = new apstrata.ui.forms.FormGenerator({definition: self.definition, value: self.options.value, save: dojo.hitch(self, "save")});
 		else this.form = new apstrata.ui.forms.FormGenerator({definition: self.definition, save: dojo.hitch(self, "save")}) 
 		
-		dojo.place(this.form.domNode, this.domNode)		
+		dojo.place(this.form.domNode, this.domNode)
 		
-		dojo.connect(this.form.getField("email"), "onChange", function(v) {
+		var emailField = this.form.getField("email");
+		emailField.onChange = function(v) {
 			// 1st check if email is valid
 			var emailFilter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 			if (!emailFilter.test(v)) {
-				self.form.getField("email").invalidMessage = self.nls.ENTER_VALID_EMAIL
-				self.form.getField("email").validator = function(value, constraints) {
+				emailField.invalidMessage = self.nls.ENTER_VALID_EMAIL
+				emailField.validator = function(value, constraints) {
 					return false // true if email not found, false otherwise
 				}
+				emailField.validate();
+				
+			// 2nd Async Check if email is unique, disable form while you do
 			} else if (v.trim()!="") {
-				//
-				// 2nd Async Check if email is unique, disable form while you do
-				//
 				self.form.showAsBusy(true, null, "Verifying e-mail uniqueness")
-				self._userExists(self.form.getField("email").get("value")).then(function(userExists) {
+				self._userExists(emailField.get("value")).then(function(userExists) {
 					if (userExists) {
 						var loginUrl = self.loginurl;					
-						self.form.getField("email").invalidMessage = self.nls.EMAIL_ALREADY_REGISTERED +" <a href='" + loginUrl + "'>" + self.nls.LOGIN + "</a>"
-						self.form.getField("email").validator = function(value, constraints) {
+						emailField.invalidMessage = self.nls.EMAIL_ALREADY_REGISTERED +" <a href='" + loginUrl + "'>" + self.nls.LOGIN + "</a>"
+						emailField.validator = function(value, constraints) {
 							return false
 						}
-						self.form.validate()
 						self.form.showAsBusy(false)
 					} else {
-						self.form.getField("email").validator = function(value, constraints) {
+						emailField.validator = function(value, constraints) {
 							return true 
 						}
-						self.form.validate()
 						self.form.showAsBusy(false)
 					}
+					emailField.validate();
 				});
 			}
-		})
+		}
 
 		self.form.getField("confirmPassword").validator = function(value, constraints) {
 			return self.form.getField("password").get("value") == self.form.getField("confirmPassword").get("value")

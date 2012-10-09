@@ -338,7 +338,7 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 								}
 							})
 							dojo.mixin(attr, {
-					            value: choices[0].id,
+//					            value: choices[0].id,
 					            store: new  dojo.data.ObjectStore({objectStore: new dojo.store.Memory({data: choices})}),
 					        })			
 						}				

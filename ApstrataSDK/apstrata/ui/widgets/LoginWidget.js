@@ -68,8 +68,10 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 					{name: "user", required: true, displayGroup: "user"},
 					{name: "password", required: true, type: "password", displayGroup: "user"}
 				],
+				submitAction: 'login',
 				actions: ['login']
 			},
+			submitOnEnter: true,
 			displayGroups: self.type?self.type:"master",
 			login: dojo.hitch(this, this.login)	
 		})
