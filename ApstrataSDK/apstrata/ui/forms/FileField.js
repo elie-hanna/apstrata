@@ -150,7 +150,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 					self.tooltip.open(self.domNode);
 				} else { //Check if file name matches the regexp in case defined
 					if(this.regExp) {
-					   isValid = new RegExp("^(?:" + this.regExp +")?$").test(self.attachedFile.fileInput.value)
+					   isValid = new RegExp("^(" + this.regExp +")?$","i").test(self.attachedFile.fileInput.value)
 					}
 				}
 				return isValid;
