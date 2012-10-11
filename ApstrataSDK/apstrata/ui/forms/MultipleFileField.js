@@ -11,6 +11,13 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 {
 	templatePath: dojo.moduleUrl("apstrata.ui.forms", "templates/MultipleFileField.html"),
 	x : "toShow",
+
+	min: 0,
+	
+	max: 10,
+	
+	_addFileBtn: null,
+	_addFileBtnConn: null,
 	
 	/* This creates an instance of a MultipleFileField. A MultipleFielField can be used to upload many files to an apstrata document
 	 * or to download files from a document (diplayed as links or images). MultipleFileField uses the FileField class.
@@ -77,12 +84,16 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 			})
 		}		
 		
-		if (!this._addFieldButtonDisplayed) {
-			var addFileBtn = new dijit.form.Button({"label": "+"});
-			dojo.place(addFileBtn.domNode, this.dvNodes);
-			dojo.addClass(addFileBtn.domNode, "addFileDiv");
-			dojo.connect(addFileBtn, "onClick", this, "addFileField");
+		if (!this._addFieldButtonDisplayed && this.fileFields.length < this.max) {
+			this._addFileBtn = new dijit.form.Button({"label": "+"});
+			dojo.place(this._addFileBtn.domNode, this.dvNodes);
+			dojo.addClass(this._addFileBtn.domNode, "addFileDiv");
+			this._addFileBtnConn =dojo.connect(this._addFileBtn, "onClick", this, "addFileField");
 			this._addFieldButtonDisplayed = true;
+		}
+		
+		if(this.min >=1 && this.fileFields.length == 0) {
+			this.addFileField("");
 		}
 		
 	},	
@@ -120,7 +131,7 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 		}
 		
 		var newField = dojo.place(fileField.domNode, this.files);	
-		
+		this.showHideAddButton();
 		return fileField;	
 	},
 	
@@ -131,7 +142,7 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 	 */
 	removeFileField: function(fileField, destroy) {
 		
-		if (this.fileFields.length > 1) {
+		if (this.fileFields.length >= 1) {
 			
 			var found = false;
 			for (var index = 0; index < this.fileFields.length && !found; index++) {
@@ -146,7 +157,28 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 					this.fileFields.splice(index, 1);	
 				}
 			}
-		}	
+		}
+		
+		this.showHideAddButton();
+	},
+	
+	/*
+	 * Show/hide the add button based on the min and max values and the already fileFields length
+	 * If the already displayed fileFields are >= to max hide the button
+	 * otherwise display the add file field Button
+	 */
+	showHideAddButton: function() {
+		if(this.fileFields.length >= this.max) {
+			dojo.style(this._addFileBtn.domNode, "display", "none");
+			dojo.disconnect(this._addFileBtnConn);
+			this._addFieldButtonDisplayed = false;
+		} else {
+			if(this._addFieldButtonDisplayed == false) {
+				dojo.style(this._addFileBtn.domNode, "display", "");
+				this._addFileBtnConn = dojo.connect(this._addFileBtn, "onClick", this, "addFileField");
+				this._addFieldButtonDisplayed = true;
+			}
+		}
 	},
 	
 	/*
