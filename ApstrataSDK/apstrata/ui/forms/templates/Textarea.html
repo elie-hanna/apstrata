@@ -1,0 +1,17 @@
+{% if %}
+{% endif %}
+<div class="dijit dijitReset dijitInlineTable dijitLeft" id="widget_{{id}}" role="presentation">
+	<div class='dijitReset dijitValidationContainer'>
+		<input class="dijitReset dijitInputField dijitValidationIcon dijitValidationInner" value="&#935;" type="text" tabIndex="-1" readonly="readonly" role="presentation"/>
+	</div>
+	<div class="dijitReset dijitInputField dijitInputContainer dijitTextAreaWrapper">
+		<textarea class="dijitReset dijitInputInner" dojoAttachPoint='textbox,focusNode' autocomplete="off" name="{{ name }}" type='{{type}}'></textarea>
+	</div>
+	<div dojoAttachPoint="counterDiv" class="textareaCounter" style="display:none">
+		<div dojoAttachPoint="currentLength"></div>
+		{% if showMaxLength %}
+			<span>|</span>
+			<div dojoAttachPoint="maxLengthDiv"></div>
+		{% endif %}
+	</div>
+</div>
