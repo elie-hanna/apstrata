@@ -482,9 +482,10 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 			
 			if (inlineLabel) {
 				if (label) dojo.place(label, dv);
-				if(helpText) dojo.place(helpText, dv);
 	
 				dojo.place(field.domNode, dv)
+				
+				if(helpText) dojo.place(helpText, dv);
 				
 				// if a custom class has been set in the field definition
 				if (definition.cssClass) {
