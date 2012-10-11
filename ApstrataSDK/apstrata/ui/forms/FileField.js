@@ -120,7 +120,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 	_addAttachmentNode: function() {				
 		
 		var self = this;
-		this.attachedFile = new dojox.form.FileInput({name: this.name ? this.name : "apsdb_attachments" });
+		this.attachedFile = new dojox.form.FileInput({name: this.name ? this.name : "apsdb_attachments", required: true });
 		
 		this.attachedFile._matchValue = function(){
 			// summary: set the content of the upper input based on the semi-hidden file input
@@ -153,7 +153,6 @@ dojo.declare("apstrata.ui.forms.FileField",
 					   isValid = new RegExp("^(?:" + this.regExp +")?$").test(self.attachedFile.fileInput.value)
 					}
 				}
-				
 				return isValid;
 			}
 			
