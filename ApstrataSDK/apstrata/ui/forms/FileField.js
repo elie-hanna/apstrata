@@ -16,6 +16,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 	
 	value: "",
 
+	regExp: null,
 	/*
 	 * This creates an instance of a FileField. A FielField can be used to upload a file to an apstrata document
 	 * or to dislay a file (as a link or an image if it is an image) if it is already attached to a document. 
@@ -121,6 +122,21 @@ dojo.declare("apstrata.ui.forms.FileField",
 		var self = this;
 		this.attachedFile = new dojox.form.FileInput({name: this.name ? this.name : "apsdb_attachments" });
 		
+		this.attachedFile._matchValue = function(){
+			// summary: set the content of the upper input based on the semi-hidden file input
+			var tmpValue = self.attachedFile.fileInput.value;
+			if(tmpValue.lastIndexOf('\\') != -1) {
+				self.attachedFile.inputNode.value = tmpValue.substring(tmpValue.lastIndexOf('\\') + 1, tmpValue.length);
+			} else {
+				self.attachedFile.inputNode.value = tmpValue;
+			}
+
+			if(self.attachedFile.inputNode.value){
+				self.attachedFile.cancelNode.style.visibility = "visible";
+				dojo.fadeIn({ node: self.attachedFile.cancelNode, duration:275 }).play();
+			}
+		}
+		
 		// Add a custom validator to make this field required (otherwise, submitting an empty input
 		// will be interpreted by apstrata as an instruction to remove all attached files
 		this.validate = function(value, constraints) {
@@ -132,6 +148,10 @@ dojo.declare("apstrata.ui.forms.FileField",
 					// Create an ad-hoc tooltip  
 					self.tooltip = new dijit.Tooltip({connectId: self.domNode, position:"before", label:"This field is required"});
 					self.tooltip.open(self.domNode);
+				} else { //Check if file name matches the regexp in case defined
+					if(this.regExp) {
+					   isValid = new RegExp("^(?:" + this.regExp +")?$").test(self.attachedFile.fileInput.value)
+					}
 				}
 				
 				return isValid;
@@ -139,12 +159,8 @@ dojo.declare("apstrata.ui.forms.FileField",
 			
 			return true;
 		}		
-			
-		// Make the cancel button visible once a file is selected		
-		dojo.connect(this.attachedFile.fileInput, "onchange", function() {			
-				self.attachedFile.inputNode.value = self.attachedFile.fileInput.value;
-				self.attachedFile.cancelNode.style.visibility = 'visible';			
-		});	
+		//Startup the fileInput widget to set the listeners and display cancel button
+		this.attachedFile.startup();
 		
 		// Add the FileInput to the dom	
 		dojo.place(this.attachedFile.domNode, this.dvNode, "last");		
@@ -175,7 +191,10 @@ dojo.declare("apstrata.ui.forms.FileField",
 		// When clicking the "-" button, remove the
 		// element that is used to select a file 
 		dojo.connect(this.removeFile, "onClick", function(event){
-			
+			if (self.group) {
+				var event = {action: "remove", target: self};
+				self.group.handleChildEvent(event);
+			}
 			self._removeAttachmentNode();								
 		});
 	},
