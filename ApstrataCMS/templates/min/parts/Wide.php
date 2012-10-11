@@ -13,9 +13,23 @@
 <div class='page'>
 	<h2><?php print $title; ?></h2>
 	
-	<p><?php print $section1; ?></p>
+	<p><?php 
+			if (strrpos($section1, "</") >= 0) {
+				print html_entity_decode($section1);
+			}else {			
+				print $section1;
+			} 
+		?>
+	</p>
 
-	<p><?php print $section2; ?></p>
+	<p><?php 
+			if (strrpos($section2, "</") >= 0) {
+				print html_entity_decode($section2);
+			}else {			
+				print $section2;
+			} 
+		?>
+	</p>
 	
 <?php
 
