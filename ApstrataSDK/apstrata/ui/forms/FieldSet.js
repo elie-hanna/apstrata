@@ -30,6 +30,7 @@ dojo.require("apstrata.ui.forms.MultiSelect")
 dojo.require("dijit.form.Textarea")
 dojo.require("apstrata.ui.forms.FileField");
 dojo.require("apstrata.ui.forms.MultipleFileField");
+dojo.require("apstrata.ui.forms.Textarea");
 
 dojo.require("dijit.form.Button")
 
@@ -247,15 +248,18 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 	_addField: function(dv, definition) {
 		var self = this
 		var attr = {}
-		var label
+		var label = "";
 				
-		var labelCss = ""
+		var labelCss = "";
 		
 		if (definition.type == self._SUBFORM) {
 			labelCss = "setLabel"
 		} else {
 			labelCss = "label"
 		}
+		
+		var helpText = "";
+		var helpTextCss = "helpText";
 				
 		// If this is not a tabular format add a label before each field
 		if ((self.style == self._FORM) && (definition.type != "hidden")) {
@@ -269,6 +273,13 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				// if label hasn't been set show name as label
 				label = dojo.create("div", {innerHTML: definition.name + (definition.required?"*":"")}) 
 				dojo.addClass(label, labelCss)
+			}
+			if(definition.helpText != undefined) {
+				if (definition.helpText!="") { // and it's not empty
+					// show helpText
+					helpText = dojo.create("div", {innerHTML: definition.helpText}) 
+					dojo.addClass(helpText, helpTextCss)
+				}
 			}
 		}
 
@@ -470,16 +481,21 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				}
 			
 			if (inlineLabel) {
-				if (label) dojo.place(label, dv)
+				if (label) dojo.place(label, dv);
+				if(helpText) dojo.place(helpText, dv);
 	
 				dojo.place(field.domNode, dv)
 				
 				// if a custom class has been set in the field definition
 				if (definition.cssClass) {
 					// add it to the label with the suffix -label
-					dojo.addClass(label, definition.cssClass+"-label")
+					dojo.addClass(label, definition.cssClass+"-label");
+					if(helpText) {
+						// add it to the helpText with the suffix -helpText
+						dojo.addClass(helpText, definition.cssClass+"-helpText");
+					}
 					// add it to the field
-					dojo.addClass(field.domNode, definition.cssClass)
+					dojo.addClass(field.domNode, definition.cssClass);
 				}
 			} else {
 				var div = dojo.create("div")
@@ -489,14 +505,17 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				dojo.place(field.domNode, div)
 				if (definition.cssClass) dojo.addClass(field.domNode, definition.cssClass)
 				
-				if (label) dojo.place(label, div)
+				if (label) dojo.place(label, div);
+				if(helpText) dojo.place(helpText, dv);
 				dojo.style(label, "display", "inline-block")
+				dojo.style(helpText, "display", "inline-block")
 			}
 			
 			// Hide hidden fields
 			if (definition.type=="hidden") dojo.style(field.domNode, "display", "none")
 			
 			if (label) dojo.addClass(label, definition.name+"-label")
+			if(helpText) dojo.addClass(helpText, definition.name+"-helpText");
 			dojo.addClass(field.domNode, definition.name)
 						
 			return field
