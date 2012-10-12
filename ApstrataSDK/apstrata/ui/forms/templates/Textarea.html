@@ -7,11 +7,11 @@
 	<div class="dijitReset dijitInputField dijitInputContainer dijitTextAreaWrapper">
 		<textarea class="dijitReset dijitInputInner" dojoAttachPoint='textbox,focusNode' autocomplete="off" name="{{ name }}" type='{{type}}'></textarea>
 	</div>
-	<div dojoAttachPoint="counterDiv" class="textareaCounter" style="display:none">
-		<div dojoAttachPoint="currentLength"></div>
+	<div dojoAttachPoint="counterDiv" class="counter" style="display:none">
+		<p dojoAttachPoint="currentLength"></p>
 		{% if showMaxLength %}
 			<span>|</span>
-			<div dojoAttachPoint="maxLengthDiv"></div>
+			<p dojoAttachPoint="maxLengthDiv"></p>
 		{% endif %}
 	</div>
 </div>
