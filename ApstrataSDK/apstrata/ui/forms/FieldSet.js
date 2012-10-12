@@ -506,10 +506,14 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				dojo.place(field.domNode, div)
 				if (definition.cssClass) dojo.addClass(field.domNode, definition.cssClass)
 				
-				if (label) dojo.place(label, div);
-				if(helpText) dojo.place(helpText, dv);
-				dojo.style(label, "display", "inline-block")
-				dojo.style(helpText, "display", "inline-block")
+				if (label) {
+					dojo.place(label, div);
+					dojo.style(label, "display", "inline-block")
+				}
+				if(helpText) { 
+					dojo.place(helpText, dv);
+					dojo.style(helpText, "display", "inline-block")
+				}
 			}
 			
 			// Hide hidden fields
