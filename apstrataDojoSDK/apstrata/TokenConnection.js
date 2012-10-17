@@ -643,14 +643,22 @@ dojo.declare("apstrata.TokenConnection",
 			cookieObject.token = self.token;
 
 			apstrata.logger.debug("Saving credentials and token in a cookie.");
-
-			dojo.cookie(self._COOKIE_NAME, dojo.toJson(cookieObject), { expires: self._fromSecondToDateString(self.token.expires), path: "/" });
+			var theDomain = "";
+			var tmpObj = { expires: self._fromSecondToDateString(self.token.expires), path: "/" };
+			if (apstrata.apConfig) {
+				var config = apstrata.apConfig.get();
+				if (config.tokenCookieDomain) {
+					theDomain = " domain=" + config.tokenCookieDomain;
+					tmpObj.domain = config.tokenCookieDomain;
+				}
+			}
+			dojo.cookie(self._COOKIE_NAME, dojo.toJson(cookieObject), tmpObj);
 
 			// Try to set the cookie the old-fashioned way if Dojo could not set it.
 			if (!dojo.cookie(self._COOKIE_NAME)) {
 				var expirationDate = new Date();
 				expirationDate.setUTCSeconds(expirationDate.getUTCSeconds() + parseInt(self.token.expires));
-				var cookieValue = escape(dojo.toJson(cookieObject)) + ("; expires=" + expirationDate.toUTCString() + "; path=/;");
+				var cookieValue = escape(dojo.toJson(cookieObject)) + ("; expires=" + expirationDate.toUTCString() + "; path=/;" + theDomain);
 				document.cookie = self._COOKIE_NAME + "=" + cookieValue;
 			}
 		},
@@ -671,10 +679,20 @@ dojo.declare("apstrata.TokenConnection",
 		 * Delete the token and credentials cookie. Expected to be called on logout.
 		 */
 		deleteCookie: function () {
-			dojo.cookie(this._COOKIE_NAME, null, { expires: -1, path: "/"});
+			var theDomain = "";
+			var tmpObj = { expires: -1, path: "/" };
+			if (apstrata.apConfig) {
+				var config = apstrata.apConfig.get();
+				if (config.tokenCookieDomain) {
+					theDomain = " domain=" + config.tokenCookieDomain;
+					tmpObj.domain = config.tokenCookieDomain;
+				}
+			}			
+			
+			dojo.cookie(this._COOKIE_NAME, null, tmpObj);
 			// Try to delete the cookie the old-fashioned way if Dojo could not delete it.
 			if (typeof dojo.cookie(this._COOKIE_NAME) != "undefined") {
-				document.cookie = this._COOKIE_NAME + "=; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/;";
+				document.cookie = this._COOKIE_NAME + "=; expires=Thu, 01-Jan-70 00:00:01 GMT; path=/;" + theDomain;
 			}
 		},
 
