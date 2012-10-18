@@ -106,7 +106,8 @@ null,
 		
 		sdks: [
 			{ icon: "JavascriptSDK.png", name: "Javascript SDK", iconClass: "userManagement", wikiDoc: "Javascript+SDK", tryIt: "false", getSampleCode: "false" }, 
-			{ icon: "AndroidSDK.png", name: "Android SDK", iconClass: "userManagement", wikiDoc: "Android", tryIt: "false", getSampleCode: "false" }
+			{ icon: "AndroidSDK.png", name: "Android SDK", iconClass: "userManagement", wikiDoc: "Android", tryIt: "false", getSampleCode: "false" },
+			{ icon: "iosSDK.png", name: "iOS SDK", iconClass: "userManagement", wikiDoc: "iOS", tryIt: "false", getSampleCode: "false" }
 		],
 		
 		addTags: function(object, tags) {
