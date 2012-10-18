@@ -47,6 +47,15 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 		} catch (e) {
 			//catch the exception that results from adding the logout item when it already exists and do nothing about it
 		}	
+		
+		//redirect in case the "redirectTo" URL parameter is specified
+		if (location.search) {
+			urlParams = dojo.queryToObject(location.search.substring(1));
+			redirectUrl = urlParams.redirectTo;
+			if (redirectUrl) {
+				location.href = redirectUrl;
+			}
+		}
 	},
 	
 	startup: function() {

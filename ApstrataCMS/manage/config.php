@@ -20,6 +20,12 @@
 		"developmentMode" => false,
 		"useStub" => false,
 		"autoLogin" => false,
+		
+		//
+		// Config params for jsConnect in order to establish SSO with apstrata forum
+		//
+		"jsConnectClientID" => "953217106",
+		"jsConnectSecret" => "9f57204826f2830b8969e1e67f1cb401",
 
 		//
 		// URLs and other related values used to compose paths by the php CMS code 

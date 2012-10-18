@@ -5,7 +5,7 @@ global $testData;
 $testData = array (
 
 	"menu" => array ( "pageFound" => "1",
-						"menuPhp" => array("0"=>array("id"=>"company","title"=>"Company","level"=>"0"),"1"=>array("id"=>"the-developer-ecosystem","title"=>"ecosystem","level"=>"0"),"2"=>array("id"=>"product","title"=>"Product","level"=>"0"),"3"=>array("id"=>"experimental","title"=>"Experimental","level"=>"0")),
+						"menuPhp" => array("0"=>array("id"=>"company","title"=>"Company","level"=>"0"),"1"=>array("id"=>"the-developer-ecosystem","title"=>"ecosystem","level"=>"0"),"2"=>array("id"=>"product","title"=>"Product","level"=>"0"),"3"=>array("id"=>"experimental","title"=>"Experimental","level"=>"0"),"4"=>array("id"=>"forum","title"=>"Forum","level"=>"0","url"=>"http://forum.apstrata.com/index.php?p=/entry/jsconnect&client_id=953217106","type"=>"external")),
 						"leftFooterPhp" => array("0"=>array("id"=>"privacy","title"=>"Privacy statement","level"=>"0"),"1"=>array("id"=>"terms","title"=>"TERMS &amp; CONDITIONS OF USE","level"=>"0")),
 						"rightFooterPhp" => array("0"=>array("id"=>"careers","title"=>"Careers","level"=>"0"),"1"=>array("id"=>"company","title"=>"Company","level"=>"0"))),
 	
