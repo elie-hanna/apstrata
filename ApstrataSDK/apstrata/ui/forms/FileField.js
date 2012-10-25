@@ -301,9 +301,9 @@ dojo.declare("apstrata.ui.forms.FileField",
 		};
 		
 		if (isUser && isUser == true) {
-			params.login = this.dockey;
+			params.login = this.docKey;
 		} else {
-			params["apsdb.documentKey"] = this.dockey;
+			params["apsdb.documentKey"] = this.docKey;
 			params["apsdb.store"] = this.store;
 		}
 		
