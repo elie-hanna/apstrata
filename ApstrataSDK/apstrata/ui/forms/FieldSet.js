@@ -45,6 +45,7 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 	
 	_fieldSet: [],
 	label: "",
+	requiredFieldIndicator: "*",
 
 	//
 	// Constants
@@ -96,6 +97,10 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 					break
 				}
 			}
+		}
+		
+		if (options.requiredFieldIndicator) {
+			this.requiredFieldIndicator = options.requiredFieldIndicator;
 		}
 	},
 	
@@ -266,12 +271,12 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 			if (definition.label != undefined) { // if definition has a label
 				if (definition.label!="") { // and it's not empty
 					// show label
-					label = dojo.create("div", {innerHTML: definition.label + (definition.required?"*":"")}) 
+					label = dojo.create("div", {innerHTML: definition.label + (definition.required?self.requiredFieldIndicator:"")}) 
 					dojo.addClass(label, labelCss)
 				}
 			} else {
 				// if label hasn't been set show name as label
-				label = dojo.create("div", {innerHTML: definition.name + (definition.required?"*":"")}) 
+				label = dojo.create("div", {innerHTML: definition.name + (definition.required?self.requiredFieldIndicator:"")}) 
 				dojo.addClass(label, labelCss)
 			}
 			if(definition.helpText != undefined) {

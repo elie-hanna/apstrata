@@ -40,6 +40,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 {
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.ui.widgets", "templates/LoginWidget.html"),
+	requiredFieldIndicator: '*',
 	
 	autoLogin: false,
 	
@@ -68,6 +69,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 					{name: "user", required: true, displayGroup: "user"},
 					{name: "password", required: true, type: "password", displayGroup: "user"}
 				],
+				requiredFieldIndicator: this.requiredFieldIndicator,
 				submitAction: 'login',
 				actions: ['login']
 			},

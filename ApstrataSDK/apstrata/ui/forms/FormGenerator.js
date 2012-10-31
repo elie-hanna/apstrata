@@ -382,6 +382,7 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		this._rootFieldSet = new apstrata.ui.forms.FieldSet({
 			type: "form", style: "form",
 			fieldset: self.definition.fieldset,
+			requiredFieldIndicator: self.definition.requiredFieldIndicator,
 			value: self.value,
 			formGenerator: self
 		}, this.dvFieldset)
