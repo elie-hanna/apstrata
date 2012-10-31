@@ -44,11 +44,31 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 	
 	autoLogin: false,
 	
+	formDefinition: null,
+	
 	constructor: function(attrs) {
 		this.type = attrs.type
 		this.useToken = attrs.useToken
 		this.nls = dojo.i18n.getLocalization("apstrata.ui.widgets", "login-widget")
 		this.showPreferencesLink = false;
+		if(attrs.formDefintion) {
+			this.formDefinition = attrs.formDefinition;
+		} else {
+			this.formDefinition = {
+					label: "Login",
+					cssClass: "newClass",
+					fieldset: [
+						{name: "key", required: true, displayGroup: "master"},
+						{name: "secret", required: true, type: "password", displayGroup: "master"},
+						{name: "key", required: true, displayGroup: "key"},
+						{name: "user", required: true, displayGroup: "user"},
+						{name: "password", required: true, type: "password", displayGroup: "user"}
+					],
+					requiredFieldIndicator: this.requiredFieldIndicator,
+					submitAction: 'login',
+					actions: ['login']
+				};
+		}
 		
 		dojo.mixin(this, apstrata.registry.get("apstrata.ui", "widgets.Login"))
 	},
@@ -59,20 +79,7 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		this._animation = new apstrata.ui.ApstrataAnimation({node: self.domNode})
 
 		this.form = new apstrata.ui.forms.FormGenerator({
-			definition: {
-				label: "Login",
-				cssClass: "newClass",
-				fieldset: [
-					{name: "key", required: true, displayGroup: "master"},
-					{name: "secret", required: true, type: "password", displayGroup: "master"},
-					{name: "key", required: true, displayGroup: "key"},
-					{name: "user", required: true, displayGroup: "user"},
-					{name: "password", required: true, type: "password", displayGroup: "user"}
-				],
-				requiredFieldIndicator: this.requiredFieldIndicator,
-				submitAction: 'login',
-				actions: ['login']
-			},
+			definition: this.formDefinition,
 			submitOnEnter: true,
 			displayGroups: self.type?self.type:"master",
 			login: dojo.hitch(this, this.login)	
