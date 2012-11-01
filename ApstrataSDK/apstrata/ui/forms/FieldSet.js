@@ -294,6 +294,8 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 		
 		if (definition.type == self._SUBFORM) {
 			definition.formGenerator = self.formGenerator
+			if (self.formGenerator.definition.requiredFieldIndicator) definition.requiredFieldIndicator = self.formGenerator.definition.requiredFieldIndicator
+
 			var fieldset = new apstrata.ui.forms.FieldSet(definition)
 			if (definition.cssClass) dojo.addClass(fieldset.domNode, definition.cssClass)
 
