@@ -384,7 +384,7 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 			value: self.value,
 			formGenerator: self
 		}
-		if (self.definition.requiredFieldIndicator) fsdef.requiredFieldIndicator = self.definition.requiredFieldIndicator
+		if (self.definition.requiredFieldIndicator  != null ) fsdef.requiredFieldIndicator = self.definition.requiredFieldIndicator
 
 		// Start building the form
 		this._rootFieldSet = new apstrata.ui.forms.FieldSet(fsdef, this.dvFieldset)
