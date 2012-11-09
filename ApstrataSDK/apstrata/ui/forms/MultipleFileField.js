@@ -19,6 +19,18 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 	_addFileBtn: null,
 	_addFileBtnConn: null,
 	
+	validate: function(value, constraints) {
+		var self = this;
+		var isValid = this.fileFields.length >= this.min && this.fileFields.length <= this.max;
+		if (!isValid) {
+			
+			// Create an ad-hoc tooltip  
+			self.tooltip = new dijit.Tooltip({connectId: self.domNode, position:"right", label:"invalid cardinality"});
+			self.tooltip.open(self.domNode);
+		}
+		return isValid;
+	},
+	
 	/* This creates an instance of a MultipleFileField. A MultipleFielField can be used to upload many files to an apstrata document
 	 * or to download files from a document (diplayed as links or images). MultipleFileField uses the FileField class.
 	 * @param formGenerator: this has to be set by the FieldSet instance, not the definition. Will be used to retrieve the field
@@ -93,7 +105,7 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 		}
 		
 		if(this.min >=1 && this.fileFields.length == 0) {
-			this.addFileField("");
+//			this.addFileField("");
 		}
 		
 	},	
@@ -227,9 +239,6 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 			var docKeyField = this.formGenerator.getField("apsdb.documentKey");
 			if (docKeyField) {
 				this.docKey = docKeyField.get("value");
-				if (!this.docKey) {
-					this.docKey = docKeyField.get("value");
-				}
 			}
 		};		
 		
@@ -278,9 +287,14 @@ dojo.declare("apstrata.ui.forms.MultipleFileField",
 				
 				this._multivalueAppendNodeAdded = true;			
 			}			
-		}		
+		}
+		
+		for (var i = this.fileFields.length; i<this.min; i++) {
+			this.addFileField("");
+		}
+
+
 	},
 	
 })
-
 
