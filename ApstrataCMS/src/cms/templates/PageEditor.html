@@ -1,0 +1,18 @@
+<div style="width:1000px; height:100%" dojoAttachPoint="pageEditorRoot" class="panel">
+{{ }}	
+ 	<div dojoType="dijit.layout.TabContainer" dojoAttachPoint="tabbedContentPane" class="pageEditor" style="width:1000px; height:100%; top:20px">
+    
+	 	<div dojoType="dijit.layout.ContentPane"  title="Editorial" selected="true" dojoAttachPoint="editorial" style="overflow:auto">
+	 		 <button dojoType="dijit.form.Button" type="button" dojoAttachEvent='onClick: save'>Save</button>
+	 	</div>    
+	 
+	    <div dojoType="dijit.layout.ContentPane" title="JS/CSS" dojoAttachPoint="code" style="overflow:auto">
+	    	<button dojoType="dijit.form.Button" type="button" dojoAttachEvent='onClick:save'>Save</button>
+	    </div>
+	
+	    <div dojoType="dijit.layout.ContentPane" title="Metadata" dojoAttachPoint="metadata" style="overflow:auto">
+	    	 <button dojoType="dijit.form.Button" type="button" dojoAttachEvent='onClick:save'>Save</button>
+	    </div>
+    
+	</div>	
+</div>  
