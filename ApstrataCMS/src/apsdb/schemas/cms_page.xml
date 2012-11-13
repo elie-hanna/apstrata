@@ -1,0 +1,55 @@
+<schema>
+	<aclGroups>
+		<aclGroup name="all">
+			<read>anonymous</read>
+			<write>creator;group:publishers</write>
+			<fields>
+				<field>title</field>
+				<field>section1</field>
+				<field>section2</field>
+				<field>tags</field>
+				<field>documentType</field>
+				<field>attachments</field>
+				<field>smallIcon</field>
+				<field>regularIcon</field>
+				<field>parent</field>
+				<field>javascript</field>
+				<field>css</field>
+				<field>description</field>
+				<field>category</field>
+				<field>keywords</field>
+				<field>pageStatus</field>
+				<field>visibility</field>
+				<field>publishedDate</field>
+			</fields>
+		</aclGroup>
+		<schemaAcl>
+			<read>nobody</read>
+			<write>nobody</write>
+			<delete>nobody</delete>
+		</schemaAcl>
+	</aclGroups>
+	<fields>
+		<field name="title" type="string" />
+		<field name="section1" type="text" />
+		<field name="section2" type="text" />
+		<field name="tags" type="string" />
+		<field name="documentType" type="string" />
+		<field name="attachments" type="file">
+			<validation>
+				<cardinality min="0"></cardinality>
+			</validation>
+		</field>
+		<field name="smallIcon" type="file" />
+		<field name="regularIcon" type="file" />
+		<field name="parent" type="string" />
+		<field name="javascript" type="text" />
+		<field name="css" type="text" />
+		<field name="description" type="string" />
+		<field name="category" type="string" />
+		<field name="keywords" type="string" />
+		<field name="pageStatus" type="string" />
+		<field name="visibility" type="string" />
+		<field name="publishedDate" type="date" />
+	</fields>
+</schema>
