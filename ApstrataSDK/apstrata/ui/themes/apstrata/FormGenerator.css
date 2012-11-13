@@ -95,6 +95,11 @@
 	color: red;
 }
 
+.filefield {
+	
+	padding-bottom: 1em;
+}
+
 .multiplefilesfield .field {clear: both; display: inline-block; margin-bottom: 8px; width: 100%;}
 .multiplefilesfield .filefieldimage {float: left;}
 .multiplefilesfield .removeFileDiv {float: left; margin-top: -3px; position: relative; z-index: 10;}
