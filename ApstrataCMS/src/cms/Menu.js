@@ -37,7 +37,7 @@ dojo.declare("apstrata.cms.Menu",
 			{
 				id:"pages", 
 				label: "Pages",
-				panelClass: "apstrata.cms.Pages"
+				panelClass: "apstrata.cms.PagesGrid"
 			},
 			{
 				id:"links", 
@@ -86,7 +86,13 @@ dojo.declare("apstrata.cms.Menu",
 			{
 				id:"linksCategories", 
 				label: "Links Categories"
+			},
+			{
+				id:"linksCatalog", 
+				label: "Catalogs",
+				panelClass: "apstrata.cms.Catalogs"
 			}
+			
 	],
 	
 	
