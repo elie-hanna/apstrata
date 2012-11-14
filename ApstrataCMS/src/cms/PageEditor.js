@@ -1,10 +1,12 @@
 dojo.provide("apstrata.cms.PageEditor");
 
 dojo.require("dojox.dtl._Templated");
+dojo.require("dijit._editor.plugins.ViewSource");
 dojo.require("apstrata.horizon.util._Templated");
 dojo.require("apstrata.horizon.Panel");
 dojo.require("dijit.layout.TabContainer");
 dojo.require("dijit.layout.ContentPane");
+dojo.require("dijit.form.Button");
 
 /**
  * This class provides an editor to create/update page documents
@@ -48,7 +50,7 @@ dojo.declare("apstrata.cms.PageEditor",
 				submitOnEnter: true
 			}
 		);		
-							
+					
 		this.inherited(arguments);
 	},
 	
@@ -59,18 +61,50 @@ dojo.declare("apstrata.cms.PageEditor",
 		
 		var self = this;
 		this._handleFormEditorBug();
-			
+				
 		var params = {											
 				"apsdb.update": this._mode,
 				"apsdb.store": this._store,
 				"apsdb.schema": "cms_page",
 				"section1.apsdb.fieldType": "text",
-				"section2.apsdb.fieldType": "text"				
+				"section2.apsdb.fieldType": "text",
+				"javascript.apsdb.fieldType": "text",
+				"css.apsdb.fieldType": "text",
+				"publishedDate.apsdb.fieldType": "date"	
 		};	
-		 
+		
+		// Important:
+		// In _arrangeLayout(), we split the form fields into the three tabs. However, the form
+		// is only contained into the first tab, hence, submitting the form will not submit
+		// the fields contained in the second and third tab. Therefore, we need to "manually" add
+		// these remaining fields to the params variable below. 	 
+		
+		// We need to change the tags ListInput value into a string of tags separated by ','			
+		params["tags"] = this._tagsAsString(this._formGenerator.getField("tags").value);
+								
 		params["description"] = this._formGenerator.getField("description").value;
 		params["category"] = this._formGenerator.getField("category").value;
+		params["javascript"] = this._formGenerator.getField("javascript").value;
+		params["css"] = this._formGenerator.getField("css").value;
+		params["category"] = this._formGenerator.getField("category").value;		
+		params["description"] = this._formGenerator.getField("description").value;
+		params["keywords"] = this._formGenerator.getField("keywords").value;
+		params["document.readACL"] = this._formGenerator.getField("document.readACL").value;
+		
+		// We will only send the publishedDate if the status is "Published"
+		// If not date/time was set, we use the current date/time
+		var status = this._formGenerator.getField("pageStatus").value;
+		params["pageStatus"] = status;
+		if (status == "Published" && !this._formGenerator.getField("publishedDate").value) {
+							
+			params["publishedDate"] = this._formatDate();			
+		}else {			
+			if (status == "Published" && this._formGenerator.getField("publishedDate").value) {
 				
+				params["publishedDate"] = this._formGenerator.getField("publishedDate").value;			
+			}
+		}
+								
 		var client = new apstrata.sdk.Client(this._connection);
 		client.call("SaveDocument", params, this._formGenerator.frmMain.domNode, {method:"post"}).then( 
 		
@@ -123,12 +157,45 @@ dojo.declare("apstrata.cms.PageEditor",
 			var metadataGroup= groups[2].nextSibling;
 			dojo.destroy(groups[2]);
 			dojo.place(metadataGroup, this.metadata.domNode);											 			
-		}	
+		}
+		
+		// Add a save button on top of every tab (content pane_
+		var tabs = [this.editorial, this.code, this.metadata];
+		dojo.forEach(tabs, function(tab, index){
+			
+			var saveButton = new dijit.form.Button({
+				
+				label: "Save",
+				onClick: dojo.hitch(self, self._savePart),
+				type: "button"
+			})
+			
+			dojo.place(saveButton.domNode, tab.domNode, "first");
+		});		
 	},
 	
+	/*
+	 * This function is called by the save buttons placed on top of every content page (tab)
+	 * It validates the form then calls the save() function
+	 */
+	_savePart: function(target) {
+		
+		var isValid = this._formGenerator.validate();
+		if (isValid) {
+			
+			this.save(this._formGenerator.value);
+		}
+	},
+	
+	/*
+	 * This function instanciates the _pageFormDefinition attribute of the current class.
+	 * We need to have this in a function (instead of a direct instanciation of the attribute
+	 * because we need to allocate the value of other attributes (this._connection mainly)
+	 * to some of the definition properties (mainly connection)
+	 */
 	_specifyFormDefinition: function() {
 		
-		if (!this._cnnection) {
+		if (!this._connection) {
 			this._connection = new apstrata.sdk.Connection(this.container.connection);
 		}
 				
@@ -141,23 +208,22 @@ dojo.declare("apstrata.cms.PageEditor",
 					fieldset: [						
 						{name: "apsdb.documentKey", label: "Page ID", required: true, type: "string"},
 						{name: "title", type: "string", required: true},
-						{name: "section1", label: "Body: first section", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
-						{name: "section2", label: "Body: second section", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
+						{name: "section1", label: "Body: first section", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true}, 'fontSize','formatBlock','insertImage','insertHorizontalRule'], extraPlugins: ['viewSource']},
+						{name: "section2", label: "Body: second section", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule'], extraPlugins: ['viewSource']},
 						{name: "template", label:"Template", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["Wide", "Two columns"]},
-						{name: "tags", label:"tags", type: "string", widget: "dojox.form.ListInput"},
 						{name: "attachments", label: "Attachments", type: "multiplefiles", connection: this._connection, displayImage:false, value:""},
 						{name: "smallIcon", label:"Small icon", type: "file", displayImage:true, connection: this._connection, store: this._store, value:"", showRemoveFieldBtn: true},
 						{name: "regularIcon", label:"Regular Icon", type: "file", displayImage:true, connection: this._connection, store: this._store, value:"",showRemoveFieldBtn: true},
-						{name: "documentType", type: "hidden", value: "page"}
-						//{name: "parent", label:"Parent", type: "string", widget: "dojox.form.ListInput"},
+						{name: "documentType", type: "hidden", value: "page"},
+						{name: "parent", label:"Parent", type: "string", widget: "dojox.form.ListInput"}
 					]
 				},
 	
 				// definition of the "JS/CSS" tab
 				{name: "Code",  type: "subform",
 					fieldset: [
-						{name: "javascript", label: "JavaScript", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},
-						{name: "css", label: "CSS", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule']},			
+						{name: "javascript", label: "JavaScript", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule'], extraPlugins: ['viewSource']},
+						{name: "css", label: "CSS", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule'], extraPlugins: ['viewSource']},			
 					]				
 				},
 		
@@ -165,11 +231,12 @@ dojo.declare("apstrata.cms.PageEditor",
 				{name: "Metadata",  type: "subform",
 					fieldset: [
 						{name: "description", label: "Description", type: "string"},
-						{name: "category", label: "Category", type: "string", type: "string", value: "Editor", widget: "dijit.form.ComboBox", "formGenerator-options": ["Editorial", "Product", "Blog"]},
+						{name: "category", label: "Category", type: "string", type: "string", value: "Editorial", widget: "dijit.form.ComboBox", "formGenerator-options": ["Editorial", "Product", "Blog"]},
+						{name: "tags", label:"tags", type: "string", widget: "dojox.form.ListInput"},
 						{name: "keywords", label: "Keywords", type: "string"},
 						{name: "pageStatus", label: "Status", type: "string", type: "string", value: "Draft", widget: "dijit.form.ComboBox", "formGenerator-options": ["Published", "Draft", "Pending Approval"]},
 						{name: "document.readACL", label: "Read permissions", type: "string"},
-						{name: "publishedDate", label: "Published date", type: "date"}
+						{name: "publishedDate", label: "Published date", type: "string"}
 					]
 				},
 			],
@@ -179,9 +246,38 @@ dojo.declare("apstrata.cms.PageEditor",
 	},
 	
 	/*
-	 * This section is required due to a dojo bug in the FormGenerator: when submitting the form node,
+	 * Utility function that format a date to the format that is expected by Apstrata
+	 * (yyyy-MM-dd'T'HH:mm:ssZ)
+	 * @param aDate: the date/time to format. If undefined, will take the current date/time
+	 * @return the formatted date
+	 */
+	_formatDate: function(aDate) {
+		
+		var date = aDate ? aDate: new Date();
+		var fDate = dojo.date.locale.format(date, {datePattern: "yyyy-MM-dd'T'", timePattern: "HH:mm:ssZ"});
+		fDate = fDate.replace(/\T /g, "T");
+		return fDate;
+	},
+	
+	/*
+	 * Utility function that turns an array of string tags into a string where tags are 
+	 * separated with ","
+	 */
+	_tagsAsString: function(tagsArray) {
+		
+		var tagsStr = "";
+		for (var i = 0; i < tagsArray.length; i++) {			
+			tagsStr += tagsArray[i] + "," 
+		}
+		
+		return tagsStr.substring(0, tagsStr.length - 1);
+	},
+	
+	/*
+	 * Caution:
+	 * This function is only required due to a dojo bug in the FormGenerator: when submitting the form node,
 	 * the value of dijit.Editors is not sent along the other data. This section is a quick workaround
-	 * but should be removed when the bug is fixed
+	 * but should be removed when the bug is fixed (i.e. this fix to be added to the form generator
 	 */	
 	_handleFormEditorBug: function() {
 				
@@ -198,7 +294,21 @@ dojo.declare("apstrata.cms.PageEditor",
 			dojo.place(this._section2TextArea.domNode, this._formGenerator.frmMain.domNode);
 		}
 		
-		this._section2TextArea.set("value", this._formGenerator.getField("section2").value);		
+		this._section2TextArea.set("value", this._formGenerator.getField("section2").value);
+		
+		if (!this._javascriptTextArea) {				
+			this._javascriptTextArea = new dijit.form.Textarea({name:"javascript", style:"display:none"});
+			dojo.place(this._javascriptTextArea.domNode, this._formGenerator.frmMain.domNode);
+		}
+		
+		this._javascriptTextArea.set("value", this._formGenerator.getField("javascript").value);
+		
+		if (!this.cssArea) {				
+			this.cssArea = new dijit.form.Textarea({name:"css", style:"display:none"});
+			dojo.place(this.cssArea.domNode, this._formGenerator.frmMain.domNode);
+		}
+		
+		this.cssArea.set("value", this._formGenerator.getField("css").value);		
 	},
 	
 	/*
