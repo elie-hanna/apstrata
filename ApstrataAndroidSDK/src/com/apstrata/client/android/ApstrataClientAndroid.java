@@ -32,7 +32,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
+
 
 import android.net.http.AndroidHttpClient;
 import android.util.Log;
@@ -117,7 +120,7 @@ public class ApstrataClientAndroid {
 	 * @throws Exception
 	 */
 	public String callAPI(String methodName, List<NameValuePair> params, Map<String, List<File>> files) throws Exception {
-		String apiUrl = getFullApiUrlWithQueryParameters(methodName, params, files);
+		String apiUrl = getSignedRequestUrl(methodName, params, files);
 		return getStringResponse(apiUrl, params, files);
 	}
 	
@@ -133,7 +136,7 @@ public class ApstrataClientAndroid {
 	 * @throws Exception
 	 */
 	public InputStream callAPIStream(String methodName, List<NameValuePair> params, Map<String, List<File>> files, HttpClient httpClient) throws Exception {
-		String apiUrl = getFullApiUrlWithQueryParameters(methodName, params, files);
+		String apiUrl = getSignedRequestUrl(methodName, params, files);
 		return getStreamResponse(apiUrl, params, files, httpClient);
 	}
 	
@@ -182,9 +185,10 @@ public class ApstrataClientAndroid {
 	 * @throws Exception
 	 */
 	public File callAPIFile(String methodName, List<NameValuePair> params, String path) throws Exception {
-		String apiUrl = getFullApiUrlWithQueryParameters(methodName, params, null);
-		AndroidHttpClient httpClient = AndroidHttpClient.newInstance("some-android-user-agent");
+		String apiUrl = getSignedRequestUrl(methodName, params, null);
 		
+		//AndroidHttpClient httpClient = AndroidHttpClient.newInstance("some-android-user-agent");
+		DefaultHttpClient httpClient = MySSLSocketFactory.getNewHttpClient();
 		File file = new File(path);
 		FileOutputStream f = new FileOutputStream(file);
 		
@@ -202,7 +206,7 @@ public class ApstrataClientAndroid {
 		} finally {
 			
 			f.close();
-			httpClient.close();
+			//httpClient.close();
 		}
 	}
 	
@@ -235,7 +239,7 @@ public class ApstrataClientAndroid {
 	 * @return String full URL
 	 * @throws Exception
 	 */
-	private String getFullApiUrlWithQueryParameters(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {
+	public String getSignedRequestUrl(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {
 		long timeStamp = System.currentTimeMillis();
 		
 		List<String> stringedParams = new ArrayList<String>();
@@ -314,7 +318,8 @@ public class ApstrataClientAndroid {
 	 * @throws Exception
 	 */
 	private String getStringResponse(String fullURL, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {
-		AndroidHttpClient httpClient = AndroidHttpClient.newInstance("some-android-user-agent");
+		// AndroidHttpClient httpClient = AndroidHttpClient.newInstance("some-android-user-agent");
+		DefaultHttpClient httpClient = MySSLSocketFactory.getNewHttpClient();
 		StringBuffer sb = new StringBuffer();
 		
 		try {
@@ -325,7 +330,7 @@ public class ApstrataClientAndroid {
 				sb.append(line);
 			}
 		} finally {
-			httpClient.close();
+			// httpClient.close();
 		}
 		
 		Log.d(this.getClass().getName(), "success invoking apstrata at " + fullURL + ", response: " + sb);
