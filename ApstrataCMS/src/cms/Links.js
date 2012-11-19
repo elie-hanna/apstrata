@@ -37,6 +37,9 @@ dojo.declare("apstrata.cms.Links",
 	//
 	// widget attributes
 	//
+	_mode: "new",
+	_store: "apstrata",
+	_formGenerator: null,
 	filterable: true,
 	sortable: true,
 	editable: true,
@@ -44,19 +47,7 @@ dojo.declare("apstrata.cms.Links",
 
 	newObjectPanel: null,
 	
-	pageFormDefinition:  {
-		label: "Link",
-		fieldset: [
-//			{name: "apsdb.documentKey", label: "Page ID", required: true, type: "string"},
-			{name: "title", type: "string", required: true},
-			{name: "address", type: "string", required: true},
-			{name: "description", type: "string", required: false},
-			{name: "target", label: "type", type: "string"},
-			{name: "documentType", type: "hidden", value: "link"}			
-		],
-		actions: ['save']
-	},
-
+	linkFormDefinition:  null,
 	
 	// index of the essential item properties
 	idAttribute: 'apsdb.documentKey',
@@ -65,12 +56,13 @@ dojo.declare("apstrata.cms.Links",
 	constructor: function() {
 		var self = this
 
+		this._setFormDefinition();
 		this.store = new apstrata.sdk.ObjectStore({
 					connection: self.container.connection,
 					store: "apstrata",
 					queryFields: "*",
 					queryExpression: "documentType =\"link\"" 
-				}) 
+				})
 	},
 	
 	itemIsDeleteable: function(item) {
@@ -87,27 +79,22 @@ dojo.declare("apstrata.cms.Links",
 	},
 
 	openEditor: function(value) {
-		var self = this	
+		var self = this;
+		this._mode = value ? "edit" : "new";
 
 		this.openPanel(apstrata.horizon.WrapperPanel, {
 			widgetClass: "apstrata.ui.forms.FormGenerator",
 			maximizable: true,
 			cssClass: "pageEditor",
-			attrs: {
-				definition: self.pageFormDefinition,
-				save: function(v) {
-					v["apsdb.ftsFields"] = "name,address"
-
-					delete v["apsdb!documentKey"]
-					if (v.dijit) delete v.dijit
-
-					self.store.add(v).then(function() {
-						self.reload()
-					})
-				},
+			attrs: {				
+			
+				definition: self.linkFormDefinition,
+				save: dojo.hitch(self, self.save),
 				value: value 
 			}
-		})
+		});
+		
+		this._formGenerator = this._openPanel.getWidget();
 	},
 
 	onNew: function() {
@@ -125,6 +112,79 @@ dojo.declare("apstrata.cms.Links",
 	onDeleteItem: function(id) {
 		var self = this
 		this.store.remove(id).then(function() {self.reload()})
+	},
+	
+	save: function(value) {		
+		
+		var self = this;
+		var params = {		
+												
+				"apsdb.update": this._mode == "edit" ? true : false,
+				"apsdb.store": this._store,
+				//"apsdb.schema": "cms_page"		
+		};	
+		
+		if (this._mode == "new") {
+			
+			var docKey = this._formGenerator.getField("apsdb.documentKey");
+			docKey.destroy();
+			delete docKey;
+		}
+								
+		var client = new apstrata.sdk.Client(this.container.connection);
+		client.call("SaveDocument", params, this._formGenerator.frmMain.domNode, {method:"post"}).then( 
+		
+			function(response){
+												
+				self._alert("Link successfully updated")
+				self.parentList.refresh();				
+			},
+			
+			function(response) {				
+			
+				var errorMsg= response.metadata.errorDetail ? response.metadata.errorDetail : response.metadata.errorCode;
+				self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");
+			}
+		)		
+	},
+	
+	_setFormDefinition: function() {
+		
+		this.linkFormDefinition = {
+			label: "Link",
+			fieldset: [
+				{name: "apsdb.documentKey", type: "hidden"},
+				{name: "title", type: "string", required: true},
+				{name: "address", type: "string", required: true},
+				{name: "description", type: "string", required: false},
+				{name: "target", label: "type", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["_blank", "_top", "_none"]},
+				{name: "regularIcon", label:"Regular Icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"",showRemoveFieldBtn: true},
+				{name: "document.readACL", type:"string"},
+				{name: "smallIcon", label:"Small icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"", showRemoveFieldBtn: true},
+				{name: "documentType", type: "hidden", value: "link"}				
+			],
+			
+			actions: ['save']
+		}
+	},
+	
+	/*
+	 * Displays an alert message
+	 */
+	_alert: function(message, iconClass){
+		
+		var self = this;
+		new apstrata.horizon.PanelAlert({
+			panel: self,
+			width: 320,
+			height: 140,
+			iconClass: iconClass,
+			message: message,
+			actions: ['OK'],
+			actionHandler: function(action){
+				self.closePanel();
+			}
+		});
 	}
 })
 

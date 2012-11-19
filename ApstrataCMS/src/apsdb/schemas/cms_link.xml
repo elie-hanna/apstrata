@@ -1,0 +1,39 @@
+<schema>
+	<aclGroups>
+		<aclGroup name="all">
+			<read>anonymous</read>
+			<write>creator;group:publishers</write>
+			<fields>
+				<field>title</field>
+				<field>documentType</field>
+				<field>address</field>
+				<field>smallIcon</field>
+				<field>regularIcon</field>
+				<field>target</field>				
+				<field>description</field>				
+				<field>attachments</field>
+				<field>visibility</field>
+			</fields>
+		</aclGroup>
+		<schemaAcl>
+			<read>nobody</read>
+			<write>nobody</write>
+			<delete>nobody</delete>
+		</schemaAcl>
+	</aclGroups>
+	<fields>
+		<field name="title" searchable="true" type="string" />
+		<field name="address" type="string" />
+		<field name="documentType" type="string" />
+		<field name="attachments" type="file">
+			<validation>
+				<cardinality min="0"></cardinality>
+			</validation>
+		</field>
+		<field name="smallIcon" type="file" />
+		<field name="regularIcon" type="file" />
+		<field name="target" type="string" />
+		<field name="description" type="string" />
+		<field name="visibility" type="string" />
+	</fields>
+</schema>

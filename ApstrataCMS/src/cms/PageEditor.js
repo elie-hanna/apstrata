@@ -174,6 +174,8 @@ dojo.declare("apstrata.cms.PageEditor",
 				onClick: dojo.hitch(self, self._savePart),
 				type: "button"
 			})
+			
+			dojo.place(saveButton.domNode, tab.domNode, "first");
 		});		
 	},
 	
