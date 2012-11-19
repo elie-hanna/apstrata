@@ -30,7 +30,7 @@
 		</schemaAcl>
 	</aclGroups>
 	<fields>
-		<field name="title" type="string" />
+		<field name="title" searchable="true" type="string" />
 		<field name="section1" type="text" />
 		<field name="section2" type="text" />
 		<field name="tags" type="string" />

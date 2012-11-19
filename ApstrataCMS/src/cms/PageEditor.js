@@ -7,6 +7,7 @@ dojo.require("apstrata.horizon.Panel");
 dojo.require("dijit.layout.TabContainer");
 dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.form.Button");
+dojo.require("dijit.form.SimpleTextarea");
 
 /**
  * This class provides an editor to create/update page documents
@@ -49,8 +50,8 @@ dojo.declare("apstrata.cms.PageEditor",
 				save: dojo.hitch(this, this.save),
 				submitOnEnter: true
 			}
-		);		
-					
+		);				
+		
 		this.inherited(arguments);
 	},
 	
@@ -60,6 +61,7 @@ dojo.declare("apstrata.cms.PageEditor",
 	save: function(value) {
 		
 		var self = this;
+		this.showAsBusy(true, "Saving page...");	
 		this._handleFormEditorBug();
 				
 		var params = {											
@@ -92,7 +94,7 @@ dojo.declare("apstrata.cms.PageEditor",
 		params["document.readACL"] = this._formGenerator.getField("document.readACL").value;
 		
 		// We will only send the publishedDate if the status is "Published"
-		// If not date/time was set, we use the current date/time
+		// If no date/time was set, we use the current date/time
 		var status = this._formGenerator.getField("pageStatus").value;
 		params["pageStatus"] = status;
 		if (status == "Published" && !this._formGenerator.getField("publishedDate").value) {
@@ -110,11 +112,14 @@ dojo.declare("apstrata.cms.PageEditor",
 		
 			function(response){
 												
-				self._alert("Page successfully updated");
+				self._alert("Page successfully updated")
+				self.parentList.refresh();
+				self.showAsBusy(false);	
 			},
 			
 			function(response) {
 				
+				self.showAsBusy(false);	
 				var errorMsg= response.metadata.errorDetail ? response.metadata.errorDetail : response.metadata.errorCode;
 				self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");
 			}
@@ -129,8 +134,8 @@ dojo.declare("apstrata.cms.PageEditor",
 	startup: function() {
 		
 		dojo.style(this.domNode, "height", "100%");				
-		this._arrangeLayout();		
-		this.inherited(arguments);
+		this._arrangeLayout();	
+		this.inherited(arguments);	
 	},
 	
 	/*
@@ -151,15 +156,15 @@ dojo.declare("apstrata.cms.PageEditor",
 			// move the "code" group to the code div
 			var codeGroup = groups[1].nextSibling;
 			dojo.destroy(groups[1]);
-			dojo.place(codeGroup, this.code.domNode);				
-			
+			dojo.place(codeGroup, this.code.domNode);
+									
 			// move the "metadata" group to the metadata div
 			var metadataGroup= groups[2].nextSibling;
 			dojo.destroy(groups[2]);
 			dojo.place(metadataGroup, this.metadata.domNode);											 			
 		}
 		
-		// Add a save button on top of every tab (content pane_
+		// Add a save button on top of every tab (content pane)
 		var tabs = [this.editorial, this.code, this.metadata];
 		dojo.forEach(tabs, function(tab, index){
 			
@@ -169,8 +174,6 @@ dojo.declare("apstrata.cms.PageEditor",
 				onClick: dojo.hitch(self, self._savePart),
 				type: "button"
 			})
-			
-			dojo.place(saveButton.domNode, tab.domNode, "first");
 		});		
 	},
 	
@@ -189,7 +192,7 @@ dojo.declare("apstrata.cms.PageEditor",
 	
 	/*
 	 * This function instanciates the _pageFormDefinition attribute of the current class.
-	 * We need to have this in a function (instead of a direct instanciation of the attribute
+	 * We need to have this in a function (instead of a direct instanciation of the attribute)
 	 * because we need to allocate the value of other attributes (this._connection mainly)
 	 * to some of the definition properties (mainly connection)
 	 */
@@ -221,8 +224,9 @@ dojo.declare("apstrata.cms.PageEditor",
 	
 				// definition of the "JS/CSS" tab
 				{name: "Code",  type: "subform",
-					fieldset: [
+					fieldset: [						 
 						{name: "javascript", label: "JavaScript", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule'], extraPlugins: ['viewSource']},
+						{name: "javascript", label: "JavaScript", type: "hidden"},
 						{name: "css", label: "CSS", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule'], extraPlugins: ['viewSource']},			
 					]				
 				},
@@ -246,7 +250,7 @@ dojo.declare("apstrata.cms.PageEditor",
 	},
 	
 	/*
-	 * Utility function that format a date to the format that is expected by Apstrata
+	 * Utility function that formats a date to the format that is expected by Apstrata
 	 * (yyyy-MM-dd'T'HH:mm:ssZ)
 	 * @param aDate: the date/time to format. If undefined, will take the current date/time
 	 * @return the formatted date
@@ -277,7 +281,7 @@ dojo.declare("apstrata.cms.PageEditor",
 	 * Caution:
 	 * This function is only required due to a dojo bug in the FormGenerator: when submitting the form node,
 	 * the value of dijit.Editors is not sent along the other data. This section is a quick workaround
-	 * but should be removed when the bug is fixed (i.e. this fix to be added to the form generator
+	 * but should be removed when the bug is fixed (i.e. this fix to be added to the form generator)
 	 */	
 	_handleFormEditorBug: function() {
 				
@@ -328,5 +332,5 @@ dojo.declare("apstrata.cms.PageEditor",
 				self.closePanel();
 			}
 		});
-	}
+	},	
 })
