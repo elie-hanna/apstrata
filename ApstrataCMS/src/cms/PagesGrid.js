@@ -32,10 +32,7 @@ dojo.declare("apstrata.cms.PagesGrid",
 	connection: null,
 	gridParams: null,
 	maxRows: 20,
-	
-	// the panel containing the details of the selected page document
-	openedPanel: null,
-	
+		
 	// the query to execute to fetch the page documents
 	_queryExpression: "documentType =\"page\"",
 	
@@ -46,6 +43,13 @@ dojo.declare("apstrata.cms.PagesGrid",
 	// and the fields returned by the query executed by the dataStore   
     _gridStructure: null,
 	
+	/**
+	 * Creates and instance of PagesGrid and wraps and instance of dojox.grid.EnhancedGrid.
+	 * PagesGrid also wraps an instance of apstrata.sdk.ObjectStore used to retrieve the pages
+	 * from the Apstrata store. An instanc of PagesGridFTSearch is used for filtering and FTS
+	 * @param credentials: the credentials used to instanciate apstrata.sdk.Connection.
+	 * If credentials are undefined, the class will use this.container.connection
+	 */
 	constructor: function(credentials) {
 		
 		this.connection = credentials ?  new apstrata.sdk.Connection(credentials) 
@@ -53,12 +57,15 @@ dojo.declare("apstrata.cms.PagesGrid",
 		
 		this._setGridStructure();
 		
-		// Create the dataStore, i.e the object store instance responsible for fetching the pages		
+		// Create the dataStore, i.e the object store instance responsible for fetching the pages
+		// We use the fieldTypes attribute to specify the type of "apsdb.lastModifiedTime" (otherwise
+		// it is set to "string" when sorting and the sort by date column fails)		
 		this.dataStore = new apstrata.sdk.ObjectStore({
 				connection: this.connection,
 				store: "apstrata",
 				queryFields: this._queryFields,
-				queryExpression: this._queryExpression 
+				queryExpression: this._queryExpression,
+				fieldTypes: {"apsdb.lastModifiedTime": "date"} 
 			}); 
 			
 		// gridClass is inherited from apstrata.horizon.Grid. It is used by the parent class if defined
@@ -134,28 +141,46 @@ dojo.declare("apstrata.cms.PagesGrid",
 		
 	},
 	
-	/*
-	 * Overrides the inherited filter method (empty)
-	 * If full text search is defined, will use it to filter the content of the grid
-	 * If status is defined, will use it to filter the content of the grid
+	/**
+	 * Overrides the inherited filter method (empty in parent class)
+	 * @param attr.search, if defined, is used to filter the grid by full text
+	 * @param attr.status, if defined, is used to filter the grid by status
+	 * @param attr.fromDate, if defined, is used to filter the grid by lastModifiedTime >= fromDate
+	 * @param attr.toDate, if defined, is used to filter the grid by lastModifiedTime <= toDate
 	 */
 	filter: function(attr) {
-		
-		this.showAsBusy(true, "Filtering...");
-		this.dataStore.ftsQuery = attr.search;
-		
-		// If status is defined, change the query expression of the store to include it
-		if (attr.status) {
+		 
+		try {
 			
-			this.dataStore.queryExpression = this.dataStore.queryExpression + " AND pageStatus=\"" + attr.status + "\"";
+			this.showAsBusy(true, "Filtering...");
+			this.dataStore.ftsQuery = attr.search;
+			
+			// If status is defined, change the query expression of the store to include it
+			if (attr.status) {
+				
+				this.dataStore.queryExpression = this.dataStore.queryExpression + " AND pageStatus=\"" + attr.status + "\"";
+			}
+			
+			if (attr.fromDate) {
+				
+				this.dataStore.queryExpression = this.dataStore.queryExpression + " AND apsdb.lastModifiedTime<date> >=\"" + attr.fromDate + "\"";
+			}
+			
+			if (attr.toDate) {
+				
+				this.dataStore.queryExpression = this.dataStore.queryExpression + " AND apsdb.lastModifiedTime<date> <=\"" + attr.toDate + "\"";
+			}
+			
+			this.dataStore.query({}, null);
+			this.refresh();
+			this.showAsBusy(false);
+							
+			// reset the query expression of the store to its initial value;
+			this.dataStore.queryExpression =  this._queryExpression
+		}catch(exception) {
+			
+			this._alert(exception, "errorICon");
 		}
-		
-		this.dataStore.query({}, null);
-		this.refresh();
-		this.showAsBusy(false);
-						
-		// reset the query expression of the store to its initial value;
-		this.dataStore.queryExpression =  this._queryExpression
 	},
 	
 	refresh: function() {
