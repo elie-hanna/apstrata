@@ -86,13 +86,7 @@ dojo.declare("apstrata.cms.Menu",
 			{
 				id:"linksCategories", 
 				label: "Links Categories"
-			},
-			{
-				id:"linksCatalog", 
-				label: "Catalogs",
-				panelClass: "apstrata.cms.Catalogs"
-			}
-			
+			}			
 	],
 	
 	
