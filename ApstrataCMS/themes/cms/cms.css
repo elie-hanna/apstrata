@@ -26,6 +26,7 @@ body {
 
 .apstrataCms {
 	font-family: sans-serif;
+	font-size: .9em;
 }
 
 .apstrataCms .apstrataLogo {
@@ -58,6 +59,15 @@ body {
 .apstrataCms .pagesList {
 	width: 300px;
 }
+
+.apstrataCms .linksList {
+	width: 300px;
+}
+
+.apstrataCms .collectionsList {
+	width: 300px;
+}
+
 
 .apstrataCms .pageEditor {
 	width: 800px;
