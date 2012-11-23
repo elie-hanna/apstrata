@@ -82,10 +82,6 @@ dojo.declare("apstrata.cms.Menu",
 			{
 				id:"media", 
 				label: "Media"
-			},
-			{
-				id:"linksCategories", 
-				label: "Links Categories"
 			}			
 	],
 	
