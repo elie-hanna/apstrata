@@ -45,6 +45,11 @@ dojo.declare("apstrata.cms.Menu",
 				panelClass: "apstrata.cms.Links"
 			},
 			{
+				id:"collections", 
+				label: "Collections",
+				panelClass: "apstrata.cms.Collections"
+			},
+			{
 				id:"menu", 
 				label: "Menu Editor", 
 				panelClass: "apstrata.horizon.WrapperPanel",
@@ -55,34 +60,11 @@ dojo.declare("apstrata.cms.Menu",
 					} 
 				}
 			},
-/*
-			{
-				id:"home", 
-				label: "Home page editor",
-				panelClass: "apstrata.cms.Home"
-			},
-*/			
 			{
 				id:"homePageEditor", 
 				label: "Home",
 				panelClass: "apstrata.cms.HomePageEditor"
-			},
-			{
-				id:"posts", 
-				label: "Posts"
-			},
-			{
-				id:"postsCategories", 
-				label: "Posts Categories"
-			},
-			{
-				id:"tags", 
-				label: "Tags"
-			},
-			{
-				id:"media", 
-				label: "Media"
-			}			
+			}
 	],
 	
 	

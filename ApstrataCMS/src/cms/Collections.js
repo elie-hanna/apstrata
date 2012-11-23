@@ -17,21 +17,13 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.cms.Links")
+dojo.provide("apstrata.cms.Collections")
 
 dojo.require("apstrata.horizon.NewList")
 
-dojo.require("apstrata.sdk.ObjectStore")
-
 dojo.require("apstrata.horizon.WrapperPanel")
- 
-dojo.require("dijit.Editor")
-dojo.require("dijit._editor.plugins.FontChoice");  // 'fontName','fontSize','formatBlock'
-dojo.require("dijit._editor.plugins.TextColor");
-dojo.require("dijit._editor.plugins.LinkDialog");
-dojo.require("dojox.form.ListInput")
- 
-dojo.declare("apstrata.cms.Links",
+
+dojo.declare("apstrata.cms.Collections",
 [apstrata.horizon.NewList], 
 {	
 	//
@@ -56,12 +48,11 @@ dojo.declare("apstrata.cms.Links",
 	constructor: function() {
 		var self = this
 
-		this._setFormDefinition();
 		this.store = new apstrata.sdk.ObjectStore({
 					connection: self.container.connection,
 					store: "apstrata",
 					queryFields: "*",
-					queryExpression: "documentType =\"link\"" 
+					queryExpression: "documentType =\"collection\"" 
 				})
 	},
 	
@@ -74,7 +65,7 @@ dojo.declare("apstrata.cms.Links",
 	},
 	
 	postCreate: function() {
-		dojo.addClass(this.domNode, "linksList")
+		dojo.addClass(this.domNode, "collectionsList")
 		this.inherited(arguments)
 	},
 
@@ -85,7 +76,7 @@ dojo.declare("apstrata.cms.Links",
 		this.openPanel(apstrata.horizon.WrapperPanel, {
 			widgetClass: "apstrata.ui.forms.FormGenerator",
 			maximizable: true,
-			cssClass: "pageEditor",
+			cssClass: "collectionEditor",
 			attrs: {				
 			
 				definition: self.linkFormDefinition,
@@ -155,14 +146,12 @@ dojo.declare("apstrata.cms.Links",
 			fieldset: [
 				{name: "apsdb.documentKey", type: "hidden"},
 				{name: "title", type: "string", required: true},
-				{name: "address", type: "string", required: true},
-				{name: "description", type: "string", required: false},
-				{name: "target", label: "type", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["_blank", "_top", "_none"]},
-				{name: "attachments", label: "Attachments", type: "multiplefiles", connection: this._connection, displayImage:false, value:""},
+				{name: "First Query", type: "string", required: false},
+				{name: "Second Query", type: "string", required: false},
 				{name: "regularIcon", label:"Regular Icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"",showRemoveFieldBtn: true},
 				{name: "document.readACL", type:"string"},
 				{name: "smallIcon", label:"Small icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"", showRemoveFieldBtn: true},
-				{name: "documentType", type: "hidden", value: "link"}				
+				{name: "documentType", type: "hidden", value: "collection"}				
 			],
 			
 			actions: ['save']
