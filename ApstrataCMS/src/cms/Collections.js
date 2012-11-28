@@ -17,11 +17,12 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
-dojo.provide("apstrata.cms.Collections")
+dojo.provide("apstrata.cms.Collections");
 
-dojo.require("apstrata.horizon.NewList")
+dojo.require("apstrata.cms.PageSelector");
 
-dojo.require("apstrata.horizon.WrapperPanel")
+dojo.require("apstrata.horizon.NewList");
+dojo.require("apstrata.horizon.WrapperPanel");
 
 dojo.declare("apstrata.cms.Collections",
 [apstrata.horizon.NewList], 
@@ -47,7 +48,8 @@ dojo.declare("apstrata.cms.Collections",
 	
 	constructor: function() {
 		var self = this
-
+		
+		this._setFormDefinition();
 		this.store = new apstrata.sdk.ObjectStore({
 					connection: self.container.connection,
 					store: "apstrata",
@@ -65,8 +67,8 @@ dojo.declare("apstrata.cms.Collections",
 	},
 	
 	postCreate: function() {
-		dojo.addClass(this.domNode, "collectionsList")
-		this.inherited(arguments)
+		dojo.addClass(this.domNode, "collectionsList");		
+		this.inherited(arguments);
 	},
 
 	openEditor: function(value) {
@@ -79,7 +81,7 @@ dojo.declare("apstrata.cms.Collections",
 			cssClass: "collectionEditor",
 			attrs: {				
 			
-				definition: self.linkFormDefinition,
+				definition: self.collectionFormDefinition,
 				save: dojo.hitch(self, self.save),
 				value: value 
 			}
@@ -112,7 +114,8 @@ dojo.declare("apstrata.cms.Collections",
 												
 				"apsdb.update": this._mode == "edit" ? true : false,
 				"apsdb.store": this._store,
-				//"apsdb.schema": "cms_page"		
+				"apsdb.schema": "cms_collection",
+				"pageSelection": value["pageSelection"]		
 		};	
 		
 		if (this._mode == "new") {
@@ -127,7 +130,7 @@ dojo.declare("apstrata.cms.Collections",
 		
 			function(response){
 												
-				self._alert("Link successfully updated")
+				self._alert("Collection successfully updated")
 				self.parentList.refresh();				
 			},
 			
@@ -141,13 +144,14 @@ dojo.declare("apstrata.cms.Collections",
 	
 	_setFormDefinition: function() {
 		
-		this.linkFormDefinition = {
-			label: "Link",
+		this.collectionFormDefinition = {
+			label: "Collection",
 			fieldset: [
 				{name: "apsdb.documentKey", type: "hidden"},
 				{name: "title", type: "string", required: true},
-				{name: "First Query", type: "string", required: false},
-				{name: "Second Query", type: "string", required: false},
+				{name: "First Query", name:"firstQuery", type: "string", widget: "dijit.form.SimpleTextarea", required: false},
+				{name: "Second Query", name:"secondQuery", type: "string", widget: "dijit.form.SimpleTextarea", required: false},
+				{name: "Page selection", name: "pageSelection", type: "string", widget: "apstrata.cms.PageSelector", connection: this.container.connection},
 				{name: "regularIcon", label:"Regular Icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"",showRemoveFieldBtn: true},
 				{name: "document.readACL", type:"string"},
 				{name: "smallIcon", label:"Small icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"", showRemoveFieldBtn: true},

@@ -76,8 +76,7 @@ dojo.declare("apstrata.cms.PagesGrid",
 		this.gridParams = this._getGridParams();	
 		
 		// Override default this.filterClass
-		this.filterClass = apstrata.cms.PagesGridFTSearch; 			
-		this.inherited(arguments);
+		this.filterClass = apstrata.cms.PagesGridFTSearch; 		
 	},	
 	
 	/**
