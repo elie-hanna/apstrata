@@ -9,6 +9,8 @@ dojo.require("dijit.layout.ContentPane");
 dojo.require("dijit.form.Button");
 dojo.require("dijit.form.SimpleTextarea");
 
+dojo.require("apstrata.cms.PageSelector");
+
 /**
  * This class provides an editor to create/update page documents
  * The content of the document is displayed/edited in three distinct tabs.
@@ -38,6 +40,7 @@ dojo.declare("apstrata.cms.PageEditor",
 		var value = params && params.attrs.doc ? params.attrs.doc : null;
 		this._mode = value ? true : false;
 		this._store = params && params.attrs.store ? params.attrs.store : this._store;
+		this.maximizePanel = params && params.attrs.maximizePanel ? params.attrs.maximizePanel : false;		
 		this._specifyFormDefinition();
 		this._formGenerator = new apstrata.ui.forms.FormGenerator(
 			{
@@ -72,7 +75,8 @@ dojo.declare("apstrata.cms.PageEditor",
 				"section2.apsdb.fieldType": "text",
 				"javascript.apsdb.fieldType": "text",
 				"css.apsdb.fieldType": "text",
-				"publishedDate.apsdb.fieldType": "date"	
+				"publishedDate.apsdb.fieldType": "date",
+				"parent": this._formGenerator.getField("parent").value	
 		};	
 		
 		// Important:
@@ -89,8 +93,7 @@ dojo.declare("apstrata.cms.PageEditor",
 		params["javascript"] = this._formGenerator.getField("javascript").value;
 		params["css"] = this._formGenerator.getField("css").value;
 		params["category"] = this._formGenerator.getField("category").value;		
-		params["description"] = this._formGenerator.getField("description").value;
-		params["keywords"] = this._formGenerator.getField("keywords").value;
+		params["description"] = this._formGenerator.getField("description").value;		
 		params["document.readACL"] = this._formGenerator.getField("document.readACL").value;
 		
 		// We will only send the publishedDate if the status is "Published"
@@ -113,8 +116,8 @@ dojo.declare("apstrata.cms.PageEditor",
 			function(response){
 												
 				self._alert("Page successfully updated")
-				self.parentList.refresh();
-				self.showAsBusy(false);	
+				self.getParent().refresh();
+				self.showAsBusy(false);
 			},
 			
 			function(response) {
@@ -133,7 +136,7 @@ dojo.declare("apstrata.cms.PageEditor",
 	
 	startup: function() {
 		
-		dojo.style(this.domNode, "height", "100%");				
+		dojo.style(this.domNode, "height", "100%");					
 		this._arrangeLayout();	
 		this.inherited(arguments);	
 	},
@@ -164,19 +167,11 @@ dojo.declare("apstrata.cms.PageEditor",
 			dojo.place(metadataGroup, this.metadata.domNode);											 			
 		}
 		
-		// Add a save button on top of every tab (content pane)
-		var tabs = [this.editorial, this.code, this.metadata];
-		dojo.forEach(tabs, function(tab, index){
-			
-			var saveButton = new dijit.form.Button({
-				
-				label: "Save",
-				onClick: dojo.hitch(self, self._savePart),
-				type: "button"
-			})
-			
-			dojo.place(saveButton.domNode, tab.domNode, "first");
-		});		
+		var saveParts = dojo.hitch(this, this._savePart);
+		dojo.connect(this.saveBtn, "onClick", saveParts);
+		
+		var closeMe = dojo.hitch(this, this.close);
+		dojo.connect(this.closeBtn, "onClick", closeMe);		
 	},
 	
 	/*
@@ -220,7 +215,7 @@ dojo.declare("apstrata.cms.PageEditor",
 						{name: "smallIcon", label:"Small icon", type: "file", displayImage:true, connection: this._connection, store: this._store, value:"", showRemoveFieldBtn: true},
 						{name: "regularIcon", label:"Regular Icon", type: "file", displayImage:true, connection: this._connection, store: this._store, value:"",showRemoveFieldBtn: true},
 						{name: "documentType", type: "hidden", value: "page"},
-						{name: "parent", label:"Parent", type: "string", widget: "dojox.form.ListInput"}
+						{name: "parent", label:"Parent", type: "string", widget: "apstrata.cms.PageSelector", connection: this.container.connection}
 					]
 				},
 	
@@ -239,7 +234,6 @@ dojo.declare("apstrata.cms.PageEditor",
 						{name: "description", label: "Description", type: "string"},
 						{name: "category", label: "Category", type: "string", type: "string", value: "Editorial", widget: "dijit.form.ComboBox", "formGenerator-options": ["Editorial", "Product", "Blog"]},
 						{name: "tags", label:"tags", type: "string", widget: "dojox.form.ListInput"},
-						{name: "keywords", label: "Keywords", type: "string"},
 						{name: "pageStatus", label: "Status", type: "string", type: "string", value: "Draft", widget: "dijit.form.ComboBox", "formGenerator-options": ["Published", "Draft", "Pending Approval"]},
 						{name: "document.readACL", label: "Read permissions", type: "string"},
 						{name: "publishedDate", label: "Published date", type: "string"}

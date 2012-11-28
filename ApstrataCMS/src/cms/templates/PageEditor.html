@@ -1,7 +1,10 @@
-<div style="width:1000px; height:100%" dojoAttachPoint="pageEditorRoot" class="panel">
+<div style="width:100%; height:100%" dojoAttachPoint="pageEditorRoot" class="panel">
+<br>
+<input dojoType="dijit.form.Button" dojoAttachPoint="saveBtn" label="Save"/>
+<input dojoType="dijit.form.Button" dojoAttachPoint="closeBtn" label="Close"/>
 {% if true %} 
 {% endif %}	
- 	<div dojoType="dijit.layout.TabContainer" dojoAttachPoint="tabbedContentPane" class="pageEditor" style="width:1000px; height:100%; top:20px">
+ 	<div dojoType="dijit.layout.TabContainer" dojoAttachPoint="tabbedContentPane" class="pageEditor" style="width:100%; height:100%; top:20px">
     
 	 	<div dojoType="dijit.layout.ContentPane"  title="Editorial" selected="true" dojoAttachPoint="editorial" style="overflow:auto">	 		
 	 	</div>    

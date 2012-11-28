@@ -52,6 +52,7 @@ dojo.declare("apstrata.cms.PageSelector",
 			
 			this._selectedPages = this._selectedPages.concat(value.split(","));
 			this.readView.set("value", this._stringifyArray(this._selectedPages));
+			this.inherited(arguments);
 		}
 		
 		this.inherited(arguments);
@@ -230,6 +231,7 @@ dojo.declare("apstrata.cms.PageSelector",
 		
 		// update the text area (read view)
 		this.readView.set("value", this._stringifyArray(this._selectedPages));
+		this.value = this.readView.get("value");
 		this.dialog.hide();
 	},
 	

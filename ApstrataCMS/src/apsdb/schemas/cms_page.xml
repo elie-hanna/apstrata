@@ -17,7 +17,6 @@
 				<field>css</field>
 				<field>description</field>
 				<field>category</field>
-				<field>keywords</field>
 				<field>pageStatus</field>
 				<field>visibility</field>
 				<field>publishedDate</field>
@@ -47,7 +46,6 @@
 		<field name="css" type="text" />
 		<field name="description" type="string" />
 		<field name="category" type="string" />
-		<field name="keywords" type="string" />
 		<field name="pageStatus" type="string" />
 		<field name="visibility" type="string" />
 		<field name="publishedDate" type="date" />

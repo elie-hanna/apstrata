@@ -41,7 +41,7 @@ dojo.declare("apstrata.cms.PagesGrid",
 		
 	// this attribute specifies the 'structure' of the grid, i.e. the matching between the column names
 	// and the fields returned by the query executed by the dataStore   
-    _gridStructure: null,
+    _gridStructure: null,   
 	
 	/**
 	 * Creates and instance of PagesGrid and wraps and instance of dojox.grid.EnhancedGrid.
@@ -79,6 +79,11 @@ dojo.declare("apstrata.cms.PagesGrid",
 		this.filterClass = apstrata.cms.PagesGridFTSearch; 		
 	},	
 	
+	onClick: function(event) {
+		
+		this.editItems(event);
+	},
+	
 	/**
 	 * Opens the PageEditor on a new page document.
 	 */
@@ -86,7 +91,8 @@ dojo.declare("apstrata.cms.PagesGrid",
 		
 		this.openPanel(apstrata.cms.PageEditor, {
 										
-			maximizable: true, 
+			maximizable: true,
+			maximizePanel: true,
 			attrs: {}
 		});
 	},
@@ -117,7 +123,7 @@ dojo.declare("apstrata.cms.PagesGrid",
 													
 				self.openPanel(apstrata.cms.PageEditor, {
 										
-					maximizable: true, 
+					maximizable: true,
 					attrs: {
 						 doc: doc
 					}
