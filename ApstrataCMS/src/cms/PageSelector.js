@@ -111,6 +111,7 @@ dojo.declare("apstrata.cms.PageSelector",
 		dojo.connect(this.dialog, "onCancel", cancelSelection);
 		
 		// Fill the textarea (readView) with a string built from the selected pages	
+		this.readView.value = "";
 		this.readView.value = this._stringifyArray(this._selectedPages);
 		
 		this.inherited(arguments);
