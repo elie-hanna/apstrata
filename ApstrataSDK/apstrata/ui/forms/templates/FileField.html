@@ -1,6 +1,6 @@
 <div>
 	<div dojoAttachPoint="dvNode" class="filefield">
-		<div>	
+		<div style="padding-top: 1em"">	
 			<label dojoAttachPoint="filefieldLabel" style="display:none">Field name</label>
 			<input dojoAttachPoint="filefieldName" type="text" style="display:none"></input>
 		</div>
@@ -9,7 +9,9 @@
 		{% else %} 
 				<a dojoAttachPoint="fileLink" target="_blank" style="display: none">{{value}}</a>
 		{% endifequal %}
-		<div dojoAttachPoint="removeFileDiv" class="removeFileDiv" style="display:none">	
-		</div>	
+		
 	</div>
+	<div dojoAttachPoint="removeFileDiv" class="removeFileDiv" style="display:none">	
+	</div>	
+	<button dojoType="dijit.form.Button" type="button" dojoAttachPoint="showNode" style="display:none">+</button>
 </div>

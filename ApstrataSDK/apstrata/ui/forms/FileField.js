@@ -11,6 +11,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 [dijit._Widget, dojox.dtl._Templated], 
 {
 	templatePath: dojo.moduleUrl("apstrata.ui.forms", "templates/FileField.html"),
+	widgetsInTemplate: true,
 	
 	displayImage: false,
 	
@@ -59,7 +60,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 			// We need to hitch to this as _getReady will be called from the FormGenerator
 			this.formGenerator.ready(dojo.hitch(this, this._getReady));
 		};		
-						
+				
 		this.inherited(arguments);
 	},	
 	
@@ -73,6 +74,15 @@ dojo.declare("apstrata.ui.forms.FileField",
 	focus: function() {
 		
 		this.domNode.focus();
+	},	
+	
+	set:function(name, value) {
+		
+		if (name == "disabled") {
+			this.disabled = "disabled";			
+		}
+		
+		this.inherited(arguments);
 	},
 	
 	/*
@@ -146,7 +156,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 				if (!isValid) {
 										
 					// Create an ad-hoc tooltip  
-					self.tooltip = new dijit.Tooltip({connectId: self.domNode, position:"before", label:"This field is required"});
+					self.tooltip = new dijit.Tooltip({connectId: self.domNode, position:"before", label:"This field is required (remove it with \"-\" if you need to leave it empty)"});
 					self.tooltip.open(self.domNode);
 				} else { //Check if file name matches the regexp in case defined
 					if(this.regExp) {
@@ -157,7 +167,8 @@ dojo.declare("apstrata.ui.forms.FileField",
 			}
 			
 			return true;
-		}		
+		}
+				
 		//Startup the fileInput widget to set the listeners and display cancel button
 		this.attachedFile.startup();
 		
@@ -202,10 +213,35 @@ dojo.declare("apstrata.ui.forms.FileField",
 	 * Removes the nodes (FileInput) that allows to upload a file as well as the adjacent "-" button
 	 */
 	_removeAttachmentNode: function() {
+		
+		var self = this;
 		if (this.tooltip) {
 			this.tooltip.close();
 		}		
-		dojo.destroy(this.domNode);	
+		//dojo.destroy(this.domNode);		
+		
+		dojo.style(this.showNode.domNode, "display", "inline");
+		if (this.removeFile) {
+			this.removeFile.destroy();
+			delete this.removeFile;
+		}
+		
+		if (this.attachedFile) {
+			this.attachedFile.destroyRecursive();
+			delete this.attachedFile;
+		}
+		
+		dojo.empty(this.dvNode);
+		
+		if (!this.showNodeConnector) {	
+				
+			this.showNodeConnector = dojo.connect(this.showNode, "onClick", function() {
+				
+				self._displayAttachedFile();
+				dojo.style(self.showNode.domNode, "display", "none");
+				//self.startup();
+			})
+		}
 	},
 		
 	/*
@@ -266,6 +302,13 @@ dojo.declare("apstrata.ui.forms.FileField",
 			
 		}else {				
 				this._addAttachmentNode();
+		}
+		
+		if (this.disabled) {			
+			if (this.attachedFile) {
+				this.attachedFile.set("disabled", "disabled");
+				this.attachedFile.fileInput.disabled = true;
+			}
 		}				
 	},
 	
@@ -343,5 +386,3 @@ dojo.declare("apstrata.ui.forms.FileField",
 		}
 	}	
 })
-
-
