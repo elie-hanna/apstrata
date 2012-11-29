@@ -7,6 +7,7 @@ dojo.require("dijit.form.SimpleTextarea");
 dojo.require("dojox.grid.EnhancedGrid");
 dojo.require("dojox.grid.enhanced.plugins.Pagination");
 dojo.require("dojox.grid._CheckBoxSelector");
+dojo.require("dijit.form.Button");
 
 dojo.require("apstrata.sdk.ObjectStore");
 dojo.require("apstrata.sdk.Connection");
@@ -27,6 +28,10 @@ dojo.declare("apstrata.cms.PageSelector",
 	_structure: [],
 	_connection: null,
 	_selectedPages: [],
+	_confirmSelectionBtn: null,
+	_cancelSelectionBrn: null,
+	_pageSizes: ["10", "25", "50"],
+	_gridHeight: "220px",
 	value: "",
 	
 	constructor: function(params) {
@@ -36,6 +41,8 @@ dojo.declare("apstrata.cms.PageSelector",
 		this._queryFields = params.queryFields ? params.queryFields : this._queryFields;
 		this._selectedPages = params.pages ? params.pages : this._selectedPages; 
 		this._queryExpression = params.queryExpression ? params.queryExpression : this._queryExpression;
+		this._pageSizes = params.pageSizes ? params.pageSizes : this._pageSizes;
+		this._gridHeight = params.gridHeight ? params.gridHeight : this._gridHeight;
 		this.setStructure(params.structure);
 		this._setStore();		
 	},	
@@ -103,11 +110,23 @@ dojo.declare("apstrata.cms.PageSelector",
 		var showGrid = dojo.hitch(this, this.showGrid);
 		dojo.connect(this.readView, "onClick", showGrid);		
 		
-		// Connect the confirm, cancel and close ("X") buttons + ESC event to corresponding private methods
+		// Add Confirm and Cancel button to the dialog and connect then to corresponding onClick handler methods
 		var confirmSelection = dojo.hitch(this, this._confirmSelection);
-		dojo.connect(this.confirmSelection, "onclick", confirmSelection);
 		var cancelSelection = dojo.hitch(this, this._cancelSelection);
-		dojo.connect(this.cancelSelection, "onclick", cancelSelection);
+		this._confirmSelectionBtn = new dijit.form.Button({
+			label: "Confirm",
+			onClick: confirmSelection			
+		});
+		
+		this._cancelSelectionBtn = new dijit.form.Button({
+			label: "Cancel",
+			onClick: cancelSelection			
+		});
+		
+		dojo.place(this._confirmSelectionBtn.domNode, this.pageSelectorRoot, "last");
+		dojo.place(this._cancelSelectionBtn.domNode, this.pageSelectorRoot, "last");
+		
+		// Connect the close ("X") button + ESC event to corresponding private methods		
 		dojo.connect(this.dialog, "onCancel", cancelSelection);
 		
 		// Fill the textarea (readView) with a string built from the selected pages	
@@ -159,7 +178,7 @@ dojo.declare("apstrata.cms.PageSelector",
 				
 				this.getStructure()
 	   		 ],	   		
-			height: "200px",
+			height: this._gridHeight,
 			autoWidth: true,
 			keepSelection: true, // Do not forget this in order to keep selection when sorting
 			plugins: {
@@ -167,7 +186,7 @@ dojo.declare("apstrata.cms.PageSelector",
 				// we can pass a boolean for default values or a configuration object as shown here
 				pagination: {
 					
-					pageSizes: ["10", "25"],
+					pageSizes: this._pageSizes,
 					description: true,
 					sizeSwitch: true,
 					pageStepper: true,
