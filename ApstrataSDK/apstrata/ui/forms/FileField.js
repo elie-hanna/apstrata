@@ -213,35 +213,40 @@ dojo.declare("apstrata.ui.forms.FileField",
 	 * Removes the nodes (FileInput) that allows to upload a file as well as the adjacent "-" button
 	 */
 	_removeAttachmentNode: function() {
-		
+				
 		var self = this;
 		if (this.tooltip) {
 			this.tooltip.close();
-		}		
-		//dojo.destroy(this.domNode);		
-		
-		dojo.style(this.showNode.domNode, "display", "inline");
-		if (this.removeFile) {
-			this.removeFile.destroy();
-			delete this.removeFile;
 		}
 		
-		if (this.attachedFile) {
-			this.attachedFile.destroyRecursive();
-			delete this.attachedFile;
-		}
+		if (!this.group) {				
+							
+			if (this.removeFile) {
+				this.removeFile.destroy();
+				delete this.removeFile;
+			}
+			
+			if (this.attachedFile) {
+				this.attachedFile.destroyRecursive();
+				delete this.attachedFile;
+			}
 		
-		dojo.empty(this.dvNode);
-		
-		if (!this.showNodeConnector) {	
+			dojo.empty(this.dvNode);
 				
-			this.showNodeConnector = dojo.connect(this.showNode, "onClick", function() {
-				
-				self._displayAttachedFile();
-				dojo.style(self.showNode.domNode, "display", "none");
-				//self.startup();
-			})
-		}
+			dojo.style(this.showNode.domNode, "display", "inline");
+			if (!this.showNodeConnector) {	
+					
+				this.showNodeConnector = dojo.connect(this.showNode, "onClick", function() {
+					
+					self._displayAttachedFile();
+					dojo.style(self.showNode.domNode, "display", "none");
+					//self.startup();
+				})
+			}
+		}else {
+			
+			dojo.destroy(this.domNode);
+		}	
 	},
 		
 	/*
