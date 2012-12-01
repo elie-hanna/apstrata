@@ -41,3 +41,54 @@
 	
 }
 
+.min .catalogPage .title {
+	margin-top: 10px;
+	font-size: 1.4em;
+}
+
+.min .catalogPage .itemDescription {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.min .catalogPage .pageDescription {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: #3333EE;
+}
+
+
+.min .catalogPage .slides {
+	font-size: 0.8em;
+	overflow: hidden;
+	background: #aaa;
+	padding: 15px;
+}
+
+.min .catalogPage .slides .slide {
+	float: left;
+	width: 25%;
+	overflow: hidden;
+}
+
+.min .catalogPage .slides .title {
+	margin-top: 10px;
+	font-size: 1.4em;
+	overflow: hidden;
+	width: 90%;
+}
+
+.min .catalogPage .slides .itemDescription {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	width: 90%;
+}
+
+.min .catalogPage .slides .pageDescription {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: #3333EE;
+}
+
+

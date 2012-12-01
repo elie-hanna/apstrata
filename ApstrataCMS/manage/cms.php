@@ -35,7 +35,9 @@
 		public function getPage($id) {
 			if ($GLOBALS["config"]["useStub"]) {
 				if ($id == "home") return $GLOBALS["testData"]["home"];
-				return $GLOBALS["testData"]["page"];
+				
+				if ($id == "catalog") return $GLOBALS["testData"]["collection"];
+				else return $GLOBALS["testData"]["page"];
 			}
 
 			// apstrata dockey can't contain forward slashes(/), replace them with dots (.)
