@@ -93,22 +93,6 @@ $testData = array (
 	console.debug(dojo.toJson(firstQuery))	
 
 
-	https://sandbox.apstrata.com/apsdb/rest/E83D22E93F/Query?
-	apsws.time=1354484548620
-	&apsws.authSig=23002e6b41a20f8df1298312cde040c1
-	&apsws.responseType=json
-	&apsws.authMode=simple
-	&apsdb.query=documentType%3D%22page%22
-	&apsdb.queryFields=apsdb.documentKey%2Ctitle
-	&apsdb.store=apstrata
-	&apsdb.count=true
-	&apsdb.resultsPerPage=4
-	&apsdb.pageNumber=2
-
-
-	
-	
-
 */
 
 
