@@ -13,7 +13,7 @@
 			$result = file_get_contents ($url); 
 
 			if ($result != FALSE) {
-				eval("\$menu =" . $result);
+				eval("\$menu =" . $result);				
 				if ($menu["pageFound"]=="1") {
 					return $menu;
 				} else {
@@ -33,6 +33,7 @@
 		}
 		
 		public function getPage($id) {
+						
 			if ($GLOBALS["config"]["useStub"]) {
 				if ($id == "home") return $GLOBALS["testData"]["home"];
 				
@@ -43,12 +44,16 @@
 			// apstrata dockey can't contain forward slashes(/), replace them with dots (.)
 			$id = str_replace("/", ".", $id);
 		
-			$url = $GLOBALS["config"]["apstrataServiceURL"] . "/" . $GLOBALS["config"]["apstrataKey"] . '/RunScript?apsdb.scriptName=apstrata.getPage&page=' . $id;
+			$url = $GLOBALS["config"]["apstrataServiceURL"] . "/" . $GLOBALS["config"]["apstrataKey"] . '/RunScript?apsdb.scriptName=apstrata.getPageJSon&page=' . $id;
 			$result = file_get_contents ($url); 
-
+			
+			//Page content as associative array
+			$page = json_decode($result, true);
+			
 			if ($result != FALSE) {
-				eval("\$page =" . $result);
-				if ($page["pageFound"]=="1") {			
+				//$error = eval("\$page =" . $result);				
+				
+				if ($page["pageFound"]=="1") {							
 					return $page;
 				} else {
 					return array (

@@ -155,7 +155,8 @@ dojo.declare("apstrata.cms.Collections",
 				{name: "regularIcon", label:"Regular Icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"",showRemoveFieldBtn: true},
 				{name: "document.readACL", type:"string"},
 				{name: "smallIcon", label:"Small icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"", showRemoveFieldBtn: true},
-				{name: "documentType", type: "hidden", value: "collection"}				
+				{name: "documentType", type: "hidden", value: "collection"},
+				{name: "template", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["catalog"]}				
 			],
 			
 			actions: ['save']

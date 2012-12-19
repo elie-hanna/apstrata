@@ -21,7 +21,7 @@
 				include("templates/" . $config['template'] . "/parts/head.php");
 			}
 		?>
-		
+		<script language="javascript" type="text/javascript" src="../lib/editarea/edit_area/edit_area_full.js"></script>
 	</head>
 	<body class="claro <?php print $config['template'] ?>">
 <!-- Place this tag in your head or just before your close body tag -->
@@ -37,7 +37,7 @@
 
 		<div id='content'>
 			<div class='contentFrame'>
-				<?php 
+				<?php					
 					include("templates/min/parts/" . $page["template"] . ".php");
 				?>
 			</div>

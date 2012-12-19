@@ -68,6 +68,38 @@ body {
 	width: 300px;
 }
 
+.apstrataCms .collectionEditor {
+	width: 800px;
+	font-size: 0.8em;
+	overflow-y: hidden;
+	overflow-x: auto;
+}
+
+.apstrataCms .collectionEditor .header {
+	height: 20px;
+}
+
+
+.apstrataCms .collectionEditor .title {
+	width: 100%;
+}
+
+.apstrataCms .collectionEditor .firstQuery {
+	width: 100%;	
+}
+
+.apstrataCms .collectionEditor .secondQuery {
+	width: 100%;	
+}
+
+.apstrataCms .collectionEditor .footer {
+	height: 10px;
+}
+
+.apstrataCms .collectionEditor .title {
+	width: 100%;
+}
+
 
 .apstrataCms .pageEditor {
 	width: 800px;
