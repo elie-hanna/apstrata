@@ -100,7 +100,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 			dojo.style(self.fileLink, "display", displayMode);			
 		}
 		
-		if (!showFile) {
+		if (!showFile && self.value) {
 			
 			// we need to inform apstrata about the name of the file that needs to be removed.
 			// so we add it inside an invisible text input
@@ -132,6 +132,9 @@ dojo.declare("apstrata.ui.forms.FileField",
 		var self = this;
 		this.attachedFile = new dojox.form.FileInput({name: this.name ? this.name : "apsdb_attachments", required: true });
 		
+		// do not allow direct manual editing of the fake file input field 
+		this.attachedFile.inputNode.readOnly = true;
+		
 		this.attachedFile._matchValue = function(){
 			// summary: set the content of the upper input based on the semi-hidden file input
 			var tmpValue = self.attachedFile.fileInput.value;
@@ -160,7 +163,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 					self.tooltip.open(self.domNode);
 				} else { //Check if file name matches the regexp in case defined
 					if(this.regExp) {
-					   isValid = new RegExp("^(" + this.regExp +")?$","i").test(self.attachedFile.fileInput.value)
+					   isValid = new RegExp(this.regExp, "i").test(self.attachedFile.fileInput.value)
 					}
 				}
 				return isValid;
@@ -255,7 +258,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 	 * Otherwise, the function will retrieve the url of the file and pass it to the href attribute of the
 	 * link element (see template).
 	 * This function will be called by _getReady() that is a listener on the formGenerator ready() function. 
-	 * When this eventis triggered, we are sure that this.value will contain the value retrieved from
+	 * When this event is triggered, we are sure that this.value will contain the value retrieved from
 	 * the document (if any) for that field (i.e. the name of the image file)
 	 */
 	_displayAttachedFile: function(isUser) {
