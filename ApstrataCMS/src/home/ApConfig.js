@@ -33,7 +33,7 @@ dojo.setObject("apstrata.apConfig", {
     "apstrata.sdk": {
         "Connection" : {
 			credentials: {
-				key:'E83D22E93F'
+				key:''
 				
 			},
 			serviceURL: 'http://sandbox.apstrata.com/apsdb/rest',
