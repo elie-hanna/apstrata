@@ -36,7 +36,7 @@ dojo.setObject("apstrata.apConfig", {
 				key:''
 				
 			},
-			serviceURL: 'http://sandbox.apstrata.com/apsdb/rest',
+			serviceURL: '',
 			
 			
 			defaultStore: 'apstrata',
@@ -46,8 +46,8 @@ dojo.setObject("apstrata.apConfig", {
     
     
     "apstrata.services" : {
-    	"targetClusterUrl" : 'http://sandbox.apstrata.com/apsdb/rest',
-    	"worbenchUrl" : 'http://sandbox.apstrata.com/ApstrataDeveloperWorkbench/src/ui' 
+    	"targetClusterUrl" : '',
+    	"worbenchUrl" : '' 
     }
     
 })
