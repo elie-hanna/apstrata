@@ -12,7 +12,7 @@
 				<field>target</field>				
 				<field>description</field>				
 				<field>attachments</field>
-				<field>visibility</field>
+				<field>parent</field>					
 			</fields>
 		</aclGroup>
 		<schemaAcl>
@@ -33,7 +33,7 @@
 		<field name="smallIcon" type="file" />
 		<field name="regularIcon" type="file" />
 		<field name="target" type="string" />
-		<field name="description" type="string" />
-		<field name="visibility" type="string" />
+		<field name="description" type="string" />	
+		<field name="parent" type="string" />	
 	</fields>
 </schema>
