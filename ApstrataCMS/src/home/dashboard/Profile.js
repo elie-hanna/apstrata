@@ -32,7 +32,7 @@ dojo.require("apstrata.ui.forms.FormGenerator")
 dojo.declare("apstrata.home.dashboard.Profile", 
 [apstrata.horizon.Panel], 
 {
-	
+	templatePath: dojo.moduleUrl("apstrata.home.dashboard.Profile", profileTemplate ? profileTemplate : "templates/Profile.html"),
 	definition : {
 				label: "Profile",
 				fieldset: [
@@ -58,6 +58,12 @@ dojo.declare("apstrata.home.dashboard.Profile",
 				actions: ['save']
 			},
 	
+	loading: true,
+	
+	/**
+	 * @param options.useClass: specifies a given CSS class to replace the template's class (optional)
+	 * @param options.useFormClass: specifies a given CSS class to replace the form's generator class (optional)
+	 */
 	constructor: function(options) {
 		this.options = options;			
 	},
@@ -67,9 +73,9 @@ dojo.declare("apstrata.home.dashboard.Profile",
 		var zDefinition = self.definition;
 
 		dojo.addClass(this.domNode, "profile")
-
+		
 		var formGenOptions = {
-			cssClass : "newClass",
+			cssClass : self.useFormClass ? self.useFormClass : "newClass",
 			width : "500px",
 			definition : zDefinition,
 			autoWidth : true,
@@ -81,7 +87,14 @@ dojo.declare("apstrata.home.dashboard.Profile",
 		this.inherited(arguments);
 			
 		// Register the _loadProfileData to the formGenerator.isReady event occurrence		
-		this.formGenerator.ready(dojo.hitch(this, "_loadProfileData"));			
+		this.formGenerator.ready(dojo.hitch(this, "_loadProfileData"));
+		
+		// set a specific class for rendering
+		if (this.useClass) {
+			
+			dojo.removeClass(this.domNode, "panel");
+			dojo.addClass(this.domNode, this.useClass);
+		}	
 	},
 
 	startup: function() {
@@ -237,7 +250,10 @@ dojo.declare("apstrata.home.dashboard.Profile",
 						accounts : accountsAsStr
 					}			
 					
-					self.formGenerator.set("value", self.value);				
+					self.formGenerator.set("value", self.value);		
+					self.loading = false;
+					var loadingNode = dojo.query(".loading")[0];
+					dojo.destroy(loadingNode);		
 					self.reload();
 					
 				}else {			
