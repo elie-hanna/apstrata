@@ -35,7 +35,7 @@
 				"apsdb.creationTime" => "",
 				 "apsdb.lastModifiedTime" =>""
 			);
-			include('templates/min/default.php');
+			include("templates/". $config['template'] . "/default.php");
 			break;
 			
 		case "dashboard":
@@ -45,11 +45,11 @@
 				"apsdb.creationTime" => "",
 				 "apsdb.lastModifiedTime" =>""
 			);
-			include('templates/min/default.php');
+			include("templates/". $config['template'] . "/default.php");
 			break;
 
 		case "login":
-			include('templates/min/login.php');
+			include("templates/". $config['template'] . "/login.php");
 			break;
 			
 		case "processingReg":
@@ -59,7 +59,7 @@
 				"apsdb.creationTime" => "",
 				 "apsdb.lastModifiedTime" =>""
 			);
-			include('templates/min/default.php');
+			include("templates/". $config['template'] . "/default.php");
 			break;
 		case "summary":
 			$page = array (
@@ -67,7 +67,7 @@
 				"template" => $pageId,
 				"summaryMode" => "true"
 			);
-			include('templates/min/default.php');
+			include("templates/". $config['template'] . "/default.php");
 			break;
 		case null:
 		case "":
@@ -75,6 +75,6 @@
 			$pageId = "home";
 		default:
 			$page = $cms->getPage($pageId);
-			include('templates/min/default.php');
+			include("templates/". $config['template'] . "/default.php");
 	}
 ?>
