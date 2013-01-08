@@ -12,23 +12,36 @@ dojo.require("dojox.encoding.crypto.SimpleAES");
 dojo.declare("apstrata.home.dashboard.Accounts", 
 [apstrata.horizon.Panel], 
 {
-//	templateString: '<div class="panel" style="width: 500px;"><h1>Accounts List</h1></div>',
-	templatePath: dojo.moduleUrl("apstrata.home.dashboard", "templates/Accounts.html"),
-	
-	constructor: function() {
-		this._accounts = []
+
+	templatePath: dojo.moduleUrl("apstrata.home.dashboard", accountsTemplate ? accountsTemplate : "templates/Accounts.html"),
+	connection: null,
+	client: null,	
+		
+	/**
+	 * params.connection: the connection to use
+	 */
+	constructor: function(params) {
+		this._accounts = [];
+		if (params) {
+			
+			this.connection = new apstrata.sdk.Connection(params.credentials);
+			if (params.container) {
+				this.container = params.container;
+			}
+			this.noRendering = params.noRendering ? params.noRendering : "false";
+		}
 	},
 	
 	postCreate: function(){	
 		var self = this	
 		
 		this._getAccounts().then(function(response) {
+			
 			dojo.forEach(response.result.accounts, function(account) {
 				self._accounts.push(account)
 			})
-
-			self.render()
 			
+				self.render();			
 		}, function(response){
 			var errorDetail = response.metadata.errorDetail;
 			var errorCode = response.metadata.errorCode;
@@ -46,7 +59,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 	_getAccounts: function() {
 		
 		var self = this;
-		var credentials = this.container.client.connection.credentials;
+		var credentials = this.container ? this.container.client.connection.credentials : this.connection.credentials;
 		var userLogin = "";
 		var loginType = "login";
 		if (credentials.user){
@@ -72,7 +85,9 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 			}
 		}
 		
-		return this.container.client.call("RunScript", params, null);
+		var connection = self.container ? self.container.connection : self.connection;
+		var client = this.client ? this.client : (self.container ? self.container.client : new apstrata.sdk.Client(connection));
+		return client.call("RunScript", params, null);
 	},
 	
 	renderList: function(response) {
@@ -89,8 +104,9 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 			"authKey" : key,
 			"function" : "getAccount"
 		}
-					
-		this.container.client.call("RunScript", params, null).then(
+		
+		var client = self.container ? self.container.client : new apstrata.sdk.Client(self.connection);			
+		client.call("RunScript", params, null).then(
 			
 			function(response){
 					
@@ -138,7 +154,8 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 										"function" : "regenerateSecret"
 							}
 							
-							self.container.client.call("RunScript", params, null).then(
+							var client = self.container ? self.container.client : new apstrata.sdk.Client(self.connection);
+							client.call("RunScript", params, null).then(
 								function(response){
 									if (response.metadata.status == "success") {	
 										if (response.result.errorDetail) {
