@@ -121,7 +121,7 @@ dojo.declare("apstrata.cms.Links",
 												
 				"apsdb.update": this._mode == "edit" ? true : false,
 				"apsdb.store": this._store,
-				//"apsdb.schema": "cms_page"		
+				"apsdb.schema": "cms_link"		
 		};	
 		
 		if (this._mode == "new") {
@@ -153,7 +153,7 @@ dojo.declare("apstrata.cms.Links",
 		this.linkFormDefinition = {
 			label: "Link",
 			fieldset: [
-				{name: "apsdb.documentKey", type: "hidden"},
+				{name: "apsdb.documentKey", label: "Link id", type: "string", required:true},
 				{name: "title", type: "string", required: true},
 				{name: "address", type: "string", required: true},
 				{name: "description", type: "string", required: false},
@@ -162,6 +162,7 @@ dojo.declare("apstrata.cms.Links",
 				{name: "regularIcon", label:"Regular Icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"",showRemoveFieldBtn: true},
 				{name: "document.readACL", type:"string"},
 				{name: "smallIcon", label:"Small icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"", showRemoveFieldBtn: true},
+				{name: "parent", type: "string"},
 				{name: "documentType", type: "hidden", value: "link"}				
 			],
 			
