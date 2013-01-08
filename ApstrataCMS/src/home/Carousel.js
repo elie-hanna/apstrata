@@ -14,8 +14,12 @@ dojo.declare("apstrata.home.Carousel",
 	widgetsInTemplate: true,
 	templatePath: dojo.moduleUrl("apstrata.home", "templates/Carousel.html"),
 	
+	//The dockeys of the pages to be displayed in the carousel
 	itemsIds: null,
+	
+	//The pages to be displayed in the carousel
 	items: null,
+	
 	connection: null,
 	store: null,
 	

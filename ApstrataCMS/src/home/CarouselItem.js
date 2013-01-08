@@ -10,9 +10,15 @@ dojo.declare("apstrata.home.CarouselItem",
 	widgetsInTemplate: false,
 	templatePath: dojo.moduleUrl("apstrata.home", "templates/CarouselItem.html"),
 	
+	//The inner html of the item. This will be displayed in the carousel slider
 	innerHtml: "",
+	
+	//The inner html that will get displayed once the item is clicked
 	detailsInnerHtml: "",
+	
+	// The image url to use when the item is clicked
 	detailsImageUrl: "",
+	
 	parent: null,
 	
 	constructor: function(params) {
