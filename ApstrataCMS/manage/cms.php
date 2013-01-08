@@ -11,7 +11,7 @@
 			
 			$url = $GLOBALS["config"]["apstrataServiceURL"] . "/" . $GLOBALS["config"]["apstrataKey"] . '/RunScript?apsdb.scriptName=apstrata.getMenu';
 			$result = file_get_contents ($url); 
-
+			
 			if ($result != FALSE) {
 				eval("\$menu =" . $result);				
 				if ($menu["pageFound"]=="1") {
@@ -33,7 +33,7 @@
 		}
 		
 		public function getPage($id) {
-						
+					
 			if ($GLOBALS["config"]["useStub"]) {
 				if ($id == "home") return $GLOBALS["testData"]["home"];
 				
@@ -45,8 +45,9 @@
 			$id = str_replace("/", ".", $id);
 		
 			$url = $GLOBALS["config"]["apstrataServiceURL"] . "/" . $GLOBALS["config"]["apstrataKey"] . '/RunScript?apsdb.scriptName=apstrata.getPageJSon&page=' . $id;
+		
 			$result = file_get_contents ($url); 
-			
+						
 			//Page content as associative array
 			$page = json_decode($result, true);
 			
@@ -95,8 +96,34 @@
 			
 			
 			if (isset($item['title'])) $link = "<a " . $class . " href='" . $url . "'>" .  $item['title'] . "</a>";
-			
+						
 			return $link;
+		}
+		
+		/**
+		 * Calls a script that returns an array of all links and for each link, an array of sub-links if available
+		 * (otherwise the array is empty) 
+		 */
+		public function getLinks() {
+			
+			$url = $GLOBALS["config"]["apstrataServiceURL"] . "/" . $GLOBALS["config"]["apstrataKey"] . '/RunScript?apsdb.scriptName=apstrata.getLinks';
+			$result = file_get_contents ($url); 
+			$links = json_decode($result, true);
+			if ($result != FALSE) {
+								
+				if ($links["status"]=="1") {									
+					return $links["links"];
+				} else {
+					return array (
+						"links" => array()						
+					);
+				}
+			} else {
+				return array (
+					"title" => "internal server error",
+					"template" => "internalError"
+				);
+			}
 		}
 
 		public function getUrl($path) {
