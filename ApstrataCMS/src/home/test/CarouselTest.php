@@ -6,9 +6,6 @@
 <script type="text/javascript" src="../../../lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
 <script type="text/javascript" src="../../../lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 
-<link rel="stylesheet" href="./reset.css">
-<link rel="stylesheet" href="./styles.css">
-
 <script type="text/javascript">
 	dojo.ready(function() {
 		dojo.registerModulePath("apstrata", "../../ApstrataSDK/apstrata");
