@@ -115,6 +115,7 @@ dojo.declare("apstrata.cms.Collections",
 				"apsdb.update": this._mode == "edit" ? true : false,
 				"apsdb.store": this._store,
 				"apsdb.schema": "cms_collection",
+				"apsdb.documentKey": this._formGenerator.getField("apsdb.documentKey").value,
 				"pageSelection": value["pageSelection"]		
 		};	
 		
@@ -147,7 +148,7 @@ dojo.declare("apstrata.cms.Collections",
 		this.collectionFormDefinition = {
 			label: "Collection",
 			fieldset: [
-				{name: "apsdb.documentKey", type: "hidden"},
+				{name: "apsdb.documentKey", label: "Collection Id", type: "string", required: true},
 				{name: "title", type: "string", required: true},
 				{name: "First Query", name:"firstQuery", type: "string", widget: "dijit.form.SimpleTextarea", required: false},
 				{name: "Second Query", name:"secondQuery", type: "string", widget: "dijit.form.SimpleTextarea", required: false},
@@ -156,7 +157,7 @@ dojo.declare("apstrata.cms.Collections",
 				{name: "document.readACL", type:"string"},
 				{name: "smallIcon", label:"Small icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"", showRemoveFieldBtn: true},
 				{name: "documentType", type: "hidden", value: "collection"},
-				{name: "template", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["catalog"]}				
+				{name: "template", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["catalog", "twoColumnsCatalog"]}				
 			],
 			
 			actions: ['save']
