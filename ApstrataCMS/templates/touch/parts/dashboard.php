@@ -143,13 +143,19 @@
 				})
 				
 				/*
-				 * 
+				 * workbench link on click event handler
 				 */
 				var workbenchLink = dojo.byId("workbenchLink");
 				dojo.connect(workbenchLink, "onclick", function(event) {
 					toggleSelected(workbenchLink);
 					window.open('<?php echo $config["workbenchUrl"]; ?>', '_blank');
   					window.focus();
+				});
+				
+				var logoutLink = dojo.byId("lougoutLink");
+				dojo.connect(logoutLink, "onclick", function(event) {
+					connection.logout();
+					window.open("/page.php?pageId=home");
 				});
 				
 				/*
