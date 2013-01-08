@@ -38,7 +38,8 @@
 			<div class="content-wrap">
 		    	<!-- begin content -->
 		        <div class="content">
-		<?php				   
+		<?php		
+		   
 			include("templates/". $config['template'] . "/parts/" . $page['template'] . ".php");
 		?>
 		
@@ -49,8 +50,9 @@
 		</div>
 		 <!-- end wrapper -->
 		
-	</div> <!-- end wrap -->
+	</div> <!-- end container -->
 	<div class="clearfix"></div>
+	</div><!--end wrap -->
 	<?php 
 		include("templates/" . $config['template'] . "/parts/bottom.php");
 	?>
