@@ -150,13 +150,7 @@
 					toggleSelected(workbenchLink);
 					window.open('<?php echo $config["workbenchUrl"]; ?>', '_blank');
   					window.focus();
-				});
-				
-				var logoutLink = dojo.byId("lougoutLink");
-				dojo.connect(logoutLink, "onclick", function(event) {
-					connection.logout();
-					window.open("/page.php?pageId=home");
-				});
+				});				
 				
 				/*
 				 * this function factors out the logic that is shared by the login successful and manage account event handler
