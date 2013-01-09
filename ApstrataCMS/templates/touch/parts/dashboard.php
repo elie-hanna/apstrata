@@ -118,6 +118,7 @@
 				 */ 
 				var userCredentials = null;		
 				dojo.connect(dashboard, "onCredentials", function(credentials){	
+					connection = dashboard.connection;
 					userCredentials = credentials;
 					manageAccountFct(credentials);	
 				})
@@ -127,7 +128,7 @@
 				 */
 				var manageAccountLink = dojo.byId("manageAccountLink");
 				dojo.connect(manageAccountLink, "onclick", function(event) {
-					dojo.empty(linkedContent);	
+					dojo.empty(linkedContent);
 					manageAccountFct(userCredentials);
 				})
 				
@@ -135,11 +136,13 @@
 				 * user Profile event handler, displays the profile of the logged in user
 				 */
 				var userProfileLink = dojo.byId("userProfileLink");
-				dojo.connect(userProfileLink, "onclick", function(event) {					
-					var userProfile = new apstrata.home.dashboard.Profile({container: dashboard, useClass: "dashboard"});
-					dojo.empty(linkedContent);					
-					dojo.place(userProfile.domNode, linkedContent);	
-					toggleSelected(userProfileLink);					
+				dojo.connect(userProfileLink, "onclick", function(event) {	
+					if (userCredentials) {						
+						var userProfile = new apstrata.home.dashboard.Profile({container: dashboard, useClass: "dashboard"});
+						dojo.empty(linkedContent);					
+						dojo.place(userProfile.domNode, linkedContent);	
+						toggleSelected(userProfileLink);
+					}			
 				})
 				
 				/*
@@ -150,18 +153,33 @@
 					toggleSelected(workbenchLink);
 					window.open('<?php echo $config["workbenchUrl"]; ?>', '_blank');
   					window.focus();
-				});				
+				});	
+				
+				/*
+				 * log out link on click event handler
+				 */	
+				 var logoutLink = dojo.byId("logoutLink");
+				 dojo.connect(logoutLink, "onclick", function(event) {
+					if (connection) {
+						toggleSelected(logoutLink);
+						connection.logout();
+						window.open('<?php echo $config["baseUrl"]."/page.php?pageId=home"; ?>');					
+					}
+				});	
 				
 				/*
 				 * this function factors out the logic that is shared by the login successful and manage account event handler
 				 */
 				var manageAccountFct = function(credentials) {
 					var helloUserNode = dojo.query(".marB20")[0];
-					helloUserNode.innerHTML = "Hello " + credentials.user; 		
-					var account = new apstrata.home.dashboard.Accounts({container: dashboard, credentials: credentials});
-					account.container = dashboard;								
-					dojo.place(account.domNode, linkedContent);						
-					toggleSelected(manageAccountLink);							
+					helloUserNode.innerHTML = "Hello " + (credentials ? credentials.user : "");
+					var account = null;
+					if (credentials) { 		
+						account = new apstrata.home.dashboard.Accounts({container: dashboard, credentials: credentials});
+						account.container = dashboard;								
+						dojo.place(account.domNode, linkedContent);						
+						toggleSelected(manageAccountLink);
+					}				
 				}
 				
 				/*
