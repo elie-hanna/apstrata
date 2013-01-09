@@ -87,7 +87,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 		
 		var connection = self.container ? self.container.connection : self.connection;
 		var client = this.client ? this.client : (self.container ? self.container.client : new apstrata.sdk.Client(connection));
-		return client.call("RunScript", params, null);
+		return client.call("RunScript", params, null, {method:"get"});
 	},
 	
 	renderList: function(response) {
@@ -155,7 +155,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 							}
 							
 							var client = self.container ? self.container.client : new apstrata.sdk.Client(self.connection);
-							client.call("RunScript", params, null).then(
+							client.call("RunScript", params, null, {method:"get"}).then(
 								function(response){
 									if (response.metadata.status == "success") {	
 										if (response.result.errorDetail) {

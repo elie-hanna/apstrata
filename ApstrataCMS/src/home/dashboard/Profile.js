@@ -166,7 +166,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 			"phone" : this.formGenerator._fields.phone.value
 		}
 		
-		this.container.client.call("RunScript", params).then(
+		this.container.client.call("RunScript", params, null, {method:"get"}).then(
 		
 			function(response) {
 				if (response.result.status == "failure") {
