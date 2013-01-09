@@ -369,3 +369,150 @@ text-shadow: 1px 1px 0 #767779;
 -moz-text-shadow: 1px 1px 0 #000;
 -webkit-text-shadow: 1px 1px 0 #000;
 text-shadow: 1px 1px 0 #000;}
+
+#####################
+
+.loading {margin: 10px 0; text-align: center; padding: 15px 0;}
+
+.dashboard.profile { position:relative !important; }
+
+.dashboard.profile .actions { clear:both; padding-top:15px; }
+
+
+.profile .FormGenerator { padding: 5px; }
+
+.touch .FormGenerator .form .dijitTextBox {
+	border: 1px solid #B4B4B4;
+	background: white;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	padding: 7px 4px;
+	width: 98%;
+	color: #999;
+	font-size:0.75em;
+	}
+.touch .dijitButton  { 
+-moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px;
+background: #8c8c8c; 
+background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzhjOGM4YyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9Ijk5JSIgc3RvcC1jb2xvcj0iI2IyYjJiMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
+background: -moz-linear-gradient(top,  #8c8c8c 0%, #b2b2b2 99%); /* FF3.6+ */
+background: -webkit-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* Chrome10+,Safari5.1+ */
+background: -ms-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* IE10+ */
+background: linear-gradient(to bottom,  #8c8c8c 0%,#b2b2b2 99%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', endColorstr='#b2b2b2',GradientType=0 ); /* IE6-8 */
+-webkit-transition: all 0.5s ease-in-out;
+-moz-transition: all 0.5s ease-in-out;
+-ms-transition: all 0.5s ease-in-out;
+-o-transition: all 0.5s ease-in-out;
+transition: all 0.5s ease-in-out;
+width:auto !important;
+}
+.ie9.touch .dijitButton {filter: none;}	
+
+.touch .dijitButton .dijitButtonText {
+border: none;
+padding: 6px 12px;
+text-align: center;
+text-transform: uppercase;
+font-size: 16px;
+font-weight: bold;
+color: white;	
+-moz-text-shadow: 1px 1px 0 #767779;
+-webkit-text-shadow: 1px 1px 0 #767779;
+text-shadow: 1px 1px 0 #767779;	
+	
+	}
+.touch .dijitButtonNode { border: 0 none; vertical-align: middle; text-align: center;  }
+
+.touch .dijitButtonHover { background: #009FB4;}
+.touch .dijitButtonHover .dijitButtonText { text-shadow: 1px 1px 0 #000000;}
+
+
+.touch .label {font-family: 'NunitoBold'; font-size: 0.85em; color: #555555; margin-top: 7px; margin-bottom: 3px;}
+.FormGenerator form {
+	
+}
+
+.FormGenerator .set {
+	
+}
+			
+.FormGenerator .form {
+	
+}
+
+.FormGenerator .set .fieldset-label {
+	padding-top: 8px;
+}
+
+.FormGenerator.row.dijiTextBox {
+	background: green;
+	
+    -o-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+
+.FormGenerator form .headerRow {
+}
+
+.FormGenerator form .headerRow .label {
+	font-size: 0.8em;
+	display: inline-block;
+	padding-top: 0px;
+	width: 215px;
+}
+
+.FormGenerator form .set {
+	
+}
+
+.FormGenerator form .setLabel {
+	margin-top: 15px;
+	font-weight: bold;
+}
+
+
+.FormGenerator form .row {
+	
+}
+
+.FormGenerator .FieldSet {  }
+
+.FormGenerator .FieldSet.section { float:left; width:300px; }
+.touch .FormGenerator .FieldSet.section + div + div { margin-left:15px; }
+.touch .FormGenerator form .setLabel + div + div { margin-top: -22px; text-indent: 313px; }
+
+.FormGenerator .FieldSet .set {
+}
+
+/* example custom classes */
+.redInput { /* this could be assigned to a field through "cssClass" attribute */
+	color: red;
+	background: yellow !important;
+}
+
+.redInput-label {  /* the field label will be assigned the "[customClass]-label" class  */
+	color: red;
+}
+
+
+.touch .LoginWidget .login {
+background: #383B3E;
+font-size: 1.7em;
+margin-left: auto;
+margin-right: auto;
+padding: 20px;
+width: 400px;
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px;
+border-radius: 5 px;
+-moz-box-shadow: 0 3px 4px #cccccc;
+box-shadow: 0 3px 4px #cccccc;
+-webkit-box-shadow: 0 3px 4px #cccccc;
+border:1px solid black;
+}
+.touch .LoginWidget .login h2 { color:#efefef; }
+
