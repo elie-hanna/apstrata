@@ -23,6 +23,9 @@ dojo.declare("apstrata.home.Carousel",
 	connection: null,
 	store: null,
 	
+	/**
+	 * @param: params.items = array of items to use as content of the carroussel
+	 */
 	constructor: function(params) {
 		if (params) {
 			if (params.connection) {
