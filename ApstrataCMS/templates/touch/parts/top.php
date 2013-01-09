@@ -17,10 +17,9 @@
 		<!-- begin social media -->
         <div class="social-media">
             <ul>
-                <li class="facebook"><a href="#">facebook</a></li>
-                <li class="twitter"><a href="#">twitter</a></li>
-                <li class="linkedin"><a href="#">linkedin</a></li>
-                <li class="youtube"><a href="#">youtube</a></li>
+                <li class="facebook"><a href="https://www.facebook.com/TouchCloudLB" target="_blank">facebook</a></li>
+                <li class="twitter"><a href="https://twitter.com/#!/touchlebanon" target="_blank">twitter</a></li>
+                <li class="youtube"><a href="http://www.youtube.com/touchlebanon" target="_blank">youtube</a></li>
             </ul>
         </div>
         <!-- end social media -->
