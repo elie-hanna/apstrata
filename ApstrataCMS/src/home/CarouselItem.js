@@ -36,5 +36,7 @@ dojo.declare("apstrata.home.CarouselItem",
 		if (this.detailsInnerHtml && this.parent && this.parent.itemClicked) {
 			this.parent.itemClicked(this);
 		}
+		
+		dojo.addClass(this.domNode.childNodes[0], "selected");	
 	}
 })
