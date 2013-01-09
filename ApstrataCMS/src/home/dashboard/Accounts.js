@@ -13,7 +13,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 [apstrata.horizon.Panel], 
 {
 
-	templatePath: dojo.moduleUrl("apstrata.home.dashboard", accountsTemplate ? accountsTemplate : "templates/Accounts.html"),
+	templatePath: dojo.moduleUrl("apstrata.home.dashboard", dojo.getObject("accountsTemplate") ? accountsTemplate : "templates/Accounts.html"),
 	connection: null,
 	client: null,	
 		
