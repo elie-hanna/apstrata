@@ -13,7 +13,7 @@
             <a href='#' data-key='{{ account.aps_authKey }}' dojoAttachEvent='onclick: _view'>View Secret</a><span class="separator">|</span>
             <a href='#' data-key='{{ account.aps_authKey }}' dojoAttachEvent='onclick: _reset'>Reset Secret</a>
         </td>
-        <td><a href="">manage account</a></td>
+        <td><a href="#" data-key='{{ account.aps_authKey }}' dojoAttachEvent='onclick: _open'>Workbench</a></td>
         {% endfor %}
       </tr>	   
     </table>    
