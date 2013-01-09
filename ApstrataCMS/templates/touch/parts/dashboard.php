@@ -163,7 +163,7 @@
 					if (connection) {
 						toggleSelected(logoutLink);
 						connection.logout();
-						window.url('<?php echo $config["baseUrl"]."/page.php?pageId=home"; ?>');					
+						window.location = '<?php echo $config["baseUrl"]."/page.php?pageId=home"; ?>';					
 					}
 				});	
 				
