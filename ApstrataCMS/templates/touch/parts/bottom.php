@@ -1,12 +1,16 @@
 <!-- begin footer -->
     <div class="footer-wrap">
      	<footer>
+     		<form action="http://apstrata.us5.list-manage1.com/subscribe/post?u=e47d89e2bf16064cf52d8c9ae&amp;id=d603e02565" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate>
         	<div class="newsletter">
-            	<h3>We'd like to stay in touch!</h3>
+            	<h3>We'd like to stay in touch!</h3> 
                 <p>Subscribe to our monthly newsletter for great articles and cool features.</p>
-                <div class="textfield"><input type="text" value="enter your email" /></div>
-                <div class="btn"><input type="submit" /></div>
+                <div class="textfield">
+         			<input type="text" value="enter your email" name="EMAIL" id="mce-EMAIL" required>
+         		</div>
+       			<div class="btn"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe"></div>				
             </div>
+            </form>  
             <div class="clearfix"></div>
             <div class="site-map">
             <?php 
