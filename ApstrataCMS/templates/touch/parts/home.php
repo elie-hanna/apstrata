@@ -1,4 +1,5 @@
 <?php
+	
 	$slogan1='';
 	$text1='';
 	
@@ -16,45 +17,46 @@
 	if (isset($page["text2"])) $text2=$page["text2"];
 	if (isset($page["text3"])) $text3=$page["text3"];
 ?>
+<script type="text/javascript">
 
-		<script type="text/javascript">
-			dojo.ready(function() {
-				dojo.require("apstrata.home.SearchBar")
-				dojo.require("apstrata.home.Gallery")
-				dojo.require("apstrata.home.Slides")
-				
-				var searchBar = new apstrata.home.SearchBar({onSearch: function(v, category) {
-					results.search(v, category)
-				}}, dojo.byId("searchBar") )
-				var results = new apstrata.home.Gallery({}, dojo.byId("searchResults") )
-				
-				slides = [
-					{
-						slogan: "<?php print $slogan1; ?>",
-						text: "<?php print $text1; ?>"
-					},
-					{
-						slogan: "<?php print $slogan2; ?>",
-						text: "<?php print $text2; ?>"
-					},
-					{
-						slogan: "<?php print $slogan3; ?>",
-						text: "<?php print $text3; ?>"
-					}
-				]
-				
-				apstrata.slides = new apstrata.home.Slides({slides: slides}, dojo.byId("slides"))
-				
-				dojo.parser.parse()
-			})
-		</script>
+	searchBarTemplate = "../../templates/touch/widgets/SearchBar.html";
 
-<div class='homePage'>
-	<div id="serviceDescription">
-		<div id='slides'></div>
-	</div>
+	dojo.ready(function() {
+		dojo.require("apstrata.home.SearchBar");
+		dojo.require("apstrata.home.Gallery");
+		dojo.require("apstrata.home.Slides");		
+		dojo.require("apstrata.home.Carousel");
+		
+		var items = [
+			{section1: '<div class="details-container"><h3>touch cloud is free to use</h3><div class="txt-details">If your application succeeds, then you start paying, before that\'s on us!</div><div class="buttons"><div class="btn yellow large"><input type="submit" value="SIGN UP FOR FREE"></div><div class="btn large tour"><input type="submit" value="TAKE THE TOUR"></div></div><div class="note">Already a member? Click <a href="#">here</a> to sign in.</div></div>', section2: '<div class="control control1"><div class="arrow"></div><h5>11111 what is touch cloud?</h5><div class="">11111 apstrata is a complete BAAS service for web and mobile apps. find out how it can help</div></div>', title: "Title 1", regularIcon: "<?php print $config['baseUrl'] ?>" + "/themes/cms/resources/bin-full.png"},
+			{section1: '<div class="details-container"><h3>touch cloud is free to use</h3><div class="txt-details">If your application succeeds, then you start paying, before that\'s on us!</div><div class="buttons"><div class="btn yellow large"><input type="submit" value="SIGN UP FOR FREE"></div><div class="btn large tour"><input type="submit" value="TAKE THE TOUR"></div></div><div class="note">Already a member? Click <a href="#">here</a> to sign in.</div></div>', section2: '<div class="control control1"><div class="arrow"></div><h5>11111 what is touch cloud?</h5><div class="">11111 apstrata is a complete BAAS service for web and mobile apps. find out how it can help</div></div>', title: "Title 1", regularIcon: "<?php print $config['baseUrl'] ?>" + "/themes/cms/resources/bin-full.png"},
+			{section1: '<div class="details-container"><h3>touch cloud is free to use</h3><div class="txt-details">If your application succeeds, then you start paying, before that\'s on us!</div><div class="buttons"><div class="btn yellow large"><input type="submit" value="SIGN UP FOR FREE"></div><div class="btn large tour"><input type="submit" value="TAKE THE TOUR"></div></div><div class="note">Already a member? Click <a href="#">here</a> to sign in.</div></div>', section2: '<div class="control control1"><div class="arrow"></div><h5>11111 what is touch cloud?</h5><div class="">11111 apstrata is a complete BAAS service for web and mobile apps. find out how it can help</div></div>', title: "Title 1", regularIcon: "<?php print $config['baseUrl'] ?>" + "/themes/cms/resources/bin-full.png"},
+			{section1: '<div class="details-container"><h3>touch cloud is free to use</h3><div class="txt-details">If your application succeeds, then you start paying, before that\'s on us!</div><div class="buttons"><div class="btn yellow large"><input type="submit" value="SIGN UP FOR FREE"></div><div class="btn large tour"><input type="submit" value="TAKE THE TOUR"></div></div><div class="note">Already a member? Click <a href="#">here</a> to sign in.</div></div>', section2: '<div class="control control1"><div class="arrow"></div><h5>11111 what is touch cloud?</h5><div class="">11111 apstrata is a complete BAAS service for web and mobile apps. find out how it can help</div></div>', title: "Title 1", regularIcon: "<?php print $config['baseUrl'] ?>" + "/themes/cms/resources/bin-full.png"}
+		];
+		
+		var carousel = new apstrata.home.Carousel({
+				items: items
+			}, dojo.byId("carouselContainer") );
+			
+		var contentNode = dojo.query(".content")[0];	
+		dojo.place(carousel.domNode, contentNode, "first");
+			
+		var searchBar = new apstrata.home.SearchBar({onSearch: function(v, category) {
+				results.search(v, category)
+			}}, dojo.byId("searchBar") );
+		
+		
+		var results = new apstrata.home.Gallery({}, dojo.byId("searchResults") );		
+		dojo.parser.parse()
+	})
+</script>
+
+<div class='homePage'>	
 	<div id="searchBar"></div>
 	<div id="search-results">
 		<div id='searchResults'></div>
 	</div>	
 </div>
+
+
+		
