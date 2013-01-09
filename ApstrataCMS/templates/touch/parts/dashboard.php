@@ -41,7 +41,7 @@
                     <li><a href="#" id="manageAccountLink" class="selected">manage accounts</a></li>
                     <li><a href="#" id="userProfileLink">user profile</a></li>                
                     <li><a href="#" id="workbenchLink">workbench</a></li>                   
-                    <li><a href="#" id="logoutLink">logout</a></li>
+                    <li style="display:none"><a href="#" id="logoutLink">logout</a></li>
                 </ul>
         	</div>
             <div class="bottom"></div>
@@ -116,10 +116,15 @@
 				/*
 				 * Login successful event handler, triggers the display of the accounts info
 				 */ 
-				var userCredentials = null;		
+				var userCredentials = null;	
+				var logoutLink = dojo.byId("logoutLink");
+				var logoutLinkLine = logoutLink.parentNode;
+				var logoutIconTop = dojo.query(".logout")[0];
+				var loginIconTop = dojo.query(".login")[0];
 				dojo.connect(dashboard, "onCredentials", function(credentials){	
 					connection = dashboard.connection;
 					userCredentials = credentials;
+					toggleLoginLogout("in");
 					manageAccountFct(credentials);	
 				})
 				
@@ -157,15 +162,18 @@
 				
 				/*
 				 * log out link on click event handler
-				 */	
-				 var logoutLink = dojo.byId("logoutLink");
+				 */								 
 				 dojo.connect(logoutLink, "onclick", function(event) {
-					if (connection) {
-						toggleSelected(logoutLink);
-						connection.logout();
-						window.location = '<?php echo $config["baseUrl"]."/page.php?pageId=home"; ?>';					
-					}
-				});	
+				 	logout(event);	
+				 });
+				 
+				
+				 /*
+				 * log out icon on click event handler
+				 */								 
+				 dojo.connect(logoutIconTop, "onclick", function(event) {
+				 	logout(event);	
+				 });				
 				
 				/*
 				 * this function factors out the logic that is shared by the login successful and manage account event handler
@@ -183,12 +191,39 @@
 				}
 				
 				/*
+				 * this function factors out the logic to log out
+				 */
+				var logout =  function(event) {					
+					if (connection) {
+						toggleSelected(logoutLink);
+						toggleLoginLogout("out");
+						connection.logout();
+						window.location = '<?php echo $config["baseUrl"]."/page.php?pageId=home"; ?>';					
+					}
+				} 
+				
+				/*
 				 * this function factors out the logic to toggle the selected element on the menu				 
 				 */
 				var toggleSelected = function(newLinkNode) {					
 					dojo.toggleClass(lastSelected, "selected");					
 					dojo.toggleClass(newLinkNode, "selected");
 					lastSelected = newLinkNode;
+				}
+				
+				/*
+				 * toggles login/logout links and icons
+				 */
+				var toggleLoginLogout = function(status) {
+					if (status == "in") {
+						dojo.style(logoutLinkLine, "display", "block");
+						dojo.style(logoutIconTop, "display", "block");
+						dojo.style(loginIconTop, "display", "none");						
+					}else {
+						dojo.style(logoutLinkLine, "display", "block");
+						dojo.style(logoutIconTop, "display", "block");
+						dojo.style(loginIconTop, "display", "none");	
+					}					
 				}
 				
 			})		
