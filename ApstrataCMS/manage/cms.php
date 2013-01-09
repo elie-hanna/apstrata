@@ -45,16 +45,53 @@
 			$id = str_replace("/", ".", $id);
 		
 			$url = $GLOBALS["config"]["apstrataServiceURL"] . "/" . $GLOBALS["config"]["apstrataKey"] . '/RunScript?apsdb.scriptName=apstrata.getPageJSon&page=' . $id;
-		
 			$result = file_get_contents ($url); 
-						
+			
 			//Page content as associative array
 			$page = json_decode($result, true);
-			
+								
 			if ($result != FALSE) {
 				//$error = eval("\$page =" . $result);				
 				
 				if ($page["pageFound"]=="1") {							
+					return $page;
+				} else {
+					return array (
+						"title" => "page not found",
+						"template" => "pageNotFound"
+					);
+				}
+			} else {
+				return array (
+					"title" => "internal server error",
+					"template" => "internalError"
+				);
+			}
+			
+			return $page;
+		}
+		
+		/**
+		 * Calls a saved query that returns specific pages from the CMS ($category)
+		 */
+		public function getPages($category) {
+			
+			//TODO: implement corresponding stub		
+			if ($GLOBALS["config"]["useStub"]) {
+				
+			}
+
+			// apstrata dockey can't contain forward slashes(/), replace them with dots (.)
+			$id = str_replace("/", ".", $id);
+		
+			$url = $GLOBALS["config"]["apstrataServiceURL"] . "/" . $GLOBALS["config"]["apstrataKey"] . '/RunScript?apsdb.scriptName=apstrata.getPagesByCategory&category=' . $category;
+			$result = file_get_contents ($url); 			
+						
+			//Page content as associative array
+			$page = json_decode($result, true);				
+			if ($result != FALSE) {
+								
+				if (count($page) > 0) {							
 					return $page;
 				} else {
 					return array (
