@@ -1,0 +1,18 @@
+<query>
+    <executeACL>all</executeACL>
+    <store>apstrata</store>
+    <condition><![CDATA[ documentType<string>="page" AND category<string>={category}?]]></condition>
+    <returnedFields>
+        <field>*</field>
+    </returnedFields>
+    <sort>
+        <field>
+            <name>pageTitle</name>
+            <type>string</type>
+            <order>ASC</order>
+        </field>
+    </sort>
+    <count>true</count>    
+    <resultsPerPage>10</resultsPerPage>
+    <forceCurrentSnapShot>true</forceCurrentSnapShot>
+</query>
