@@ -46,7 +46,7 @@
 		
 			$url = $GLOBALS["config"]["apstrataServiceURL"] . "/" . $GLOBALS["config"]["apstrataKey"] . '/RunScript?apsdb.scriptName=apstrata.getPageJSon&page=' . $id;
 			$result = file_get_contents ($url); 
-			
+		
 			//Page content as associative array
 			$page = json_decode($result, true);
 								
@@ -85,8 +85,9 @@
 			$id = str_replace("/", ".", $id);
 		
 			$url = $GLOBALS["config"]["apstrataServiceURL"] . "/" . $GLOBALS["config"]["apstrataKey"] . '/RunScript?apsdb.scriptName=apstrata.getPagesByCategory&category=' . $category;
+			
 			$result = file_get_contents ($url); 			
-						
+				
 			//Page content as associative array
 			$page = json_decode($result, true);				
 			if ($result != FALSE) {
@@ -132,7 +133,7 @@
 			} 
 			
 			
-			if (isset($item['title'])) $link = "<a " . $class . " href='" . $url . "'>" .  $item['title'] . "</a>";
+			if (isset($item['title'])) $link = "<a " . $class . " href='" . $url . "' id='" . $item[title]. "Link'>" .  $item['title'] . "</a>";
 						
 			return $link;
 		}
