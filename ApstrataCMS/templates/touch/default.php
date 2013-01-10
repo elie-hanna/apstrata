@@ -33,22 +33,36 @@
 			include("templates/" . $config['template'] . "/parts/top.php");			
 		?>			
 		
-		<div class="container">             	
-			<!-- begin content wrap-->
-			<div class="content-wrap">
-		    	<!-- begin content -->
-		        <div class="content">
-		<?php		
-		   
+		<?php 
+			if ($page['template'] != "home") {
+		?>
+			<div class="container">             	
+				<!-- begin content wrap-->
+				<div class="content-wrap">
+			    	<!-- begin content -->
+			        <div class="content">
+		<?php
+			}
+		?>
+		
+		<?php
+		  
 			include("templates/". $config['template'] . "/parts/" . $page['template'] . ".php");
 		?>
 		
+		<?php 
+			if ($page['template'] != "home") {
+		?>
 				  <!-- end content -->
 		        <div class="clearfix"></div>
 		    </div>
 		    <!-- end content wrap-->
 		</div>
 		 <!-- end wrapper -->
+		
+		<?php
+			}
+		?>
 		
 	</div> <!-- end container -->
 	<div class="clearfix"></div>

@@ -1,6 +1,6 @@
 <?php
 	
-	$pages = $cms->getPages("homeSlides");	
+	$pages = $cms->getPages("homeSlides");
 	
 ?>
 <script type="text/javascript">
@@ -48,8 +48,8 @@
 				connection: useConnection,
 			}, dojo.byId("carouselContainer") );
 			
-		var contentNode = dojo.query(".content")[0];	
-		dojo.place(carousel.domNode, contentNode, "first");
+		var navNode = dojo.byId("nav-wrapper");	
+		dojo.place(carousel.domNode, navNode, "after");		
 			
 		var searchBar = new apstrata.home.SearchBar({onSearch: function(v, category) {
 				results.search(v, category)
@@ -60,13 +60,20 @@
 		dojo.parser.parse()
 	})
 </script>
-
-<div class='homePage'>	
-	<div id="searchBar"></div>
-	<div id="search-results">
-		<div id='searchResults'></div>
-	</div>	
+<div class="container">             	
+	<!-- begin content wrap-->
+	<div class="content-wrap">
+    	<!-- begin content -->
+        <div class="content">
+			<div class='homePage'>	
+				<div id="searchBar"></div>
+				<div id="search-results">
+					<div id='searchResults'></div>
+				</div>	
+		</div>
+	 <!-- end content -->
+        <div class="clearfix"></div>
+    </div>
+    <!-- end content wrap-->
 </div>
-
-
-		
+ <!-- end wrapper -->	
