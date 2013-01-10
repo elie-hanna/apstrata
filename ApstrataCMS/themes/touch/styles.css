@@ -235,7 +235,7 @@ footer .site-map ul li a {text-transform: uppercase; color: #999; font-weight: n
 }
 footer .site-map ul li a:hover {color: #fff;}
 footer .site-map ul li:first-child {border: none;}
-footer .site-map ul li {margin-bottom: 6px; padding-top: 10px; border-top: 1px solid #6e7072;}
+footer .site-map ul li {margin-bottom: 6px; padding-top: 2px; border-top: 1px solid #6e7072;}
 footer .site-map ul {float: left; width: 140px; margin-right: 40px;}
 footer .site-map section {float: left; margin-right: 40px;}
 footer .site-map .title {margin-bottom: 5px; color: #999; font-weight: normal; font-size: 13px; padding: 10px 0; text-transform: uppercase; border-bottom: 1px solid #6e7072;}
