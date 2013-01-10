@@ -18,7 +18,7 @@
                         <li><a id="wiki" href="http://wiki.apstrata.com" target="_blank">the wiki</a></li>
                         <li><a id="touchCloud" href="" class="selected">get started with touch cloud</a>
                         	<ul class="submenu">
-                        		<li><a id="ios" href="http://wiki.apstrata.com/display/doc/iOS+SDK" target="_blank">iOs</a></li>
+                        		<li><a id="ios" href="http://wiki.apstrata.com/display/doc/iOS+SDK" target="_blank">iOS</a></li>
                         		<li><a id="android" href="http://wiki.apstrata.com/display/doc/Android+SDK" target="_blank">android</a></li>
                         		<li><a id="js" href="http://wiki.apstrata.com/display/doc/Javascript+SDK" target="_blank">javascript</a></li>
                         		<li><a id="rest" href="http://wiki.apstrata.com/display/doc/REST+API+Reference" target="_blank">rest api</a></li>
@@ -32,7 +32,6 @@
                             </ul>
                         </li>
                         <li><a id="tutorials" href="http://wiki.apstrata.com/display/doc/Tutorials" target="_blank">tutorials</a></li>
-                        <li><a id="forum" href="http://forum.apstrata.com" target="_blank">community forum</a></li>
                         <li><a id="blog" href="http://blog.apstrata.com" target="_blank">blog</a></li>
                     </ul>
             	</div>
