@@ -89,6 +89,8 @@ header {max-width: 960px; margin: 0 auto;}
 #credentials ul li.login a:link, #credentials ul li.login a:visited {background: url(../touch/images/lock.png) top left no-repeat;
 padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 #credentials ul li a:hover, #credentials ul li a:active {color: #fff;}
+#credentials ul li.logout a:link, #credentials ul li.logout a:visited {background: url(../images/logout.png) center left no-repeat;
+padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 
 /*** Social media ***/
 .social-media {float: right; margin-right: 30px; position: relative; z-index: 1;}
@@ -484,6 +486,8 @@ text-shadow: 1px 1px 0 #767779;
 .FormGenerator .FieldSet.section { float:left; width:300px; }
 .touch .FormGenerator .FieldSet.section + div + div { margin-left:15px; }
 .touch .FormGenerator form .setLabel + div + div { margin-top: -22px; text-indent: 313px; }
+.dj_gecko .touch .FormGenerator form .setLabel + div + div { text-indent: 13px;  }
+
 
 .FormGenerator .FieldSet .set {
 }
