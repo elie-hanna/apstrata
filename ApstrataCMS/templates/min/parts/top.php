@@ -8,7 +8,7 @@
 					
 					
 <?php			
-		$totalCharacters = 0;
+		$totalCharacters = 0;		
 		foreach ($menu["menuPhp"] as $menuItem) {
 			
 			$totalCharacters = $totalCharacters + strlen($menuItem["title"]);			
@@ -29,6 +29,7 @@
 		
 		var initialCharacterCount = 4 * 12;
 		var initialPaddingCount = 4 * 2;
+		var menuItemQuery = ".min #menu .menu-item a";
 		
 		// The initial menu was styled to fit 4 items of 12 characters each. 
 		// If more items are added we need to shrink the font size and paddings of all items so they can fit 
@@ -38,24 +39,29 @@
 		// Over this limit, layout will not be consistent
 		
 		// Retrieve the nodes of the menu elements
-		var menuItems = dojo.query(".min #menu .menu-item a");		
-		var initialFontSize = dojo.style(menuItems[0], "fontSize");
-		initialFontSize = initialFontSize.substring(0, initialFontSize.length - 2); // remove the 'px'
-		var initialPaddingLeft = dojo.style(menuItems[0], "paddingLeft");
-		var initialPaddingRight =  dojo.style(menuItems[0], "paddingRight");
-		var fontRatio = initialCharacterCount / totalCharacters;
-		fontRatio = fontRatio > 1 ? 1 : fontRatio;		
-		var paddingRatio = initialPaddingCount / (menuItems.length * 2);
-		paddingRatio = paddingRatio > 1 ? 1 : paddingRatio;
-		dojo.forEach(menuItems, function(item, count){
-							
-			var newFontSize = Math.round(initialFontSize * fontRatio);
-			var newPaddingLeft = Math.round(initialPaddingLeft * paddingRatio);
-			var newPaddingRight = Math.round(initialPaddingRight * paddingRatio);
-			dojo.style(item, "fontSize", newFontSize + "px");
-			dojo.style(item, "paddingLeft", newPaddingLeft + "px");
-			dojo.style(item, "paddingRight", newPaddingRight + "px");
-		})	
+		var menuItems = dojo.query(menuItemQuery);
+		var initialFontSize = "16px";
+		var initialPaddingLeft = "15px";
+		var initialPaddingRight = "15px";		
+		if (menuItems && menuItems.length > 0) {
+			initialFontSize = dojo.style(menuItems[0], "fontSize");
+			initialFontSize = initialFontSize.substring(0, initialFontSize.length - 2); // remove the 'px'
+			initialPaddingLeft = dojo.style(menuItems[0], "paddingLeft");
+			initialPaddingRight =  dojo.style(menuItems[0], "paddingRight");
+			var fontRatio = initialCharacterCount / totalCharacters;
+			fontRatio = fontRatio > 1 ? 1 : fontRatio;		
+			var paddingRatio = initialPaddingCount / (menuItems.length * 2);
+			paddingRatio = paddingRatio > 1 ? 1 : paddingRatio;
+			dojo.forEach(menuItems, function(item, count){
+								
+				var newFontSize = Math.round(initialFontSize * fontRatio);
+				var newPaddingLeft = Math.round(initialPaddingLeft * paddingRatio);
+				var newPaddingRight = Math.round(initialPaddingRight * paddingRatio);
+				dojo.style(item, "fontSize", newFontSize + "px");
+				dojo.style(item, "paddingLeft", newPaddingLeft + "px");
+				dojo.style(item, "paddingRight", newPaddingRight + "px");
+			})	
+	    }
 	}); 
 	
 </script>
