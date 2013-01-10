@@ -119,8 +119,10 @@
 				var loginIconTop = dojo.query(".login")[0];
 				dojo.connect(dashboard, "onCredentials", function(credentials){	
 					userCredentials = credentials;
-					toggleLoginLogout("in");
-					manageAccountFct(dashboard.connection);	
+					if (dashboard.connection.isLoggedIn()) {
+						toggleLoginLogout("in");
+						manageAccountFct(dashboard.connection);	
+					}
 				})
 				
 				/*
