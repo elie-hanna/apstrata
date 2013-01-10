@@ -13,46 +13,28 @@
             </form>  
             <div class="clearfix"></div>
             <div class="site-map">
-            <?php 
-            	$links = $cms->getLinks();  
-            	$closedUl = false;            	
-            	foreach ($links as $link) {
-            		
-            		$link = (object)$link;             		        		
-            		if (count($link->children) > 0) {
-            			
-            			echo "<section class='title'>";
-                		echo "<div class='title'>" . $link->title . "</div>";
-                    	echo "<ul>";
-            			foreach ($link->children as $subLink) {
-            				
-            				$subLink = (object)$subLink;
-            				echo "<li><a href='" . $subLink->address . "' target='" . $subLink->type ."' >" . $subLink->title . "</a></li>";
-            			}
-            			
-            			echo "</ul>";
-            			echo "</section>";
-            		}else {
-            			
-            			$iterator = 0;
-            			if ($iterator % 3 === 0) {
-            				echo "<ul>";
-            				$iterator = $iterator + 1;
-            			}
-                	
-                		echo "<li><a href='" . $link->address . "' target='" . $link->type . "'>" . $link->title . "</a></li>";
-                		if ($iterator % 3 === 0) {
-            				echo "</ul>";
-            				$closedUl = true;
-            			}                		
-            		} 
-            	} 
-            	
-            	if (!$closedUl) {
-            		echo "</ul>";
-            	}             
-            ?>
-            </div>
+            	<ul>
+                	<li><a href="page.php?pageId=features">features</a></li>
+                	<li><a href="page.php?pageId=dashboard">dashboard</a></li>
+                	<li><a href="http://blog.apstrata.com" target="_blank">blog</a></li>
+                </ul>
+                <section>
+                	<div class="title">Legal</div>
+                    <ul>
+                        <li><a href="#">terms</a></li>
+                        <li><a href="#">privacy policy</a></li>
+                    </ul>
+                </section>
+                <section class="help">
+                	<div class="title">help</div>
+                    <ul>
+                        <li><a href="http://wiki.apstrata.com/display/doc/iOS+SDK" target="_blank">ios5</a></li>
+                        <li><a href="http://wiki.apstrata.com/display/doc/Javascript+SDK" target="_blank">html5</a></li>
+                        <li><a href="http://wiki.apstrata.com/display/doc/Android+SDK" target="_blank">android</a></li>
+                        <li><a href="http://wiki.apstrata.com" target="_blank">wiki</a></li>
+                    </ul>
+                </section>
+            </div>          
 			<div class="clearfix"></div>
 			<div class="copyright">
             	<p>Powered by <a href="http://www.apstrata.com" target="_blank"><img src="themes/touch/images/apstrata.png" alt="Apstrata" title="Apstrata" /></a></p>
