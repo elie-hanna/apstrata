@@ -93,18 +93,14 @@
 					"panel.finalAlpha": .95
 				}
 				
-				/*
-				 * the current connection instance
-				 */
-				 var connection = null;
 				
 				/*
 				 * this variable is regularly updated with a reference to the menu link node that was last selected 
 				 */
 				var lastSelected = dojo.byId("manageAccountLink");
 					
-				//loginWidget = new apstrata.ui.widgets.LoginWidget({useToken: true, type: "user"})
-				loginWidget = new apstrata.ui.widgets.LoginWidget({type: "user"});		
+				loginWidget = new apstrata.ui.widgets.LoginWidget({useToken: true, type: "user"})
+				//loginWidget = new apstrata.ui.widgets.LoginWidget({type: "user"});		
 				dojo.parser.parse();
 				var dashboard = dijit.byId("dashboard");				
 				
@@ -122,10 +118,9 @@
 				var logoutIconTop = dojo.query(".logout")[0];
 				var loginIconTop = dojo.query(".login")[0];
 				dojo.connect(dashboard, "onCredentials", function(credentials){	
-					connection = dashboard.connection;
 					userCredentials = credentials;
 					toggleLoginLogout("in");
-					manageAccountFct(credentials);	
+					manageAccountFct(dashboard.connection);	
 				})
 				
 				/*
@@ -134,7 +129,7 @@
 				var manageAccountLink = dojo.byId("manageAccountLink");
 				dojo.connect(manageAccountLink, "onclick", function(event) {
 					dojo.empty(linkedContent);
-					manageAccountFct(userCredentials);
+					manageAccountFct(dashboard.connection);
 				})
 				
 				/*
@@ -142,7 +137,7 @@
 				 */
 				var userProfileLink = dojo.byId("userProfileLink");
 				dojo.connect(userProfileLink, "onclick", function(event) {	
-					if (userCredentials) {						
+					if (dashboard.connection) {						
 						var userProfile = new apstrata.home.dashboard.Profile({container: dashboard, useClass: "dashboard"});
 						dojo.empty(linkedContent);					
 						dojo.place(userProfile.domNode, linkedContent);	
@@ -178,12 +173,12 @@
 				/*
 				 * this function factors out the logic that is shared by the login successful and manage account event handler
 				 */
-				var manageAccountFct = function(credentials) {
+				var manageAccountFct = function(connection) {
 					var helloUserNode = dojo.query(".marB20")[0];
-					helloUserNode.innerHTML = "Hello " + (credentials ? credentials.user : "");
+					helloUserNode.innerHTML = "Hello " + (connection ? connection.credentials.user : "");
 					var account = null;
-					if (credentials) { 		
-						account = new apstrata.home.dashboard.Accounts({container: dashboard, credentials: credentials});
+					if (connection) { 		
+						account = new apstrata.home.dashboard.Accounts({container: dashboard, credentials: connection.credentials});
 						account.container = dashboard;								
 						dojo.place(account.domNode, linkedContent);						
 						toggleSelected(manageAccountLink);
@@ -194,11 +189,17 @@
 				 * this function factors out the logic to log out
 				 */
 				var logout =  function(event) {					
-					if (connection) {
+					if (dashboard.connection) {
 						toggleSelected(logoutLink);
 						toggleLoginLogout("out");
-						connection.logout();
-						window.location = '<?php echo $config["baseUrl"]."/page.php?pageId=home"; ?>';					
+						dashboard.connection.logout({
+							success: function() {
+								window.location = '<?php echo $config["baseUrl"]."/page.php?pageId=home"; ?>';	
+							},
+							failure: function() {
+								
+							}
+						})		
 					}
 				} 
 				
@@ -225,6 +226,9 @@
 						dojo.style(loginIconTop, "display", "none");	
 					}					
 				}
+				
+				//This is required in case we are using token connection
+				dashboard.onCredentials();
 				
 			})		
 			
