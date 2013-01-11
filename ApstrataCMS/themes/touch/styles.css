@@ -425,7 +425,7 @@ color: white;
 text-shadow: 1px 1px 0 #767779;	
 	
 	}
-.touch .dijitButtonNode { border: 0 none; vertical-align: middle; text-align: center;  }
+.touch .dijitButtonNode { border: 0!important; vertical-align: middle; text-align: center; background: none!important;}
 
 .touch .dijitButtonHover { background: #009FB4;}
 .touch .dijitButtonHover .dijitButtonText { text-shadow: 1px 1px 0 #000000;}
