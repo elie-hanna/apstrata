@@ -1,7 +1,7 @@
 <br><br><br>
 
 <!-- embed code: start -->
-<div class="claro">
+<div class="login">
 	<div class="apstrata">
 	
 		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/ui/embed/apstrataEmbed.js"></script>
