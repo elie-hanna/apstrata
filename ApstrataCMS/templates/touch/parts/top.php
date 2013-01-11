@@ -54,7 +54,10 @@
 		dojo.require("dojo.cookie");
 		var lastSelected = dojo.cookie("lastSelected");
 		if (lastSelected) {
-			dojo.removeClass(dojo.byId(lastSelected), "selected");
+			var node = dojo.byId(lastSelected);
+			if (node) {
+				dojo.removeClass(node, "selected");
+			}
 		}
 		
 	});
