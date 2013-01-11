@@ -53,6 +53,12 @@
 
 	dojo.addOnLoad(function() {
 		
+		var title = "documentationLink";
+		var linkNode = dojo.byId(title);
+		if (linkNode) {
+			dojo.addClass(linkNode, "selected");
+		};
+		
 		var lastSelected = dojo.byId("touchCloud");
 			
 		/*

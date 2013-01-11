@@ -49,38 +49,14 @@
 </div>
 <div class="clearfix"></div>	
 <script>
-	dojo.addOnLoad(function() {		
-			
-		/*
-		 * Connect the toggleSelected function to all the links in
-		 * order to manage the link clicked event
-		 */
-		dojo.require("dojo.cookie"); 
+	dojo.addOnLoad(function() {	
+		
+		dojo.require("dojo.cookie");
 		var lastSelected = dojo.cookie("lastSelected");
 		if (lastSelected) {
-			dojo.addClass(dojo.byId(lastSelected), "selected");
+			dojo.removeClass(dojo.byId(lastSelected), "selected");
 		}
 		
-		var allLinks = dojo.query("ul.menu li a");
-		for (var i = 0; i < allLinks.length; i++) {						
-			dojo.connect(allLinks[i], "onclick", function(event) {				
-				toggleSelected(event.target);
-			});
-		}
-	
-		/*
-		 * this function factors out the logic to toggle the selected element on the menu				 
-		 */
-		var toggleSelected = function(newLinkNode) {		   	
-			if (lastSelected && lastSelected != newLinkNode.id) {
-			    var lastSelectedNode = dojo.byId(lastSelected);
-				dojo.removeClass(lastSelectedNode, "selected");
-			}								
-			
-			dojo.addClass(newLinkNode, "selected");
-			lastSelected = newLinkNode.id;
-			dojo.cookie("lastSelected", lastSelected);			
-		}
 	});
 
 </script>		
