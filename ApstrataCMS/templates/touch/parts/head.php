@@ -1,6 +1,6 @@
 <!-- start: head.php -->		
 		
-	    <link rel="shortcut icon" href="themes/<?php print $config['template'] ?>/resources/favicon.png" type="image/png" />
+	    <link rel="shortcut icon" href="themes/<?php print $config['template'] ?>/images/favicon.ico" type="image/png" />
 
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
@@ -28,7 +28,7 @@
 		
 		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 
-		<link rel="shortcut icon" href="workbench/images/favicon.png" type="image/png" />
+		<link rel="shortcut icon" href="workbench/images/favicon.ico" type="image/png" />
 	
 
 		<?php 

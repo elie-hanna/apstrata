@@ -5,10 +5,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<meta property="og:title" content="<?php echo $_REQUEST['api'] ?>" />
 	<meta property="og:description" content="<?php echo extractTextFromWikiNode($content) ?>" />
-	<meta property="og:image" content="<?php echo $config["baseUrl"]."/resources/icons/".$_REQUEST['type']."/".$_REQUEST['api'].".png" ?>" />
+	<meta property="og:image" content="<?php echo $config["baseUrl"]."/images/icons/".$_REQUEST['type']."/".$_REQUEST['api'].".png" ?>" />
 	<title>"Apstrata Website"</title>
 
-	<link rel="shortcut icon" href="<?php print "/themes/".$config['template'] ?>/resources/favicon.png" type="image/png" />
+	<link rel="shortcut icon" href="<?php print "/themes/".$config['template'] ?>/images/favicon.ico" type="image/png" />
 	<?php 
 		if ($config["developmentMode"]) { 
 	?>
