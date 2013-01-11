@@ -298,7 +298,8 @@ text-align: center;}
 .listing {clear: both; padding: 10px 0 40px 0; display: inline-block; width: 100%; margin-bottom: 3px;}
 .listing .image {width: 130px; height: 130px; float: left; margin-right: 30px;}
 .listing-info {float: left; width: 460px;}
-.listing h2 {color: #282828; font-size: 16px; margin-bottom: 4px; text-transform: uppercase;}
+.listing h2, .registrationWidget h2 {color: #282828; font-size: 16px; margin-bottom: 4px; text-transform: uppercase;}
+.registrationWidget h2 {font-family: "NunitoBold";}
 .listing .info {line-height: 1.3em;}
 .listing .btn {margin-top: 8px;}
 
