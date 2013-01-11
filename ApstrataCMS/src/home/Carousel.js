@@ -137,9 +137,11 @@ dojo.declare("apstrata.home.Carousel",
 		this.slideImage.src = itemCloned.detailsImageUrl;		
 		this.slideDetails.innerHTML = itemCloned.detailsInnerHtml;
 		
-		var selectedNode = dojo.query(".selected")[0];
-		if (selectedNode) {
-			dojo.toggleClass(selectedNode, "selected");
-		}	
+		var selectedNodes = dojo.query(".selected");
+		if (selectedNodes) {
+			for (var x = 0; x < selectedNodes.length; x++) {
+				dojo.toggleClass(selectedNodes[x], "selected");
+			}
+		}
 	}
 })

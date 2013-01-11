@@ -37,6 +37,13 @@ dojo.declare("apstrata.home.CarouselItem",
 			this.parent.itemClicked(this);
 		}
 		
-		dojo.addClass(this.domNode.childNodes[0], "selected");	
+		dojo.addClass(this.domNode.childNodes[0], "selected");
+		
+		//This is a hack and needs to be fixed. There was an extra div being displayed for the first item only.
+		if (this.domNode.childNodes[0].childNodes.length > 0) {
+			dojo.addClass(this.domNode.childNodes[0].childNodes[0], "selected");
+		}
+			
+			
 	}
 })
