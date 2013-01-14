@@ -173,7 +173,7 @@ dojo.declare("apstrata.sdk.TokenConnection",
 			// 2. Calculate the token expiration time and compare it with the current time to see if it's expired.
 			else {
 				var time = new Date().getTime();
-				var tokenExpiryTime = time + (self.token.expires * 1000);
+				var tokenExpiryTime = self.token.creationTime + (self.token.expires * 1000);
 				return (tokenExpiryTime > time);
 			}
 		},
