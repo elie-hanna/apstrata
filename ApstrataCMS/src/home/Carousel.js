@@ -20,6 +20,17 @@ dojo.declare("apstrata.home.Carousel",
 	//The pages to be displayed in the carousel
 	items: null,
 	
+	//An array of widgets, each corresponding for a widget of a child item 
+	itemsWidgets: null,
+
+	//A boolean indicating whether to auto rotate between the items or not
+	autoRotate: false,
+	
+	//Number of seconds after which a rotate happens
+	rotateInterval: 10000,
+	
+	currentItemIndex: null,
+	
 	connection: null,
 	store: null,
 	
@@ -43,10 +54,19 @@ dojo.declare("apstrata.home.Carousel",
 			if (params.store) {
 				this.store = params.store;
 			}
+			
+			if (params.autoRotate) {
+				this.autoRotate = params.autoRotate;
+			}
+			
+			if (params.rotateInterval) {
+				this.rotateInterval = params.rotateInterval;
+			}
 		}
 	},
 
 	postCreate: function() {
+		var self = this;
 		
 		if (this.connection) {
 			var client = new apstrata.sdk.Client(this.connection);
@@ -76,6 +96,8 @@ dojo.declare("apstrata.home.Carousel",
 			}
 		}
 
+		this.itemsWidgets = [];
+
 		if (this.items) {
 		
 			if (this.itemsIds) {	
@@ -94,6 +116,10 @@ dojo.declare("apstrata.home.Carousel",
 				}
 			}			
 		}
+		
+		if (this.autoRotate) {
+			setInterval(dojo.hitch(self, self.rotate), self.rotateInterval);
+		}
 
 		this.inherited(arguments)	
 		
@@ -110,10 +136,13 @@ dojo.declare("apstrata.home.Carousel",
 				innerHtml: item.section2,
 				detailsInnerHtml: item.section1,
 				detailsImageUrl: (this.connection ? this.getUrl(item.regularIcon, item.key) : item.regularIcon),
+				index: index,
 				parent: this
 			});
 			
 			dojo.place(itemWidget.domNode, this.slidesControls);
+			
+			this.itemsWidgets.push(itemWidget);
 			
 			if (index == 0) {
 				itemWidget.displayDetails();
@@ -132,16 +161,25 @@ dojo.declare("apstrata.home.Carousel",
 		return imageUrl;
 	},
 	
-	itemClicked: function(item) {
-		var itemCloned = dojo.clone(item);
-		this.slideImage.src = itemCloned.detailsImageUrl;		
-		this.slideDetails.innerHTML = itemCloned.detailsInnerHtml;
-		
-		var selectedNodes = dojo.query(".selected");
-		if (selectedNodes) {
-			for (var x = 0; x < selectedNodes.length; x++) {
-				dojo.toggleClass(selectedNodes[x], "selected");
+	selectItem: function(item) {
+			this.currentItemIndex = item.index;
+			this.slideImage.src = item.detailsImageUrl;		
+			this.slideDetails.innerHTML = item.detailsInnerHtml;
+			
+			var selectedNodes = dojo.query(".selected");
+			if (selectedNodes) {
+				for (var x = 0; x < selectedNodes.length; x++) {
+					dojo.toggleClass(selectedNodes[x], "selected");
+				}
 			}
+	},
+	
+	rotate: function() {
+		var self = this;
+		var nextItemIndex = self.currentItemIndex + 1;
+		if (nextItemIndex == self.items.length) {
+			nextItemIndex = 0;
 		}
+		self.itemsWidgets[nextItemIndex].displayDetails();
 	}
 })

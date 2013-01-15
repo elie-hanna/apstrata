@@ -19,6 +19,9 @@ dojo.declare("apstrata.home.CarouselItem",
 	// The image url to use when the item is clicked
 	detailsImageUrl: "",
 	
+	// The order or index of the item in the carousel
+	index: null,
+	
 	parent: null,
 	
 	constructor: function(params) {
@@ -33,8 +36,8 @@ dojo.declare("apstrata.home.CarouselItem",
 	},
 	
 	displayDetails: function() {
-		if (this.detailsInnerHtml && this.parent && this.parent.itemClicked) {
-			this.parent.itemClicked(this);
+		if (this.detailsInnerHtml && this.parent && this.parent.selectItem) {
+			this.parent.selectItem(this);
 		}
 		
 		dojo.addClass(this.domNode.childNodes[0], "selected");

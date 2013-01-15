@@ -45,6 +45,7 @@
 								
 		var carousel = new apstrata.home.Carousel({
 				items: items,
+				autoRotate: true,
 				connection: useConnection,
 			}, dojo.byId("carouselContainer") );
 			
