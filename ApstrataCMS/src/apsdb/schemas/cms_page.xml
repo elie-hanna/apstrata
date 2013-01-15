@@ -20,6 +20,7 @@
 				<field>pageStatus</field>
 				<field>visibility</field>
 				<field>publishedDate</field>
+				<field>order</field>
 			</fields>
 		</aclGroup>
 		<schemaAcl>
@@ -49,5 +50,6 @@
 		<field name="pageStatus" type="string" />
 		<field name="visibility" type="string" />
 		<field name="publishedDate" type="date" />
+		<field name="order" type="numeric" />
 	</fields>
 </schema>

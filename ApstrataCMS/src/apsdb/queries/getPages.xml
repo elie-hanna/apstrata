@@ -7,8 +7,8 @@
     </returnedFields>
     <sort>
         <field>
-            <name>pageTitle</name>
-            <type>string</type>
+            <name>order</name>
+            <type>numeric</type>
             <order>ASC</order>
         </field>
     </sort>

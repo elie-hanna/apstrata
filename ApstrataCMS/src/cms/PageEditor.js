@@ -93,8 +93,9 @@ dojo.declare("apstrata.cms.PageEditor",
 		params["javascript"] = this._formGenerator.getField("javascript").value;
 		params["css"] = this._formGenerator.getField("css").value;
 		params["category"] = this._formGenerator.getField("category").value;		
-		params["description"] = this._formGenerator.getField("description").value;		
 		params["document.readACL"] = this._formGenerator.getField("document.readACL").value;
+		params["order"] = this._formGenerator.getField("order").value;
+		params["order.apsdb.fieldType"] = this._formGenerator.getField("order").type;
 		
 		// We will only send the publishedDate if the status is "Published"
 		// If no date/time was set, we use the current date/time
@@ -233,6 +234,7 @@ dojo.declare("apstrata.cms.PageEditor",
 					fieldset: [
 						{name: "description", label: "Description", type: "string"},
 						{name: "category", label: "Category", type: "string", type: "string", value: "Editorial", widget: "dijit.form.ComboBox", "formGenerator-options": ["Editorial", "Product", "Blog"]},
+						{name: "order", label: "Page Order", type: "numeric"},
 						{name: "tags", label:"tags", type: "string", widget: "dojox.form.ListInput"},
 						{name: "pageStatus", label: "Status", type: "string", type: "string", value: "Draft", widget: "dijit.form.ComboBox", "formGenerator-options": ["Published", "Draft", "Pending Approval"]},
 						{name: "document.readACL", label: "Read permissions", type: "string"},
