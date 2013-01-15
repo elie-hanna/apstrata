@@ -376,7 +376,7 @@ public class ApstrataClientJava {
 			
 		} else {
 			if (parameters != null) {
-				httpPost.setEntity(new UrlEncodedFormEntity(parameters));
+				httpPost.setEntity(new UrlEncodedFormEntity(parameters,"UTF-8"));
 			}	
 		}
 		
