@@ -220,7 +220,7 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 /*** Footer ***/
 .footer-wrap {height: 353px; background: url(../touch/images/footer-bg.png) bottom left repeat-x;}
 footer {width: 960px; margin: 0 auto;}
-footer h3 {font-size: 14px; font-family: "NunitoBold"; color: #f5f5f5;}
+footer h3 {font-size: 14px; font-family: "NunitoBold"; color: #f5f5f5;margin-top: 0; line-height: 12px;}
 footer .newsletter {padding-top: 33px;}
 footer .newsletter p {font-family: "NunitoLight"; color: #999; font-size: 13px; margin: 11px 0;}
 footer .textfield {width: 300px; float: left; margin-right: 10px;}
@@ -252,7 +252,7 @@ footer .copyright p + p {float: right; font-family: "NunitoRegular";}
 
 /*** Container and content ***/
 .container {background: url(../touch/images/container.png) top left repeat-x; padding-top: 3px; padding-bottom: 336px;}
-.content-wrap {background:url("../touch/images/content-wrap.png") repeat scroll left top; padding-bottom: 30px; margin-bottom: -16px;}
+.content-wrap {background:url("../touch/images/content-wrap.png") repeat scroll left top; padding-bottom: 130px; margin-bottom: -16px;}
 
 .content  {max-width: 960px; margin: 0 auto; padding-top: 32px;}
 .content h1 {font-size: 30px;}
@@ -356,7 +356,7 @@ background: linear-gradient(to bottom,  #8c8c8c 0%,#b2b2b2 99%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', endColorstr='#b2b2b2',GradientType=0 ); /* IE6-8 */
 }
 .ie9 .btn {filter: none;}
-.btn input[type="submit"] {background: none; border: none; padding: 6px 12px; text-align: center; text-transform: uppercase; font-size: 16px; font-weight: bold; color: #fff;
+.btn input[type="submit"] {background: none; border: none; padding: 6px 12px; text-align: center; text-transform: uppercase; font-size: 16px; font-family: 'NunitoBold'; color: #fff;
 -moz-text-shadow: 1px 1px 0 #767779;
 -webkit-text-shadow: 1px 1px 0 #767779;
 text-shadow: 1px 1px 0 #767779;
@@ -537,3 +537,9 @@ background: -ms-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* IE10+ */
 background: linear-gradient(to bottom,  #8c8c8c 0%,#b2b2b2 99%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', endColorstr='#b2b2b2',GradientType=0 ); /* IE6-8 */}
 .touch .innerContent .smallButton:hover {background: #009FB4;}
+
+.apstrata .RegistrationWidget {padding-bottom: 60px !important ;}
+.page#registration { padding-top: 100px; padding-bottom: 250px; }
+
+.expand-container ul { list-style:disc;}
+.expand-container li { font-size:13px; margin-bottom:3px; margin-left:20px;}
