@@ -221,7 +221,7 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 .footer-wrap {height: 353px; background: url(../touch/images/footer-bg.png) bottom left repeat-x;}
 footer {width: 960px; margin: 0 auto;}
 footer h3 {font-size: 14px; font-family: "NunitoBold"; color: #f5f5f5;}
-footer .newsletter {padding-top: 25px;}
+footer .newsletter {padding-top: 33px;}
 footer .newsletter p {font-family: "NunitoLight"; color: #999; font-size: 13px; margin: 11px 0;}
 footer .textfield {width: 300px; float: left; margin-right: 10px;}
 footer .btn {float: left;}
