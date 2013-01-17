@@ -501,7 +501,7 @@ text-shadow: 1px 1px 0 #767779;
 .redInput-label {  /* the field label will be assigned the "[customClass]-label" class  */
 	color: red;
 }
-
+.touch .LoginWidget { top: 205px !important; }
 
 .touch .LoginWidget .login {
 background: #383B3E;
