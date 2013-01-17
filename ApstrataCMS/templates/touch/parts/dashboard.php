@@ -52,8 +52,10 @@
     </div>
     <!-- end side menu -->
 	<div class="editorial">
-    	<h1 class="marB20"></h1>      
-    	<div class="dashboard">		
+    	<h1 class="marB20" style="visibility:none">Hello</h1>      
+    	<div class="dashboard" style"visibility:none">
+		This is your dashboard. <br />
+		This is where you control your apps, your settings and stuff.
 		</div>
 		<div id="linkedContent">    
 		<script>
@@ -179,7 +181,7 @@
 				 * this function factors out the logic that is shared by the login successful and manage account event handler
 				 */
 				var manageAccountFct = function(connection) {					
-					//dojo.style(helloNode, "visibility", "visible");
+					dojo.style(helloNode, "visibility", "visible");
 					//dojo.style(txtNode, "visibility", "visible");
 					helloNode.innerHTML = "Hello " + (connection ? connection.credentials.user : "");
 					var account = null;
