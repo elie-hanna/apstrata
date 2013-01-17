@@ -52,8 +52,8 @@
     </div>
     <!-- end side menu -->
 	<div class="editorial">
-    	<h1 class="marB20" style="visibility:none">Hello</h1>      
-    	<div class="dashboard" style"visibility:none">
+    	<h1 class="marB20" style="visibility:hidden">Hello</h1>      
+    	<div class="dashboard" style="visibility:hidden">
 		This is your dashboard. <br />
 		This is where you control your apps, your settings and stuff.
 		</div>
