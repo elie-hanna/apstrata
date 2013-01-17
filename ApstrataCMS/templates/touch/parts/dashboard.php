@@ -52,10 +52,8 @@
     </div>
     <!-- end side menu -->
 	<div class="editorial">
-    	<h1 class="marB20">Hello</h1>      
-    	<div class="dashboard">
-		This is your dashboard. <br />
-		This is where you control your apps, your settings and stuff.
+    	<h1 class="marB20"></h1>      
+    	<div class="dashboard">		
 		</div>
 		<div id="linkedContent">    
 		<script>
@@ -93,6 +91,11 @@
 					"panel.finalAlpha": .95
 				}
 				
+				var helloNode = dojo.query(".marB20")[0];
+				//var txtNode = dojo.query(".dashboard")[0];
+				
+				//dojo.style(helloNode, "visibility", "hidden");
+				//dojo.style(txtNode, "visibility", "hidden");
 				
 				/*
 				 * this variable is regularly updated with a reference to the menu link node that was last selected 
@@ -175,9 +178,10 @@
 				/*
 				 * this function factors out the logic that is shared by the login successful and manage account event handler
 				 */
-				var manageAccountFct = function(connection) {
-					var helloUserNode = dojo.query(".marB20")[0];
-					helloUserNode.innerHTML = "Hello " + (connection ? connection.credentials.user : "");
+				var manageAccountFct = function(connection) {					
+					//dojo.style(helloNode, "visibility", "visible");
+					//dojo.style(txtNode, "visibility", "visible");
+					helloNode.innerHTML = "Hello " + (connection ? connection.credentials.user : "");
 					var account = null;
 					if (connection) { 		
 						account = new apstrata.home.dashboard.Accounts({container: dashboard, credentials: connection.credentials});

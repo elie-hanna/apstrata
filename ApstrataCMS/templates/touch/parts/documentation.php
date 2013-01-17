@@ -16,7 +16,7 @@
                 <div class="middle">
                     <ul>
                         <li><a id="wiki" href="http://wiki.apstrata.com" target="_blank">the wiki</a></li>
-                        <li><a id="touchCloud" href="" class="selected">get started with touch cloud</a>
+                        <li><a id="touchCloud" href="">get started with touch cloud</a>
                         	<ul class="submenu">
                         		<li><a id="ios" href="http://wiki.apstrata.com/display/doc/iOS+SDK" target="_blank">iOS</a></li>
                         		<li><a id="android" href="http://wiki.apstrata.com/display/doc/Android+SDK" target="_blank">android</a></li>
