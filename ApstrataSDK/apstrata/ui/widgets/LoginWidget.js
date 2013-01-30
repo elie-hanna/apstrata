@@ -70,7 +70,11 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 				};
 		}
 		
-		dojo.mixin(this, apstrata.registry.get("apstrata.ui", "widgets.Login"))
+		dojo.mixin(this, apstrata.registry.get("apstrata.ui", "widgets.Login"));
+		
+		if (typeof attrs['refererBoundToken'] === 'boolean') {
+			this.refererBoundToken = attrs['refererBoundToken'];
+		}
 	},
 	
 	_setUpLoginForm: function() {
@@ -128,21 +132,23 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 		}
 		
 		if (this.useToken && this.useToken == true) {
-			connection.login({
-				success: function() {
-					self.form.enable()
-					self._animation.hide()
-					if (self._success) self._success(credentials)
-				},
-				failure: function() {
-					self.form.enable()
-					self._animation.hide()
-					self.form.vibrate(self.domNode)
-					self.message(self.nls.BAD_CREDENTIALS)
-					
-					if (self._failure) self._failure()
-				}
-			})			
+			var loginParams = {};
+			loginParams['success'] = function() {
+				self.form.enable();
+				self._animation.hide();
+				if (self._success) self._success(credentials);
+			};
+			loginParams['failure'] = function() {
+				self.form.enable();
+				self._animation.hide();
+				self.form.vibrate(self.domNode);
+				self.message(self.nls.BAD_CREDENTIALS);
+				if (self._failure) self._failure();
+			};
+			if (typeof this.refererBoundToken === 'boolean') {
+				loginParams['extraParameters'] = {"apsdb.bindReferrer": this.refererBoundToken};
+			}
+			connection.login(loginParams);			
 		} else {
 			connection.login().then(
 				function() {
@@ -194,15 +200,19 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 			}
 			
 			if (this.useToken && this.useToken == true) {
-				connection.login({
-					success: function() {
-						self.form.enable()
-						if (self._success) self._success(credentials)
-					},
-					failure: function() {
-						self.form.enable()
-					}
-				})			
+				var loginParams = {};
+				loginParams['success'] = function() {
+					self.form.enable();
+					if (self._success) self._success(credentials);
+				};
+				loginParams['failure'] = function() {
+					self.form.enable();
+				};
+				if (typeof this.refererBoundToken === 'boolean') {
+					loginParams['extraParameters'] = {"apsdb.bindReferrer": this.refererBoundToken};
+				}
+				connection.login(loginParams);
+				
 			} else {
 				connection.login().then(
 					function() {
