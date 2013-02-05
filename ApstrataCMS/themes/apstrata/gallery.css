@@ -1,0 +1,203 @@
+.homePage {
+	
+}
+
+#searchBar {
+	position: relative;
+}
+
+#search {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border:solid 2px #009FB4;
+	background:#ffffff;
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;		
+}
+
+#search-icon {
+	display: inline-block;
+	background: url('images/magnifying-glass.png') no-repeat;
+	width: 21px;
+	height: 21px;
+	float:right;
+	margin-top:11px;
+	margin-right:11px;
+}
+
+#search-field {
+	display: inline-block;
+	position: relative;
+	left: 0px;
+}
+
+#search-field .dijitTextBox {
+    border: medium none;
+	background: none repeat scroll 0 0 transparent;
+	color: #009FB4;
+    display: block;
+    font-size: 15px;
+	font-family: 'NunitoBold';
+    line-height: 39px;
+    position: relative;
+    width: 900px;
+	padding-left:10px;
+}
+.dj_gecko #search-field .dijitTextBox input { 
+	padding:10px 0;
+
+}
+
+#search-field .dijitTextBoxFocused {
+	background: none;
+	border:none;
+	outline:none;
+}
+
+#categories {
+	display: block;
+	padding: 10px;
+	text-align: center;
+	background:#FFFFFF;
+	border-radius:0 0 5px 5px;
+	-moz-border-radius:0 0 5px 5px;
+	-webkit-border-radius:0 0 5px 5px;
+	box-shadow:0 2px 5px #CCCCCC;
+	-moz-box-shadow:0 2px 5px #CCCCCC;
+	-webkit-box-shadow:0 2px 5px #CCCCCC;
+}
+
+#categories .category {
+	display: inline-block;
+	font-size: 13px;
+	font-family: 'DosisBold';
+	padding: 5px 7px;
+	color: #383B3E;
+	cursor:pointer;
+	text-transform:uppercase;
+		-webkit-transition: all 0.3s ease-in-out; 
+            -moz-transition:  all 0.3s ease-in-out; 
+            -ms-transition:  all 0.3s ease-in-out; 
+            -o-transition: all 0.3s ease-in-out; 
+			transition: all 0.3s ease-in-out;
+}
+
+#categories .category:hover,
+
+#categories .selected {
+	color: #ffffff;
+	background: #009FB4;
+	-moz-border-radius: 5px;
+	-webkit-bordee-radius: 5px;
+	border-radius: 5px;
+}
+
+#searchResults {
+	position: relative;
+	display: table;
+	width: 100%;
+	padding-bottom: 30px;
+	height: 200px;
+}
+
+.content .line {
+	border: 1px solid black;
+	text-align: center;
+	display: table-row;
+}
+
+.content .item {
+	display: inline-block;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 145px;
+	height:125px;
+	border:solid 1px #B4B4B4;
+	background:url(images/white-transparent.png);
+	-moz-border-radius: 5px;
+	-webkit-bordee-radius: 5px;
+	border-radius: 5px;
+	margin-bottom: 13px;
+    margin-left: 6px;
+    margin-right: 6px;
+		-webkit-transition: all 0.3s ease-in-out; 
+        -moz-transition:  all 0.3s ease-in-out; 
+        -ms-transition:  all 0.3s ease-in-out; 
+        -o-transition: all 0.3s ease-in-out; 
+		transition: all 0.3s ease-in-out;	
+}
+
+.content .item:hover {
+ 	box-shadow: 0 0 3px #999999;
+ }
+
+.content .item:hover .label{
+	background:#FFDD17;
+	color:#A34180;
+	
+}
+
+.content .item .type {
+	position: relative;
+	top: 30px;
+	left: 10px;
+	font-size: 0.8em;
+	color: #fff;
+	background: #9a9a9a;
+	display: none;
+	padding: 3px;
+	opacity: .7;
+	width: 50px;
+	
+	z-index: 11;
+	
+	font-weight: bold;
+			
+	padding: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+
+	-moz-transform:rotate(-90deg);
+	-webkit-transform:rotate(-90deg);
+	-o-transform:rotate(-90deg);
+	-ms-transform:rotate(-90deg);
+}
+
+.content .item .label {
+	position: relative;
+	font-family: 'NunitoRegular';
+	top: 0px;
+	margin-bottom: 10px;
+	font-size: 12px;
+	color: #323232; 
+	width: 90%;
+	margin: 0 auto;
+	padding:10px 0;
+	display: block;
+	background:#e2e2e3;
+	-moz-border-radius: 5px;
+	-webkit-bordee-radius: 5px;
+	border-radius: 5px;
+			-webkit-transition: all 0.3s ease-in-out; 
+        -moz-transition:  all 0.3s ease-in-out; 
+        -ms-transition:  all 0.3s ease-in-out; 
+        -o-transition: all 0.3s ease-in-out; 
+		transition: all 0.3s ease-in-out;
+}
+
+.content .item img {
+	width: 90px;
+	height: 90px;
+	opacity: .8;
+	margin-right: auto;
+	margin-left: auto;
+	display: block;
+	cursor: pointer;
+}
+
+.content .item img:hover {
+	opacity: 1;
+}

@@ -1,0 +1,17 @@
+<div>
+	<div id="categories">
+		{% for category in _categories %}
+			{% ifequal category "|" %}
+				|
+			{% else %}
+				<div class="category" data-category='{{ category }}' dojoAttachEvent='onclick: changeCategory'>{{ category }}</div>
+			{% endifequal %}
+		{% endfor %}
+	</div>
+	<div id="search">
+		<div id="search-icon"></div>
+		<div id="search-field"><input dojoType='dijit.form.TextBox' intermediateChanges="true" type='text' name='searchApstrata' dojoAttachPoint='fldSearch' dojoAttachEvent="onFocus: focus, onChange: change, onBlur: blur, onKeyPress: keyPress"></input></div>
+		<div class='clear'></div>
+	</div>
+
+</div>
