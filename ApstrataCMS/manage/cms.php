@@ -122,7 +122,7 @@
 				if ($item['id'] == $this->pageId) $class="class='selected'";
 			}
 
-			if (isset($item['target'])) {
+			if (isset($item['target']) && ($item['target'] != "")) {
 				$url = $url . "' target='" . $item['target'];
 			}
 
@@ -132,9 +132,8 @@
 				}
 			} 
 			
-			
-			if (isset($item['title'])) $link = "<a " . $class . " href='" . $url . "' id='" . strtolower($item[title]). "Link'>" .  $item['title'] . "</a>";
-						
+			if (isset($item['title'])) $link = "<a " . $class . " href='" . $url . "' id='" . strtolower($item['title']). "Link'>" .  $item['title'] . "</a>";
+					
 			return $link;
 		}
 		

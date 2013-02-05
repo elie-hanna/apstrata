@@ -12,7 +12,10 @@
 				<field>target</field>				
 				<field>description</field>				
 				<field>attachments</field>
-				<field>parent</field>					
+				<field>parent</field>	
+				<field>category</field>				
+				<field>order</field>
+								
 			</fields>
 		</aclGroup>
 		<schemaAcl>
@@ -35,5 +38,7 @@
 		<field name="target" type="string" />
 		<field name="description" type="string" />	
 		<field name="parent" type="string" />	
+		<field name="category" type="string" />
+		<field name="order" type="numeric" />
 	</fields>
 </schema>

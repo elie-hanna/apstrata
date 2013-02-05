@@ -1,11 +1,7 @@
-<!-- 
-  this query is used by the benefits collection in conjunction with the twoColumnsCatalog template
-  to generate the "the benefits" page on the web site  
--->
 <query>
     <executeACL>all</executeACL>
     <store>apstrata</store>
-    <condition><![CDATA[ category<string>="benefits"]]></condition>
+    <condition><![CDATA[ category<string>="siteMap" and documentType="Link"]]></condition>
     <returnedFields>
         <field>*</field>
     </returnedFields>

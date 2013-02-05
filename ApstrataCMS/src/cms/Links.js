@@ -121,15 +121,9 @@ dojo.declare("apstrata.cms.Links",
 												
 				"apsdb.update": this._mode == "edit" ? true : false,
 				"apsdb.store": this._store,
-				"apsdb.schema": "cms_link"		
+				"apsdb.schema": "cms_link"
 		};	
-		
-		if (this._mode == "new") {
-			
-			var docKey = this._formGenerator.getField("apsdb.documentKey");
-			docKey.destroy();
-			delete docKey;
-		}
+
 								
 		var client = new apstrata.sdk.Client(this.container.connection);
 		client.call("SaveDocument", params, this._formGenerator.frmMain.domNode, {method:"post"}).then( 
@@ -158,6 +152,9 @@ dojo.declare("apstrata.cms.Links",
 				{name: "address", type: "string", required: true},
 				{name: "description", type: "string", required: false},
 				{name: "target", label: "type", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["_blank", "_top", "_none"]},
+				{name: "category", label: "Category", type: "string"},
+				{name: "order", label: "Order", type: "numeric"},
+				{name: "order.apsdb.fieldType", label: "Order Type", type: "hidden", value: "numeric"},
 				{name: "attachments", label: "Attachments", type: "multiplefiles", connection: this._connection, displayImage:false, value:""},
 				{name: "regularIcon", label:"Regular Icon", type: "file", displayImage:true, connection: this.container.connection, store: this._store, value:"",showRemoveFieldBtn: true},
 				{name: "document.readACL", type:"string"},
