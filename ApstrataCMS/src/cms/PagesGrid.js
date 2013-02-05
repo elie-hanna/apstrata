@@ -91,8 +91,7 @@ dojo.declare("apstrata.cms.PagesGrid",
 		
 		this.openPanel(apstrata.cms.PageEditor, {
 										
-			maximizable: true,
-			maximizePanel: true,
+			maximizable: true,		
 			attrs: {}
 		});
 	},
