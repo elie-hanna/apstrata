@@ -32,7 +32,7 @@
 	</style>
 	<!-- begin side menu -->
     <div class="side-menu">
-    	<h1>tools</h1>
+    	<h1>TOOLS</h1>
     	<!-- begin navigation -->
         <div class="navigation">
         	<div class="top"></div>
@@ -64,7 +64,7 @@
 		     * Global variables defining templates that will overload the default templates of Account.js and Profile.js
 		     */
 			accountsTemplate =  "../../../templates/apstrata/widgets/Accounts.html";
-			profileTemplate = "../../../../templates/apstrata/widgets/Profile.html";
+			profileTemplate = "../../../templates/apstrata/widgets/Profile.html";
 			dojo.addOnLoad(function() {
 		<?php 
 				if ($config["developmentMode"]) { 
