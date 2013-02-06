@@ -238,6 +238,19 @@
 				//This is required in case we are using token connection
 				dashboard.onCredentials();
 				
+				if (dashboard._curtain) {
+					var d = dojo.query(".content-wrap")[0];
+					if (d) {
+						var p = dojo.position(d);			
+						dojo.style(dashboard._curtain, {
+							top: p.y + "px",
+							left: p.x + "px",
+							width: p.w + "px",
+							height: p.h + "px"
+						})
+					}
+				}
+				
 			})		
 			
 		</script>
