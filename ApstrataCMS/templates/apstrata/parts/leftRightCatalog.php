@@ -81,6 +81,7 @@
 				    	var imageUrl = connection.sign("GetFile", dojo.objectToQuery(params)).url;				    	        
 				    </script>
 			<?php
+					print "<a id='" . $item->key . "'></a>";
 	                print "<div class='" . $imageClass . "'><img id='" . $item->regularIcon . "'/></div>";
 	        		print "<div class='" . $textClass . "'>";
 	        		print "<div class='title'><span>((</span>" . $item->title . "</div>";
