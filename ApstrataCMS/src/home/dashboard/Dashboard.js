@@ -72,5 +72,24 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 				
 			}
 		})
+	},
+	
+	showCurtain: function() {
+		var d = dojo.query(".content-wrap")[0];
+		if (d) {
+			this._curtain = dojo.create('div', {}, dojo.body())
+			dojo.addClass(this._curtain, "HorizonCurtain")
+			var p = dojo.position(d);			
+			dojo.style(this._curtain, {
+				top: p.y + "px",
+				left: p.x + "px",
+				width: p.w + "px",
+				height: p.h + "px"
+			})
+			
+			return this._curtain
+		} else {
+			return this.inherited(arguments);
+		}
 	}
 })
