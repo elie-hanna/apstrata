@@ -1,74 +1,103 @@
 /** Fonts **/
 @font-face {
-    font-family: 'DosisRegular';
-    src: url('fonts/dosis-regular-webfont.eot');
-    src: url('fonts/dosis-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/dosis-regular-webfont.woff') format('woff'),
-         url('fonts/dosis-regular-webfont.ttf') format('truetype'),
-         url('fonts/dosis-regular-webfont.svg#DosisRegular') format('svg');
+		font-family: 'ArialRoundedMTBold';
+		src: url('fonts/arialroundedmtbold.eot');
+		src: url('fonts/arialroundedmtbold.eot?#iefix') format('embedded-opentype'),
+			 url('fonts/arialroundedmtbold.woff') format('woff'),
+			 url('fonts/arialroundedmtbold.ttf') format('truetype'),
+			 url('fonts/arialroundedmtbold.svg#arialroundedmtbold') format('svg');
+		font-weight: normal;
+		font-style: normal;
+}
+
+@font-face {
+    font-family: 'PTSansNarrowRegular';
+    src: url('fonts/PTN57F-webfont.eot');
+    src: url('fonts/PTN57F-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/PTN57F-webfont.woff') format('woff'),
+         url('fonts/PTN57F-webfont.ttf') format('truetype'),
+         url('fonts/PTN57F-webfont.svg#PTSansNarrowRegular') format('svg');
     font-weight: normal;
     font-style: normal;
 
 }
 
 @font-face {
-    font-family: 'DosisLight';
-    src: url('fonts/dosis-light-webfont.eot');
-    src: url('fonts/dosis-light-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/dosis-light-webfont.woff') format('woff'),
-         url('fonts/dosis-light-webfont.ttf') format('truetype'),
-         url('fonts/dosis-light-webfont.svg#DosisLight') format('svg');
+    font-family: 'PTSansCaptionBold';
+    src: url('fonts/PTC75F-webfont.eot');
+    src: url('fonts/PTC75F-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/PTC75F-webfont.woff') format('woff'),
+         url('fonts/PTC75F-webfont.ttf') format('truetype'),
+         url('fonts/PTC75F-webfont.svg#PTSansCaptionBold') format('svg');
     font-weight: normal;
     font-style: normal;
+
 }
 
 @font-face {
-    font-family: 'DosisBold';
-    src: url('fonts/dosis-bold-webfont.eot');
-    src: url('fonts/dosis-bold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/dosis-bold-webfont.woff') format('woff'),
-         url('fonts/dosis-bold-webfont.ttf') format('truetype'),
-         url('fonts/dosis-bold-webfont.svg#DosisBold') format('svg');
+    font-family: 'PTSansCaptionRegular';
+    src: url('fonts/PTC55F-webfont.eot');
+    src: url('fonts/PTC55F-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/PTC55F-webfont.woff') format('woff'),
+         url('fonts/PTC55F-webfont.ttf') format('truetype'),
+         url('fonts/PTC55F-webfont.svg#PTSansCaptionRegular') format('svg');
     font-weight: normal;
     font-style: normal;
-}
- 
-@font-face {
-    font-family: 'NunitoBold';
-    src: url('fonts/nunito-bold-webfont.eot');
-    src: url('fonts/nunito-bold-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/nunito-bold-webfont.woff') format('woff'),
-         url('fonts/nunito-bold-webfont.ttf') format('truetype'),
-         url('fonts/nunito-bold-webfont.svg#NunitoBold') format('svg');
-    font-weight: normal;
-    font-style: normal;
+
 }
 
 @font-face {
-    font-family: 'NunitoLight';
-    src: url('fonts/nunito-light-webfont.eot');
-    src: url('fonts/nunito-light-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/nunito-light-webfont.woff') format('woff'),
-         url('fonts/nunito-light-webfont.ttf') format('truetype'),
-         url('fonts/nunito-light-webfont.svg#NunitoLight') format('svg');
+    font-family: 'PTSansBoldItalic';
+    src: url('fonts/PTS76F-webfont.eot');
+    src: url('fonts/PTS76F-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/PTS76F-webfont.woff') format('woff'),
+         url('fonts/PTS76F-webfont.ttf') format('truetype'),
+         url('fonts/PTS76F-webfont.svg#PTSansBoldItalic') format('svg');
     font-weight: normal;
     font-style: normal;
+
 }
 
 @font-face {
-    font-family: 'NunitoRegular';
-    src: url('fonts/nunito-regular-webfont.eot');
-    src: url('fonts/nunito-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('fonts/nunito-regular-webfont.woff') format('woff'),
-         url('fonts/nunito-regular-webfont.ttf') format('truetype'),
-         url('fonts/nunito-regular-webfont.svg#NunitoRegular') format('svg');
+    font-family: 'PTSansBold';
+    src: url('fonts/PTS75F-webfont.eot');
+    src: url('fonts/PTS75F-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/PTS75F-webfont.woff') format('woff'),
+         url('fonts/PTS75F-webfont.ttf') format('truetype'),
+         url('fonts/PTS75F-webfont.svg#PTSansBold') format('svg');
     font-weight: normal;
     font-style: normal;
+
 }
+
+@font-face {
+    font-family: 'PTSansItalic';
+    src: url('fonts/PTS56F-webfont.eot');
+    src: url('fonts/PTS56F-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/PTS56F-webfont.woff') format('woff'),
+         url('fonts/PTS56F-webfont.ttf') format('truetype'),
+         url('fonts/PTS56F-webfont.svg#PTSansItalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'PTSansRegular';
+    src: url('fonts/PTS55F-webfont.eot');
+    src: url('fonts/PTS55F-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/PTS55F-webfont.woff') format('woff'),
+         url('fonts/PTS55F-webfont.ttf') format('truetype'),
+         url('fonts/PTS55F-webfont.svg#PTSansRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 
 
 /*** general Styles ***/
-body {font-family: 'NunitoRegular',"Lucida Grande", sans-serif;}
+body {font-family: 'PTSansRegular',"Lucida Grande", sans-serif;}
 
 #wrap {min-width: 960px; width: 100%;postion: relative; 	min-height: 100%;
 	height: auto !important;
@@ -87,40 +116,32 @@ header {max-width: 960px; margin: 0 auto;}
             -o-transition: all 0.5s ease-in-out; 
 			transition: all 0.5s ease-in-out; }
 #credentials ul li.login a:link, #credentials ul li.login a:visited {background: url(images/lock.png) top left no-repeat;
-padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
+padding-left: 20px; border-right: 1px solid #999; padding-right: 10px; font-family: 'ArialRoundedMTBold';}
 #credentials ul li a:hover, #credentials ul li a:active {color: #fff;}
 #credentials ul li.logout a:link, #credentials ul li.logout a:visited {background: url(../images/logout.png) center left no-repeat;
 padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 
 /*** Social media ***/
-.social-media {float: right; margin-right: 30px; position: relative; z-index: 1;}
-.social-media ul li {float: left; margin-left: 7px;}
-.social-media ul li a {display: block; height: 20px; width: 20px; text-indent: -2000px; overflow: hidden; 
+.social-media {float: left; position: relative; z-index: 1; margin-top: 26px;}
+.social-media ul li {float: left; margin-right: 7px;}
+.social-media ul li a {display: block; height: 30px; width: 30px; text-indent: -2000px; overflow: hidden; 
 			-webkit-transition: all 0.5s ease-in-out; 
             -moz-transition:  all 0.5s ease-in-out; 
             -ms-transition:  all 0.5s ease-in-out; 
             -o-transition: all 0.5s ease-in-out; 
 			transition: all 0.5s ease-in-out; 
-			background:url(images/test.png) top left no-repeat;
+			background:url(images/social-media.png) top left no-repeat;
 }
-/*.social-media ul li.facebook a  {background-position: 0 0;}
-.social-media ul li.twitter a {background-position: -27px 0;}
-.social-media ul li.linkedin a {background-position: -54px 0;}
-.social-media ul li.youtube a {background-position: -80px 0;}
-.social-media ul li a:hover {background:url(images/social-media-hover.png) top left no-repeat;}
-.social-media ul li.facebook a:hover {background-position: 0 0;}
-.social-media ul li.twitter a:hover {background-posotion: -27px 0;}
-.social-media ul li.linkedin a:hover {background-position: -54px 0;}
-.social-media ul li.youtube a:hover {background-position: -80px 0;}*/
 
 .social-media ul li.facebook a  {background-position: 0 0;}
-.social-media ul li.facebook a:hover {background-position: -32px 0;}
-.social-media ul li.twitter a {background-position: 0 -32px;}
-.social-media ul li.twitter a:hover {background-position: -32px -32px;}
-.social-media ul li.linkedin a {background-position: 0 -64px;}
-.social-media ul li.linkedin a:hover {background-position: -32px -64px;}
-.social-media ul li.youtube a {background-position: 0 -96px;}
-.social-media ul li.youtube a:hover {background-position: -32px -96px;}
+.social-media ul li.facebook a:hover {background-position: -43px 0;}
+.social-media ul li.twitter a {background-position: 0 -38px;}
+.social-media ul li.twitter a:hover {background-position: -43px -38px;}
+.social-media ul li.linkedin a {background-position: 0 -76px;}
+.social-media ul li.linkedin a:hover {background-position: -43px -76px;}
+.social-media ul li.youtube a {background-position: 0 -114px;}
+.social-media ul li.youtube a:hover {background-position: -43px -114px;}
+.social-media p {font-family: "PTSansRegular"; color: #999; font-size: 13px; margin: 11px 0;}
 
 
 /*** Logo ***/
@@ -136,8 +157,8 @@ nav {max-width: 960px; margin: 0 auto;}
 .menu li.home a:link, .menu li.home a:visited {height: 18px; width: 20px; margin-top: -2px; overflow: hidden; text-indent: -1000px; display: block; background: url(images/home.png) top left no-repeat;}
 .menu li.home a.selected {background: url(images/home-selected.png) top left no-repeat; margin-top: -10px;}
 
-.menu a:link, .menu a:visited {padding: 10px; font-family: NunitoBold; color: #fff; font-size: 14px; text-decoration: none;}
-.menu a:hover, .menu a:active, .menu a.selected {text-shadow: 1px 1px 0 #333; color: #fcfcfc; background-color: #009FB4;
+.menu a:link, .menu a:visited {padding: 10px 8px; font-family: ArialRoundedMTBold; color: #fff; font-size: 12px; text-decoration: none;}
+.menu a:hover, .menu a:active, .menu a.selected {text-shadow: 1px 1px 0 #333; color: #fcfcfc; background-color: #F48220;
 -moz-border-radius: 5px;
 -webkit-border-radius: 5px;
 border-radius: 5px;} 
@@ -155,14 +176,14 @@ border-radius: 5px;}
 
 .slider .slide .media-container { float: left; height: 320px;  width: 550px; margin-top:20px; margin-right:10px; }
 .slider .slide .details-container { float:left; width:400px; }
-.slider .slide .details-container h3{ font-size:30px; font-weight:normal; font-family: NunitoBold; margin-bottom:20px; margin-top:85px; }
-.slider .slide .details-container .txt-details{ font-weight:normal; font-family: NunitoLight; font-size:16px; margin-bottom:25px; }
+.slider .slide .details-container h3{ font-size:30px; font-weight:normal; font-family: ArialRoundedMTBold; margin-bottom:20px; margin-top:85px; }
+.slider .slide .details-container .txt-details{ font-weight:normal; font-family: 'PTSansRegular'; font-size:16px; margin-bottom:25px; }
 .slider .slide .details-container .buttons .btn { display:inline-block; box-shadow:1px 1px 2px #cccccc; margin-left:3px; margin-right:3px;}
 .slider .slide .details-container .buttons .btn.large {width:190px; }
 .slider .slide .details-container .buttons .btn.large input[type="submit"] { width:190px; text-align:center; }
 
 .slider .slide .details-container .buttons .btn.large.tour input[type="submit"] { background:url(images/tour-arrow.png) no-repeat 165px center;  }
-.slider .slide .details-container .buttons .btn.large.tour:hover input[type="submit"] { background: #009FB4 url(images/tour-arrow.png) no-repeat 165px center;  }
+.slider .slide .details-container .buttons .btn.large.tour:hover input[type="submit"] { background: #F48220 url(images/tour-arrow.png) no-repeat 165px center;  }
 
 .slider .slide .details-container .buttons .btn.medium {width:124px; }
 .slider .slide .details-container .buttons .btn.medium input[type="submit"] { width:124px; text-align:center; }
@@ -172,7 +193,7 @@ border-radius: 5px;}
 
 
 
-.slider .slide .details-container .note { font-weight:normal; font-family: NunitoLight; font-size:13px; margin-top:25px;  }
+.slider .slide .details-container .note { font-weight:normal; font-family: PTSansCaptionRegular; font-size:13px; margin-top:25px;  }
 
 .controls { height:110px; background:#F2F2F2; }
 .controls .controls-wrapper { max-width:960px; margin:0 auto; }
@@ -203,10 +224,10 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 .controls .control.selected, .controls .control.selected h5,
 .controls .control:hover, .controls .control:hover h5{ color:#FFFFFF; filter:none; }
 .controls .control:first-child { width:237px; }
-.controls .control h5 { color:#009FB4; font-size:16px; font-family: 'NunitoBold'; font-weight:normal; padding:15px 18px;}
-.controls .control div { font-family: 'NunitoLight'; font-size:13px; padding:0 15px 15px 15px; }
+.controls .control h5 { color:#4047CF; font-size:16px; font-family: 'ArialRoundedMTBold'; font-weight:normal; padding:15px 18px;}
+.controls .control div {font-size:13px; padding:0 15px 15px 15px; }
 
-.controls .control1.selected, .controls .control1:hover { background:#01adc1; }
+.controls .control1.selected, .controls .control1:hover { background:#4047CF; }
 .controls .control2.selected, .controls .control2:hover { background:#7fb637; }
 .controls .control3.selected, .controls .control3:hover { background:#ba4f95; }
 .controls .control4.selected, .controls .control4:hover { background:#F5C91F; color:#383B3E; }
@@ -220,13 +241,13 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 /*** Footer ***/
 .footer-wrap {height: 353px; background: url(images/footer-bg.png) bottom left repeat-x;}
 footer {width: 960px; margin: 0 auto;}
-footer h3 {font-size: 14px; font-family: "NunitoBold"; color: #f5f5f5;margin-top: 0; line-height: 12px;}
-footer .newsletter {padding-top: 33px;}
-footer .newsletter p {font-family: "NunitoLight"; color: #999; font-size: 13px; margin: 11px 0;}
+footer h3 {font-size: 14px; font-family: "ArialRoundedMTBold"; color: #f5f5f5;margin-top: 0; line-height: 12px;}
+footer .newsletter {padding-top: 33px; float: right;}
+footer .newsletter p {font-family: "PTSansRegular"; color: #999; font-size: 13px; margin: 11px 0;}
 footer .textfield {width: 300px; float: left; margin-right: 10px;}
 footer .btn {float: left;}
 footer .site-map {padding-top: 42px;}
-footer .site-map ul li a {text-transform: uppercase; color: #999; font-weight: normal; font-family: "NunitoRegular"; font-size: 13px; text-decoration: none;
+footer .site-map ul li a {text-transform: uppercase; color: #999; font-weight: normal; font-family: "PTSansRegular"; font-size: 13px; text-decoration: none;
 			-webkit-transition: all 0.5s ease-in-out; 
             -moz-transition:  all 0.5s ease-in-out; 
             -ms-transition:  all 0.5s ease-in-out; 
@@ -240,15 +261,15 @@ footer .site-map ul {float: left; width: 100px; margin-right: 40px;}
 footer .site-map section {float: left; margin-right: 40px;}
 footer .site-map .title {margin-bottom: 5px; color: #999; font-weight: normal; font-size: 13px; padding: 10px 0; text-transform: uppercase; border-bottom: 1px solid #6e7072;}
 footer .site-map section ul li {margin: 0 0 4px 0; padding: 0; border: none;}
-footer .site-map section ul li a {text-transform: lowercase; font-size: 12px; font-family: "NunitoLight";}
+footer .site-map section ul li a {text-transform: lowercase; font-size: 12px; font-family: "PTSansRegular";}
 footer .site-map section.help {width: 200px;}
 /*footer .site-map section.help ul {float: left; margin-right: 20px; width: 200px;}*/
 /*footer .site-map section.help ul li {float: left; margin-right: 20px;}*/
 footer .copyright {padding-top: 52px;}
-footer .copyright p {float: left; font-size: 13px; font-family: "NunitoLight"; color: #777;}
+footer .copyright p {float: left; font-size: 13px; font-family: "PTSansRegular"; color: #777;}
 footer .copyright p img {margin-top: -2px;}
 footer .copyright img:hover {opacity: 0.6; filter:alpha(opacity=60);}
-footer .copyright p + p {float: right; font-family: "NunitoRegular";}
+footer .copyright p + p {float: right; font-family: "PTSansRegular";}
 
 footer #social {
 		float: right;
@@ -263,9 +284,9 @@ footer #social {
 .content-wrap {background:url("images/content-wrap.png") repeat scroll left top; padding-bottom: 130px; margin-bottom: -16px;}
 
 .content  {max-width: 960px; margin: 0 auto; padding-top: 32px;}
-.content h1 {font-size: 30px;}
-.title {font-size: 25px; font-family: "NunitoBold"; color: #282828; margin-bottom: 20px;}
-.title span  {color: #009FB4; margin-right: 10px;}
+.content h1 {font-size: 30px; font-family: "ArialRoundedMTBold";}
+.title {font-size: 25px; font-family: "ArialRoundedMTBold"; color: #282828; margin-bottom: 20px;}
+.title span  {color: #F48220; margin-right: 10px;}
 .side-menu {width: 300px; float: left;}
 
 .navigation {margin-left: -25px;margin-bottom: 20px; margin-top: 20px;}
@@ -275,7 +296,7 @@ footer #social {
 .navigation .middle ul {width: 220px; padding-left: 38px;}
 .navigation ul li {border-top: 1px solid #ccc; margin-top: 4px;}
 .navigation ul li:first-child {border-top: none; margin-top: 0;}
-.navigation ul li a:link, .navigation ul li a:visited {font-family: "NunitoBold"; font-size: 15px; color: #383B3E; padding: 8px 0 6px 6px; text-decoration: none;
+.navigation ul li a:link, .navigation ul li a:visited {font-family: "ArialRoundedMTBold"; font-size: 15px; color: #383B3E; padding: 8px 0 6px 6px; text-decoration: none;
 display: block; margin-top: 4px;
 			-webkit-transition: all 0.5s ease-in-out; 
             -moz-transition:  all 0.5s ease-in-out; 
@@ -284,22 +305,22 @@ display: block; margin-top: 4px;
 			transition: all 0.5s ease-in-out; 
 }
 .navigation ul li:first-child a {margin-top: 0;}
-.navigation ul li a:hover, .navigation ul li a:active {color: #A34180; background: #FFDD17;}
-.navigation ul li a.selected {color: #A34180; background: #FFDD17; cursor: default;}
+.navigation ul li a:hover, .navigation ul li a:active {color: #fff; background: #F48220;}
+.navigation ul li a.selected {color: #fff; background: #F48220; cursor: default;}
 
 .navigation .middle ul.submenu {padding-left: 20px; width: auto; margin: 4px 0 6px 0;}
 .navigation .middle ul.submenu li {border: none; margin: 0;}
-.navigation .middle ul.submenu li a:link, .navigation .middle ul.submenu a:visited {font-size: 13px; font-family: "DosisRegular"; padding: 2px 0 2px 4px;}
+.navigation .middle ul.submenu li a:link, .navigation .middle ul.submenu a:visited {font-size: 13px; font-family: "PTSansRegular"; padding: 2px 0 2px 4px;}
 
 /*** Editorial ***/
 .editorial {width: 625px; float: right;}
-.dashboard {color: #383B3E; font-family: "NunitoLight"; font-size: 18px;}
-.info {color: #282828; font-family: "NunitoLight"; font-size: 16px;}
+.dashboard {color: #383B3E; font-family: "PTSansRegular"; font-size: 18px;}
+.info {color: #282828; font-family: "PTSansRegular"; font-size: 16px;}
 .table-design {margin: 10px 0; background:url("images/table-bg.png") repeat scroll left top;border: 1px solid #B4B4B4; -moz-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; padding: 8px;}
 table th {text-align: left; text-transform: uppercase; font-size: 16px; color: #282828; padding: 10px 0; border-bottom: 1px solid #B2B2B2;}
 table td {padding: 8px 0 4px 0;}
-table td a {font-family: "NunitoLight"; text-decoration: none;}
-table .separator {color: #009FB4; margin: 0 5px;}
+table td a {font-family: "PTSansRegular"; text-decoration: none;}
+table .separator {color: #F48220; margin: 0 5px;}
 
 .image {background: #fff; border: 1px solid #B4B4B4;  -moz-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px;
 text-align: center;}
@@ -307,7 +328,7 @@ text-align: center;}
 .listing .image {width: 130px; height: 130px; float: left; margin-right: 30px;}
 .listing-info {float: left; width: 460px;}
 .listing h2, .registrationWidget h2 {color: #282828; font-size: 16px; margin-bottom: 4px; text-transform: uppercase;}
-.registrationWidget h2 {font-family: "NunitoBold";}
+.registrationWidget h2 {font-family: "PTSansBold";}
 .listing .info {line-height: 1.3em;}
 .listing .btn {margin-top: 8px;}
 
@@ -315,15 +336,15 @@ text-align: center;}
 .documentation:hover {opacity: 0.6; filter:alpha(opacity=60);}
 .documentation h2 {text-transform: uppercase; margin: 8px 0 4px 0;}
 .documentation .image {background:url("images/table-bg.png") repeat left top; width: 190px; height: 190px;}
-.documentation .info {font-size: 13px; font-family: "NunitoLight"; line-height: 1.3em;}
+.documentation .info {font-size: 13px; font-family: "PTSansRegular"; line-height: 1.3em;}
 .documentation.selected {cursor: default; }
 .documentation.selected:hover {opacity: 1; filter:alpha(opacity=100);}
-.documentation.selected .image {background: #fff; border-color: #009FB4;}
-.documentation.selected h2 {color: #009FB4;}
+.documentation.selected .image {background: #fff; border-color: #F48220;}
+.documentation.selected h2 {color: #F48220;}
 
 .benefit {width: 425px; float: left;}
 .benefit .image {width: 425px; height: 170px; margin-bottom: 14px;}
-.benefit h2 {margin: 0 0 4px 0;}
+.benefit h2 {margin: 0 0 4px 0; font-family: 'PTSansBold';}
 .benefit .info {line-height: 1.3em;}
 .row {display: inline-block; width: 100%; clear: both; border-bottom: 1px solid #bfbfbf; padding: 30px 0;}
 .row .benefit {margin-right: 20px;}
@@ -337,13 +358,21 @@ text-align: center;}
 
 .feature .title {width: 475px;}
 .feature .section {margin-bottom: 22px; width: 440px; margin-left: 26px;}
-.feature h2 {font-size: 16px; margin-bottom: 2px;}
+.feature h2 {font-size: 16px; margin-bottom: 2px; font-family: 'PTSansBold';}
 .feature .info {line-height: 1.3em;}
 .feature .btn {margin-top: 20px;}
 
 .feature.last {background: none;}
 
+.case-study {margin-top: 10px; display: inline-block; clear: both; margin-bottom: 15px; padding-bottom: 35px; background:url("images/feature-sep.png") no-repeat bottom left;width: 100%; }
+.case-study .image {float: left;}
+.case-study .img-wrap {width: 300px; height: 200px; display: table-cell; vertical-align: middle;}
+.case-study .section {float: right; margin-left: 40px; width: 600px;}
+.case-study h2 {font-size: 16px; margin-bottom: 8px;}
+
+
 /** General styles ***/
+.apstrata .FormGenerator h2 {margin-top: 0;}
 .border {border: 1px solid #bfbfbf; margin: 40px 0; display: inline-block; width: 100%; height: 0;}
 .fr {float: right;}
 .fl {float: left;}
@@ -364,7 +393,7 @@ background: linear-gradient(to bottom,  #8c8c8c 0%,#b2b2b2 99%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', endColorstr='#b2b2b2',GradientType=0 ); /* IE6-8 */
 }
 .ie9 .btn {filter: none;}
-.btn input[type="submit"] {background: none; border: none; padding: 6px 12px; text-align: center; text-transform: uppercase; font-size: 16px; font-family: 'NunitoBold'; color: #fff;
+.btn input[type="submit"] {background: none; border: none; padding: 6px 12px; text-align: center; text-transform: uppercase; font-size: 16px; font-family: 'ArialRoundedMTBold'; color: #fff;
 -moz-text-shadow: 1px 1px 0 #767779;
 -webkit-text-shadow: 1px 1px 0 #767779;
 text-shadow: 1px 1px 0 #767779;
@@ -376,7 +405,7 @@ text-shadow: 1px 1px 0 #767779;
 			transition: all 0.5s ease-in-out; 
 }
 
-.btn:hover input[type="submit"] {background: #009FB4;
+.btn:hover input[type="submit"] {background: #F48220;
 -moz-text-shadow: 1px 1px 0 #000;
 -webkit-text-shadow: 1px 1px 0 #000;
 text-shadow: 1px 1px 0 #000;}
@@ -435,11 +464,11 @@ text-shadow: 1px 1px 0 #767779;
 	}
 .apstrata .dijitButtonNode { border: 0!important; vertical-align: middle; text-align: center; background: none!important;}
 
-.apstrata .dijitButtonHover { background: #009FB4;}
+.apstrata .dijitButtonHover { background: #F48220;}
 .apstrata .dijitButtonHover .dijitButtonText { text-shadow: 1px 1px 0 #000000;}
 
 
-.apstrata .label {font-family: 'NunitoBold'; font-size: 0.85em; color: #555555; margin-top: 7px; margin-bottom: 3px;}
+.apstrata .label {font-family: 'PTSansBold'; font-size: 0.85em; color: #555555; margin-top: 7px; margin-bottom: 3px;}
 .FormGenerator form {
 	
 }
@@ -529,7 +558,7 @@ border:1px solid black;
 .apstrata .LoginWidget .login h2 { color:#efefef; }
 .apstrata .DocViewer .content .middle .description p {font-size: 0.8em;}
 .apstrata .expand-container ol li {font-size: 0.8em;}
-.apstrata .innerContent .smallButton {-moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; font-family: "NunitoRegular";
+.apstrata .innerContent .smallButton {-moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; font-family: "PTSansRegular";
 color: #fff; text-transform: uppercase;
 -moz-text-shadow: 1px 1px 0 #767779;
 -webkit-text-shadow: 1px 1px 0 #767779;
@@ -544,7 +573,7 @@ background: -o-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* Opera 11.10+ */
 background: -ms-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* IE10+ */
 background: linear-gradient(to bottom,  #8c8c8c 0%,#b2b2b2 99%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', endColorstr='#b2b2b2',GradientType=0 ); /* IE6-8 */}
-.apstrata .innerContent .smallButton:hover {background: #009FB4;}
+.apstrata .innerContent .smallButton:hover {background: #F48220;}
 
 .apstrata .RegistrationWidget {padding-bottom: 60px !important ;}
 .page#registration { padding-top: 100px; padding-bottom: 250px; }

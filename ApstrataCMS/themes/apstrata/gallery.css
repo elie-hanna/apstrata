@@ -9,7 +9,7 @@
 #search {
 	margin-top: 10px;
 	margin-bottom: 10px;
-	border:solid 2px #009FB4;
+	border:solid 2px #4047CF;
 	background:#ffffff;
 	border-radius:5px;
 	-moz-border-radius:5px;
@@ -35,10 +35,10 @@
 #search-field .dijitTextBox {
     border: medium none;
 	background: none repeat scroll 0 0 transparent;
-	color: #009FB4;
+	color: #4047CF;
     display: block;
     font-size: 15px;
-	font-family: 'NunitoBold';
+	font-family: 'ArialRoundedMTBold';
     line-height: 39px;
     position: relative;
     width: 900px;
@@ -70,9 +70,9 @@
 
 #categories .category {
 	display: inline-block;
-	font-size: 13px;
-	font-family: 'DosisBold';
-	padding: 5px 7px;
+	font-size: 12px;
+	font-family: 'ArialRoundedMTBold';
+	padding: 5px 4px;
 	color: #383B3E;
 	cursor:pointer;
 	text-transform:uppercase;
@@ -87,7 +87,7 @@
 
 #categories .selected {
 	color: #ffffff;
-	background: #009FB4;
+	background: #F48220;
 	-moz-border-radius: 5px;
 	-webkit-bordee-radius: 5px;
 	border-radius: 5px;
@@ -133,8 +133,8 @@
  }
 
 .content .item:hover .label{
-	background:#FFDD17;
-	color:#A34180;
+	background:#fda03d;
+	color:#fff;
 	
 }
 
@@ -168,7 +168,7 @@
 
 .content .item .label {
 	position: relative;
-	font-family: 'NunitoRegular';
+	font-family: 'PTSansBold';
 	top: 0px;
 	margin-bottom: 10px;
 	font-size: 12px;
