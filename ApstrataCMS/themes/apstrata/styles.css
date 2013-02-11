@@ -296,7 +296,7 @@ footer #social {
 .navigation .middle ul {width: 220px; padding-left: 38px;}
 .navigation ul li {border-top: 1px solid #ccc; margin-top: 4px;}
 .navigation ul li:first-child {border-top: none; margin-top: 0;}
-.navigation ul li a:link, .navigation ul li a:visited {font-family: "ArialRoundedMTBold"; font-size: 15px; color: #383B3E; padding: 8px 0 6px 6px; text-decoration: none;
+.navigation ul li a:link, .navigation ul li a:visited {font-family: "ArialRoundedMTBold"; font-size: 15px; color: #383B3E; padding: 0px 0 3px 6px; text-decoration: none;
 display: block; margin-top: 4px;
 			-webkit-transition: all 0.5s ease-in-out; 
             -moz-transition:  all 0.5s ease-in-out; 
@@ -369,6 +369,9 @@ text-align: center;}
 .case-study .img-wrap {width: 300px; height: 200px; display: table-cell; vertical-align: middle;}
 .case-study .section {float: right; margin-left: 40px; width: 600px;}
 .case-study h2 {font-size: 16px; margin-bottom: 8px;}
+
+.team .title {margin-top: 20px; background:url("images/feature-sep.png") no-repeat top left; padding-top: 20px;}
+.team h2 {float: left; text-decoration: underline; font-family: 'PTSansRegular'; color: #F48220; float: left; width: 100%; margin-bottom: 5px;}
 
 
 /** General styles ***/
