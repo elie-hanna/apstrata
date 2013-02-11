@@ -7,6 +7,19 @@
 <!-- begin footer -->
     <div class="footer-wrap">
      	<footer>
+     		
+			<!-- begin social media -->
+	        <div class="social-media">
+            	<h3>Let's talk</h3>
+                <p>Follow Apstrata on</p>
+	            <ul>
+	                <li class="facebook"><a href="https://www.facebook.com/Apstrata" target="_blank">facebook</a></li>
+	                <li class="twitter"><a href="https://twitter.com/apstrata" target="_blank">twitter</a></li>
+	                <li class="linkedin"><a href="http://www.linkedin.com/company/apstrata" target="_blank">linkedin</a></li>
+	            </ul>
+	        </div>
+	        <!-- end social media -->
+     		
      		<form action="http://apstrata.us5.list-manage1.com/subscribe/post?u=e47d89e2bf16064cf52d8c9ae&amp;id=d603e02565" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate>
         	<div class="newsletter">
             	<h3>We'd like to stay in touch!</h3> 

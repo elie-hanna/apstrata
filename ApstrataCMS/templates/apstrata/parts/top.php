@@ -3,7 +3,7 @@
 	<header>
 		<div id="logo">
 			<a href="<?php print $GLOBALS["config"]["baseUrl"]."/page.php?pageId=home"; ?>" id='logo'>
-				<img src="lib/ApstrataSDK/apstrata/horizon/resources/images/apstrata-big.png" alt="Apstrata" title="Apstrata" width="200px"/>
+				<img src="themes/apstrata/images/logo.png" alt="Apstrata" title="Apstrata" />
 			</a>
 		</div>
 		<!-- begin credentials-->
@@ -14,15 +14,6 @@
                     <li><a href=<?php echo $config["baseUrl"]."/page.php?pageId=register"; ?>>Signup</a></li>
                 </ul>
         </div>
-		<!-- begin social media -->
-        <div class="social-media">
-            <ul>
-                <li class="facebook"><a href="https://www.facebook.com/Apstrata" target="_blank">facebook</a></li>
-                <li class="twitter"><a href="https://twitter.com/apstrata" target="_blank">twitter</a></li>
-                <li class="linkedin"><a href="http://www.linkedin.com/company/apstrata" target="_blank">linkedin</a></li>
-            </ul>
-        </div>
-        <!-- end social media -->
 	</header>
 </div>      
 <div id="nav-wrapper">
