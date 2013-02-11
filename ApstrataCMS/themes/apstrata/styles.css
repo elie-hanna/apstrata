@@ -370,8 +370,12 @@ text-align: center;}
 .case-study .section {float: right; margin-left: 40px; width: 600px;}
 .case-study h2 {font-size: 16px; margin-bottom: 8px;}
 
+.team {font-size: 15px;}
 .team .title {margin-top: 20px; background:url("images/feature-sep.png") no-repeat top left; padding-top: 20px;}
-.team h2 {float: left; text-decoration: underline; font-family: 'PTSansRegular'; color: #F48220; float: left; width: 100%; margin-bottom: 5px;}
+.team h2 {font-size: 14px; float: left; text-decoration: underline; font-family: 'PTSansCaptionBold'; color: #F48220; float: left; width: 100%; margin-bottom: 5px;}
+
+.question {font-family: 'ArialRoundedMTBold'; margin-bottom: 3px; background:url("images/parenthese.png") no-repeat top left; padding-left: 18px;}
+.answer {font-family: 'PTSansRegular'; margin-bottom: 16px; color: #666; font-size: 14px;}
 
 
 /** General styles ***/
