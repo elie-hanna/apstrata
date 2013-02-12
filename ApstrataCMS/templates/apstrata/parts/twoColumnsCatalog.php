@@ -37,12 +37,6 @@
 		
 	var connection = new apstrata.sdk.Connection(connectionData);
 	
-	var title = "<?php echo strtolower($title); ?>Link";
-	var linkNode = dojo.byId(title);
-	if (linkNode) {
-		dojo.addClass(linkNode, "selected");
-	};
-	
 </script>
 
 <!-- TODO: implement pagination <div>first query: page <?php print $page1; ?> of <?php print ceil($firstQuery->count/11); ?></div>-->

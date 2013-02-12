@@ -23,12 +23,52 @@
 		
 	var connection = new apstrata.sdk.Connection(connectionData);
 	
-	var title = "<?php echo strtolower($title); ?>Link";
-	var linkNode = dojo.byId(title);
-	if (linkNode) {
-		dojo.addClass(linkNode, "selected");
-	};
-	
+</script>
+
+<script>
+
+	dojo.addOnLoad(function() {
+		
+		var lastSelected = '';
+			
+		/*
+		 * Connect the toggleSelected function to all the links in
+		 * order to manage the link clicked event
+		 */
+		var menuItems = dojo.query("a[category='menuItem']")
+		for (var i = 0; i < menuItems.length; i++) {						
+			dojo.connect(menuItems[i], "onclick", function(event) {				
+				toggleSelected(event.target);
+			});
+		}
+		
+		var imageItems = dojo.query("a[category='imageItem']")
+		for (var i = 0; i < imageItems.length; i++) {						
+			dojo.connect(imageItems[i], "onclick", function(event) {				
+				toggleSelected(event.target);
+			});
+		}
+			
+		/*
+		 * this function factors out the logic to toggle the selected element on the menu				 
+		 */
+		toggleSelected = function(newLinkNode) {
+			if (lastSelected != '') {	
+				var matches = dojo.query("*[id='" + lastSelected.id + "']");		
+				for (var i = 0; i < matches.length; i++) {						
+					dojo.toggleClass(matches[i], "selected");
+				}
+			}					
+
+			var matches = dojo.query("*[id='" + newLinkNode.id + "']");		
+			for (var i = 0; i < matches.length; i++) {						
+				dojo.toggleClass(matches[i], "selected");
+			}
+
+			lastSelected = newLinkNode;
+		}
+	});
+
 </script>
 
 
@@ -61,7 +101,7 @@
 							}
 							$prevLinkKey = $link->key;
 							
-							echo '<li><a id="' . $link->key . '" href="' . $link->address . '" target="' . $link->target . '">' . $link->title . '</a></li>';
+							echo '<li><a category="menuItem" id="' . $link->key . '" href="' . $link->address . '" target="' . $link->target . '">' . $link->title . '</a></li>';
 							
 						}						
 						?>	
@@ -93,13 +133,14 @@
 			<?php
 				if (!isset($item->target) || $item->target == "_none") {
 			?>
-					<div class="documentation" onclick="location.href='<?php echo $item->address ?>';">
+					<div category="imageItem" id="<?php echo $item->key ?>" class="documentation" onclick="toggleSelected(this);location.href='<?php echo $item->address ?>';">
 					
 			<?php
 				} else {
 			?>
 			
-					<div class="documentation" onclick="window.open('<?php echo $item->address ?>');">
+					<div category="imageItem" id="<?php echo $item->key ?>" class="documentation" onclick="toggleSelected(this);window.open('<?php echo $item->address ?>');">
+					
 			
 			<?php
 				} 
@@ -142,37 +183,3 @@
     </div>
     <!-- end editorial -->
     
- <script>
-
-	dojo.addOnLoad(function() {
-		
-		var title = "documentationLink";
-		var linkNode = dojo.byId(title);
-		if (linkNode) {
-			dojo.addClass(linkNode, "selected");
-		};
-		
-		var lastSelected = dojo.byId("touchCloud");
-			
-		/*
-		 * Connect the toggleSelected function to all the links in
-		 * order to manage the link clicked event
-		 */
-		var allLinks = dojo.query("a");
-		for (var i = 0; i < allLinks.length; i++) {						
-			dojo.connect(allLinks[i], "onclick", function(event) {				
-				toggleSelected(event.target);
-			});
-		}
-	
-		/*
-		 * this function factors out the logic to toggle the selected element on the menu				 
-		 */
-		var toggleSelected = function(newLinkNode) {					
-			dojo.toggleClass(lastSelected, "selected");					
-			dojo.toggleClass(newLinkNode, "selected");
-			lastSelected = newLinkNode;
-		}
-	});
-
-</script>

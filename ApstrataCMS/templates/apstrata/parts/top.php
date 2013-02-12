@@ -19,7 +19,7 @@
 <div id="nav-wrapper">
     <nav>				        	
         <ul class="menu">
-        	<?php						
+        	<?php		
 				foreach ($menu["menuPhp"] as $menuItem) {									
 					
 					$link = $cms->getLink($menuItem);							
@@ -27,7 +27,7 @@
 				<li 
 				  <?php 
 				    if (strcasecmp($link, "home") == 0) {
-				    	echo "class='home''";
+				    	echo "class='home'";
 				    } ?> 
 				>
 			<?php echo $link ?>
@@ -39,18 +39,3 @@
     </nav>
 </div>
 <div class="clearfix"></div>	
-<script>
-	dojo.addOnLoad(function() {	
-		
-		dojo.require("dojo.cookie");
-		var lastSelected = dojo.cookie("lastSelected");
-		if (lastSelected) {
-			var node = dojo.byId(lastSelected);
-			if (node) {
-				dojo.removeClass(node, "selected");
-			}
-		}
-		
-	});
-
-</script>		
