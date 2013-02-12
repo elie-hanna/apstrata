@@ -10,6 +10,28 @@
 	if (isset($page["secondQuery"])) $secondQuery= (object)($page["secondQuery"]);
 ?>
 
+<script>
+    dojo.require("apstrata.sdk.Connection");
+	var connectionData = {
+			credentials: {
+				key: '<?php print $GLOBALS["config"]["apstrataKey"]; ?>'								
+			},
+			serviceURL: '<?php print $GLOBALS["config"]["apstrataServiceURL"]; ?>',
+			defaultStore: '<?php print $GLOBALS["config"]["contentStore"]; ?>',
+			timeout: parseInt('<?php print $GLOBALS["config"]["apstrataConnectionTimeout"]; ?>')
+		}
+		
+	var connection = new apstrata.sdk.Connection(connectionData);
+	
+	var title = "<?php echo strtolower($title); ?>Link";
+	var linkNode = dojo.byId(title);
+	if (linkNode) {
+		dojo.addClass(linkNode, "selected");
+	};
+	
+</script>
+
+
 <h1 class="marB20"><?php print $title; ?></h1>	
 
 <!-- begin side menu -->
@@ -54,12 +76,67 @@
     
     <!-- begin editorial -->
     <div class="editorial">
+	    <div class="title"><span>((</span>Touch cloud tools</div>
+	    <div class="info mrgB20">
+			We have created tools and docs for you to have an easy start with us. The wiki contains all what you might need. Getting started guides help you get going and the SDKs make your life easier.                    
+		</div>
 
-        <?php
-		foreach ($secondQuery->documents as $pageItem) {		
-			$pageItem = (object)$pageItem;
-			print html_entity_decode($pageItem->section1);
-		}						
+    	<?php
+			foreach ($firstQuery->documents as $item) {		
+				
+				$item = (object)$item;
+				
+				if (!isset($item->parent)) {
+		?>	
+		
+			<!-- begin documentation -->
+			<?php
+				if (!isset($item->target) || $item->target == "_none") {
+			?>
+					<div class="documentation" onclick="location.href='<?php echo $item->address ?>';">
+					
+			<?php
+				} else {
+			?>
+			
+					<div class="documentation" onclick="window.open('<?php echo $item->address ?>');">
+			
+			<?php
+				} 
+			?>
+			    
+			    <script> 
+			        // Build the URL to the image file
+			    	var params = {
+						"apsdb.fieldName": "regularIcon",
+						"apsdb.fileName": "<?php echo $item->regularIcon ?>",
+						"apsdb.store": "apstrata",
+						"apsdb.documentKey": "<?php echo $item->key ?>"
+					};
+			      
+			    	var imageUrl = connection.sign("GetFile", dojo.objectToQuery(params)).url;           
+			    </script>
+			    <?php 
+			       if (isset($item->regularIcon)) {
+			       		echo "<div class='image'><img id='" . $item->regularIcon . "'/></div>";
+					}
+				?>
+				
+				<h2><?php echo $item->title ?></h2>
+				<div class="info"><?php echo $item->description ?></div>
+				
+				<?php
+			       print html_entity_decode($item->section1);
+			     ?>
+			     <script>
+			        <?php echo "dojo.byId('" . $item->regularIcon . "').src = imageUrl"; ?>
+			     </script>
+			</div>
+			<!-- end documentation -->
+			
+		<?php
+				}
+			}
 		?>	
         
     </div>
