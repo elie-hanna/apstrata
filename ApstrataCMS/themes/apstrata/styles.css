@@ -102,7 +102,7 @@ body {font-family: 'PTSansRegular',"Lucida Grande", sans-serif;}
 #wrap {min-width: 960px; width: 100%;postion: relative; min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -353px; background: #999 url(images/content-wrap.png) top left repeat;}
+	margin: 0 auto -353px; background: url(images/content-wrap.png) top left repeat;}
 .header-wrap {background: #383B3E; height: 30px; border-bottom: 1px solid  #000;}
 header {max-width: 960px; margin: 0 auto;}
 
