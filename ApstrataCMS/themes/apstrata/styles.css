@@ -99,7 +99,7 @@
 /*** general Styles ***/
 body {font-family: 'PTSansRegular',"Lucida Grande", sans-serif;}
 
-#wrap {min-width: 960px; width: 100%;postion: relative; 	min-height: 100%;
+#wrap {min-width: 960px; width: 100%;postion: relative; 	/*min-height: 100%;*/
 	height: auto !important;
 	height: 100%;
 	margin: 0 auto -353px;}
@@ -141,7 +141,7 @@ padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 .social-media ul li.linkedin a:hover {background-position: -43px -76px;}
 .social-media ul li.youtube a {background-position: 0 -114px;}
 .social-media ul li.youtube a:hover {background-position: -43px -114px;}
-.social-media p {font-family: "PTSansRegular"; color: #999; font-size: 13px; margin: 11px 0;}
+.apstrata .social-media p {font-family: "PTSansRegular"; color: #999; font-size: 13px; margin: 11px 0;}
 
 
 /*** Logo ***/
@@ -243,7 +243,7 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 footer {width: 960px; margin: 0 auto;}
 footer h3 {font-size: 14px; font-family: "ArialRoundedMTBold"; color: #f5f5f5;margin-top: 0; line-height: 12px;}
 footer .newsletter {padding-top: 33px; float: right;}
-footer .newsletter p {font-family: "PTSansRegular"; color: #999; font-size: 13px; margin: 11px 0;}
+.apstrata footer .newsletter p {font-family: "PTSansRegular"; color: #999; font-size: 13px; margin: 11px 0;}
 footer .textfield {width: 300px; float: left; margin-right: 10px;}
 footer .btn {float: left;}
 footer .site-map {padding-top: 42px;}
@@ -266,10 +266,10 @@ footer .site-map section.help {width: 200px;}
 /*footer .site-map section.help ul {float: left; margin-right: 20px; width: 200px;}*/
 /*footer .site-map section.help ul li {float: left; margin-right: 20px;}*/
 footer .copyright {padding-top: 52px;}
-footer .copyright p {float: left; font-size: 13px; font-family: "PTSansRegular"; color: #777;}
+.apstrata footer .copyright p {float: left; font-size: 13px; font-family: "PTSansRegular"; color: #777;}
 footer .copyright p img {margin-top: -2px;}
 footer .copyright img:hover {opacity: 0.6; filter:alpha(opacity=60);}
-footer .copyright p + p {float: right; font-family: "PTSansRegular";}
+.apstrata footer .copyright p + p {float: right; font-family: "PTSansRegular";}
 
 footer #social {
 		float: right;
@@ -587,3 +587,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 
 .expand-container ul { list-style:disc;}
 .expand-container li { font-size:13px; margin-bottom:3px; margin-left:20px;}
+
+
+
+.apstrata p {font-size: 13px; margin: 0; padding: 0; line-height: 1.2em;}
