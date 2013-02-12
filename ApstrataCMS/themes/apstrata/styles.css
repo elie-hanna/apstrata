@@ -170,9 +170,9 @@ border-radius: 5px;}
 
 
 /** Slider ***/
-.slider-wrapper {background: #E6E6E6;}
+.slider-wrapper {background: #f5f5f5;}
 .slider { margin: 0 auto; height:470px; -webkit-user-select:none;-moz-user-select:none; -ms-user-select:none;}
-.slider .slides-wrapper { height:360px; max-width: 960px; margin:0 auto; background:url(images/slider-bg.png) no-repeat left top;}
+.slider .slides-wrapper { height:360px; max-width: 960px; margin:0 auto;}
 
 .slider .slide .media-container { float: left; height: 320px;  width: 550px; margin-top:20px; margin-right:10px; }
 .slider .slide .details-container { float:left; width:400px; }
@@ -195,7 +195,7 @@ border-radius: 5px;}
 
 .slider .slide .details-container .note { font-weight:normal; font-family: PTSansCaptionRegular; font-size:13px; margin-top:25px;  }
 
-.controls { height:110px; background:#F2F2F2; }
+.controls { height:110px; background: url(images/controls-bg.png) top center no-repeat;}
 .controls .controls-wrapper { max-width:960px; margin:0 auto; }
 .controls .control { float:left; width:236px; height:110px; cursor:pointer;
 background: #f2f2f2;
@@ -563,8 +563,10 @@ box-shadow: 0 3px 4px #cccccc;
 border:1px solid black;
 }
 .apstrata .LoginWidget .login h2 { color:#efefef; }
-.apstrata .DocViewer .content .middle .description p {font-size: 0.8em;}
-.apstrata .expand-container ol li {font-size: 0.8em;}
+.apstrata .expand-container ol, .apstrata #apstrata-summary ol {list-style-type: decimal; list-style-position: inside;}
+.apstrata #apstrata-summary ul {list-style-type: square; list-style-position: inside;}
+.apstrata #apstrata-summary {font-size: 0.8em;}
+.apstrata .expand-container ol li, .apstrata #apstrata-summary ul li, .apstrata #apstrata-summary ol li {font-size: 0.9em;}
 .apstrata .innerContent .smallButton {-moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; font-family: "PTSansRegular";
 color: #fff; text-transform: uppercase;
 -moz-text-shadow: 1px 1px 0 #767779;
@@ -592,3 +594,5 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 
 .apstrata p {font-size: 13px; margin: 0; padding: 0; line-height: 1.2em;}
 .apstrata .HorizonCurtain {background: none;}
+
+
