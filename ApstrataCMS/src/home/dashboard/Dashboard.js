@@ -83,7 +83,7 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 			dojo.style(this._curtain, {
 				top: p.y + "px",
 				left: p.x + "px",
-				width: p.w + "px",
+				width: (p.w - 20) + "px", // for some reason, the dojo calculation is adding 20 pixels to the width
 				height: p.h + "px"
 			})
 			
