@@ -99,10 +99,10 @@
 /*** general Styles ***/
 body {font-family: 'PTSansRegular',"Lucida Grande", sans-serif;}
 
-#wrap {min-width: 960px; width: 100%;postion: relative; 	/*min-height: 100%;*/
+#wrap {min-width: 960px; width: 100%;postion: relative; min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -353px;}
+	margin: 0 auto -353px; background: #999 url(images/content-wrap.png) top left repeat;}
 .header-wrap {background: #383B3E; height: 30px; border-bottom: 1px solid  #000;}
 header {max-width: 960px; margin: 0 auto;}
 
@@ -145,12 +145,12 @@ padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 
 
 /*** Logo ***/
-#logo {float: left; height: auto; margin-left: -8px;}
+#logo {float: left; height: auto; margin-left: -8px; position: relative; z-index: 10;}
 #logo img {width: 100%; height: auto;}
 
 
 /*** Nav ***/
-#nav-wrapper {background:url(images/nav-bg.png) top left repeat; border-top: 1px solid #868485; height: 100px;}
+#nav-wrapper {background:url(images/nav-bg.png) top left repeat; border-top: 1px solid #868485; height: 100px; position: relative;}
 nav {max-width: 960px; margin: 0 auto;}
 .menu {float: right; margin-top: 35px; position: relative; z-index: 1;}
 .menu li {float: left; text-align: center; margin-left: 8px;}
@@ -239,7 +239,7 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 .controls .control4.selected .arrow, .controls .control4:hover .arrow { visibility:visible;  }
 
 /*** Footer ***/
-.footer-wrap {height: 353px; background: url(images/footer-bg.png) bottom left repeat-x;}
+.footer-wrap {height: 353px; background: url(images/footer-bg.png) bottom left repeat-x; width: 100%; min-width: 960px;}
 footer {width: 960px; margin: 0 auto;}
 footer h3 {font-size: 14px; font-family: "ArialRoundedMTBold"; color: #f5f5f5;margin-top: 0; line-height: 12px;}
 footer .newsletter {padding-top: 33px; float: right;}
@@ -280,8 +280,8 @@ footer #social {
 .social-bookmarks li {float: right; margin: 0; padding: 0!important; list-style-type: none;}
 
 /*** Container and content ***/
-.container {background: url(images/container.png) top left repeat-x; padding-top: 3px; padding-bottom: 336px;}
-.content-wrap {background:url("images/content-wrap.png") repeat scroll left top; padding-bottom: 130px; margin-bottom: -16px;}
+.container {background: url(images/container.png) top left repeat-x; margin-top: -1px; padding-bottom: 336px;}
+.content-wrap {padding-bottom: 130px; margin-bottom: -16px;}
 
 .content  {max-width: 960px; margin: 0 auto; padding-top: 32px;}
 .content h1 {font-size: 30px; font-family: "ArialRoundedMTBold";}
@@ -591,3 +591,4 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 
 
 .apstrata p {font-size: 13px; margin: 0; padding: 0; line-height: 1.2em;}
+.apstrata .HorizonCurtain {background: none;}
