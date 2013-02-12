@@ -20,7 +20,7 @@
 	        </div>
 	        <!-- end social media -->
      		
-     		<form action="http://apstrata.us5.list-manage1.com/subscribe/post?u=e47d89e2bf16064cf52d8c9ae&amp;id=d603e02565" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate>
+     		<form action="http://apstrata.us5.list-manage1.com/subscribe/post?u=e47d89e2bf16064cf52d8c9ae&amp;id=80d7c2b3dd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate>
         	<div class="newsletter">
             	<h3>We'd like to stay in touch!</h3> 
                 <p>Subscribe to our monthly newsletter for great articles and cool features.</p>
