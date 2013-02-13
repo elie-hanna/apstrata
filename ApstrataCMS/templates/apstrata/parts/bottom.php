@@ -96,8 +96,14 @@
 								
 								$prevLinkParent = '';
 							}
+							
+							$urlPrefix = '';
+							if (substr($link->address, 0, 7) != 'http://' && substr($link->address, 0, 8) != 'https://') {
+								$urlPrefix = $GLOBALS["config"]["urlPrefix"];
+							}
+								
 						
-							echo '<li><a id="' . $link->key . '" href="' . $link->address . '" target="' . $link->target . '">' . $link->title . '</a></li>';
+							echo '<li><a id="' . $link->key . '" href="' . $urlPrefix . $link->address . '" target="' . $link->target . '">' . $link->title . '</a></li>';
 							
 						}
 						
