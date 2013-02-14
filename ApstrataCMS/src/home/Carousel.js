@@ -162,16 +162,24 @@ dojo.declare("apstrata.home.Carousel",
 	},
 	
 	selectItem: function(item) {
-			this.currentItemIndex = item.index;
-			this.slideImage.src = item.detailsImageUrl;		
-			this.slideDetails.innerHTML = item.detailsInnerHtml;
-			
-			var selectedNodes = dojo.query(".selected");
-			if (selectedNodes) {
-				for (var x = 0; x < selectedNodes.length; x++) {
-					dojo.toggleClass(selectedNodes[x], "selected");
-				}
+		var self = this;
+		
+		this.currentItemIndex = item.index;
+
+		dojo.style(this.slideWrapper, "opacity", "0");
+		
+		this.mediaContainer.innerHTML = "<img src='" + item.detailsImageUrl + "'/>";		
+		this.slideDetails.innerHTML = item.detailsInnerHtml;
+
+		dojo.fadeIn({node: this.slideWrapper, duration: 3000}).play();
+
+		
+		var selectedNodes = dojo.query(".selected");
+		if (selectedNodes) {
+			for (var x = 0; x < selectedNodes.length; x++) {
+				dojo.toggleClass(selectedNodes[x], "selected");
 			}
+		}
 	},
 	
 	rotate: function() {
