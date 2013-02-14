@@ -97,13 +97,11 @@
 	position: relative;
 	display: table;
 	width: 100%;
-	padding-bottom: 30px;
 	height: 200px;
 }
 
 .content .line {
 	border: 1px solid black;
-	text-align: center;
 	display: table-row;
 }
 
@@ -167,6 +165,7 @@
 }
 
 .content .item .label {
+	text-align: center;
 	position: relative;
 	font-family: 'PTSansBold';
 	top: 0px;
