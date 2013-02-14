@@ -13,7 +13,10 @@
 <!-- <div class='page'> -->
 
 <div>
-	<h1 class="marB20"><?php print $title; ?></h1>	
+	<?php if (strtolower($title) != 'company') { ?>
+		<h1 class="marB20"><?php print $title; ?></h1>	
+	<?php } ?>
+	
 	<p><?php 
 			if (strrpos($section1, "</") >= 0) {				
 				print html_entity_decode($section1);

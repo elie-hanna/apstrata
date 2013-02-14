@@ -62,7 +62,11 @@ dojo.setObject("apstrata.cms.toPhp", function(o) {
 			s += '"'+k+'"' + "=>" + '"'+o[k]+'",'
 		}
 	}
-	return s.substring(0, s.length-1) +")"
+	if (s == "array(") {
+		return s + ")";
+	} else {
+		return s.substring(0, s.length-1) +")"
+	}
 })
 
 

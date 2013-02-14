@@ -2,16 +2,16 @@
 <div class="header-wrap">
 	<header>
 		<div id="logo">
-			<a href="<?php print $GLOBALS["config"]["baseUrl"]."/page.php?pageId=home"; ?>" id='logo'>
+			<a href="<?php print $GLOBALS["config"]["baseUrl"] . "/" . $GLOBALS["config"]["urlPrefix"] . "home"; ?>" id='logo'>
 				<img src="themes/apstrata/images/logo.png" alt="Apstrata" title="Apstrata" />
 			</a>
 		</div>
 		<!-- begin credentials-->
         <div id="credentials">
                 <ul>
-                    <li class="login"><a href=<?php echo $config["baseUrl"]."/page.php?pageId=dashboard"; ?>>Login</a></li>
+                    <li class="login"><a href=<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "dashboard"; ?>>Login</a></li>
                     <li class="logout" style="display: none;"><a href="#">Log out</a></li>
-                    <li><a href=<?php echo $config["baseUrl"]."/page.php?pageId=register"; ?>>Signup</a></li>
+                    <li><a href=<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "register"; ?>>Signup</a></li>
                 </ul>
         </div>
 	</header>

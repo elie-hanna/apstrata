@@ -10,7 +10,7 @@
      		
 			<!-- begin social media -->
 	        <div class="social-media">
-            	<h3>Let's talk</h3>
+            	<h3>Let's talk!</h3>
                 <p>Follow Apstrata on</p>
 	            <ul>
 	                <li class="facebook"><a href="https://www.facebook.com/Apstrata" target="_blank">facebook</a></li>
@@ -124,7 +124,7 @@
 
 			<div class="clearfix"></div>
 			<div class="copyright">
-                <p>&copy; All Rights Reverved to Apstrata</p>
+                <p>&copy; All rights reserved to apstrata</p>
     			<div id="social">
 					<ul class="social-bookmarks">			
 						<li><script src="//platform.linkedin.com/in.js" type="text/javascript"></script>

@@ -121,7 +121,7 @@
     
     <!-- begin editorial -->
     <div class="editorial">
-	    <div class="title"><span>((</span>Touch cloud tools</div>
+	    <div class="title"><span>((</span>Apstrata tools</div>
 	    <div class="info mrgB20">
 			We have created tools and docs for you to have an easy start with us. The wiki contains all what you might need. Getting started guides help you get going and the SDKs make your life easier.                    
 		</div>
