@@ -28,6 +28,7 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 	applicationId: "apstrata-home",
 	showToolbar: false,
 	connection: {},
+	curtainNodeClass: '',
 	
 	constructor: function(attrs) {
 		dojo.mixin(this, attrs);
@@ -75,15 +76,16 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 	},
 	
 	showCurtain: function() {
-		var d = dojo.query(".content-wrap")[0];
+		
+		var d = dojo.query("." + this.curtainNodeClass)[0];
 		if (d) {
-			this._curtain = dojo.create('div', {}, dojo.body())
+			this._curtain = dojo.create('div', {}, d.parentNode)
 			dojo.addClass(this._curtain, "HorizonCurtain")
 			var p = dojo.position(d);			
 			dojo.style(this._curtain, {
 				top: p.y + "px",
 				left: p.x + "px",
-				width: (p.w - 20) + "px", // for some reason, the dojo calculation is adding 20 pixels to the width
+				width: p.w + "px", 
 				height: p.h + "px"
 			})
 			
@@ -91,5 +93,6 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 		} else {
 			return this.inherited(arguments);
 		}
+		
 	}
 })

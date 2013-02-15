@@ -2,8 +2,6 @@
 	<?php 
 			if ($config["developmentMode"]) { 
 		?>
-		@import "lib/dojo/dojo/resources/dojo.css";
-	    @import "lib/dojo/dijit/themes/claro/claro.css";
 	    @import "lib/dojo/dojox/grid/resources/Grid.css";
 	    @import "lib/dojo/dojox/grid/resources/claroGrid.css";
 		@import "lib/dojo/dojox/grid/enhanced/resources/claro/EnhancedGrid.css";
@@ -247,6 +245,7 @@
 			loginWidget='loginWidget'
 			class= "dashboard"
 			id="dashboard"
+			curtainNodeClass="content-wrap"
 		>
 		</div>
 	</div>
