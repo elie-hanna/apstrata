@@ -32,7 +32,7 @@ dojo.require("apstrata.ui.forms.FormGenerator")
 dojo.declare("apstrata.home.dashboard.Profile", 
 [apstrata.horizon.Panel], 
 {
-	templatePath: dojo.moduleUrl("apstrata.home.dashboard", dojo.getObject("profileTemplate") ? profileTemplate : "templates/Profile.html"),
+	templatePath: dojo.moduleUrl("apstrata.home.dashboard.templates", "Profile.html"),
 	definition : {
 				label: "Profile",
 				fieldset: [
