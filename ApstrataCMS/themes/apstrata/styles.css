@@ -176,8 +176,9 @@ background: -webkit-linear-gradient(top,  #f18020 42%,#f05e16 100%); /* Chrome10
 background: -o-linear-gradient(top,  #f18020 42%,#f05e16 100%); /* Opera 11.10+ */
 background: -ms-linear-gradient(top,  #f18020 42%,#f05e16 100%); /* IE10+ */
 background: linear-gradient(to bottom,  #f18020 42%,#f05e16 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f18020', endColorstr='#f05e16',GradientType=0 ); /* IE6-8 */
-} 
+}
+
+
 .menu a.selected {cursor: default;}
 
 
@@ -432,7 +433,7 @@ background: -webkit-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* Chrome10+,
 background: -o-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* Opera 11.10+ */
 background: -ms-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* IE10+ */
 background: linear-gradient(to bottom,  #8c8c8c 0%,#b2b2b2 99%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', endColorstr='#b2b2b2',GradientType=0 ); /* IE6-8 */
+/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', endColorstr='#b2b2b2',GradientType=0 ); /* IE6-8 */
 }
 .ie9 .btn {filter: none;}
 .btn input[type="submit"] {background: none; border: none; padding: 6px 12px; text-align: center; text-transform: uppercase; font-size: 16px; font-family: 'ArialRoundedMTBold'; color: #fff;
@@ -584,7 +585,7 @@ text-shadow: 1px 1px 0 #767779;
 
 .apstrata .LoginWidget .login {
 background: #4e4848;
-font-size: 1.7em;
+font-size: 1.2em;
 margin-left: auto;
 margin-right: auto;
 padding: 20px;
@@ -597,7 +598,7 @@ box-shadow: 0 3px 4px #555;
 -webkit-box-shadow: 0 3px 4px #555;
 border:none;
 }
-.apstrata .LoginWidget .login h2 { color:#F48220; }
+.apstrata .LoginWidget .login h2 { color:#F48220; font-size: 24px; }
 .apstrata .expand-container ol, .apstrata #apstrata-summary ol {list-style-type: decimal; list-style-position: inside;}
 .apstrata #apstrata-summary ul {list-style-type: square; list-style-position: inside;}
 .apstrata #apstrata-summary {font-size: 0.8em;}
@@ -628,7 +629,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 
 
 .apstrata p {font-size: 13px; margin: 0; padding: 0; line-height: 1.2em;}
-.apstrata .HorizonCurtain {background: #000; z-index: 200;}
+.apstrata .HorizonCurtain {background: none; z-index: 200;}
 
 
 .apstrata .dijitTooltipContainer {border: 1px solid #666; background: #d46464; color: #fff; padding: 4px;
