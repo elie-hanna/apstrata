@@ -4,6 +4,7 @@
 	$section2='';
 	$relatedItems=array();
 
+	if (isset($page["title"])) $id=$page["key"];
 	if (isset($page["title"])) $title=$page["title"];
 	if (isset($page["section1"])) $section1=$page["section1"];
 	if (isset($page["section2"])) $section2=$page["section2"];
@@ -14,7 +15,7 @@
 
 <div>
 	<?php if (strtolower($title) != 'company') { ?>
-		<h1 class="marB20"><?php print $title; ?></h1>	
+		<h1 id='<?php print $id; ?>' class="marB20"><?php print $title; ?></h1>	
 	<?php } ?>
 	
 	<p><?php 
