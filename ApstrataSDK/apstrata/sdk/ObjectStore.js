@@ -175,7 +175,7 @@ dojo.declare("apstrata.sdk.ObjectStore",
 			requestParams["apsdb.runAs"] = self.runAs;
 		}
 		
-		this.client.call("Query", requestParams).then(function(response) {
+		this.client.call("Query", requestParams, null, {method: "GET"}).then(function(response) {
 			if (response.result.documents.length>0) {
 				deferred.resolve(response.result.documents[0])
 			} else {
