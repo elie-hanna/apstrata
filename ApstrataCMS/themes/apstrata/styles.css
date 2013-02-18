@@ -157,7 +157,7 @@ nav {max-width: 960px; margin: 0 auto;}
 .menu li.home a:link, .menu li.home a:visited {height: 18px; width: 20px; margin-top: -2px; overflow: hidden; text-indent: -1000px; display: block; background: url(images/home.png) top left no-repeat;}
 .menu li.home a.selected {background: url(images/home-selected.png) top left no-repeat; margin-top: -10px;}
 
-.menu a:link, .menu a:visited {padding: 38px 8px 0 8px; display: block; font-family: ArialRoundedMTBold; color: #fff; font-size: 12px; text-decoration: none;
+.menu a:link, .menu a:visited {padding: 38px 8px 0 8px; display: block; font-family: ArialRoundedMTBold; color: #fff; font-size: 14px; text-transform: lowercase; text-decoration: none;
 	-webkit-transition: all 0.3s ease-in-out; 
     -moz-transition:  all 0.3s ease-in-out; 
     -ms-transition:  all 0.3s ease-in-out; 
@@ -283,7 +283,7 @@ footer .site-map ul li a {text-transform: uppercase; color: #999; font-family: "
 }
 footer .site-map ul li a:hover {color: #fff;}
 footer .site-map ul li:first-child {border: none;}
-footer .site-map ul li {margin-bottom: 2px; padding-top: 2px; border-top: 1px solid #6e7072;}
+footer .site-map ul li {margin-bottom: 2px; padding-top: 3px; border-top: 1px solid #6e7072;}
 footer .site-map ul {float: left; width: 100px; margin-right: 40px;}
 footer .site-map section {float: left; margin-right: 40px;}
 footer .site-map .title {font-family: "PTSansBold"; margin-bottom: 5px; color: #999; font-weight: normal; font-size: 13px; padding: 8px 0; text-transform: uppercase; border-bottom: 1px solid #6e7072;}
@@ -311,8 +311,8 @@ footer #social {
 .content-wrap {padding-bottom: 80px;}
 
 .content  {max-width: 960px; margin: 0 auto; padding-top: 32px;}
-.content h1 {font-size: 30px; font-family: "ArialRoundedMTBold";}
-.title {font-size: 25px; font-family: "ArialRoundedMTBold"; color: #282828; margin-bottom: 20px;}
+.content h1 {font-size: 30px; font-family: "ArialRoundedMTBold"; text-transform: lowercase;}
+.title {font-size: 25px; font-family: "ArialRoundedMTBold"; color: #282828; margin-bottom: 20px; text-transform: lowercase;}
 .title span  {color: #F48220; margin-right: 10px;}
 .side-menu {width: 300px; float: left;}
 
