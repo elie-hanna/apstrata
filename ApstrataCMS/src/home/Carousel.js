@@ -114,7 +114,8 @@ dojo.declare("apstrata.home.Carousel",
 				for (j = 0; j < this.items.length; j++) {
 					this.addItem(this.items[j], j);
 				}
-			}			
+			}
+						
 		}
 		
 		if (this.autoRotate) {
@@ -142,11 +143,16 @@ dojo.declare("apstrata.home.Carousel",
 			
 			dojo.place(itemWidget.domNode, this.slidesControls);
 			
+			var imgNode = dojo.create("img", {id: 'img_' + itemWidget.index, src: itemWidget.detailsImageUrl, style: {display:'none'}});
+			dojo.place(imgNode, this.mediaContainer);
+			
 			this.itemsWidgets.push(itemWidget);
 			
-			if (index == 0) {
-				itemWidget.displayDetails();
-			}
+			dojo.ready(function(){
+				if (index == 0) {
+					itemWidget.displayDetails();
+				}
+			});
 	},
 	
 	getUrl: function(imageName, docKey) { 
@@ -164,11 +170,15 @@ dojo.declare("apstrata.home.Carousel",
 	selectItem: function(item) {
 		var self = this;
 		
+		if (this.currentItemIndex != null) {
+			dojo.style(dojo.byId('img_' + this.currentItemIndex), 'display', 'none');
+		}
+		
 		this.currentItemIndex = item.index;
 
-		dojo.style(this.slideWrapper, "opacity", "0");
-		
-		this.mediaContainer.innerHTML = "<img src='" + item.detailsImageUrl + "'/>";		
+		dojo.style(this.slideWrapper, "opacity", "0");	
+
+		dojo.style(dojo.byId('img_' + item.index), 'display', 'block');		
 		this.slideDetails.innerHTML = item.detailsInnerHtml;
 
 		dojo.fadeIn({node: this.slideWrapper, duration: 3000}).play();
