@@ -543,3 +543,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 
 .expand-container ul { list-style:disc;}
 .expand-container li { font-size:13px; margin-bottom:3px; margin-left:20px;}
+
+/*** Alert ***/
+.touch .apstrataHorizonAlert .icon {position: static; margin-right: 10px;}
+.touch .apstrataHorizonAlert .message {font-size: 0.9em; padding-top: 10px; position: static; word-wrap: break-word;}
+.touch .apstrataHorizonAlert .message .content {padding-top: 0; border: none; margin: 0; line-height: 1.3em;}
+.touch .apstrataHorizonAlert .actions {margin-top: -10px;}
