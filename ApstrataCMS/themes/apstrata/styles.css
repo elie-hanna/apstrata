@@ -346,7 +346,8 @@ display: block; margin-top: 4px;
 .table-design {margin: 10px 0; background:url("images/table-bg.png") repeat scroll left top;border: 1px solid #B4B4B4; -moz-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; padding: 8px;}
 table th {text-align: left; text-transform: uppercase; font-size: 16px; color: #282828; padding: 10px 0; border-bottom: 1px solid #B2B2B2;}
 table td {padding: 8px 0 4px 0;}
-table td a {font-family: "PTSansRegular"; text-decoration: none;}
+table td a {font-family: "PTSansRegular"; text-decoration: none; font-size: 0.9em;}
+table td:first-child a {cursor: default; color: #444;}
 table .separator {color: #F48220; margin: 0 5px;}
 
 .image {background: #fff; border: 1px solid #B4B4B4;  -moz-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px;
@@ -643,3 +644,10 @@ font-family: "PTSansCaptionBold";}
 
 
 .apstrata h1#faq {text-transform: uppercase;}
+
+
+/*** Alert ***/
+.apstrata .apstrataHorizonAlert .icon {position: static; margin-right: 10px;}
+.apstrata .apstrataHorizonAlert .message {font-size: 1em; padding-top: 10px; position: static; word-wrap: break-word;}
+.apstrata .apstrataHorizonAlert .message .content {padding-top: 0; border: none; margin: 0;}
+.apstrata .apstrataHorizonAlert .actions {margin-top: -10px;}
