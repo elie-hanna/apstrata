@@ -144,8 +144,29 @@
 				//
 				//
 
+				//check if already logged in and display the logout link
+			    dojo.require("apstrata.sdk.TokenConnection");
+				var theConnectionData = {
+						credentials: {
+							key: '<?php print $GLOBALS["config"]["apstrataKey"]; ?>'								
+						},
+						serviceURL: '<?php print $GLOBALS["config"]["apstrataServiceURL"]; ?>',
+						defaultStore: '<?php print $GLOBALS["config"]["contentStore"]; ?>',
+						timeout: parseInt('<?php print $GLOBALS["config"]["apstrataConnectionTimeout"]; ?>')
+					}
+					
+				var theConnection = new apstrata.sdk.TokenConnection();
+					
+				if (theConnection.isLoggedIn()) {
+					dojo.style(dojo.query(".login")[0], "display", "none");
+					dojo.style(dojo.query(".dashboard")[0], "display", "block");
+				} else {
+					dojo.style(dojo.query(".dashboard")[0], "display", "none");					
+					dojo.style(dojo.query(".login")[0], "display", "block");
+				}
 
 			})
+
 		</script>
 
 

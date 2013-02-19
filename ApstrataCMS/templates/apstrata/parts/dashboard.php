@@ -118,7 +118,7 @@
 				var userCredentials = null;	
 				var logoutLink = dojo.byId("logoutLink");
 				var logoutLinkLine = logoutLink.parentNode;
-				var logoutIconTop = dojo.query(".logout")[0];
+				var dashboardLink = dojo.query(".dashboard")[0];
 				var loginIconTop = dojo.query(".login")[0];
 				dojo.connect(dashboard, "onCredentials", function(credentials){	
 					userCredentials = credentials;
@@ -168,12 +168,6 @@
 				 });
 				 
 				
-				 /*
-				 * log out icon on click event handler
-				 */								 
-				 dojo.connect(logoutIconTop, "onclick", function(event) {
-				 	logout(event);	
-				 });				
 				
 				/*
 				 * this function factors out the logic that is shared by the login successful and manage account event handler
@@ -224,11 +218,11 @@
 				var toggleLoginLogout = function(status) {
 					if (status == "in") {
 						dojo.style(logoutLinkLine, "display", "block");
-						dojo.style(logoutIconTop, "display", "block");
+						dojo.style(dashboardLink, "display", "block");
 						dojo.style(loginIconTop, "display", "none");						
 					}else {
 						dojo.style(logoutLinkLine, "display", "block");
-						dojo.style(logoutIconTop, "display", "block");
+						dojo.style(dashboardLink, "display", "block");
 						dojo.style(loginIconTop, "display", "none");	
 					}					
 				}

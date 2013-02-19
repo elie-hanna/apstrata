@@ -9,11 +9,11 @@
 		<!-- begin credentials-->
         <div id="credentials">
                 <ul>
-                    <li class="login"><a href=<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "dashboard"; ?>>Login</a></li>
-                    <li class="logout" style="display: none;"><a href="#">Log out</a></li>
+                    <li class="login" style="display: none;"><a href=<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "dashboard"; ?>>Login</a></li>
+                    <li class="dashboard" style="display: none;"><a href=<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "dashboard"; ?>>Dashboard</a></li>
                     <li><a href=<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "register"; ?>>Signup</a></li>
                 </ul>
-        </div>
+        </div>        
 	</header>
 </div>      
 <div id="nav-wrapper">
@@ -38,4 +38,7 @@
         </ul>		        	
     </nav>
 </div>
-<div class="clearfix"></div>	
+<div class="clearfix"></div>
+
+
+	

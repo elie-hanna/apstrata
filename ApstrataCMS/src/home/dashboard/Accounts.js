@@ -116,7 +116,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 						self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");						
 					}else {						
 					
-						self._alert("The account secret for [" + key + "] is: " + response.result.account.aps_authSecret)
+						self._alert("The account secret for [" + key + "] is: " + response.result.account.aps_authSecret, "infoIcon")
 					}						
 				}else {			
 					var errorMsg = response.metadata.errorDetail;
@@ -162,7 +162,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 											var errorMsg = response.result.errorDetail.errorDetail;
 											self._alert(errorMsg ? errorMsg : "An error has occured", "errorIcon");						
 										}else {						
-											self._alert("The account secret for [" + key + "] has been reset ")
+											self._alert("The account secret for [" + key + "] has been reset ", "doneIcon")
 										}						
 									}else {			
 										var errorMsg = response.metadata.errorDetail;

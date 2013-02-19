@@ -118,7 +118,7 @@ header {max-width: 960px; margin: 0 auto;}
 #credentials ul li.login a:link, #credentials ul li.login a:visited {background: url(images/lock.png) top left no-repeat;
 padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 #credentials ul li a:hover, #credentials ul li a:active {color: #fff;}
-#credentials ul li.logout a:link, #credentials ul li.logout a:visited {background: url(../images/logout.png) center left no-repeat;
+#credentials ul li.dashboard a:link, #credentials ul li.dashboard a:visited {background: url(images/logout.png) center left no-repeat;
 padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 
 /*** Social media ***/
