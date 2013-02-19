@@ -56,6 +56,21 @@
 	background-size: 100% 100%;
 }
 
+.apstrataHorizonAlert .infoIcon {
+	background-image:url('../../resources/images/pencil-icons/info.png');
+	width: 64px;
+	height: 64px;
+	background-size: 100% 100%;
+}
+
+.apstrataHorizonAlert .doneIcon {
+	background-image:url('../../resources/images/pencil-icons/done.png');
+	width: 64px;
+	height: 64px;
+	background-size: 100% 100%;
+}
+
+
 
 .apstrataHorizonAlert .icon img {
 	width: 50px;
