@@ -25,7 +25,7 @@
 	searchBarTemplate = "../../templates/apstrata/widgets/SearchBar.html";	
 	
 	dojo.ready(function() {
-		dojo.require("apstrata.home.SearchBar");
+		dojo.require("apstrata.extend.SearchBar");
 		dojo.require("apstrata.home.Gallery");
 		dojo.require("apstrata.home.Slides");		
 		dojo.require("apstrata.home.Carousel");
@@ -52,7 +52,7 @@
 		var navNode = dojo.byId("nav-wrapper");	
 		dojo.place(carousel.domNode, navNode, "after");		
 			
-		var searchBar = new apstrata.home.SearchBar({onSearch: function(v, category) {
+		var searchBar = new apstrata.extend.SearchBar({onSearch: function(v, category) {
 				results.search(v, category)
 			}}, dojo.byId("searchBar") );
 		

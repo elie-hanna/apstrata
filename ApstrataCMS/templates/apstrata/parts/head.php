@@ -94,8 +94,7 @@
 				dojo.registerModulePath("apstrata", "../../../lib/ApstrataSDK/apstrata")
 				dojo.registerModulePath("apstrata.home", "../../../src/home")
 				dojo.registerModulePath("apstrata.cms", "../../../src/cms")
-				dojo.registerModulePath("apstrata.home.templates", "../../../templates/apstrata/widgets")
-				dojo.registerModulePath("apstrata.home.dashboard.templates", "../../../templates/apstrata/widgets")
+				dojo.registerModulePath("apstrata.extend", "../../../widgets/apstrata")
 			<?php 
 			} else {
 		?>	
