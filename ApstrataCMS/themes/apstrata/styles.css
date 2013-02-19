@@ -649,5 +649,5 @@ font-family: "PTSansCaptionBold";}
 /*** Alert ***/
 .apstrata .apstrataHorizonAlert .icon {position: static; margin-right: 10px;}
 .apstrata .apstrataHorizonAlert .message {font-size: 1em; padding-top: 10px; position: static; word-wrap: break-word;}
-.apstrata .apstrataHorizonAlert .message .content {padding-top: 0; border: none; margin: 0;}
+.apstrata .apstrataHorizonAlert .message .content {padding-top: 0; border: none; margin: 0; line-height: 1.3em;}
 .apstrata .apstrataHorizonAlert .actions {margin-top: -10px;}
