@@ -183,7 +183,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 
 								self.isEditing = false;
 								self.backup = {};
-								self._alert("Your profile has been updated", "icon");									
+								self._alert("Your profile has been updated", "doneIcon");									
 							}, failure: function(errorCode, errorDetail) {
 								self._alert(errorDetail ? errorDetail : errorCode, "errorIcon");
 							}
@@ -194,7 +194,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 
 						self.isEditing = false;
 						self.backup = {};
-						self._alert("Your profile has been updated", "icon");
+						self._alert("Your profile has been updated", "doneIcon");
 					}	
 				}						
 			},
