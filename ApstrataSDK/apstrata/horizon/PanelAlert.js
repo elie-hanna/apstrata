@@ -53,10 +53,15 @@ dojo.declare("apstrata.horizon.PanelAlert",
 
 		// Style and position the widget
 		dojo.addClass(this.domNode, "apstrataHorizonAlert")
-
+		
+		var top = a.y - 5 + dojo.body().scrollTop;
+		if (dojo.body().scrollTop > 0) {
+			top = top + a.h/2;
+		}
+		
 		// Start with a small rectangle
 		dojo.style(this.domNode, {
-			top: (a.y-5) + "px",
+			top: top + "px",
 			left: (a.x + a.w/2 - 4) + "px",
 			height: "8px",
 			width: 8 + "px"
@@ -72,7 +77,7 @@ dojo.declare("apstrata.horizon.PanelAlert",
 			node: this.domNode,
 			duration: 100,
 			properties: {
-				top: a.y,
+				top: top,
 				height: self.height,
 			}, 
 			onEnd: function() {
