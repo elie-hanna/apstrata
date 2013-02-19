@@ -18,7 +18,7 @@ function _phpEscape(value) {
 
 // Query listing fields
 var queryResult = apsdb.callApi("Query", queryRequest, null);
-log.debug("Debug trace", queryResult);
+apsdb.log.debug("Debug trace", queryResult);
 var strOutput = '';
 
 var leftColumn, rightColumn, title, template
