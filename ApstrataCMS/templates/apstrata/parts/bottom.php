@@ -99,7 +99,7 @@
 							
 							$urlPrefix = '';
 							if (substr($link->address, 0, 7) != 'http://' && substr($link->address, 0, 8) != 'https://') {
-								$urlPrefix = $GLOBALS["config"]["urlPrefix"];
+								$urlPrefix = $GLOBALS["config"]["baseUrl"] . "/" . $GLOBALS["config"]["urlPrefix"];
 							}
 								
 						

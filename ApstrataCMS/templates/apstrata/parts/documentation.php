@@ -103,7 +103,7 @@
 							
 							$urlPrefix = '';
 							if (substr($link->address, 0, 7) != 'http://' && substr($link->address, 0, 8) != 'https://') {
-								$urlPrefix = $GLOBALS["config"]["urlPrefix"];
+								$urlPrefix = $GLOBALS["config"]["baseUrl"] . "/" . $GLOBALS["config"]["urlPrefix"];
 							}
 							
 							echo '<li><a category="menuItem" id="' . $link->key . '" href="' . $urlPrefix . $link->address . '" target="' . $link->target . '">' . $link->title . '</a></li>';
@@ -133,7 +133,7 @@
 				
 				$urlPrefix = '';
 				if (substr($item->address, 0, 7) != 'http://' && substr($item->address, 0, 8) != 'https://') {
-					$urlPrefix = $GLOBALS["config"]["urlPrefix"];
+					$urlPrefix = $GLOBALS["config"]["baseUrl"] . "/" . $GLOBALS["config"]["urlPrefix"];
 				}
 				
 				if (!isset($item->parent)) {
