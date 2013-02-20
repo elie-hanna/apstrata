@@ -3,7 +3,7 @@
 	<header>
 		<div id="logo">
 			<a href="<?php print $GLOBALS["config"]["baseUrl"]."/page.php?pageId=home"; ?>" id='logo'>
-				<img src="themes/touch/images/logo.png" alt="Touch Cloud" title="Touch Cloud" />
+				<img src="<?php print $GLOBALS["config"]["baseUrl"] ?>/themes/touch/images/logo.png" alt="Touch Cloud" title="Touch Cloud" />
 			</a>
 		</div>
 		<!-- begin credentials-->

@@ -3,7 +3,7 @@
 	<header>
 		<div id="logo">
 			<a href="<?php print $GLOBALS["config"]["baseUrl"] . "/" . $GLOBALS["config"]["urlPrefix"] . "home"; ?>" id='logo'>
-				<img src="themes/apstrata/images/logo.png" alt="Apstrata" title="Apstrata" />
+				<img src="<?php print $GLOBALS["config"]["baseUrl"] ?>/themes/apstrata/images/logo.png" alt="Apstrata" title="Apstrata" />
 			</a>
 		</div>
 		<!-- begin credentials-->
