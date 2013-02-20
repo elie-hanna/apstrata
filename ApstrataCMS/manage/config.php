@@ -4,9 +4,9 @@
 		// 
 		// Apstrata backend connection parameters
 		//
-		"apstrataServiceURL" => "https://varick.apstrata.com/apsdb/rest",
+		"apstrataServiceURL" => "https://test-sandbox.apstrata.com/apsdb/rest",
 		"apstrataConnectionTimeout" => 30000,
-		"apstrataKey" => "E83D22E93F",
+		"apstrataKey" => "YDEE622D6C",
 		"apstrataSecret" => "",		
 
 		//
@@ -30,13 +30,13 @@
 		//
 		// URLs and other related values used to compose paths by the php CMS code 
 		//
-		//"baseUrl" => "http://localhost/ApstrataCMS",
-		"baseUrl" => "http://www.apstrata.com",
+		"baseUrl" => "http://10.0.0.147/ApstrataCMS",
+		//"baseUrl" => "http://www.apstrata.com",
 		"urlPrefix" => "page.php?pageId=",
 		"loginUrl" => "dashboard",
-		"docroot" => $_SERVER["DOCUMENT_ROOT"],
+		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS",
    		"workbenchUrl" => "http://workbench.apstrata.com",
-		"targetClusterUrl" => "https://varick.apstrata.com/apsdb/rest",
+		"targetClusterUrl" => "https://test-sandbox.apstrata.com/apsdb/rest",
 
 		//
 		// Controls caching parameters in /page.php
@@ -47,7 +47,7 @@
 		//
 		// Controls the template folder and CSS root class used by the site
 		//
-		"template" => "min"
+		"template" => "apstrata"
 	);
 	
 	// Dublin Core meta-data site-wide init

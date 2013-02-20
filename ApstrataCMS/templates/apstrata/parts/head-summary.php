@@ -13,9 +13,6 @@
 		if ($config["developmentMode"]) { 
 	?>
 	<style type="text/css">
-		@import "../../lib/dojo/dojo/resources/dojo.css";
-		@import "../../lib/dojo/dijit/themes/claro/claro.css";
-		@import "../../lib/dojo/dojox/widget/Dialog/Dialog.css";
 
 	        @import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css";
 	        @import "../../themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
@@ -26,7 +23,7 @@
 	?>
 		<style type="text/css">
 		        @import "<?php echo $config["baseUrl"]?>/lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";
-		        @import "<?php echo $config["baseUrl"]?>/lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>-packaged.css";
+		        @import "<?php echo $config["baseUrl"]?>/lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
 	        </style>
 
 	<?php 

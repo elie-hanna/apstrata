@@ -1,6 +1,7 @@
 #!/bin/bash
 
 basePath=../../../../..
+basePath=`readlink -f $basePath`
 
 # This should be located in your dojo/util/buildscripts folder
 # You must have the dojo build profile template file: /profiles/apstratacms.template.profile
@@ -45,7 +46,7 @@ cp profiles/apstratacms.profile.js $basePath/lib/dojo/util/buildscripts/profiles
 # backup the i18n.js file before playing around with it:
 echo "backup dojo's i18n.js file - need to edit it before building"
 i18njsfile=$basePath/lib/dojo/dojo/i18n.js
-cp $i18njsfile/lib/dojo/dojo/i18n.js `pwd`/i18n.js.tmp
+cp $i18njsfile `pwd`/i18n.js.tmp
 
 # fix the dojo i18n.js file for nls bundle bug
 echo "modifying dojo's i18n.js to add an nls fix..."

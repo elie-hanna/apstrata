@@ -1,0 +1,27 @@
+/* global definitions */
+@import "../../../dojo/resources/dojo.css";
+@import "../../../dijit/themes/claro/claro.css";
+@import "../../../dojox/widget/Dialog/Dialog.css";
+
+@import "../../../dojox/grid/resources/Grid.css";
+@import "../../../dojox/grid/resources/claroGrid.css";
+@import "../../../dojox/grid/enhanced/resources/claro/EnhancedGrid.css";
+@import "../../../dojox/form/resources/FileInput.css";
+@import "../../../dojox/highlight/resources/highlight.css";
+@import "../../../dojox/highlight/resources/pygments/colorful.css";
+@import "../../ui/themes/apstrata/FormGenerator.css";
+@import "../../ui/themes/apstrata/Curtain.css";
+@import "../../ui/themes/apstrata/FlashAlert.css";
+@import "../../ui/themes/apstrata/ApstrataAnimation.css";
+@import "../../horizon/themes/horizon.css";
+
+
+
+@import url("reset.css");
+@import url("styles.css");
+@import url("gallery.css");
+@import url("docViewer.css");
+
+
+
+

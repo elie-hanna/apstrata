@@ -103,7 +103,7 @@
 							}
 								
 						
-							echo '<li><a id="' . $link->key . '" href="' . $urlPrefix . $link->address . '" target="' . $link->target . '">' . $link->title . '</a></li>';
+							echo '<li><a id="' . $link->key . '" href="' . $urlPrefix . $link->address . '" target="' . ((isset($link->target)) ? $link->target : '') . '">' . $link->title . '</a></li>';
 							
 						}
 						

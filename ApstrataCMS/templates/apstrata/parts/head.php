@@ -1,6 +1,6 @@
 <!-- start: head.php -->		
 		
-	    <link rel="shortcut icon" href="themes/<?php print $config['template'] ?>/images/favicon.ico" type="image/png" />
+	    <link rel="shortcut icon" href="<?php print $GLOBALS["config"]["baseUrl"]; ?>/themes/<?php print $config['template'] ?>/images/favicon.ico" type="image/png" />
 
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
@@ -28,8 +28,6 @@
 		
 		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 
-		<link rel="shortcut icon" href="workbench/images/favicon.ico" type="image/png" />
-
 		<!-- start of google analytics -->		
 		<script type="text/javascript">
 
@@ -54,11 +52,8 @@
 		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 
 		<style type="text/css">
-			<!-- @import "lib/dojo/dojo/resources/dojo.css";
-		   	 @import "lib/dojo/dijit/themes/claro/claro.css";
-		   	 @import "lib/dojo/dojox/widget/Dialog/Dialog.css"; 
 
-	       		 @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css"; -->
+	       		 @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css"; 
 	       		 @import "themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
        		 </style>
 		

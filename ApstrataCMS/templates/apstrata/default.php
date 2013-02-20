@@ -21,7 +21,7 @@
 				include("templates/" . $config['template'] . "/parts/head.php");
 			}
 		?>
-		<script language="javascript" type="text/javascript" src="lib/editarea/edit_area/edit_area_full.js"></script>
+		<script language="javascript" type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"] ?>/lib/editarea/edit_area/edit_area_full.js"></script>
 	</head>
 	<body class="<?php print $config['template'] ?>">
 <!-- Place this tag in your head or just before your close body tag -->

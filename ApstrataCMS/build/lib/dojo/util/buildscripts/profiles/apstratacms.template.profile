@@ -24,7 +24,8 @@ dependencies = {
 		["apstrata", "../../../lib/ApstrataSDK/apstrata"],
 		["apstrata.cms", "../../../src/cms"],
 		["apstrata.home", "../../../src/home"],
-		["apstrata.themes", "../../../themes"]//fake entry to get the css copied
+		["apstrata.themes", "../../../themes"],//fake entry to get the css copied
+		["apstrata.extend", "../../../widgets/apstrata"]
 	]
 }
 
