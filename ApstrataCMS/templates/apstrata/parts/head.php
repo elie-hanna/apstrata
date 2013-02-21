@@ -20,7 +20,7 @@
 		<meta name="DC.Title" content="elementn: <?php print $page["title"]; ?>" />
 		<meta name="DC.Type" content="<?php print $config['DC']['Type'] ?>" />
 		<meta name="DC.Description" content="<?php print $config['DC']['Description'] ?>" />
-		<meta name="DC.Subject.keyword" content="<?php print $config['DC']['Subject.keyword'] ?>" />
+		<meta name="DC.Subject" content="<?php print $config['DC']['Subject'] ?>" />
 		
 		<meta name="DC.Date.Created" content="<?php print $page['apsdb.creationTime'] ?>" />
 		<meta name="DC.Date.Modified" content="<?php print $page['apsdb.lastModifiedTime'] ?>" />
