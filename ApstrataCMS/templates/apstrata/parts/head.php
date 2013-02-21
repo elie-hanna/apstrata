@@ -48,13 +48,13 @@
 		<?php 
 			if ($config["developmentMode"]) { 
 		?>
-		<script type="text/javascript" src="lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
-		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 
 		<style type="text/css">
 
-	       		 @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css"; 
-	       		 @import "themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
+	       		 @import "<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css"; 
+	       		 @import "<?php print $GLOBALS["config"]["baseUrl"]; ?>/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
        		 </style>
 		
 		<?php 
