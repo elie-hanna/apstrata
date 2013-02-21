@@ -55,7 +55,7 @@
 		"Title" => "apstrata",
 		"Type" => "cloud, back end as a service, BaaS, mobile cloud, HTML5 cloud",
 		"Description" => "HTML5 and mobile cloud Back-end as a Service",
-		"Subject.keyword" => "apstrata, html5, BaaS, SaaS, PaaS, cloud computing, rich client, RIA, iOS, android",
+		"Subject.keyword" => "BAAS, back-end-as-a-service, backend-as-a-service, identity management, orchestration, custom workflow, database, security, facebook integration, twitter integration, open API, web services, fast development, ready-made, html5, SaaS, PaaS, cloud computing, rich client, RIA, iOS development, android development, push notification",
 		"Version" => "1",
 		"Publisher" => "apstrata",
 		"Creator" => "apstrata",
