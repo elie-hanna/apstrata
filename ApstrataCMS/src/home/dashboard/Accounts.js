@@ -16,6 +16,8 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 	templatePath: dojo.moduleUrl("apstrata.home.dashboard", "templates/Accounts.html"),
 	connection: null,
 	client: null,	
+	
+	loadingImagePath: '',
 		
 	/**
 	 * params.connection: the connection to use

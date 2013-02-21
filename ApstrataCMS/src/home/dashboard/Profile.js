@@ -33,6 +33,8 @@ dojo.declare("apstrata.home.dashboard.Profile",
 [apstrata.horizon.Panel], 
 {
 	templatePath: dojo.moduleUrl("apstrata.home.dashboard", "templates/Profile.html"),
+	loadingImagePath: '',
+	
 	definition : {
 				label: "Profile",
 				fieldset: [
