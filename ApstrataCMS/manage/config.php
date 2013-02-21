@@ -61,7 +61,7 @@
 		"Creator" => "apstrata",
 		"Creator.Address" => "apstrata",
 		"Identifier" => "http://www.apstrata.com/",
-		"Rights" => "Copyright, Copyright Statement (http://www.apstrata.com/terms)."
+		"Rights" => "Copyright, Copyright Statement (http://www.apstrata.com/pages/terms)."
 	);
 ?>
 
