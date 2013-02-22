@@ -61,6 +61,12 @@
 		dojo.parser.parse()
 	})
 </script>
+
+<!-- This div is placed here so that google search engine displays it as summary for the website match -->
+<div style="display:none">
+	Apstrata is a complete backend-as-a-service for web and mobile applications
+</div>
+
 <div class="container">             	
 	<!-- begin content wrap-->
 	<div class="content-wrap">
