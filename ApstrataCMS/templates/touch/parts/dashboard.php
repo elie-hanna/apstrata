@@ -83,8 +83,8 @@
 				dojo.require("apstrata.home.dashboard.Dashboard");
 				dojo.require("dojo.parser");
 				dojo.require("apstrata.ui.widgets.LoginWidget");
-				dojo.require("apstrata.extend.Accounts");
-				dojo.require("apstrata.extend.Profile");
+				dojo.require("apstrata.touch.extend.Accounts");
+				dojo.require("apstrata.touch.extend.Profile");
 															 
 				// These are visual properties used by the application that can not fit in a CSS file yet 			
 				apstrata.horizon.magicUIdimensions = {
@@ -143,7 +143,7 @@
 				var userProfileLink = dojo.byId("userProfileLink");
 				dojo.connect(userProfileLink, "onclick", function(event) {	
 					if (dashboard.connection) {						
-						var userProfile = new apstrata.extend.Profile({container: dashboard, useClass: "dashboard"});
+						var userProfile = new apstrata.touch.extend.Profile({container: dashboard, useClass: "dashboard"});
 						dojo.empty(linkedContent);					
 						dojo.place(userProfile.domNode, linkedContent);	
 						toggleSelected(userProfileLink);
@@ -184,7 +184,7 @@
 					helloNode.innerHTML = "Hello " + (connection ? connection.credentials.user : "");
 					var account = null;
 					if (connection) { 		
-						account = new apstrata.extend.Accounts({container: dashboard, credentials: connection.credentials});
+						account = new apstrata.touch.extend.Accounts({container: dashboard, credentials: connection.credentials});
 						account.container = dashboard;								
 						dojo.place(account.domNode, linkedContent);						
 						toggleSelected(manageAccountLink);

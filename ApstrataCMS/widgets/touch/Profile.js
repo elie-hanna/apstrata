@@ -1,10 +1,10 @@
-dojo.provide("apstrata.extend.Profile")
+dojo.provide("apstrata.touch.extend.Profile")
 
 dojo.require("apstrata.home.dashboard.Profile");
 
-dojo.declare("apstrata.extend.Profile", 
+dojo.declare("apstrata.touch.extend.Profile", 
 [apstrata.home.dashboard.Profile], 
 {
-	templatePath: dojo.moduleUrl("apstrata.extend", "templates/Profile.html")
+	templatePath: dojo.moduleUrl("apstrata.touch.extend", "templates/Profile.html")
 	
 })

@@ -1,11 +1,11 @@
-dojo.provide("apstrata.extend.Accounts")
+dojo.provide("apstrata.touch.extend.Accounts")
 
 dojo.require("apstrata.home.dashboard.Accounts");
 
-dojo.declare("apstrata.extend.Accounts", 
+dojo.declare("apstrata.touch.extend.Accounts", 
 [apstrata.home.dashboard.Accounts], 
 {
 
-	templatePath: dojo.moduleUrl("apstrata.extend", "templates/Accounts.html")
+	templatePath: dojo.moduleUrl("apstrata.touch.extend", "templates/Accounts.html")
 		
 })
