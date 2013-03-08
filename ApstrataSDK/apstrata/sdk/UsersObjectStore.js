@@ -23,21 +23,19 @@
  * 
  * @fileOverview
  */
-dojo.provide("apstrata.sdk.ObjectStore")
+dojo.provide("apstrata.sdk.UsersObjectStore")
 
 dojo.require("apstrata.sdk.Connection")
 dojo.require("apstrata.sdk.Client")
-dojo.require("apstrata.sdk.ObjectStoreAdaptor")
 dojo.require("dojo.store.util.QueryResults")
 dojo.require("dojo.store.api.Store")
 dojo.require("dojo.data.ObjectStore")
 
-dojo.declare("apstrata.sdk.ObjectStore", 
+dojo.declare("apstrata.sdk.UsersObjectStore", 
 [dojo.store.api.Store], 
 {
 	
-	idProperty: "key",
-	versionProperty: "versionNumber",
+	idProperty: "login",
 	
 	/**
 	 * Instantiates a new instance of ObjectStore
@@ -49,7 +47,7 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		var self = this
 		
 		dojo.mixin(this, options);
-		this.action = "Query"
+		this.action = "ListUsers"
 
 		this.client = new apstrata.sdk.Client(self.connection)
 	},
@@ -60,15 +58,11 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		var deferred = new dojo.Deferred();
 
 		var apsdb = attrs || {}
-		if (this.store) apsdb.store = this.store
 		if (this.ftsQuery) apsdb.ftsQuery = this.ftsQuery
 		if (this.queryExpression) {
 			apsdb.query = this.queryExpression
-			if (this.schema)  {
-				this.queryExpression = this.queryExpression.concat(" and apsdb.schema=\"" + this.schema + "\"");
-			}
 		}
-		if (this.queryFields) apsdb.queryFields = this.queryFields
+		if (this.queryFields) apsdb.attributes = this.queryFields
 		if (this.resultsPerPage) apsdb.resultsPerPage = this.resultsPerPage
 		if (this.runAs) apsdb.runAs = this.runAs
 		if (options && options.count) apsdb.resultsPerPage = options.count
@@ -101,8 +95,6 @@ dojo.declare("apstrata.sdk.ObjectStore",
 			apsdb.count = true
 		}
 	
-		if (this.action == "RunScript") apsdb.scriptName = this.scriptName
-	
 		var queryAttrs = {}
 
 		for (k in apsdb) {
@@ -113,34 +105,34 @@ dojo.declare("apstrata.sdk.ObjectStore",
 			function(response) {
 				//do the page slicing in case it is an fts query, since fts search always returns resultsPerPage as the count. We also do not ask for the count in case it ia an fts query
 				if (!apsdb.ftsQuery) {
-					response.result.documents.total = response.result.count
+					response.result.users.total = response.result.count
 				} else {
 					if (apsdb.pageNumber > 1) {
 						var tmpDocuments = [];
-						for (var i = (apsdb.pageNumber - 1) * apsdb.resultsPerPage; i < response.result.documents.length; i++) {
-							tmpDocuments.push(response.result.documents[i])
+						for (var i = (apsdb.pageNumber - 1) * apsdb.resultsPerPage; i < response.result.users.length; i++) {
+							tmpDocuments.push(response.result.users[i])
 						}
-						response.result.documents = tmpDocuments;	
+						response.result.users = tmpDocuments;	
 					}
-					if (response.result.documents.length == apsdb.resultsPerPage) {
+					if (response.result.users.length == apsdb.resultsPerPage) {
 						//in this case there is a possibility that we have more search results, so we add a page
-						response.result.documents.total = (apsdb.pageNumber + 1) * apsdb.resultsPerPage
+						response.result.users.total = (apsdb.pageNumber + 1) * apsdb.resultsPerPage
 					} else {
-						response.result.documents.total = ((apsdb.pageNumber - 1) * apsdb.resultsPerPage) + response.result.documents.length 
+						response.result.users.total = ((apsdb.pageNumber - 1) * apsdb.resultsPerPage) + response.result.users.length 
 					}
 				}
 				
 				//mix derived fields with the regular ones so that their values get populated in the grid
-				for(var i = 0 ; i < response.result.documents.length; i++) {
-					if (response.result.documents[i]["_derivedFields"]) {
-						for(var derivedFieldName in response.result.documents[i]["_derivedFields"]) {
-							response.result.documents[i][derivedFieldName] = response.result.documents[i]["_derivedFields"][derivedFieldName];
+				for(var i = 0 ; i < response.result.users.length; i++) {
+					if (response.result.users[i]["_derivedFields"]) {
+						for(var derivedFieldName in response.result.users[i]["_derivedFields"]) {
+							response.result.users[i][derivedFieldName] = response.result.users[i]["_derivedFields"][derivedFieldName];
 						}
 						
 					}
 				}
 				
-				deferred.callback(response.result.documents)
+				deferred.callback(response.result.users)
 			},
 			function(response) {
 				deferred.callback(response.metadata)
@@ -157,18 +149,10 @@ dojo.declare("apstrata.sdk.ObjectStore",
 	get: function(id) {
 		var self = this
 		var deferred = new dojo.Deferred()
-		
-		var idElements = id.split("|")
-		var key = idElements[0]
-		var versionNumber = 1
-		if (idElements.length > 1) {
-			versionNumber = Math.floor(idElements[[1]])
-		}
-		
+				
 		var requestParams = {
-			"apsdb.query": "apsdb.documentKey=\"" + key + "\" and apsdb.versionNumber = " + versionNumber, 
-			"apsdb.queryFields": self.queryFields,
-			"apsdb.store": self.store,
+			"apsdb.query": "login=\"" + id + "\"", 
+			"apsdb.attributes": self.queryFields,
 			"apsdb.includeFieldType": true
 		}
 		
@@ -176,9 +160,9 @@ dojo.declare("apstrata.sdk.ObjectStore",
 			requestParams["apsdb.runAs"] = self.runAs;
 		}
 		
-		this.client.call("Query", requestParams, null, {method: "GET"}).then(function(response) {
-			if (response.result.documents.length>0) {
-				deferred.resolve(response.result.documents[0])
+		this.client.call("ListUsers", requestParams, null, {method: "GET"}).then(function(response) {
+			if (response.result.users.length>0) {
+				deferred.resolve(response.result.users[0])
 			} else {
 				deferred.reject("NOT_FOUND")
 			}
@@ -191,47 +175,43 @@ dojo.declare("apstrata.sdk.ObjectStore",
 	
 	put: function(object, options) {
 		var self = this
-		var o = {"apsdb.update": true, "apsdb.store": self.store}
+		var o = {"apsdb.update": true}
 		if (options) {
 			dojo.mixin(o, options);
 		}
 		if (object && object.domNode) {
-			return this.client.call("SaveDocument", o, object.domNode);	
+			return this.client.call("SaveUser", o, object.domNode);	
 		}else {		
 			dojo.mixin(o, object)	
-			return this.client.call("SaveDocument", o)
+			return this.client.call("SaveUser", o)
 		}
 	},
 
 	add: function(object, options) {
 		var self = this		
-		var o = {"apsdb.store": self.store};
+		var o = {};
 		if (options) {
 			dojo.mixin(o, options);
 		}
-		if (self.schema) {
-			o["apsdb.schema"] = self.schema;
-		}
 		if (object && object.domNode) {
-			return this.client.call("SaveDocument", o, object.domNode);	
+			return this.client.call("SaveUser", o, object.domNode);	
 		}else {			
 			dojo.mixin(o, object)
-			return this.client.call("SaveDocument", o)
+			return this.client.call("SaveUser", o)
 		}
 	},
 
 	remove: function(id, options) {
 		var self = this
 		var requestParams = {
-			"apsdb.store": self.store,
-			"apsdb.documentKey": id
+			"login": id
 		}
 		
 		if (self.runAs) {
 			requestParams["apsdb.runAs"] = self.runAs;
 		}
 		
-		return this.client.call("DeleteDocument", requestParams, null, options)
+		return this.client.call("DeleteUser", requestParams, null, options)
 	},
 	
 	queryResults: function(results){
@@ -287,7 +267,4 @@ dojo.declare("apstrata.sdk.ObjectStore",
 		return results;
 	}		
 })
-
-
-
 

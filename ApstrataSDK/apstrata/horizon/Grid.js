@@ -100,9 +100,10 @@ dojo.declare("apstrata.horizon.Grid",
 	deleteSingleItem: function(selection, index, processedKeys, deferred) {
 		var self = this;
 		
-		if (!processedKeys[selection[index].key]) {
-			processedKeys[selection[index].key] = "processed"
-			self.gridParams.store.objectStore.remove(selection[index].key, {method:"GET"}).then(
+		var key = self.gridParams.store.objectStore.idProperty;
+		if (!processedKeys[selection[index][key]]) {
+			processedKeys[selection[index][key]] = "processed"
+			self.gridParams.store.objectStore.remove(selection[index][key], {method:"GET"}).then(
 				function() {
 					if (index + 1 < selection.length) {
 						self.deleteSingleItem(selection, index + 1, processedKeys, deferred);
@@ -112,9 +113,9 @@ dojo.declare("apstrata.horizon.Grid",
 				},
 				function(response) {
 					if (response.metadata) {
-						self.displayError(response.metadata.errorCode, response.metadata.errorDetail + "[Document Key: " + selection[index].key + "]");
+						self.displayError(response.metadata.errorCode, response.metadata.errorDetail + "[Document Key: " + selection[index][key] + "]");
 					} else if (response.errorCode) {
-						self.displayError(response.errorCode, response.errorDetail + "[Document Key: " + selection[index].key + "]");					
+						self.displayError(response.errorCode, response.errorDetail + "[Document Key: " + selection[index][key] + "]");					
 					}
 					if (index + 1 < selection.length) {
 						self.deleteSingleItem(selection, index + 1, processedKeys, deferred);
@@ -190,6 +191,11 @@ dojo.declare("apstrata.horizon.Grid",
 		f = dojo.marginBox(this.dvFooter).h
 		
 		return  c  - h - f
+	},
+	
+	refresh: function() {
+		var self = this;
+		self._grid.setStructure(self._grid.structure);	
 	}
 })
 
