@@ -1,6 +1,6 @@
 <!-- start: head.php -->		
 		
-	    <link rel="shortcut icon" href="themes/<?php print $config['template'] ?>/images/favicon.ico" type="image/png" />
+	    <link rel="shortcut icon" href="<?php print $GLOBALS["config"]["baseUrl"]; ?>/themes/<?php print $config['template'] ?>/images/favicon.ico" type="image/png" />
 
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
@@ -34,8 +34,8 @@
 		<?php 
 			if ($config["developmentMode"]) { 
 		?>
-		<script type="text/javascript" src="lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
-		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 
 		<style type="text/css">
 			<!-- @import "lib/dojo/dojo/resources/dojo.css";

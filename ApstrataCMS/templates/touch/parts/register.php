@@ -4,7 +4,7 @@
 <div class="claro">
 	<div class="apstrata">
 	
-		<script type="text/javascript" src="lib/ApstrataSDK/apstrata/ui/embed/apstrataEmbed.js"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"] ?>/lib/ApstrataSDK/apstrata/ui/embed/apstrataEmbed.js"></script>
 
 		<div class="registrationWidget embed spinner" data-apstrata-embedType="apstrata.ui.widgets.RegistrationWidget" 
 			loginurl='<?php echo $GLOBALS["config"]["baseUrl"] . "/". $GLOBALS["config"]["urlPrefix"] . $GLOBALS["config"]["loginUrl"]; ?>'></div>

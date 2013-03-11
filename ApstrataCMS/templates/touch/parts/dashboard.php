@@ -200,7 +200,7 @@
 						toggleLoginLogout("out");
 						dashboard.connection.logout({
 							success: function() {
-								window.location = '<?php echo $config["baseUrl"]."/page.php?pageId=home"; ?>';	
+								window.location = '<?php echo $config["baseUrl"]; ?>';	
 							},
 							failure: function() {
 								

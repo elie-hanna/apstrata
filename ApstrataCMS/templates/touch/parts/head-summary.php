@@ -26,7 +26,7 @@
 	?>
 		<style type="text/css">
 		        @import "<?php echo $config["baseUrl"]?>/lib/dojo/release/dojo/apstrata/ui/themes/apstrata/apstrata.css";
-		        @import "<?php echo $config["baseUrl"]?>/lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>-packaged.css";
+		        @import "<?php echo $config["baseUrl"]?>/lib/dojo/release/dojo/apstrata/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
 	        </style>
 
 	<?php 
