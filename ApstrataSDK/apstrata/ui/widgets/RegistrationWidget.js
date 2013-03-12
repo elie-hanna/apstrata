@@ -63,6 +63,11 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 					{name: "phone", label: "Phone", type: "string"}
 				]
 			},
+			{name: "promotion", label: "", type: "subform", style: "form", cssClass:"row", 
+				fieldset: [
+					{name: "promotionCode", label: "Promotion Code (if you have one)", type: "string"}
+				]
+			}
 		],
 		actions: ['save']
 	},
