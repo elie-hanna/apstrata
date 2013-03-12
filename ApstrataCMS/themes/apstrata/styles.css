@@ -356,6 +356,8 @@ text-align: center;}
 .listing-info {float: left; width: 460px;}
 .listing h2, .registrationWidget h2 {color: #282828; font-size: 16px; margin-bottom: 4px; text-transform: uppercase;}
 .registrationWidget h2 {font-family: "PTSansBold";}
+.registrationWidget .promotion.row { width: 605px; }
+
 .listing .info {line-height: 1.3em;}
 .listing .btn {margin-top: 8px;}
 
