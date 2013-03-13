@@ -72,7 +72,38 @@ function checkUser(login) {
 	return apsdb.callApi("GetUser", params, null).metadata.status;
 }
 
+function validatePromotionCode(promotionCode) {
+	if (promotionCode) {
+		if (configuration.promotionCodes) {
+			for (var i = 0; i < configuration.promotionCodes.length; i++) {
+				if (promotionCode == configuration.promotionCodes[i]) {
+					return {metadata:{status: "success"}};
+				}
+			}
+		}
+		
+
+		var response = {metadata:{status: "failure", errorCode: "INVALID_PROMOTION_CODE", errorDetail: "The promotion code you entered is not valid. Please try again."}}
+		var url = configuration.registrationRedirectUrl;
+	
+		if (url && url != ""){
+			url = url + "&status=error&error=" + response.metadata.errorDetail;
+			response.url = url;
+		}				
+		
+		return response;
+	}
+	
+	return {metadata:{status: "success"}};
+}
+
+
 try {
+	
+	var validatePromotionCodeResult = validatePromotionCode(request.parameters["user.promotionCode"]);
+	if (validatePromotionCodeResult.metadata.status == "failure") {
+		return validatePromotionCodeResult;
+	}
 
 	var params = {}
 	

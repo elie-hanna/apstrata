@@ -38,7 +38,10 @@ var sendEmailOnceRegistrationConfirmed = true;
 var verifyUrl = apstrataHomeEnvironment + "/apsdb/rest/" + apstrataHomeKey + "/RunScript?apsws.authMode=simple&apsdb.scriptName=widgets.Registration.verifyAccount&login=$login&d=$confirmation";
 
 // The URL where to redirect the user after he submits his registration form. Change this according to your own environment.
-var registrationRedirectUrl = "http://www.apstrata.com/page.php?pageId=processingReg"
+var registrationRedirectUrl = "http://www.apstrata.com/page.php?pageId=processingReg";
+
+// The promotion codes that will be distributed to developers
+var promotionCodes = [];
  
 var configuration = {
 	projectName: projectName,
@@ -49,6 +52,7 @@ var configuration = {
 	registrationType: registrationType,
 	registrationRedirectUrl: registrationRedirectUrl,
 	sendEmailOnceRegistrationConfirmed: sendEmailOnceRegistrationConfirmed,	
+	promotionCodes: promotionCodes,
 	templates: {
 		adminEmail: "dude@dude.com",
 		subject: "$projectName Registration - Email Verification",
