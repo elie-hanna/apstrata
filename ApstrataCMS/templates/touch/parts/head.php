@@ -43,7 +43,7 @@
 		   	 @import "lib/dojo/dojox/widget/Dialog/Dialog.css"; 
 
 	       		 @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css"; -->
-	       		 @import "themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
+	       		 @import "<?php print $GLOBALS["config"]["baseUrl"]; ?>/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
        		 </style>
 		
 		<?php 
