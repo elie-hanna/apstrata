@@ -48,9 +48,10 @@ dojo.declare("apstrata.horizon.WrapperPanel",
 		if (this["cssClass"]) dojo.addClass(this.domNode, this["cssClass"])
 		
 		if (this.widgetClass) {
-			var attrs = this.attrs?this.attrs:{}
-			attrs.container = this.container
-			self._widget = new dojo.getObject(self.widgetClass)(attrs, self.dvWidget)
+			var attrs = this.attrs?this.attrs:{};
+			attrs.container = this.container;
+			attrs.wrapperPanel = this;
+			self._widget = new dojo.getObject(self.widgetClass)(attrs, self.dvWidget);
 		}
 
 		this.inherited(arguments)
