@@ -19,7 +19,8 @@ try {
 		"apsdb.forceCurrentSnapshot":"true",
 		"apsdb.store": "apstrata",
 		"apsdb.query": "documentType=\"link\"",
-		"apsdb.queryFields": "title, address, type, parent"
+		"apsdb.queryFields": "title, address, target, parent, category",
+		"apsdb.sort": "order<numeric:asc>"
 	};
 	
 	var getLinksResult = apsdb.callApi("Query", getLinksRequest , null);
@@ -35,7 +36,8 @@ try {
 			var link = {
 				title: linkDoc.title,
 				address: linkDoc.address,
-				type: linkDoc.type,
+				type: linkDoc.target,
+				category: linkDoc.category,
 				children: []
 			}
 			
@@ -48,7 +50,8 @@ try {
 				"apsdb.forceCurrentSnapshot":"true",
 				"apsdb.store": "apstrata",
 				"apsdb.query": "parent=\"" + link.title + "\"",
-				"apsdb.queryFields": "title, address, type"
+				"apsdb.queryFields": "title, address, target, category",
+				"apsdb.sort": "order<numeric:asc>"
 			};		
 			
 			var getLinkChildrenResult = apsdb.callApi("Query", getLinkChildrenRequest, null);
@@ -59,7 +62,8 @@ try {
 					var subLink = {
 						title: getLinkChildrenResult.result.documents[j].title,
 						address: getLinkChildrenResult.result.documents[j].address,
-						type: getLinkChildrenResult.result.documents[j].type
+						type: getLinkChildrenResult.result.documents[j].target,
+						category: getLinkChildrenResult.result.documents[j].category
 					}
 					link.children.push(subLink);
 				}
