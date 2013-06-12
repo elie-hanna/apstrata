@@ -71,5 +71,8 @@ apstrata.horizon.util.PanelAnimation = function(panel) {
 
 		
 		dojo.animateProperty(_animation).play()
+	} else {
+		panel.onAnimationEnd() 
+		panel.getContainer().autoScroll()
 	}
 }
