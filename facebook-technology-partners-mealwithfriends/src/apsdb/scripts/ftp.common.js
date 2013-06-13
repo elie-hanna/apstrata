@@ -32,6 +32,9 @@ var scope = "email,publish_stream,read_stream,user_photos,user_videos,user_statu
 // The status to use as security for the facebook meals with friend application
 var facebookStatus = "ads&=f";
 
+// default account Key (use it when no account info retrievable from the request
+var defaultAccountKey = "B030C6D305";
+
 /*
  * This is a utility function that loads the pictures that where uploaded along an HTTP 
  * request to Apstrata	

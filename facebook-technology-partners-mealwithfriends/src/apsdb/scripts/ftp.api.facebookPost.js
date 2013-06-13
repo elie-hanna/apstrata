@@ -12,7 +12,9 @@
  * either by signing the request using their Apstrata credentials, or by passing a valid facebook access
  * token as a parameter of the request.
  * @param message: the message to post (optional). If empty, will post a blank
- * @param accessToken: the facebook access token of the requestor (optional)
+ * @param docKey(optional): the key of the meal document from which data will be retrieved for the post
+ * @param link (optional): a link on which users can click from the post
+ * @param accessToken (optional): the facebook access token of the requestor 
  * @return 
  * if successful, {"result": {"id": "the_facebook_id_of_the_posted_message"}}
  * if failure because the user is not authenticated:
@@ -58,12 +60,29 @@ try {
 		user = userManager.findUserFromToken(apsdb, accessToken);
 	}
 
+	var postDTO = {};
+
 	// retrieve the post message from the request
 	var message = request.parameters["message"] ? request.parameters["message"] : "";
 	
+	// check if a document key is passed, if so, extract corresponding data
+	var docKey = request.parameters["docKey"];
+	if (docKey) {
+	
+		postDTO = _getMealData(apsdb, docKey);
+	}
+	
+	// retrieve the link if any
+	var link = request.parameters["link"];
+	if (link) {
+		postDTO["link"] = link;
+	}
+	
+	postDTO["message"] = message;
+		
 	// post to facebook using Apstrata's APIs
 	var facebookManager = apsdb.require("social.facebookManager");
-	return facebookManager.post(apsdb, user.facebookid, accessToken, message);
+	return facebookManager.post(apsdb, user.facebookid, accessToken, postDTO);
 }catch(exception) {
 
 	return {
@@ -71,6 +90,25 @@ try {
 		"status": "failure",
 		"errorCode": exception.errorCode ? exception.errorCode: exception,
 		"errorDetail": exception.errorDetail ? exception.errorDetail : ""
+	}
+}
+
+function _getMealData(apsdb, key) {
+
+	var mealManager = apsdb.require("ftp.mealManager");
+	var doc = mealManager.getMeal(apsdb, {"key": docKey});
+	var picName = ([].concat(doc.pictures))[0];
+	var userManager = apsdb.require("ftp.userManager");
+	var accountKey = userManager.getUserAccountFromRequest(apsdb, request);
+	var common = apsdb.require("ftp.common");
+	var picUrl = "https://sandbox.apstrata.com/apsdb/rest/" + accountKey + "/GetFile?apsws.time=" + new Date().getTime() + "&apsws.responseType=json&";
+	picUrl = picUrl + "apsdb.fileName=" + picName + "&apsdb.fieldName=pictures&apsdb.documentKey=" + doc.key + "&apsdb.store=" + common.storeName;
+	return {
+	
+		"picture": picUrl,
+		"name": doc.recipeName,
+		"caption":  doc.recipeName,
+		"description": doc.description
 	}
 }	
 	

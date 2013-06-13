@@ -117,14 +117,30 @@ function checkAccessToken(apsdb, accessToken) {
  * Post to the wall of a user using his facebook id and access token
  * @param facebookid: the facebook identifier of the targeted user
  * @param accessToken: the access token to the facebook account of the user
- * @param message: the message to post (string)
+ * @param postDTO: the parameters to post (string)
  * @return { "result": { "id": "the_identifier_of_the_facebook_message"}}
  */
-function post(apsdb, facebookid, accessToken, message) {
+function post(apsdb, facebookid, accessToken, postDTO) {
 
 	var url = "https://graph.facebook.com/" + facebookid + "/feed";
 	var params = {
-		"message": message,
+		"message": postDTO.message,
+	}
+	
+	if (postDTO.link) {
+		params["link"] = postDTO.link;
+	}
+	
+	if (postDTO.caption) {
+		params["caption"] = postDTO.caption;
+	}
+	
+	if (postDTO.picture) {
+		params["picture"] = postDTO.picture;
+	}
+	
+	if (postDTO.description) {
+		params["description"] = postDTO.description;
 	}
 	
 	var common = apsdb.require("ftp.common");

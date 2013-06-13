@@ -181,6 +181,30 @@ function getUserLoginFromRequest(apsdb, req) {
 }
 
 /*
+ * Returns the account key of the user who triggered the request without the login 
+ */
+function getUserAccountFromRequest(apsdb, req) {
+	
+	var fullLogin = req.user.login;
+	if (fullLogin == "anonymous") {
+	
+		var common = apsdb.require("ftp.common");
+		return common.defaultAccountKey;
+	}
+	
+	var atIndex = fullLogin.lastIndexOf("@");
+	
+	// if the user is the owner, just return the fullLogin as is + a pound so other
+	// script understand that this is the account owner
+	if (atIndex < 0) {
+		return fullLogin;
+	}
+	
+	// otherwise, return the value after the last "@"
+	return fullLogin.substring(atIndex + 1);
+}
+
+/*
  * Save (create/update) a user in the Apstrata application account
  * @param userDTO: the data on the user (userDTO.login mandatory)
  * @param update: if true, updates and existing user, if false, creates a new user

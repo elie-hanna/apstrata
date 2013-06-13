@@ -14,17 +14,6 @@
  */
 try {
 
-	// check if the user is authenticated, if not throw an exception
-	var userManager = apsdb.require("ftp.userManager");
-	if (!userManager.isUserAuthenticated(apsdb, request)) {
-	
-		throw {
-		
-			"errorCode": "PERMISSION_DENIED",
-			"errorDetail": "You need to authenticate yourself using your app or your facebook credentials"
-		}	
-	}
-	
 	var key = request.parameters["key"];
 	
 	// verify that required parameters are available
