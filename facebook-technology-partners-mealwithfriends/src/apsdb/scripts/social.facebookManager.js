@@ -32,7 +32,7 @@ function getRequestToken(apsdb, request) {
 	
 	// Get the optional url to redirect to upon login
 	var redirect = request ? request.parameters["redirectAfterLogin"] : "false";
-	var loggedInRedirectUrl = request.parameters["loggedInRedirectUrl"];
+	var loggedInRedirectUrl = request ? request.parameters["loggedInRedirectUrl"] : null;
 	if (redirect == "true") {
 		loggedInRedirectUrl = loggedInRedirectUrl ? loggedInRedirectUrl : common.loggedInRedirectUrl;
 	}
