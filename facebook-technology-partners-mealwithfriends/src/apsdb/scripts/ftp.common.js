@@ -27,7 +27,7 @@ var callbackUrl = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?
 var loggedInRedirectUrl = "";
 
 // The scope used by the facebook meals with friend application	
-var scope = "email,publish_stream,read_stream,user_photos,user_videos,user_status,offline_access,manage_pages,read_insights";
+var scope = "email,publish_stream,publish_actions,read_stream,user_photos,user_videos,user_status,offline_access,manage_pages,read_insights";
 
 // The status to use as security for the facebook meals with friend application
 var facebookStatus = "ads&=f";

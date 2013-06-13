@@ -25,13 +25,13 @@
 function getRequestToken(apsdb, request) {
 	
 	// Get the optional callback url
-	var callbackUrl = request.parameters["callbackUrl"];
+	var callbackUrl = request ? request.parameters["callbackUrl"] : null;
 	
 	// Get the details of the targetted application
 	var appDetails = _getApplicationDetails(apsdb);
 	
 	// Get the optional url to redirect to upon login
-	var redirect = request.parameters["redirectAfterLogin"];
+	var redirect = request ? request.parameters["redirectAfterLogin"] : "false";
 	var loggedInRedirectUrl = request.parameters["loggedInRedirectUrl"];
 	if (redirect == "true") {
 		loggedInRedirectUrl = loggedInRedirectUrl ? loggedInRedirectUrl : common.loggedInRedirectUrl;
@@ -122,12 +122,13 @@ function checkAccessToken(apsdb, accessToken) {
  */
 function post(apsdb, facebookid, accessToken, postDTO) {
 
-	var url = "https://graph.facebook.com/" + facebookid + "/feed";
+	//var url = "https://graph.facebook.com/" + facebookid + "/feed";
+	var url = "https://graph.facebook.com/" + facebookid + "?og.eat";
 	var params = {
 		"message": postDTO.message,
 	}
 	
-	if (postDTO.link) {
+	/*if (postDTO.link) {
 		params["link"] = postDTO.link;
 	}
 	
@@ -141,7 +142,7 @@ function post(apsdb, facebookid, accessToken, postDTO) {
 	
 	if (postDTO.description) {
 		params["description"] = postDTO.description;
-	}
+	}*/
 	
 	var common = apsdb.require("ftp.common");
 	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, params);
