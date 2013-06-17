@@ -15,7 +15,7 @@
     <store>DefaultStore</store>
     <condition><![CDATA[ apsdb.schema<string>="ftp_meal" AND recipeName LIKE {name}? AND apsdb.pageNumber<string>={pageNumber}?]]></condition>
     <returnedFields>
-        <field>name</field>
+        <field>recipeName</field>
         <field>description</field>
         <field>ingredients</field>
         <field>pictures</field>
