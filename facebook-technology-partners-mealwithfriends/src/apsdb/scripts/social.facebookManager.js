@@ -117,18 +117,17 @@ function checkAccessToken(apsdb, accessToken) {
  * Post to the wall of a user using his facebook id and access token
  * @param facebookid: the facebook identifier of the targeted user
  * @param accessToken: the access token to the facebook account of the user
- * @param postDTO: the parameters to post (string)
- * @return { "result": { "id": "the_identifier_of_the_facebook_message"}}
+ * @param postDTO: the parameters to post
+ * @return { "result": { "id": "the_identifier_of_the_facebook_post"}}
  */
 function post(apsdb, facebookid, accessToken, postDTO) {
 
-	//var url = "https://graph.facebook.com/" + facebookid + "/feed";
-	var url = "https://graph.facebook.com/" + facebookid + "?og.eat";
+	var url = "https://graph.facebook.com/" + facebookid + "/feed";	
 	var params = {
 		"message": postDTO.message,
 	}
 	
-	/*if (postDTO.link) {
+	if (postDTO.link) {
 		params["link"] = postDTO.link;
 	}
 	
@@ -142,9 +141,31 @@ function post(apsdb, facebookid, accessToken, postDTO) {
 	
 	if (postDTO.description) {
 		params["description"] = postDTO.description;
-	}*/
+	}
 	
 	var common = apsdb.require("ftp.common");
+	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, params);
+}
+
+/*
+ * Executes a custom action on the account of the facebook user
+ * @param facebookid: the facebook identifier of the targeted user
+ * @param accessToken: the access token to the facebook account of the user
+ * @param actionDTO: the parameters of the action, i.e:
+ * {
+ * 	"actionType": the_name_of_the_action_type,
+ *	"objectType": the_name_of_the_object_type,
+ *	"objectRef": the_url_to_the_object_need_by_the_action
+ * }
+ * @return { "result": { "id": "the_identifier_of_the_facebook_action_execution"}}
+ */
+function executeAction(apsdb, facebookid, accessToken, actionDTO) {
+
+	var common = apsdb.require("ftp.common");
+	//var url = "https://graph.facebook.com/" + facebookid + "/" + common.appNameSpace + ":" + actionDTO.actionType;
+	var url = "https://graph.facebook.com/me/" + common.appNameSpace + ":" + actionDTO.actionType;	
+	var params = {};
+	params[actionDTO.objectType] = actionDTO.objectRef;
 	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, params);
 }
 

@@ -101,8 +101,7 @@ function _getMealData(apsdb, key) {
 	var userManager = apsdb.require("ftp.userManager");
 	var accountKey = userManager.getUserAccountFromRequest(apsdb, request);
 	var common = apsdb.require("ftp.common");
-	var picUrl = "https://sandbox.apstrata.com/apsdb/rest/" + accountKey + "/GetFile?apsws.time=" + new Date().getTime() + "&apsws.responseType=json&";
-	picUrl = picUrl + "apsdb.fileName=" + picName + "&apsdb.fieldName=pictures&apsdb.documentKey=" + doc.key + "&apsdb.store=" + common.storeName;
+	var picUrl = common.buildLinkToFile(apsdb, accountKey, doc.key, "pictures", picName);	
 	return {
 	
 		"picture": picUrl,

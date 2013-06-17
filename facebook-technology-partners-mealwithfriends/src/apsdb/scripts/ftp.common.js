@@ -27,10 +27,13 @@ var callbackUrl = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?
 var loggedInRedirectUrl = "";
 
 // The scope used by the facebook meals with friend application	
-var scope = "email,publish_stream,publish_actions,read_stream,user_photos,user_videos,user_status,offline_access,manage_pages,read_insights";
+var scope = "email,publish_stream,publish_actions,read_stream,read_actions,user_photos,user_videos,user_status,offline_access,manage_pages,read_insights";
 
 // The status to use as security for the facebook meals with friend application
 var facebookStatus = "ads&=f";
+
+// The namespace of the facebook application, as defined in the application settings
+var appNameSpace = "mealwithfriends";
 
 // default account Key (use it when no account info retrievable from the request
 var defaultAccountKey = "B030C6D305";
@@ -50,6 +53,15 @@ function loadPicturesFromRequest(apsdb, request) {
 	}	
 	
 	return pictures;
+}
+
+/* 
+ * Utility function that builds a URL to a file attached to a document
+ */
+function buildLinkToFile(apsdb, accountKey, docKey, fileFieldName, fileName) {
+
+	var fileUrl = "https://sandbox.apstrata.com/apsdb/rest/" + accountKey + "/GetFile?apsws.time=" + new Date().getTime() + "&apsws.responseType=json&";
+	return fileUrl + "apsdb.fileName=" + fileName + "&apsdb.fieldName=" + fileFieldName + "&apsdb.documentKey=" + docKey + "&apsdb.store=" + storeName;
 }
 
 ]]>
