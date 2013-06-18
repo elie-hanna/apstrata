@@ -5,6 +5,11 @@
 	
 	class Util
 	{
+			
+			static $APP_NAMESPACE = "mealwithfriends";
+			static $APP_KEY = "157527211099108";
+			static $WEB_URL = "http://as.elementn.com";
+			
 			public function Util() {
 								
 			}

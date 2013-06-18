@@ -3,8 +3,7 @@
 	require_once 'lib/APSDB/APSDBClient.php';
 	require_once 'lib/APSDB/APSDBConfig.php';
 	require_once 'util.php';
-	error_reporting(E_ALL);
-	ini_set('display_errors', '1');
+	
 	$client = new APSDBClient(APSDBConfig::$ACCOUNT_KEY);
 		
 	// verify if the request contains the key of a meal document or the document itself
@@ -39,30 +38,31 @@
 	}
 	
 ?>
-<link rel="stylesheet" type="text/css" href="./css/style.css">
-<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
-<div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container-fluid">
-      <a class="brand" href="http://as.elementn/listMeals.php">Meals with Friends</a>
-      <p id="user-identity" class="navbar-text pull-right"></p>
-    </div>
-  </div>
-</div>
-<body>
-	<div class="container-fluid">	
-	<section id="meal" class="meal row-fluid" data-meal="<?php print $meal['recipeName']?>" data-mealtitle="<?php print $meal['recipeName']?>" role="main">
-	  <div class="span4 thumbnail img-container"><img alt="<?php print $meal['recipeName']?>" src="<?php print $meal['picture']?>"/></div>
-	  <div class="span8">
-	    <header>
-	      <h1><?php print $meal['recipeName']?></h1>
-	      <p class="lead"><?php print $meal['description']?></p>
-	    </header>
-	
-	    <p id="ingredients"><?php print $meal['ingredients']?></p>
-	
-	    <div id="social-actions"></div>
-	  </div>
-	</section>	
-	</div><!--/.fluid-container-->
-</body>
+	<body>
+		<link rel="stylesheet" type="text/css" href="./css/style.css">
+		<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+		<div class="navbar navbar-inverse navbar-fixed-top">
+		  <div class="navbar-inner">
+		    <div class="container-fluid">
+		      <a class="brand" href="http://as.elementn/listMeals.php">Meals with Friends</a>
+		      <p id="user-identity" class="navbar-text pull-right"></p>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="container-fluid">	
+		<section id="meal" class="meal row-fluid" data-meal="<?php print $meal['recipeName']?>" data-mealtitle="<?php print $meal['recipeName']?>" role="main">
+		  <div class="span4 thumbnail img-container"><img alt="<?php print $meal['recipeName']?>" src="<?php print $meal['picture']?>"/></div>
+		  <div class="span8">
+		    <header>
+		      <h1><?php print $meal['recipeName']?></h1>
+		      <p class="lead"><?php print $meal['description']?></p>
+		    </header>
+		
+		    <p id="ingredients"><?php print $meal['ingredients']?></p>
+		
+		    <div id="social-actions"></div>
+		  </div>
+		</section>	
+		</div><!--/.fluid-container-->
+	</body>

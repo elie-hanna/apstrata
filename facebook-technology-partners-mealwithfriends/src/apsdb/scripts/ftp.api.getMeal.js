@@ -67,7 +67,8 @@ function _buildHTML(apsdb, mealDocument) {
  		"ingredients": mealDocument.ingredients.join(),
  		"picture": linkToPic
  	}
- 	return "http://as.elementn.com/getMeal.php?meal=" + JSON.stringify(mealParam);
+ 	
+ 	//return "http://as.elementn.com/getMeal.php?meal=" + JSON.stringify(mealParam);
 	var ui = apsdb.callHttp("http://as.elementn.com/getMeal.php?meal=" + encodeURIComponent(JSON.stringify(mealParam)));
 	body = body + "</head>" + ui.body;
 	body = body + "</html>";

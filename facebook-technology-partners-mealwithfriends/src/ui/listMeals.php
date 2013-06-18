@@ -1,5 +1,9 @@
+<html>
+<head>
 <link rel="stylesheet" type="text/css" href="./css/style.css">
 <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+</head>
+<body>
 <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container-fluid">
@@ -25,16 +29,17 @@
 	$mealsResponse = $client->callApi("RunScript", $params);
 	$meals = $mealsResponse["response"]["result"]["documents"];	
 	$util = new Util();
+	$siteUrl = util::$WEB_URL;
 	foreach ($meals as $meal) {
 	
 		$fileUrl = $util->getLinkToFile("pictures", $meal["pictures"], $meal["key"]); 
 		$meal["picture"] = $fileUrl;
        ?>       
        <div class="row-fluid">
-    	<section id="<?php print $meal['key']?>" class="meal span4" data-meal="<?php print $meal['recipeName']?>" aria-label="print <?php $meal['recipeName']?>" style="background-image: url('<?print $meal['picture']?>');">
+    	<section id="<?php print $meal['key']?>" class="meal span4" data-meal="<?php print $meal['recipeName']?>" aria-label="print <?php $meal['recipeName']?>" style="background-image: url('<?php print $meal['picture']?>');">
     		<div class="caption">
-      			<h2><a href="<?php print "/getMeal.php?key=" . $meal['key']?>"><?php print $meal['recipeName']?></a></h2>
-      			<p><a href="<?php print "/getMeal.php?key=" . $meal['key']?>"><?php print $meal['description']?></a></p>
+      			<h2><a href="<?php print $siteUrl . "/getMeal.php?key=" . $meal['key']?>"><?php print $meal['recipeName']?></a></h2>
+      			<p><a href="<?php print $siteUrl . "/getMeal.php?key=" . $meal['key']?>"><?php print $meal['description']?></a></p>
     		</div>
   		</section>  	 
   	</div><!--/row-fluid-->
@@ -45,3 +50,5 @@
   </div><!--/span-->
 </div><!--/row-fluid-->
 </div><!--/.fluid-container-->
+</body>
+</html>

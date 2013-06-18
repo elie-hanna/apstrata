@@ -26,8 +26,11 @@ var callbackUrl = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?
 // The URL where to redirect (if requested) further to successfully obtaining an access token
 var loggedInRedirectUrl = "";
 
+// The url of the web version of the application
+var siteUrl = "http://as.elementn.com";
+
 // The scope used by the facebook meals with friend application	
-var scope = "email,publish_stream,publish_actions,read_stream,read_actions,user_photos,user_videos,user_status,offline_access,manage_pages,read_insights";
+var scope = "email,publish_stream,publish_actions,read_stream,user_photos,user_videos,user_status,offline_access,manage_pages,read_insights";
 
 // The status to use as security for the facebook meals with friend application
 var facebookStatus = "ads&=f";
