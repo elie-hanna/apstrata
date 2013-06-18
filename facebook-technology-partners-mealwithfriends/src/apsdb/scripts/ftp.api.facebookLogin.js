@@ -13,6 +13,21 @@
  * (1)Use "login" to log in using facebook from a web application. This command orchestrates the two others.
  * (2)Use "getRequestToken" to get an authorization url from facebook that you will paste into your browser.
  * (3)Use the "getAccessToken" to get an access token that you can use to authorize the application
+ *** login ***
+ * @param accessToken(optional): if set, will check the token against facebook. If valid, will verify if 
+ * a user currently exists for that token. If so, update the token and return the user login and hashed password
+ * If the user did not exist, create him, and return the above
+ * @param redirectAfterLogin (optional): if true, redirect either to the loggedInRedirectUrl if provided, 
+ * @param loggedInRedirectUrl (optional): the URL where to redirect (if requested) further to successfully obtaining an access token
+ * @return (upon success, if no redirection) 
+ * {
+ * 	status: "success",
+ *	accessToken: the_access_token_sent_by_facebook,
+ *	login: the Apstrata login of the user
+ *	hashedPwd: the Apstrata hashed password of the user
+ *	  
+ * }
+ * 
  *** getRequestToken ***
  * @param callbackUrl (optional): the URL that will be called back by Facebook after the user logs in 
  * If not provided, will use the url defined in "ftp.common"
@@ -67,8 +82,16 @@ try {
 	 */
 	if (command == "login") {
 	
-		var authorizationUrl = facebookManager.getRequestToken(apsdb);
-		apsdb.httpRedirect(authorizationUrl);
+		var accessToken = request.parameters["accessToken"];
+		if (accessToken) {
+		
+			return _handleAccessToken(apsdb, accessToken);
+		}else {
+		
+			var authorizationUrl = facebookManager.getRequestToken(apsdb, request);
+			return authorizationUrl;
+			apsdb.httpRedirect(authorizationUrl);
+		}
 	}
 			
 	if (command == "getRequestToken") {
@@ -85,28 +108,7 @@ try {
 		var accessToken = facebookManager.getAccessToken(apsdb, request);		
 		if (accessToken) {
 		
-			// we need to either create a new user of update it with the new token
-			var userLoginHashedPwd = _updateUserInfo(apsdb, accessToken);
-			
-			// we need to check if redirection is requested			
-			var redirect = request.parameters["redirectAfterLogin"];
-			var redirectUrl = request.parameters["loggedInRedirectUrl"];
-			if (redirect && redirect == "true") { 	
-			
-				var common = apsdb.require("ftp.common");
-				redirectUrl = redirectUrl ? redirectUrl : common.loggedInRedirectUrl;
-				redirectUrl = redirectUrl + "?accessToken=" + accessToken + "&login=" + userLoginHashedPwd.login + "&hashedPwd=" + userLoginHashedPwd.hashedPassword;
-				apsdb.httpRedirect(redirectUrl);				
-			}
-			
-			// if no redirection required return 
-			return {
-			
-				"status": "success",
-				"accessToken": accessToken,
-				"login": userLoginHashedPwd.login,
-				"hashedPwd": userLoginHashedPwd.hashedPassword
-			}
+			return _handleAccessToken(apsdb, accessToken);
 		}else {
 			throw {
 			
@@ -170,6 +172,32 @@ function _updateUserInfo(apsdb, accessToken) {
 		
 		return userManager.updateUser(apsdb, userDTO);
 	}	
+}
+
+function _handleAccessToken(apsdb, accessToken) {
+
+	// we need to either create a new user of update it with the new token
+	var userLoginHashedPwd = _updateUserInfo(apsdb, accessToken);
+	
+	// we need to check if redirection is requested			
+	var redirect = request.parameters["redirectAfterLogin"];
+	var redirectUrl = request.parameters["loggedInRedirectUrl"];	
+	if (redirect && redirect == "true") { 	
+	
+		var common = apsdb.require("ftp.common");
+		redirectUrl = redirectUrl ? redirectUrl : common.loggedInRedirectUrl;
+		redirectUrl = redirectUrl + "?accessToken=" + accessToken + "&login=" + userLoginHashedPwd.login + "&hashedPwd=" + userLoginHashedPwd.hashedPassword;
+		apsdb.httpRedirect(redirectUrl);				
+	}
+	
+	// if no redirection required return 
+	return {
+	
+		"status": "success",
+		"accessToken": accessToken,
+		"login": userLoginHashedPwd.login,
+		"hashedPwd": userLoginHashedPwd.hashedPassword
+	}
 }
 
 ]]>

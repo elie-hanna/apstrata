@@ -15,6 +15,7 @@
 try {
 	
 	var userManager = apsdb.require("ftp.userManager");
+	var common = apsdb.require("ftp.common");
 	
 	// check if the user is authenticated, if not throw an exception
 	if (!userManager.isUserAuthenticated(apsdb, request)) {
@@ -66,7 +67,7 @@ try {
 		}
 	}
 	
-	var objectRef = "https://sandbox.apstrata.com/apsdb/rest/" + accountKey + "/RunScript?apsws.time=" + new Date().getTime() + "&apsws.responseType=jsoncdp&apsdb.scriptName=ftp.api.getMeal&key=" + docKey + "&returnHTML=true";
+	var objectRef = common.apstrataUrl + accountKey + "/RunScript?apsws.time=" + new Date().getTime() + "&apsws.responseType=jsoncdp&apsdb.scriptName=ftp.api.getMeal&key=" + docKey + "&returnHTML=true";
 	actionDTO.objectRef = objectRef;	
 	
 	// post action to facebook using Apstrata's APIs
