@@ -88,7 +88,7 @@
 									
 									echo '<ul>';
 									$ulOpen = true;							
-								} else if ($counter > 3) {
+								} else if ($counter > 4) {
 									echo '</ul>';
 									echo '<ul>';
 									$counter = 1;									

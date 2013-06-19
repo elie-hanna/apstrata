@@ -9,13 +9,20 @@
 
 	// 2. Check if a user is already signed in
 	$login = '';
+	$signedIn = false;
 	if (isset($_COOKIE['apstrata_token_connection'])) {
+		
 		$cookie = json_decode($_COOKIE['apstrata_token_connection'], true);
 		$login = $cookie['credentials']['user'];  
-		$signedIn = true;
-	} else {
-		$signedIn = false;
-	}
+		
+		//check if token has expired
+		$time = time() * 1000;
+		$tokenExpiryTime = $cookie['token']['creationTime'] + ($cookie['token']['expires'] * 1000);
+		if ($tokenExpiryTime > $time) {
+			$signedIn = true;
+		} 
+		
+	} 
 	
 
 	// 3. Fill in the user information in a way that Vanilla can understand.

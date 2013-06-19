@@ -26,6 +26,13 @@
 		//
 		"jsConnectClientID" => "953217106",
 		"jsConnectSecret" => "9f57204826f2830b8969e1e67f1cb401",
+		
+		//
+		// Secret for JWT token authentication in order to establish SSO with the apstrata support portal, and other support related properties
+		//
+		"jwtSecret" => "6HxNLjp6KqHZKqNUFyPYpDdKA6jkpZU6FXkwl6d2NISwX4uX",
+		"supportUrl" => "http://support.apstrata.com",
+		
 
 		//
 		// URLs and other related values used to compose paths by the php CMS code 

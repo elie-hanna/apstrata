@@ -50,11 +50,13 @@ dojo.declare("apstrata.home.dashboard.Dashboard",
 		}	
 		
 		//redirect in case the "redirectTo" URL parameter is specified
-		if (location.search) {
-			urlParams = dojo.queryToObject(location.search.substring(1));
-			redirectUrl = urlParams.redirectTo;
-			if (redirectUrl) {
-				location.href = redirectUrl;
+		if (this.connection.isLoggedIn()) {
+			if (location.search) {
+				urlParams = dojo.queryToObject(location.search.substring(1));
+				redirectUrl = urlParams.redirectTo;
+				if (redirectUrl) {
+					location.href = redirectUrl;
+				}
 			}
 		}
 	},
