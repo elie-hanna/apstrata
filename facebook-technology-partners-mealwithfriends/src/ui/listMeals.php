@@ -30,6 +30,7 @@
 			window.location.assign(url);	
 		}
 	</script>
+	<script type="text/javascript" src="logout.js"></script>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -37,21 +38,29 @@
     <div class="container-fluid">
       <a class="brand" href="http://as.elementn/listMeals.php">Meals with Friends</a>
       <p id="user-identity" class="navbar-text pull-right">
-      	<?php if ($user == null && $_REQUEST["userName"] == null) {?>
-      		<button id="login-button" class="btn btn-primary" type="button" onclick="facebookLogin()">Login</button>'
+      	<?php 
+      	
+      		$apstrataToken = isset($_REQUEST["apstrataToken"]) ? $_REQUEST["apstrataToken"] : null;
+      		$isApstrataTokenValid = $apstrataToken != null ? User::isTokenValid($_REQUEST["userName"], $apstrataToken) : false;
+      		if ($user == null && $isApstrataTokenValid == false ) {
+      	?>
+      			<button id="login-button" class="btn btn-primary" type="button" onclick="facebookLogin()">Login</button>'
       	<?php } else {
       		      		
-      		if (isset($_REQUEST["userName"]) && $user == null) {
-      			
-      			$user = new User($_REQUEST["userName"], null, null, $_REQUEST["apstrataToken"]);
-      			$_SESSION["user"] = $user;
-      		}
-      	?>
-		<img width="25" height="25" alt="<?php print $user->getName()?>" src="<?php print $user->getPicture()?>">
-		<span class="hidden-phone"><?php print $user->getName()?></span>
-		<button id="logout-button" type="button" class="btn btn-primary">Logout</button>		     			
-      	<?php	
-      	}	
+	      		if ($isApstrataTokenValid == true && $user == null) {
+	      		
+	      			$user = new User($_REQUEST["userName"], null, null, $apstrataToken);
+	      			$_SESSION["user"] = $user;
+	      		}
+      		
+      			if ($user != null) {
+      	?>	
+		      		<img width="25" height="25" alt="<?php print $user->getName()?>" src="<?php print $user->getPicture()?>">
+					<span class="hidden-phone"><?php print $user->getName()?></span>
+					<button id="logout-button" type="button" class="btn btn-primary" onclick="logout()">Logout</button>		
+      	<?php
+      			}	
+      		}	
       	?>
       </p>
     </div>

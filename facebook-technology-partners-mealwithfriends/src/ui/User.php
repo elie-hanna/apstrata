@@ -29,7 +29,7 @@
 		}
 		
 		public function getUserName() {
-			return $this->nameToken;
+			return $this->userName;
 		}
 		
 		public function getName() {
@@ -68,6 +68,16 @@
 				} 
 			}	
 		}
-		 
+		
+		public static function isTokenValid($userName, $apstrataToken) {
+			
+			$client = new APSDBClient(APSDBConfig :: $ACCOUNT_KEY, null, $userName, false, $apstrataToken);
+			$response = $client->callApi("VerifyCredentials", array());
+			if ($response["response"]["metadata"]["status"] == "success") {
+				return true;
+			}
+			
+			return false;
+		}		 
 	}
 ?>
