@@ -19,6 +19,7 @@
  * If the user did not exist, create him, and return the above
  * @param redirectAfterLogin (optional): if true, redirect either to the loggedInRedirectUrl if provided, 
  * @param loggedInRedirectUrl (optional): the URL where to redirect (if requested) further to successfully obtaining an access token
+ * @param returnApstrataToken: if sent and set to true, will make the api return the Apstrata token (See below)
  * @return (upon success, if no redirection) 
  * {
  * 	status: "success",
@@ -26,6 +27,14 @@
  *	login: the Apstrata login of the user
  *	hashedPwd: the Apstrata hashed password of the user
  *	  
+ * }
+ * @return (upon success, if returnApstrataToken==true) 
+ * {
+ *	status: "success",
+ *	"login": the Apstrata login of the user
+ * 	"apsdb.authToken": "some_token", 
+ *	"apsdb.tokenExpires": "time_in_seconds", 
+ *	"apsdb.tokenLifetime": "time_in_seconds"
  * }
  * 
  *** getRequestToken ***
@@ -49,6 +58,7 @@
  * @param loggedInRedirectUrl (optional): the URL where to redirect (if requested) further to successfully obtaining an access token
  * @param redirectAfterLogin (optional): if true, redirect either to the loggedInRedirectUrl if provided, 
  * or the one defined in "ftp.common"
+ * @param returnApstrataToken: if sent and set to true, will make the api return the Apstrata token (See below)
  * @return (upon success) 
  * {
  * 	status: "success",
@@ -57,6 +67,15 @@
  *	hashedPwd: the Apstrata hashed password of the user
  *	  
  * }
+ * @return (upon success, if returnApstrataToken==true) 
+ * {
+ *	status: "success",
+ *	"login": the Apstrata login of the user
+ * 	"apsdb.authToken": "some_token", 
+ *	"apsdb.tokenExpires": "time_in_seconds", 
+ *	"apsdb.tokenLifetime": "time_in_seconds"
+ * }
+ * 
  *** Response on error ***
  * @return (upon failure)
  * {
@@ -89,7 +108,6 @@ try {
 		}else {
 		
 			var authorizationUrl = facebookManager.getRequestToken(apsdb, request);
-			return authorizationUrl;
 			apsdb.httpRedirect(authorizationUrl);
 		}
 	}
@@ -108,7 +126,7 @@ try {
 		var accessToken = facebookManager.getAccessToken(apsdb, request);		
 		if (accessToken) {
 		
-			return _handleAccessToken(apsdb, accessToken);
+			return _handleAccessToken(apsdb, accessToken, request);
 		}else {
 			throw {
 			
@@ -157,6 +175,7 @@ function _updateUserInfo(apsdb, accessToken) {
 			"name": userInfo.result.first_name + " " + userInfo.result.last_name,
 			"email": userInfo.result.email,
 			"accessToken": accessToken,
+			"facebookPicture": userInfo.result.picture,
 			"facebookid": userInfo.result.id
 		}
 		
@@ -174,7 +193,7 @@ function _updateUserInfo(apsdb, accessToken) {
 	}	
 }
 
-function _handleAccessToken(apsdb, accessToken) {
+function _handleAccessToken(apsdb, accessToken, request) {
 
 	// we need to either create a new user of update it with the new token
 	var userLoginHashedPwd = _updateUserInfo(apsdb, accessToken);
@@ -185,8 +204,17 @@ function _handleAccessToken(apsdb, accessToken) {
 	if (redirect && redirect == "true") { 	
 	
 		var common = apsdb.require("ftp.common");
+		var returnApstrataToken = request.parameters["returnApstrataToken"];
 		redirectUrl = redirectUrl ? redirectUrl : common.loggedInRedirectUrl;
-		redirectUrl = redirectUrl + "?accessToken=" + accessToken + "&login=" + userLoginHashedPwd.login + "&hashedPwd=" + userLoginHashedPwd.hashedPassword;
+		if (returnApstrataToken) {
+		
+			var userManager = apsdb.require("ftp.userManager");
+			var apstrataToken = userManager.generateToken(apsdb, userLoginHashedPwd.login, userLoginHashedPwd.hashedPassword);
+			redirectUrl = redirectUrl + "?apstrataToken=" + apstrataToken["apsdb.authToken"] + "&expiresAfter=" + apstrataToken["apsdb.tokenExpires"] + "&userName=" + userLoginHashedPwd.login;
+		}else {
+			redirectUrl = redirectUrl + "?accessToken=" + accessToken + "&login=" + userLoginHashedPwd.login + "&hashedPwd=" + userLoginHashedPwd.hashedPassword;
+		}
+			
 		apsdb.httpRedirect(redirectUrl);				
 	}
 	

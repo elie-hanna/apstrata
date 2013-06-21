@@ -19,9 +19,14 @@ var appKey = "157527211099108";
 
 // The application secret of the facebook meals with friend application
 var secret = "1229e940a7a4466e896c50cbf23786fa";	
+
+var apstrataUrl = "https://sandbox.apstrata.com/apsdb/rest/";
+
+// default account Key (use it when no account info retrievable from the request
+var defaultAccountKey = "B030C6D305";
 	
-// The callback URL used by the facebook meals with friend application
-var callbackUrl = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?apsdb.scriptName=ftp.api.facebookLogin";
+// The callback URL used by the facebook meals with friend application for login
+var callbackUrl = apstrataUrl + defaultAccountKey + "/RunScript?apsdb.scriptName=ftp.api.facebookLogin";
 
 // The URL where to redirect (if requested) further to successfully obtaining an access token
 var loggedInRedirectUrl = "";
@@ -37,9 +42,6 @@ var facebookStatus = "ads&=f";
 
 // The namespace of the facebook application, as defined in the application settings
 var appNameSpace = "mealwithfriends";
-
-// default account Key (use it when no account info retrievable from the request
-var defaultAccountKey = "B030C6D305";
 
 /*
  * This is a utility function that loads the pictures that where uploaded along an HTTP 
@@ -66,6 +68,37 @@ function buildLinkToFile(apsdb, accountKey, docKey, fileFieldName, fileName) {
 	var fileUrl = "https://sandbox.apstrata.com/apsdb/rest/" + accountKey + "/GetFile?apsws.time=" + new Date().getTime() + "&apsws.responseType=json&";
 	return fileUrl + "apsdb.fileName=" + fileName + "&apsdb.fieldName=" + fileFieldName + "&apsdb.documentKey=" + docKey + "&apsdb.store=" + storeName;
 }
+
+/*
+ * Parse the returned response in JSON format.
+ * @param resp : the response received from the callHttp
+ */
+function parseJSONResult(apsdb, resp) {	
+	
+	if (resp.metadata && resp.metadata.status == "failure") {
+		return resp;
+	}
+
+	var body = resp["body"];	
+	var content = JSON.parse(body );	
+	var metadata = content.response["metadata"];
+	var status = metadata["status"];
+	if (status == "failure") {
+		var errorDetail = metadata["errorDetail"];
+		var errorCode = metadata["errorCode"];		
+		return {
+			"status" : "failure", 
+			"errorDetail" : errorDetail,
+			"errorCode": errorCode
+		};
+	}
+	
+	return {
+		"status": "success",
+		"result": content.response["result"]
+	}
+}
+
 
 ]]>
 </code>

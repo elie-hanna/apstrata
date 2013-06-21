@@ -204,6 +204,32 @@ function getUserAccountFromRequest(apsdb, req) {
 	return fullLogin.substring(atIndex + 1);
 }
 
+function generateToken(apsdb, login, hashedPassword, action, token) {
+
+	var common = apsdb.require("ftp.common");
+	var accountUrl = common.apstrataUrl;
+	var accountKey = common.defaultAccountKey;
+			
+	// Sign the request
+	var submitUrl = accountUrl + accountKey + "/VerifyCredentials";			
+	var ts = new Date().getTime();		
+	var valueToHash = ts + login + "VerifyCredentials" + hashedPassword;
+	var hash = hex_md5(valueToHash);		
+				
+	var params = {
+		"apsdb.action": action ? action : "generate"
+	}
+	
+	if (action == "renew") {
+		params["apsdb.authToken"] = token
+	}
+					
+	var url = submitUrl + "?apsws.time=" + ts + "&apsws.authSig=" + hash + "&apsws.user=" + login + "&apsws.authMode=simple&apsws.responseType=json";
+	var res = apsdb.callHttp(url , "GET", params, null, null, null, false, null, false, false);
+	var resJson = common.parseJSONResult(apsdb, res);
+	return resJson["result"];
+}
+
 /*
  * Save (create/update) a user in the Apstrata application account
  * @param userDTO: the data on the user (userDTO.login mandatory)

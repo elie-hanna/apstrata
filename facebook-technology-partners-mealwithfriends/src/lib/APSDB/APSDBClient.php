@@ -25,6 +25,7 @@ class APSDBClient
 {
     private $accountKey;
     private $accountSecret;
+    private $authToken;
     private $user;
     private $APS_DB_URL;
 
@@ -53,18 +54,24 @@ class APSDBClient
      * @param string $accountKey (mandatory)
      * 		This parameter should be the Apstrata authKey of your account.
      */
-    public function  APSDBClient($accountKey, $accountSecret = null, $userLogin = null)
+    public function  APSDBClient($accountKey, $accountSecret = null, $userLogin = null, $hashed = false, $authToken = null)
     {
         $this->accountKey = $accountKey;
         $this->userLogin = $userLogin;
         
-        if($userLogin != null){
+        if($userLogin != null && $authToken == null){
         	// If this is a user request then the second parameter $accountSecret is the user's password
-            $this->accountSecret = strtoupper(md5($accountSecret));
+        	if ($hashed == false) {
+            	$this->accountSecret = strtoupper(md5($accountSecret));
+        	}else {
+        		$this->accountSecret = $accountSecret;
+        	}
         } else{
             // If this is an owner request then the second parameter $accountSecret is the account's secret
             $this->accountSecret = $accountSecret;
         }
+        
+         $this->authToken = $authToken;
             
         // The rest url will be read from the APSDBConfig.php file (remember to update it before using the client)
         $this->APS_DB_URL = APSDBConfig::$SERVICE_URL;
@@ -91,7 +98,7 @@ class APSDBClient
         if($action == Constants::GET_FILE && $destinationPath == null)
         	exit(Constants::GET_FILE_MISSING_PARAM_ERROR_MSG);
         	
-        $fullURL = $this->getFullURL($action, $arrParams);
+        $fullURL = $this->getFullURL($action, $arrParams);       
         $result = $this->sendRequest($fullURL, $arrParams, $destinationPath);
         return array("response" => $this->formatResponse($result['response']), "headers" => $result['headers']);
     }
@@ -126,7 +133,7 @@ class APSDBClient
 	        array_push($allParam, new KeyValue("apsws.time", $time));
 	        array_push($allParam, new KeyValue("apsws.responseType", "json"));
 	
-	        if($this->userLogin != null)
+	        if($this->userLogin != null){}
 	            array_push($allParam, new KeyValue("apsws.user", $this->userLogin));
 	
 	        for($i=0; $i < count($params); $i++){
@@ -134,6 +141,11 @@ class APSDBClient
 	        }
 	
 	        $paramString .= "&apsws.authSig=" . $this->getLevel2HashString($allParam, $this->accountSecret, $tmpURL);
+        }else {
+        
+        	if ($this->authToken != null) {	
+        		$paramString .= "&apsdb.authToken=" . $this->authToken;
+        	}
         }
 
         return $tmpURL . $paramString;
