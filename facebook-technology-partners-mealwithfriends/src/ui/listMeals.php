@@ -41,15 +41,15 @@
       		<button id="login-button" class="btn btn-primary" type="button" onclick="facebookLogin()">Login</button>'
       	<?php } else {
       		      		
-      		if ($_REQUEST["userName"] != null && $user == null) {
+      		if (isset($_REQUEST["userName"]) && $user == null) {
       			
       			$user = new User($_REQUEST["userName"], null, null, $_REQUEST["apstrataToken"]);
       			$_SESSION["user"] = $user;
       		}
       	?>
-  			<img width="25" height="25" alt="<?php print $user->getName()?>" src="<?php print $user->getPicture()?>">
-  			<span class="hidden-phone"><?php print $user->getName()?></span>
-  			<button id="logout-button" type="button" class="btn btn-primary">Logout</button>		     			
+		<img width="25" height="25" alt="<?php print $user->getName()?>" src="<?php print $user->getPicture()?>">
+		<span class="hidden-phone"><?php print $user->getName()?></span>
+		<button id="logout-button" type="button" class="btn btn-primary">Logout</button>		     			
       	<?php	
       	}	
       	?>
