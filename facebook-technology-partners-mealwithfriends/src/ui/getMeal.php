@@ -4,12 +4,7 @@
 	require_once 'lib/APSDB/APSDBConfig.php';
 	require_once 'util.php';
 	require_once 'User.php';
-	
-	session_start();
-	$user = null;
-	if (isset($_COOKIE["user"])) {
-		$user = unserialize($_COOKIE["user"]);	
-	}
+	require_once 'LoginManager.php';
 	
 	$client = new APSDBClient(APSDBConfig::$ACCOUNT_KEY);
 	$util = new Util();
@@ -42,13 +37,7 @@
 		$meal = json_decode($mealStr, true);
 	}
 	
-	$apstrataToken = isset($_REQUEST["apstrataToken"]) ? $_REQUEST["apstrataToken"] : null;
-    $isApstrataTokenValid = $apstrataToken != null ? User::isTokenValid($_REQUEST["userName"], $apstrataToken) : false;
-	if ($isApstrataTokenValid == true && $user == null) {
-	      		
-		$user = new User($_REQUEST["userName"], null, null, $apstrataToken);
-		setcookie("user", serialize($user),  time() + $_REQUEST["expiresAfter"], "/", Util::$WEB_DOMAIN);	
-	}
+	$user = LoginManager::handleUser();	
 ?>
 <html>
 	<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#<?php print util::$APP_NAMESPACE?>: http://ogp.me/ns/fb/<?php print util::$APP_NAMESPACE?>#">
@@ -76,7 +65,7 @@
 				window.location.assign(url);	
 			}
 		</script>
-		<script type="text/javascript" src="logout.js"></script>
+		<script type="text/javascript" src="publishFBAction.js"></script> 
  	</head>	
 	<div class="navbar navbar-inverse navbar-fixed-top">
 	  <div class="navbar-inner">
@@ -96,8 +85,7 @@
 				<span class="hidden-phone"><?php print $user->getName()?></span>
 				<button id="logout-button" type="button" class="btn btn-primary" onclick="window.open('<?php print Util::$WEB_URL . '/logout.php?paramString=' . urlencode('getMeal.php?key=' . $key)?>', '_self')">Logout</button>		
       	<?php
-      		}	
-      			
+      		}      			
       	?>
       </p>
 	    </div>
@@ -115,7 +103,13 @@
 		
 		    <p id="ingredients"><?php print $meal['ingredients']?></p>
 		
-		    <div id="social-actions"></div>
+		    <div id="social-actions">
+		    <?php
+		    	if ($user != null) {
+		    ?>
+		    	<button class="btn" id="share-button" type="button" onclick="publishAction('<?php print $key?>')">I ate this!</button>
+		    <?php } ?> 
+		    </div>
 		  </div>
 		</section>	
 		</div><!--/.fluid-container-->

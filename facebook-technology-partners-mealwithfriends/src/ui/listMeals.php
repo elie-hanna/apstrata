@@ -4,21 +4,9 @@
 	require_once 'lib/APSDB/APSDBConfig.php';
 	require_once 'util.php';
 	require_once 'User.php';
+	require_once 'LoginManager.php';
 
-	session_start();
-	$user = null;
-	if (isset($_COOKIE["user"])) {
-		$user = unserialize($_COOKIE["user"]);	
-	}
-	
-	$apstrataToken = isset($_REQUEST["apstrataToken"]) ? $_REQUEST["apstrataToken"] : null;
-    $isApstrataTokenValid = $apstrataToken != null ? User::isTokenValid($_REQUEST["userName"], $apstrataToken) : false;
-    if ($isApstrataTokenValid == true && $user == null) {
-	      		
-		$user = new User($_REQUEST["userName"], null, null, $apstrataToken);
-		setcookie("user", serialize($user),  time() + $_REQUEST["expiresAfter"], "/", util::$WEB_DOMAIN);
-	}
-	
+	$user = LoginManager::handleUser();	
 	$client = null;	
 ?>
 <html>
@@ -38,7 +26,6 @@
 			window.location.assign(url);	
 		}
 	</script>
-	<script type="text/javascript" src="logout.js"></script>
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">

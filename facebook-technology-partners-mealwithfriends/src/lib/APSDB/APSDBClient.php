@@ -144,7 +144,7 @@ class APSDBClient
         }else {
         
         	if ($this->authToken != null) {	
-        		$paramString .= "&apsdb.authToken=" . $this->authToken;
+        		$paramString .= "&apsdb.authToken=" . $this->authToken . "&apsdb.bindReferrer=false";
         	}
         }
 
