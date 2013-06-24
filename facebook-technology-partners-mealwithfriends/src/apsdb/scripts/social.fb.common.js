@@ -26,7 +26,7 @@ var apstrataUrl = "https://sandbox.apstrata.com/apsdb/rest/";
 var defaultAccountKey = "B030C6D305";
 	
 // The callback URL used by the facebook meals with friend application for login
-var callbackUrl = apstrataUrl + defaultAccountKey + "/RunScript?apsdb.scriptName=ftp.api.facebookLogin";
+var callbackUrl = apstrataUrl + defaultAccountKey + "/RunScript?apsdb.scriptName=social.api.facebookLogin";
 
 // The URL where to redirect (if requested) further to successfully obtaining an access token
 var loggedInRedirectUrl = "";

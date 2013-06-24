@@ -6,7 +6,7 @@
 </scriptACL>
 <code><![CDATA[
 
-	var userManager = apsdb.require("ftp.userManager");
+	var userManager = apsdb.require("social.fb.Manager");
 	var login = userManager.getUserLoginFromRequest(apsdb, request);
 	return userManager.getUser(apsdb, login);		
 ]]>

@@ -14,8 +14,8 @@
  */
 try {
 	
-	var userManager = apsdb.require("ftp.userManager");
-	var common = apsdb.require("ftp.common");
+	var userManager = apsdb.require("social.fb.userManager");
+	var common = apsdb.require("social.fb.common");
 	
 	// check if the user is authenticated, if not throw an exception
 	if (!userManager.isUserAuthenticated(apsdb, request)) {
@@ -72,7 +72,7 @@ try {
 	actionDTO.objectRef = objectRef;	
 	
 	// post action to facebook using Apstrata's APIs
-	var facebookManager = apsdb.require("social.facebookManager");
+	var facebookManager = apsdb.require("social.fb.facebookManager");
 	return facebookManager.executeAction(apsdb, user.facebookid, accessToken, actionDTO);
 }catch(exception) {
 

@@ -48,7 +48,7 @@ try {
 
 function _buildHTML(apsdb, mealDocument) {
 
-	var common = apsdb.require("ftp.common");
+	var common = apsdb.require("social.fb.common");
 	var picName = ([].concat(mealDocument.pictures))[0];
 	var linkToPic = common.buildLinkToFile(apsdb, common.defaultAccountKey, mealDocument.key, "pictures", picName);
 	var status = 200;

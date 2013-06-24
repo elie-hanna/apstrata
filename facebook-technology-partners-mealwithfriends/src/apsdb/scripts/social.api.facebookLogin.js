@@ -39,12 +39,12 @@
  * 
  *** getRequestToken ***
  * @param callbackUrl (optional): the URL that will be called back by Facebook after the user logs in 
- * If not provided, will use the url defined in "ftp.common"
+ * If not provided, will use the url defined in "social.fb.common"
  * Note: this URL has to be defined in the settings of the facebook app (Web site URL)
  * @param loggedInRedirectUrl (optional): the URL where to redirect (if requested) further to successfully obtaining an access token
  * if provided you do not need to set redirectAfterLogin
  * @param redirectAfterLogin (optional): if true, redirect either to the loggedInRedirectUrl if provided, 
- * or the one defined in "ftp.common"
+ * or the one defined in "social.fb.common"
  * @return of getRequestToken (upon success)
  * {
  *	status : "success",
@@ -87,7 +87,7 @@
 
 try {
 
-	var facebookManager = apsdb.require("social.facebookManager");
+	var facebookManager = apsdb.require("social.fb.facebookManager");
 		
 	// Since this script offers different capabilities (command), retrieve the needed command from the request	
 	var command = request.parameters["command"];
@@ -153,7 +153,7 @@ try {
 
 function _updateUserInfo(apsdb, accessToken) {
 
-	var common = apsdb.require("ftp.common");
+	var common = apsdb.require("social.fb.common");
 	var resourceUrl = "https://graph.facebook.com/me";
 	
 	// Retrieve the user's information from faceboo, using the authentication token
@@ -163,7 +163,7 @@ function _updateUserInfo(apsdb, accessToken) {
 	}
 	
 	// Try to find a user with facebook's username
-	var userManager = apsdb.require("ftp.userManager");
+	var userManager = apsdb.require("social.fb.userManager");
 	var user = userManager.getUser(apsdb, userInfo.result.username);
 	
 	// If the user does not exist, we need to create one using the facebook info
@@ -203,12 +203,12 @@ function _handleAccessToken(apsdb, accessToken, request) {
 	var redirectUrl = request.parameters["loggedInRedirectUrl"];	
 	if (redirect && redirect == "true") { 	
 	
-		var common = apsdb.require("ftp.common");
+		var common = apsdb.require("social.fb.common");
 		var returnApstrataToken = request.parameters["returnApstrataToken"];
 		redirectUrl = redirectUrl ? redirectUrl : common.loggedInRedirectUrl;
 		if (returnApstrataToken) {
 		
-			var userManager = apsdb.require("ftp.userManager");
+			var userManager = apsdb.require("social.fb.userManager");
 			var apstrataToken = userManager.generateToken(apsdb, userLoginHashedPwd.login, userLoginHashedPwd.hashedPassword);
 			redirectUrl = redirectUrl + "?apstrataToken=" + apstrataToken["apsdb.authToken"] + "&expiresAfter=" + apstrataToken["apsdb.tokenExpires"] + "&userName=" + userLoginHashedPwd.login;
 		}else {

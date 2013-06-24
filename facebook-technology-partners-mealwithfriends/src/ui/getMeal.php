@@ -54,7 +54,7 @@
 				
 				var url = "<?php print APSDBConfig::$SERVICE_URL . '/' . APSDBConfig::$ACCOUNT_KEY?>/RunScript?";
 				url = url + "apsws.time=" + new Date().getTime() + "&apsws.responseType=jsoncdp";
-				url = url + "&apsdb.scriptName=ftp.api.facebookLogin&redirectAfterLogin=true&";
+				url = url + "&apsdb.scriptName=social.api.facebookLogin&redirectAfterLogin=true&";
 				url = url + "loggedInRedirectUrl=" + encodeURIComponent("<?php print Util::$WEB_URL?>/getMeal.php");
 				<?php 
 					if ($key != null) {
@@ -101,7 +101,7 @@
 		      <p class="lead"><?php print $meal['description']?></p>
 		    </header>
 		
-		    <p id="ingredients"><?php print $meal['ingredients']?></p>
+		    <p id="ingredients">Ingredients: <?php print $meal['ingredients']?></p>
 		
 		    <div id="social-actions">
 		    <?php

@@ -11,7 +11,7 @@
  * to the provided callbackUrl. Use the returned autorization URL to route the user to the
  * facebook login
  * @param the request sent by the app
- * If this parameter is not provided, the script will take the default value from the ftp.common file
+ * If this parameter is not provided, the script will take the default value from the social.fb.common file
  * @return:
  * If successful 
  * {
@@ -39,6 +39,10 @@ function getRequestToken(apsdb, request) {
 		
 	// Add the appKey and next command to run to the callback url
 	var callbackUrl = _buildCallbackUrl(appDetails.appKey, callbackUrl ? callbackUrl : appDetails.callbackUrl, loggedInRedirectUrl);
+	if (request.parameters["returnApstrataToken"]) {
+		callbackUrl = callbackUrl + "&returnApstrataToken=" + request.parameters["returnApstrataToken"];
+	}
+	
 	var response = apsdb.social.facebook.getRequestToken(appDetails.appKey, appDetails.secret, callbackUrl, appDetails.scope, appDetails.facebookStatus);
 	if (response.metadata.status == "success") {
 		return response.result.authorizationUrl;
@@ -82,6 +86,10 @@ function getAccessToken(apsdb, request) {
 	
 	// As per facebook's specifications, we need to re-send the same callback url
 	var callbackUrl = _buildCallbackUrl(appDetails.appKey, callBackUrl ? callBackUrl : appDetails.callbackUrl, loggedInRedirectUrl);	
+	if (request.parameters["returnApstrataToken"]) {
+		callbackUrl = callbackUrl + "&returnApstrataToken=" + request.parameters["returnApstrataToken"];
+	}
+	
 	var response = apsdb.social.facebook.getAccessToken(appDetails.appKey, appDetails.secret, callbackUrl, request.parameters["code"]);	
 	var appId = "facebook" + appDetails.appKey;
 	if (response.result.accessToken) {		
@@ -143,7 +151,7 @@ function post(apsdb, facebookid, accessToken, postDTO) {
 		params["description"] = postDTO.description;
 	}
 	
-	var common = apsdb.require("ftp.common");
+	var common = apsdb.require("social.fb.common");
 	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, params);
 }
 
@@ -161,7 +169,7 @@ function post(apsdb, facebookid, accessToken, postDTO) {
  */
 function executeAction(apsdb, facebookid, accessToken, actionDTO) {
 
-	var common = apsdb.require("ftp.common");
+	var common = apsdb.require("social.fb.common");
 	//var url = "https://graph.facebook.com/" + facebookid + "/" + common.appNameSpace + ":" + actionDTO.actionType;
 	var url = "https://graph.facebook.com/me/" + common.appNameSpace + ":" + actionDTO.actionType;	
 	var params = {};
@@ -177,7 +185,7 @@ function executeAction(apsdb, facebookid, accessToken, actionDTO) {
  */
 function _getApplicationDetails(apsdb) {
 
-	var common = apsdb.require("ftp.common");
+	var common = apsdb.require("social.fb.common");
 	return {
 	
 		"appKey": common.appKey,

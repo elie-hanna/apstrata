@@ -102,7 +102,7 @@ function listMeals(apsdb, mealDTO) {
  */ 
 function _saveMeal(apsdb, mealDTO, update) {
 
-	var common = apsdb.require("ftp.common");
+	var common = apsdb.require("social.fb.common");
 	var params = {
 	
 		"apsdb.schema": "ftp_meal",

@@ -98,7 +98,7 @@ function isUserAuthenticated(apsdb, request) {
 		
 		// if an access token was found, we need to verify if it is still up to date
 		// if not return false
-		var facebookManager = apsdb.require("social.facebookManager");
+		var facebookManager = apsdb.require("social.fb.facebookManager");
 		return facebookManager.checkAccessToken(apsdb, accessToken);
 	}
 }
@@ -188,7 +188,7 @@ function getUserAccountFromRequest(apsdb, req) {
 	var fullLogin = req.user.login;
 	if (fullLogin == "anonymous") {
 	
-		var common = apsdb.require("ftp.common");
+		var common = apsdb.require("social.fb.common");
 		return common.defaultAccountKey;
 	}
 	
@@ -206,7 +206,7 @@ function getUserAccountFromRequest(apsdb, req) {
 
 function generateToken(apsdb, login, hashedPassword, action, token) {
 
-	var common = apsdb.require("ftp.common");
+	var common = apsdb.require("social.fb.common");
 	var accountUrl = common.apstrataUrl;
 	var accountKey = common.defaultAccountKey;
 			

@@ -1,6 +1,6 @@
 <script>
 <scriptACL>
-  <execute>anonymous</execute>
+  <execute>authenticated-users</execute>
   <read>nobody</read>
   <write>nobody</write>
 </scriptACL>
@@ -26,7 +26,7 @@
  */
 try {
 	
-	var userManager = apsdb.require("ftp.userManager");
+	var userManager = apsdb.require("social.fb.Manager");
 	
 	// check if the user is authenticated, if not throw an exception
 	if (!userManager.isUserAuthenticated(apsdb, request)) {
@@ -81,7 +81,7 @@ try {
 	postDTO["message"] = message;
 		
 	// post to facebook using Apstrata's APIs
-	var facebookManager = apsdb.require("social.facebookManager");
+	var facebookManager = apsdb.require("social.fb.facebookManager");
 	return facebookManager.post(apsdb, user.facebookid, accessToken, postDTO);
 }catch(exception) {
 
@@ -98,7 +98,7 @@ function _getMealData(apsdb, key) {
 	var mealManager = apsdb.require("ftp.mealManager");
 	var doc = mealManager.getMeal(apsdb, {"key": docKey});
 	var picName = ([].concat(doc.pictures))[0];
-	var userManager = apsdb.require("ftp.userManager");
+	var userManager = apsdb.require("social.fb.userManager");
 	var accountKey = userManager.getUserAccountFromRequest(apsdb, request);
 	var common = apsdb.require("ftp.common");
 	var picUrl = common.buildLinkToFile(apsdb, accountKey, doc.key, "pictures", picName);	

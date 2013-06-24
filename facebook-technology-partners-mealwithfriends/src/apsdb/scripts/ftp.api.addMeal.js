@@ -21,7 +21,7 @@
 try {
 
 	// check if the user is authenticated, if not throw an exception
-	var userManager = apsdb.require("ftp.userManager");
+	var userManager = apsdb.require("social.fb.userManager");
 	if (!userManager.isUserAuthenticated(apsdb, request)) {
 	
 		throw {
@@ -31,7 +31,7 @@ try {
 		}	
 	}
 
-	var common = apsdb.require("ftp.common");
+	var common = apsdb.require("social.fb.common");
 	var name = request.parameters["name"];
 	var description = request.parameters["description"];
 	var ingredients = request.parameters["ingredients"];	
