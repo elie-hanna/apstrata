@@ -7,8 +7,16 @@
 
 	session_start();
 	$user = null;
-	if (isset($_SESSION["user"])) {
-		$user = $_SESSION["user"];	
+	if (isset($_COOKIE["user"])) {
+		$user = unserialize($_COOKIE["user"]);	
+	}
+	
+	$apstrataToken = isset($_REQUEST["apstrataToken"]) ? $_REQUEST["apstrataToken"] : null;
+    $isApstrataTokenValid = $apstrataToken != null ? User::isTokenValid($_REQUEST["userName"], $apstrataToken) : false;
+    if ($isApstrataTokenValid == true && $user == null) {
+	      		
+		$user = new User($_REQUEST["userName"], null, null, $apstrataToken);
+		setcookie("user", serialize($user),  time() + $_REQUEST["expiresAfter"], "/", util::$WEB_DOMAIN);
 	}
 	
 	$client = null;	
@@ -36,30 +44,21 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container-fluid">
-      <a class="brand" href="http://as.elementn/listMeals.php">Meals with Friends</a>
+      <a class="brand" href=<?php print Util::$WEB_URL?>/listMeals.php">Meals with Friends</a>
       <p id="user-identity" class="navbar-text pull-right">
-      	<?php 
-      	
-      		$apstrataToken = isset($_REQUEST["apstrataToken"]) ? $_REQUEST["apstrataToken"] : null;
-      		$isApstrataTokenValid = $apstrataToken != null ? User::isTokenValid($_REQUEST["userName"], $apstrataToken) : false;
+      	<?php     	
+      		
       		if ($user == null && $isApstrataTokenValid == false ) {
       	?>
-      			<button id="login-button" class="btn btn-primary" type="button" onclick="facebookLogin()">Login</button>'
-      	<?php } else {
-      		      		
-	      		if ($isApstrataTokenValid == true && $user == null) {
-	      		
-	      			$user = new User($_REQUEST["userName"], null, null, $apstrataToken);
-	      			$_SESSION["user"] = $user;
-	      		}
+      			<button id="login-button" class="btn btn-primary" type="button" onclick="facebookLogin()">Login</button>
+      	<?php }
       		
-      			if ($user != null) {
+      		if ($user != null) {
       	?>	
 		      		<img width="25" height="25" alt="<?php print $user->getName()?>" src="<?php print $user->getPicture()?>">
 					<span class="hidden-phone"><?php print $user->getName()?></span>
-					<button id="logout-button" type="button" class="btn btn-primary" onclick="logout()">Logout</button>		
+					<button id="logout-button" type="button" class="btn btn-primary" onclick="window.open('<?php print Util::$WEB_URL . '/logout.php?paramString=listMeals.php'?>', '_self')">Logout</button>		
       	<?php
-      			}	
       		}	
       	?>
       </p>

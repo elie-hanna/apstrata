@@ -9,6 +9,7 @@
 			static $APP_NAMESPACE = "mealwithfriends";
 			static $APP_KEY = "157527211099108";
 			static $WEB_URL = "http://as.elementn.com";
+			static $WEB_DOMAIN = "as.elementn.com";
 			static $APP_SECRET = "1229e940a7a4466e896c50cbf23786fa";
 			
 			public function Util() {

@@ -7,13 +7,13 @@
 	
 	session_start();
 	$user = null;
-	if (isset($_SESSION["user"])) {
-		$user = $_SESSION["user"];	
+	if (isset($_COOKIE["user"])) {
+		$user = unserialize($_COOKIE["user"]);	
 	}
 	
 	$client = new APSDBClient(APSDBConfig::$ACCOUNT_KEY);
 	$util = new Util();
-		
+			
 	// verify if the request contains the key of a meal document or the document itself
 	$key = $_REQUEST['key'];
 	
@@ -27,7 +27,7 @@
 		array_push($params, new KeyValue("apsdb.scriptName", "ftp.api.getMeal"));	
 			
 		$mealDocResp = $client->callApi("RunScript", $params);
-		$meal = $mealDocResp["response"]["result"];	
+		$meal = $mealDocResp["response"]["result"];
 			
 		// join the content of the ingredients array into a string
 		$meal["ingredients"] = join(",", $meal["ingredients"]);
@@ -39,11 +39,16 @@
 		
 		// otherwise, the meal data is already available in the request as a JSON object
 		$mealStr = $_REQUEST['meal'];
-		//$mealStr = str_replace('\\', '', $mealStr);
-		//$mealStr = str_replace(';=', '=', $mealStr);
 		$meal = json_decode($mealStr, true);
 	}
 	
+	$apstrataToken = isset($_REQUEST["apstrataToken"]) ? $_REQUEST["apstrataToken"] : null;
+    $isApstrataTokenValid = $apstrataToken != null ? User::isTokenValid($_REQUEST["userName"], $apstrataToken) : false;
+	if ($isApstrataTokenValid == true && $user == null) {
+	      		
+		$user = new User($_REQUEST["userName"], null, null, $apstrataToken);
+		setcookie("user", serialize($user),  time() + $_REQUEST["expiresAfter"], "/", Util::$WEB_DOMAIN);	
+	}
 ?>
 <html>
 	<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#<?php print util::$APP_NAMESPACE?>: http://ogp.me/ns/fb/<?php print util::$APP_NAMESPACE?>#">
@@ -76,31 +81,23 @@
 	<div class="navbar navbar-inverse navbar-fixed-top">
 	  <div class="navbar-inner">
 	    <div class="container-fluid">
-	      <a class="brand" href="<?php util::$WEB_URL?>/listMeals.php">Meals with Friends</a>
+	      <a class="brand" href="<?php Util::$WEB_URL?>/listMeals.php">Meals with Friends</a>
 	      <p id="user-identity" class="navbar-text pull-right">
-      	<?php 
-      	
-      		$apstrataToken = isset($_REQUEST["apstrataToken"]) ? $_REQUEST["apstrataToken"] : null;
-      		$isApstrataTokenValid = $apstrataToken != null ? User::isTokenValid($_REQUEST["userName"], $apstrataToken) : false;
+      	<?php     	
+      		
       		if ($user == null && $isApstrataTokenValid == false ) {
       	?>
       			<button id="login-button" class="btn btn-primary" type="button" onclick="facebookLogin()">Login</button>
-      	<?php } else {
-      		      		
-	      		if ($isApstrataTokenValid == true && $user == null) {
-	      		
-	      			$user = new User($_REQUEST["userName"], null, null, $apstrataToken);
-	      			$_SESSION["user"] = $user;
-	      		}
+      	<?php }
       		
-      			if ($user != null) {
+      		if ($user != null) {
       	?>	
-		      		<img width="25" height="25" alt="<?php print $user->getName()?>" src="<?php print $user->getPicture()?>">
-					<span class="hidden-phone"><?php print $user->getName()?></span>
-					<button id="logout-button" type="button" class="btn btn-primary" onclick="logout(<?php print $key?>)">Logout</button>		
+		    	<img width="25" height="25" alt="<?php print $user->getName()?>" src="<?php print $user->getPicture()?>">
+				<span class="hidden-phone"><?php print $user->getName()?></span>
+				<button id="logout-button" type="button" class="btn btn-primary" onclick="window.open('<?php print Util::$WEB_URL . '/logout.php?paramString=' . urlencode('getMeal.php?key=' . $key)?>', '_self')">Logout</button>		
       	<?php
-      			}	
       		}	
+      			
       	?>
       </p>
 	    </div>
