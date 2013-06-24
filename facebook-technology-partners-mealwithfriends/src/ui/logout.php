@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 	require_once 'LoginManager.php';
 
 	// default value for the redirection URL
-	$paramString = "/listMeals.php";
+	$paramString = "/index.php";
 		
 	// If a redirection URL is specified in the request parameters, get it
 	if (isset($_REQUEST["paramString"])) {

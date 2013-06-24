@@ -28,7 +28,6 @@
 				$user = new User($_REQUEST["userName"], null, null, $apstrataToken);
 				setcookie("user", serialize($user),  time() + $_REQUEST["expiresAfter"], "/", Util::$WEB_DOMAIN);
 				setcookie("apstrataToken", $apstrataToken . ";" . $user->getUserName(), time() + $_REQUEST["expiresAfter"], "/", Util::$WEB_DOMAIN);
-				setcookie("fbToken", )	
 			}
 			
 			return $user;			
