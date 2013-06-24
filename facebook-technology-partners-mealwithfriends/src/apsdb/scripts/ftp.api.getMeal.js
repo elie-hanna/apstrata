@@ -63,7 +63,7 @@ function _buildHTML(apsdb, mealDocument) {
  	}
  	
  	param = {"meal": JSON.stringify(mealParam)};	
- 	var ui = apsdb.callHttp("http://as.elementn.com/getMealStandalone2.php", "POST", param, null, null, null, false, null, false, false);
+ 	var ui = apsdb.callHttp("http://as.elementn.com/getMeal.php", "POST", param, null, null, null, false, null, false, false);
 	apsdb.httpRespond(ui.body, status, null);
 }
 	

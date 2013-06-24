@@ -1,6 +1,6 @@
 <script>
 <scriptACL>
-  <execute>anonymous</execute>
+  <execute>authenticated-users</execute>
   <read>nobody</read>
   <write>nobody</write>
 </scriptACL>
@@ -46,6 +46,7 @@ try {
 	var accessToken = request.parameters["accessToken"]
 	if (currentUserLogin != "anonymous") {
 		user = userManager.getUser(apsdb, currentUserLogin);
+		accessToken = user.user.accessToken;
 	}else {
 		user = userManager.findUserFromToken(apsdb, accessToken);
 	}
