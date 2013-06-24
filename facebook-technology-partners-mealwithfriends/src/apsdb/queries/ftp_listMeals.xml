@@ -19,6 +19,9 @@
         <field>description</field>
         <field>ingredients</field>
         <field>pictures</field>
-    </returnedFields>   
+    </returnedFields>
+    <sort>
+        <![CDATA[ name<string:ASC> ]]>
+    </sort>
     <count>true</count> 
 </query>
