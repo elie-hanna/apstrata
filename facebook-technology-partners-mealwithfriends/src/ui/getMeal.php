@@ -70,7 +70,7 @@
 	<div class="navbar navbar-inverse navbar-fixed-top">
 	  <div class="navbar-inner">
 	    <div class="container-fluid">
-	      <a class="brand" href="<?php Util::$WEB_URL?>/index.php">Meals with Friends</a>
+	      <a class="brand" href="<?php Util::$WEB_URL?>/index.php"> Meals with Friends</a>
 	      <p id="user-identity" class="navbar-text pull-right">
       	<?php     	
       		
