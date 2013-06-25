@@ -157,7 +157,7 @@ function _updateUserInfo(apsdb, accessToken) {
 	var resourceUrl = "https://graph.facebook.com/me";
 	
 	// Retrieve the user's information from faceboo, using the authentication token
-	var userInfo = apsdb.social.facebook.callApi(common.appKey, common.appSecret, accessToken, "GET", resourceUrl, {});
+	var userInfo = apsdb.social.facebook.callApi(common.appKey, common.appSecret, accessToken, "GET", resourceUrl, {{"fields":"picture"}});
 	if (userInfo.metadata.status == "failure") {
 		throw userInfo.metadata;
 	}
