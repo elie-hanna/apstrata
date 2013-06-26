@@ -53,7 +53,7 @@
 			$params = array();
 			if ($this->userName != null) {
 				
-				array_push($params, new KeyValue("apsdb.scriptName", "ftp.api.getUserData"));
+				array_push($params, new KeyValue("apsdb.scriptName", "social.api.fb.getUserData"));
 				if ($this->hashedPassword != null) {										 
 					$client = new APSDBClient(APSDBConfig :: $ACCOUNT_KEY, $hashedPassword, $userName, true);					
 				}else {
