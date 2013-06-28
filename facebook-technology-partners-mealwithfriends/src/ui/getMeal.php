@@ -35,6 +35,7 @@
 		// otherwise, the meal data is already available in the request as a JSON object
 		$mealStr = $_REQUEST['meal'];
 		$meal = json_decode($mealStr, true);
+		$key = $meal['key'];
 	}
 	
 	$user = LoginManager::handleUser();	
@@ -65,7 +66,7 @@
 				window.location.assign(url);	
 			}
 		</script>
-		<script type="text/javascript" src="publishFBAction.js"></script> 
+		<script type="text/javascript" src="formController.js"></script>		
  	</head>	
 	<div class="navbar navbar-inverse navbar-fixed-top">
 	  <div class="navbar-inner">
@@ -93,25 +94,71 @@
 	</div>
 	<body>		
 		<div class="container-fluid">	
-		<section id="meal" class="meal row-fluid" data-meal="<?php print $meal['recipeName']?>" data-mealtitle="<?php print $meal['recipeName']?>" role="main">
-		  <div class="span4 thumbnail img-container"><img alt="<?php print $meal['recipeName']?>" src="<?php print $meal['picture']?>"/></div>
-		  <div class="span8">
-		    <header>
-		      <h1><?php print $meal['recipeName']?></h1>
-		      <p class="lead"><?php print $meal['description']?></p>
-		    </header>
-		
-		    <p id="ingredients">Ingredients: <?php print $meal['ingredients']?></p>
-		
-		    <div id="social-actions">
-		    <?php
-		    	if ($user != null) {
-		    ?>
-		    	<button class="btn" id="share-button" type="button" onclick="publishAction('<?php print $key?>')">I ate this!</button>
-		    <?php } ?> 
-		    </div>
-		  </div>
-		</section>	
+			<section id="meal" class="meal row-fluid" data-meal="<?php print $meal['recipeName']?>" data-mealtitle="<?php print $meal['recipeName']?>" role="main">
+			  <div class="span4 thumbnail img-container"><img alt="<?php print $meal['recipeName']?>" src="<?php print $meal['picture']?>"/></div>
+			  <div class="span8">
+			    <header>
+			      <h1><?php print $meal['recipeName']?></h1>
+			      <p class="lead"><?php print $meal['description']?></p>
+			    </header>
+			
+			    <p id="ingredients">Ingredients: <?php print $meal['ingredients']?></p>
+			
+			    <div id="social-actions">
+			    <?php
+			    	if ($user != null) {
+			    ?>
+			    	<button class="btn" id="share-button" type="button" onclick="handleEvent(event)">I ate this!</button>
+			    <?php } ?> 
+			    </div>
+			  </div>
+			</section>	
+			<form id="composer">
+				<input type="hidden" id="composer-meal" value="<?php print $meal['recipeName']?>">
+					<div class="modal in" id="composer-modal" role="dialog" aria-labelledby="modal-title" aria-hidden="false" style="display: none;">
+						<div class="modal-header">
+							<button id="symbol-form-close" class="close" type="button" aria-hidden="true" onclick="handleEvent(event)">x</button>
+							<h3 id="modal-title">Post to Timeline</h3>
+						</div>
+						<div class="modal-body">
+							<div id="composer-message-group" class="control-group">
+								<label class="control-label" for="composer-message">Message</label>
+								<div class="controls">
+									<input type="text" class="input-xxlarge" id="composer-message" maxlength="1000" autocomplete="off" placeholder="Write something about the <?php print $meal['recipeName']?>">
+								</div>
+								<span id="composer-message-data" style="display: none;"></span>
+							</div>
+							<div id="autocomplete-fields">
+								<div class="form-inline" id="composer-friends-group" style="display: none;">
+									<ul class="unstyled inline" id="composer-friends-group-fields">
+										<li>
+											<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+											<input type="search" role="combobox" id="composer-friends-field" autocomplete="off" placeholder="Who are you with?" aria-label="Who are you with?" class="ui-autocomplete-input" aria-haspopup="true">
+										</li>
+									</ul>
+									<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-2" tabindex="0" style="display: none;"></ul>
+								</div>
+								<div id="composer-place-group" style="display: none;">
+									<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+									<input type="search" role="combobox" id="composer-place-field" autocomplete="off" placeholder="Where are you?" aria-label="Where are you?" class="ui-autocomplete-input" aria-haspopup="true">
+									<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="display: none;"></ul>
+								</div>
+							</div>
+							<div class="btn-group" id="composer-buttons">
+								<button id="toggle-place" type="button" title="Add location" aria-controls="composer-place-group" class="btn active" onclick="handleEvent(event)">
+									<img width="32" height="32" alt="Facebook Location icon" src="http://s.facebooksampleapp.com/scrumptious/static/images/location.png">
+								</button>
+								<button id="toggle-friends" type="button" title="Tag friends" aria-controls="composer-friends-group" class="btn" onclick="handleEvent(event)">
+									<img width="32" height="32" alt="Facebook silhouette icon" src="http://s.facebooksampleapp.com/scrumptious/static/images/friend.png">
+								</button>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button id="btn-form-close" class="btn" onclick="handleEvent(event)" type="button">Close</button>
+							<button id="btn-post" class="btn btn-primary" type="button" onclick="publishAction('<?php print $key ?>')">Post to Timeline</button>
+						</div>
+					</div>
+				</form>
 		</div><!--/.fluid-container-->
 	</body>
 </html>

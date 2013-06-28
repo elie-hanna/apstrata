@@ -50,12 +50,19 @@ try {
 	}else {
 		user = userManager.findUserFromToken(apsdb, accessToken);
 	}
-
-	var actionDTO = {
 	
-		"actionType":  request.parameters["actionType"],
-		"objectType": request.parameters["objectType"],
-	} 
+	var actionDTO = {};
+	for (var param in request.parameters) {
+		
+		if (_isPostParameter(param)) {		
+		
+			try {	
+				actionDTO[param] = JSON.parse(request.parameters[param]);
+			}catch(exception){
+				actionDTO[param] = request.parameters[param];
+			}
+		}
+	}
 	
 	// check if a document key is passed, if so, extract corresponding data
 	var docKey = request.parameters["docKey"];
@@ -69,7 +76,8 @@ try {
 	}
 	
 	var objectRef = common.apstrataUrl + accountKey + "/RunScript?apsws.time=" + new Date().getTime() + "&apsws.responseType=jsoncdp&apsdb.scriptName=ftp.api.getMeal&key=" + docKey + "&returnHTML=true";
-	actionDTO.objectRef = objectRef;	
+	actionDTO.objectRef = objectRef;
+	actionDTO["fb:explicitly_shared"]="true";	
 	
 	// post action to facebook using Apstrata's APIs
 	var facebookManager = apsdb.require("social.fb.facebookManager");
@@ -83,6 +91,19 @@ try {
 		"errorDetail": exception.errorDetail ? exception.errorDetail : ""
 	}
 }
+
+function _isPostParameter(parameter) {
+
+	if (parameter.indexOf("apsdb") > -1 || parameter.indexOf("apsws") > -1) {
+		return false;
+	}
+	
+	if (parameter == "accessToken") {
+		return false;
+	}
+	
+	return true;
+}	
 	
 ]]>
 </code>

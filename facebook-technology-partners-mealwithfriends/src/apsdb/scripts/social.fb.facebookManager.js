@@ -130,40 +130,31 @@ function checkAccessToken(apsdb, accessToken) {
  */
 function post(apsdb, facebookid, accessToken, postDTO) {
 
-	var url = "https://graph.facebook.com/" + facebookid + "/feed";	
-	var params = {
-		"message": postDTO.message,
-	}
-	
-	if (postDTO.link) {
-		params["link"] = postDTO.link;
-	}
-	
-	if (postDTO.caption) {
-		params["caption"] = postDTO.caption;
-	}
-	
-	if (postDTO.picture) {
-		params["picture"] = postDTO.picture;
-	}
-	
-	if (postDTO.description) {
-		params["description"] = postDTO.description;
-	}
-	
+	var url = "https://graph.facebook.com/" + facebookid + "/feed";		
 	var common = apsdb.require("social.fb.common");
-	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, params);
+	for(var property in postDTO) {
+		if (property == "actions" || property == "properties") {
+			postDTO[property] = JSON.stringify([].concat(postDTO[property]));
+		}
+		
+		if (property == "place") {
+			postDTO[property] = JSON.stringify(postDTO[property]);
+		}
+	}
+	
+	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, postDTO);
 }
 
 /*
  * Executes a custom action on the account of the facebook user
- * @param facebookid: the facebook identifier of the targeted user
+ * @param facebookid: the facebook identifier of the targeted user (optional)
  * @param accessToken: the access token to the facebook account of the user
- * @param actionDTO: the parameters of the action, i.e:
+ * @param actionDTO: the parameters of the action, i.e: (https://developers.facebook.com/docs/opengraph/using-actions/#publish)
  * {
  * 	"actionType": the_name_of_the_action_type,
  *	"objectType": the_name_of_the_object_type,
  *	"objectRef": the_url_to_the_object_need_by_the_action
+ * ...
  * }
  * @return { "result": { "id": "the_identifier_of_the_facebook_action_execution"}}
  */
@@ -174,7 +165,34 @@ function executeAction(apsdb, facebookid, accessToken, actionDTO) {
 	var url = "https://graph.facebook.com/me/" + common.appNameSpace + ":" + actionDTO.actionType;	
 	var params = {};
 	params[actionDTO.objectType] = actionDTO.objectRef;
+	params["fb:explicitly_shared"] = actionDTO["fb:explicitly_shared"];
+	
+	for(var property in actionDTO) {
+		if (property != "objectType") {
+		
+			if (property == "place") {
+				params[property] = JSON.stringify(actionDTO[property]);
+			}else {
+				params[property] = actionDTO[property];
+			}		
+		}
+	} 
+	
 	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, params);
+}
+
+/*
+ * @param facebookid: the facebook identifier of the targeted user (optional)
+ * @param accessToken: the access token to the facebook account of the user
+ * @param paging(optional): in case of pagination, { "__after_id": the friend id to start from, "limit": fb_limit, "offset": fb_offset}
+ * @return 
+ */
+function getFriends(apsdb, facebookid, accessToken, paging) {
+
+	var common = apsdb.require("social.fb.common");
+	var url = "https://graph.facebook.com/me/friends";
+	var params = paging ? paging : {}
+	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "GET", url, params);
 }
 
 /*

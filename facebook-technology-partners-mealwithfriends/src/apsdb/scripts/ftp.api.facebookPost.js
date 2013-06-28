@@ -1,6 +1,6 @@
 <script>
 <scriptACL>
-  <execute>authenticated-users</execute>
+  <execute>anonymous</execute>
   <read>nobody</read>
   <write>nobody</write>
 </scriptACL>
@@ -11,7 +11,8 @@
  * ACL set to anonymous, users sending the request need to be authenticated. They can do this
  * either by signing the request using their Apstrata credentials, or by passing a valid facebook access
  * token as a parameter of the request.
- * @param message: the message to post (optional). If empty, will post a blank
+ * @param facebook post parameter (optional): check them at https://developers.facebook.com/docs/reference/api/post/
+ * Note: parameters of type object or array should be sent as stringified JSON
  * @param docKey(optional): the key of the meal document from which data will be retrieved for the post
  * @param link (optional): a link on which users can click from the post
  * @param accessToken (optional): the facebook access token of the requestor 
@@ -26,7 +27,7 @@
  */
 try {
 	
-	var userManager = apsdb.require("social.fb.Manager");
+	var userManager = apsdb.require("social.fb.userManager");
 	
 	// check if the user is authenticated, if not throw an exception
 	if (!userManager.isUserAuthenticated(apsdb, request)) {
@@ -40,6 +41,8 @@ try {
 	
 	// get the login of the user who sent the request, if any
 	var currentUserLogin = userManager.getUserLoginFromRequest(apsdb, request);
+	
+	var currentUserLogin = "angus.mackeyboard";
 	
 	// the script should not be called as an account owner
 	if (currentUserLogin.indexOf("#") > 1) {
@@ -62,26 +65,27 @@ try {
 
 	var postDTO = {};
 
-	// retrieve the post message from the request
-	var message = request.parameters["message"] ? request.parameters["message"] : "";
-	
 	// check if a document key is passed, if so, extract corresponding data
 	var docKey = request.parameters["docKey"];
 	if (docKey) {
 	
 		postDTO = _getMealData(apsdb, docKey);
 	}
-	
-	// retrieve the link if any
-	var link = request.parameters["link"];
-	if (link) {
-		postDTO["link"] = link;
+		
+	for (var param in request.parameters) {
+		
+		if (_isPostParameter(param)) {		
+		
+			try {	
+				postDTO[param] = JSON.parse(request.parameters[param]);
+			}catch(exception){
+				postDTO[param] = request.parameters[param];
+			}
+		}
 	}
-	
-	postDTO["message"] = message;
 		
 	// post to facebook using Apstrata's APIs
-	var facebookManager = apsdb.require("social.fb.facebookManager");
+	var facebookManager = apsdb.require("social.fb.facebookManager2");
 	return facebookManager.post(apsdb, user.facebookid, accessToken, postDTO);
 }catch(exception) {
 
@@ -100,7 +104,7 @@ function _getMealData(apsdb, key) {
 	var picName = ([].concat(doc.pictures))[0];
 	var userManager = apsdb.require("social.fb.userManager");
 	var accountKey = userManager.getUserAccountFromRequest(apsdb, request);
-	var common = apsdb.require("ftp.common");
+	var common = apsdb.require("social.fb.common");
 	var picUrl = common.buildLinkToFile(apsdb, accountKey, doc.key, "pictures", picName);	
 	return {
 	
@@ -109,6 +113,19 @@ function _getMealData(apsdb, key) {
 		"caption":  doc.recipeName,
 		"description": doc.description
 	}
+}
+
+function _isPostParameter(parameter) {
+
+	if (parameter.indexOf("apsdb") > -1 || parameter.indexOf("apsws") > -1) {
+		return false;
+	}
+	
+	if (parameter == "docKey" || parameter == "accessToken") {
+		return false;
+	}
+	
+	return true;
 }	
 	
 ]]>
