@@ -103,6 +103,9 @@ function getAccessToken(apsdb, request) {
  * Verify if the accessToken passed as an argument is valid
  * @param accessToken: the oAuth token received from Facebook
  * @return true or false
+ * On failure
+ * @throws
+ * { "status" = "failure", "errorCode": "some_error_code", "error_detail": "some_error_detail" }
  */
 function checkAccessToken(apsdb, accessToken) {
 
@@ -127,6 +130,9 @@ function checkAccessToken(apsdb, accessToken) {
  * @param accessToken: the access token to the facebook account of the user
  * @param postDTO: the parameters to post
  * @return { "result": { "id": "the_identifier_of_the_facebook_post"}}
+ * On failure
+ * @throws
+ * { "status" = "failure", "errorCode": "some_error_code", "error_detail": "some_error_detail" }
  */
 function post(apsdb, facebookid, accessToken, postDTO) {
 
@@ -142,7 +148,12 @@ function post(apsdb, facebookid, accessToken, postDTO) {
 		}
 	}
 	
-	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, postDTO);
+	var response = apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, postDTO);
+	if (response.metadata.status == "success") {	
+		return response;
+	}else {
+		return response.metadata;
+	}
 }
 
 /*
@@ -157,6 +168,9 @@ function post(apsdb, facebookid, accessToken, postDTO) {
  * ...
  * }
  * @return { "result": { "id": "the_identifier_of_the_facebook_action_execution"}}
+ * On failure
+ * @throws
+ * { "status" = "failure", "errorCode": "some_error_code", "error_detail": "some_error_detail" }
  */
 function executeAction(apsdb, facebookid, accessToken, actionDTO) {
 
@@ -178,22 +192,64 @@ function executeAction(apsdb, facebookid, accessToken, actionDTO) {
 		}
 	} 
 	
-	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, params);
+	var response = apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "POST", url, params);
+	if (response.metadata.status == "success") {	
+		return response;
+	}else {
+		return response.metadata;
+	}
 }
 
 /*
- * @param facebookid: the facebook identifier of the targeted user (optional)
+ * @param facebookid (optional): the facebook identifier of the targeted user (optional)
  * @param accessToken: the access token to the facebook account of the user
  * @param paging(optional): in case of pagination, { "__after_id": the friend id to start from, "limit": fb_limit, "offset": fb_offset}
  * @return 
+ * On failure
+ * @throws
+ * { "status" = "failure", "errorCode": "some_error_code", "error_detail": "some_error_detail" }
  */
 function getFriends(apsdb, facebookid, accessToken, paging) {
 
 	var common = apsdb.require("social.fb.common");
 	var url = "https://graph.facebook.com/me/friends";
 	var params = paging ? paging : {}
-	return apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "GET", url, params);
+	var response = apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "GET", url, params);
+	if (response.metadata.status == "success") {	
+		return response;
+	}else {
+		return response.metadata;
+	}
 }
+
+/*
+ * @param facebookid (optional): the facebook identifier of the targeted user (optional)
+ * @param accessToken: the access token to the facebook account of the user
+ * @param searchDTO: the object holding the search criteria {"name":"some_name"}
+ * @return
+ * { "result": {  "data": [  {"uid": "some_uid", "name": "some_name", "pic_small": "url_to_profile_pic"}, ... ]}}
+ * On failure
+ * @throws
+ * { "status" = "failure", "errorCode": "some_error_code", "error_detail": "some_error_detail" }
+ */
+function searchFriendsByName(apsdb, facebookid, accessToken, searchDTO) {
+
+	var common = apsdb.require("social.fb.common");
+	var fqlQuery = "select uid, name, pic_small from user where uid in (SELECT uid2 FROM friend WHERE uid1 = me())and (strpos(lower (name),'" + searchDTO.name + "')>=0 OR strpos(name,'" + searchDTO.name + "')>=0)";
+	apsdb.log.setLogLevel(4);
+	apsdb.log.debug("fql", {"fql":fqlQuery});
+	var url = "https://graph.facebook.com/fql";
+	var params = {
+		"q": fqlQuery
+	}
+	
+	var response = apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "GET", url, params);
+	if (response.metadata.status == "success") {	
+		return response;
+	}else {
+		return response.metadata;
+	}
+} 
 
 /*
  * Gets the details of the application we need to integrate with. 
