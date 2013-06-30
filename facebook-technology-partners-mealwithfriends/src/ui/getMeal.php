@@ -134,7 +134,7 @@
 									<ul class="unstyled inline" id="composer-friends-group-fields">
 										<li>
 											<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
-											<input type="search" role="combobox" id="composer-friends-field" autocomplete="off" placeholder="Who are you with?" aria-label="Who are you with?" class="ui-autocomplete-input" aria-haspopup="true" onchange="handleEvent(event)">
+											<input type="search" role="combobox" id="composer-friends-field" autocomplete="off" placeholder="Who are you with?" aria-label="Who are you with?" class="ui-autocomplete-input" aria-haspopup="true" onkeyup="handleEvent(event)">
 										</li>
 									</ul>
 									<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="display: none;"></ul>

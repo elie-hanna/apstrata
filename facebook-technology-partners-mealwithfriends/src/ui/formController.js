@@ -1,4 +1,5 @@
 var friends = [];
+var selectedFriends = [];
 
 function handleEvent(event) {
 	
@@ -18,11 +19,7 @@ function handleEvent(event) {
 
 function openForm() {
 	
-	var apstrataToken = decodeURIComponent(getCookie("apstrataToken")).split(";");	
-	if (!apstrataToken || apstrataToken[0] === "") {	
-		
-		var url = window.location.href.substring(0, window.location.href.indexOf("&"));
-		window.location.href = url;
+	if (!validateToken()) {
 		return;
 	}
 	
@@ -44,6 +41,18 @@ function closeForm() {
 	var bodyNode = document.getElementsByTagName("body")[0];
 	var curtain = document.getElementById("curtain");
 	bodyNode.removeChild(curtain);
+}
+
+function validateToken() {
+	
+	var apstrataToken = decodeURIComponent(getCookie("apstrataToken")).split(";");	
+	if (!apstrataToken || apstrataToken[0] === "") {	
+		
+		var url = window.location.href.substring(0, window.location.href.indexOf("&"));
+		window.location.href = url;
+		return false;
+	}
+	return true;
 }
 
 function toggleFriendsHandler() {
@@ -153,10 +162,15 @@ function publishAction(docKey) {
 
 function getFriends(event) {
 	
+	if (!validateToken()) {
+		return;
+	}
+	
 	var name = event.target.value;
 	if (name == "") {
 		
-		displayFriends([]);
+		friends = [];
+		displayFriends(friends);
 	}
 	
 	var apstrataToken = decodeURIComponent(getCookie("apstrataToken")).split(";");	
@@ -173,7 +187,8 @@ function getFriends(event) {
 	if (serverResponse) {
 		var result = JSON.parse(serverResponse);
 		if (!result.friends) {
-			alert(result);
+			alert("result: " + JSON.stringify(result));
+			return;
 		}
 		
 		friends = result.friends;
@@ -225,9 +240,11 @@ function displayFriends(friends) {
 		var li = document.createElement("li");
 		li.className = "friend ui-menu-item";
 		li.setAttribute("role", "presentation");
+		li.setAttribute("id", "friend-" + i);
 		li.setAttribute("aria-label", friend.name);	
-		li.setAttribute("onmouveover", "toggleSelectedFriend(this)");
-		li.setAttribute("onmouseout", "toggleSelectedFriend(this)");
+		li.setAttribute("onmouseover", "focusFriend(this)");
+		li.setAttribute("onmouseout", "blurFriend(this)");
+		li.setAttribute("onclick", "addFriend(event)");
 		whoAreYouWithNode.appendChild(li);
 		
 		var img = document.createElement("img");
@@ -246,20 +263,67 @@ function displayFriends(friends) {
 	}
 }	
 
-function toggleSelectedFriend(node) {
+function focusFriend(node) {
 		
-	if (node.className == "ui-state-focus") {		
-		node.className = node.className.replace(/\ui-state-focus\b/,'');
-	}else {
-		node.className = "ui-state-focus"
-	}
+	node.className = "ui-state-focus"
 }
 
-/*function addFriend(friend) {
+function blurFriend(node) {
 	
-	<li class="friend">
-		<a href="http://www.facebook.com/alex.tairieur.9" target="_blank">Alex Tairieur</a>
-		<button class="btn btn-link" type="button" title="Remove Alex Tairieur from meal">×</button>
-	</li>
+	node.className = node.className.replace(/\ui-state-focus\b/,'');
+}
+
+function addFriend(item) {
 	
-}*/
+	var index = item.currentTarget.id.substring(item.currentTarget.id.indexOf("-") + 1);
+	var selectedFriend = friends[index];
+	var found = false; 
+	for (var i = 0; i < selectedFriends.length && !found; i++) {
+		found = (selectedFriends[i].uid == selectedFriend.uid) ? true : false;
+	}
+	
+	if (found){
+		return;
+	}
+	
+	
+	selectedFriends.push(selectedFriend);
+	var ul = document.getElementById("composer-friends-group-fields");
+	var li = document.createElement("li");
+	li.setAttribute("id", "selectedFriend-" + selectedFriend.uid);
+	li.className = "friend";
+	ul.appendChild(li);
+	var a = document.createElement("a");
+	a.setAttribute("href", selectedFriend.profile_url);
+	a.setAttribute("target", "_blank");
+	a.innerHTML = selectedFriend.name;
+	li.appendChild(a);
+	var button = document.createElement("button");
+	button.className = "btn btn-link";
+	button.setAttribute("type", "button");
+	button.setAttribute("id", "btn-remove-friend-" + selectedFriend.uid);
+	button.setAttribute("title", "Remove " + selectedFriend.name);
+	button.setAttribute("onclick", "removeFriend(event)");
+	var x = document.createTextNode("x");
+	button.appendChild(x);
+	li.appendChild(button);
+	
+	var whoAreYouWithNode = document.getElementById("ui-id-1");
+	whoAreYouWithNode.style.display = "none";	
+}
+
+function removeFriend(event) {
+	
+	var id = event.currentTarget.id.substring(event.currentTarget.id.lastIndexOf("-") + 1);
+	var ul = document.getElementById("composer-friends-group-fields");
+	var li = document.getElementById("selectedFriend-" + id);
+	ul.removeChild(li);
+	var found = false;
+	for (i=0; i < selectedFriends.length && !found; i++) {
+		if (selectedFriends[i].uid == id) {
+			
+			selectedFriends.splice(i,1);
+			found = true;
+		}
+	}
+}	

@@ -235,9 +235,7 @@ function getFriends(apsdb, facebookid, accessToken, paging) {
 function searchFriendsByName(apsdb, facebookid, accessToken, searchDTO) {
 
 	var common = apsdb.require("social.fb.common");
-	var fqlQuery = "select uid, name, pic_small from user where uid in (SELECT uid2 FROM friend WHERE uid1 = me())and (strpos(lower (name),'" + searchDTO.name + "')>=0 OR strpos(name,'" + searchDTO.name + "')>=0)";
-	apsdb.log.setLogLevel(4);
-	apsdb.log.debug("fql", {"fql":fqlQuery});
+	var fqlQuery = "select uid, name, pic_small, profile_url from user where uid in (SELECT uid2 FROM friend WHERE uid1 = me())and (strpos(lower (name),'" + searchDTO.name + "')>=0 OR strpos(name,'" + searchDTO.name + "')>=0)";
 	var url = "https://graph.facebook.com/fql";
 	var params = {
 		"q": fqlQuery
