@@ -16,7 +16,12 @@ try {
 	var response = userManager.getUser(apsdb, login);
 	var facebookManager = apsdb.require("social.fb.facebookManager");
 	var name = request.parameters["name"];
-	return facebookManager.searchFriendsByName(apsdb, null, response.user.accessToken, {"name":name});
+	var response = facebookManager.searchFriendsByName(apsdb, null, response.user.accessToken, {"name":name});
+	if (request.parameters["cors"]) {
+	
+		var headers = {"Access-Control-Allow-Origin": "*"};
+		apsdb.httpRespond(JSON.stringify(response), 200, headers);
+	}
 	
 	return response;
 }catch(exception) {

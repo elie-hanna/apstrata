@@ -81,7 +81,9 @@ try {
 	
 	// post action to facebook using Apstrata's APIs
 	var facebookManager = apsdb.require("social.fb.facebookManager");
-	return facebookManager.executeAction(apsdb, user.facebookid, accessToken, actionDTO);
+	var response = facebookManager.executeAction(apsdb, user.facebookid, accessToken, actionDTO);
+	var headers = {"Access-Control-Allow-Origin": "*"};
+	apsdb.httpRespond(JSON.stringify(response), 200, headers);
 }catch(exception) {
 
 	return {

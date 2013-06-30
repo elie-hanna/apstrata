@@ -48,6 +48,7 @@
  		<meta property="og:image" content="<?php print $meal['picture']?>"/>
  		<link rel="stylesheet" type="text/css" href="./css/style.css"/>
 		<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css"/>
+		<link rel="stylesheet" type="text/css" href="./css/jquery-ui-autocomplete.css"/>
 		<script type="text/javascript">
 	
 			// this function invokes the Apstrata script that handles the login process
@@ -133,15 +134,15 @@
 									<ul class="unstyled inline" id="composer-friends-group-fields">
 										<li>
 											<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
-											<input type="search" role="combobox" id="composer-friends-field" autocomplete="off" placeholder="Who are you with?" aria-label="Who are you with?" class="ui-autocomplete-input" aria-haspopup="true">
+											<input type="search" role="combobox" id="composer-friends-field" autocomplete="off" placeholder="Who are you with?" aria-label="Who are you with?" class="ui-autocomplete-input" aria-haspopup="true" onchange="handleEvent(event)">
 										</li>
 									</ul>
-									<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-2" tabindex="0" style="display: none;"></ul>
+									<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="display: none;"></ul>
 								</div>
 								<div id="composer-place-group" style="display: none;">
 									<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
 									<input type="search" role="combobox" id="composer-place-field" autocomplete="off" placeholder="Where are you?" aria-label="Where are you?" class="ui-autocomplete-input" aria-haspopup="true">
-									<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="display: none;"></ul>
+									<!--<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="display: none;"></ul>-->
 								</div>
 							</div>
 							<div class="btn-group" id="composer-buttons">

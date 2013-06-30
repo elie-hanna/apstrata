@@ -1,3 +1,5 @@
+var friends = [];
+
 function handleEvent(event) {
 	
 	var eventHandler = {
@@ -6,11 +8,12 @@ function handleEvent(event) {
 		"toggle-place" : "togglePlaceHandler",
 		"symbol-form-close": "closeForm",
 		"btn-form-close": "closeForm",
-		"share-button": "openForm"
+		"share-button": "openForm",
+		"composer-friends-field": "getFriends"
 	}
 	
 	var clickedBtnId = event.currentTarget.id;
-	window[eventHandler[clickedBtnId]]();	
+	window[eventHandler[clickedBtnId]](event);	
 }
 
 function openForm() {
@@ -49,10 +52,10 @@ function toggleFriendsHandler() {
 	var friendsGroupNode = document.getElementById("composer-friends-group");
 	var toggleFriendsBtnNode = document.getElementById("toggle-friends");
 	var togglePlaceBtnNode = document.getElementById("toggle-place");
-	if (friendsGroupNode.style.display == "block") {
+	if (friendsGroupNode.style.display == "") {
 		friendsGroupNode.style.display = "none";
 	}else {
-		friendsGroupNode.style.display = "block";
+		friendsGroupNode.style.display = "";
 	}
 	
 	if (toggleFriendsBtnNode.className == "btn active") {
@@ -134,7 +137,7 @@ function publishAction(docKey) {
 	try {
 		xhReq.send(null);
 	}catch(crossSiteException) {
-		
+		console.log(crossSiteException);
 	}
 	
 	var serverResponse = xhReq.responseText;
@@ -146,6 +149,36 @@ function publishAction(docKey) {
 	}
 	
 	closeForm();
+}
+
+function getFriends(event) {
+	
+	var name = event.target.value;
+	if (name == "") {
+		
+		displayFriends([]);
+	}
+	
+	var apstrataToken = decodeURIComponent(getCookie("apstrataToken")).split(";");	
+	var xhReq = new XMLHttpRequest();	
+	var url = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?apsws.time=1371484281539&apsws.responseType=jsoncdp&apsdb.scriptName=social.api.fb.searchUserFriends&apsdb.authToken=" + apstrataToken[0] + "&apsws.user=" + apstrataToken[1] + "&cors=true&name=" + name;		
+	xhReq.open("GET", url, false);
+	try {
+		xhReq.send(null);
+	}catch(crossSiteException) {
+		console.log(crossSiteException);
+	}
+
+	var serverResponse = xhReq.responseText;
+	if (serverResponse) {
+		var result = JSON.parse(serverResponse);
+		if (!result.friends) {
+			alert(result);
+		}
+		
+		friends = result.friends;
+		displayFriends(friends)
+	}		
 }
 
 function getCookie(cookieName) {
@@ -163,3 +196,70 @@ function getCookie(cookieName) {
 	
 	return "";
 }
+
+function displayFriends(friends) {
+
+	var whoAreYouWithNode = document.getElementById("ui-id-1");
+	if (friends.length == 0) {
+		whoAreYouWithNode.style.display = "none"; 
+		return;
+	}
+	
+	whoAreYouWithNode.style.display = "block"; 
+	whoAreYouWithNode.style.width = "218px";
+	whoAreYouWithNode.style.top = "120px";
+	whoAreYouWithNode.style.left = "20.5px";
+	
+	// remove existing nodes
+	if (whoAreYouWithNode.hasChildNodes()) {
+	    while (whoAreYouWithNode.childNodes.length >= 1 ){
+	        whoAreYouWithNode.removeChild(whoAreYouWithNode.firstChild);       
+	    } 
+	}
+	
+	// build new friend list from returned friends	
+	for(var i = 0; i < friends.length; i++) {
+		
+		var friend = friends[i];
+		
+		var li = document.createElement("li");
+		li.className = "friend ui-menu-item";
+		li.setAttribute("role", "presentation");
+		li.setAttribute("aria-label", friend.name);	
+		li.setAttribute("onmouveover", "toggleSelectedFriend(this)");
+		li.setAttribute("onmouseout", "toggleSelectedFriend(this)");
+		whoAreYouWithNode.appendChild(li);
+		
+		var img = document.createElement("img");
+		img.setAttribute("src", friend.pic_small);
+		img.setAttribute("alt", friend.name);
+		img.setAttribute("width", "25");
+		img.setAttribute("height", "25");		
+		li.appendChild(img);
+		
+		var a = document.createElement("a");
+		a.className = "text ui-corner-all";
+		a.setAttribute("id", "ui-id-" + (i+2));
+		a.setAttribute("tabindex", "-1");		
+		a.innerHTML = friend.name;
+		li.appendChild(a);
+	}
+}	
+
+function toggleSelectedFriend(node) {
+		
+	if (node.className == "ui-state-focus") {		
+		node.className = node.className.replace(/\ui-state-focus\b/,'');
+	}else {
+		node.className = "ui-state-focus"
+	}
+}
+
+/*function addFriend(friend) {
+	
+	<li class="friend">
+		<a href="http://www.facebook.com/alex.tairieur.9" target="_blank">Alex Tairieur</a>
+		<button class="btn btn-link" type="button" title="Remove Alex Tairieur from meal">×</button>
+	</li>
+	
+}*/
