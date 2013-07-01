@@ -40,7 +40,6 @@ function closeForm() {
 	composerModalNode.style.display = "none";
 	var bodyNode = document.getElementsByTagName("body")[0];
 	var curtain = document.getElementById("curtain");
-	removeAllFriends();
 	bodyNode.removeChild(curtain);
 }
 
@@ -305,8 +304,7 @@ function addFriend(item) {
 	
 	if (found){
 		return;
-	}
-	
+	}	
 	
 	selectedFriends.push(selectedFriend);
 	var ul = document.getElementById("composer-friends-group-fields");
@@ -329,6 +327,28 @@ function addFriend(item) {
 	button.appendChild(x);
 	li.appendChild(button);
 	
+	var composerMsgDataNode = document.getElementById("composer-message-data");
+	composerMsgDataNode.style.display = "block";
+	if (selectedFriends.length == 1) {
+	
+		var withTxt = document.createTextNode("With ");
+		composerMsgDataNode.appendChild(withTxt);
+	}
+	
+	var span = document.createElement("span");
+	span.className = "friends";
+	span.setAttribute("id", "span-selected-friend-" + selectedFriend.uid);
+		
+	var a = document.createElement("a");
+	a.setAttribute("href", selectedFriend.profile_url);
+	a.setAttribute("target", "_blank");
+	span.appendChild(a);
+	var nameTxt =  document.createTextNode(selectedFriend.name);
+	a.appendChild(nameTxt);		
+	var sepTxt = document.createTextNode(" ");
+	span.appendChild(sepTxt);
+	composerMsgDataNode.appendChild(span);
+	
 	var whoAreYouWithNode = document.getElementById("ui-id-1");
 	whoAreYouWithNode.style.display = "none";	
 }
@@ -339,6 +359,11 @@ function removeFriend(event) {
 	var ul = document.getElementById("composer-friends-group-fields");
 	var li = document.getElementById("selectedFriend-" + id);
 	ul.removeChild(li);
+	
+	var composerMsgDataNode = document.getElementById("composer-message-data");
+	var span = document.getElementById("span-selected-friend-" + id);
+	composerMsgDataNode.removeChild(span);
+	
 	var found = false;
 	for (i=0; i < selectedFriends.length && !found; i++) {
 		if (selectedFriends[i].uid == id) {
@@ -346,6 +371,11 @@ function removeFriend(event) {
 			selectedFriends.splice(i,1);
 			found = true;
 		}
+	}
+	
+	if (selectedFriends.length == 0) {
+		composerMsgDataNode.style.display = "none";
+		composerMsgDataNode.removeChild(composerMsgDataNode.firstChild);
 	}
 }
 
@@ -356,7 +386,8 @@ function removeAllFriends() {
 		
 	    for (var i = 0; i < ul.childNodes.length; i++){
 	    	
-	    	if (ul.childNodes[i].id && ul.childNodes[i].id.indexOf("selectedFriend-") > -1) {
+	    	if (ul.childNodes[i].id && ul.childNodes[i].id.indexOf("selectedFriend-") > -1) {    		
+	    		
 	        	ul.removeChild(ul.childNodes[i]);       
 	    	}
 	    } 
