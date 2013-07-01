@@ -50,8 +50,8 @@
 				$resp = $client->callApi("DeleteToken", $params); 
 				
 				// Remove the user and the Apstrata token from cookies 
-				setcookie("user", "", time()-3600, "/", Util::$WEB_DOMAIN);
-				setcookie("apstrataToken", "", time()-3600, "/", Util::$WEB_DOMAIN);				
+				setcookie("user", "", time()-36000, "/", Util::$WEB_DOMAIN);
+				setcookie("apstrataToken", "", time()-36000, "/", Util::$WEB_DOMAIN);				
 			}			
 		}
 	}

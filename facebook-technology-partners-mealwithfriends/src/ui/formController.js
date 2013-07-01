@@ -176,24 +176,32 @@ function getFriends(event) {
 	var apstrataToken = decodeURIComponent(getCookie("apstrataToken")).split(";");	
 	var xhReq = new XMLHttpRequest();	
 	var url = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?apsws.time=1371484281539&apsws.responseType=jsoncdp&apsdb.scriptName=social.api.fb.searchUserFriends&apsdb.authToken=" + apstrataToken[0] + "&apsws.user=" + apstrataToken[1] + "&cors=true&name=" + name;		
-	xhReq.open("GET", url, false);
+	
+	xhReq.onreadystatechange=function() {
+	  	
+	  	if (xhReq.readyState==4 && xhReq.status==200) {
+	   
+	   		var serverResponse = xhReq.responseText;
+			if (serverResponse) {
+				
+				var result = JSON.parse(serverResponse);
+				if (!result.friends) {
+					alert("result: " + JSON.stringify(result));
+					return;
+				}
+				
+				friends = result.friends;
+				displayFriends(friends)
+			}
+	  	}
+  	}
+	
+	xhReq.open("GET", url, true);
 	try {
 		xhReq.send(null);
 	}catch(crossSiteException) {
 		console.log(crossSiteException);
 	}
-
-	var serverResponse = xhReq.responseText;
-	if (serverResponse) {
-		var result = JSON.parse(serverResponse);
-		if (!result.friends) {
-			alert("result: " + JSON.stringify(result));
-			return;
-		}
-		
-		friends = result.friends;
-		displayFriends(friends)
-	}		
 }
 
 function getCookie(cookieName) {
