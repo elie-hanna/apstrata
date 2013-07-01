@@ -40,6 +40,7 @@ function closeForm() {
 	composerModalNode.style.display = "none";
 	var bodyNode = document.getElementsByTagName("body")[0];
 	var curtain = document.getElementById("curtain");
+	removeAllFriends();
 	bodyNode.removeChild(curtain);
 }
 
@@ -121,17 +122,14 @@ function handleGeolocateError(error) {
   	switch(error.code) {
   	
 	    case error.PERMISSION_DENIED:
-	      
-	      break;
+	          
 	    case error.POSITION_UNAVAILABLE:
 	      
-	      break;
 	    case error.TIMEOUT:
 	     
-	      break;
 	    case error.UNKNOWN_ERROR:
 	     
-	      break;
+	    alert(JSON.stringify(error));
 	}
 }
 
@@ -141,7 +139,18 @@ function publishAction(docKey) {
 	var apstrataToken = decodeURIComponent(getCookie("apstrataToken")).split(";");	
 	var xhReq = new XMLHttpRequest(docKey);	
 	var url = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?apsws.time=1371484281539&apsws.responseType=jsoncdp&apsdb.scriptName=ftp.api.facebookAction&apsdb.authToken=" + apstrataToken[0] + "&apsws.user=" + apstrataToken[1] + "&docKey=" + docKey + "&actionType=Eat&objectType=meal";
-	url = (messageNode.value) ? url + "&message=" + messageNode.value : url;	
+	url = (messageNode.value) ? url + "&message=" + messageNode.value : url;
+	if (selectedFriends.length > 0) {
+		
+		var friendsInfoToSend = [];
+		for (var i = 0; i < selectedFriends.length; i++) {
+			
+			friendsInfoToSend.push(selectedFriends[i].uid);
+		}
+		
+		url = url + "&tags=" + JSON.stringify(friendsInfoToSend);
+	}
+	
 	xhReq.open("GET", url, false);
 	try {
 		xhReq.send(null);
@@ -154,6 +163,10 @@ function publishAction(docKey) {
 		var result =  JSON.parse(serverResponse);
 		if (result.metadata.status == "failure") {
 			alert(result.metadata.errorDetail);
+		}
+		
+		if (result.result.error) {
+			alert(result.result.error.message);
 		}
 	}
 	
@@ -334,4 +347,20 @@ function removeFriend(event) {
 			found = true;
 		}
 	}
-}	
+}
+
+function removeAllFriends() {
+	
+	var ul = document.getElementById("composer-friends-group-fields");
+	if (ul.hasChildNodes()) {
+		
+	    for (var i = 0; i < ul.childNodes.length; i++){
+	    	
+	    	if (ul.childNodes[i].id && ul.childNodes[i].id.indexOf("selectedFriend-") > -1) {
+	        	ul.removeChild(ul.childNodes[i]);       
+	    	}
+	    } 
+	}
+	
+	selectedFriends.splice(0, selectedFriends.length);
+}

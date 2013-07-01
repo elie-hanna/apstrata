@@ -1,6 +1,6 @@
 <script>
 <scriptACL>
-  <execute>anonymous</execute>
+  <execute>authenticated-users</execute>
   <read>nobody</read>
   <write>nobody</write>
 </scriptACL>
@@ -28,6 +28,7 @@
 try {
 	
 	var userManager = apsdb.require("social.fb.userManager");
+	var common = apsdb.require("social.fb.common");
 	
 	// check if the user is authenticated, if not throw an exception
 	if (!userManager.isUserAuthenticated(apsdb, request)) {
@@ -39,10 +40,9 @@ try {
 		}	
 	}
 	
-	// get the login of the user who sent the request, if any
+	// get the login and account key of the user who sent the request, if any
 	var currentUserLogin = userManager.getUserLoginFromRequest(apsdb, request);
-	
-	var currentUserLogin = "angus.mackeyboard";
+	var accountKey = userManager.getUserAccountFromRequest(apsdb, request);
 	
 	// the script should not be called as an account owner
 	if (currentUserLogin.indexOf("#") > 1) {
@@ -59,6 +59,7 @@ try {
 	var accessToken = request.parameters["accessToken"]
 	if (currentUserLogin != "anonymous") {
 		user = userManager.getUser(apsdb, currentUserLogin);
+		accessToken = user.user.accessToken;
 	}else {
 		user = userManager.findUserFromToken(apsdb, accessToken);
 	}
@@ -85,8 +86,10 @@ try {
 	}
 		
 	// post to facebook using Apstrata's APIs
-	var facebookManager = apsdb.require("social.fb.facebookManager2");
-	return facebookManager.post(apsdb, user.facebookid, accessToken, postDTO);
+	var facebookManager = apsdb.require("social.fb.facebookManager");
+	var response = facebookManager.post(apsdb, user.facebookid, accessToken, postDTO);
+	var headers = {"Access-Control-Allow-Origin": "*"};
+	apsdb.httpRespond(JSON.stringify(response), 200, headers);
 }catch(exception) {
 
 	return {

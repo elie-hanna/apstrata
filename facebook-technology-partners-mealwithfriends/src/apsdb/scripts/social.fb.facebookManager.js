@@ -136,10 +136,12 @@ function checkAccessToken(apsdb, accessToken) {
  */
 function post(apsdb, facebookid, accessToken, postDTO) {
 
+	var fbObjects = ["actions", "properties", "to"];
 	var url = "https://graph.facebook.com/" + facebookid + "/feed";		
 	var common = apsdb.require("social.fb.common");
 	for(var property in postDTO) {
-		if (property == "actions" || property == "properties") {
+	
+		if (fbObjects.indexOf(property) > -1) {
 			postDTO[property] = JSON.stringify([].concat(postDTO[property]));
 		}
 		
@@ -174,6 +176,7 @@ function post(apsdb, facebookid, accessToken, postDTO) {
  */
 function executeAction(apsdb, facebookid, accessToken, actionDTO) {
 
+	var fbObjects = ["place", "tags"];
 	var common = apsdb.require("social.fb.common");
 	//var url = "https://graph.facebook.com/" + facebookid + "/" + common.appNameSpace + ":" + actionDTO.actionType;
 	var url = "https://graph.facebook.com/me/" + common.appNameSpace + ":" + actionDTO.actionType;	
@@ -184,7 +187,7 @@ function executeAction(apsdb, facebookid, accessToken, actionDTO) {
 	for(var property in actionDTO) {
 		if (property != "objectType") {
 		
-			if (property == "place") {
+			if (fbObjects.indexOf(property) > -1) {
 				params[property] = JSON.stringify(actionDTO[property]);
 			}else {
 				params[property] = actionDTO[property];
