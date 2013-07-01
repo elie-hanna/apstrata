@@ -253,6 +253,41 @@ function searchFriendsByName(apsdb, facebookid, accessToken, searchDTO) {
 } 
 
 /*
+ * @param facebookid (optional): the facebook identifier of the targeted user (optional)
+ * @param accessToken: the access token to the facebook account of the user
+ * @param searchDTO: the object holding the search criteria {"name":"some_place_name", "center":"longitude,lattitude", "fields":[field1,field2,..], etc.}
+ * // kindly check Facebook's documentation for more information about input parameters https://developers.facebook.com/docs/reference/api/search/#types
+ * @return (if successful) // returned structured depends on the content of the field property of searchDTO
+ * "result":{"data":[{"name":"page_name","location":{"street":"some_address","city":"city_name","state":"state_name","country":"country_name", etc.},"id":"place_id_on_fb", etc.}
+ * On failure
+ * @throws
+ * { "status" = "failure", "errorCode": "some_error_code", "error_detail": "some_error_detail" }
+ */
+function searchPlaces(apsdb, facebookid, accessToken, searchDTO) {
+
+	var fbObjects = ["fields"];
+	var common = apsdb.require("social.fb.common");
+	var params = [];
+	for(var property in searchDTO) {		
+		
+		if (fbObjects.indexOf(property) > -1) {
+			params[property] = JSON.stringify(searchDTO[property]);
+		}else {
+			params[property] = searchDTO[property];
+		}	
+	} 
+	
+	params["type"] = "place";
+	var url = "https://graph.facebook.com/search";	
+	var response = apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "GET", url, params);
+	if (response.metadata.status == "success") {	
+		return response;
+	}else {
+		return response.metadata;
+	}
+}
+
+/*
  * Gets the details of the application we need to integrate with. 
  * These details will be retrieved from the request.
  * If this is not the case, falls back to the default values

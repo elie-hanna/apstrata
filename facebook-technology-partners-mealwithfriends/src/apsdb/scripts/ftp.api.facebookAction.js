@@ -17,16 +17,6 @@ try {
 	var userManager = apsdb.require("social.fb.userManager");
 	var common = apsdb.require("social.fb.common");
 	
-	// check if the user is authenticated, if not throw an exception
-	if (!userManager.isUserAuthenticated(apsdb, request)) {
-	
-		throw {
-		
-			"errorCode": "PERMISSION_DENIED",
-			"errorDetail": "You need to authenticate yourself using your app or your facebook credentials"
-		}	
-	}
-	
 	// get the login and account key of the user who sent the request, if any
 	var currentUserLogin = userManager.getUserLoginFromRequest(apsdb, request);
 	var accountKey = userManager.getUserAccountFromRequest(apsdb, request);
