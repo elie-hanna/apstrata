@@ -185,12 +185,16 @@ function publishAction(docKey) {
 	var serverResponse = xhReq.responseText;
 	if (serverResponse) {
 		var result =  JSON.parse(serverResponse);
-		if (result.metadata.status == "failure") {
+		if (result && result.metadata.status == "failure") {
 			alert(result.metadata.errorDetail);
 		}
 		
-		if (result.result.error) {
+		if (result && result.result.error) {
 			alert(result.result.error.message);
+		}
+		
+		if (!result) {
+			alert("Time-out: could not connect to server");
 		}
 	}
 	
