@@ -127,7 +127,8 @@
 								<div class="controls">
 									<input type="text" class="input-xxlarge" id="composer-message" maxlength="1000" autocomplete="off" placeholder="Write something about the <?php print $meal['recipeName']?>">
 								</div>
-								<span id="composer-message-data" style="display: none;"></span>
+								<span id="composer-message-data-place" style="display: none;"></span>
+								<span id="composer-message-data-friends" style="display: none;"></span>
 							</div>
 							<div id="autocomplete-fields">
 								<div class="form-inline" id="composer-friends-group" style="display: none;">

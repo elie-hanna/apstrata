@@ -439,7 +439,7 @@ function addFriend(item) {
 	button.appendChild(x);
 	li.appendChild(button);
 	
-	var composerMsgDataNode = document.getElementById("composer-message-data");
+	var composerMsgDataNode = document.getElementById("composer-message-data-friends");
 	composerMsgDataNode.style.display = "block";
 	if (selectedFriends.length == 1) {
 	
@@ -475,7 +475,7 @@ function addPlace(item) {
 	}
 	
 	currentPlace = selectedPlace;
-	var composerMsgDataNode = document.getElementById("composer-message-data");
+	var composerMsgDataNode = document.getElementById("composer-message-data-place");
 	var span = document.getElementById("currentPlace");
 	if (span) {
 		removePlace(composerMsgDataNode);
@@ -486,7 +486,8 @@ function addPlace(item) {
 	span.id = "currentPlace";
 	composerMsgDataNode.appendChild(span);
 	var at = document.createTextNode("at ");
-	span.appendChild(at); 
+	span.appendChild(at);
+	 
 	var a = document.createElement("a");
 	a.setAttribute("href", selectedPlace.link);
 	a.setAttribute("target", "_blank");
@@ -506,7 +507,7 @@ function removeFriend(event) {
 	var li = document.getElementById("selectedFriend-" + id);
 	ul.removeChild(li);
 	
-	var composerMsgDataNode = document.getElementById("composer-message-data");
+	var composerMsgDataNode = document.getElementById("composer-message-data-friends");
 	var span = document.getElementById("span-selected-friend-" + id);
 	composerMsgDataNode.removeChild(span);
 	
