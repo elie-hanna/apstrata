@@ -7,15 +7,16 @@
 <code><![CDATA[
 
 /*
- * Use this script to search for places on Facebook
+ * Use this script to search for places on Facebook. Note that this script does not allow you to retrieve
+ * paginated results but only returns the first batch of results.
  * @param query (mandatory): the query string to send (e.g. "office")
  * @param center (optional): the lattitude and longitude from where to start the search
  * @param distance (optional): the radius from the center to narrow the search
  * @param fields (optional): the fields to return 
  * @param any other parameter available from Facebook
  * (check Facebook's documentation for more https://developers.facebook.com/docs/reference/api/search/#types)
- * @return
- * { "result": {  "data": [  {"uid": "some_uid", "name": "some_name", "pic_small": "url_to_profile_pic"}, ... ]}}
+ * @return (minimum for each place (name, location, id, picture))
+ * "result":{"data":[{"name":"page_name","location":{"street":"some_address","city":"city_name","state":"state_name","country":"country_name", etc.},"id":"place_id_on_fb", "picture": {"data": {"url": "link_to_pic", ...}, ...},  etc.}
  * On failure
  * @throws
  * { "status" = "failure", "errorCode": "some_error_code", "error_detail": "some_error_detail" }
@@ -59,8 +60,14 @@ try {
 				searchDTO[param] = JSON.parse(request.parameters[param]);
 			}catch(exception){
 				searchDTO[param] = request.parameters[param];
-			}
+			}		
 		}
+	}
+	
+	// Add default returned fields if not specified
+	if (!searchDTO["fields"]) {
+	
+		searchDTO["fields"] = ["name", "location", "picture", "link"];
 	}
 		
 	// post to facebook using Apstrata's APIs
@@ -103,7 +110,7 @@ function _getMealData(apsdb, key) {
 
 function _isPostParameter(parameter) {
 
-	if (parameter.indexOf("apsdb") > -1 || parameter.indexOf("apsws") > -1) {
+	if (parameter.indexOf("apsdb") > -1 || parameter.indexOf("apsws") > -1 || parameter == "cors") {
 		return false;
 	}
 	

@@ -1,5 +1,26 @@
 var friends = [];
+var places = [];
 var selectedFriends = [];
+var currentPlace;
+var currentLocation = {};
+
+window.onkeypress = function(event) {
+	
+	if (event.keyCode == 27) {
+		
+		var whoAreYouWithNode = document.getElementById("ui-id-1");
+		if (whoAreYouWithNode) {
+			whoAreYouWithNode.style.display = "none";
+		}
+		
+		var whereAreYouNode = document.getElementById("ui-id-p1");
+		if (whereAreYouNode) {
+			whereAreYouNode.style.display = "none";
+		}
+		
+		event.stopPropagation();
+	}
+}
 
 function handleEvent(event) {
 	
@@ -10,7 +31,8 @@ function handleEvent(event) {
 		"symbol-form-close": "closeForm",
 		"btn-form-close": "closeForm",
 		"share-button": "openForm",
-		"composer-friends-field": "getFriends"
+		"composer-friends-field": "getFriends",
+		"composer-place-field": "getPlaces"
 	}
 	
 	var clickedBtnId = event.currentTarget.id;
@@ -110,10 +132,12 @@ function geolocate() {
 
 function getPosition(position) {
  
-	var lattitude = position.coords.latitude;
+	var latitude = position.coords.latitude;
 	var longitude = position.coords.longitude;
-	var placeFieldNode = document.getElementById("composer-place-field");
-	placeFieldNode.innerHTML = lattitude + ";" + longitude;
+	currentLocation = {
+		"latitude" : latitude,
+		"longitude" : longitude
+	}
 }
 
 function handleGeolocateError(error) {
@@ -139,6 +163,7 @@ function publishAction(docKey) {
 	var xhReq = new XMLHttpRequest(docKey);	
 	var url = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?apsws.time=1371484281539&apsws.responseType=jsoncdp&apsdb.scriptName=ftp.api.facebookAction&apsdb.authToken=" + apstrataToken[0] + "&apsws.user=" + apstrataToken[1] + "&docKey=" + docKey + "&actionType=Eat&objectType=meal";
 	url = (messageNode.value) ? url + "&message=" + messageNode.value : url;
+	url = (currentPlace) ? url + "&place=" + currentPlace.id : url;
 	if (selectedFriends.length > 0) {
 		
 		var friendsInfoToSend = [];
@@ -216,20 +241,52 @@ function getFriends(event) {
 	}
 }
 
-function getCookie(cookieName) {
+function getPlaces(event) {
 	
-	var cookies = document.cookie;
-	var cookieName = cookieName + "=";
-	var cookieStart = cookies.indexOf(cookieName);
-	cookieStart = cookieStart + cookieName.length; 
-	if (cookieStart > -1) {
-	 
-		cookieEnd = cookies.indexOf(";", cookieStart);
-		var cookieValue = cookieEnd >  -1 ? cookies.substring(cookieStart, cookieEnd) : cookies.substring(cookieStart);
-		return cookieValue;
+	if (!validateToken()) {
+		return;
 	}
 	
-	return "";
+	var name = event.target.value;
+	if (name == "") {
+		
+		places = [];
+		displayPlaces(places);
+		return;
+	}
+	
+	var apstrataToken = decodeURIComponent(getCookie("apstrataToken")).split(";");	
+	var xhReq = new XMLHttpRequest();
+	var url = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?apsws.time=1371484281539&apsws.responseType=jsoncdp&apsdb.scriptName=social.api.fb.searchPlaces&apsdb.authToken=" + apstrataToken[0] + "&apsws.user=" + apstrataToken[1] + "&cors=true&q=" + name;		
+	if (currentLocation && currentLocation.latitude && currentLocation.longitude) {		
+		url = url + "&center=" + currentLocation.latitude + "," + currentLocation.longitude;
+	}
+	
+	xhReq.onreadystatechange=function() {
+	  	
+	  	if (xhReq.readyState==4 && xhReq.status==200) {
+	   
+	   		var serverResponse = xhReq.responseText;
+			if (serverResponse) {
+				
+				var result = JSON.parse(serverResponse);
+				if (!result.data) {
+					alert("result: " + JSON.stringify(result));
+					return;
+				}
+				
+				places = result.data;
+				displayPlaces(places)
+			}
+	  	}
+  	}
+	
+	xhReq.open("GET", url, true);
+	try {
+		xhReq.send(null);
+	}catch(crossSiteException) {
+		console.log(crossSiteException);
+	}
 }
 
 function displayFriends(friends) {
@@ -279,6 +336,57 @@ function displayFriends(friends) {
 		a.setAttribute("id", "ui-id-" + (i+2));
 		a.setAttribute("tabindex", "-1");		
 		a.innerHTML = friend.name;
+		li.appendChild(a);
+	}
+}
+
+function displayPlaces(places) {
+	
+	var whereAreYouNode = document.getElementById("ui-id-p1");
+	if (places.length == 0) {
+		whereAreYouNode.style.display = "none"; 
+		return;
+	}
+	
+	whereAreYouNode.style.display = "block"; 
+	whereAreYouNode.style.width = "363px";
+	whereAreYouNode.style.top = "121px";
+	whereAreYouNode.style.left = "15px";
+	
+	// remove existing nodes
+	if (whereAreYouNode.hasChildNodes()) {
+	    while (whereAreYouNode.childNodes.length >= 1 ){
+	        whereAreYouNode.removeChild(whereAreYouNode.firstChild);       
+	    } 
+	}
+	
+	// build new friend list from returned friends	
+	for(var i = 0; i < places.length; i++) {
+		
+		var place = places[i];
+		
+		var li = document.createElement("li");
+		li.className = "place ui-menu-item";
+		li.setAttribute("role", "presentation");
+		li.setAttribute("id", "place-" + i);
+		li.setAttribute("aria-label", place.name);	
+		li.setAttribute("onmouseover", "focusFriend(this)");
+		li.setAttribute("onmouseout", "blurFriend(this)");
+		li.setAttribute("onclick", "addPlace(event)");
+		whereAreYouNode.appendChild(li);
+		
+		var img = document.createElement("img");
+		img.setAttribute("src", place.picture.data.url);
+		img.setAttribute("alt", place.name);
+		img.setAttribute("width", "25");
+		img.setAttribute("height", "25");		
+		li.appendChild(img);
+		
+		var a = document.createElement("a");
+		a.className = "text ui-corner-all";
+		a.setAttribute("id", "ui-id-p" + (i+2));
+		a.setAttribute("tabindex", "-1");		
+		a.innerHTML = place.name;
 		li.appendChild(a);
 	}
 }	
@@ -353,6 +461,40 @@ function addFriend(item) {
 	whoAreYouWithNode.style.display = "none";	
 }
 
+function addPlace(item) {
+	
+	var index = item.currentTarget.id.substring(item.currentTarget.id.indexOf("-") + 1);
+	var selectedPlace = places[index];
+	var found = false; 
+	if (currentPlace && currentPlace.name == selectedPlace.name) {
+		return;
+	}
+	
+	currentPlace = selectedPlace;
+	var composerMsgDataNode = document.getElementById("composer-message-data");
+	var span = document.getElementById("currentPlace");
+	if (span) {
+		removePlace(composerMsgDataNode);
+	}
+	
+	span = document.createElement("span");
+	span.className = "place";
+	span.id = "currentPlace";
+	composerMsgDataNode.appendChild(span);
+	var at = document.createTextNode("at ");
+	span.appendChild(at); 
+	var a = document.createElement("a");
+	a.setAttribute("href", selectedPlace.link);
+	a.setAttribute("target", "_blank");
+	span.appendChild(a); 
+	var aTxt = document.createTextNode(selectedPlace.name);
+	a.appendChild(aTxt);
+	
+	composerMsgDataNode.style.display = "block";
+	var whereAreYouNode = document.getElementById("ui-id-p1");
+	whereAreYouNode.style.display = "none";	
+}
+
 function removeFriend(event) {
 	
 	var id = event.currentTarget.id.substring(event.currentTarget.id.lastIndexOf("-") + 1);
@@ -379,6 +521,11 @@ function removeFriend(event) {
 	}
 }
 
+function removePlace(root) {
+	
+	root.removeChild(root.firstChild);
+}
+
 function removeAllFriends() {
 	
 	var ul = document.getElementById("composer-friends-group-fields");
@@ -394,4 +541,20 @@ function removeAllFriends() {
 	}
 	
 	selectedFriends.splice(0, selectedFriends.length);
+}
+
+function getCookie(cookieName) {
+	
+	var cookies = document.cookie;
+	var cookieName = cookieName + "=";
+	var cookieStart = cookies.indexOf(cookieName);
+	cookieStart = cookieStart + cookieName.length; 
+	if (cookieStart > -1) {
+	 
+		cookieEnd = cookies.indexOf(";", cookieStart);
+		var cookieValue = cookieEnd >  -1 ? cookies.substring(cookieStart, cookieEnd) : cookies.substring(cookieStart);
+		return cookieValue;
+	}
+	
+	return "";
 }

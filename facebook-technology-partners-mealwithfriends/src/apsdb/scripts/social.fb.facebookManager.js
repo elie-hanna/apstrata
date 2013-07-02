@@ -267,7 +267,7 @@ function searchPlaces(apsdb, facebookid, accessToken, searchDTO) {
 
 	var fbObjects = ["fields"];
 	var common = apsdb.require("social.fb.common");
-	var params = [];
+	var params = {};
 	for(var property in searchDTO) {		
 		
 		if (fbObjects.indexOf(property) > -1) {
@@ -277,11 +277,11 @@ function searchPlaces(apsdb, facebookid, accessToken, searchDTO) {
 		}	
 	} 
 	
-	params["type"] = "place";
-	var url = "https://graph.facebook.com/search";	
+	params["type"] = "place";	
+	var url = "https://graph.facebook.com/search";
 	var response = apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "GET", url, params);
 	if (response.metadata.status == "success") {	
-		return response;
+		return response.result;
 	}else {
 		return response.metadata;
 	}

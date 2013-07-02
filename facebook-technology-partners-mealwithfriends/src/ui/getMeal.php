@@ -141,8 +141,8 @@
 								</div>
 								<div id="composer-place-group" style="display: none;">
 									<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
-									<input type="search" role="combobox" id="composer-place-field" autocomplete="off" placeholder="Where are you?" aria-label="Where are you?" class="ui-autocomplete-input" aria-haspopup="true">
-									<!--<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="display: none;"></ul>-->
+									<input type="search" role="combobox" id="composer-place-field" autocomplete="off" placeholder="Where are you?" aria-label="Where are you?" class="ui-autocomplete-input" aria-haspopup="true" onkeyup="handleEvent(event)">
+									<ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-p1" tabindex="0" style="display: none;"></ul>
 								</div>
 							</div>
 							<div class="btn-group" id="composer-buttons">
