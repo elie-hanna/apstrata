@@ -158,6 +158,10 @@ function handleGeolocateError(error) {
 
 function publishAction(docKey) {
 	
+	if (!validateToken()) {
+		return;
+	}
+	
 	var messageNode = document.getElementById("composer-message");
 	var apstrataToken = decodeURIComponent(getCookie("apstrataToken")).split(";");	
 	var xhReq = new XMLHttpRequest(docKey);	
