@@ -54,10 +54,10 @@
  * @param code: the oAuth verifier sent by facebook upon redirection to the callbackUrl
  * @param callbackUrl (optional): : the URL that will be called back by Facebook after the user logs in 
  * Note: this has to be the same URL as the one provided when invoking "getRequestToken"
- * If not provided, will use the url defined in "ftp.common"
+ * If not provided, will use the url defined in "social.fb.common"
  * @param loggedInRedirectUrl (optional): the URL where to redirect (if requested) further to successfully obtaining an access token
  * @param redirectAfterLogin (optional): if true, redirect either to the loggedInRedirectUrl if provided, 
- * or the one defined in "ftp.common"
+ * or the one defined in "social.fb.common"
  * @param returnApstrataToken: if sent and set to true, will make the api return the Apstrata token (See below)
  * @return (upon success) 
  * {
@@ -156,7 +156,7 @@ function _updateUserInfo(apsdb, accessToken) {
 	var common = apsdb.require("social.fb.common");
 	var resourceUrl = "https://graph.facebook.com/me";
 	
-	// Retrieve the user's information from faceboo, using the authentication token
+	// Retrieve the user's information from facebook, using the authentication token
 	var userInfo = apsdb.social.facebook.callApi(common.appKey, common.appSecret, accessToken, "GET", resourceUrl, {"fields":"id, first_name, last_name, username, email, picture"});
 	if (userInfo.metadata.status == "failure") {
 		throw userInfo.metadata;
@@ -164,18 +164,21 @@ function _updateUserInfo(apsdb, accessToken) {
 	
 	// Try to find a user with facebook's username
 	var userManager = apsdb.require("social.fb.userManager");
-	var user = userManager.getUser(apsdb, userInfo.result.username);
+	
+	// Create a user name for that user, either from his FB's user name, or from his email
+	var username = userInfo.result.username ? userInfo.result.username : userInfo.result.email;
+	var user = userManager.getUser(apsdb, username);
 	
 	// If the user does not exist, we need to create one using the facebook info
 	if (!user) {
 	
 		var userDTO = {
 		
-			"login": userInfo.result.username,
+			"login": username,
 			"name": userInfo.result.first_name + " " + userInfo.result.last_name,
 			"email": userInfo.result.email,
 			"accessToken": accessToken,
-			"facebookPicture": userInfo.result.picture,
+			"facebookPicture": userInfo.result.picture.data.url,
 			"facebookid": userInfo.result.id
 		}
 		
@@ -185,7 +188,7 @@ function _updateUserInfo(apsdb, accessToken) {
 		// if the user exists, we need to update his access token
 		var userDTO = {
 		
-			"login": userInfo.result.username,
+			"login": username,
 			"accessToken": accessToken
 		}
 		
@@ -210,9 +213,10 @@ function _handleAccessToken(apsdb, accessToken, request) {
 		
 			var userManager = apsdb.require("social.fb.userManager");
 			var apstrataToken = userManager.generateToken(apsdb, userLoginHashedPwd.login, userLoginHashedPwd.hashedPassword);
-			redirectUrl = redirectUrl + "?apstrataToken=" + apstrataToken["apsdb.authToken"] + "&expiresAfter=" + apstrataToken["apsdb.tokenExpires"] + "&userName=" + userLoginHashedPwd.login;
+			var paramSep = (redirectUrl.indexOf("?") > -1) || (redirectUrl.indexOf("%3F") < -1)  ? "&" : "?";
+			redirectUrl = redirectUrl + paramSep + "apstrataToken=" + apstrataToken["apsdb.authToken"] + "&expiresAfter=" + apstrataToken["apsdb.tokenExpires"] + "&userName=" + userLoginHashedPwd.login;
 		}else {
-			redirectUrl = redirectUrl + "?accessToken=" + accessToken + "&login=" + userLoginHashedPwd.login + "&hashedPwd=" + userLoginHashedPwd.hashedPassword;
+			redirectUrl = redirectUrl + paramSep + "accessToken=" + accessToken + "&login=" + userLoginHashedPwd.login + "&hashedPwd=" + userLoginHashedPwd.hashedPassword;
 		}
 			
 		apsdb.httpRedirect(redirectUrl);				

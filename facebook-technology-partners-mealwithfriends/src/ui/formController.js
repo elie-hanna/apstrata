@@ -189,7 +189,7 @@ function publishAction(docKey) {
 	var serverResponse = xhReq.responseText;
 	if (serverResponse) {
 		var result =  JSON.parse(serverResponse);
-		if (result && result.metadata.status == "failure") {
+		if (result && result.metadata && result.metadata.status == "failure") {
 			alert(result.metadata.errorDetail);
 		}
 		
