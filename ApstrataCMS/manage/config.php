@@ -4,9 +4,9 @@
 		// 
 		// Apstrata backend connection parameters
 		//
-		"apstrataServiceURL" => "https://test-sandbox.apstrata.com/apsdb/rest",
+		"apstrataServiceURL" => "https://sandbox.apstrata.com/apsdb/rest",
 		"apstrataConnectionTimeout" => 30000,
-		"apstrataKey" => "YDEE622D6C",
+		"apstrataKey" => "E83D22E93F",
 		"apstrataSecret" => "",		
 
 		//
@@ -37,13 +37,12 @@
 		//
 		// URLs and other related values used to compose paths by the php CMS code 
 		//
-		"baseUrl" => "http://10.0.0.147/ApstrataCMS",
-		//"baseUrl" => "http://www.apstrata.com",
-		"urlPrefix" => "page.php?pageId=",
+		"baseUrl" => "http://www.apstrata.com",
+		"urlPrefix" => "",
 		"loginUrl" => "dashboard",
-		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/ApstrataCMS",
+		"docroot" => $_SERVER["DOCUMENT_ROOT"],
    		"workbenchUrl" => "http://workbench.apstrata.com",
-		"targetClusterUrl" => "https://test-sandbox.apstrata.com/apsdb/rest",
+		"targetClusterUrl" => "https://sandbox.apstrata.com/apsdb/rest",
 
 		//
 		// Controls caching parameters in /page.php

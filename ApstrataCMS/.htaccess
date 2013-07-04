@@ -1,3 +1,9 @@
 RewriteEngine on
 RewriteRule ^gallery/(.*)/(.*) index.php?type=$1&api=$2&pageId=summary 
-RewriteRule ^pages/(.*) page.php?pageId=$1
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+## This condition is needed to avoid the dojo nls files, that are not found, to break the site
+RewriteCond %{REQUEST_FILENAME} !/nls/
+## This condition is needed to avoid the ApConfigSDK.js file, which does not exist, to break the site
+RewriteCond %{REQUEST_FILENAME} !/ApConfigSDK\.js$
+RewriteRule ^(.*)$ page.php?pageId=$1
