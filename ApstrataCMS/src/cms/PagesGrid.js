@@ -114,7 +114,7 @@ dojo.declare("apstrata.cms.PagesGrid",
 		
 		// retrive the corresponding page document from the store. Set the queryFields
 		// attribute of the store to return all fields
-		this.dataStore.queryFields = "apsdb.documentKey, title, section1, section2, smallIcon, regularIcon, attachments, template, parent, documentType, css, javascript, description, category, tags, keywords, publishedDate, document.readACL, pageStatus, order";		
+		this.dataStore.queryFields = "apsdb.documentKey, title, section1, section2, smallIcon, regularIcon, attachments, template, parent, documentType, css, javascript, description, category, tags, keywords, publishedDate, document.readACL, pageStatus, order, windowTitle, searchEngineMetaTags";		
 		this.dataStore.get(item.key).then( 
 			
 			// if successful, open the page document in the PageEditor instance

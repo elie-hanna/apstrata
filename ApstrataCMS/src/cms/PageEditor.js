@@ -76,6 +76,7 @@ dojo.declare("apstrata.cms.PageEditor",
 				"javascript.apsdb.fieldType": "text",
 				"css.apsdb.fieldType": "text",
 				"publishedDate.apsdb.fieldType": "date",
+				"searchEngineMetaTags.apsdb.fieldType": "text",
 				"parent": this._formGenerator.getField("parent").value	
 		};	
 		
@@ -110,7 +111,9 @@ dojo.declare("apstrata.cms.PageEditor",
 				params["publishedDate"] = this._formGenerator.getField("publishedDate").value;			
 			}
 		}
-								
+		
+		params["searchEngineMetaTags"] = this._formGenerator.getField("searchEngineMetaTags").value;
+		
 		var client = new apstrata.sdk.Client(this._connection);
 		client.call("SaveDocument", params, this._formGenerator.frmMain.domNode, {method:"post"}).then( 
 		
@@ -239,7 +242,8 @@ dojo.declare("apstrata.cms.PageEditor",
 						{name: "tags", label:"tags", type: "string", widget: "dojox.form.ListInput"},
 						{name: "pageStatus", label: "Status", type: "string", type: "string", value: "Draft", widget: "dijit.form.ComboBox", "formGenerator-options": ["Published", "Draft", "Pending Approval"]},
 						{name: "document.readACL", label: "Read permissions", type: "string"},
-						{name: "publishedDate", label: "Published date", type: "string"}
+						{name: "publishedDate", label: "Published date", type: "string"},
+						{name: "searchEngineMetaTags", label: "Search Engine Meta Tags (excluding creation and modification dates)", type: "string", widget: "dijit.form.SimpleTextarea"}
 					]
 				},
 			],

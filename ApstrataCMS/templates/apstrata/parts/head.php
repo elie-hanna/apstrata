@@ -4,27 +4,11 @@
 
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		
-		<!-- Generic Metadata -->
-		<meta name="description" content="<?php print $config['DC']['Description'] ?>" />
-		<meta name="author" content="apstrata" />
-		
 		<!-- Dublin Core Metadata -->
-		
-		<meta name="DC.Version" content="<?php print $config['DC']['Version'] ?>" />
-		<meta name="DC.Publisher" content="<?php print $config['DC']['Publisher'] ?>" />
-		<meta name="DC.Creator" content="<?php print $config['DC']['Creator'] ?>" />
-		<meta name="DC.Creator.Address" content="<?php print $config['DC']['Creator.Address'] ?>" />
-		<meta name="DC.Identifier" content="<?php print $config['DC']['Identifier'] ?>" />
-		<meta name="DC.Rights" content="<?php print $config['DC']['Rights'] ?>" />
-		
-		<meta name="DC.Title" content="elementn: <?php print $page["title"]; ?>" />
-		<meta name="DC.Type" content="<?php print $config['DC']['Type'] ?>" />
-		<meta name="DC.Description" content="<?php print $config['DC']['Description'] ?>" />
-		<meta name="DC.Subject" content="<?php print $config['DC']['Subject'] ?>" />
+		<?php print $page['searchEngineMetaTags'] ?>
 		
 		<meta name="DC.Date.Created" content="<?php print $page['apsdb.creationTime'] ?>" />
 		<meta name="DC.Date.Modified" content="<?php print $page['apsdb.lastModifiedTime'] ?>" />
-		<meta name="DC.Language" content="English" />
 		
 		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 
