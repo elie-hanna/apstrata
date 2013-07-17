@@ -7,10 +7,10 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>
 			<?php 
-				if (!isset($page["title"])) {
-					$page["title"] = "Apstrata Website";
+				if (!isset($page["windowTitle"])) {
+					$page["windowTitle"] = "Apstrata Website";
 				} 
-				print $page["title"];
+				print $page["windowTitle"];
 				
 			?>
 		</title>

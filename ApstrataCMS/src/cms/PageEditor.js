@@ -208,7 +208,8 @@ dojo.declare("apstrata.cms.PageEditor",
 					
 					fieldset: [						
 						{name: "apsdb.documentKey", label: "Page ID", required: true, type: "string"},
-						{name: "title", type: "string", required: true},
+						{name: "windowTitle", label: "Window Title", type: "string", required: true},
+						{name: "title", label: "Page Title", type: "string", required: true},
 						{name: "section1", label: "Body: first section", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true}, 'fontSize','formatBlock','insertImage','insertHorizontalRule'], extraPlugins: ['viewSource']},
 						{name: "section2", label: "Body: second section", type: "string", widget: "dijit.Editor", height: "200px", plugins: ['bold','italic','|','createLink','foreColor','hiliteColor',{name:'dijit._editor.plugins.FontChoice', command:'fontName', generic:true},'fontSize','formatBlock','insertImage','insertHorizontalRule'], extraPlugins: ['viewSource']},
 						{name: "template", label:"Template", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["Wide", "Two columns"]},
