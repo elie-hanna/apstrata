@@ -348,8 +348,7 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		self._fields = {};
 		
 		// add custom CSS class
-		//  TODO: this is not working go figure!
-		if (this.definition.cssClass) dojo.addClass(this.domNode, this.definition.cssClass)
+		if (this.definition.cssClass)  this.cssClass = this.definition.cssClass;
 		
 		// If the user has provided a label show it
 		if (this.definition.label) this.label = this.definition.label
