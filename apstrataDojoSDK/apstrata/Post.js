@@ -42,8 +42,12 @@ dojo.declare("apstrata.Post",
 			this.request.apsws = {}
 			this.request.apsws.callback = "apstrataSaveDocumentCallback" + Math.floor(Math.random()*10000)
 
+			//Fixing a permission denied error when accessing parent window callback in the hidden iframe domain.com is opened instead of www.domain.com
+			var baseUrl = apstrata.baseUrl;
+			if (window.location.href.indexOf("www.") == -1)
+				baseUrl = apstrata.baseUrl.replace("www.","");
 			if (attrs.redirectHref) this.request.apsws.redirectHref = attrs.redirectHref;
-			else this.request.apsws.redirectHref = apstrata.baseUrl + "/resources/PostIframeHandler.html"
+			else this.request.apsws.redirectHref = baseUrl + "/resources/PostIframeHandler.html"
 			// This is a temporary fix for the P3P compact policy IE (should be removed asap) 
 			if (this.apsdbOperation == "RunScript" && this.request["apsdb.scriptName"] == "VerifyCredentials" && (this.request["apsdb.action"] == "renew" || this.request["apsdb.action"] == "generate")) {
 				this.request["renewCallback"] = this.request.apsws.callback;
