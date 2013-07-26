@@ -1,6 +1,6 @@
 <div class="FTSearch">{{% %}}
 	<div dojoType='dijit.form.Form' dojoAttachPoint='frmSearch'>
-		&nbsp;&nbsp;&nbsp;&nbsp;<span dojoAttachPoint="title">Title:</span> <input dojoType='dijit.form.ValidationTextBox' name='search' type='text'>
-		<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: _search' type="button">search</button>
+		&nbsp;&nbsp;&nbsp;&nbsp;<span dojoAttachPoint="title">{{ titleLabel|safe|default:""}}</span> <input dojoType='dijit.form.ValidationTextBox' name='search' type='text' promptMessage="Search">
+		<button dojoType='dijit.form.Button' dojoAttachEvent='onClick: _search' type="button">{{ searchActionLabel|safe|default:""}}</button>
 	</div>
 </div>

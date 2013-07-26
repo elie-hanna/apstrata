@@ -36,6 +36,8 @@ dojo.declare("apstrata.horizon.Grid",
 
 	store: null,
 	rowsPerPage: 20,
+	sbTitle: "Title:",
+	sbActionLabel: "Search",
 	
 	constructor: function() {
 		this.editable = true
@@ -51,8 +53,8 @@ dojo.declare("apstrata.horizon.Grid",
 		if(!this.filterClass) this.filterClass = apstrata.horizon.GridFTSearch
 		if (this.filterable) {
 			var filterDv = dojo.create("div", null, this.dvHeader)
-			this._filter = new this.filterClass(null, filterDv)
-			dojo.connect(this._filter, "search", dojo.hitch(this, "filter"))
+			this._filter = new this.filterClass({titleLabel: self.sbTitle, searchActionLabel: self.sbActionLabel }, filterDv)
+			dojo.connect(self._filter, "search", dojo.hitch(self, "filter"))
 		}
 		
 		this.resize()
