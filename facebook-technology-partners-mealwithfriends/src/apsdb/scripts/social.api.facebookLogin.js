@@ -209,11 +209,11 @@ function _handleAccessToken(apsdb, accessToken, request) {
 		var common = apsdb.require("social.fb.common");
 		var returnApstrataToken = request.parameters["returnApstrataToken"];
 		redirectUrl = redirectUrl ? redirectUrl : common.loggedInRedirectUrl;
+		var paramSep = (redirectUrl.indexOf("?") > -1) || (redirectUrl.indexOf("%3F") < -1)  ? "&" : "?";
 		if (returnApstrataToken) {
 		
 			var userManager = apsdb.require("social.fb.userManager");
-			var apstrataToken = userManager.generateToken(apsdb, userLoginHashedPwd.login, userLoginHashedPwd.hashedPassword);
-			var paramSep = (redirectUrl.indexOf("?") > -1) || (redirectUrl.indexOf("%3F") < -1)  ? "&" : "?";
+			var apstrataToken = userManager.generateToken(apsdb, userLoginHashedPwd.login, userLoginHashedPwd.hashedPassword);			
 			redirectUrl = redirectUrl + paramSep + "apstrataToken=" + apstrataToken["apsdb.authToken"] + "&expiresAfter=" + apstrataToken["apsdb.tokenExpires"] + "&userName=" + userLoginHashedPwd.login;
 		}else {
 			redirectUrl = redirectUrl + paramSep + "accessToken=" + accessToken + "&login=" + userLoginHashedPwd.login + "&hashedPwd=" + userLoginHashedPwd.hashedPassword;
