@@ -104,7 +104,7 @@ try {
 		var accessToken = request.parameters["accessToken"];
 		if (accessToken) {
 		
-			return _handleAccessToken(apsdb, accessToken);
+			return _handleAccessToken(apsdb, accessToken, request);
 		}else {
 		
 			var authorizationUrl = facebookManager.getRequestToken(apsdb, request);
