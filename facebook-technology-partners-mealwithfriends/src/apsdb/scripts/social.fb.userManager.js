@@ -243,7 +243,7 @@ function _saveUser(apsdb, userDTO, update) {
 	for (var property in userDTO) {
 	
 		if (userDTO[property] != null) {
-			params[property] = userDTO[property];
+			params[property] = "" + userDTO[property];
 		}
 	}
 	
