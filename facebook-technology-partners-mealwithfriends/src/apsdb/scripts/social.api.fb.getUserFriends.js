@@ -57,9 +57,11 @@ try {
 	var more = false;
 	if (getFriendsResponse.result) {
 	
-		allFriends = allFriends.concat(getFriendsResponse.result.data);
+		if (getFriendsResponse.result.data) {
+			allFriends = allFriends.concat(getFriendsResponse.result.data);
+		}
 		
-		if (getFriendsResponse.result.paging.next) {
+		if (getFriendsResponse.result.paging && getFriendsResponse.result.paging.next) {
 		
 			// get next id
 			nextId = _getParameterByName("__after_id", getFriendsResponse.result.paging.next);
