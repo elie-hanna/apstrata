@@ -9,7 +9,7 @@
 /*
  * Use this script to search for places on Facebook. Note that this script does not allow you to retrieve
  * paginated results but only returns the first batch of results.
- * @param query (mandatory): the query string to send (e.g. "office")
+ * @param q (mandatory): the query string to send (e.g. "office")
  * @param center (optional): the lattitude and longitude from where to start the search
  * @param distance (optional): the radius from the center to narrow the search
  * @param fields (optional): the fields to return 

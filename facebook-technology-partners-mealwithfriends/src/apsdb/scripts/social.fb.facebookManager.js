@@ -273,7 +273,7 @@ function searchPlaces(apsdb, facebookid, accessToken, searchDTO) {
 		if (fbObjects.indexOf(property) > -1) {
 			params[property] = JSON.stringify(searchDTO[property]);
 		}else {
-			params[property] = searchDTO[property];
+			params[property] = "" + searchDTO[property];
 		}	
 	} 
 	
