@@ -137,7 +137,7 @@ function checkAccessToken(apsdb, accessToken) {
 function post(apsdb, facebookid, accessToken, postDTO) {
 
 	var fbObjects = ["actions", "properties", "to"];
-	var url = "https://graph.facebook.com/" + facebookid + "/feed";		
+	var url = "https://graph.facebook.com/me/feed";		
 	var common = apsdb.require("social.fb.common");
 	for(var property in postDTO) {
 	
