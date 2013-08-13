@@ -181,7 +181,7 @@ function executeAction(apsdb, facebookid, accessToken, actionDTO) {
 	//var url = "https://graph.facebook.com/" + facebookid + "/" + common.appNameSpace + ":" + actionDTO.actionType;
 	var url = "https://graph.facebook.com/me/" + common.appNameSpace + ":" + actionDTO.actionType;	
 	var params = {};
-	params[actionDTO.objectType] = actionDTO.objectRef;
+	params[actionDTO.objectType] = "" + actionDTO.objectRef;
 	params["fb:explicitly_shared"] = actionDTO["fb:explicitly_shared"];
 	
 	for(var property in actionDTO) {
@@ -190,7 +190,7 @@ function executeAction(apsdb, facebookid, accessToken, actionDTO) {
 			if (fbObjects.indexOf(property) > -1) {
 				params[property] = JSON.stringify(actionDTO[property]);
 			}else {
-				params[property] = actionDTO[property];
+				params[property] = "" + actionDTO[property];
 			}		
 		}
 	} 
