@@ -249,7 +249,6 @@ dojo.declare("apstrata.horizon.Container",
 		
 		var container = {}
 		var fixedPanel = {}
-		
 		if (this._mainPanel) {
 			// get main panel's width
 			var mpw = dojo.position(this._mainPanel.domNode).w
@@ -285,7 +284,6 @@ dojo.declare("apstrata.horizon.Container",
 		var toolbar = {}
 		toolbar.top = (bounding.top - cBarH - bMargin)
 		toolbar.left = (bounding.left + bMargin * 2)
-
 		// Position divs
 		dojo.style(this.domNode, {
 			top: container.top + "px",
@@ -294,13 +292,15 @@ dojo.declare("apstrata.horizon.Container",
 			height: container.height  + "px",
 			zIndex: "100"
 		})
+		if(fixedPanel.top != undefined){
 		dojo.style(this.fixedPanelNode, {
-			top: fixedPanel.top + "px",
-			left: fixedPanel.left + "px",
-			width: fixedPanel.width  + "px",
-			height: fixedPanel.height  + "px",
-			zIndex: "100"
-		})
+				top: fixedPanel.top + "px",
+				left: fixedPanel.left + "px",
+				width: fixedPanel.width  + "px",
+				height: fixedPanel.height  + "px",
+				zIndex: "100"
+			})
+		}
 		dojo.style(this.background, {
 			top: background.top + "px",
 			left: background.left + "px",

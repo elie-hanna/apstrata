@@ -17,6 +17,7 @@
  *  along with Apstrata Database Javascript Client.  If not, see <http://www.gnu.org/licenses/>.
  * *****************************************************************************
  */
+
 dojo.provide("apstrata.ui.forms.FormGenerator")
 
 dojo.require("dojox.dtl._Templated")
@@ -45,6 +46,8 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	definitionPath: "",
 	autoWidth: false,
 	displayGroups: "",
+	
+	_saveDisabledState : null,
 	
 	method: "GET", //By default form method is GET
 
@@ -133,7 +136,9 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	
 	disable: function() {
 		var self = this
-		this._saveDisabledState = []
+		this._saveDisabledState = [];
+		
+		
 		this.frmMain.getDescendants().forEach(function(dijit) {
 			self._saveDisabledState.push ({
 				dijit: dijit,
@@ -144,9 +149,16 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 	},
 	
 	enable: function() {
-		this._saveDisabledState.forEach(function(item) {
-			item.dijit.set("disabled", item.state)
-		})
+
+			
+			dojo.forEach(this._saveDisabledState, function (item) {
+				item.dijit.set("disabled", item.state)
+			});
+
+//			
+//			  this._saveDisabledState.forEach(function(item) {
+//					item.dijit.set("disabled", item.state)
+//				})
 	},
 	
 	/**
