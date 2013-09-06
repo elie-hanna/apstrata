@@ -53,7 +53,7 @@ dojo.declare("apstrata.horizon.Grid",
 		if(!this.filterClass) this.filterClass = apstrata.horizon.GridFTSearch
 		if (this.filterable) {
 			var filterDv = dojo.create("div", null, this.dvHeader)
-			this._filter = new this.filterClass({titleLabel: self.sbTitle, searchActionLabel: self.sbActionLabel, titleMsg: self.sbTitleMsg }, filterDv)
+			this._filter = new this.filterClass({attrs: self.filterClassAttrs, titleLabel: self.sbTitle, searchActionLabel: self.sbActionLabel, titleMsg: self.sbTitleMsg }, filterDv)
 			dojo.connect(self._filter, "search", dojo.hitch(self, "filter"))
 		}
 		
