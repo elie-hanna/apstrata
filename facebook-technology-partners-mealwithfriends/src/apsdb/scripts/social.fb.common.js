@@ -17,6 +17,8 @@ var storeName = "DefaultStore";
 // The application id of the facebook meals with friend application
 var appKey = "157527211099108";
 
+var appVersion = "1.0";
+
 // The application secret of the facebook meals with friend application
 var secret = "1229e940a7a4466e896c50cbf23786fa";	
 
@@ -42,6 +44,15 @@ var facebookStatus = "ads&=f";
 
 // The namespace of the facebook application, as defined in the application settings
 var appNameSpace = "mealwithfriends";
+
+// Set the below to true if you need to add the instrumentation provided by Facebook
+var triggerFacebookInstrumentation = false;
+
+var facebookInstrumentationUrl = "https://www.facebook.com/impression.php";
+
+var facebookPlugin = "featured_resources";
+
+var facebookResourceId = "apstrata_apstrata";
 
 /*
  * This is a utility function that loads the pictures that where uploaded along an HTTP 

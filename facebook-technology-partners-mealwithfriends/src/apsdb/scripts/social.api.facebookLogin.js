@@ -198,15 +198,21 @@ function _updateUserInfo(apsdb, accessToken) {
 
 function _handleAccessToken(apsdb, accessToken, request) {
 
-	// we need to either create a new user of update it with the new token
+	var common = apsdb.require("social.fb.common");
+
+	// we need to either create a new user or update it with the new token
 	var userLoginHashedPwd = _updateUserInfo(apsdb, accessToken);
+	
+	// trigger a call to Facebook's instrumentation if configured to do so
+	if (common.triggerFacebookInstrumentation == true) {
+		_triggerInstrumentation(common);
+	}
 	
 	// we need to check if redirection is requested			
 	var redirect = request.parameters["redirectAfterLogin"];
 	var redirectUrl = request.parameters["loggedInRedirectUrl"];	
 	if (redirect && redirect == "true") { 	
 	
-		var common = apsdb.require("social.fb.common");
 		var returnApstrataToken = request.parameters["returnApstrataToken"];
 		redirectUrl = redirectUrl ? redirectUrl : common.loggedInRedirectUrl;
 		var paramSep = (redirectUrl.indexOf("?") > -1) || (redirectUrl.indexOf("%3F") < -1)  ? "&" : "?";
@@ -229,6 +235,23 @@ function _handleAccessToken(apsdb, accessToken, request) {
 		"accessToken": accessToken,
 		"login": userLoginHashedPwd.login,
 		"hashedPwd": userLoginHashedPwd.hashedPassword
+	}
+}
+
+function _triggerInstrumentation(common) {
+	
+	apsdb.log.setLogLevel(4);
+	try {
+	
+		var facebookParams = {
+		
+			"plugin": common.facebookPlugin,
+			"payload": "{\"resource\":\"" +  common.facebookResourceId + "\",\"appid\":\"" + common.appKey + "\",\"version\":\"" + common.appVersion + "\"}"		}
+	
+		var postResult = apsdb.callHttp(common.facebookInstrumentationUrl, "POST", facebookParams, null, null, null, false, null, false, false);
+		apsdb.log.debug("postResult", {"postResult":postResult});
+	}catch(exception) {
+		apsdb.log.debug("exception", {"exception":exception});
 	}
 }
 
