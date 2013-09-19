@@ -189,10 +189,10 @@ background: linear-gradient(to right,  #f2f2f2 0%,#e8e8e8 100%);
 box-shadow:0 1px 4px #CCCCCC inset;
 }
 
-.ie9 .controls .control {
+.dj_ie9 .controls .control {
 background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YyZjJmMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNlOGU4ZTgiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
 }
-.ie8 .controls .control { filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#e8e8e8',GradientType=1 ); }
+.dj_ie8 .controls .control { filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#e8e8e8',GradientType=1 ); }
 
 .controls .arrow{ width:207px; height:10px; visibility:hidden; padding: 0 !important; margin-top: -10px; }
 .controls .control1 .arrow { background:url(../touch/images/arrow-4.png) no-repeat center center; }
@@ -254,8 +254,8 @@ footer .copyright p + p {float: right; font-family: "NunitoRegular";}
 .container {background: url(../touch/images/container.png) top left repeat-x; padding-top: 3px; padding-bottom: 336px;}
 .content-wrap {background:url("../touch/images/content-wrap.png") repeat scroll left top; padding-bottom: 130px; margin-bottom: -16px;}
 
-.content  {max-width: 960px; margin: 0 auto; padding-top: 32px;}
-.content h1 {font-size: 30px;}
+.content-page  {max-width: 960px; margin: 0 auto; padding-top: 32px;}
+.content-page h1 {font-size: 30px;}
 .title {font-size: 25px; font-family: "NunitoBold"; color: #282828; margin-bottom: 20px;}
 .title span  {color: #009FB4; margin-right: 10px;}
 .side-menu {width: 300px; float: left;}
@@ -319,7 +319,7 @@ text-align: center;}
 .benefit .image {width: 425px; height: 170px; margin-bottom: 14px;}
 .benefit h2 {margin: 0 0 4px 0;}
 .benefit .info {line-height: 1.3em;}
-.row {display: inline-block; width: 100%; clear: both; border-bottom: 1px solid #bfbfbf; padding: 30px 0;}
+.row {display: inline-block; width: 100%; clear: both; padding: 10px 0;}
 .row .benefit {margin-right: 20px;}
 .row .benefit + .benefit {margin-right: 0; float: right;} 
 .row.last {border: none;}
@@ -357,7 +357,7 @@ background: -ms-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* IE10+ */
 background: linear-gradient(to bottom,  #8c8c8c 0%,#b2b2b2 99%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', endColorstr='#b2b2b2',GradientType=0 ); /* IE6-8 */
 }
-.ie9 .btn {filter: none;}
+.dj_ie9 .btn {filter: none;}
 .btn input[type="submit"] {background: none; border: none; padding: 6px 12px; text-align: center; text-transform: uppercase; font-size: 16px; font-family: 'NunitoBold'; color: #fff;
 -moz-text-shadow: 1px 1px 0 #767779;
 -webkit-text-shadow: 1px 1px 0 #767779;
@@ -391,7 +391,6 @@ text-shadow: 1px 1px 0 #000;}
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	border-radius: 6px;
-	padding: 7px 4px;
 	width: 98%;
 	color: #999;
 	font-size:0.75em;
@@ -412,7 +411,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 transition: all 0.5s ease-in-out;
 width:auto !important;
 }
-.ie9.touch .dijitButton {filter: none;}	
+.dj_ie9 .touch .dijitButton {filter: none;}	
 
 .touch .dijitButton .dijitButtonText {
 border: none;
@@ -427,25 +426,13 @@ color: white;
 text-shadow: 1px 1px 0 #767779;	
 	
 	}
-.touch .dijitButtonNode { border: 0!important; vertical-align: middle; text-align: center; background: none!important;}
+.touch .dijitButtonNode {padding:0!important; border: 0!important; vertical-align: middle; text-align: center; background: none!important;}
 
 .touch .dijitButtonHover { background: #009FB4;}
 .touch .dijitButtonHover .dijitButtonText { text-shadow: 1px 1px 0 #000000;}
 
 
 .touch .label {font-family: 'NunitoBold'; font-size: 0.85em; color: #555555; margin-top: 7px; margin-bottom: 3px;}
-.FormGenerator form {
-	
-}
-
-.FormGenerator .set {
-	
-}
-			
-.FormGenerator .form {
-	
-}
-
 .FormGenerator .set .fieldset-label {
 	padding-top: 8px;
 }
@@ -520,7 +507,11 @@ box-shadow: 0 3px 4px #cccccc;
 -webkit-box-shadow: 0 3px 4px #cccccc;
 border:1px solid black;
 }
-.touch .LoginWidget .login h2 { color:#efefef; }
+.touch .LoginWidget .login .label {font-family: "NunitoRegular"; font-size: 0.7em; float: left; width: 105px;}
+.touch .LoginWidget  .FormGenerator .form .dijitTextBox {width: 68%;}
+.dj_ie9 .touch .LoginWidget .FormGenerator .form .dijitTextBox {font-size: 14px;}
+
+.touch .LoginWidget .login h2 { color:#efefef; margin-bottom: 14px;}
 .touch .DocViewer .content .middle .description p {font-size: 0.8em;}
 .touch .expand-container ol li {font-size: 0.8em;}
 .touch .innerContent .smallButton {-moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; font-family: "NunitoRegular";
@@ -545,9 +536,55 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 
 .expand-container ul { list-style:disc;}
 .expand-container li { font-size:13px; margin-bottom:3px; margin-left:20px;}
+.touch .HorizonCurtain {background: none; z-index: 200; border: none;}
+
 
 /*** Alert ***/
 .touch .apstrataHorizonAlert .icon {position: static; margin-right: 10px;}
 .touch .apstrataHorizonAlert .message {font-size: 0.9em; padding-top: 10px; position: static; word-wrap: break-word;}
 .touch .apstrataHorizonAlert .message .content {padding-top: 0; border: none; margin: 0; line-height: 1.3em;}
 .touch .apstrataHorizonAlert .actions {margin-top: -10px;}
+
+
+/*** Override Horizon for touch ***/
+.touch.amc .asterisk {color: #009FB4!important;}
+.clear {clear: both;}
+.touch .horizon .list .listInnerLabel {padding: 3px 5px 3px 10px;}
+.touch .horizon .panel.mainPanel {font-size: 130%!important;} 
+.touch .horizon .panel {font-size: 75%;}
+.touch .horizon .panel.list {font-size: 100%;}
+.touch .horizon .panel .title {font-weight: normal;}
+.touch .dojoxGridHeader .dojoxGridCell {font-size: 0.9em; text-transform: capitalize;}
+.touch .FTSearch .dijitButton {background: none; border: 0; width: 10%!important;}
+.touch .FTSearch .dijitButtonNode {width: 21px; height: 28px!important; background: url('images/magnifying-glass.png') no-repeat!important;}
+.dj_ie .touch .FTSearch .dijitButtonNode, .dj_gecko .touch .FTSearch .dijitButtonNode {margin: -8px -15px 8px 0!important;}
+.dj_webkit .touch .FTSearch .dijitButtonNode{margin: 3px -15px -4px 0!important}
+.touch .dijitTooltip {z-index: 7000;}
+.touch .dijitTooltip .dijitTooltipContainer {font-size: 0.7em;}
+.touch .dojoxGridPaginator td {padding: 0!important;}
+
+.touch .filterSection.btn {width: 170px;}
+.dj_webkit .touch .filterSection.btn {width: 182px; margin: 1px 0 0 -12px;}
+.touch .filterSection.btn .dijitButton .dijitButtonText {font-size: 14px;}
+
+/*** Overrida Calendar ***/
+.touch .dijitCalendarMonthLabel, .touch .dijitCalendarMonthMenu .dijitCalendarMonthLabel {font-family: "NunitoRegular"; font-size: 0.9em;}
+.touch .dijitCalendar {font-family: "NunitoRegular"; font-size: 0.8em; background-color:#2C9DAF;}
+.touch .dijitCalendarDayLabelTemplate {font-family: "NunitoRegular";}
+.touch .dijitCalendarYearLabel {font-family: "NunitoRegular"; font-size: 1em;}
+.touch .dijitCalendarDisabledDate .dijitCalendarDateLabel {color: #00DCFF;}
+.touch .dijitCalendarSelectedDate .dijitCalendarDateLabel, 
+.touch .dijitCalendarHoveredDate .dijitCalendarDateLabel,
+.touch .dijitCalendarNextYearHover, 
+.touch .dijitCalendarPreviousYearHover,
+.touch .dijitCalendarPreviousMonth .dijitCalendarDateLabel, 
+.touch .dijitCalendarNextMonth .dijitCalendarDateLabel {
+color: #00DCFF;}
+
+.touch .dijitCalendarPreviousMonth .dijitCalendarDateLabel, 
+.touch .dijitCalendarNextMonth .dijitCalendarDateLabel {color: #00DCFF;}
+.touch.amc .calendar-field .dijitComboBox .dijitArrowButtonInner {background: url('images/calendar-ico.png') no-repeat center left;}
+.touch.amc .dijitCalendarIncrementControl {background-image: url("images/calendarArrows.png"); }
+.touch.amc .dijitCalendarArrowActive .dijitCalendarDecrease {background-position: -36px 0;}
+.touch.amc .dojoxGridLoading {background: url("images/loading.gif") no-repeat center top;}
+	

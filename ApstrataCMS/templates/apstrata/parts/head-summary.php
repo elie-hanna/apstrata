@@ -13,7 +13,8 @@
 		if ($config["developmentMode"]) { 
 	?>
 	<style type="text/css">
-
+			/* import the dojo styles overriden by amc */
+			@import "../../lib/amc/src/ui/css/amc/amc.css";
 	        @import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css";
 	        @import "../../themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
         </style>

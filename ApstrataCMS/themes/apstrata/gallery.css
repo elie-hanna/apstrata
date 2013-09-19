@@ -100,12 +100,12 @@
 	height: 200px;
 }
 
-.content .line {
+.content-page .line {
 	border: 1px solid black;
 	display: table-row;
 }
 
-.content .item {
+.content-page #searchResults .item {
 	display: inline-block;
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -126,17 +126,17 @@
 		transition: all 0.3s ease-in-out;	
 }
 
-.content .item:hover {
+.content-page #searchResults .item:hover {
  	box-shadow: 0 0 3px #999999;
  }
 
-.content .item:hover .label{
+.content-page #searchResults .item:hover .label{
 	background:#fda03d;
 	color:#fff;
 	
 }
 
-.content .item .type {
+.content-page #searchResults .item .type {
 	position: relative;
 	top: 30px;
 	left: 10px;
@@ -164,7 +164,7 @@
 	-ms-transform:rotate(-90deg);
 }
 
-.content .item .label {
+.content-page #searchResults .item .label {
 	text-align: center;
 	position: relative;
 	font-family: 'PTSansBold';
@@ -187,7 +187,7 @@
 		transition: all 0.3s ease-in-out;
 }
 
-.content .item img {
+.content-page #searchResults .item img {
 	width: 90px;
 	height: 90px;
 	opacity: .8;
@@ -197,6 +197,6 @@
 	cursor: pointer;
 }
 
-.content .item img:hover {
+.content-page #searchResults .item img:hover {
 	opacity: 1;
 }

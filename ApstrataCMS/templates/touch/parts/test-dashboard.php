@@ -1,4 +1,12 @@
 	<style type="text/css">
+	<?php 
+			if ($config["developmentMode"]) { 
+		?>
+		/* manually import the apstrataSDK styles since they are not in touch.css in development mode */
+	    @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/FormGenerator.css";
+	    @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/Curtain.css";
+	    @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/FlashAlert.css";
+	    @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/ApstrataAnimation.css";
 	
 		/* import amc styles which contain amc widgets and panels styles */
 		@import "lib/amc/src/ui/css/amcStyles.css";
@@ -6,20 +14,14 @@
 		@import "lib/amc/src/ui/css/font-style.css";
 		/* import horizon styles from amc */
 		@import "lib/amc/src/ui/css/horizon/horizon.css";
-	
-		.blueHorizon {
-			font-family: sans-serif;
-			font-size: 1.2em;
-	
-			top: 44px;
-			left: 70px;
-			width: 700px;
-			height: 400px;
-		}
+	<?php 
+			} 
+		?>
 	</style>
+	
 	<!-- begin side menu -->
     <div class="side-menu">
-    	<h1>TOOLS</h1>
+    	<h1>tools</h1>
     	<!-- begin navigation -->
         <div class="navigation">
         	<div class="top"></div>
@@ -50,14 +52,15 @@
 		    /*
 		     * Global variables defining templates that will overload the default templates of Account.js and Profile.js
 		     */
-			accountsTemplate =  "../../../templates/apstrata/widgets/Accounts.html";
-			profileTemplate = "../../../templates/apstrata/widgets/Profile.html";
+			accountsTemplate =  "../../../templates/touch/widgets/Accounts.html";
+			profileTemplate = "../../../../templates/touch/widgets/Profile.html";
 			dojo.addOnLoad(function() {
 		<?php 
 				if ($config["developmentMode"]) { 
 			?>
 				dojo.registerModulePath("apstrata", "../../ApstrataSDK/apstrata")
 				dojo.registerModulePath("apstrata.cms", "../../../src/cms")
+				dojo.registerModulePath("amc", "../../../lib/amc/src/ui/amc");
 				<?php 
 				} 
 			?>
@@ -72,8 +75,8 @@
 				dojo.require("apstrata.home.dashboard.Dashboard");
 				dojo.require("dojo.parser");
 				dojo.require("apstrata.ui.widgets.LoginWidget");
-				dojo.require("apstrata.extend.Accounts");
-				dojo.require("apstrata.extend.Profile");
+				dojo.require("apstrata.touch.extend.Accounts");
+				dojo.require("apstrata.touch.extend.Profile");
 															 
 				// These are visual properties used by the application that can not fit in a CSS file yet 			
 				apstrata.horizon.magicUIdimensions = {
@@ -107,7 +110,7 @@
 				var userCredentials = null;	
 				var logoutLink = dojo.byId("logoutLink");
 				var logoutLinkLine = logoutLink.parentNode;
-				var dashboardLink = dojo.query(".dashboard")[0];
+				var logoutIconTop = dojo.query(".logout")[0];
 				var loginIconTop = dojo.query(".login")[0];
 				dojo.connect(dashboard, "onCredentials", function(credentials){	
 					userCredentials = credentials;
@@ -132,7 +135,7 @@
 				var userProfileLink = dojo.byId("userProfileLink");
 				dojo.connect(userProfileLink, "onclick", function(event) {	
 					if (dashboard.connection) {						
-						var userProfile = new apstrata.extend.Profile({container: dashboard, useClass: "dashboard"});
+						var userProfile = new apstrata.touch.extend.Profile({container: dashboard, useClass: "dashboard"});
 						dojo.empty(linkedContent);					
 						dojo.place(userProfile.domNode, linkedContent);	
 						toggleSelected(userProfileLink);
@@ -157,6 +160,12 @@
 				 });
 				 
 				
+				 /*
+				 * log out icon on click event handler
+				 */								 
+				 dojo.connect(logoutIconTop, "onclick", function(event) {
+				 	logout(event);	
+				 });				
 				
 				/*
 				 * this function factors out the logic that is shared by the login successful and manage account event handler
@@ -166,12 +175,45 @@
 					//dojo.style(txtNode, "visibility", "visible");
 					helloNode.innerHTML = "Hello " + (connection ? connection.credentials.user : "");
 					var account = null;
-					if (connection) { 		
-						account = new apstrata.extend.Accounts({container: dashboard, credentials: connection.credentials});
+					/*if (connection) { 		
+						account = new apstrata.touch.extend.Accounts({container: dashboard, credentials: connection.credentials});
 						account.container = dashboard;								
 						dojo.place(account.domNode, linkedContent);						
 						toggleSelected(manageAccountLink);
-					}				
+					}*/
+					
+					dojo.require("amc.Init");
+		
+					dojo.require('apstrata.sdk.TokenConnection');
+					dojo.require('apstrata.sdk.Client');
+				
+					// Instantiate an apstrata token based connection
+					amc.globals.sdk.connection = new apstrata.sdk.Connection({
+						"credentials": {
+						"key": "X1477E086C",
+						"secret": "W5BA7B8659529AD9A248C45DAFE36B2B",
+						"user": "maya.kassem@elementn.com",
+						"password": "121212"
+						},
+						"timeout": "10000",
+						"serviceURL": "https://10.0.0.93:8446/apstratabase/rest",
+						"success": function () {},
+						"failure": function () {}
+					});
+					amc.globals.sdk.client = new apstrata.sdk.Client(amc.globals.sdk.connection);
+					
+					dojo.require("amc.layout.App");
+					
+					// These are visual properties used by the application that can not fit in a CSS file yet 			
+					apstrata.horizon.magicUIdimensions = {
+							"list.SimpleFilterAndSort.width": 35,
+							"panel.finalAlpha": .95
+						}
+					var mainContainer = new amc.layout.App({
+						showToolbar: false,
+						margin:{top: 132, left: 0, right:0, bottom: 0}}, "linkedContent");
+		
+					mainContainer.startup();		
 				}
 				
 				/*
@@ -207,11 +249,11 @@
 				var toggleLoginLogout = function(status) {
 					if (status == "in") {
 						dojo.style(logoutLinkLine, "display", "block");
-						dojo.style(dashboardLink, "display", "block");
+						dojo.style(logoutIconTop, "display", "block");
 						dojo.style(loginIconTop, "display", "none");						
 					}else {
 						dojo.style(logoutLinkLine, "display", "block");
-						dojo.style(dashboardLink, "display", "block");
+						dojo.style(logoutIconTop, "display", "block");
 						dojo.style(loginIconTop, "display", "none");	
 					}					
 				}

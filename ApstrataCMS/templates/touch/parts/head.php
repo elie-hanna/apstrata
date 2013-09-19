@@ -38,13 +38,11 @@
 		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]; ?>/lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 
 		<style type="text/css">
-			<!-- @import "lib/dojo/dojo/resources/dojo.css";
-		   	 @import "lib/dojo/dijit/themes/claro/claro.css";
-		   	 @import "lib/dojo/dojox/widget/Dialog/Dialog.css"; 
-
-	       		 @import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css"; -->
-	       		 @import "<?php print $GLOBALS["config"]["baseUrl"]; ?>/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
-       		 </style>
+				/* import the dojo styles overriden by amc */
+				@import "lib/amc/src/ui/css/amc/amc.css";
+	       		@import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css";
+	       		@import "<?php print $GLOBALS["config"]["baseUrl"]; ?>/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
+		</style>
 		
 		<?php 
 			} else { 

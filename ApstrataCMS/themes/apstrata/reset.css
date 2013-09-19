@@ -118,8 +118,13 @@ blockquote { margin: 1em 40px; }
 
 dfn { font-style: italic; }
 
-hr { display: block; height: 1px; border: 0; border-top: 3px solid #bdbdbd; margin: 1em 0; padding: 0; }
-
+hr {display: block; padding: 0; height: 1px; color: #000; border-top: 1px solid #111111;
+	-webkit-opacity: 0.5;
+	-moz-opacity: 0.5;
+	filter:alpha(opacity=50);
+	opacity: 0.5;
+	}
+	
 ins { background: #ff9; color: #000; text-decoration: none; }
 
 mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
