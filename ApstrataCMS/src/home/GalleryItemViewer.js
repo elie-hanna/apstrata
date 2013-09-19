@@ -65,8 +65,8 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		var self = this
 		this.inherited(arguments)
 		
-		gapi.plusone.go();
-		IN.init();
+		//gapi.plusone.go();
+		//IN.init();
 		
 		var v = dijit.getViewport()
 		var w = {w: self.dimension.width, h: self.dimension.height}
