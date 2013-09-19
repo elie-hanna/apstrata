@@ -1,9 +1,0 @@
-<div class='panel list'>
-	<div dojoAttachPoint='dvHeader'></div>
-	<div dojoAttachPoint='dvContent'></div> 
-	<div dojoAttachPoint='dvFooter' class='footer' style='width: 100%;text-align: center;overflow: hidden;'>
-		{% if editable %} 
-		<div dojoType='dijit.form.ToggleButton' iconClass='dijitCheckBoxIcon' dojoAttachPoint='_tglEdit' dojoAttachEvent='onClick: editItems'>{{ _messages.editButtonLabel }}</div><div dojoType='dijit.form.Button' dojoAttachEvent='onClick: _newItem' dojoAttachPoint='_btnNew' type="button">{{ _messages.newButtonLabel }}</div>
-		{% endif %}
-	</div>
-</div>
