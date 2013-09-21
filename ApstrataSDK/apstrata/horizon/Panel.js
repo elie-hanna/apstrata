@@ -213,7 +213,9 @@ dojo.declare("apstrata.horizon.Panel",
 		// TODO: this should be handled differently
 		this._onGoingAnimation = false
 		if (this.doOpenPanel) this.doOpenPanel() 
-		this.container.layout()
+		if (this.container) {
+			this.container.layout()
+		}
 	},
 
 	/*
