@@ -1,0 +1,67 @@
+.cms .dijitTabContainerTop-tabs .dijitTabRtl, .cms .dijitTabContainerBottom-tabs .dijitTabRtl {
+  margin-right: 0;
+  margin-left: 1px;
+}
+.cms .dijitTabRtl {
+  -moz-box-orient: horizontal;
+  text-align: right;
+}
+.dj_ie7 .cms .dijitTabRtl .dijitTabContent {
+  display: block;
+  left: 0;
+}
+.dj_ie7 .cms .dijitTabContainerTop-tabs .dijitTabRtl, .dj_ie7 .cms .dijitTabContainerTop-tabs .dijitTabCheckedRtl {
+  top: 1px;
+}
+.dj_ie7 .cms .tabStripButtonRtl .dijitButtonContents,
+.dj_ie8 .cms .tabStripButtonRtl .dijitButtonContents,
+.dj_ie6 .cms .dijitTabContainerTop-tabs .dijitTabRtl .dijitTabInnerDiv,
+.dj_ie6 .cms .dijitTabContainerBottom-tabs .dijitTabRtl .dijitTabInnerDiv,
+.dj_ie7 .cms .dijitTabContainerTop-tabs .dijitTabRtl .dijitTabInnerDiv,
+.dj_ie7 .cms .dijitTabContainerBottom-tabs .dijitTabRtl .dijitTabInnerDiv,
+.dj_iequirks .cms .dijitTabContainerTop-tabs .dijitTabRtl .dijitTabInnerDiv,
+.dj_iequirks .cms .dijitTabContainerBottom-tabs .dijitTabRtl .dijitTabInnerDiv {
+  float: left;
+}
+.dj_ie6 .cms .dijitTabRtl .tabLabel,
+.dj_ie6 .cms .dijitTabContainerRight-tabs .dijitTabRtl,
+.dj_ie6 .cms .dijitTabContainerLeft-tabs .dijitTabRtl,
+.dj_ie7 .cms .dijitTabContainerRight-tabs .dijitTabRtl .dijitTabInnerDiv,
+.dj_ie7 .cms .dijitTabContainerLeft-tabs .dijitTabRtl .dijitTabInnerDiv {
+  /*Make the .tablabel have width in ie6 with haslayout property, fix Close icon position bug*/
+
+  zoom: 1;
+}
+.dj_ie6 .cms .dijitTabRtl .dijitTabCloseButton, .dj_ie7 .cms .dijitTabRtl .dijitTabCloseButton, .dj_iequirks .cms .dijitTabRtl .dijitTabCloseButton {
+  margin-right: 5px;
+}
+.dj_ie6 .cms .dijitTabContainerRightRtl .dijitTabContainerRight-tabs, .dj_ie6 .cms .dijitTabContainerLeftRtl .dijitTabContainerLeft-tabs {
+  width: 1%;
+}
+.dj_ie6 .dijitTabContainerTopStrip, .dj_ie6 .dijitTabContainerBottomStrip {
+  position: absolute;
+}
+.dj_iequirks .cms .dijitTabContainerTopRtl .dijitTabContainerTopStrip {
+  padding-top: 10px;
+}
+.dj_ie7 .cms .dijitTabContainerRight-tabs .dijitTabRtlChecked .dijitTabInnerDiv {
+  background-position: -341px -179px;
+}
+.dj_ie6 .dijitTabContainerTopRtl .dijitTabStripIcon, .dj_ie6 .dijitTabContainerBottomRtl .dijitTabStripIcon {
+  position: relative;
+}
+.dj_ie6-rtl .cms .dijitTabContainerTop-tabs {
+  /* this strange rule prevents IE6 bug in themeTester.html?dir=rtl upon closing
+	 * "Closable" tab, where the other tabs disappear
+	 */
+
+  padding-left: 3px;
+}
+.dj_iequirks-rtl .cms .dijitTabListWrapper {
+  /* this strange rule prevents IE6 bug in themeTesterQuirk.html?dir=rtl upon closing
+	 * "Closable" tab, where the other tabs disappear
+	 */
+
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #ffffff;
+}
