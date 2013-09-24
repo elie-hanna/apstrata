@@ -23,7 +23,7 @@
 		?>
 		<script language="javascript" type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"] ?>/lib/editarea/edit_area/edit_area_full.js"></script>
 	</head>
-	<body class="<?php print $config['template'] ?>">
+	<body class="<?php print $config['template'] ?> cms">
 <!-- Place this tag in your head or just before your close body tag -->
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
   {parsetags: 'explicit'}
