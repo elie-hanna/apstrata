@@ -669,3 +669,64 @@ font-family: "PTSansCaptionBold";}*/
 .apstrata .dijitCalendarDayLabelTemplate {font-family: "PTSansRegular"; font-size: 0.9em;}
 .apstrata .dijitCalendarYearLabel {font-family: "PTSansRegular"; font-size: 0.9em;}
 .apstrata.amc .dijitCalendarDateTemplate {font-size: 0.8em;}
+
+/**Add application form**/
+.addApp {
+	color: #4047CF;
+	cursor: pointer;
+	font-family: "PTSansRegular";
+	font-size: 0.9em;
+	display: inline-block;
+	padding: 2px 0 0 20px;
+	background: transparent url(images/application.png) no-repeat center left;
+}
+
+.accountWrapper {display: inline-block;}
+
+.addAppForm .FormGenerator {
+padding: 8px;
+background-color: #ccc;
+-moz-border-radius: 8px;
+-webkit-border-radius: 8px;
+border-radius: 8px;
+border: 1px solid #B4B4B4;
+margin-top: 20px;
+}
+
+.addAppForm .form {width: 300px;margin-bottom: 10px;}
+
+.addAppForm .FormGenerator h2 {
+color: #282828;
+font-size: 16px;
+margin-bottom: 20px;
+text-transform: uppercase;
+font-family: "PTSansBold"
+}
+.apstrata .api-summary ol li {font-size: 1em!important; color: #555;}
+.apstrata .dijitTooltip {z-index: 7000;}
+
+/*** Override Horizon for touch ***/
+.clear {clear: both;}
+.apstrata .horizon .list .listInnerLabel {padding: 3px 5px 3px 10px;}
+.apstrata .horizon .panel.mainPanel {font-size: 130%!important;} 
+.apstrata .horizon .panel {font-size: 75%;}
+.apstrata .horizon .panel.list {font-size: 100%;}
+.apstrata .horizon .panel .title {font-weight: normal;}
+.apstrata .dojoxGridHeader .dojoxGridCell {font-size: 1em; text-transform: capitalize;}
+.apstrata .FTSearch .dijitButton {background: none; border: 0; width: 10%!important; filter: none;}
+.apstrata .FTSearch .dijitButtonNode {width: 21px; height: 28px!important; background: url('images/magnifying-glass.png') no-repeat!important;}
+.dj_ie .apstrata .FTSearch .dijitButtonNode, .dj_gecko .apstrata .FTSearch .dijitButtonNode {margin: -9px -15px 10px 0!important;}
+.dj_webkit .apstrata .FTSearch .dijitButtonNode{margin: 3px -15px -4px 0!important}
+.apstrata .dijitTooltip {z-index: 7000;}
+.apstrata .dijitTooltip .dijitTooltipContainer {font-size: 0.7em;}
+.apstrata .dojoxGridPaginator td {padding: 0!important;}
+
+.apstrata .filterSection.btn {width: 170px;}
+.dj_webkit .apstrata .filterSection.btn {width: 182px; margin: 1px 0 0 -12px;}
+
+/*** Overrida Calendar ***/
+.apstrata .dijitCalendarMonthLabel, .apstrata .dijitCalendarMonthMenu .dijitCalendarMonthLabel {font-family: "PTSansRegular"; font-size: 0.8em;}
+.apstrata .dijitCalendar {font-family: "PTSansRegular";}
+.apstrata .dijitCalendarDayLabelTemplate {font-family: "PTSansRegular"; font-size: 0.9em;}
+.apstrata .dijitCalendarYearLabel {font-family: "PTSansRegular"; font-size: 0.9em;}
+.apstrata.amc .dijitCalendarDateTemplate {font-size: 0.8em;}
