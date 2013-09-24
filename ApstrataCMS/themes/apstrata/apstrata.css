@@ -4,7 +4,7 @@
 @import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/Curtain.css";
 @import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/FlashAlert.css";
 @import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/ApstrataAnimation.css";
-
+@import "../../lib/ApstrataSDK/apstrata/horizon/themes/horizon.css";
 
 @import url("reset.css");
 @import url("styles.css");
