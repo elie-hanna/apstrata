@@ -28,7 +28,7 @@ function getRequestToken(apsdb, request) {
 	var callbackUrl = request ? request.parameters["callbackUrl"] : null;
 	
 	// Get the details of the targetted application
-	var appDetails = _getApplicationDetails(apsdb);
+	var appDetails = _getApplicationDetails(apsdb, request);
 	
 	// Get the optional url to redirect to upon login
 	var redirect = request ? request.parameters["redirectAfterLogin"] : "false";
@@ -113,7 +113,7 @@ function checkAccessToken(apsdb, accessToken) {
 	var params = {
 	
 		"input_token": accessToken,
-     		"access_token": appDetails.secret
+     	"access_token": appDetails.secret
 	}	
 	
 	var response = apsdb.social.facebook.callApi(appDetails.appKey, appDetails.secret, accessToken, "GET", "https://graph.facebook.com/debug_token", params);
@@ -293,15 +293,21 @@ function searchPlaces(apsdb, facebookid, accessToken, searchDTO) {
  * If this is not the case, falls back to the default values
  * @return application detail object {secret, callbackUrl, scope, facebookStatus}
  */
-function _getApplicationDetails(apsdb) {
+function _getApplicationDetails(apsdb, request) {
 
+	var scope = "";
+	if (request) {
+		
+		scope = request.parameters["scope"];
+	}
+	
 	var common = apsdb.require("social.fb.common");
 	return {
 	
 		"appKey": common.appKey,
 		"secret": common.secret,
 		"callbackUrl": common.callbackUrl,
-		"scope": common.scope,
+		"scope": scope ? scope : common.scope,
 		"facebookStatus": common.facebookStatus,
 		"loggedInRedirectUrl": common.loggedInRedirectUrl
 	}
