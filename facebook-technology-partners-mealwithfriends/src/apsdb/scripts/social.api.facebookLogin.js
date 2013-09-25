@@ -123,7 +123,19 @@ try {
 	
 	if (command == "getAccessToken") {
 		
-		var accessToken = facebookManager.getAccessToken(apsdb, request);		
+		var accessToken = "";
+		var common = apsdb.require("social.fb.common");
+		try {
+			accessToken = facebookManager.getAccessToken(apsdb, request);
+		}catch(exception) {
+		
+			if (common.redirectOnLoginFailure) {				
+				apsdb.httpRedirect(common.siteUrl);
+			}else {
+				throw exception;
+			}
+		}
+				
 		if (accessToken) {
 		
 			return _handleAccessToken(apsdb, accessToken, request);
