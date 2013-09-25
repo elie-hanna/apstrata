@@ -62,9 +62,16 @@ function _buildHTML(apsdb, mealDocument) {
  		"picture": linkToPic
  	}
  	
- 	param = {"meal": JSON.stringify(mealParam)};	
- 	var ui = apsdb.callHttp("http://as.elementn.com/getMeal.php", "POST", param, null, null, null, false, null, false, false);
-	apsdb.httpRespond(ui.body, status, null);
+ 	if (!isFacebookRequest) {
+ 	
+ 		param = {"meal": JSON.stringify(mealParam)};	
+	 	var ui = apsdb.callHttp(common.siteUrl + "/getMeal.php", "POST", param, null, null, null, false, null, false, false);
+		apsdb.httpRespond(ui.body, status, null);
+	}else {
+ 		
+	 	var url = common.siteUrl + "/getMeal.php?meal=" + encodeURIComponent(JSON.stringify(mealParam)); 
+		apsdb.httpRedirect(url);
+	}
 }
 	
 function _verifyParameters() {
