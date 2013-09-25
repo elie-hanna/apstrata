@@ -10,7 +10,7 @@
 		/*
 		 * Check if a cookie exist with user information. If so, unserialize it and use
 		 * the value to create an instance of User.
-		 * If no user cookie was found, check is the request object contains an Apstrata
+		 * If no user cookie was found, check if the request object contains an Apstrata
 		 * token. If so, use it to create an instance of User, serialize the latter and
 		 * store it in a "user" cookie. Also add the Apstrata token as a separate cookie
 		 */

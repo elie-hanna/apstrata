@@ -6,6 +6,7 @@
 	require_once 'User.php';
 	require_once 'LoginManager.php';
 	
+	$user = LoginManager::handleUser();	
 	$client = new APSDBClient(APSDBConfig::$ACCOUNT_KEY);
 	$util = new Util();
 			
@@ -42,6 +43,7 @@
 ?>
 <html>
 	<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#<?php print util::$APP_NAMESPACE?>: http://ogp.me/ns/fb/<?php print util::$APP_NAMESPACE?>#">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta property="fb:app_id" content="<?php print util::$APP_KEY?>"/>
 		<meta property="og:type" content="<?php print util::$APP_NAMESPACE?>:meal"/>		
   		<meta property="og:title" content="<?php print $meal['recipeName']?>"/>
@@ -49,6 +51,8 @@
  		<link rel="stylesheet" type="text/css" href="./css/style.css"/>
 		<link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css"/>
 		<link rel="stylesheet" type="text/css" href="./css/jquery-ui-autocomplete.css"/>
+		
+		<script type="text/javascript" src="formController.js"></script>
 		<script type="text/javascript">
 	
 			// this function invokes the Apstrata script that handles the login process
@@ -66,8 +70,17 @@
 				url = url + "&returnApstrataToken=true";
 				window.location.assign(url);	
 			}
-		</script>
-		<script type="text/javascript" src="formController.js"></script>		
+			
+			// this function simulates the click on the "share" button if the current page is loaded
+			// further to the addition of a new permission (i.e. "share" was initially clicked but lead to a permission request
+			function checkEvent() {
+				
+				var event = "<?php print $_REQUEST['event'];?>";
+				if (event) {
+					handleEvent({"currentTarget":{"id":event}});
+				}
+			}
+		</script>		
  	</head>	
 	<div class="navbar navbar-inverse navbar-fixed-top">
 	  <div class="navbar-inner">
@@ -93,7 +106,7 @@
 	    </div>
 	  </div>
 	</div>
-	<body>		
+	<body onload="checkEvent()">		
 		<div class="container-fluid">	
 			<section id="meal" class="meal row-fluid" data-meal="<?php print $meal['recipeName']?>" data-mealtitle="<?php print $meal['recipeName']?>" role="main">
 			  <div class="span4 thumbnail img-container"><img alt="<?php print $meal['recipeName']?>" src="<?php print $meal['picture']?>"/></div>
@@ -160,7 +173,7 @@
 							<button id="btn-post" class="btn btn-primary" type="button" onclick="publishAction('<?php print $key ?>')">Post to Timeline</button>
 						</div>
 					</div>
-				</form>
+				</form>	
 		</div><!--/.fluid-container-->
 	</body>
 </html>

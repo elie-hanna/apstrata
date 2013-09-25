@@ -2,6 +2,7 @@ var friends = [];
 var places = [];
 var selectedFriends = [];
 var currentPlace;
+var placeQuery;
 var currentLocation = {};
 
 window.onkeypress = function(event) {
@@ -32,7 +33,8 @@ function handleEvent(event) {
 		"btn-form-close": "closeForm",
 		"share-button": "openForm",
 		"composer-friends-field": "getFriends",
-		"composer-place-field": "getPlaces"
+		"composer-place-field": "getPlaces",
+		"btn-alert-close": "closeAlert"
 	}
 	
 	var clickedBtnId = event.currentTarget.id;
@@ -41,17 +43,13 @@ function handleEvent(event) {
 
 function openForm() {
 	
+	// move this to checkpermissions and call checkPermissions from event handler
+	// checkPermissions callback will invoke openForm
 	if (!validateToken()) {
 		return;
 	}
 	
-	var composerModalNode = document.getElementById("composer-modal");
-	composerModalNode.style.display = "block";
-	var bodyNode = document.getElementsByTagName("body")[0];
-	var curtainNode = document.createElement("div");
-	curtainNode.setAttribute("id", "curtain");
-	curtainNode.setAttribute("class", "modal-backdrop in");
-	bodyNode.appendChild(curtainNode);
+	checkPermissions();	
 }  
 
 function closeForm() {
@@ -59,6 +57,11 @@ function closeForm() {
 	var composerModalNode = document.getElementById("composer-modal");
 	var formNode = document.getElementById("composer");
 	composer.reset();
+	places = [];
+	friends = [];
+	removeAllFriends();
+	removeAllPlaces();
+	currentPlace = null;
 	composerModalNode.style.display = "none";
 	var bodyNode = document.getElementsByTagName("body")[0];
 	var curtain = document.getElementById("curtain");
@@ -189,20 +192,26 @@ function publishAction(docKey) {
 	var serverResponse = xhReq.responseText;
 	if (serverResponse) {
 		var result =  JSON.parse(serverResponse);
-		if (result && result.metadata && result.metadata.status == "failure") {
-			alert(result.metadata.errorDetail);
+		if (result && result.status && result.status == "failure") {
+			alert(result.errorDetail);
+			closeForm();
+			return;
 		}
 		
 		if (result && result.result.error) {
 			alert(result.result.error.message);
+			closeForm();
+			return;
 		}
 		
 		if (!result) {
 			alert("Time-out: could not connect to server");
+			closeForm();
+			return;
 		}
+		
+		notifySuccess();		
 	}
-	
-	closeForm();
 }
 
 function getFriends(event) {
@@ -256,7 +265,8 @@ function getPlaces(event) {
 	}
 	
 	var name = event.target.value;
-	if (name == "") {
+	placeQuery = name;
+	if (name.length == 0) {
 		
 		places = [];
 		displayPlaces(places);
@@ -289,18 +299,21 @@ function getPlaces(event) {
 	  	}
   	}
 	
-	xhReq.open("GET", url, true);
-	try {
-		xhReq.send(null);
-	}catch(crossSiteException) {
-		console.log(crossSiteException);
+	if (name && name.length > 0) {
+		
+		xhReq.open("GET", url, true);
+		try {
+			xhReq.send(null);
+		}catch(crossSiteException) {
+			console.log(crossSiteException);
+		}
 	}
 }
 
 function displayFriends(friends) {
 
 	var whoAreYouWithNode = document.getElementById("ui-id-1");
-	if (friends.length == 0) {
+	if (!friends || friends.length == 0) {
 		whoAreYouWithNode.style.display = "none"; 
 		return;
 	}
@@ -350,9 +363,20 @@ function displayFriends(friends) {
 
 function displayPlaces(places) {
 	
-	var whereAreYouNode = document.getElementById("ui-id-p1");
-	if (places.length == 0) {
-		whereAreYouNode.style.display = "none"; 
+	// remove existing nodes
+	var whereAreYouNode = document.getElementById("ui-id-p1");	
+	while (whereAreYouNode.hasChildNodes()) {
+	     whereAreYouNode.removeChild(whereAreYouNode.firstChild);       
+	} 	
+	
+	// Make sure to clear the list of places if the place query is empty as we might still
+	// be receiving Ajax results from preceding searches
+	if (placeQuery.length == 0) {
+		places = [];
+	}
+	
+	if (!places || places.length == 0) {
+		whereAreYouNode.style.display = "none";
 		return;
 	}
 	
@@ -361,14 +385,7 @@ function displayPlaces(places) {
 	whereAreYouNode.style.top = "121px";
 	whereAreYouNode.style.left = "15px";
 	
-	// remove existing nodes
-	if (whereAreYouNode.hasChildNodes()) {
-	    while (whereAreYouNode.childNodes.length >= 1 ){
-	        whereAreYouNode.removeChild(whereAreYouNode.firstChild);       
-	    } 
-	}
-	
-	// build new friend list from returned friends	
+	// build new places list from returned places	
 	for(var i = 0; i < places.length; i++) {
 		
 		var place = places[i];
@@ -475,6 +492,8 @@ function addPlace(item) {
 	var selectedPlace = places[index];
 	var found = false; 
 	if (currentPlace && currentPlace.name == selectedPlace.name) {
+		
+		clearListedPlaces();
 		return;
 	}
 	
@@ -500,8 +519,7 @@ function addPlace(item) {
 	a.appendChild(aTxt);
 	
 	composerMsgDataNode.style.display = "block";
-	var whereAreYouNode = document.getElementById("ui-id-p1");
-	whereAreYouNode.style.display = "none";	
+	clearListedPlaces();
 }
 
 function removeFriend(event) {
@@ -542,14 +560,37 @@ function removeAllFriends() {
 		
 	    for (var i = 0; i < ul.childNodes.length; i++){
 	    	
-	    	if (ul.childNodes[i].id && ul.childNodes[i].id.indexOf("selectedFriend-") > -1) {    		
-	    		
+	    	if (ul.childNodes[i].id && ul.childNodes[i].id.indexOf("selectedFriend-") > -1) {	    		
 	        	ul.removeChild(ul.childNodes[i]);       
 	    	}
 	    } 
 	}
 	
+	var composerMsgDataNode = document.getElementById("composer-message-data-friends");
+	while (composerMsgDataNode.hasChildNodes()) {
+		composerMsgDataNode.removeChild(composerMsgDataNode.childNodes[0]); 
+	}
+	
 	selectedFriends.splice(0, selectedFriends.length);
+}
+
+function removeAllPlaces() {
+	
+	var composerMsgDataNode = document.getElementById("composer-message-data-place");
+	while(composerMsgDataNode.hasChildNodes()) {
+		composerMsgDataNode.removeChild(composerMsgDataNode.childNodes[0]);  
+	}
+}
+
+function clearListedPlaces() {
+	
+	var whereAreYouNode = document.getElementById("ui-id-p1");
+	while (whereAreYouNode.hasChildNodes()) {
+	     whereAreYouNode.removeChild(whereAreYouNode.firstChild);       
+	} 
+	
+	whereAreYouNode.style.display = "none";
+	places = [];
 }
 
 function getCookie(cookieName) {
@@ -567,3 +608,78 @@ function getCookie(cookieName) {
 	
 	return "";
 }
+
+function checkPermissions() {
+
+	var apstrataToken = decodeURIComponent(getCookie("apstrataToken")).split(";");	
+	var xhReq = new XMLHttpRequest();	
+	var url = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?apsws.time=1371484281539&apsws.responseType=jsoncdp&apsdb.scriptName=social.api.fb.checkPermissions&apsdb.authToken=" + apstrataToken[0] + "&apsws.user=" + apstrataToken[1];
+	url = url + "&permissions=publish_actions,publish_stream&isCORS=true";
+	xhReq.onreadystatechange=function() {
+	  	
+	  	if (xhReq.readyState==4 && xhReq.status==200) {
+	   
+	   		var serverResponse = xhReq.responseText;
+			if (serverResponse) {
+				
+				var result = JSON.parse(serverResponse);
+				if (result.errorCode) {
+					alert("result: " + JSON.stringify(result));
+					return;
+				}
+				
+				if (result.publish_actions == 1) {
+					initForm();
+				}else {
+					requestAdditionalPermissions("publish_actions,publish_stream");
+				}
+			}
+	  	}
+  	}
+	
+	xhReq.open("GET", url, true);
+	try {
+		xhReq.send(null);
+	}catch(crossSiteException) {
+		console.log(crossSiteException);
+	}	
+}	
+
+function requestAdditionalPermissions(permissions) {
+			
+		var url = "https://sandbox.apstrata.com/apsdb/rest/B030C6D305/RunScript?";
+		url = url + "apsws.time=" + new Date().getTime() + "&apsws.responseType=jsoncdp";
+		url = url + "&apsdb.scriptName=social.api.facebookLogin&redirectAfterLogin=true&";
+		if (permissions) {
+			url = url + "scope=" + permissions + "&";
+		}
+		
+		url = url + "loggedInRedirectUrl=" + encodeURIComponent(window.location + "&event=share-button");
+		url = url + "&returnApstrataToken=true";
+		window.location.assign(url);	
+}
+
+function initForm() {
+
+	var composerModalNode = document.getElementById("composer-modal");
+	composerModalNode.style.display = "block";
+	var bodyNode = document.getElementsByTagName("body")[0];
+	var curtainNode = document.createElement("div");
+	curtainNode.setAttribute("id", "curtain");
+	curtainNode.setAttribute("class", "modal-backdrop in");
+	bodyNode.appendChild(curtainNode);	
+}
+
+function notifySuccess() {
+	
+	var titleNode = document.getElementById("modal-title");
+	var initialBackground = titleNode.style.background; 
+	titleNode.style.background = "#8AC007";
+	titleNode.innerHTML = "Post to Timeline was successful";
+	setTimeout(function(){
+				
+					titleNode.style.background = initialBackground;
+					titleNode.innerHTML = "Post to Timeline";
+					// closeForm();
+				},	3000);
+}	
