@@ -37,7 +37,7 @@ var loggedInRedirectUrl = "";
 var siteUrl = "http://as.elementn.com";
 
 // The scope used by the facebook meals with friend application	
-var scope = "email,publish_stream,publish_actions,read_stream,user_photos,user_videos,user_status,offline_access,manage_pages,read_insights";
+var scope = "email,read_stream,user_photos,user_videos,user_status,offline_access,manage_pages,read_insights";
 
 // The status to use as security for the facebook meals with friend application
 var facebookStatus = "ads&=f";
@@ -46,7 +46,7 @@ var facebookStatus = "ads&=f";
 var appNameSpace = "mealwithfriends";
 
 // Set the below to true if you need to add the instrumentation provided by Facebook
-var triggerFacebookInstrumentation = false;
+var triggerFacebookInstrumentation = true;
 
 var facebookInstrumentationUrl = "https://www.facebook.com/impression.php";
 
