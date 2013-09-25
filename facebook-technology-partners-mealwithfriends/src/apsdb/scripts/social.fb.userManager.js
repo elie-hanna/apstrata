@@ -231,6 +231,69 @@ function generateToken(apsdb, login, hashedPassword, action, token) {
 }
 
 /*
+ * Call this function when you need to check if a given user has granted some permissions
+ * to an app on Facebook (https://developers.facebook.com/docs/reference/login/#permissions)
+ * @param apsdb: the Apstrata apsdb object
+ * @param facebookId: the user id on Facebook
+ * @param accessToken: the Facebook access token of the user for this app
+ * @param permissionArray: an array of Facebook permissions to check (e.g. ["email", "publish_actions"])
+ * @return A key/value object where: key = permission and value = 1 or 0, e.g: {"email":1, "publish_actions":0}
+ * @throw {"errorCode": "Check_Permission_Error", "errorDetail": response.result.error.message}
+ */
+function checkPermissions(apsdb, facebookId, accessToken, permissionArray) {
+
+	var common = apsdb.require("social.fb.common");
+	var permissionsStr = "";
+	for (var i = 0; i < permissionArray.length; i++) {
+		
+		permissionsStr = permissionsStr + permissionArray[i];
+		if (i < permissionArray.length - 1) {
+			permissionsStr = permissionsStr + ",";
+		}
+	}
+	
+	var fqlQuery = "select " + permissionsStr + " from permissions where uid = " + facebookId;
+	var url = "https://graph.facebook.com/fql";
+	var params = {
+		"q": fqlQuery
+	}
+	
+	var response = apsdb.social.facebook.callApi(common.appKey, common.secret, accessToken, "GET", url, params);
+	if (response.metadata.status == "success") {	
+		
+		if (response.result.error) {
+			
+			throw {
+				"errorCode": "Check_Permission_Error",
+				"errorDetail": response.result.error.message
+			}
+		}
+		
+		return response.result.data[0];
+	}else {
+		return response.metadata;
+	}
+}
+
+/*
+ * Call this function when you need to know if a given permission has been granted by a 
+ * a user to an app on Facebook (https://developers.facebook.com/docs/reference/login/#permissions)
+ * @param apsdb: the Apstrata apsdb object
+ * @param facebookId: the user id on Facebook
+ * @param accessToken: the Facebook access token of the user for this app
+ * @param permissionArray: an array of Facebook permissions to check (e.g. ["email", "publish_actions"])
+ * @return true or false
+ * @throw {"errorCode": "CHECK_PERMISSION_ERROR", "errorDetail": response.result.error.message}
+ */
+function hasPermission(apsdb, facebookId, accessToken, permission) {
+	
+	var permissionArray = [];
+	permissionArray[0] = permission;
+	var result = checkPermissions(apsdb, facebookId, accessToken, permissionArray);
+	return result[permission] == 1 ? true : false; 
+}
+
+/*
  * Save (create/update) a user in the Apstrata application account
  * @param userDTO: the data on the user (userDTO.login mandatory)
  * @param update: if true, updates and existing user, if false, creates a new user
