@@ -18,7 +18,7 @@
 		}
 	</style>
 	<!-- begin side menu -->
-    <div class="side-menu">
+    <div class="side-menu" style="display: none;">
     	<h1>TOOLS</h1>
     	<!-- begin navigation -->
         <div class="navigation">
@@ -39,7 +39,7 @@
     </div>
     <!-- end side menu -->
 	<div class="editorial">
-    	<h1 class="marB20" style="visibility:hidden">Hello</h1>      
+    	<h1 class="marB20" style="visibility:hidden; display: none;">Hello</h1>      
     	<div class="dashboard" style="display:none">
 		This is your dashboard. <br />
 		This is where you control your apps, your settings and stuff.
@@ -203,7 +203,7 @@
 						}
 					var mainContainer = new amc.layout.App({
 						showToolbar: false,
-						margin:{top: 132, left: 0, right:0, bottom: 0}}, "linkedContent");
+						margin:{top: 132, left: 0, right:0, bottom: 26}}, "linkedContent");
 		
 					mainContainer.startup();				
 				}

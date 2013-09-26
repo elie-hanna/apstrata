@@ -5,7 +5,7 @@
 ?>
 
 <!-- begin footer -->
-    <div class="footer-wrap">
+    <div class="footer-wrap Mainrow">
      	<footer>
      		
 			<!-- begin social media -->

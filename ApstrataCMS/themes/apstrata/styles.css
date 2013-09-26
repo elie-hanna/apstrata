@@ -99,10 +99,10 @@
 /*** general Styles ***/
 body {font-family: 'PTSansRegular',"Lucida Grande", sans-serif;}
 
-#wrap {min-width: 960px; width: 100%;postion: relative; min-height: 100%;
+/*#wrap {min-width: 960px; width: 100%;postion: relative; min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -353px; background: url(images/content-wrap.png) top left repeat;}
+	margin: 0 auto -353px; background: url(images/content-wrap.png) top left repeat;}*/
 .header-wrap {background: #383B3E; height: 30px; border-bottom: 1px solid  #000;}
 header {max-width: 960px; margin: 0 auto;}
 
@@ -265,7 +265,7 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 .controls .control4.selected .arrow, .controls .control4:hover .arrow { visibility:visible;  }
 
 /*** Footer ***/
-.footer-wrap {height: 353px; background: url(images/footer-bg.png) bottom left repeat-x; width: 100%; min-width: 960px;}
+.footer-wrap {background: #484b4e url(images/footer-bg.png) top left repeat-x; box-shadow: 0 0 3px #0e0e0e;}
 footer {width: 960px; margin: 0 auto;}
 footer h3 {font-size: 14px; font-family: "ArialRoundedMTBold"; color: #f5f5f5;margin-top: 0; line-height: 12px;}
 footer .newsletter {padding-top: 33px; float: right;}
@@ -306,10 +306,9 @@ footer #social {
 .social-bookmarks li {float: right; margin: 0; padding: 0!important; list-style-type: none;}
 
 /*** Container and content ***/
-.container {background: url(images/container.png) top left repeat-x; margin-top: -1px; padding-bottom: 336px;}
-.content-wrap {padding-bottom: 80px;}
+.container {background: url(images/container.png) top left repeat-x;}
 
-.content-page  {max-width: 960px; margin: 0 auto; padding-top: 32px;}
+.content-page  {max-width: 960px; margin: 0 auto; padding-top: 32px; padding-bottom: 40px;}
 .content-page h1 {font-size: 30px; font-family: "ArialRoundedMTBold"; text-transform: lowercase;}
 .title {font-size: 25px; font-family: "ArialRoundedMTBold"; color: #282828; margin-bottom: 20px; text-transform: lowercase;}
 .title span  {color: #F48220; margin-right: 10px;}
@@ -456,7 +455,7 @@ text-shadow: 1px 1px 0 #767779;
 text-shadow: 1px 1px 0 #000;}
 
 
-.loading {margin: 10px 0; text-align: center; padding: 15px 0;}
+.loading {margin: 10px 0; text-align: center; padding: 15px 0; position: relative!important;}
 
 .dashboard.profile { position:relative !important; }
 
@@ -571,14 +570,14 @@ text-shadow: 1px 1px 0 #767779;
 .redInput-label {  /* the field label will be assigned the "[customClass]-label" class  */
 	color: red;
 }
-.apstrata .LoginWidget { top: 205px !important; z-index: 400!important; }
+.apstrata .LoginWidget {top: 180px !important; z-index: 400!important; }
 
 .apstrata .LoginWidget .login {
 background: #4e4848;
 font-size: 1.2em;
 margin-left: auto;
 margin-right: auto;
-padding: 20px;
+padding: 20px 20px 10px 20px;
 width: 400px;
 -moz-border-radius: 5px;
 -webkit-border-radius: 5px;
@@ -617,7 +616,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 .expand-container li { font-size:13px; margin-bottom:3px; margin-left:20px;}
 
 .apstrata p {font-size: 13px; margin: 0; padding: 0; line-height: 1.2em;}
-.apstrata .HorizonCurtain {background: none; z-index: 200; border: none;}
+
+.apstrata .HorizonCurtain {background: #000; opacity: 0.4; z-index: 200; border: none;}
 
 /*
 .apstrata .dijitTooltipContainer {border: 1px solid #666; background: #d46464; color: #fff; padding: 4px;
@@ -644,33 +644,8 @@ font-family: "PTSansCaptionBold";}*/
 .apstrata .api-summary ol li {font-size: 1em!important; color: #555;}
 .apstrata .dijitTooltip {z-index: 7000;}
 
-/*** Override Horizon for touch ***/
-.clear {clear: both;}
-.apstrata .horizon .list .listInnerLabel {padding: 3px 5px 3px 10px;}
-.apstrata .horizon .panel.mainPanel {font-size: 130%!important;} 
-.apstrata .horizon .panel {font-size: 75%;}
-.apstrata .horizon .panel.list {font-size: 100%;}
-.apstrata .horizon .panel .title {font-weight: normal;}
-.apstrata .dojoxGridHeader .dojoxGridCell {font-size: 1em; text-transform: capitalize;}
-.apstrata .FTSearch .dijitButton {background: none; border: 0; width: 10%!important; filter: none;}
-.apstrata .FTSearch .dijitButtonNode {width: 21px; height: 28px!important; background: url('images/magnifying-glass.png') no-repeat!important;}
-.dj_ie .apstrata .FTSearch .dijitButtonNode, .dj_gecko .apstrata .FTSearch .dijitButtonNode {margin: -9px -15px 10px 0!important;}
-.dj_webkit .apstrata .FTSearch .dijitButtonNode{margin: 3px -15px -4px 0!important}
-.apstrata .dijitTooltip {z-index: 7000;}
-.apstrata .dijitTooltip .dijitTooltipContainer {font-size: 0.7em;}
-.apstrata .dojoxGridPaginator td {padding: 0!important;}
 
-.apstrata .filterSection.btn {width: 170px;}
-.dj_webkit .apstrata .filterSection.btn {width: 182px; margin: 1px 0 0 -12px;}
-
-/*** Overrida Calendar ***/
-.apstrata .dijitCalendarMonthLabel, .apstrata .dijitCalendarMonthMenu .dijitCalendarMonthLabel {font-family: "PTSansRegular"; font-size: 0.8em;}
-.apstrata .dijitCalendar {font-family: "PTSansRegular";}
-.apstrata .dijitCalendarDayLabelTemplate {font-family: "PTSansRegular"; font-size: 0.9em;}
-.apstrata .dijitCalendarYearLabel {font-family: "PTSansRegular"; font-size: 0.9em;}
-.apstrata.amc .dijitCalendarDateTemplate {font-size: 0.8em;}
-
-/**Add application form**/
+/** Add application form **/
 .addApp {
 	color: #4047CF;
 	cursor: pointer;
@@ -694,7 +669,6 @@ margin-top: 20px;
 }
 
 .addAppForm .form {width: 300px;margin-bottom: 10px;}
-
 .addAppForm .FormGenerator h2 {
 color: #282828;
 font-size: 16px;
@@ -705,7 +679,8 @@ font-family: "PTSansBold"
 .apstrata .api-summary ol li {font-size: 1em!important; color: #555;}
 .apstrata .dijitTooltip {z-index: 7000;}
 
-/*** Override Horizon for touch ***/
+
+/*** Override Horizon for apstrata CMS ***/
 .clear {clear: both;}
 .apstrata .horizon .list .listInnerLabel {padding: 3px 5px 3px 10px;}
 .apstrata .horizon .panel.mainPanel {font-size: 130%!important;} 
@@ -724,9 +699,24 @@ font-family: "PTSansBold"
 .apstrata .filterSection.btn {width: 170px;}
 .dj_webkit .apstrata .filterSection.btn {width: 182px; margin: 1px 0 0 -12px;}
 
-/*** Overrida Calendar ***/
+/*** Override Calendar ***/
 .apstrata .dijitCalendarMonthLabel, .apstrata .dijitCalendarMonthMenu .dijitCalendarMonthLabel {font-family: "PTSansRegular"; font-size: 0.8em;}
 .apstrata .dijitCalendar {font-family: "PTSansRegular";}
 .apstrata .dijitCalendarDayLabelTemplate {font-family: "PTSansRegular"; font-size: 0.9em;}
 .apstrata .dijitCalendarYearLabel {font-family: "PTSansRegular"; font-size: 0.9em;}
 .apstrata.amc .dijitCalendarDateTemplate {font-size: 0.8em;}
+
+/*** Dijit Dialog ***/
+.apstrata.amc .dialog-content {font-size: 0.8em;}
+
+/*** Small footer for horizon ***/
+.apstrata.amc .footer-wrap.small {background: #484b4e;}
+.apstrata.amc .footer-wrap.small footer {height:30px;}
+.apstrata.amc .footer-wrap.small footer .copyright {padding-top: 0;}
+.apstrata.amc .footer-wrap.small footer .copyright p {padding-top: 10px;}
+
+/*** Sticky Footer CSS ***/
+.frame {background: url(images/content-wrap.png) top left repeat; display: table; height: 100%; width: 100%;}
+.Mainrow {display: table-row; height: 1px;}
+.Mainrow.expand {height: auto;}
+

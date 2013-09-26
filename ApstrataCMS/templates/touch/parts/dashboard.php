@@ -18,15 +18,6 @@
 	<?php 
 			} 
 		?>
-		.blueHorizon {
-			font-family: sans-serif;
-			font-size: 1.2em;
-	
-			top: 44px;
-			left: 70px;
-			width: 700px;
-			height: 400px;
-		}
 	</style>
 	<!-- begin side menu -->
     <div class="side-menu">

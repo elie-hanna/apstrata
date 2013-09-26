@@ -23,12 +23,12 @@
 		?>
 		<script language="javascript" type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"] ?>/lib/editarea/edit_area/edit_area_full.js"></script>
 	</head>
-	<body class="<?php print $config['template'] ?> cms">
+	<body class="<?php print $config['template'] ?> amc">
 <!-- Place this tag in your head or just before your close body tag -->
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
   {parsetags: 'explicit'}
 </script>
-	<div id='wrap'>	
+	<div class='frame'>	
 		<?php 
 			include("templates/" . $config['template'] . "/parts/top.php");			
 		?>			
@@ -36,11 +36,11 @@
 		<?php 
 			if ($page['template'] != "home") {
 		?>
-			<div class="container">             	
+			<div class="container Mainrow expand">             	
 				<!-- begin content wrap-->
 				<div class="content-wrap">
 			    	<!-- begin content -->
-			        <div class="content">
+			        <div class="content-page">
 		<?php
 			}
 		?>
@@ -64,12 +64,11 @@
 			}
 		?>
 		
-	</div> <!-- end container -->
-	<div class="clearfix"></div>
-	</div><!--end wrap -->
+	</div> 
+	<!-- end container -->
 	<?php 
 		include("templates/" . $config['template'] . "/parts/bottom.php");
 	?>
-
+	</div><!--end frame -->
 	</body>
 </html>

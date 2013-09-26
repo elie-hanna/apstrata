@@ -70,10 +70,10 @@
 /*** general Styles ***/
 body {font-family: 'NunitoRegular',"Lucida Grande", sans-serif;}
 
-#wrap {min-width: 960px; width: 100%;postion: relative; 	min-height: 100%;
+/*#wrap {min-width: 960px; width: 100%;postion: relative; 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -353px;}
+	margin: 0 auto -353px;}*/
 .header-wrap {background: #383B3E; height: 30px; border-bottom: 1px solid  #000;}
 header {max-width: 960px; margin: 0 auto;}
 
@@ -218,7 +218,7 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 .controls .control4.selected .arrow, .controls .control4:hover .arrow { visibility:visible;  }
 
 /*** Footer ***/
-.footer-wrap {height: 353px; background: url(../touch/images/footer-bg.png) bottom left repeat-x;}
+.footer-wrap {background: #484b4e url(images/footer-bg.png) top left repeat-x; box-shadow: 0 0 3px #0e0e0e;}
 footer {width: 960px; margin: 0 auto;}
 footer h3 {font-size: 14px; font-family: "NunitoBold"; color: #f5f5f5;margin-top: 0; line-height: 12px;}
 footer .newsletter {padding-top: 33px;}
@@ -251,10 +251,9 @@ footer .copyright img:hover {opacity: 0.6; filter:alpha(opacity=60);}
 footer .copyright p + p {float: right; font-family: "NunitoRegular";}
 
 /*** Container and content ***/
-.container {background: url(../touch/images/container.png) top left repeat-x; padding-top: 3px; padding-bottom: 336px;}
-.content-wrap {background:url("../touch/images/content-wrap.png") repeat scroll left top; padding-bottom: 130px; margin-bottom: -16px;}
+.container {background: url(../touch/images/container.png) top left repeat-x;}
 
-.content-page  {max-width: 960px; margin: 0 auto; padding-top: 32px;}
+.content-page  {max-width: 960px; margin: 0 auto; padding-top: 32px; padding-bottom: 40px;}
 .content-page h1 {font-size: 30px;}
 .title {font-size: 25px; font-family: "NunitoBold"; color: #282828; margin-bottom: 20px;}
 .title span  {color: #009FB4; margin-right: 10px;}
@@ -545,50 +544,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 .touch .apstrataHorizonAlert .message .content {padding-top: 0; border: none; margin: 0; line-height: 1.3em;}
 .touch .apstrataHorizonAlert .actions {margin-top: -10px;}
 
-
-/*** Override Horizon for touch ***/
-.touch.amc .asterisk {color: #009FB4!important;}
-.clear {clear: both;}
-.touch .horizon .list .listInnerLabel {padding: 3px 5px 3px 10px;}
-.touch .horizon .panel.mainPanel {font-size: 130%!important;} 
-.touch .horizon .panel {font-size: 75%;}
-.touch .horizon .panel.list {font-size: 100%;}
-.touch .horizon .panel .title {font-weight: normal;}
-.touch .dojoxGridHeader .dojoxGridCell {font-size: 0.9em; text-transform: capitalize;}
-.touch .FTSearch .dijitButton {background: none; border: 0; width: 10%!important;}
-.touch .FTSearch .dijitButtonNode {width: 21px; height: 28px!important; background: url('images/magnifying-glass.png') no-repeat!important;}
-.dj_ie .touch .FTSearch .dijitButtonNode, .dj_gecko .touch .FTSearch .dijitButtonNode {margin: -8px -15px 8px 0!important;}
-.dj_webkit .touch .FTSearch .dijitButtonNode{margin: 3px -15px -4px 0!important}
-.touch .dijitTooltip {z-index: 7000;}
-.touch .dijitTooltip .dijitTooltipContainer {font-size: 0.7em;}
-.touch .dojoxGridPaginator td {padding: 0!important;}
-
-.touch .filterSection.btn {width: 170px;}
-.dj_webkit .touch .filterSection.btn {width: 182px; margin: 1px 0 0 -12px;}
-.touch .filterSection.btn .dijitButton .dijitButtonText {font-size: 14px;}
-
-/*** Overrida Calendar ***/
-.touch .dijitCalendarMonthLabel, .touch .dijitCalendarMonthMenu .dijitCalendarMonthLabel {font-family: "NunitoRegular"; font-size: 0.9em;}
-.touch .dijitCalendar {font-family: "NunitoRegular"; font-size: 0.8em; background-color:#2C9DAF;}
-.touch .dijitCalendarDayLabelTemplate {font-family: "NunitoRegular";}
-.touch .dijitCalendarYearLabel {font-family: "NunitoRegular"; font-size: 1em;}
-.touch .dijitCalendarDisabledDate .dijitCalendarDateLabel {color: #00DCFF;}
-.touch .dijitCalendarSelectedDate .dijitCalendarDateLabel, 
-.touch .dijitCalendarHoveredDate .dijitCalendarDateLabel,
-.touch .dijitCalendarNextYearHover, 
-.touch .dijitCalendarPreviousYearHover,
-.touch .dijitCalendarPreviousMonth .dijitCalendarDateLabel, 
-.touch .dijitCalendarNextMonth .dijitCalendarDateLabel {
-color: #00DCFF;}
-
-.touch .dijitCalendarPreviousMonth .dijitCalendarDateLabel, 
-.touch .dijitCalendarNextMonth .dijitCalendarDateLabel {color: #00DCFF;}
-.touch.amc .calendar-field .dijitComboBox .dijitArrowButtonInner {background: url('images/calendar-ico.png') no-repeat center left;}
-.touch.amc .dijitCalendarIncrementControl {background-image: url("images/calendarArrows.png"); }
-.touch.amc .dijitCalendarArrowActive .dijitCalendarDecrease {background-position: -36px 0;}
-.touch.amc .dojoxGridLoading {background: url("images/loading.gif") no-repeat center top;}
-	
-
 /**Add application form**/
 .addApp {
 	color: #4047CF;
@@ -621,3 +576,63 @@ margin-bottom: 20px;
 text-transform: uppercase;
 font-family: "PTSansBold"
 }
+
+
+/*** Override Horizon for touch ***/
+.touch.amc .asterisk {color: #009FB4!important;}
+.clear {clear: both;}
+.touch .horizon .list .listInnerLabel {padding: 3px 5px 3px 10px;}
+.touch .horizon .panel.mainPanel {font-size: 130%!important;} 
+.touch .horizon .panel {font-size: 75%;}
+.touch .horizon .panel.list {font-size: 100%;}
+.touch .horizon .panel .title {font-weight: normal;}
+.touch .dojoxGridHeader .dojoxGridCell {font-size: 0.9em; text-transform: capitalize;}
+.touch .FTSearch .dijitButton {background: none; border: 0; width: 10%!important;}
+.touch .FTSearch .dijitButtonNode {width: 21px; height: 28px!important; background: url('images/magnifying-glass.png') no-repeat!important;}
+.dj_ie .touch .FTSearch .dijitButtonNode, .dj_gecko .touch .FTSearch .dijitButtonNode {margin: -8px -15px 8px 0!important;}
+.dj_webkit .touch .FTSearch .dijitButtonNode{margin: 3px -15px -4px 0!important}
+.touch .dijitTooltip {z-index: 7000;}
+.touch .dijitTooltip .dijitTooltipContainer {font-size: 0.7em;}
+.touch .dojoxGridPaginator td {padding: 0!important;}
+
+.touch .filterSection.btn {width: 170px;}
+.dj_webkit .touch .filterSection.btn {width: 182px; margin: 1px 0 0 -12px;}
+.touch .filterSection.btn .dijitButton .dijitButtonText {font-size: 14px;}
+.touch .horizon .list .item .label {font-family: "NunitoRegular";}
+.touch.amc .total-transaction span {font-weight: normal;}
+
+/*** Overrida Calendar ***/
+.touch .dijitCalendarMonthLabel, .touch .dijitCalendarMonthMenu .dijitCalendarMonthLabel {font-family: "NunitoRegular"; font-size: 0.9em;}
+.touch .dijitCalendar {font-family: "NunitoRegular"; font-size: 0.8em; background-color:#2C9DAF;}
+.touch .dijitCalendarDayLabelTemplate {font-family: "NunitoRegular";}
+.touch .dijitCalendarYearLabel {font-family: "NunitoRegular"; font-size: 1em;}
+.touch .dijitCalendarDisabledDate .dijitCalendarDateLabel {color: #00DCFF;}
+.touch .dijitCalendarSelectedDate .dijitCalendarDateLabel, 
+.touch .dijitCalendarHoveredDate .dijitCalendarDateLabel,
+.touch .dijitCalendarNextYearHover, 
+.touch .dijitCalendarPreviousYearHover,
+.touch .dijitCalendarPreviousMonth .dijitCalendarDateLabel, 
+.touch .dijitCalendarNextMonth .dijitCalendarDateLabel {
+color: #00DCFF;}
+
+.touch .dijitCalendarPreviousMonth .dijitCalendarDateLabel, 
+.touch .dijitCalendarNextMonth .dijitCalendarDateLabel {color: #00DCFF;}
+.touch.amc .calendar-field .dijitComboBox .dijitArrowButtonInner {background: url('images/calendar-ico.png') no-repeat center left;}
+.touch.amc .dijitCalendarIncrementControl {background-image: url("images/calendarArrows.png"); }
+.touch.amc .dijitCalendarArrowActive .dijitCalendarDecrease {background-position: -36px 0;}
+.touch.amc .dojoxGridLoading {background: url("images/loading.gif") no-repeat center top;}
+
+/*** Dijit Dialog ***/
+.touch.amc .dialog-content {font-size: 0.75em;}
+
+/*** Small footer for horizon ***/
+.touch.amc .footer-wrap.small {background: #484b4e;}
+.touch.amc .footer-wrap.small footer {height:30px;}
+.touch.amc .footer-wrap.small footer .copyright {padding-top: 0;}
+.touch.amc .footer-wrap.small footer .copyright p {padding-top: 10px;}
+
+
+/*** Sticky Footer CSS ***/
+.frame {background: url(images/content-wrap.png) top left repeat; display: table; height: 100%; width: 100%;}
+.Mainrow {display: table-row; height: 1px;}
+.Mainrow.expand {height: auto;}

@@ -1,11 +1,4 @@
 /* global definitions */
-
-@import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/FormGenerator.css";
-@import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/Curtain.css";
-@import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/FlashAlert.css";
-@import "../../lib/ApstrataSDK/apstrata/ui/themes/apstrata/ApstrataAnimation.css";
-
-
 @import url("reset.css");
 @import url("styles.css");
 @import url("gallery.css");

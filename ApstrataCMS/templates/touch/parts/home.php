@@ -61,18 +61,18 @@
 		dojo.parser.parse()
 	})
 </script>
-<div class="container">             	
+<div class="container Mainrow expand">             	
 	<!-- begin content wrap-->
 	<div class="content-wrap">
     	<!-- begin content -->
-        <div class="content">
+        <div class="content-page">
 			<div class='homePage'>	
 				<div id="searchBar"></div>
 				<div id="search-results">
 					<div id='searchResults'></div>
 				</div>	
 		</div>
-	 <!-- end content -->
+	 	<!-- end content -->
         <div class="clearfix"></div>
     </div>
     <!-- end content wrap-->
