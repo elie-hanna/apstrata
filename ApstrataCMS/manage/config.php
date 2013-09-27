@@ -1,12 +1,12 @@
 <?php
-
 	$config = array (
 		// 
 		// Apstrata backend connection parameters
-		//
-		"apstrataServiceURL" => "https://sandbox.apstrata.com/apsdb/rest",
+		// YDEE622D6C//dev account 
+		"apstrataServiceURL" => "https://10.0.0.93:8446/apstratabase/rest",
 		"apstrataConnectionTimeout" => 30000,
-		"apstrataKey" => "E83D22E93F",
+// 		"apstrataKey" => "YDEE622D6C",
+		"apstrataKey" => "K380F5E7DF",
 		"apstrataSecret" => "",		
 
 		//
@@ -17,7 +17,7 @@
 		//
 		// Config params useful during development
 		//
-		"developmentMode" => false,
+		"developmentMode" => true,
 		"useStub" => false,
 		"autoLogin" => false,
 		
@@ -37,10 +37,10 @@
 		//
 		// URLs and other related values used to compose paths by the php CMS code 
 		//
-		"baseUrl" => "http://www.apstrata.com",
+		"baseUrl" => "http://localhost/apstrataCMS",
 		"urlPrefix" => "",
 		"loginUrl" => "dashboard",
-		"docroot" => $_SERVER["DOCUMENT_ROOT"],
+		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/apstrataCMS",
    		"workbenchUrl" => "http://workbench.apstrata.com",
 		"targetClusterUrl" => "https://sandbox.apstrata.com/apsdb/rest",
 
@@ -53,7 +53,7 @@
 		//
 		// Controls the template folder and CSS root class used by the site
 		//
-		"template" => "apstrata"
+		"template" => "touch"
 	);
 	
 	// Dublin Core meta-data site-wide init
@@ -70,4 +70,3 @@
 		"Rights" => "Copyright, Copyright Statement (http://www.apstrata.com/pages/terms)."
 	);
 ?>
-
