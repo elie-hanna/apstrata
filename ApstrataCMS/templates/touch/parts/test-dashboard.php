@@ -20,8 +20,11 @@
 	</style>
 	
 	<!-- begin side menu -->
+
     <div class="side-menu" style="display: none;">
     	<h1>tools</h1>
+    	
+    	
     	<!-- begin navigation -->
         <div class="navigation">
         	<div class="top"></div>
@@ -107,6 +110,7 @@
 				/*
 				 * Login successful event handler, triggers the display of the accounts info
 				 */ 
+
 				var userCredentials = null;	
 				var logoutLink = dojo.byId("logoutLink");
 				var logoutLinkLine = logoutLink.parentNode;
@@ -186,13 +190,13 @@
 		
 					dojo.require('apstrata.sdk.TokenConnection');
 					dojo.require('apstrata.sdk.Client');
-				
+	/*			
 					// Instantiate an apstrata token based connection
 					amc.globals.sdk.connection = new apstrata.sdk.Connection({
 						"credentials": {
 						"key": "X1477E086C",
 						"secret": "W5BA7B8659529AD9A248C45DAFE36B2B",
-						"user": "maya.kassem@elementn.com",
+						"user": "maya.kassem@elementn.com", 
 						"password": "121212"
 						},
 						"timeout": "10000",
@@ -201,15 +205,18 @@
 						"failure": function () {}
 					});
 					amc.globals.sdk.client = new apstrata.sdk.Client(amc.globals.sdk.connection);
+*/
+					amc.globals.sdk.client = new apstrata.sdk.Client(dashboard.connection);
+					amc.globals.sdk.connection = dashboard.connection;
 					
-					dojo.require("amc.layout.App");
+					dojo.require("apstrata.cms.App");
 					
 					// These are visual properties used by the application that can not fit in a CSS file yet 			
 					apstrata.horizon.magicUIdimensions = {
 							"list.SimpleFilterAndSort.width": 35,
 							"panel.finalAlpha": .95
 						}
-					var mainContainer = new amc.layout.App({
+					var mainContainer = new apstrata.cms.App({
 						showToolbar: false,
 						margin:{top: 132, left: 0, right:0, bottom: 26}}, "linkedContent");
 		
