@@ -141,8 +141,8 @@ dojo.declare("apstrata.sdk.Connection", null, {
 				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 			}
 		}
-
-		var url = this.serviceURL
+		if (dojo.isIE) {
+				var url = this.serviceURL
 				+ "/" + this.credentials.key
 				+ "/" + operation
 				+ "?apsws.time=" + timestamp
@@ -151,6 +151,18 @@ dojo.declare("apstrata.sdk.Connection", null, {
 				+ "&apsws.responseType=" + responseType
 				+ "&apsws.authMode=simple"
 				+ ((requestParams!="")?"&":"") + requestParams
+				+"&apsdb.force200ResponseStatus=true"
+		}else{
+				var url = this.serviceURL
+				+ "/" + this.credentials.key
+				+ "/" + operation
+				+ "?apsws.time=" + timestamp
+				+ ((signature!="")?"&apsws.authSig=":"") + signature
+				+ ((user!="")?"&apsws.user=":"") + user
+				+ "&apsws.responseType=" + responseType
+				+ "&apsws.authMode=simple"
+				+ ((requestParams!="")?"&":"") + requestParams
+		}
 				
 		return {url: url, signature: signature}
 	},
