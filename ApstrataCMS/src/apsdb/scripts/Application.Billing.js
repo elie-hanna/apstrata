@@ -9,14 +9,13 @@
 try{
 
 var params={
-	'apsdb.pageNumber':request.parameters["apsdb.pageNumber"],
-	'apsdb.resultsPerPage':request.parameters["apsdb.resultsPerPage"],
-	'apsdb.queryFields':request.parameters["apsdb.queryFields"],
-	'apsdb.loginParam':request.parameters["apsws.user"]
+	'accountKey':request.parameters["accountKey"],
+	'monthPar':request.parameters["monthPar"],
+	'yearPar':request.parameters["yearPar"]
 }
 
 				//return params;
-    var response = runScriptHelper.runScript("X1477E086C","Applications", "CMS@elementn.com",params,null );
+    var response = runScriptHelper.runScript("X1477E086C","Application.Billing", "CMS@elementn.com",params,null );
     return response;  
        
  } catch (e) {
