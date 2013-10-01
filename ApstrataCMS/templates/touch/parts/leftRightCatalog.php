@@ -60,11 +60,11 @@
             		if ($iterator % 2 === 0) {     
             			
             			$imageClass = "image fl";
-            			$textClass = "fr";
+            			$textClass = "fr width48";
             		}else {
             			
             			$imageClass = "image fr";
-            			$textClass = "fl";
+            			$textClass = "fl width48";
             		}
                	
                		$iterator = $iterator + 1;

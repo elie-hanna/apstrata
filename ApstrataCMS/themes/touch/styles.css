@@ -75,21 +75,21 @@ body {font-family: 'NunitoRegular',"Lucida Grande", sans-serif;}
 	height: 100%;
 	margin: 0 auto -353px;}*/
 .header-wrap {background: #383B3E; height: 30px; border-bottom: 1px solid  #000;}
-header {max-width: 960px; margin: 0 auto;}
+header {max-width: 77%; margin: 0 auto;}
 
-/*** credentials ***/
-#credentials {float:right; margin: 6px 0 0;}
-#credentials ul li {float: left; padding-left: 10px;}
-#credentials ul li a:link, #credentials ul li a:visited {color: #999; font-size: 14px; text-decoration : none;
+/*** loggingHeader ***/
+#loggingHeader {float:right; margin: 6px 0 0;}
+#loggingHeader ul li {float: left; padding-left: 10px; width: auto;}
+#loggingHeader ul li a:link, #loggingHeader ul li a:visited {color: #999; font-size: 14px; text-decoration : none;
 			-webkit-transition: all 0.5s ease-in-out; 
             -moz-transition:  all 0.5s ease-in-out; 
             -ms-transition:  all 0.5s ease-in-out; 
             -o-transition: all 0.5s ease-in-out; 
 			transition: all 0.5s ease-in-out; }
-#credentials ul li.login a:link, #credentials ul li.login a:visited {background: url(../touch/images/lock.png) top left no-repeat;
+#loggingHeader ul li.login a:link, #loggingHeader ul li.login a:visited {background: url(../touch/images/lock.png) top left no-repeat;
 padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
-#credentials ul li a:hover, #credentials ul li a:active {color: #fff;}
-#credentials ul li.logout a:link, #credentials ul li.logout a:visited {background: url(../images/logout.png) center left no-repeat;
+#loggingHeader ul li a:hover, #loggingHeader ul li a:active {color: #fff;}
+#loggingHeader ul li.logout a:link, #loggingHeader ul li.logout a:visited {background: url(../images/logout.png) center left no-repeat;
 padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 
 /*** Social media ***/
@@ -130,7 +130,7 @@ padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 
 /*** Nav ***/
 #nav-wrapper {background:url(../touch/images/nav-bg.png) top left repeat; border-top: 1px solid #868485; height: 100px;}
-nav {max-width: 960px; margin: 0 auto;}
+nav {max-width: 77%; margin: 0 auto;}
 .menu {float: right; margin-top: 35px; position: relative; z-index: 1;}
 .menu li {float: left; text-align: center; margin-left: 8px;}
 .menu li.home a:link, .menu li.home a:visited {height: 18px; width: 20px; margin-top: -2px; overflow: hidden; text-indent: -1000px; display: block; background: url(../touch/images/home.png) top left no-repeat;}
@@ -151,7 +151,7 @@ border-radius: 5px;}
 /** Slider ***/
 .slider-wrapper {background: #E6E6E6;}
 .slider { margin: 0 auto; height:470px; -webkit-user-select:none;-moz-user-select:none; -ms-user-select:none;}
-.slider .slides-wrapper { height:360px; max-width: 960px; margin:0 auto; background:url(../touch/images/slider-bg.png) no-repeat left top;}
+.slider .slides-wrapper { height:360px; max-width: 77%; margin:0 auto; background:url(../touch/images/slider-bg.png) no-repeat left top;}
 
 .slider .slide .media-container { float: left; height: 320px;  width: 550px; margin-top:20px; margin-right:10px; }
 .slider .slide .details-container { float:left; width:400px; }
@@ -175,7 +175,7 @@ border-radius: 5px;}
 .slider .slide .details-container .note { font-weight:normal; font-family: NunitoLight; font-size:13px; margin-top:25px;  }
 
 .controls { height:110px; background:#F2F2F2; }
-.controls .controls-wrapper { max-width:960px; margin:0 auto; }
+.controls .controls-wrapper { max-width:77%; margin:0 auto; }
 .controls .control { float:left; width:236px; height:110px; cursor:pointer;
 background: #f2f2f2;
 background: -moz-linear-gradient(left,  #f2f2f2 0%, #e8e8e8 100%);
@@ -218,10 +218,14 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 .controls .control4.selected .arrow, .controls .control4:hover .arrow { visibility:visible;  }
 
 /*** Footer ***/
-.footer-wrap {background: #484b4e url(images/footer-bg.png) top left repeat-x; box-shadow: 0 0 3px #0e0e0e;}
-footer {width: 960px; margin: 0 auto;}
+.footer-wrap {background: #484b4e url(images/footer-bg.png) top left repeat-x;
+-moz-box-shadow: 0 0 3px #0e0e0e;
+-webkit-shadow: 0 0 3px #0e0e0e;
+box-shadow: 0 0 3px #0e0e0e;
+}
+footer {width: 77%; margin: 0 auto; height: 336px;}
 footer h3 {font-size: 14px; font-family: "NunitoBold"; color: #f5f5f5;margin-top: 0; line-height: 12px;}
-footer .newsletter {padding-top: 33px;}
+footer .newsletter {padding-top: 16px;}
 footer .newsletter p {font-family: "NunitoLight"; color: #999; font-size: 13px; margin: 11px 0;}
 footer .textfield {width: 300px; float: left; margin-right: 10px;}
 footer .btn {float: left;}
@@ -238,13 +242,13 @@ footer .site-map ul li:first-child {border: none;}
 footer .site-map ul li {margin-bottom: 6px; padding-top: 2px; border-top: 1px solid #6e7072;}
 footer .site-map ul {float: left; width: 140px; margin-right: 40px;}
 footer .site-map section {float: left; margin-right: 40px;}
-footer .site-map .title {margin-bottom: 5px; color: #999; font-weight: normal; font-size: 13px; padding: 10px 0; text-transform: uppercase; border-bottom: 1px solid #6e7072;}
+footer .site-map .title {margin-bottom: 5px; color: #999; font-weight: normal; font-size: 13px; padding: 2px 0 9px; text-transform: uppercase; border-bottom: 1px solid #6e7072;}
 footer .site-map section ul li {margin: 0 0 4px 0; padding: 0; border: none;}
 footer .site-map section ul li a {text-transform: lowercase; font-size: 12px; font-family: "NunitoLight";}
 footer .site-map section.help {width: 220px;}
 footer .site-map section.help ul {width: 220px;}
 footer .site-map section.help ul li {float: left; margin-right: 20px;}
-footer .copyright {padding-top: 52px;}
+footer .copyright {padding-top: 82px;}
 footer .copyright p {float: left; font-size: 13px; font-family: "NunitoLight"; color: #777;}
 footer .copyright p img {margin-top: -2px;}
 footer .copyright img:hover {opacity: 0.6; filter:alpha(opacity=60);}
@@ -253,7 +257,7 @@ footer .copyright p + p {float: right; font-family: "NunitoRegular";}
 /*** Container and content ***/
 .container {background: url(../touch/images/container.png) top left repeat-x;}
 
-.content-page  {max-width: 960px; margin: 0 auto; padding-top: 32px; padding-bottom: 40px;}
+.content-page  {max-width: 77%; margin: 0 auto; padding-top: 32px; padding-bottom: 40px;}
 .content-page h1 {font-size: 30px;}
 .title {font-size: 25px; font-family: "NunitoBold"; color: #282828; margin-bottom: 20px;}
 .title span  {color: #009FB4; margin-right: 10px;}
@@ -283,7 +287,7 @@ display: block; margin-top: 4px;
 .navigation .middle ul.submenu li a:link, .navigation .middle ul.submenu a:visited {font-size: 13px; font-family: "DosisRegular"; padding: 2px 0 2px 4px;}
 
 /*** Editorial ***/
-.editorial {width: 625px; float: right;}
+.editorial {width: 60%; float: right;}
 .dashboard {color: #383B3E; font-family: "NunitoLight"; font-size: 18px;}
 .info {color: #282828; font-family: "NunitoLight"; font-size: 16px;}
 .table-design {margin: 10px 0; background:url("../touch/images/table-bg.png") repeat scroll left top;border: 1px solid #B4B4B4; -moz-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; padding: 8px;}
@@ -323,13 +327,15 @@ text-align: center;}
 .row .benefit + .benefit {margin-right: 0; float: right;} 
 .row.last {border: none;}
 
-.feature {display: inline-block; clear: both; margin-bottom: 25px; padding-bottom: 35px; background:url("../touch/images/feature-sep.png") no-repeat bottom left; }
-.feature .image {background: none; width: 465px; height: auto; border: none; padding-top: 20px;}
+.feature {display: inline-block; clear: both; margin-bottom: 25px; padding-bottom: 35px; background:url("../touch/images/feature-sep.png") no-repeat bottom center; }
+.feature .image {background: none; width: 48%; height: auto; border: none; padding-top: 20px;}
 .feature .image.fl {margin-right: 20px;}
 .feature .image.fr {margin-left: 20px;}
+.feature .image img {max-width: 100%; height: auto;}
 
-.feature .title {width: 475px;}
-.feature .section {margin-bottom: 22px; width: 440px; margin-left: 26px;}
+.width48 {width: 48%;}
+.feature .title {width: 100%;}
+.feature .section {margin-bottom: 22px; margin-left: 26px;}
 .feature h2 {font-size: 16px; margin-bottom: 2px;}
 .feature .info {line-height: 1.3em;}
 .feature .btn {margin-top: 20px;}
@@ -381,10 +387,8 @@ text-shadow: 1px 1px 0 #000;}
 
 .dashboard.profile .actions { clear:both; padding-top:15px; }
 
-
-.profile .FormGenerator { padding: 5px; }
-
-.touch .FormGenerator .form .dijitTextBox {
+/*** Dojo TextBox ***/
+.touch .dijitTextBox {
 	border: 1px solid #B4B4B4;
 	background: white;
 	-moz-border-radius: 6px;
@@ -394,6 +398,8 @@ text-shadow: 1px 1px 0 #000;}
 	color: #999;
 	font-size:0.75em;
 	}
+	
+/*** Dojo Button ***/
 .touch .dijitButton  { 
 -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px;
 background: #8c8c8c; 
@@ -411,7 +417,6 @@ transition: all 0.5s ease-in-out;
 width:auto !important;
 }
 .dj_ie9 .touch .dijitButton {filter: none;}	
-
 .touch .dijitButton .dijitButtonText {
 border: none;
 padding: 6px 12px;
@@ -423,26 +428,19 @@ color: white;
 -moz-text-shadow: 1px 1px 0 #767779;
 -webkit-text-shadow: 1px 1px 0 #767779;
 text-shadow: 1px 1px 0 #767779;	
-	
-	}
+}
 .touch .dijitButtonNode {padding:0!important; border: 0!important; vertical-align: middle; text-align: center; background: none!important;}
-
 .touch .dijitButtonHover { background: #009FB4;}
 .touch .dijitButtonHover .dijitButtonText { text-shadow: 1px 1px 0 #000000;}
 
-
 .touch .label {font-family: 'NunitoBold'; font-size: 0.85em; color: #555555; margin-top: 7px; margin-bottom: 3px;}
-.FormGenerator .set .fieldset-label {
-	padding-top: 8px;
+
+/*** Form Generator ***/
+.FormGenerator .set .label {
+	font-family: 'NunitoRegular';
 }
 
 .FormGenerator.row.dijiTextBox {
-	background: green;
-	
-    -o-border-radius: 0px;
-    -moz-border-radius: 0px;
-    -webkit-border-radius: 0px;
-    border-radius: 0px;
 }
 
 .FormGenerator form .headerRow {
@@ -454,63 +452,19 @@ text-shadow: 1px 1px 0 #767779;
 	padding-top: 0px;
 	width: 215px;
 }
-
-.FormGenerator form .set {
-	
-}
-
-.FormGenerator form .setLabel {
-	margin-top: 15px;
-	font-weight: bold;
-}
-
-
-.FormGenerator form .row {
-	
-}
-
-.FormGenerator .FieldSet {  }
-
 .FormGenerator .FieldSet.section { float:left; width:300px; }
-.touch .FormGenerator .FieldSet.section + div + div { margin-left:15px; }
-.touch .FormGenerator form .setLabel + div + div { margin-top: -22px; text-indent: 313px!important; }
-.dj_gecko .touch .FormGenerator form .setLabel + div + div { text-indent: 13px;  }
 
 
-.FormGenerator .FieldSet .set {
-}
-
-/* example custom classes */
-.redInput { /* this could be assigned to a field through "cssClass" attribute */
-	color: red;
-	background: yellow !important;
-}
-
-.redInput-label {  /* the field label will be assigned the "[customClass]-label" class  */
-	color: red;
-}
-.touch .LoginWidget { top: 205px !important; }
-
-.touch .LoginWidget .login {
-background: #383B3E;
-font-size: 1.7em;
-margin-left: auto;
-margin-right: auto;
-padding: 20px;
-width: 400px;
--moz-border-radius: 5px;
--webkit-border-radius: 5px;
-border-radius: 5 px;
--moz-box-shadow: 0 3px 4px #cccccc;
-box-shadow: 0 3px 4px #cccccc;
--webkit-box-shadow: 0 3px 4px #cccccc;
-border:1px solid black;
-}
+/*** Login widegt ***/
+.touch .LoginWidget .login {width: 275px;}
 .touch .LoginWidget .login .label {font-family: "NunitoRegular"; font-size: 0.7em; float: left; width: 105px;}
-.touch .LoginWidget  .FormGenerator .form .dijitTextBox {width: 68%;}
 .dj_ie9 .touch .LoginWidget .FormGenerator .form .dijitTextBox {font-size: 14px;}
-
-.touch .LoginWidget .login h2 { color:#efefef; margin-bottom: 14px;}
+.touch .LoginWidget .login h2 { color: #282828;
+    font-family: "NunitoBold";
+    font-size: 25px;
+    margin-bottom: 20px;
+    display: block;}
+.touch .LoginWidget .actions {text-align: left;}
 .touch .DocViewer .content .middle .description p {font-size: 0.8em;}
 .touch .expand-container ol li {font-size: 0.8em;}
 .touch .innerContent .smallButton {-moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; font-family: "NunitoRegular";
