@@ -9,9 +9,9 @@ dojo.declare("apstrata.home.dashboard.MainMenu",
 	templatePath: dojo.moduleUrl("apstrata.home.dashboard", "templates/MainMenu.html"),
 	items: [
 			{	
-				id:"accounts", 
-				label: "Accounts", 
-				panelClass: "apstrata.home.dashboard.Accounts",
+				id:"manageApplications", 
+				label: "Manage Applications", 
+				panelClass: "apstrata.home.dashboard.ApplicationsGrid",
 				attrs: {
 					panelTitle: "Accounts",
 					maximizePanel: true,

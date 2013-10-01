@@ -48,6 +48,11 @@
 					};
 						
 					var connection = new apstrata.sdk.TokenConnection({credentials: apstrata.apConfig["apstrata.sdk"].Connection.credentials, isUseParameterToken: true});
+					dojo.require("amc.Init");
+					amc.globals.sdk.connection=connection;
+					amc.globals.sdk.client = new apstrata.sdk.Client(connection);
+
+					
 					var mainContainer = new apstrata.home.dashboard.App({
 						showToolbar: false,
 					    connection: connection,	

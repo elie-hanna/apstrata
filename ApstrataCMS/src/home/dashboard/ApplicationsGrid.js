@@ -1,7 +1,7 @@
-dojo.provide("apstrata.cms.ApplicationsGrid");
+dojo.provide("apstrata.home.dashboard.ApplicationsGrid");
 dojo.require("amc.listing.ApplicationsGrid");
 
-dojo.declare("apstrata.cms.ApplicationsGrid", 
+dojo.declare("apstrata.home.dashboard.ApplicationsGrid", 
 [amc.listing.ApplicationsGrid], 
 {
 	switchStructureList: [[
