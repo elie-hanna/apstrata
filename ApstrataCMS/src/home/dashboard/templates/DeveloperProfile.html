@@ -1,0 +1,8 @@
+<div class='panel {%if maximizePanel %} maximized {%endif%}' style="width:{{ panelWidth|default:''}}">
+	<div dojoAttachPoint='dvContent' style='height: 100%;overflow-y: auto;'>
+		<div class="pd14">
+			<div class="title">{{ panelTitle|default:"" }}</div>
+			<div dojoAttachPoint='panelWidget'></div>
+		</div>
+	</div> 
+</div>
