@@ -20,6 +20,9 @@ dojo.declare("apstrata.home.Logging",
 	isLoggedIn: false,
 	credentials: {},
 	
+	dashboardUrl: '',
+	dashboardLabel: "Dashboard",
+	
 	widgetsInTemplate: false,
 	templatePath: dojo.moduleUrl("apstrata.home", "templates/Logging.html"),
 	

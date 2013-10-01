@@ -2,6 +2,8 @@ dojo.provide("apstrata.home.dashboard.MainMenu")
 
 dojo.require("dojo.store.Memory")
 dojo.require("apstrata.horizon.Menu")
+dojo.require('amc.global.DataLoader');
+dojo.require('amc.global.Welcome');
 
 dojo.declare("apstrata.home.dashboard.MainMenu", 
 [apstrata.horizon.Menu], 
@@ -14,8 +16,9 @@ dojo.declare("apstrata.home.dashboard.MainMenu",
 				panelClass: "apstrata.home.dashboard.ApplicationsGrid",
 				attrs: {
 					panelTitle: "Accounts",
-					maximizePanel: true,
-					credentials: apstrata.apConfig["apstrata.sdk"].Connection.credentials,
+					maximizePanel: false,
+					widthPanel:"420px",
+					sbTitleMsg: "Search"
 				}
 			},
 			{
@@ -45,12 +48,22 @@ dojo.declare("apstrata.home.dashboard.MainMenu",
 	
 	postCreate: function(){
 		this.inherited(arguments);
+		globalData = new amc.global.DataLoader({
+			"client": amc.globals.sdk.client
+		});
+		
+		var userName = new amc.global.Welcome({
+			"client": amc.globals.sdk.client,
+			"dataLoader": globalData
+		});
+		dojo.place(userName.domNode, this.welcomeLbl, "only");
+
 	},
 	
 	startup: function() {
 		this.inherited(arguments);
-		var args = { menuItemId: "accounts", panelTitle: "Accounts", maximizePanel: true};
-		this._listContent._selectId = "accounts";
+		var args = { menuItemId: "manageApplications", panelTitle: "Manage Applications", maximizePanel: true};
+		this._listContent._selectId = "manageApplications";
 		this.select();
 	}
 })
