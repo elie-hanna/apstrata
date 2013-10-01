@@ -2,12 +2,18 @@
 <div class="Mainrow">
 	<div class="header-wrap">
 		<header>
+			 <?php 
+	if ($page['template'] != "test-dashboard") 
+	{
+	?>   
 			<div id="logo">
 				<a href="<?php print $GLOBALS["config"]["baseUrl"]; ?>" id='logo'>
 					<img src="<?php print $GLOBALS["config"]["baseUrl"] ?>/themes/touch/images/logo.png" alt="Touch Cloud" title="Touch Cloud" />
 				</a>
 			</div>
-			
+	 <?php
+	}
+  ?>		
 	        <!-- Begin logging header -->
 			 <script type="text/javascript">
 			 	dojo.addOnLoad(function() { 
@@ -15,6 +21,7 @@
 			 	 	var loggingHeader = new apstrata.home.Logging({
 				        		loginUrl: "<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "loginboard"; ?>", 
 				        		signupUrl:"<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "register"; ?>",
+				        		dashboardUrl: "<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "test-dashboard"; ?>",
 				        		logoutUrl:"<?php echo $config["baseUrl"]; ?>",
 				        		credentials: apstrata.apConfig["apstrata.sdk"].Connection.credentials
 				      }, dojo.byId("loggingHeader"));  
@@ -22,7 +29,11 @@
 			 </script>
 	        <div id="loggingHeader"></div>
 	        <!-- end logging header -->
-	        
+	 
+	 <?php 
+	if ($page['template'] != "test-dashboard") 
+	{
+	?>       
 			<!-- begin social media -->
 	        <div class="social-media">
 	            <ul>
@@ -32,8 +43,17 @@
 	            </ul>
 	        </div>
 	        <!-- end social media -->
+   <?php
+	}
+  ?>
 		</header>
 	</div>      
+	
+<?php 
+	if ($page['template'] != "test-dashboard") 
+	{
+	?>
+	
 	<div id="nav-wrapper">
 	    <nav>				        	
 	        <ul class="menu">
@@ -56,6 +76,9 @@
 	        </ul>		        	
 	    </nav>
 	</div>
+	<?php
+	}
+  ?>
 </div>
 <script>
 	dojo.addOnLoad(function() {	
