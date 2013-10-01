@@ -40,7 +40,7 @@
 		<style type="text/css">
 				/* import the dojo styles overriden by amc */
 				@import "lib/amc/src/ui/css/amc/amc.css";
-	       		@import "lib/ApstrataSDK/apstrata/ui/themes/apstrata/apstrata.css";
+	       		@import "lib/amc/src/ui/css/apstrata/apstrata.css";
 	       		@import "<?php print $GLOBALS["config"]["baseUrl"]; ?>/themes/<?php print $config['template'] ?>/<?php print $config['template'] ?>.css";
 		</style>
 		
@@ -85,12 +85,8 @@
 		<?php 
 			}
 		?>
-		
-//				dojo.require("apstrata.home.ApConfig")
 
-				//
 				// Get apstrata configuration from config.php
-				//
 				dojo.setObject("apstrata.apConfig", {
 					"apstrata.cms": {
 						baseUrl: '<?php print $GLOBALS["config"]["baseUrl"]; ?>' ,
@@ -123,11 +119,6 @@
     					workbenchUrl: '<?php print $GLOBALS["config"]["workbenchUrl"]; ?>' 
 				    }
 				})
-				//
-				//
-				//
-
-
 			})
 		</script>
 

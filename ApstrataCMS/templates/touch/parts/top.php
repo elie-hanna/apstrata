@@ -7,14 +7,22 @@
 					<img src="<?php print $GLOBALS["config"]["baseUrl"] ?>/themes/touch/images/logo.png" alt="Touch Cloud" title="Touch Cloud" />
 				</a>
 			</div>
-			<!-- begin credentials-->
-	        <div id="credentials">
-	                <ul>
-	                    <li class="login"><a href=<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "dashboard"; ?>>Login</a></li>
-	                    <li class="logout" style="display: none;"><a href="#">Log out</a></li>
-	                    <li><a href=<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "register"; ?>>Signup</a></li>
-	                </ul>
-	        </div>
+			
+	        <!-- Begin logging header -->
+			 <script type="text/javascript">
+			 	dojo.addOnLoad(function() { 
+			 		dojo.require("apstrata.home.Logging");
+			 	 	var loggingHeader = new apstrata.home.Logging({
+				        		loginUrl: "<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "loginboard"; ?>", 
+				        		signupUrl:"<?php echo $config["baseUrl"] . "/" . $config["urlPrefix"] . "register"; ?>",
+				        		logoutUrl:"<?php echo $config["baseUrl"]; ?>",
+				        		credentials: apstrata.apConfig["apstrata.sdk"].Connection.credentials
+				      }, dojo.byId("loggingHeader"));  
+			 	});
+			 </script>
+	        <div id="loggingHeader"></div>
+	        <!-- end logging header -->
+	        
 			<!-- begin social media -->
 	        <div class="social-media">
 	            <ul>
@@ -51,7 +59,6 @@
 </div>
 <script>
 	dojo.addOnLoad(function() {	
-		
 		dojo.require("dojo.cookie");
 		var lastSelected = dojo.cookie("lastSelected");
 		if (lastSelected) {
@@ -60,7 +67,5 @@
 				dojo.removeClass(node, "selected");
 			}
 		}
-		
 	});
-
 </script>		

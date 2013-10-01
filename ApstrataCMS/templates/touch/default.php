@@ -67,9 +67,12 @@
 	</div> 
 	<!-- end container -->
 	<?php 
-		include("templates/" . $config['template'] . "/parts/bottom.php");
-	?>
-
+			if ($page['template'] != "test-dashboard") {
+				include("templates/" . $config['template'] . "/parts/bottom.php");
+			} else {
+				include("templates/" . $config['template'] . "/parts/narrowedBottom.php");
+			}
+		?>
 	</div><!--end frame -->
 	</body>
 </html>
