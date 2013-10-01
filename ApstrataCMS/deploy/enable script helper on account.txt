@@ -13,3 +13,8 @@ else we need to update we select the current data and add {"runScriptHelper":"co
 and update
 
 Reference :https://wiki.elementn.com/display/Apstrata/Scripting+Helpers 
+
+
+
+//enabling runscripthelper for amc account 
+update udFIELD set field_string='{queryHelper: "com.apstrata.database.server.services.scripting.amc.QueryHelper", "runScriptHelper":"com.apstrata.database.server.services.scripting.amc.RunScriptHelper"}'  where field_name = 'scriptingHelpers' and  docid in (Select docid from udDOCUMENT where rootkey ='X1477E086C');
