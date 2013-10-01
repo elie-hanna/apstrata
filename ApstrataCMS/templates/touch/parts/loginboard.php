@@ -59,4 +59,4 @@
 		});
 		
 	</script>
-	<div id="loginID" class="editorial"></div>
+	<div id="loginID"></div>

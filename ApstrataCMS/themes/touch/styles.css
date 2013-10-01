@@ -368,11 +368,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 -webkit-text-shadow: 1px 1px 0 #767779;
 text-shadow: 1px 1px 0 #767779;
 -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px;
-			-webkit-transition: all 0.5s ease-in-out; 
-            -moz-transition:  all 0.5s ease-in-out; 
-            -ms-transition:  all 0.5s ease-in-out; 
-            -o-transition: all 0.5s ease-in-out; 
-			transition: all 0.5s ease-in-out; 
+			-webkit-transition: all 0.3s ease-in-out; 
+            -moz-transition:  all 0.3s ease-in-out; 
+            -ms-transition:  all 0.3s ease-in-out; 
+            -o-transition: all 0.3s ease-in-out; 
+			transition: all 0.3s ease-in-out; 
 }
 
 .btn:hover input[type="submit"] {background: #009FB4;
@@ -409,11 +409,11 @@ background: -webkit-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* Chrome10+,
 background: -ms-linear-gradient(top,  #8c8c8c 0%,#b2b2b2 99%); /* IE10+ */
 background: linear-gradient(to bottom,  #8c8c8c 0%,#b2b2b2 99%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', endColorstr='#b2b2b2',GradientType=0 ); /* IE6-8 */
--webkit-transition: all 0.5s ease-in-out;
--moz-transition: all 0.5s ease-in-out;
--ms-transition: all 0.5s ease-in-out;
--o-transition: all 0.5s ease-in-out;
-transition: all 0.5s ease-in-out;
+-webkit-transition: all 0.3s ease-in-out;
+-moz-transition: all 0.3s ease-in-out;
+-ms-transition: all 0.3s ease-in-out;
+-o-transition: all 0.3s ease-in-out;
+transition: all 0.3s ease-in-out;
 width:auto !important;
 }
 .dj_ie9 .touch .dijitButton {filter: none;}	
@@ -439,24 +439,26 @@ text-shadow: 1px 1px 0 #767779;
 .FormGenerator .set .label {
 	font-family: 'NunitoRegular';
 }
-
-.FormGenerator.row.dijiTextBox {
-}
-
-.FormGenerator form .headerRow {
-}
-
+.FormGenerator .actions {clear: both;}
 .FormGenerator form .headerRow .label {
 	font-size: 0.8em;
 	display: inline-block;
 	padding-top: 0px;
 	width: 215px;
 }
-.FormGenerator .FieldSet.section { float:left; width:300px; }
-
 
 /*** Login widegt ***/
-.touch .LoginWidget .login {width: 275px;}
+.touch .LoginWidget .login {width: 275px;
+-moz-border-radius: 8px;
+-webkit-border-radius: 8px;
+border-radius: 8px;
+display: block;
+margin: 0 auto;
+padding: 20px; 
+-moz-box-shadow: 0 0 4px #666 inset;
+-webkit-box-shadow: 0 0 4px #666 inset;
+box-shadow: 0 0 4px #666 inset;
+}
 .touch .LoginWidget .login .label {font-family: "NunitoRegular"; font-size: 0.7em; float: left; width: 105px;}
 .dj_ie9 .touch .LoginWidget .FormGenerator .form .dijitTextBox {font-size: 14px;}
 .touch .LoginWidget .login h2 { color: #282828;
@@ -464,7 +466,7 @@ text-shadow: 1px 1px 0 #767779;
     font-size: 25px;
     margin-bottom: 20px;
     display: block;}
-.touch .LoginWidget .actions {text-align: left;}
+.touch .actions {text-align: left!important;}
 .touch .DocViewer .content .middle .description p {font-size: 0.8em;}
 .touch .expand-container ol li {font-size: 0.8em;}
 .touch .innerContent .smallButton {-moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; font-family: "NunitoRegular";

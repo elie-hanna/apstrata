@@ -38,7 +38,7 @@ dojo.declare("apstrata.home.dashboard.DeveloperProfile",
 	definition : {
 		cssClass: "",
 		fieldset: [
-					{name: "attributes", label: "Personal information", type: "subform", style: "form", cssClass:"eliana",
+					{name: "attributes", label: "Personal information", type: "subform", style: "form", cssClass:"section mrgb10",
 						fieldset: [
 							{name: "login", label: "Login", type: "string", readOnly: true, required: true},
 							{name: "password", label: "Update Password", type:"password", readOnly: false},
@@ -46,17 +46,21 @@ dojo.declare("apstrata.home.dashboard.DeveloperProfile",
 																											
 						]					
 					},
-					{name: "attributes", label: "", type: "subform", style: "form", cssClass:"eliana",
+					{name: "attributes", label: "", type: "subform", style: "form", cssClass:"section mrgb10",
 						fieldset: [
 							{name: "name", label: "Name", type: "string", readOnly: false, required: true},
 							{name: "jobTitle", label: "Job Title", type: "string", readOnly: false},
 							{name: "email", label: "e-Mail", type: "string", readOnly: false, required: true}																							
 						]					
 					},
-					{name: "attributes", label: "Company information", type: "subform", style: "form", cssClass:"Marvette",
+					{name: "attributes", label: "Company information", type: "subform", style: "form", cssClass:"section",
 						fieldset: [
 							{name: "company", label: "Company Name", type: "string", readOnly: false},
-							{name: "phone", label: "Phone Number", type: "string", readOnly: false},
+							{name: "phone", label: "Phone Number", type: "string", readOnly: false}
+						]					
+					},
+					{name: "attributes", label: "", type: "subform", style: "form", cssClass:"section",
+						fieldset: [
 							{name: "webSite", label: "Company Web Site", type: "string", readOnly: false}					
 						]					
 					}							
