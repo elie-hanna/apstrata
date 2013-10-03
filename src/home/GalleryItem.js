@@ -14,7 +14,7 @@ dojo.declare("apstrata.home.GalleryItem",
 		this.data = options.resultSet[options.cursor]
 		this.cursor = options.cursor
 		this.gallery = options.gallery
-		this.iconUrl = apstrata.apConfig["apstrata.cms"]["baseUrl"] + "/resources/icons/" + this.data.icon;
+		this.iconUrl = apstrata.apConfig["apstrata.cms"]["baseUrl"] + apstrata.apConfig["apstrata.cms"]["cmsBasePath"] + "/resources/icons/" + this.data.icon;
 	},
 	
 	postCreate: function() {
@@ -29,6 +29,6 @@ dojo.declare("apstrata.home.GalleryItem",
 	
 	_click: function() {
 		var self = this
-		new apstrata.home.GalleryItemViewer({data: self.data, resultSet: self.resultSet, cursor: self.cursor, gallery: self.gallery})
+		new apstrata.home.GalleryItemViewer({iconUrl: self.iconUrl, data: self.data, resultSet: self.resultSet, cursor: self.cursor, gallery: self.gallery})
 	}
 })	

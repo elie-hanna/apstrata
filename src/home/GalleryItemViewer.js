@@ -19,6 +19,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		this.data = options.resultSet[options.cursor]
 		this.cursor = options.cursor
 		this.gallery = options.gallery
+		this.iconUrl = options.iconUrl
 		
 		this.gallery.setHashParam(this.gallery.GALLERY_ITEM, this.data.label)
 	},
@@ -79,7 +80,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		})
 
 		var xhrArgs = {
-			url: "manage/wikiProxy.php?api="+self.data.wikiDoc,
+			url: apstrata.apConfig["apstrata.cms"]["baseUrl"] + apstrata.apConfig["apstrata.cms"]["cmsBasePath"] + "/manage/wikiProxy.php?api="+self.data.wikiDoc,
 			handleAs: "text",
 			timeout: apstrata.apConfig.timeout
 		}

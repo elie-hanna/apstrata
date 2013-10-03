@@ -111,7 +111,8 @@
 				dojo.setObject("apstrata.apConfig", {
 					"apstrata.cms": {
 						baseUrl: '<?php print $GLOBALS["config"]["baseUrl"]; ?>' ,
-						urlPrefix: '<?php print $GLOBALS["config"]["urlPrefix"]; ?>'						
+						urlPrefix: '<?php print $GLOBALS["config"]["urlPrefix"]; ?>',
+						cmsBasePath: '<?php print $GLOBALS["config"]["cmsBasePath"]; ?>'
 					},
 					
 				    // apstrata.ui related
