@@ -57,7 +57,7 @@
 						showToolbar: false,
 					    connection: connection,	
 						client: new apstrata.sdk.Client(connection),
-						margin:{top: 30, left: 0, right:0, bottom: 25}}, "mainContainerId");
+						margin:{top: 31, left: 0, right:0, bottom: 24}}, "mainContainerId");
 		
 					mainContainer.startup();
 			});

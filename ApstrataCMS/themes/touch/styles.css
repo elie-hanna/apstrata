@@ -592,3 +592,5 @@ color: #00DCFF;}
 .frame {background: url(images/content-wrap.png) top left repeat; display: table; height: 100%; width: 100%;}
 .Mainrow {display: table-row; height: 1px;}
 .Mainrow.expand {height: auto;}
+
+#innerLogo {position: absolute; left: 8px; z-index: 1000;}

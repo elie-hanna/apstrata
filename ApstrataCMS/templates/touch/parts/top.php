@@ -13,7 +13,22 @@
 			</div>
 	 <?php
 	}
+  ?>	
+  
+  
+  			 <?php 
+	if ($page['template'] == "test-dashboard") 
+	{
+	?>   
+			<div id="innerLogo">
+				<a href="<?php print $GLOBALS["config"]["baseUrl"]; ?>" id='logo'>
+					<img src="<?php print $GLOBALS["config"]["baseUrl"] ?>/themes/touch/images/innerLogo.png" alt="Touch Cloud" title="Touch Cloud" />
+				</a>
+			</div>
+	 <?php
+	}
   ?>		
+  	
 	        <!-- Begin logging header -->
 			 <script type="text/javascript">
 			 	dojo.addOnLoad(function() { 
