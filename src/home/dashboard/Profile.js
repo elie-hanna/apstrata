@@ -21,7 +21,8 @@ dojo.provide("apstrata.home.dashboard.Profile")
 
 dojo.require("dijit.form.ValidationTextBox");
 
-dojo.require("apstrata.ui.forms.FormGenerator")
+dojo.require("apstrata.ui.forms.FormGenerator");
+dojo.require("apstrata.horizon.Panel");
 
 
 /**

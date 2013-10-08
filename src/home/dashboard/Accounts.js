@@ -2,6 +2,7 @@ dojo.provide("apstrata.home.dashboard.Accounts")
 
 dojo.require("dijit.form.TextBox");
 dojo.require("dojox.encoding.crypto.SimpleAES");
+dojo.require("apstrata.horizon.Panel");
 
 /**
  * This widget is used to display the accounts owned by the current user.
