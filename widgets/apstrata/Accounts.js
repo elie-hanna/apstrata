@@ -7,6 +7,9 @@ dojo.declare("apstrata.extend.Accounts",
 {
 
 	templatePath: dojo.moduleUrl("apstrata.extend", "templates/Accounts.html"),
-	loadingImagePath: apstrata.apConfig["apstrata.cms"]["baseUrl"] + "/themes/apstrata/images/loading.gif"
+	
+	constructor: function(args) {
+		this.loadingImagePath = apstrata.apConfig["apstrata.cms"]["baseUrl"] + "/themes/apstrata/images/loading.gif";
+	}
 		
 })
