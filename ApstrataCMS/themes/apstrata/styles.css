@@ -104,24 +104,27 @@ body {font-family: 'PTSansRegular',"Lucida Grande", sans-serif;}
 	height: 100%;
 	margin: 0 auto -353px; background: url(images/content-wrap.png) top left repeat;}*/
 .header-wrap {background: #383B3E; height: 30px; border-bottom: 1px solid  #000;}
-header {max-width: 960px; margin: 0 auto;}
+header {max-width: 77%; margin: 0 auto;}
 
 /*** credentials ***/
-#credentials {float:right; margin: 6px 0 0;}
-#credentials ul li {float: left; padding-left: 10px; line-height: 1.2em;}
-#credentials ul li a:link, #credentials ul li a:visited {color: #999; font-size: 14px; text-decoration : none; font-family: 'ArialRoundedMTBold';
+#loggingHeader {float:right; margin: 6px 0 0;}
+#loggingHeader ul li {float: left; padding-left: 10px; line-height: 1.2em;}
+#loggingHeader ul li a:link, #loggingHeader ul li a:visited {color: #999; font-size: 14px; text-decoration : none; font-family: 'ArialRoundedMTBold';
 			-webkit-transition: all 0.5s ease-in-out; 
             -moz-transition:  all 0.5s ease-in-out; 
             -ms-transition:  all 0.5s ease-in-out; 
             -o-transition: all 0.5s ease-in-out; 
 			transition: all 0.5s ease-in-out; }
-#credentials ul li.login a:link, #credentials ul li.login a:visited {background: url(images/lock.png) top left no-repeat;
+#loggingHeader ul li.login a:link, #loggingHeader ul li.login a:visited {background: url(images/lock.png) top left no-repeat;
 padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
-#credentials ul li a:hover, #credentials ul li a:active {color: #fff;}
-#credentials ul li.dashboard a:link, #credentials ul li.dashboard a:visited {padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
+#loggingHeader ul li a:hover, #loggingHeader ul li a:active {color: #fff;}
+#loggingHeader ul li.dashboard a:link, #loggingHeader ul li.dashboard a:visited {padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
+#loggingHeader ul li.logout a:link, #loggingHeader ul li.logout a:visited {background: url(../images/logout.png) center left no-repeat;
+padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
+
 
 /*** Social media ***/
-.social-media {float: left; position: relative; z-index: 1; margin-top: 34px;}
+.social-media {float: left; position: relative; z-index: 1; margin-top: 13px;}
 .social-media ul li {float: left; margin-right: 7px;}
 .social-media ul li a {display: block; height: 30px; width: 30px; text-indent: -2000px; overflow: hidden; 
 			-webkit-transition: all 0.5s ease-in-out; 
@@ -150,7 +153,7 @@ padding-left: 20px; border-right: 1px solid #999; padding-right: 10px;}
 
 /*** Nav ***/
 #nav-wrapper {background:url(images/nav-bg.png) top left repeat; border-top: 1px solid #868485; height: 100px; position: relative;}
-nav {max-width: 960px; margin: 0 auto;}
+nav {max-width: 77%; margin: 0 auto;}
 .menu {float: right; position: relative; z-index: 1;}
 .menu li {float: left; text-align: center; margin-left: 8px;}
 .menu li.home a:link, .menu li.home a:visited {height: 18px; width: 20px; margin-top: -2px; overflow: hidden; text-indent: -1000px; display: block; background: url(images/home.png) top left no-repeat;}
@@ -177,9 +180,7 @@ background: -ms-linear-gradient(top,  #f18020 42%,#f05e16 100%); /* IE10+ */
 background: linear-gradient(to bottom,  #f18020 42%,#f05e16 100%); /* W3C */
 }
 
-
 .menu a.selected {cursor: default;}
-
 
 /** Slider ***/
 /*.slider {max-width: 960px; margin: 0 auto;}*/
@@ -188,7 +189,7 @@ background: linear-gradient(to bottom,  #f18020 42%,#f05e16 100%); /* W3C */
 /** Slider ***/
 .slider-wrapper {background: #f5f5f5;}
 .slider { margin: 0 auto; height:470px; -webkit-user-select:none;-moz-user-select:none; -ms-user-select:none;}
-.slider .slides-wrapper { height:360px; max-width: 960px; margin:0 auto;}
+.slider .slides-wrapper { height:360px; max-width: 77%; margin:0 auto;}
 
 .slider .slide .media-container { float: left; height: 320px;  width: 550px; margin-top:20px; margin-right:10px; }
 .slider .slide .details-container { float:left; width:400px; }
@@ -222,7 +223,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f18020', end
 .slider .slide .details-container .note { font-weight:normal; font-family: PTSansCaptionRegular; font-size:13px; margin-top:25px;  }
 
 .controls { height:110px; background: url(images/controls-bg.png) top center no-repeat;}
-.controls .controls-wrapper { max-width:960px; margin:0 auto; }
+.controls .controls-wrapper { max-width:77%; margin:0 auto; }
 .controls .control { float:left; width:236px; height:110px; cursor:pointer;
 background: #f2f2f2;
 background: -moz-linear-gradient(left,  #f2f2f2 0%, #e8e8e8 100%);
@@ -265,10 +266,14 @@ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIH
 .controls .control4.selected .arrow, .controls .control4:hover .arrow { visibility:visible;  }
 
 /*** Footer ***/
-.footer-wrap {background: #484b4e url(images/footer-bg.png) top left repeat-x; box-shadow: 0 0 3px #0e0e0e;}
-footer {width: 960px; margin: 0 auto;}
+.footer-wrap {background: #484b4e url(images/footer-bg.png) top left repeat-x;
+-moz-box-shadow: 0 0 3px #0e0e0e;
+-webkit-shadow: 0 0 3px #0e0e0e;
+box-shadow: 0 0 3px #0e0e0e;
+}
+footer {width: 77%; margin: 0 auto;}
 footer h3 {font-size: 14px; font-family: "ArialRoundedMTBold"; color: #f5f5f5;margin-top: 0; line-height: 12px;}
-footer .newsletter {padding-top: 33px; float: right;}
+footer .newsletter {padding-top: 11px; float: right;}
 .apstrata footer .newsletter p {font-family: "PTSansRegular"; color: #999; font-size: 13px; margin:8px 0 14px;}
 footer .textfield {width: 300px; float: left; margin-right: 10px;}
 footer .btn {float: left;}
@@ -282,16 +287,16 @@ footer .site-map ul li a {text-transform: uppercase; color: #999; font-family: "
 }
 footer .site-map ul li a:hover {color: #fff;}
 footer .site-map ul li:first-child {border: none;}
-footer .site-map ul li {margin-bottom: 2px; padding-top: 3px; border-top: 1px solid #6e7072;}
+footer .site-map ul li {margin-bottom: 6px; padding-top: 3px; border-top: 1px solid #6e7072;}
 footer .site-map ul {float: left; width: 100px; margin-right: 40px;}
 footer .site-map section {float: left; margin-right: 40px;}
-footer .site-map .title {font-family: "PTSansBold"; margin-bottom: 5px; color: #999; font-weight: normal; font-size: 13px; padding: 8px 0; text-transform: uppercase; border-bottom: 1px solid #6e7072;}
+footer .site-map .title {font-family: "PTSansBold"; margin-bottom: 5px; color: #999; font-weight: normal; font-size: 13px; padding: 6px 0; text-transform: uppercase; border-bottom: 1px solid #6e7072;}
 footer .site-map section ul li {margin: 0; line-height: 1.1em; padding: 0; border: none;}
 footer .site-map section ul li a {text-transform: lowercase; font-size: 12px; font-family: "PTSansRegular";}
 footer .site-map section.help {width: 200px;}
 /*footer .site-map section.help ul {float: left; margin-right: 20px; width: 200px;}*/
 /*footer .site-map section.help ul li {float: left; margin-right: 20px;}*/
-footer .copyright {padding-top: 52px;}
+footer .copyright {float:left; width: 100%; padding-bottom: 10px; padding-top: 45px;}
 .apstrata footer .copyright p {float: left; font-size: 13px; font-family: "PTSansRegular"; color: #777;}
 footer .copyright p img {margin-top: -2px;}
 footer .copyright img:hover {opacity: 0.6; filter:alpha(opacity=60);}
@@ -299,16 +304,16 @@ footer .copyright img:hover {opacity: 0.6; filter:alpha(opacity=60);}
 
 footer #social {
 		float: right;
-		margin: 6px 0 0;
+		margin: 0;
 }
 
-.social-bookmarks {float: left; width: 300px; padding: 0; margin: 6px 0 0;}
+.social-bookmarks {padding-bottom: 8px;float: left; width: 300px; padding: 0; margin: 0;}
 .social-bookmarks li {float: right; margin: 0; padding: 0!important; list-style-type: none;}
 
 /*** Container and content ***/
 .container {background: url(images/container.png) top left repeat-x;}
 
-.content-page  {max-width: 960px; margin: 0 auto; padding-top: 32px; padding-bottom: 40px;}
+.content-page  {max-width: 77%; margin: 0 auto; padding-top: 32px; padding-bottom: 40px;}
 .content-page h1 {font-size: 30px; font-family: "ArialRoundedMTBold"; text-transform: lowercase;}
 .title {font-size: 25px; font-family: "ArialRoundedMTBold"; color: #282828; margin-bottom: 20px; text-transform: lowercase;}
 .title span  {color: #F48220; margin-right: 10px;}
@@ -380,12 +385,14 @@ text-align: center;}
 .row.last {border: none;}
 
 .feature {display: inline-block; clear: both; margin-bottom: 25px; padding-bottom: 35px; background:url("images/feature-sep.png") no-repeat bottom left; }
-.feature .image {background: none; width: 465px; height: auto; border: none; padding-top: 20px;}
+.feature .image {background: none; width: 48%; height: auto; border: none; padding-top: 20px;}
 .feature .image.fl {margin-right: 20px;}
 .feature .image.fr {margin-left: 20px;}
+.feature .image img {max-width: 100%; height: auto;}
 
-.feature .title {width: 475px;}
-.feature .section {margin-bottom: 22px; width: 440px; margin-left: 26px;}
+.width48 {width: 48%;}
+.feature .title {width: 100%;}
+.feature .section {margin-bottom: 22px; margin-left: 26px;}
 .feature h2 {font-size: 16px; margin-bottom: 2px; font-family: 'PTSansBold';}
 .feature .info {line-height: 1.3em;}
 .feature .btn {margin-top: 20px;}
@@ -461,10 +468,8 @@ text-shadow: 1px 1px 0 #000;}
 
 .dashboard.profile .actions { clear:both; padding-top:15px; }
 
-
-.profile .FormGenerator { padding: 5px; }
-
-.apstrata .FormGenerator .form .dijitTextBox {
+/*** Dojo TextBox ***/
+.apstrata .dijitTextBox {
 	border: 1px solid #B4B4B4;
 	background: white;
 	-moz-border-radius: 6px;
@@ -474,6 +479,8 @@ text-shadow: 1px 1px 0 #000;}
 	color: #999;
 	font-size:0.75em;
 	}
+	
+/*** Dojo Button ***/
 .apstrata .dijitButton  { 
 -moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px;
 background: #8c8c8c; 
@@ -491,7 +498,6 @@ transition: all 0.5s ease-in-out;
 width:auto !important;
 }
 .dj_ie9 .apstrata .dijitButton {filter: none;}	
-
 .apstrata .dijitButton .dijitButtonText {
 border: none;
 padding: 6px 12px;
@@ -506,29 +512,18 @@ text-shadow: 1px 1px 0 #767779;
 	
 	}
 .apstrata .dijitButtonNode {padding: 0!important; border: 0!important; vertical-align: middle; text-align: center; background: none!important;}
-
 .apstrata .dijitButtonHover { background: #F48220;}
 .apstrata .dijitButtonHover .dijitButtonText { text-shadow: 1px 1px 0 #000000;}
 
-
 .apstrata .label {font-family: 'PTSansBold'; font-size: 0.85em; color: #555555; margin-top: 7px; margin-bottom: 3px;}
 
-.FormGenerator .set .fieldset-label {
-	padding-top: 8px;
-}
 
-.FormGenerator.row.dijiTextBox {
-	background: green;
-	
-    -o-border-radius: 0px;
-    -moz-border-radius: 0px;
-    -webkit-border-radius: 0px;
-    border-radius: 0px;
-}
 
-.FormGenerator form .headerRow {
+/*** Form Generator ***/
+.FormGenerator .set .label {
+	font-family: 'PTSansBold';
 }
-
+.FormGenerator .actions {clear: both;}
 .FormGenerator form .headerRow .label {
 	font-size: 0.8em;
 	display: inline-block;
@@ -536,64 +531,29 @@ text-shadow: 1px 1px 0 #767779;
 	width: 215px;
 }
 
-.FormGenerator form .set {
-	
-}
-
-.FormGenerator form .setLabel {
-	margin-top: 15px;
-	font-weight: bold;
-}
-
-
-.FormGenerator form .row {
-	
-}
-
-.FormGenerator .FieldSet {  }
-
-.FormGenerator .FieldSet.section { float:left; width:300px; }
-.apstrata .FormGenerator .FieldSet.section + div + div { margin-left:15px; }
-.apstrata .FormGenerator form .setLabel + div + div { margin-top: -22px; text-indent: 313px!important;}
-.dj_gecko .apstrata .FormGenerator form .setLabel + div + div { text-indent: 13px;  }
-
-
-.FormGenerator .FieldSet .set {
-}
-
-/* example custom classes */
-.redInput { /* this could be assigned to a field through "cssClass" attribute */
-	color: red;
-	background: yellow !important;
-}
-
-.redInput-label {  /* the field label will be assigned the "[customClass]-label" class  */
-	color: red;
-}
-.apstrata .LoginWidget {top: 180px !important; z-index: 400!important; }
-
+/*** Login widegt ***/
 .apstrata .LoginWidget .login {
-background: #4e4848;
-font-size: 1.2em;
-margin-left: auto;
-margin-right: auto;
-padding: 20px 20px 10px 20px;
-width: 400px;
--moz-border-radius: 5px;
--webkit-border-radius: 5px;
-border-radius: 5 px;
--moz-box-shadow: 0 3px 4px #555;
-box-shadow: 0 3px 4px #555;
--webkit-box-shadow: 0 3px 4px #555;
-border:none;
+width: 275px;
+-moz-border-radius: 8px;
+-webkit-border-radius: 8px;
+border-radius: 8px;
+display: block;
+margin: 0 auto;
+padding: 20px; 
+-moz-box-shadow: 0 0 4px #666 inset;
+-webkit-box-shadow: 0 0 4px #666 inset;
+box-shadow: 0 0 4px #666 inset;
 }
 .apstrata .LoginWidget .login .label {font-family: "PTSansRegular"; float: left; width: 105px;}
-.apstrata .LoginWidget  .FormGenerator .form .dijitTextBox {width: 68%;}
+.dj_ie9 .apstrata .LoginWidget .FormGenerator .form .dijitTextBox {font-size: 14px;}
 .apstrata .LoginWidget .login h2 { color:#F48220; font-size: 24px; margin-bottom: 14px; }
+.touch .actions {text-align: left!important;}
+
 .apstrata .expand-container ol, .apstrata #apstrata-summary ol {list-style-type: decimal; list-style-position: inside;}
 .apstrata #apstrata-summary ul {list-style-type: square; list-style-position: inside;}
 .apstrata #apstrata-summary {font-size: 0.8em;}
 .apstrata .expand-container ol li, .apstrata #apstrata-summary ul li, .apstrata #apstrata-summary ol li {font-size: 0.9em;}
+
 .apstrata .innerContent .smallButton {-moz-border-radius: 6px; -webkit-border-radius: 6px; border-radius: 6px; font-family: "PTSansRegular";
 color: #fff; text-transform: uppercase;
 -moz-text-shadow: 1px 1px 0 #767779;
@@ -616,17 +576,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8c8c8c', end
 .expand-container li { font-size:13px; margin-bottom:3px; margin-left:20px;}
 
 .apstrata p {font-size: 13px; margin: 0; padding: 0; line-height: 1.2em;}
-
-.apstrata .HorizonCurtain {background: #000; opacity: 0.4; z-index: 200; border: none;}
-
-/*
-.apstrata .dijitTooltipContainer {border: 1px solid #666; background: #d46464; color: #fff; padding: 4px;
--moz-border-radius: 4px;
--webkit-border-radius: 4px;
-border-radius: 4px;
-font-size: 11px;
-font-family: "PTSansCaptionBold";}*/
-
 
 .apstrata h1#faq {text-transform: uppercase;}
 
@@ -720,3 +669,4 @@ font-family: "PTSansBold"
 .Mainrow {display: table-row; height: 1px;}
 .Mainrow.expand {height: auto;}
 
+#innerLogo {position: absolute; left: 8px; z-index: 1000;}
