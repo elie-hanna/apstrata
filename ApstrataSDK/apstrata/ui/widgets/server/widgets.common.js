@@ -49,6 +49,7 @@ var extraStepNeeded = false;
 
 // set this property to the name of the server-side script that implements any additional extra step in the registration process
 var extraStepScriptName = "";
+var adminEmail = "admin@gmail.com"; 
 
 var configuration = {
 	projectName: projectName,
@@ -63,14 +64,14 @@ var configuration = {
 	extraStepNeeded: extraStepNeeded,
 	extraStepScriptName: extraStepScriptName,
 	templates: {
-		adminEmail: "dude@dude.com",
+		adminEmail: adminEmail,
 		subject: "$projectName Registration - Email Verification",
 		body: "<div style='font-family:Calibri, font-size:11'>Hello $user,<br/><br/> Thank you for signing up to our $projectName <br/><br/> Please click on the link below to activate your account. If the link doesn't work, copy and paste the link directly into the address bar of your internet browser.<br/><a href='$url'>$url</a><br/><br/>Sincerely<br/><br/>The $projectName Team",		
 		verifyUrl: verifyUrl 
 	},
 
 	templatesConfirmed: {
-		adminEmail: "dude@dude.com",
+		adminEmail: adminEmail,
 		subject: "$projectName Registration confirmed",
 		body: ""
 	}
