@@ -42,7 +42,14 @@ var registrationRedirectUrl = "http://www.apstrata.com/page.php?pageId=processin
 
 // The promotion codes that will be distributed to developers
 var promotionCodes = [];
- 
+
+ // set this property to true if you need to trigger the execution of an additional step in the registration process\
+// (used by default in widgets.Registration.registerUser and widgets.Registration.verifyAccount)
+var extraStepNeeded = false; 
+
+// set this property to the name of the server-side script that implements any additional extra step in the registration process
+var extraStepScriptName = "";
+
 var configuration = {
 	projectName: projectName,
 	defaultUsersGroup: defaultUsersGroup,
@@ -53,6 +60,8 @@ var configuration = {
 	registrationRedirectUrl: registrationRedirectUrl,
 	sendEmailOnceRegistrationConfirmed: sendEmailOnceRegistrationConfirmed,	
 	promotionCodes: promotionCodes,
+	extraStepNeeded: extraStepNeeded,
+	extraStepScriptName: extraStepScriptName,
 	templates: {
 		adminEmail: "dude@dude.com",
 		subject: "$projectName Registration - Email Verification",

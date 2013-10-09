@@ -71,7 +71,10 @@ function checkUser(login) {
 
 	return apsdb.callApi("GetUser", params, null).metadata.status;
 }
-
+/*
+ * This function validate promotion codes if these are sent by the registration widget 
+ * (default implementation of this widget does not include a field for promotion codes)
+ */
 function validatePromotionCode(promotionCode) {
 	if (promotionCode) {
 		if (configuration.promotionCodes) {
@@ -97,13 +100,13 @@ function validatePromotionCode(promotionCode) {
 	return {metadata:{status: "success"}};
 }
 
-
 try {
-	
+// Validate any promotion code sent by the registration request along the registration parameters
 	var validatePromotionCodeResult = validatePromotionCode(request.parameters["user.promotionCode"]);
 	if (validatePromotionCodeResult.metadata.status == "failure") {
 		return validatePromotionCodeResult;
 	}
+	
 
 	var params = {}
 	
@@ -173,7 +176,24 @@ try {
 				 + sendEmailResult.metadata.errorDetail + "]",
 				 params : params 	
 			};
-		} else {			
+		} else {
+			
+			// Insert here any extra step you would like to add to the process and set the widgets.common.extraStepNeed 
+			// and widgets.common.extraStepScriptName accordingly. The following contains default registration step for 
+			// Asptrata that might not work in your case.
+			if(configuration.extraStepNeeded){
+				
+				var extraStepManager = apsdb.require(configuration.extraStepScriptName);
+				var result = extraStepManager.handleStep(apsdb, "saveUser", params);
+				if(result.status == 'failure') {			
+					var parameters = {
+					  login: params["login"]				
+				  	}
+					 apsdb.callApi("DeleteUser", parameters, null);
+					 return result;
+				}	
+			}
+					
 			var url = true;		
 			if ((configuration.registrationRedirectUrl) && (configuration.registrationRedirectUrl != "")){
 				url = configuration.registrationRedirectUrl;

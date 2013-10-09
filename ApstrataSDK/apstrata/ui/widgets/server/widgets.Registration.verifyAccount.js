@@ -24,10 +24,10 @@ var logLevel = request.parameters["logLevel"];
 if (logLevel){
 	apsdb.log.setLogLevel(logLevel); 
 }
- 
+
 var widgetsCommon = apsdb.require("widgets.common");
 var configuration = widgetsCommon.getConfiguration();
-              
+  
 // Retrieve the temporary user and verify that the temporary profile contains
 // the provided confirmation code
 try {	
@@ -46,6 +46,7 @@ try {
 	// Create the parameters of the SaveUser API from the data contained
 	// in the temporary user document
 	user = user.result.user;
+
 	var response = saveUser(user);		
 		
 	if (response.metadata.status == "failure") {
@@ -60,6 +61,32 @@ try {
 	//   b) request.parameters["registrationType"] == "account"
 	//
 	// 2) Send a confirmation e-mail (if configured to do so)	
+	
+	// Insert here any extra step you would like to add to the process and set the widgets.common.extraStepNeed 
+	// and widgets.common.extraStepScriptName accordingly. The following contains default registration step for 
+	// Asptrata that might not work in your case.
+	if(configuration.extraStepNeeded){
+		
+		var extraStepManager = apsdb.require(configuration.extraStepScriptName);
+		var params = {
+			
+			"login": user.login,
+			"isSuspended": "false",
+			"update": "true",
+			"code": ""		
+		};
+	
+		var result = extraStepManager.handleStep(apsdb, "saveUser", params);
+		if(result.status == 'failure') {
+					
+			var parameters = {
+			  login: params["login"]				
+		  }
+			 apsdb.callApi("DeleteUser", parameters, null);
+			 
+			 throw result ; 
+		}
+	}
 	
 	if ((configuration.registrationType == "account") || (request.parameters["registrationType"] == "account")) {
 		// retrieve advanced configuration 
