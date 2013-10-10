@@ -45,7 +45,7 @@ function sendEmail(validationCode) {
 
 	var tokens = {
 	    projectName: configuration.projectName,
-	    user: params.login,
+	    user: params.name,
 	    url: url
 	}
 	
