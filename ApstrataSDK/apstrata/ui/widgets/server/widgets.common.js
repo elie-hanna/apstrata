@@ -54,7 +54,7 @@ var adminEmail = "admin@gmail.com";
 var configuration = {
 	projectName: projectName,
 	defaultUsersGroup: defaultUsersGroup,
-	defaultUnconfirmedRegistrationStore: defaultUnconfirmedRegistrationStore,	
+	//defaultUnconfirmedRegistrationStore: defaultUnconfirmedRegistrationStore,	
 	apstrataHomeEnvironment: apstrataHomeEnvironment,	
 	apstrataHomeKey: apstrataHomeKey,
 	registrationType: registrationType,
