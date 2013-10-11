@@ -141,9 +141,17 @@ dojo.declare("apstrata.horizon.PanelAlert",
 		var neededHeight = d.h;
 		var neededWidth = d.w + (2 * i.w);
 		var fontSize = Math.round((dojo.style(this.dvMessage, "fontSize")).replace(/px/, ""));
+		// For some reason, on IE the font size is not being calculated
+		if (!fontSize) {
+			fontSize = 14;
+		}
 		var spaceBetweenLines = Math.round(dojo.style(this.dvMessage, "lineHeight")) - fontSize;
 		var title = dojo.query(".alertTitle")[0];
 		var titleSize = Math.round((dojo.style(title, "fontSize")).replace(/px/, ""));
+		// For some reason, on IE the font size is not being calculated
+		if (!titleSize) {
+			titleSize = 32;
+		}
 		titleSize = titleSize ? titleSize * 2 : 50;	
 		if (fontSize) {
 			var msgLengthInPx = this.message.length * fontSize;
