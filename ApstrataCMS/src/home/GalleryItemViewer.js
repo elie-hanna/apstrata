@@ -6,6 +6,17 @@ dojo.require("dijit.layout.ContentPane")
 
 dojo.require("dojox.dtl._Templated")
 
+dojo.addOnLoad( function() {
+	if(dojo.query("script[src*='in.js']").length == 0) {
+		var xhrArgs = {
+				url: "//platform.linkedin.com/in.js",
+				frameDoc: dojo.doc,
+				sync: true
+		}
+		dojo.io.script.get(xhrArgs);
+	}	
+});
+
 dojo.declare("apstrata.home.GalleryItemViewer",
 [dijit._Widget, dojox.dtl._Templated],
 {
@@ -19,6 +30,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		this.data = options.resultSet[options.cursor]
 		this.cursor = options.cursor
 		this.gallery = options.gallery
+		this.iconUrl = options.iconUrl
 		
 		this.gallery.setHashParam(this.gallery.GALLERY_ITEM, this.data.label)
 	},
@@ -65,8 +77,8 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		var self = this
 		this.inherited(arguments)
 		
-		//gapi.plusone.go();
-		//IN.init();
+		gapi.plusone.go();
+		IN.init();
 		
 		var v = dijit.getViewport()
 		var w = {w: self.dimension.width, h: self.dimension.height}
@@ -79,7 +91,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		})
 
 		var xhrArgs = {
-			url: "manage/wikiProxy.php?api="+self.data.wikiDoc,
+			url: apstrata.apConfig["apstrata.cms"]["baseUrl"] + apstrata.apConfig["apstrata.cms"]["cmsBasePath"] + "/manage/wikiProxy.php?api="+self.data.wikiDoc,
 			handleAs: "text",
 			timeout: apstrata.apConfig.timeout
 		}
