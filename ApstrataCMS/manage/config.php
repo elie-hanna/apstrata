@@ -39,6 +39,7 @@
 		//
 		"baseUrl" => "http://localhost/apstrataCMS",
 		"urlPrefix" => "",
+		"cmsBasePath" => "/",
 		"loginUrl" => "dashboard",
 		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/apstrataCMS",
    		"workbenchUrl" => "http://workbench.apstrata.com",
