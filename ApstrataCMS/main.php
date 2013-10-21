@@ -68,6 +68,15 @@
 			);
 			include($GLOBALS["config"]["docroot"] . "/" . "templates/". $config['template'] . "/default.php");
 			break;
+		case "wikiProxy":
+			$page = array (
+				"template" => $pageId,
+				"title" => "Wiki Proxy",
+				"apsdb.creationTime" => "",
+				 "apsdb.lastModifiedTime" =>""
+			);
+			include($GLOBALS["config"]["docroot"] . "/" . $GLOBALS["config"]["cmsBasePath"] . "/manage/wikiProxy.php");
+			break;
 		case null:
 		case "":
 		case "/":
