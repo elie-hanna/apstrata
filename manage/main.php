@@ -11,23 +11,26 @@
 		?>
 		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]?>/lib/dojo/dojo/dojo.js" djConfig="parseOnLoad: false, isDebug: true"></script>
 		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]?>/lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+		
+		<style type="text/css">
+			@import "<?php print $GLOBALS["config"]["baseUrl"]?>/themes/cms/cms.css";
+        </style>
 
 		<?php 
 			} else { 
 		?>
 
 		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]?>/lib/dojo/release/dojo/dojo/dojo.js" djConfig="parseOnLoad: false"></script>
-		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]?>/lib/dojo/release/dojo/dojo/apstratacms.js"></script>
+		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]?>/lib/dojo/release/dojo/dojo/<?php print $GLOBALS["config"]["jsPackageName"]?>.js"></script>
 		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]?>/lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
+		
+		<style type="text/css">
+			@import "<?php print $GLOBALS["config"]["baseUrl"]?>/lib/dojo/release/dojo/<?php print $GLOBALS["config"]["template"]?>/themes/cms/cms-packaged.css";
+        </style>
 
 		<?php 
 			}
 		?>
-
-
-		<style type="text/css">
-			@import "<?php print $GLOBALS["config"]["baseUrl"]?>/themes/cms/cms.css";
-        </style>
 		
 		<script>			
 			dojo.ready(function() {
