@@ -50,6 +50,11 @@
 		//
 		"cachingHeaders" => "false",
 		"cachingAge" => 3000,
+		
+		//
+		// Controls the name of the packaged js file
+		//
+		"jsPackageName" => "apstratacms",
 
 		//
 		// Controls the template folder and CSS root class used by the site
