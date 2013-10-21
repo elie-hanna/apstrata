@@ -80,7 +80,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 		})
 
 		var xhrArgs = {
-			url: apstrata.apConfig["apstrata.cms"]["baseUrl"] + apstrata.apConfig["apstrata.cms"]["cmsBasePath"] + "/manage/wikiProxy.php?api="+self.data.wikiDoc,
+			url: apstrata.apConfig["apstrata.cms"]["baseUrl"] + "/page.php?pageId=wikiProxy&api=" + self.data.wikiDoc,
 			handleAs: "text",
 			timeout: apstrata.apConfig.timeout
 		}
