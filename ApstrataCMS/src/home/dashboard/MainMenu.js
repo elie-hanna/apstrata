@@ -15,7 +15,7 @@ dojo.declare("apstrata.home.dashboard.MainMenu",
 				label: "Manage Applications", 
 				panelClass: "apstrata.home.dashboard.ApplicationsGrid",
 				attrs: {
-					panelTitle: "Accounts",
+					panelTitle: "Applications",
 					maximizePanel: false,
 					widthPanel:"420px",
 					sbTitleMsg: "Search"
