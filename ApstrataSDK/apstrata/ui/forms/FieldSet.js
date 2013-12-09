@@ -363,6 +363,10 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 						
 						break;
 					case "dijit.form.RadioButton":
+						inlineLabel = false;
+						break;
+					case "dijit.form.CheckBox":
+						inlineLabel = false;
 						break;
 				}
 
