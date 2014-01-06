@@ -38,6 +38,11 @@ try {
 	
 	var user = apsdb.callApi("GetUser", getUserParams, null);
 	
+ // check if d parameter was sent in the request
+	if(!(request.parameters["d"]) || request.parameters["d"]==null){
+		throw "INVALID_REQUEST";
+	}
+	
 	if (!(user.result) || (!user.result.user) || (user.result.user.code != request.parameters["d"])) {
 		throw "WRONG_CONFIRMATION_CODE";		
 	}
