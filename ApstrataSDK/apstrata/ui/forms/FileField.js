@@ -16,6 +16,8 @@ dojo.declare("apstrata.ui.forms.FileField",
 	displayImage: false,
 	
 	value: "",
+	
+	browseLabel: null,
 
 	regExp: null,
 	/*
@@ -130,7 +132,16 @@ dojo.declare("apstrata.ui.forms.FileField",
 	_addAttachmentNode: function() {				
 		
 		var self = this;
-		this.attachedFile = new dojox.form.FileInput({name: this.name ? this.name : "apsdb_attachments", required: true });
+		
+		var params = {
+				name: this.name ? this.name : "apsdb_attachments", 
+			    required: true 
+		};
+		
+		if(this.browseLabel) {
+			params.label = this.browseLabel;
+		}
+		this.attachedFile = new dojox.form.FileInput(params);
 		
 		// do not allow direct manual editing of the fake file input field 
 		this.attachedFile.inputNode.readOnly = true;
