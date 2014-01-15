@@ -96,6 +96,9 @@ dojo.declare("apstrata.ui.forms.FileField",
 		
 		var displayMode = showFile ? "inline" : "none";
 		
+		//Remove the class set when displaying attached file or its link
+		dojo.removeClass(this.domNode, "attached-file");
+		
 		if (self.displayImage) {
 			dojo.style(self.fileImage, "display", displayMode);
 		}else {
@@ -278,6 +281,8 @@ dojo.declare("apstrata.ui.forms.FileField",
 		if (this.value) {
 			
 			this._gotValue = true;
+			
+			dojo.addClass(this.domNode, "attached-file");
 			
 			if (this.showFieldName) {
 				dojo.style(this.filefieldLabel, "display", "inline");
