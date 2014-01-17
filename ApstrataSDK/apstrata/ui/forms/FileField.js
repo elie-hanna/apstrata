@@ -17,6 +17,8 @@ dojo.declare("apstrata.ui.forms.FileField",
 	
 	value: "",
 	
+	missingMessage: "This field is required (remove it with \"-\" if you need to leave it empty)",
+	
 	browseLabel: null,
 
 	regExp: null,
@@ -173,7 +175,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 				if (!isValid) {
 										
 					// Create an ad-hoc tooltip  
-					self.tooltip = new dijit.Tooltip({connectId: self.domNode, position:"before", label:"This field is required (remove it with \"-\" if you need to leave it empty)"});
+					self.tooltip = new dijit.Tooltip({connectId: self.domNode, position:"before", label: self.missingMessage});
 					self.tooltip.open(self.domNode);
 				} else { //Check if file name matches the regexp in case defined
 					if(this.regExp) {
