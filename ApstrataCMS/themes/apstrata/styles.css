@@ -277,7 +277,7 @@ footer .newsletter {padding-top: 11px; float: right;}
 .apstrata footer .newsletter p {font-family: "PTSansRegular"; color: #999; font-size: 13px; margin:8px 0 14px;}
 footer .textfield {width: 300px; float: left; margin-right: 10px;}
 footer .btn {float: left;}
-footer .site-map {padding-top: 46px;}
+footer .site-map {padding-top: 22px;}
 footer .site-map ul li a {text-transform: uppercase; color: #999; font-family: "PTSansBold"; font-size: 13px; text-decoration: none;
 			-webkit-transition: all 0.5s ease-in-out; 
             -moz-transition:  all 0.5s ease-in-out; 
@@ -304,10 +304,10 @@ footer .copyright img:hover {opacity: 0.6; filter:alpha(opacity=60);}
 
 footer #social {
 		float: right;
-		margin: 0;
+		margin: -5px 0 0;
 }
 
-.social-bookmarks {padding-bottom: 8px;float: left; width: 300px; padding: 0; margin: 0;}
+.social-bookmarks {float: left; width: 300px; padding: 0; margin: 0;}
 .social-bookmarks li {float: right; margin: 0; padding: 0!important; list-style-type: none;}
 
 /*** Container and content ***/
@@ -516,6 +516,7 @@ text-shadow: 1px 1px 0 #767779;
 .apstrata .dijitButtonHover .dijitButtonText { text-shadow: 1px 1px 0 #000000;}
 
 .apstrata .label {font-family: 'PTSansBold'; font-size: 0.85em; color: #555555; margin-top: 7px; margin-bottom: 3px;}
+
 
 
 
