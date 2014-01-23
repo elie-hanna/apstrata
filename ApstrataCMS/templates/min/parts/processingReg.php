@@ -18,7 +18,7 @@
 				var status = urlParams["status"];
 				if (status && status == "complete") {
 					h1Message = "Welcome ! Your registration has successfully completed";
-					span1Message = "Click on the <a href=\'<?php print $GLOBALS["config"]["baseUrl"] . "/". $GLOBALS["config"]["urlPrefix"] . $GLOBALS["config"]["loginUrl"]; ?>'>login link</a> and enter you email and password to log in";
+					span1Message = "Click on the <a href=\'<?php print $GLOBALS["config"]["baseUrl"] . "/". $GLOBALS["config"]["urlPrefix"] . $GLOBALS["config"]["loginUrl"]; ?>'>login link</a> and enter your email and password to log in";
 					span2Message = "";
 				}
 				
