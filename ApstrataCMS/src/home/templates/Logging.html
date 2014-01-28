@@ -2,7 +2,11 @@
          <ul>
             {%if isLoggedIn %}
             	<li class="logout"><a href='javascript: void(0);' dojoAttachEvent="onclick: logout">{{logoutLabel}}</a></li>
-	            <li><a href='{{dashboardUrl|default:"#"}}'>{{dashboardLabel}}</a></li>
+	            {%ifequal windowUrl dashboardUrl%}
+					 <li><a href='{{homeUrl|default:"#"}}'>{{homeLabel}}</a></li>
+	            {%else%}
+		            <li><a href='{{dashboardUrl|default:"#"}}'>{{dashboardLabel}}</a></li>
+	            {%endifequal%}
             {%else%}
              	 <li class="login"><a href='{{loginUrl|default:"#"}}'>{{loginLabel}}</a></li> 
 	             <li><a href='{{signupUrl|default:"#"}}'>{{signupLabel}}</a></li>

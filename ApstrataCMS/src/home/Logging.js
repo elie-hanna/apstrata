@@ -23,15 +23,22 @@ dojo.declare("apstrata.home.Logging",
 	dashboardUrl: '',
 	dashboardLabel: "Dashboard",
 	
+	homeUrl: '',
+	homeLabel: "Dashboard",
+	
 	widgetsInTemplate: false,
 	templatePath: dojo.moduleUrl("apstrata.home", "templates/Logging.html"),
 	
+	windowUrl: "",
 	
 	constructor: function(attrs){
 		dojo.mixin(this, attrs);
 		
 		var theConnection = new apstrata.sdk.TokenConnection();
 		this.isLoggedIn = theConnection.isLoggedIn();
+		
+		this.windowUrl = window.location.href;
+	
 	},
 	
 	logout: function() {
