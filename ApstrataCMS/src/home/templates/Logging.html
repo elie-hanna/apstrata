@@ -2,7 +2,7 @@
          <ul>
             {%if isLoggedIn %}
             	<li class="logout"><a href='javascript: void(0);' dojoAttachEvent="onclick: logout">{{logoutLabel}}</a></li>
-	            {%ifequal windowUrl dashboardUrl%}
+	            {%ifequal windowUrl|lower dashboardUrl|lower %}
 					 <li><a href='{{homeUrl|default:"#"}}'>{{homeLabel}}</a></li>
 	            {%else%}
 		            <li><a href='{{dashboardUrl|default:"#"}}'>{{dashboardLabel}}</a></li>
