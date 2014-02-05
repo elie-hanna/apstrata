@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="User Settings">
-        <EditTextPreference android:title="@string/apstrata_base_url" android:key="apstrata_base_url" android:summary="Your base URL for Apstrata here" android:defaultValue="https://27.111.175.219/apsdb/rest"/>
-        <EditTextPreference android:title="@string/apstrata_key" android:key="apstrata_key" android:summary="Your Apstrata account key here" android:defaultValue="K4E685E0EAC"/>
-        <EditTextPreference android:title="@string/apstrata_secret" android:key="apstrata_secret" android:summary="Your Apstrata account secret here" android:defaultValue="0F37CB31B2810DF485D9"/>
+        <EditTextPreference android:title="@string/apstrata_base_url" android:key="apstrata_base_url" android:summary="Your base URL for Apstrata here" android:defaultValue="https://10.0.0.93:8446/apstratabase/rest"/>
+        <EditTextPreference android:title="@string/apstrata_key" android:key="apstrata_key" android:summary="Your Apstrata account key here" android:defaultValue=" J1234B6A83"/>
+        <EditTextPreference android:title="@string/apstrata_secret" android:key="apstrata_secret" android:summary="Your Apstrata account secret here" android:defaultValue="W809C3A8CE93BC2943B0C280B9D5021C"/>
+        <EditTextPreference android:title="@string/apstrata_user" android:key="apstrata_user" android:summary="Your Apstrata user name here" android:defaultValue=""/>
+        <EditTextPreference android:title="@string/apstrata_password" android:key="apstrata_password" android:summary="Your Apstrata user password here" android:defaultValue=""/>
         <ListPreference android:key="apstrata_auth_mode" android:title="@string/apstrata_auth_mode" android:summary="Your Apstrata auth mode here" android:entryValues="@array/settings_apstrata_auth_mode_values" android:entries="@array/settings_apstrata_auth_mode_entries" android:defaultValue="10"/>
         <ListPreference android:key="apstrata_response_type" android:title="@string/apstrata_response_type" android:summary="Your apstrata response type here" android:entryValues="@array/settings_apstrata_response_type_values" android:entries="@array/settings_apstrata_response_type_entries" android:defaultValue="xml"/>
+        
+        <EditTextPreference android:title="@string/apstrata_token_expiry" android:key="apstrata_token_expiry" android:summary="Your Apstrata token expiry here" android:defaultValue="0"/>
+        <EditTextPreference android:title="@string/apstrata_token_lifetime" android:key="apstrata_token_lifetime" android:summary="Your Apstrata token lifetime here" android:defaultValue="0"/>
     </PreferenceCategory>
 </PreferenceScreen>

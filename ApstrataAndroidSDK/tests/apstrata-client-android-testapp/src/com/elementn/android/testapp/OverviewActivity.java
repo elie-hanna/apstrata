@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +18,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.NameValuePair;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,52 +38,260 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.apstrata.client.android.ApstrataClientAndroid;
-import com.apstrata.client.android.ApstrataClientAndroid.AuthMode;
+import com.apstrata.client.android.Client;
+import com.apstrata.client.android.MySSLSocketFactory;
+import com.apstrata.client.android.connection.AnonymousConnection;
+import com.apstrata.client.android.connection.Connection;
+import com.apstrata.client.android.connection.OwnerConnection;
+import com.apstrata.client.android.connection.TokenConnection;
+import com.apstrata.client.android.connection.UserConnection;
 
 public class OverviewActivity extends Activity {
+	
 	SharedPreferences preferences;
+	
+	String asBaseUrl = null;
+	String asKey = null;
+	String asSecret = null;
+	String asAuthMode = null;
+	String asResponseType = null;
+	String asUser = null;
+	String asPassword = null;
+	long asTokenExpiry = 0;
+	long asTokenLifetime = 0;
+	
+	Connection connOwner, connUser, connToken, connAnonymous;
+	Client client;
 	
 	/** Called when the activity is first created. */
     @Override
 	public void onCreate(Bundle savedInstanceState) {
+    	
+    	this.preferences = PreferenceManager.getDefaultSharedPreferences(this);
+    	this.loadPreferences();
+    	
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-		// Initialize preferences
-		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		
-		Button buttonRunTest = (Button) findViewById(R.id.ButtonRunTests);
-		buttonRunTest.setOnClickListener(new OnClickListener() {
+		Button buttonRunTestO = (Button) findViewById(R.id.ButtonRunTestsOwner);
+		buttonRunTestO.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				handleClick(v);
+				handleClickOwnerConnectionTest(v);
+			}
+		});
+		Button buttonRunTestU = (Button) findViewById(R.id.ButtonRunTestsUser);
+		buttonRunTestU.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				handleClickUserConnectionTest(v);
+			}
+		});
+		Button buttonRunTestT = (Button) findViewById(R.id.ButtonRunTestsToken);
+		buttonRunTestT.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				handleClickTokenConnectionTest(v);
+			}
+		});
+		Button buttonRunTestA = (Button) findViewById(R.id.ButtonRunTestsAnonymous);
+		buttonRunTestA.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				handleClickAnonymousConnectionTest(v);
 			}
 		});
     }
     
-    private void handleClick(View v) {
+	private void loadPreferences() {
+		Log.d(this.getClass().getName(), "Loading application preferences");
+		
+    	String baseUrl = preferences.getString("apstrata_base_url", null);
+    	String key = preferences.getString("apstrata_key", null);
+    	String secret = preferences.getString("apstrata_secret", null);
+    	String authMode = preferences.getString("apstrata_auth_mode", null);
+    	String responseType = preferences.getString("apstrata_response_type", null);
+    	String user = preferences.getString("apstrata_user", null);
+    	String password = preferences.getString("apstrata_password", null);
+    	long tokenExpiry = Long.parseLong(preferences.getString("apstrata_token_expiry", "0"));
+    	long tokenLifetime = Long.parseLong(preferences.getString("apstrata_token_lifetime", "0"));
+    	
+    	boolean recreateConnections = false;
+    	if (isPreferenceChanged(this.asBaseUrl, baseUrl)) {
+    		this.asBaseUrl = baseUrl;
+    		recreateConnections = true;
+    	}
+    	if (isPreferenceChanged(this.asKey, key)) {
+    		this.asKey = key;
+    		recreateConnections = true;
+    	}
+    	if (isPreferenceChanged(this.asSecret, secret)) {
+    		this.asSecret = secret;
+    		recreateConnections = true;
+    	}
+    	if (isPreferenceChanged(this.asUser, user)) {
+    		this.asUser = user;
+    		recreateConnections = true;
+    	}
+    	if (isPreferenceChanged(this.asPassword, password)) {
+    		this.asPassword = password;
+    		recreateConnections = true;
+    	}
+    	
+    	if (this.asTokenExpiry != tokenExpiry) {
+    		this.asTokenExpiry = tokenExpiry;
+    		recreateConnections = true;
+    	}
+    	
+    	if (this.asTokenLifetime != tokenLifetime) {
+    		this.asTokenLifetime = tokenLifetime;
+    		recreateConnections = true;
+    	}
+    	
+    	if (recreateConnections) {
+			Log.d(this.getClass().getName(), "Application preferences changed");
+    		this.setConnections();
+    	}
+    	
+    	this.asAuthMode = authMode;
+    	this.asResponseType = responseType;
+    }
+    
+    boolean isPreferenceChanged(String initial, String current) {
+    	boolean b = false;
+    	if (initial == null && current == null) {
+    		b = false;
+    	}
+    	else if ((initial == null && current != null) || (initial != null && current == null) || !initial.equals(current)) {
+    		b = true;
+    	}
+    	return b;
+    }
+    
+    private void setConnections() {
+		Log.d(this.getClass().getName(), "[re]initializing apstrata connections & client");
+		
+		try {
+			this.connOwner = new OwnerConnection(this.asBaseUrl, this.asKey, this.asSecret);
+		} catch (Exception e) {
+			Log.e(this.getClass().getName(), Log.getStackTraceString(e));
+		}
+		
+		try {
+			this.connUser = new UserConnection(this.asBaseUrl, this.asKey, this.asUser, this.asPassword);
+		} catch (Exception e) {
+			Log.e(this.getClass().getName(), Log.getStackTraceString(e));
+		}
+			
+		try {
+			if (this.connToken != null) {
+				((TokenConnection) this.connToken).terminate();
+			}
+			this.connToken = new TokenConnection(this.asBaseUrl, this.asKey, this.asUser, this.asPassword, this.asTokenExpiry, this.asTokenLifetime);
+		} catch (Exception e) {
+			Log.e(this.getClass().getName(), Log.getStackTraceString(e));
+		}
+		
+		this.connAnonymous = new AnonymousConnection();
+		
+		this.client = new Client(this.asBaseUrl, this.asKey, this.connAnonymous);
+    }
+    
+    private void handleClickOwnerConnectionTest(View v) {
     	EditText testsResults = (EditText) this.findViewById(R.id.EditText1);
     	testsResults.setText("");
     	
-		String asBaseUrl = preferences.getString("apstrata_base_url", null);
-		String asKey = preferences.getString("apstrata_key", null);
-		String asSecret = preferences.getString("apstrata_secret", null);
-		String asAuthMode = preferences.getString("apstrata_auth_mode", null);
-		String asResponseType = preferences.getString("apstrata_response_type", null);
-		
+    	this.loadPreferences();
+    	
 		if (asBaseUrl == null || asKey == null || asSecret == null || asAuthMode == null || asResponseType == null) {
+			testsResults.setText("Owner configuration incomplete, click preferences to configure apstrata client");
+			return;
+		}
+		
+		String prefs = formatPreferencesAsString(asBaseUrl, asKey, asSecret, null, null, asAuthMode, asResponseType);
+		notifyOfApstrataResult("Preferences: " + prefs);
+		
+		client.setConn(connOwner);
+		try {
+			verifyApstrataCredentials(client);
+			invokeApstrataSaveDocument(client, true);
+			invokeApstrataSaveDocument(client, false);
+			
+		} catch (Exception e) {
+	    	testsResults.setText("Exception: " + e.getMessage());
+		}
+    }
+    
+    private void handleClickUserConnectionTest(View v) {
+    	EditText testsResults = (EditText) this.findViewById(R.id.EditText1);
+    	testsResults.setText("");
+    	
+    	this.loadPreferences();
+    	
+		if (asBaseUrl == null || asKey == null || asUser == null || asPassword == null || asAuthMode == null || asResponseType == null) {
+			testsResults.setText("User configuration incomplete, click preferences to configure apstrata client");
+			return;
+		}
+		
+		String prefs = formatPreferencesAsString(asBaseUrl, asKey, null, asUser, asPassword, asAuthMode, asResponseType);
+		notifyOfApstrataResult("Preferences: " + prefs);
+		
+		client.setConn(connUser);
+		try {
+			verifyApstrataCredentials(client);
+			invokeApstrataSaveDocument(client, true);
+			invokeApstrataSaveDocument(client, false);
+			
+		} catch (Exception e) {
+	    	testsResults.setText("Exception: " + e.getMessage());
+		}
+    }
+    
+    private void handleClickTokenConnectionTest(View v) {
+    	EditText testsResults = (EditText) this.findViewById(R.id.EditText1);
+    	testsResults.setText("");
+    	
+    	this.loadPreferences();
+    	
+		if (asBaseUrl == null || asKey == null || asUser == null || asPassword == null || asAuthMode == null || asResponseType == null) {
 			testsResults.setText("Configuration incomplete, click preferences to configure apstrata client");
 			return;
 		}
 		
-		String prefs = showPrefs(asBaseUrl, asKey, asSecret, asAuthMode, asResponseType);
-		notifyOfApstrataResult("Preferences: \n" + prefs);
+		String prefs = formatPreferencesAsString(asBaseUrl, asKey, null, asUser, asPassword, asAuthMode, asResponseType);
+		notifyOfApstrataResult("Preferences: " + prefs);
 		
-		verifyApstrataCredentials(asBaseUrl, asKey, asSecret, asAuthMode, asResponseType);
-		invokeApstrataSaveDocument(asBaseUrl, asKey, asSecret, asAuthMode, asResponseType, true);
-		invokeApstrataSaveDocument(asBaseUrl, asKey, asSecret, asAuthMode, asResponseType, false);
+		client.setConn(connToken);
+		try {
+			verifyApstrataCredentials(client, (TokenConnection) connToken);
+			invokeApstrataSaveDocument(client, true);
+			invokeApstrataSaveDocument(client, false);
+			
+		} catch (Exception e) {
+	    	testsResults.setText("Exception: " + e.getMessage());
+		}
     }
     
+    private void handleClickAnonymousConnectionTest(View v) {
+    	EditText testsResults = (EditText) this.findViewById(R.id.EditText1);
+    	testsResults.setText("");
+    	
+    	this.loadPreferences();
+    	
+		if (asBaseUrl == null || asKey == null || asResponseType == null) {
+			testsResults.setText("Configuration incomplete, click preferences to configure apstrata client");
+			return;
+		}
+		
+		String prefs = formatPreferencesAsString(asBaseUrl, asKey, null, null, null, asAuthMode, asResponseType);
+		notifyOfApstrataResult("Preferences: " + prefs);
+		
+		client.setConn(connAnonymous);
+		try {
+			invokeApstrataSaveDocument(client, true);
+			invokeApstrataSaveDocument(client, false);
+			
+		} catch (Exception e) {
+	    	testsResults.setText("Exception: " + e.getMessage());
+		}
+	}
+
     private String getOptionText(String currentValue, String[] values, String[] entries) {
 		int i;
 		for (i = 0; i < values.length && !currentValue.equals(values[i]); i++) {
@@ -94,25 +303,28 @@ public class OverviewActivity extends Activity {
 		return s;
     }
     
-	private String showPrefs(String baseUrl, String key, String secret, String authMode, String responseType){
+	private String formatPreferencesAsString(String baseUrl, String key, String secret, String userName, String userPassword, String authMode, String responseType){
 		String authModeDisplayValue = getOptionText(authMode, getResources().getStringArray(R.array.settings_apstrata_auth_mode_values), getResources().getStringArray(R.array.settings_apstrata_auth_mode_entries));
 		String responseTypeDisplayValue = getOptionText(responseType, getResources().getStringArray(R.array.settings_apstrata_response_type_values), getResources().getStringArray(R.array.settings_apstrata_response_type_entries));
-		return "base url: " + baseUrl + ", key: " + key + ", secret: " + secret + ", auth mode: " + authModeDisplayValue + ", response: " + responseTypeDisplayValue;
+		return "base url: " + baseUrl + ", key: " + key 
+			+ (secret != null? ", secret: " + secret: "") 
+			+ (userName != null? ", user: " + userName: "") 
+			+ (userPassword != null? ", password: " + userPassword: "")
+			+ ", auth mode: " + authModeDisplayValue + ", response: " + responseTypeDisplayValue;
 	}
 	
-	private void verifyApstrataCredentials(final String baseUrl, final String key, final String secret, final String authMode, final String responseType) {
+	private void verifyApstrataCredentials(final Client client) {
 		AsyncTask<String, Void, String> at = new AsyncTask<String, Void, String>() {
 			protected String doInBackground(String... params) {
 				String response = "no response yet";
 				try {
-//					ApstrataClientAndroid client = new ApstrataClientAndroid("https://27.111.175.219/apsdb/rest", "K4E685E0EAC", "0F37CB31B2810DF485D9", AuthMode.SIMPLE);
-					ApstrataClientAndroid client = new ApstrataClientAndroid(baseUrl, key, secret, authMode.equals("10")? AuthMode.SIMPLE: AuthMode.COMPLEX);
-					List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 					
-					if (responseType.equals(ApstrataClientAndroid.RESPONSE_TYPE_JSON)) {
-						response = client.callAPIJson("VerifyCredentials", parameters, null);
+					Client.AuthMode mode = asAuthMode.equals("10")? Client.AuthMode.SIMPLE: Client.AuthMode.COMPLEX;
+					
+					if (asResponseType.equals(Client.RESPONSE_TYPE_JSON)) {
+						response = client.callAPIJson("VerifyCredentials", null, null, mode);
 					} else {
-						response = client.callAPIXml("VerifyCredentials", parameters, null);
+						response = client.callAPIXml("VerifyCredentials", null, null, mode);
 					}
 					
 				} catch (Exception e) {
@@ -123,13 +335,13 @@ public class OverviewActivity extends Activity {
 			}
 			
 		    protected void onPostExecute(String result) {
-		    	notifyOfApstrataResult("Verify Credential response: \n" + result);
+		    	notifyOfApstrataResult("Verify Credentials: " + result);
 		    }
 		};
 		at.execute((String) null);
 	}
 
-	private void invokeApstrataSaveDocument(final String baseUrl, final String key, final String secret, final String authMode, final String responseType, final boolean someFlag) {
+	private void invokeApstrataSaveDocument(final Client client, final boolean someFlag) {
 		AsyncTask<String, Void, String> at = new AsyncTask<String, Void, String>() {
 			String fileFieldName = "apsdb_attachments";
 			String fileName1 = "mytestfile1.txt";
@@ -138,10 +350,10 @@ public class OverviewActivity extends Activity {
 			protected String doInBackground(String... params) {
 				String response = "no response yet";
 				try {
-					ApstrataClientAndroid client = new ApstrataClientAndroid(baseUrl, key, secret, authMode.equals("10")? AuthMode.SIMPLE: AuthMode.COMPLEX);
+					Client.AuthMode mode = asAuthMode.equals("10")? Client.AuthMode.SIMPLE: Client.AuthMode.COMPLEX;
 					
 					List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-					parameters.add(new BasicNameValuePair("apsdb.store", "LoadTestStore"));
+					parameters.add(new BasicNameValuePair("apsdb.store", "DefaultStore"));
 					parameters.add(new BasicNameValuePair("apsdb.update", "false"));
 					parameters.add(new BasicNameValuePair("somefield1", "some.value.1"));
 					parameters.add(new BasicNameValuePair("somefield2", "some.value.2"));
@@ -154,10 +366,10 @@ public class OverviewActivity extends Activity {
 					someFileList.add(somefile2);
 					files.put(fileFieldName, someFileList);
 
-					if (responseType.equals(ApstrataClientAndroid.RESPONSE_TYPE_JSON)) {
-						response = client.callAPIJson("SaveDocument", parameters, files);
+					if (asResponseType.equals(Client.RESPONSE_TYPE_JSON)) {
+						response = client.callAPIJson("SaveDocument", parameters, files, mode);
 					} else {
-						response = client.callAPIXml("SaveDocument", parameters, files);
+						response = client.callAPIXml("SaveDocument", parameters, files, mode);
 					}
 					
 				} catch (Exception e) {
@@ -168,18 +380,18 @@ public class OverviewActivity extends Activity {
 			}
 			
 			protected void onPostExecute(String result) {
-		    	notifyOfApstrataResult("Save Document response: \n" + result);
+		    	notifyOfApstrataResult("Save Document: " + result);
 		    	String dockey = extractResultDocumentDockey(result);
-		    	invokeApstrataGetFileAttachment(baseUrl, key, secret, authMode, responseType, dockey, fileFieldName, fileName1, someFlag);
+		    	invokeApstrataGetFileAttachment(client, dockey, fileFieldName, !someFlag? fileName1: fileName2, someFlag);
 		    }
 
 			private String extractResultDocumentDockey(String result) {
 				String dockey = null;
 				try {
-					if (responseType.equals(ApstrataClientAndroid.RESPONSE_TYPE_JSON)) {
+					if (asResponseType.equals(Client.RESPONSE_TYPE_JSON)) {
 						dockey = new JSONObject(result).getJSONObject("response").getJSONObject("result").getJSONObject("document").getString("key");
 					} else {
-						Pattern pattern = Pattern.compile(".*<document\\s+key=\"(.+)\"/>.*");
+						Pattern pattern = Pattern.compile(".*<document\\s+key=\"(.+)\" versionNumber=\"(.+)\"/>.*");
 						Matcher matcher = pattern.matcher(result);
 						if (matcher.matches()) {
 							dockey = matcher.group(1);
@@ -194,12 +406,37 @@ public class OverviewActivity extends Activity {
 		at.execute((String) null);
 	}
 	
-	private void invokeApstrataGetFileAttachment(final String baseUrl, final String key, final String secret, final String authMode, final String responseType, final String dockey, final String fieldName, final String fileName, final boolean asStream) {
+	private void verifyApstrataCredentials(final Client client, final TokenConnection conn) {
+		AsyncTask<String, Void, String> at = new AsyncTask<String, Void, String>() {
+			protected String doInBackground(String... params) {
+				String response = "no response yet";
+				try {
+					if (conn.validateToken()) {
+						response = "token " + conn.getToken() + ", expires " + new Date(conn.getTokenExpires()) + ", lifetime " + new Date(conn.getTokenLifetime());
+					} else {
+						response = "token validation failed";
+					}
+					
+				} catch (Exception e) {
+					response = "Error: " + e.getMessage();
+					e.printStackTrace();
+				}
+				return response;
+			}
+			
+		    protected void onPostExecute(String result) {
+		    	notifyOfApstrataResult("Verify Credentials: " + result);
+		    }
+		};
+		at.execute((String) null);
+	}
+
+	private void invokeApstrataGetFileAttachment(final Client client, final String dockey, final String fieldName, final String fileName, final boolean asStream) {
 		if (dockey == null) {
 	    	notifyOfApstrataResult("dockey is null, cannot proceed with file attachment retrieval");
 		} else {
 			List<NameValuePair> parametersTemp = new ArrayList<NameValuePair>();
-			parametersTemp.add(new BasicNameValuePair("apsdb.store", "LoadTestStore"));
+			parametersTemp.add(new BasicNameValuePair("apsdb.store", "DefaultStore"));
 			parametersTemp.add(new BasicNameValuePair("apsdb.fieldName", fieldName));
 			parametersTemp.add(new BasicNameValuePair("apsdb.fileName", fileName));
 			parametersTemp.add(new BasicNameValuePair("apsdb.documentKey", dockey));
@@ -211,12 +448,12 @@ public class OverviewActivity extends Activity {
 					protected String doInBackground(String... params) {
 						String response = "no response yet";
 						StringBuffer sb = new StringBuffer();
-						AndroidHttpClient httpClient = AndroidHttpClient.newInstance("some-android-user-agent");
+						//AndroidHttpClient httpClient = AndroidHttpClient.newInstance("some-android-user-agent");
+						DefaultHttpClient httpClient = MySSLSocketFactory.getNewHttpClient();
 	
 						try {
-							ApstrataClientAndroid client = new ApstrataClientAndroid(baseUrl, key, secret, authMode.equals("10")? AuthMode.SIMPLE: AuthMode.COMPLEX);
-							
-							InputStream is = client.callAPIStream("GetFile", parameters, null, httpClient);
+							Client.AuthMode mode = asAuthMode.equals("10")? Client.AuthMode.SIMPLE: Client.AuthMode.COMPLEX;
+							InputStream is = client.callAPIStream("GetFile", parameters, null, mode, httpClient);
 							BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 							String line = "";
 							while ((line = reader.readLine()) != null) {
@@ -228,7 +465,7 @@ public class OverviewActivity extends Activity {
 							response = "Error: " + e.getMessage();
 							Log.e(this.getClass().getName(), "Error reading stream contents of apstrata file attachment of doc " + dockey + ", field " + fieldName + ", file " + fileName, e);
 						} finally {
-							httpClient.close();
+							//httpClient.close();
 						}
 						
 						Log.d(this.getClass().getName(), "read stream contents of apstrata file attachment of doc " + dockey + ", field " + fieldName + ", file " + fileName + " = " + response);
@@ -236,7 +473,7 @@ public class OverviewActivity extends Activity {
 					}
 					
 					protected void onPostExecute(String result) {
-						notifyOfApstrataResult("File attachment " + fileName + " of doc field " + dockey + "." + fieldName + ": \n" + result);
+						notifyOfApstrataResult("File " + fileName + " of field " + dockey + " " + fieldName + ": " + result);
 					}
 				};
 			} else {
@@ -246,9 +483,8 @@ public class OverviewActivity extends Activity {
 						String response = "no response yet";
 
 						try {
-							ApstrataClientAndroid client = new ApstrataClientAndroid(baseUrl, key, secret, authMode.equals("10")? AuthMode.SIMPLE: AuthMode.COMPLEX);
-							
-							File file = client.callAPIFile("GetFile", parameters, path);
+							Client.AuthMode mode = asAuthMode.equals("10")? Client.AuthMode.SIMPLE: Client.AuthMode.COMPLEX;
+							File file = client.callAPIFile("GetFile", parameters, mode, path);
 							response = readTextFile(file);
 							
 						} catch (Exception e) {
@@ -261,7 +497,7 @@ public class OverviewActivity extends Activity {
 					}
 					
 					protected void onPostExecute(String result) {
-						notifyOfApstrataResult("File attachment " + fileName + " of doc field " + dockey + "." + fieldName + " read into local file " + path + ": \n" + result);
+						notifyOfApstrataResult("File " + fileName + " of field " + dockey + " " + fieldName + " read into local file " + path + ": " + result);
 					}
 				};
 				
@@ -272,7 +508,11 @@ public class OverviewActivity extends Activity {
 	
 	private void notifyOfApstrataResult(String result) {
 		EditText testsResults = (EditText) this.findViewById(R.id.EditText1);
-    	testsResults.append(result + "\n\n");
+		if (testsResults.getText().length() == 0) {
+	    	testsResults.append(result);
+		} else {
+			testsResults.append("\n\n" + result);
+		}
 	}
 	
     private File createTextFile(String fileName, String fileContent) throws IOException {
@@ -323,4 +563,14 @@ public class OverviewActivity extends Activity {
 		}
 		return true;
 	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		if (this.connToken != null) {
+			((TokenConnection) this.connToken).terminate();
+		}
+	}
+	
 }

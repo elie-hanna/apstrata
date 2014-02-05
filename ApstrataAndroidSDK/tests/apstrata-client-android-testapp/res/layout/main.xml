@@ -4,17 +4,54 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/ButtonRunTests"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/apstrata_run_tests" />
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/ButtonRunTestsOwner"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:maxHeight="15dp"
+            android:minHeight="15dp"
+            android:text="@string/apstrata_run_tests_owner"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/ButtonRunTestsUser"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:maxHeight="15dp"
+            android:minHeight="15dp"
+            android:text="@string/apstrata_run_tests_user"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/ButtonRunTestsToken"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:maxHeight="15dp"
+            android:minHeight="15dp"
+            android:text="@string/apstrata_run_tests_token"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/ButtonRunTestsAnonymous"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:maxHeight="15dp"
+            android:minHeight="15dp"
+            android:text="@string/apstrata_run_tests_anonymous"
+            android:textSize="12sp" />
+        
+    </LinearLayout>
+    
     <EditText
         android:id="@+id/EditText1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top"
-        android:text="@string/apstrata_run_tests_help" />
+        android:text="@string/apstrata_run_tests_help"
+        android:textSize="10sp" />
 
 </LinearLayout>
