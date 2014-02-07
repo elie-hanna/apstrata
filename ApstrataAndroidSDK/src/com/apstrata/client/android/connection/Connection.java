@@ -6,6 +6,15 @@ import java.util.Map;
 
 import org.apache.http.NameValuePair;
 
+/**
+ * interface for connection implementations. the connection interface specifies methods for generating request signatures.
+ * request signatures are lists of name/value pairs that are appended as parameters to urls invoked by the apstrata android client.
+ * these parameters collectively form the request's signature and are used by server side code to validate the request.
+ * request signatures come in 2 flavours: complex and simple, hence the 2 corresponding methods of the interface.
+ * 
+ * @author apstrata
+ *
+ */
 public interface Connection {
 	
 	final static String	APSWS_PREFIX			= "apsws.";
@@ -18,7 +27,23 @@ public interface Connection {
 	
 	final static String	SIGNATURE_MODE_SIMPLE	= "simple";
 
+	/**
+	 * builds a simple request signature corresponding to the combination of the request's action, text parameters and file parameters (for file upload requests)
+	 * @param action: the name of the apstrata endpoint invoked by the request, ie, SaveDocument, RunScript, etc...
+	 * @param parameters: the list of request parameters, passed as name/value pairs
+	 * @param files: the list of the request's file parameters
+	 * @return the simple signature, consisting of a list of name/value parameters that should be included in the request
+	 * @throws Exception
+	 */
 	public List<NameValuePair> getSimpleRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception;
 	
+	/**
+	 * builds a complex request signature corresponding to the combination of the request's action, text parameters and file parameters (for file upload requests)
+	 * @param action: the name of the apstrata endpoint invoked by the request, ie, SaveDocument, RunScript, etc...
+	 * @param parameters: the list of request parameters, passed as name/value pairs
+	 * @param files: the list of the request's file parameters
+	 * @return the complex signature, consisting of a list of name/value parameters that should be included in the request
+	 * @throws Exception
+	 */
 	public List<NameValuePair> getComplexRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception;
 }

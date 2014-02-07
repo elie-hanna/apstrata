@@ -29,6 +29,27 @@ import android.util.Log;
 
 import com.apstrata.client.android.connection.Connection;
 
+/**
+ * Responsible for making calls to the backend apstrata service and returning the response
+ * as text (json or xml) or as an inputstream. In order to build request urls for successful backend validation,
+ * this class delegates the signature of requests to an implementation of the {@link com.apstrata.client.android.connection.Connection} interface.
+ * Such implementations currently include 
+ * the {@link com.apstrata.client.android.connection.AnonymousConnection}, 
+ * the {@link com.apstrata.client.android.connection.OwnerConnection},
+ * the {@link com.apstrata.client.android.connection.UserConnection}
+ * and the {@link com.apstrata.client.android.connection.TokenConnection}.
+ * The connection implementation is plugged into the client object at instantiation time and may be replaced at runtime as needed.
+ * A typical usage is the following: 
+ * <pre>
+ * {@code
+ * Connection connOwner = new OwnerConnection("someBaseUrl", "someKey", "someSecret");
+ * Client apsClient = new Client("someBaseUrl", "someKey", connOwner);
+ * String resp = apsClient.callAPIJson("SaveDocument", parameters, files, mode);
+ * // convert the text response into a json object etc...
+ * }
+ * </pre>
+ * @author apstrata
+ */
 public class Client {
 	
 	private final static String	APSTRATA_PREFIX		= "apsws.";
@@ -46,41 +67,54 @@ public class Client {
 	private String accountKey;
 	
 	
-	public Client(String baseUrl, String accountKey, Connection conn) {
+	/**
+	 * @param baseUrl identifies the scheme and the apstrata server that is targeted. Ex: "https://sandbox.apstrata.com/"
+	 * @param accKey identifies the customer account
+	 * @param conn identifies the connection object responsible for signing requests
+	 */
+	public Client(String baseUrl, String accKey, Connection conn) {
 		this.conn = conn;
 		this.baseUrl = baseUrl;
-		this.accountKey = accountKey;
+		this.accountKey = accKey;
 	}
 	
+	/**
+	 * @return the current Connection object used for signing requests
+	 */
 	public Connection getConn() {
 		return conn;
 	}
 	
+	/**
+	 * sets a connection object for use in signing requests
+	 * @param conn 
+	 */
 	public void setConn(Connection conn) {
 		this.conn = conn;
 	}
 	
 	/**
-	 * Returns a string representing the full URL with the additional necessary query string
+	 * Returns a string representing the full URL with the additional necessary query string including the request signature
 	 * 
-	 * @param action
-	 * @param parameters
-	 * @param files
-	 * @return String full URL
+	 * @param methodName identifies the API method being invoked
+	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode: identifies the signature type: Simple or complex
+	 * @return String: A request Url duly signed by the current connection
 	 * @throws Exception
 	 */
-	public String getSignedRequestUrl(String action, List<NameValuePair> parameters, Map<String, List<File>> files, AuthMode mode) throws Exception {
+	public String getSignedRequestUrl(String methodName, List<NameValuePair> parameters, Map<String, List<File>> files, AuthMode mode) throws Exception {
 		if (this.conn == null) {
 			throw new Exception("null connection");
 		}
 		
 		// TODO: add the run as user option to the call api options	
 		
-		String url = this.baseUrl + "/" + this.accountKey + "/" + action + "?";
+		String url = this.baseUrl + "/" + this.accountKey + "/" + methodName + "?";
 		
 		List<NameValuePair> requestSignatureParams = (mode == AuthMode.SIMPLE? 
-					this.conn.getSimpleRequestSignature(action, parameters, files): 
-					this.conn.getComplexRequestSignature(action, parameters, files));
+					this.conn.getSimpleRequestSignature(methodName, parameters, files): 
+					this.conn.getComplexRequestSignature(methodName, parameters, files));
 		
 		for (Iterator<NameValuePair> iterator = requestSignatureParams.iterator(); iterator.hasNext();) {
 			NameValuePair nameValuePair = (NameValuePair) iterator.next();
@@ -97,6 +131,7 @@ public class Client {
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
 	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode: identifies the signature type: Simple or complex
 	 * @return the String response as received from the apstrata sevice
 	 * @throws Exception
 	 */
@@ -112,7 +147,8 @@ public class Client {
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
 	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
-	 * @param httpClient is an AndroidHttpClient used by the client object. the calling code is expected to close this httpClient upon consuming the stream
+	 * @param mode is the signature type: simple or complex
+	 * @param httpClient is the HttpClient used by the client object. the calling code is expected to close this httpClient (as needed) upon consuming the stream
 	 * @return an input stream that returns the data sent by apstrata in response to the call 
 	 * @throws Exception
 	 */
@@ -129,6 +165,7 @@ public class Client {
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
 	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode: identifies the signature type: Simple or complex
 	 * @return the String response in JSON format as received from the apstrata sevice
 	 * @throws Exception
 	 */
@@ -146,6 +183,7 @@ public class Client {
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
 	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode: identifies the signature type: Simple or complex
 	 * @return the String response in XML format as received from the apstrata sevice
 	 * @throws Exception
 	 */
@@ -161,6 +199,7 @@ public class Client {
 	 * 
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param mode: identifies the signature type: Simple or complex
 	 * @param path is the path to the destination file, where the content of the file attachment is to be stored
 	 * @return a handle to the destination file, where the content is stored
 	 * @throws Exception
