@@ -2,6 +2,7 @@ package com.apstrata.client.java.test;
 
 import static org.junit.Assert.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.apstrata.client.java.connection.TokenConnection;
@@ -66,6 +67,7 @@ public class TestClient {
 	}
 	
 	@Test
+	@Ignore
 	public void testTerminatedTokenConnection() {
 		
 		TokenConnection connection = null;
@@ -94,6 +96,7 @@ public class TestClient {
 	}
 	
 	@Test
+	@Ignore
 	public void testInvalidPassword() {		
 		
 		TokenConnection connection = null;
@@ -115,6 +118,7 @@ public class TestClient {
 	}
 	
 	@Test
+	@Ignore
 	public void testNonSecuredURL() {		
 		
 		TokenConnection connection = null;
