@@ -8,7 +8,7 @@ import org.apache.http.NameValuePair;
 
 /**
  * interface for connection implementations. the connection interface specifies methods for generating request signatures.
- * request signatures are lists of name/value pairs that are appended as parameters to urls invoked by the apstrata android client.
+ * request signatures are lists of name/value pairs that are appended as parameters to urls invoked by the apstrata client.
  * these parameters collectively form the request's signature and are used by server side code to validate the request.
  * request signatures come in 2 flavours: complex and simple, hence the 2 corresponding methods of the interface.
  * 
