@@ -24,6 +24,10 @@ import org.apache.http.message.BasicNameValuePair;
 
 import org.apache.log4j.Logger;
 
+/**
+ * this is the Connection implementation that generates request signatures using a user name and password, hence its name, UserConnection. 
+ *
+ */
 public class UserConnection implements Connection {
 		
 	private Logger logger = Logger.getLogger("com.apstrata.client.java");
@@ -34,6 +38,13 @@ public class UserConnection implements Connection {
 	private String userPassword;
 	private MessageDigest md5;
 	
+	/**
+	 * @param baseUrl identifies the scheme and the apstrata server that is targeted. Ex: "https://sandbox.apstrata.com/"
+	 * @param accKey identifies the customer account
+	 * @param userName is the user login
+	 * @param userPassword is the user password
+	 * @throws Exception if unable to instantiate a MessageDigest that utilizes MD5
+	 */
 	public UserConnection(String baseUrl, String accKey, String userName, String userPassword) throws Exception {
 		try {
 			this.md5 = MessageDigest.getInstance("MD5");

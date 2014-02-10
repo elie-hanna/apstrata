@@ -8,6 +8,11 @@ import java.util.Map;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * this is the Connection implementation that generates request signatures for anonymous requests, hence its name, AnonymousConnection.
+ * it does not require any form of user name nor password. the 2 types of signatures it generates are identical.
+ *
+ */
 public class AnonymousConnection implements Connection {
 	
 	public List<NameValuePair> getSimpleRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {

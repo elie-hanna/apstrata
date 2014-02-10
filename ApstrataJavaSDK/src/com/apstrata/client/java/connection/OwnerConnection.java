@@ -24,6 +24,10 @@ import org.apache.http.message.BasicNameValuePair;
 
 import org.apache.log4j.Logger;
 
+/**
+ * this is the Connection implementation that generates request signatures using the account secret, hence its name, OwnerConnection. 
+ *
+ */
 public class OwnerConnection implements Connection {
 	
 	private static Logger logger = Logger.getLogger("com.apstrata.client.java");
@@ -33,6 +37,12 @@ public class OwnerConnection implements Connection {
 	private String accountSecret;
 	private MessageDigest md5;
 	
+	/**
+	 * @param baseUrl identifies the scheme and the apstrata server that is targeted. Ex: "https://sandbox.apstrata.com/"
+	 * @param accKey identifies the customer account
+	 * @param accSecret is the account secret
+	 * @throws Exception if unable to instantiate a MessageDigest that utilizes MD5
+	 */
 	public OwnerConnection(String baseUrl, String accKey, String accSecret) throws Exception {
 		try {
 			this.md5 = MessageDigest.getInstance("MD5");

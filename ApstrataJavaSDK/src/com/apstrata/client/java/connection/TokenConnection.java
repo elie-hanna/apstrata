@@ -15,6 +15,15 @@ import com.apstrata.client.java.Client.AuthMode;
 
 import org.apache.log4j.Logger;
 
+/**
+ * this is the Connection implementation that generates request signatures using an authentication token, hence its name, TokenConnection.
+ * this implementation takes care of obtaining and maintaining an authentication token in addition of course to generating request 
+ * signatures using the token. Obtaining a token requires a user name and password. the implementation uses these credentials to
+ * make a first request to VerifyCredentials and to regenerate a new token when the lifetime of the current expires.
+ * it also renews the current token transparently during its lifetime as required by the apstrata specification.
+ * token renewal during the course of its lifetime does not require user credentials.   
+ *
+ */
 public class TokenConnection implements Connection {
 	
 	final static String ACTION 					= APSDB_PREFIX + "action";
@@ -35,19 +44,41 @@ public class TokenConnection implements Connection {
 	private long connectionLifetimeTS = 0;
 	
 	private TokenController controller;
-			
+	
+	/**
+	 * @param baseUrl identifies the scheme and the apstrata server that is targeted. Ex: "https://sandbox.apstrata.com/"
+	 * @param accKey identifies the customer account
+	 * @param userName is the user login
+	 * @param userPassword is the user password
+	 * @throws Exception if unable to instantiate a MessageDigest that utilizes MD5
+	 */
 	public TokenConnection(String baseUrl, String accountKey, String userName, String userPassword) throws Exception {
 		this.userName = userName;
 		this.userConnection = new UserConnection(baseUrl, accountKey, userName, userPassword);
 		this.client = new Client(baseUrl, accountKey, this.userConnection);		
 	}
 	
+	/**
+	 * @param baseUrl identifies the scheme and the apstrata server that is targeted. Ex: "https://sandbox.apstrata.com/"
+	 * @param accKey identifies the customer account
+	 * @param userName is the user login
+	 * @param userPassword is the user password
+	 * @param tokenExpiry is the token expiry time (overriding the apstrata default)
+	 * @param tokenLifetime is the user password (overriding the apstrata default)
+	 * @throws Exception if unable to instantiate a MessageDigest that utilizes MD5
+	 */
 	public TokenConnection(String baseUrl, String accountKey, String userName, String userPassword, long tokenExpiry, long tokenLifetime) throws Exception {
 		this(baseUrl, accountKey, userName, userPassword);
 		this.tokenExpiry = tokenExpiry;
 		this.connectionLifetime = tokenLifetime;
 	}
 	
+	/**
+	 * call this method to make sure that a valid token is ready for use. the implementation does not kick off the initial token generation
+	 * until this method is invoked. subsequently, it transparently renews the token in the background upon expiry  
+	 * @return true if a valid token is available
+	 * @throws Exception
+	 */
 	synchronized public boolean validateToken() throws Exception {
 		
 		logger.info("Verifying token validity");

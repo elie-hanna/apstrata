@@ -46,28 +46,40 @@ public class Client {
 	private String baseUrl;
 	private String accountKey;
 	
-	
+	/**
+	 * @param baseUrl identifies the scheme and the apstrata server that is targeted. Ex: "https://sandbox.apstrata.com/"
+	 * @param accKey identifies the customer account
+	 * @param conn identifies the connection object responsible for signing requests
+	 */
 	public Client(String baseUrl, String accountKey, Connection conn) {
 		this.connection = conn;
 		this.baseUrl = baseUrl;
 		this.accountKey = accountKey;
 	}
 	
+	/**
+	 * @return the current Connection object used for signing requests
+	 */
 	public Connection getConn() {
 		return connection;
 	}
 	
+	/**
+	 * sets a connection object for use in signing requests
+	 * @param conn 
+	 */
 	public void setConn(Connection conn) {
 		this.connection = conn;
 	}
 	
 	/**
-	 * Returns a string representing the full URL with the additional necessary query string
+	 * Returns a string representing the full URL with the additional necessary query string including the request signature
 	 * 
-	 * @param action
-	 * @param parameters
-	 * @param files
-	 * @return String full URL
+	 * @param methodName identifies the API method being invoked
+	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode: identifies the signature type: Simple or complex
+	 * @return String: A request Url duly signed by the current connection
 	 * @throws Exception
 	 */
 	public String getSignedRequestUrl(String action, List<NameValuePair> parameters, Map<String, List<File>> files, AuthMode mode) throws Exception {
@@ -98,6 +110,7 @@ public class Client {
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
 	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode: identifies the signature type: Simple or complex
 	 * @return the String response as received from the apstrata sevice
 	 * @throws Exception
 	 */
@@ -113,7 +126,8 @@ public class Client {
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
 	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
-	 * @param httpClient is an AndroidHttpClient used by the client object. the calling code is expected to close this httpClient upon consuming the stream
+	 * @param mode is the signature type: simple or complex
+	 * @param httpClient is the HttpClient used by the client object. the calling code is expected to close this httpClient (as needed) upon consuming the stream
 	 * @return an input stream that returns the data sent by apstrata in response to the call 
 	 * @throws Exception
 	 */
@@ -130,6 +144,7 @@ public class Client {
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
 	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode: identifies the signature type: Simple or complex
 	 * @return the String response in JSON format as received from the apstrata sevice
 	 * @throws Exception
 	 */
@@ -147,6 +162,7 @@ public class Client {
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
 	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode: identifies the signature type: Simple or complex
 	 * @return the String response in XML format as received from the apstrata sevice
 	 * @throws Exception
 	 */
@@ -162,6 +178,7 @@ public class Client {
 	 * 
 	 * @param methodName identifies the API method being invoked
 	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param mode: identifies the signature type: Simple or complex
 	 * @param path is the path to the destination file, where the content of the file attachment is to be stored
 	 * @return a handle to the destination file, where the content is stored
 	 * @throws Exception
