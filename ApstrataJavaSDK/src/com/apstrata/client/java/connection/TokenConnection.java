@@ -49,6 +49,8 @@ public class TokenConnection implements Connection {
 	}
 	
 	synchronized public boolean validateToken() throws Exception {
+		
+		logger.info("Verifying token validaty");
 		boolean success = false;
 		if (this.token == null) {
 			success = this.generateToken();		
@@ -105,10 +107,9 @@ public class TokenConnection implements Connection {
 	}
 
 	protected synchronized boolean generateToken() {
-		boolean success = false;
 		
-		logger.debug(this.getClass().getName() + " generating new token to replace " + this.token);
-		
+		boolean success = false;		
+		logger.debug(this.getClass().getName() + " generating new token to replace " + this.token);		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair(ACTION, "generate"));
 		if (this.tokenExpiry > 0) {
@@ -190,7 +191,7 @@ public class TokenConnection implements Connection {
 		return getSimpleRequestSignature(action, parameters, files);
 	}
 		
-	public String getToken() {
+	public synchronized String getToken() {
 		return this.token;
 	}
 

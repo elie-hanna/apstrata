@@ -32,10 +32,10 @@ public class TestClient {
 	private static final String INVALID_PASSWORD = "blah";
 	
 	// time in seconds before refreshing a token
-	private static final long RENEW = 5;
+	private static final long RENEW = 30;
 	
 	// time in seconds before regenerating a token
-	private static final long REGENERATE = 15;
+	private static final long REGENERATE = 120;
 
 	private static final int MAX_LOOPS = 5;
 	
@@ -51,7 +51,6 @@ public class TestClient {
 			for (int i = 0; i < Math.round(REGENERATE / RENEW) * MAX_LOOPS; i++) {
 				
 				Thread.sleep(RENEW * 1000);
-				logger.info("Verifying token validaty after sleep " + i);
 				assertTrue(connection.validateToken());				
 			}
 		} catch (Exception e) {
