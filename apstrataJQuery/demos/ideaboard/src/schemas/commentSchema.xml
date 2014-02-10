@@ -1,9 +1,0 @@
-<schema>
-	<aclGroups>
-		<defaultAcl>
-			<read>anonymous</read>
-			<write>nobody</write>
-		</defaultAcl>
-	</aclGroups>
-	<fields></fields>
-</schema>
