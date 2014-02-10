@@ -37,7 +37,10 @@ public class TestClient {
 	// time in seconds before regenerating a token
 	private static final long REGENERATE = 120;
 
-	private static final int MAX_LOOPS = 5;
+	private static final int MAX_LOOPS = 10;
+	
+	// Time for thread sleep in ms between two tests
+	private static final long SLEEP = 5000;
 	
 	@Test
 	public void testTokenConnection() {
@@ -48,9 +51,9 @@ public class TestClient {
 			connection = new TokenConnection(BASE_URL, ACCOUNT_KEY, USER_NAME, PASSWORD, RENEW, REGENERATE);
 			boolean result = connection.validateToken();
 			assertTrue(result);
-			for (int i = 0; i < Math.round(REGENERATE / RENEW) * MAX_LOOPS; i++) {
+			for (int i = 0; i < MAX_LOOPS; i++) {
 				
-				Thread.sleep(RENEW * 1000);
+				Thread.sleep(SLEEP);
 				assertTrue(connection.validateToken());				
 			}
 		} catch (Exception e) {
@@ -66,7 +69,6 @@ public class TestClient {
 	}
 	
 	@Test
-	@Ignore
 	public void testTerminatedTokenConnection() {
 		
 		TokenConnection connection = null;
@@ -95,7 +97,6 @@ public class TestClient {
 	}
 	
 	@Test
-	@Ignore
 	public void testInvalidPassword() {		
 		
 		TokenConnection connection = null;
@@ -117,7 +118,6 @@ public class TestClient {
 	}
 	
 	@Test
-	@Ignore
 	public void testNonSecuredURL() {		
 		
 		TokenConnection connection = null;

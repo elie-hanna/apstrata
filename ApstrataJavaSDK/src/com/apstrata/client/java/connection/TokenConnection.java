@@ -50,7 +50,7 @@ public class TokenConnection implements Connection {
 	
 	synchronized public boolean validateToken() throws Exception {
 		
-		logger.info("Verifying token validaty");
+		logger.info("Verifying token validity");
 		boolean success = false;
 		if (this.token == null) {
 			success = this.generateToken();		
