@@ -89,9 +89,19 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 		var self = this
 		
 		// Build the form only after loading the definition
-		this._getdefinition().then(dojo.hitch(this,"_buildForm"), dojo.hitch(this,"_error"))
-		this._curtain = new apstrata.ui.Curtain({node: self.domNode})
+		this._getdefinition().then(dojo.hitch(this,"_buildForm"), dojo.hitch(this,"_error"));
+		this._curtain = new apstrata.ui.Curtain({node: self.domNode});
 
+//		this.frmMain.destroyDescendants = function(/*Boolean*/preserveDom) {
+//			dojo.forEach(this.getDescendants(), function(widget){
+//				if(widget.destroyRecursive){
+//					widget.destroyRecursive(preserveDom);
+//				}
+//			});
+//			
+//			this.inherited(arguments);
+//		},
+//		
 		this.inherited(arguments)
 	},
 	

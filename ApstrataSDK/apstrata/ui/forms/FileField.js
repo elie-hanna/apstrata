@@ -410,5 +410,13 @@ dojo.declare("apstrata.ui.forms.FileField",
 			this._displayAttachedFile();
 			this.startup();
 		}
-	}	
+	},
+	
+	/*
+	 * Tear Down Behavior of file field widget
+	 */
+	uninitialize: function(){
+		if(this.tooltip) this.tooltip.close();
+		return false;
+	},
 })
