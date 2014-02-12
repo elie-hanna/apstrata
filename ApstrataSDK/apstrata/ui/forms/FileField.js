@@ -175,11 +175,16 @@ dojo.declare("apstrata.ui.forms.FileField",
 				if (!isValid) {
 										
 					// Create an ad-hoc tooltip  
-					self.tooltip = new dijit.Tooltip({connectId: self.domNode, position:"before", label: self.missingMessage});
+					self.tooltip = new dijit.Tooltip({connectId: self.focusNode, position:"before", label: self.missingMessage});
 					self.tooltip.open(self.domNode);
 				} else { //Check if file name matches the regexp in case defined
 					if(this.regExp) {
 					   isValid = new RegExp(this.regExp, "i").test(self.attachedFile.fileInput.value)
+					   if (!isValid) {
+						   // Create an ad-hoc tooltip  
+						   self.tooltip = new dijit.Tooltip({connectId: self.focusNode, position:"before", label: self.invalidMessage});
+						   self.tooltip.open(self.domNode);
+					   }
 					}
 				}
 				return isValid;
