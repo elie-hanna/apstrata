@@ -101,10 +101,11 @@ try {
 		// load account creation logic and run it
 		var accountProcess = apsdb.require("widgets.Registration.createAccount");	
 		var resp = accountProcess.handleAccountCreation(request, user, advancedConfig, apsdb, logLevel);		
-		apsdb.log.debug("Create account response", {resp:resp});
 		if (resp.metadata.status == "failure") {		
-			deleteUser();
-			throw resp.metadata.errorDetail;
+			// MFE: No need to delete user, we just create him without an application
+			// deleteUser();
+			// MFE: No need to throw anymore, because registration can be completed without a user application
+			//throw resp.metadata.errorDetail; 
 		}else {
 			response = resp;
 		}
@@ -131,8 +132,10 @@ try {
 	var errorDetail = exception ? exception : "An error occurred";		
 	var resp = {
 		status: "failure", 		
-		errorDetail: encodeURIComponent(errorDetail) 
+		errorDetail: exception
 	};
+	
+
 	
 	var url = configuration.registrationRedirectUrl;
 	
