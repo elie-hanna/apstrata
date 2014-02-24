@@ -317,6 +317,11 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				}
 			}
 
+			if (definition.type == "file") { // Change the form method and encType to be compliant with file inputs				self.formGenerator._setFormFileEncType();
+				// Add a reference to the form generator
+				attr.formGenerator = this.formGenerator;
+			}
+			
 			if (definition.widget) {
 				switch (definition.widget) {
 					case "apstrata.ui.forms.FormGenerator.ComboBox":
@@ -388,19 +393,11 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				
 				if (definition.type == "file") {
 				
-					self.formGenerator._setFormFileEncType();
-					// Add a reference to the form generator
-					attr.formGenerator = this.formGenerator;
-					
 					// Use the FileField widget in the form
 					defaultWidget = apstrata.ui.forms.FileField;
 				}
 						
 				if (definition.type == "multiplefiles") {
-					
-					self.formGenerator._setFormFileEncType();
-					// Add a reference to the form generator
-					attr.formGenerator = this.formGenerator;
 					
 					// Use the FileField widget in the form
 					defaultWidget = apstrata.ui.forms.MultipleFileField;
