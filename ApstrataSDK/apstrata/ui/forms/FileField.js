@@ -171,7 +171,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 		this.validate = function(value, constraints) {
 						
 			if (self.attachedFile) {				
-				var isValid = self.attachedFile.fileInput.files.length > 0;
+				var isValid = dojo.isIE ? self.attachedFile.fileInput.value && self.attachedFile.fileInput.value.length > 0 : self.attachedFile.fileInput.files.length > 0;
 				if (!isValid) {
 										
 					// Create an ad-hoc tooltip  
