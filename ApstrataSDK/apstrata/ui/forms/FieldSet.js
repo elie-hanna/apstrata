@@ -317,7 +317,7 @@ dojo.declare("apstrata.ui.forms.FieldSet",
 				}
 			}
 
-			if (definition.type == "file") { //Set the form enctype file in case input type file
+			if (definition.type == "file" || definition.type == "multiplefiles" ) { //Set the form enctype file in case input type file
 				self.formGenerator._setFormFileEncType();
 				// Add a reference to the form generator
 				attr.formGenerator = this.formGenerator;
