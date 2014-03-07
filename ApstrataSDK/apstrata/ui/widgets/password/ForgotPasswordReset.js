@@ -13,6 +13,7 @@ dojo.declare("apstrata.ui.widgets.password.ForgotPasswordReset",
 {
 	widgetsInTemplate: true,
 	templateString: dojo.cache("apstrata.ui.widgets.password", "templates/ForgotPasswordReset.html"),
+	redirectUrl: "",
 	
 	
 	/**
@@ -139,7 +140,7 @@ dojo.declare("apstrata.ui.widgets.password.ForgotPasswordReset",
 	
 	redirectToLogin: function() {
 		
-		window.location = apstrata.apConfig["apstrata.cms"]["baseUrl"]+"/page.php?pageId=loginboard";
+		window.location = this.redirectUrl;
 	}
 
 });
