@@ -3,5 +3,8 @@
 		<div dojoAttachPoint='dvLoginWidget'></div>
 		<div dojoAttachPoint='dvPreferencesPanel' class='preferencesPanel'></div>
 		<div dojoAttachPoint='dvPreferences' class='preferencesLink'><a href="#" dojoAttachEvent="onclick: _preferences">Preferences</a></div>
+		{%if ShowForgotPass %}
+			<a href="javascript: void(0);" dojoAttachEvent="onclick: forgotPassword" class="forgotPass">Forgot Password</a>
+		{%endif%}
 	</div>
 </div>

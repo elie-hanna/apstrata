@@ -21,19 +21,21 @@
 dojo.provide('apstrata.ui.widgets.LoginWidget');
 
 dojo.require('dojox.dtl._Templated');
-dojo.require('dijit.form.ValidationTextBox')
+dojo.require('dijit.form.ValidationTextBox');
 
-dojo.require('apstrata.ui.forms.FormGenerator')
-dojo.require('apstrata.ui.FlashAlert')
-dojo.require('apstrata.ui.ApstrataAnimation')
-
-dojo.require('apstrata.sdk.Connection')
-dojo.require('apstrata.sdk.TokenConnection')
-dojo.require('apstrata.sdk.Client')
+dojo.require('apstrata.ui.forms.FormGenerator');
+dojo.require('apstrata.ui.FlashAlert');
+dojo.require('apstrata.ui.ApstrataAnimation');
+dojo.require('apstrata.sdk.Connection');
+dojo.require('apstrata.sdk.TokenConnection');
+dojo.require('apstrata.sdk.Client');
+dojo.require('apstrata.ui.widgets.password.ForgotPassword');
+dojo.require('apstrata.ui.Utility');
 
 dojo.require('apstrata.ui.widgets.LoginWidgetPreferences');
 
-dojo.requireLocalization("apstrata.ui.widgets", "login-widget")
+dojo.requireLocalization("apstrata.ui.widgets", "login-widget");
+
 
 dojo.declare("apstrata.ui.widgets.LoginWidget", 
 [dijit._Widget, dojox.dtl._Templated], 
@@ -43,8 +45,11 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 	requiredFieldIndicator: '*',
 	
 	autoLogin: false,
-	
+	ShowForgotPass : false,
 	formDefinition: null,
+	
+	fgp: null,
+	dlg: null,
 	
 	constructor: function(attrs) {
 		this.type = attrs.type
@@ -98,7 +103,25 @@ dojo.declare("apstrata.ui.widgets.LoginWidget",
 			dojo.style(this.dvPreferences, "display", "block")
 		}
 	},	
-
+	
+	forgotPassword: function() {
+		if(this.fgp == null){
+			this.fgp = new apstrata.ui.widgets.password.ForgotPassword();
+		}
+		if(this.dlg == null){
+			this.dlg = new dijit.Dialog({
+				"title": "Forgot Password",
+				"draggable": false,
+				"content": this.fgp.domNode
+			});
+		}
+		dojo.style(this.fgp.form.frmMain.domNode, "display", "");
+		dojo.style(this.fgp.form.domNode, "display", "");
+		dom.globals.handleResponseCleanup(this.fgp.messages, this.successClass, this.failureClass);
+		this.fgp.form.frmMain.reset();
+		this.dlg.show();
+	},
+	
 	login: function(values) {
 		
 		var self = this;
