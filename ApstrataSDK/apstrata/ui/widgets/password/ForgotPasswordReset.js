@@ -8,11 +8,12 @@ dojo.require("apstrata.sdk.Connection");
 dojo.require("apstrata.ui.forms.FormGenerator");
 dojo.require("dojox.validate.regexp");
 dojo.require('apstrata.ui.Utility');
+
 dojo.declare("apstrata.ui.widgets.password.ForgotPasswordReset",
 [dijit._Widget, dojox.dtl._Templated],
 {
 	widgetsInTemplate: true,
-	templateString: dojo.cache("apstrata.ui.widgets.password", "templates/ForgotPasswordReset.html"),
+	templatePath: dojo.moduleUrl("apstrata.ui.widgets.password", "templates/ForgotPasswordReset.html"),
 	redirectUrl: "",
 	
 	

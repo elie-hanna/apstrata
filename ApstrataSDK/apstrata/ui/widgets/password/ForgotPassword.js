@@ -13,7 +13,7 @@ dojo.declare("apstrata.ui.widgets.password.ForgotPassword",
 [dijit._Widget, dojox.dtl._Templated],
 {
 	widgetsInTemplate: true,
-	templateString: dojo.cache("apstrata.ui.widgets.password", "templates/ForgotPassword.html"),
+	templatePath: dojo.moduleUrl("apstrata.ui.widgets.password", "templates/ForgotPassword.html"),
 	
 	
 	/**
