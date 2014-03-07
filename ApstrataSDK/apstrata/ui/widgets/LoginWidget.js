@@ -20,24 +20,22 @@
 
 dojo.provide('apstrata.ui.widgets.LoginWidget');
 
-dojo.require("dojo.i18n");
-
 dojo.require('dojox.dtl._Templated');
-dojo.require('dijit.form.ValidationTextBox');
+dojo.require('dijit.form.ValidationTextBox')
 
-dojo.require('apstrata.ui.forms.FormGenerator');
-dojo.require('apstrata.ui.FlashAlert');
-dojo.require('apstrata.ui.ApstrataAnimation');
+dojo.require('apstrata.ui.forms.FormGenerator')
+dojo.require('apstrata.ui.FlashAlert')
+dojo.require('apstrata.ui.ApstrataAnimation')
 
-dojo.require('apstrata.sdk.Connection');
-dojo.require('apstrata.sdk.TokenConnection');
-dojo.require('apstrata.sdk.Client');
+dojo.require('apstrata.sdk.Connection')
+dojo.require('apstrata.sdk.TokenConnection')
+dojo.require('apstrata.sdk.Client')
 
 dojo.require('apstrata.ui.widgets.password.ForgotPassword');
 dojo.require('apstrata.ui.Utility');
 dojo.require('apstrata.ui.widgets.LoginWidgetPreferences');
 
-dojo.requireLocalization("apstrata.ui.widgets", "login-widget");
+dojo.requireLocalization("apstrata.ui.widgets", "login-widget")
 
 dojo.declare("apstrata.ui.widgets.LoginWidget", 
 [dijit._Widget, dojox.dtl._Templated], 
