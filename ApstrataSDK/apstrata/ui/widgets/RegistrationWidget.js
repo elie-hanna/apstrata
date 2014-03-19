@@ -163,7 +163,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		
 		if(this.showTermsAndCond=="true" && this.termsAndCondUrl!=""){
 			dojo.place("<span class=''>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text </span>", self.form.domNode,"before");
-			dojo.place("<span class=''><a href='" + this.termsAndCondUrl + "'>Terms and conditions</a></span>", this.form._fields.promotionCode.domNode,"after");
+			dojo.place("<span class=''>By clicking Join, you agree to Touch Cloud's <a href='" + this.termsAndCondUrl + "'>terms and conditions</a></span>", this.form._fields.promotionCode.domNode,"after");
 		}
 
 	},
