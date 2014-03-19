@@ -42,6 +42,9 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 	
 	apsdbScriptUserExists: "widgets.Registration.userExists",
 	apsdbScriptRegisterUser: "widgets.Registration.registerUser",
+	
+	showTermsAndCond: "false",
+	termsAndCondUrl: "",
 
 	definition: {
 		label: "User Registration",
@@ -69,7 +72,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 				]
 			}
 		],
-		actions: ['save']
+		actions: ['Join']
 	},
 	
 	/**
@@ -97,7 +100,15 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 					if (embedNodeAttrs[attr].name == "loginurl") {
 						loginUrl = embedNodeAttrs[attr].value;
 						this.loginurl = loginUrl;
-						break;
+						//break;
+					}
+					if (embedNodeAttrs[attr].name == "showTermsAndCond".toLowerCase()) {
+						this.showTermsAndCond = embedNodeAttrs[attr].value;
+						//break;
+					}
+					if (embedNodeAttrs[attr].name == "termsAndCondUrl".toLowerCase()) {
+						this.termsAndCondUrl = embedNodeAttrs[attr].value;
+						//break;
 					}
 				}
 			}
@@ -148,6 +159,11 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 
 		self.form.getField("confirmPassword").validator = function(value, constraints) {
 			return self.form.getField("password").get("value") == self.form.getField("confirmPassword").get("value")
+		}
+		
+		if(this.showTermsAndCond=="true" && this.termsAndCondUrl!=""){
+			dojo.place("<span class=''>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text </span>", self.form.domNode,"before");
+			dojo.place("<span class=''><a href='" + this.termsAndCondUrl + "'>Terms and conditions</a></span>", this.form._fields.promotionCode.domNode,"after");
 		}
 
 	},
