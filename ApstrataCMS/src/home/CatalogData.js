@@ -52,7 +52,8 @@ null,
 			{ name: "DeleteGroup", apiType: "identity", getSampleCode: "false", tryIt: "false" }, 
 			{ name: "DeleteSavedQuery", apiType: "persistence", getSampleCode: "false", tryIt: "false" }, 
 
-
+			{ name: "Billing API reference", apiType: "telecom", getSampleCode: "false", tryIt: "false" },
+			
 			{ name: "DeleteSchema", apiType: "persistence", getSampleCode: "false", tryIt: "false" }, 
 			{ name: "DeleteScript", apiType: "orchestration", getSampleCode: "false", tryIt: "false" }, 
 			{ name: "DeleteStore", apiType: "persistence", getSampleCode: "false", tryIt: "false" }, 
