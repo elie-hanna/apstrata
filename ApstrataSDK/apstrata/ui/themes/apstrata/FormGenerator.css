@@ -46,9 +46,19 @@
 	padding-top: 8px;
 }
 
+.appIcon {position: relative; width: 340px;}
+.filefielderror {
+background: transparent url(images/error-small.png) no-repeat top left;
+width: 18px;
+height: 18px;
+position: absolute;
+right: 70px;
+z-index: 1000;
+position: absolute;
+right: 70px;}
+
 .FormGenerator.row.dijiTextBox {
 	background: green;
-	
     -o-border-radius: 0px;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
