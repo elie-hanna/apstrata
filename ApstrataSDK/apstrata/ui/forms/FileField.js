@@ -20,6 +20,8 @@ dojo.declare("apstrata.ui.forms.FileField",
 	missingMessage: "This field is required (remove it with \"-\" if you need to leave it empty)",
 	
 	browseLabel: null,
+	
+	isValid : true,
 
 	regExp: null,
 	/*
@@ -70,6 +72,33 @@ dojo.declare("apstrata.ui.forms.FileField",
 	
 	getAttachedFileWidget: function() {
 		return this.attachedFile;
+	},
+	
+	onFocus: function() {
+		console.debug("onFocus");
+		if(dojo.isFunction(this.validate)) {
+			this.validate(this.value);
+		}
+		if(this.isValid) {
+			dojo.style(this.errorState, "display", "none")
+		} else {
+			dojo.style(this.errorState, "display", "")
+		}
+	},
+	// summary:
+	//		Called when the widget stops being "active" because
+	//		focus moved to something outside of it, or the user
+	//		clicked somewhere outside of it, or the widget was
+	//		hidden.
+	onBlur: function() {
+		if(this.tooltip) {
+			this.tooltip.close();
+			if(!this.isValid) {
+				dojo.style(this.errorState, "display", "")
+			} else {
+				dojo.style(this.errorState, "display", "none")
+			}
+		}
 	},
 	
 	/*
@@ -169,7 +198,7 @@ dojo.declare("apstrata.ui.forms.FileField",
 		// Add a custom validator to make this field required (otherwise, submitting an empty input
 		// will be interpreted by apstrata as an instruction to remove all attached files
 		this.validate = function(value, constraints) {
-						
+			this.isValid = true;	
 			if (self.attachedFile) {				
 				var isValid = dojo.isIE ? self.attachedFile.fileInput.value && self.attachedFile.fileInput.value.length > 0 : self.attachedFile.fileInput.files.length > 0;
 				if (!isValid) {
@@ -177,13 +206,17 @@ dojo.declare("apstrata.ui.forms.FileField",
 					// Create an ad-hoc tooltip  
 					self.tooltip = new dijit.Tooltip({connectId: self.focusNode, position:"before", label: self.missingMessage});
 					self.tooltip.open(self.domNode);
+					self.isValid = false;
+					self.focus();
 				} else { //Check if file name matches the regexp in case defined
 					if(this.regExp) {
 					   isValid = new RegExp(this.regExp, "i").test(self.attachedFile.fileInput.value)
 					   if (!isValid) {
 						   // Create an ad-hoc tooltip  
-						   self.tooltip = new dijit.Tooltip({connectId: self.focusNode, position:"before", label: self.invalidMessage});
+						   self.tooltip = new dijit.Tooltip({connectId: self.focusNode, position:"left", label: self.invalidMessage});
 						   self.tooltip.open(self.domNode);
+						   self.isValid = false;
+						   self.focus();
 					   }
 					}
 				}
