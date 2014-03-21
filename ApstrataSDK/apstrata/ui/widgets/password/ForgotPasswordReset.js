@@ -50,7 +50,7 @@ dojo.declare("apstrata.ui.widgets.password.ForgotPasswordReset",
 	resetToken: "",
 	
 	definition : {
-		label: "Reset Password",
+		label: "",
 		cssClass: "newClass",
 		submitAction: "Submit",
 		fieldset: [
