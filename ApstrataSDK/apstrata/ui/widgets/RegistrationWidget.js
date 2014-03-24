@@ -52,10 +52,10 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		fieldset: [
 			{name: "required", label: "", type: "subform", style: "form", cssClass:"column",
 				fieldset: [
-					{name: "name", label: "Name", type: "string", required: true},
-					{name: "email", label: "Email", type: "string", required: true},
-					{name: "password", label: "Password", type: "password", required: true},
-					{name: "confirmPassword", label: "Confirm Password", type: "password", required: true, attrs: {invalidMessage: "Passwords don't match"}}
+				    {name: "name", label: "Name", type: "string", required: true},
+				    {name: "email", label: "Email", type: "string", required: true},
+				    {name: "password", label: "Password", type: "password", required: true},
+				    {name: "confirmPassword", label: "Confirm Password", type: "password", required: true, attrs: {invalidMessage: "Passwords don't match"}}
 				]
 			},
 			{name: "optional", label: "", type: "subform", style: "form", cssClass:"column", 
@@ -100,15 +100,15 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 					if (embedNodeAttrs[attr].name == "loginurl") {
 						loginUrl = embedNodeAttrs[attr].value;
 						this.loginurl = loginUrl;
-						//break;
 					}
 					if (embedNodeAttrs[attr].name == "showTermsAndCond".toLowerCase()) {
 						this.showTermsAndCond = embedNodeAttrs[attr].value;
-						//break;
 					}
 					if (embedNodeAttrs[attr].name == "termsAndCondUrl".toLowerCase()) {
 						this.termsAndCondUrl = embedNodeAttrs[attr].value;
-						//break;
+					}
+					if (embedNodeAttrs[attr].name == "formdef".toLowerCase()) {
+						this.definition = dojo.fromJson(embedNodeAttrs[attr].value);
 					}
 				}
 			}
@@ -161,9 +161,8 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 			return self.form.getField("password").get("value") == self.form.getField("confirmPassword").get("value")
 		}
 		
-		if(this.showTermsAndCond=="true" && this.termsAndCondUrl!=""){
-			dojo.place("<div class='bannerWrapper'><p><span class='bannerContent'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy textLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy textLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text </span></p></div>", self.form.domNode,"before");
-			dojo.place("<span class='termsLink'>By clicking Join, you agree to Touch Cloud's <a href='" + this.termsAndCondUrl + "'>Terms and conditions</a></span>", this.form._fields.promotionCode.domNode,"after");
+		if(self.showTermsAndCond=="true" && self.termsAndCondUrl!=""){
+			dojo.place("<span class='termsLink'>By clicking Join, you agree to Touch Cloud's <a href='" + this.termsAndCondUrl + "'>terms and conditions</a></span>", self.form._fields.promotionCode.domNode,"after");
 		}
 
 	},
