@@ -72,7 +72,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 				]
 			}
 		],
-		actions: ['Join']
+		actions: ['save']
 	},
 	
 	/**
@@ -120,7 +120,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		var self = this
 
 		if (this.options && this.options.value) this.form = new apstrata.ui.forms.FormGenerator({definition: self.definition, value: self.options.value, save: dojo.hitch(self, "save")});
-		else this.form = new apstrata.ui.forms.FormGenerator({definition: self.definition, save: dojo.hitch(self, "save")}) 
+		else this.form = new apstrata.ui.forms.FormGenerator({definition: self.definition, join: dojo.hitch(self, "save")}) 
 		
 		dojo.place(this.form.domNode, this.domNode)
 		
