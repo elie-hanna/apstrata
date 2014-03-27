@@ -107,10 +107,11 @@
 
 
 /**Browse Image**/
-.appIcon {width: 340px; position: relative;}
+.appIcon {position: relative;}
+
+.appIcon .dijitFakeInput{position: absolute; left: 0;}
 
 .appIcon .dijitFileInputText {border: 1px solid #769dc0;
-padding: 2px 4px 4px 4px;
 background-image: url("images/button.png");
 background-position: center top;
 background-repeat: repeat-x;
@@ -119,9 +120,11 @@ background-color: #e9f4fe;
 border-radius: 4px;
 -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
 -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);}
-
-.appIcon .dijitFileInput {margin-top: -7px; position: relative; height: 1.3em;}
+box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+font-size: 14px;
+padding: 5px 3px;
+margin-top: -2px
+}
 
 
 .appIcon .filefielderror {
@@ -130,13 +133,24 @@ width: 18px;
 height: 18px;
 z-index: 1000;
 position: absolute;
-right: 70px;}
+left: 190px;
+top: 24px;
+}
 
+.appIcon .dijitFileInputVisible{ border: 1px solid red;
+border-radius: 4px;
+width: 212px;
+padding:5px 0;}
 
-.appIcon .dijitFileInputReal {width: 100%; position: absolute;
+.appIcon .dijitFileInputReal {
+	opacity:1;
+	border: 1px solid blue;
+	height: 26px;
+margin: 2px 0 0 -1px;
+width: auto; 
+font-size: 14px;
+position: absolute;
 z-index: 2;
-filter: alpha(opacity:0);
-opacity: 0;
-cursor: pointer;
-font-size: 16px;
-margin: 0px 0 0 39px;}
+/*filter: alpha(opacity:0);
+opacity: 0;*/
+cursor: pointer;}
