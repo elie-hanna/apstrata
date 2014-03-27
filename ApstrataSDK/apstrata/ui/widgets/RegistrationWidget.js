@@ -162,7 +162,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		}
 		
 		if(self.showTermsAndCond=="true" && self.termsAndCondUrl!=""){
-			dojo.place("<span class='termsLink'>By clicking Join, you agree to Touch Cloud's <a href='" + this.termsAndCondUrl + "'>terms and conditions</a></span>", self.form._fields.promotionCode.domNode,"after");
+			dojo.place("<span class='termsLink'>By clicking Join, you agree to Touch Cloud's <a href='" + self.termsAndCondUrl + "'>terms and conditions</a></span>", self.form._fields.promotionCode.domNode,"after");
 		}
 
 	},
