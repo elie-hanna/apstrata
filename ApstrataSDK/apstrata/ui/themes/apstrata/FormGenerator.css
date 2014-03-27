@@ -46,17 +46,6 @@
 	padding-top: 8px;
 }
 
-.appIcon {position: relative; width: 340px;}
-.filefielderror {
-background: transparent url(images/error-small.png) no-repeat top left;
-width: 18px;
-height: 18px;
-position: absolute;
-right: 70px;
-z-index: 1000;
-position: absolute;
-right: 70px;}
-
 .FormGenerator.row.dijiTextBox {
 	background: green;
     -o-border-radius: 0px;
@@ -115,3 +104,39 @@ right: 70px;}
 .multiplefilesfield .removeFileDiv {float: left; margin-top: -3px; position: relative; z-index: 10;}
 .multiplefilesfield .dijitFileInput {float: left;}
 .multiplefilesfield .removeFileDiv .dijitButtonNode {padding: 0px 6px 4px;}
+
+
+/**Browse Image**/
+.appIcon {width: 340px; position: relative;}
+
+.appIcon .dijitFileInputText {border: 1px solid #769dc0;
+padding: 2px 4px 4px 4px;
+background-image: url("images/button.png");
+background-position: center top;
+background-repeat: repeat-x;
+background-color: #e9f4fe;
+-moz-border-radius: 4px;
+border-radius: 4px;
+-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);}
+
+.appIcon .dijitFileInput {margin-top: -7px; position: relative; height: 1.3em;}
+
+
+.appIcon .filefielderror {
+background: transparent url(images/error-small.png) no-repeat top left;
+width: 18px;
+height: 18px;
+z-index: 1000;
+position: absolute;
+right: 70px;}
+
+
+.appIcon .dijitFileInputReal {width: 100%; position: absolute;
+z-index: 2;
+filter: alpha(opacity:0);
+opacity: 0;
+cursor: pointer;
+font-size: 16px;
+margin: 0px 0 0 39px;}

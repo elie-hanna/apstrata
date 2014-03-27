@@ -37,6 +37,8 @@
 					{name: "name", type: "string"},
 					{name: "email", type: "string", style: "color: green;"},
 					{name: "enable", type: "boolean"},
+					{name:"appIcon", store: "apstrata", label: "App Icon", type: "file", required : true, displayImage: true , regExp: "^.*(.jpeg|.jpg|.png)$" ,invalidMessage: "Icon should be PNG or JPEG",
+					missingMessage: "Icon is required"},
 
 					{name: "groups", label:"group", type: "subform", style: "row",
 						cardinality: {
@@ -59,6 +61,7 @@
 							{name: "attributeType", label: "type", type: "string", widget: "dijit.form.ComboBox", "formGenerator-options": ["string", "numeric", "date", "text"]},
 							{name: "attributeCode", label: "code", type: "string", widget: "dijit.form.FilteringSelect", "formGenerator-options": [{id:"c1", name:"code 1"},{id:"c2", name: "code 2"}]},
 							{name: "attributeValue", label: "value", type: "string"}
+							
 						]
 					},
 					
@@ -83,12 +86,14 @@
 				fieldset: [
 					{name: "attributes", label: "", type: "subform", style: "form", cssClass:"column",
 						fieldset: [
-							{name: "name", type: "string"},
+							{name: "name", label :"qwer" , type: "string"},
 							{name: "email", type: "string"},
 							{name: "password", type: "password"},
 							{name: "confirmPassword", type: "password"},
+							
 						]
 					},
+					
 					{name: "attributes", label: "", type: "subform", style: "form", cssClass:"column", 
 						fieldset: [
 							{name: "jobTitle", type: "string"},

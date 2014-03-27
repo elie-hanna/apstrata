@@ -3,7 +3,7 @@
 		<div style="padding-top: 1em">	
 			<label dojoAttachPoint="filefieldLabel" style="display:none">Field name</label>
 			<input dojoAttachPoint="filefieldName" type="text" style="display:none"></input>
-			<div style="display: none; float: right; z-index: 1000; color: red; position: absolute; margin-left: 200px;" dojoAttachPoint="errorState">X</div>
+			<div class="filefielderror" style="display: none;" dojoAttachPoint="errorState">&nbsp;</div>
 		</div>
 {% ifequal displayImage true %}
 		<img class="filefieldimage" dojoAttachPoint="fileImage" alt="{{value}}" style="display: none"/>
