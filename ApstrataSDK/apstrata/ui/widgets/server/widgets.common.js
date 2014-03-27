@@ -51,6 +51,12 @@ var extraStepNeeded = false;
 var extraStepScriptName = "";
 var adminEmail = "admin@gmail.com"; 
 
+//configuration used for mailchaimp subscription.
+var subscribeToMailchimp = false;
+var mailChimpApiKey = "";
+var mailChimpListId = "";
+var mailChimpURI = "";
+
 var configuration = {
 	projectName: projectName,
 	defaultUsersGroup: defaultUsersGroup,
@@ -63,6 +69,10 @@ var configuration = {
 	promotionCodes: promotionCodes,
 	extraStepNeeded: extraStepNeeded,
 	extraStepScriptName: extraStepScriptName,
+	subscribeToMailchimp: subscribeToMailchimp,
+	mailChimpApiKey: mailChimpApiKey,
+	mailChimpListId: mailChimpListId,
+	mailChimpURI: mailChimpURI,
 	templates: {
 		adminEmail: adminEmail,
 		subject: "$projectName Registration - Email Verification",

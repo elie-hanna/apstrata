@@ -115,7 +115,12 @@ try {
 	if (configuration.sendEmailOnceRegistrationConfirmed == true) {
 		sendEmail();
 	}
-					
+	
+	//subscribe user to mailchimp.
+	if (configuration.subscribeToMailchimp) {
+		subscribeUserToMailchimp();
+	}
+	
 	response = {status : "success", result : response }; 
 	var url = configuration.registrationRedirectUrl;
 	if (url && url != ""){
@@ -198,6 +203,33 @@ function sendEmail() {
 	};
 	
 	return apsdb.callApi("SendEmail", sendEmailInput, null);		
+}
+
+function subscribeUserToMailchimp() {
+	var apiKey = configuration.mailChimpApiKey;
+	var listId = configuration.mailChimpListId;
+	var requestURI = configuration.mailChimpURI + "?method=listSubscribe&output=json";
+	var theName = user.name.split(" ");
+	var requestParamsObj = {
+							 "apikey": apiKey, 
+							 "id": listId,
+						     "email_address": user.email,
+						     "merge_vars[FNAME]":theName[0],
+						     "merge_vars[LNAME]":theName.length > 1 ? theName[1]: theName[0],
+						     "double_optin":"false",
+						     "send_welcome": "false"
+						   };
+
+	var mailChimpCall = apsdb.callHttp(requestURI, "GET", requestParamsObj, null, null, null, true, null, false, false);
+	var fileContent = mailChimpCall.file.content;
+
+	eval('var returnValue = ' + fileContent);
+
+	if(typeof returnValue == "object"){
+		return {status : "failure", errorDetail: returnValue.error };
+	}else{
+		return {status : "success"};
+	}
 }
 
 ]]>
