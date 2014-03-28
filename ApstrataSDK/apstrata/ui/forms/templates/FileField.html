@@ -3,13 +3,13 @@
 		<div style="padding-top: 1em">	
 			<label dojoAttachPoint="filefieldLabel" style="display:none">Field name</label>
 			<input dojoAttachPoint="filefieldName" type="text" style="display:none"></input>
-			<div class="filefielderror" style="display: none;" dojoAttachPoint="errorState">&nbsp;</div>
 		</div>
 {% ifequal displayImage true %}
 		<img class="filefieldimage" dojoAttachPoint="fileImage" alt="{{value}}" style="display: none"/>
 {% else %} 
 		<a dojoAttachPoint="fileLink" target="_blank" style="display: none">{{value}}</a>
 {% endifequal %}
+		<div class="filefielderror" style="display: none;" dojoAttachPoint="errorState">&nbsp;</div>
 	</div>
 	<div dojoAttachPoint="removeFileDiv" class="removeFileDiv" style="display:none"></div>	
 	<button dojoType="dijit.form.Button" type="button" dojoAttachPoint="showNode" style="display:none">+</button>
