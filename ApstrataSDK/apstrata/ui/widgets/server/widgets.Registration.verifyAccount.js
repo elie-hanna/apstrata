@@ -206,16 +206,16 @@ function sendEmail() {
 }
 
 function subscribeUserToMailchimp() {
-	var apiKey = configuration.mailChimpApiKey;
+	var mailChimpApiKey = configuration.mailChimpApiKey;
 	var listId = configuration.mailChimpListId;
-	var requestURI = configuration.mailChimpURI + "?method=listSubscribe&output=json";
+	var requestURI = configuration.mailChimpURI;
 	var theName = user.name.split(" ");
 	var requestParamsObj = {
-							 "apikey": apiKey, 
+							 "apikey": mailChimpApiKey, 
 							 "id": listId,
 						     "email_address": user.email,
 						     "merge_vars[FNAME]":theName[0],
-						     "merge_vars[LNAME]":theName.length > 1 ? theName[1]: theName[0],
+						     "merge_vars[LNAME]":theName.length > 1 ? theName[1]: "",
 						     "double_optin":"false",
 						     "send_welcome": "false"
 						   };
