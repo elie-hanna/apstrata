@@ -141,27 +141,19 @@ dojo.declare("apstrata.sdk.Connection", null, {
 				signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 			}
 		}
-		if (dojo.isIE) {
-				var url = this.serviceURL
-				+ "/" + this.credentials.key
-				+ "/" + operation
-				+ "?apsws.time=" + timestamp
-				+ ((signature!="")?"&apsws.authSig=":"") + signature
-				+ ((user!="")?"&apsws.user=":"") + user
-				+ "&apsws.responseType=" + responseType
-				+ "&apsws.authMode=simple"
-				+ ((requestParams!="")?"&":"") + requestParams
-				+"&apsdb.force200ResponseStatus=true"
-		}else{
-				var url = this.serviceURL
-				+ "/" + this.credentials.key
-				+ "/" + operation
-				+ "?apsws.time=" + timestamp
-				+ ((signature!="")?"&apsws.authSig=":"") + signature
-				+ ((user!="")?"&apsws.user=":"") + user
-				+ "&apsws.responseType=" + responseType
-				+ "&apsws.authMode=simple"
-				+ ((requestParams!="")?"&":"") + requestParams
+		
+		var url = this.serviceURL
+		+ "/" + this.credentials.key
+		+ "/" + operation
+		+ "?apsws.time=" + timestamp
+		+ ((signature!="")?"&apsws.authSig=":"") + signature
+		+ ((user!="")?"&apsws.user=":"") + user
+		+ "&apsws.responseType=" + responseType
+		+ "&apsws.authMode=simple"
+		+ ((requestParams!="")?"&":"") + requestParams
+				
+		if (dojo.isIE && requestParams.indexOf("apsdb.force200ResponseStatus") < 0 ) {
+			url = url + +"&apsdb.force200ResponseStatus=true";
 		}
 				
 		return {url: url, signature: signature}
