@@ -74,39 +74,43 @@ dojo.declare("apstrata.ui.forms.FileField",
 		return this.attachedFile;
 	},
 	
+	//Validate attachment in case widget is focused
 	onFocus: function() {
-		console.debug("onFocus");
 		if(dojo.isFunction(this.validate)) {
 			this.validate(this.value);
 		}
 		if(this.isValid) {
-			dojo.style(this.errorState, "display", "none")
+			this.hideStateError();
 		} else {
-			dojo.style(this.errorState, "display", "")
+			this.displayStateError();
 		}
 	},
-	// summary:
-	//		Called when the widget stops being "active" because
-	//		focus moved to something outside of it, or the user
-	//		clicked somewhere outside of it, or the widget was
-	//		hidden.
+	
+	//Close tooltip when user moves out of FileField.js
 	onBlur: function() {
 		if(this.tooltip) {
 			this.tooltip.close();
-			if(!this.isValid) {
-				dojo.style(this.errorState, "display", "")
-			} else {
-				dojo.style(this.errorState, "display", "none")
-			}
 		}
+		if(!this.isValid) {
+			this.displayStateError();
+		} else {
+			this.hideStateError();
+		}
+	},
+	
+	displayStateError: function() {
+		dojo.style(this.errorState, "display", "")
+	},
+	
+	hideStateError: function() {
+		dojo.style(this.errorState, "display", "none")
 	},
 	
 	/*
 	 * This function is called upon validation
 	 */
 	focus: function() {
-		
-		this.domNode.focus();
+		dijit.focus(this.domNode);
 	},	
 	
 	set:function(name, value) {
@@ -193,30 +197,64 @@ dojo.declare("apstrata.ui.forms.FileField",
 				self.attachedFile.cancelNode.style.visibility = "visible";
 				dojo.fadeIn({ node: self.attachedFile.cancelNode, duration:275 }).play();
 			}
+			self.validate();
 		}
 		
+		//  Overriding the the reset button of the fileInput widget, to have validate
+		//  run at the end of it. We don't connect to it  since the connect event will run
+		// before the input is emptied by the reset
+		this.attachedFile.reset = function() {
+			// summary: on click of cancel button, since we can't clear the input because of
+			// 	security reasons, we destroy it, and add a new one in it's place.
+			self.attachedFile.disconnect(self.attachedFile._listener);
+			self.attachedFile.disconnect(self.attachedFile._keyListener);
+			if(self.attachedFile.fileInput){
+				self.attachedFile.domNode.removeChild(self.attachedFile.fileInput);
+			}
+			dojo.fadeOut({ node: self.attachedFile.cancelNode, duration:275 }).play();
+
+			// should we use cloneNode()? can we?
+			self.attachedFile.fileInput = document.createElement('input');
+			// dojo.attr(this.fileInput,{
+			//	"type":"file", "id":this.id, "name": this.name
+			//});
+			self.attachedFile.fileInput.setAttribute("type","file");
+			self.attachedFile.fileInput.setAttribute("id", self.attachedFile.id);
+			self.attachedFile.fileInput.setAttribute("name", self.attachedFile.name);
+			dojo.addClass(self.attachedFile.fileInput,"dijitFileInputReal");
+			self.attachedFile.domNode.appendChild(self.attachedFile.fileInput);
+
+			self.attachedFile._keyListener = self.attachedFile.connect(self.attachedFile.fileInput, "onkeyup", "_matchValue");
+			self.attachedFile._listener = self.attachedFile.connect(self.attachedFile.fileInput, "onchange", "_matchValue");
+			self.attachedFile.inputNode.value = "";
+			self.validate();
+		};
+	
 		// Add a custom validator to make this field required (otherwise, submitting an empty input
 		// will be interpreted by apstrata as an instruction to remove all attached files
 		this.validate = function(value, constraints) {
-			this.isValid = true;	
-			if (self.attachedFile) {				
+			self.isValid = true;	
+			if(self.tooltip) { //Close tooltip if opened
+				  self.tooltip.close();
+			}
+			self.hideStateError();
+			if (self.attachedFile) {	
 				var isValid = dojo.isIE ? self.attachedFile.fileInput.value && self.attachedFile.fileInput.value.length > 0 : self.attachedFile.fileInput.files.length > 0;
 				if (!isValid) {
-										
 					// Create an ad-hoc tooltip  
 					self.tooltip = new dijit.Tooltip({connectId: self.focusNode, position:"before", label: self.missingMessage});
 					self.tooltip.open(self.domNode);
+					self.displayStateError();
 					self.isValid = false;
-					self.focus();
 				} else { //Check if file name matches the regexp in case defined
 					if(this.regExp) {
-					   isValid = new RegExp(this.regExp, "i").test(self.attachedFile.fileInput.value)
+					   isValid = new RegExp(this.regExp, "i").test(self.attachedFile.fileInput.value);
 					   if (!isValid) {
 						   // Create an ad-hoc tooltip  
 						   self.tooltip = new dijit.Tooltip({connectId: self.focusNode, position:"left", label: self.invalidMessage});
 						   self.tooltip.open(self.domNode);
+						   self.displayStateError();
 						   self.isValid = false;
-						   self.focus();
 					   }
 					}
 				}
