@@ -153,7 +153,7 @@ dojo.declare("apstrata.sdk.Connection", null, {
 		+ ((requestParams!="")?"&":"") + requestParams
 				
 		if (dojo.isIE && requestParams.indexOf("apsdb.force200ResponseStatus") < 0 ) {
-			url = url + +"&apsdb.force200ResponseStatus=true";
+			url = url  +"&apsdb.force200ResponseStatus=true";
 		}
 				
 		return {url: url, signature: signature}
