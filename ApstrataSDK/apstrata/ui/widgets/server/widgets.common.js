@@ -22,6 +22,8 @@ var defaultUsersGroup = "users";
 // The auth key of the provisioning account on the client application
 var apstrataHomeEnvironment = "";
 
+var apstrataHomeUrl = apstrataHomeEnvironment + "/apsdb/rest";
+
 // The auth key of the provisioning account on the client application
 var apstrataHomeKey = "";
 
@@ -51,6 +53,10 @@ var extraStepNeeded = false;
 var extraStepScriptName = "";
 var adminEmail = "admin@gmail.com"; 
 
+var provisioningLogo = "";
+
+var storeName = "";
+
 //configuration used for mailchaimp subscription.
 var subscribeToMailchimp = false;
 var mailChimpApiKey = "";
@@ -61,7 +67,8 @@ var configuration = {
 	projectName: projectName,
 	defaultUsersGroup: defaultUsersGroup,
 	//defaultUnconfirmedRegistrationStore: defaultUnconfirmedRegistrationStore,	
-	apstrataHomeEnvironment: apstrataHomeEnvironment,	
+	apstrataHomeEnvironment: apstrataHomeEnvironment,
+	apstrataHomeUrl: apstrataHomeUrl,
 	apstrataHomeKey: apstrataHomeKey,
 	registrationType: registrationType,
 	registrationRedirectUrl: registrationRedirectUrl,
@@ -69,6 +76,8 @@ var configuration = {
 	promotionCodes: promotionCodes,
 	extraStepNeeded: extraStepNeeded,
 	extraStepScriptName: extraStepScriptName,
+	provisioningLogo: provisioningLogo,
+	storeName: storeName,
 	subscribeToMailchimp: subscribeToMailchimp,
 	mailChimpApiKey: mailChimpApiKey,
 	mailChimpListId: mailChimpListId,

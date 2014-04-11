@@ -189,11 +189,24 @@ function sendEmail() {
 	
 	var tokens = {
 	    projectName: configuration.projectName,
-	    user: user.name,	    
+	    user: user.name
+	};
+	
+	if(configuration.provisioningLogo && configuration.provisioningLogo != "") {
+		var params = {
+	    'apsdb.documentKey':'ApstrataLogo',
+	    'apsdb.fieldName':'apsdb_attachments',
+	    'apsdb.fileName':configuration.provisioningLogo
+	   };
+		if(configuration.storeName && configuration.storeName != "") {
+			params['apsdb.store'] = configuration.storeName;
+		}
+	    var result = apsdb.getApiCall(configuration.apstrataHomeUrl,"GET",configuration.apstrataHomeKey,"GetFile",params,null,false,false,false);		
+		tokens.logoUrl = result.baseURL + "?" + result.query;
 	}
 	
-	var emailSubject = widgetsCommon.parseTemplate(configuration.templatesConfirmed.subject, tokens)
-	var emailBody = widgetsCommon.parseTemplate(configuration.templatesConfirmed.body, tokens)
+	var emailSubject = widgetsCommon.parseTemplate(configuration.templatesConfirmed.subject, tokens);
+	var emailBody = widgetsCommon.parseTemplate(configuration.templatesConfirmed.body, tokens);
 	
 	var sendEmailInput = {
 		"apsma.from": configuration.adminEmail, 
