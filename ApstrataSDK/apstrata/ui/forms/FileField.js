@@ -19,6 +19,8 @@ dojo.declare("apstrata.ui.forms.FileField",
 	
 	missingMessage: "This field is required (remove it with \"-\" if you need to leave it empty)",
 	
+	invalidMessage: "Invalid value",
+	
 	browseLabel: null,
 	
 	isValid : true,
