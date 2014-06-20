@@ -172,9 +172,16 @@ dojo.declare("apstrata.ui.forms.FileField",
 	_addAttachmentNode: function() {				
 		
 		var self = this;
+		var fiedName = "";
+		
+		if(typeof this.name === "undefined" || this.name==null ){
+			fiedName = "apsdb_attachments";
+		} else{
+			fiedName = this.name;
+		}
 		
 		var params = {
-				name: this.name ? this.name : "apsdb_attachments", 
+				name: fiedName, 
 			    required: true 
 		};
 		
