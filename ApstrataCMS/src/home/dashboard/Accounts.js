@@ -25,7 +25,7 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 	 * params.connection: the connection to use
 	 */
 	constructor: function(params) {
-		this._accounts = [];
+		this._accounts = null;
 		if (params) {
 			
 			this.connection = new apstrata.sdk.Connection(params.credentials);
@@ -40,12 +40,12 @@ dojo.declare("apstrata.home.dashboard.Accounts",
 		var self = this	
 		
 		this._getAccounts().then(function(response) {
-			
+			self._accounts = [];
 			dojo.forEach(response.result.accounts, function(account) {
 				self._accounts.push(account)
 			})
 			
-				self.render();			
+			self.render();			
 		}, function(response){
 			var errorDetail = response.metadata.errorDetail;
 			var errorCode = response.metadata.errorCode;
