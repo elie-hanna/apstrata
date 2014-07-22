@@ -457,7 +457,8 @@ dojo.declare("apstrata.ui.forms.FormGenerator",
 					if (self.frmMain.validate()) {
 						var values = self.get("value") //.frmMain.get("value")
 						self.onAction(action, values, self)
-						if (self.options[action] && dojo.isFunction(self.options[action])) self.options[action](values, self)
+						var actionNoSpaces = action.split(' ').join(''); 
+						if (self.options[actionNoSpaces] && dojo.isFunction(self.options[actionNoSpaces])) self.options[actionNoSpaces](values, self)
 					}
 				}
 			})
