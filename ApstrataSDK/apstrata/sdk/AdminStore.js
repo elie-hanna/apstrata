@@ -115,6 +115,10 @@ dojo.declare("apstrata.sdk.AdminStore",
 				return this._queryAsList("ListUsers", "users", query, queryOptions)
 				break;
 
+			case 'devices':
+				return this._queryAsList("ListDevices", "devices", query, queryOptions)
+				break;
+
 			case 'groups': 
 				return this._queryAsList("ListGroups", "groups", query, queryOptions)
 				break;
@@ -178,6 +182,25 @@ dojo.declare("apstrata.sdk.AdminStore",
 				this.client.call("GetUser", params, null, clientOptions).then(
 					function(response) {
 						deferred.resolve({id: id, user: response.result.user})
+					},
+					function(response) {
+						deferred.reject(response.metadata)
+					}
+				)
+				break;
+
+			case 'devices':
+				var params = {
+					id: id
+				} 
+				
+				if (options && options["apsdb.includeFieldType"]) {
+					params["apsdb.includeFieldType"] = options["apsdb.includeFieldType"]
+				}
+				
+				this.client.call("GetDevice", params, null, clientOptions).then(
+					function(response) {
+						deferred.resolve({id: id, device: response.result.device})
 					},
 					function(response) {
 						deferred.reject(response.metadata)
@@ -298,6 +321,35 @@ dojo.declare("apstrata.sdk.AdminStore",
 				
 			case 'users':
 				var action = "SaveUser";
+				var request = object;
+		
+				if (request && request.domNode) {
+					self.client.call(action, requestParams, request.domNode, clientOptions).then(
+						function(response) {
+							deferred.resolve(true)
+						},
+						function(response) {
+							deferred.reject(response.metadata)
+						}
+					)
+				}else {
+					request = dojo.mixin(request, requestParams);
+					self.client.call(action, request, null, clientOptions).then(
+						function(response) {
+							deferred.resolve(true)
+						},
+						function(response) {
+							deferred.reject(response.metadata)
+						}
+					)
+				}
+				
+				
+				return deferred
+				break;
+				
+			case 'devices':
+				var action = "SaveDevice";
 				var request = object;
 		
 				if (request && request.domNode) {
@@ -478,6 +530,10 @@ dojo.declare("apstrata.sdk.AdminStore",
 				return this.put(object, options)
 				break;
 			
+			case 'devices':
+				return this.put(object, options)
+				break;
+			
 			case 'groups':
 				return this.put(object, options)
 				break;
@@ -526,6 +582,22 @@ dojo.declare("apstrata.sdk.AdminStore",
 				var action = "DeleteUser";
 				var request = {
 					login: id
+				};
+							
+				this.client.call(action, request, null, clientOptions).then(
+					function(response) {
+						deferred.resolve(true)
+					},
+					function(response) {
+						deferred.reject(response.metadata)
+					}
+				)
+				break;
+			
+			case 'devices':
+				var action = "DeleteDevice";
+				var request = {
+					id: id
 				};
 							
 				this.client.call(action, request, null, clientOptions).then(
