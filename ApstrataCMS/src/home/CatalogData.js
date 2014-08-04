@@ -114,12 +114,26 @@ null,
 		addTags: function(object, tags) {
 			var t
 			var tagLabel = "tags"
-			if (dojo.isArray(tags)) t = tags; else t=[tags]
+			t = tags;
 			
 			if (object[tagLabel]) {
-				if (dojo.isArray(object[tagLabel])) object[tagLabel].push(t)
+				if (dojo.isArray(object[tagLabel])) {
+					if (dojo.isArray(t)) {
+						dojo.forEach(t, function(i){
+							object[tagLabel].push(i);			
+						});
+					} else {
+						object[tagLabel].push(t);
+					}
+				} 
+				
 			} else {
-				object[tagLabel] = t
+				if (dojo.isArray(t)) {
+					object[tagLabel] = t
+				} else {
+					object[tagLabel] = [t];
+				}
+				
 			}
 		},
 		
