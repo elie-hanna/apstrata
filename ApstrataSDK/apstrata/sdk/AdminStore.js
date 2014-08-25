@@ -355,7 +355,7 @@ dojo.declare("apstrata.sdk.AdminStore",
 				if (request && request.domNode) {
 					self.client.call(action, requestParams, request.domNode, clientOptions).then(
 						function(response) {
-							deferred.resolve(true)
+							deferred.resolve(response)
 						},
 						function(response) {
 							deferred.reject(response.metadata)
@@ -365,7 +365,7 @@ dojo.declare("apstrata.sdk.AdminStore",
 					request = dojo.mixin(request, requestParams);
 					self.client.call(action, request, null, clientOptions).then(
 						function(response) {
-							deferred.resolve(true)
+							deferred.resolve(response)
 						},
 						function(response) {
 							deferred.reject(response.metadata)
