@@ -31,8 +31,9 @@ dojo.declare("apstrata.sdk.AdminStore",
 [apstrata.sdk.ObjectStore], 
 {
 	
-	setType: function(type) {
+	setType: function(type, dataProperty) {
 		this.type = type
+		this.dataProperty = dataProperty
 	},
 	
 	_queryAsList: function(action, dataProperty, query, queryOptions) {
@@ -104,7 +105,7 @@ dojo.declare("apstrata.sdk.AdminStore",
 			 	break;
 				
 			case 'scripts': 
-				return this._queryAsList("ListScripts", "scripts", query, queryOptions)
+				return this._queryAsList("ListScripts", (this.dataProperty && this.dataProperty != "") ? this.dataProperty : "scripts", query, queryOptions)
 				break;
 
 			case 'SavedQueries': 
