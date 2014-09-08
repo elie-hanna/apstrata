@@ -142,12 +142,17 @@ dojo.declare("apstrata.sdk.Connection", null, {
 			}
 		}
 		
+		var requesterParamName = "apsws.user";
+		if (apstrata.apConfig && apstrata.apConfig["signatureLegacyMode"] && apstrata.apConfig["signatureLegacyMode"] == "off") {
+			requesterParamName = "apsws.id";
+		} 
+		
 		var url = this.serviceURL
 		+ "/" + this.credentials.key
 		+ "/" + operation
 		+ "?apsws.time=" + timestamp
 		+ ((signature!="")?"&apsws.authSig=":"") + signature
-		+ ((user!="")?"&apsws.user=":"") + user
+		+ ((user!="")?"&" + requesterParamName + "=":"") + user
 		+ "&apsws.responseType=" + responseType
 		+ "&apsws.authMode=simple"
 		+ ((requestParams!="")?"&":"") + requestParams

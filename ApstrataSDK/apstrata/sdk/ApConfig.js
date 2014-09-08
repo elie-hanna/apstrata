@@ -43,4 +43,7 @@ dojo.setObject("apstrata.apConfig", {
             timeout: 10000
         }
     }
-})
+});
+
+//This parameter specifies if signature legacy mode is on or off. By default, it is on, so that the SDK remains backward compatible
+apstrata.apConfig["signatureLegacyMode"] = "on";

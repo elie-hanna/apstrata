@@ -76,6 +76,10 @@ dojo.declare("apstrata.sdk.TokenConnection",
 		 */
 		constructor: function (attrs) {
 			var self = this;
+			
+			if (apstrata.apConfig && apstrata.apConfig["signatureLegacyMode"] && apstrata.apConfig["signatureLegacyMode"] == "off") {
+				this.PARAMETER_USER = "apsws.id";
+			}
 
 			// 1. If credentials are passed to the constructor.
 			var isTokenMetadataLoaded = false;

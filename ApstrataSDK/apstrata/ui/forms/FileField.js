@@ -455,7 +455,12 @@ dojo.declare("apstrata.ui.forms.FileField",
 		};
 		
 		if (isUser && isUser == true) {
-			params.login = this.docKey;
+			if (apstrata.apConfig && apstrata.apConfig["signatureLegacyMode"] && apstrata.apConfig["signatureLegacyMode"] == "off") {
+				params["apsdb.id"] = this.docKey;
+			} else {
+				params.login = this.docKey;
+			}
+			
 		} else {
 			params["apsdb.documentKey"] = this.docKey;
 			params["apsdb.store"] = this.store;
@@ -486,6 +491,10 @@ dojo.declare("apstrata.ui.forms.FileField",
 			if (!docKeyField) {
 				//in case it is a user document
 				docKeyField = this.formGenerator.getField("login");
+				if (!docKeyField) {
+					//in case it is a device document
+					docKeyField = this.formGenerator.getField("id");
+				}
 			}
 			this.docKey = docKeyField.get("value");
 			

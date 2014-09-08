@@ -210,13 +210,18 @@ dojo.declare("apstrata.sdk.CompactClient", null, {
 			valueToHash = timestamp + this.credentials.key + operation + this.credentials.secret
 			signature = dojox.encoding.digests.MD5(valueToHash, dojox.encoding.digests.outputTypes.Hex)
 		}
+		
+		var requesterParamName = "apsws.user";
+		if (apstrata.apConfig && apstrata.apConfig["signatureLegacyMode"] && apstrata.apConfig["signatureLegacyMode"] == "off") {
+			requesterParamName = "apsws.id";
+		} 
 
 		var url = this.serviceURL
 				+ "/" + this.credentials.key
 				+ "/" + operation
 				+ "?apsws.time=" + timestamp
 				+ ((signature!="")?"&apsws.authSig=":"") + signature
-				+ ((user!="")?"&apsws.user=":"") + user
+				+ ((user!="")?"&" + requesterParamName + "=":"") + user
 				+ "&apsws.responseType=" + responseType
 				+ "&apsws.authMode=simple"
 				+ ((requestParams!="")?"&":"") + requestParams
