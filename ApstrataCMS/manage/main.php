@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="<?php print $GLOBALS["config"]["baseUrl"]?>/lib/ApstrataSDK/apstrata/sdk/apstrata.js"></script>
 		
 		<style type="text/css">
-			@import "<?php print $GLOBALS["config"]["baseUrl"].$GLOBALS["config"]["cmsBasePath"]?>/themes/cms/cms.css";
+			@import "<?php print $GLOBALS["config"]["baseUrl"]?>/themes/cms/cms.css";
         </style>
 
 		<?php 
