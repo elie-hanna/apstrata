@@ -210,7 +210,7 @@ dojo.declare("apstrata.sdk.AdminStore",
 				break;
 
 			case 'scripts': 
-				this.client.call("GetScript", {"apsdb.scriptName": id}, null, clientOptions).then(
+				this.client.call("GetScript", dojo.mixin({"apsdb.scriptName": id},options), null, clientOptions).then(
 					function(response) {
 						deferred.resolve({id: id, script: response.result})
 					},
