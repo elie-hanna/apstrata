@@ -49,7 +49,12 @@ dojo.declare("apstrata.sdk.AdminStore",
 		this.client.call(action, null, null, options).then(
 			function(response) {
 				if (dataProperty && dataProperty != "") {
-					def.resolve(response.result[dataProperty])
+					if (response.result[dataProperty]) {
+						def.resolve(response.result[dataProperty]);	
+					} else {
+						def.resolve([]);
+					}
+					
 				} else {
 					def.resolve(response.result)
 				}
