@@ -119,7 +119,7 @@ dojo.declare("apstrata.horizon.Panel",
 				})
 				
 				self.resize()
-				self.getContainer.autoScroll()
+				self.getContainer().autoScroll()
 			})
 			dojo.connect(icons, 'restore', function() {
 				var w = dojo.marginBox(self.getContainer().domNode)
@@ -129,7 +129,7 @@ dojo.declare("apstrata.horizon.Panel",
 				})
 
 				self.resize()
-				self.getContainer.autoScroll()
+				self.getContainer().autoScroll()
 			})
 		}
 
