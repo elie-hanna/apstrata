@@ -599,7 +599,7 @@ dojo.declare("apstrata.horizon.NewList",
 			// show delete nodes
 			dojo.query(".deleteCell", this.domNode).forEach(function(node){
 				dojo.style(node, "display", "table-cell")
-				if (self.multiEditMode) dojo.attr(node, "title", self.nls.TOOLTIP_DELETE_UNDELETE);
+				if (self.multiEditMode) dojo.attr(node, "title", self.nls.TOOLTIP_DELETE);
 				else dojo.attr(node, "title", self.nls.TOOLTIP_DELETE)
 			})
 
