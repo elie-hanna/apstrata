@@ -39,7 +39,7 @@ dojo.declare("apstrata.horizon.PanelIcons",
 			this.maximized = true
 			this.maximize()
 
-			this.img.setAttribute("src", self._horizonRoot + "/resources/images/pencil-icons/round-restore.png")
+			this.img.setAttribute("src", self._horizonRoot + "/resources/images/pencil-icons/round-minimize.png")
 		}
 	},
 	
