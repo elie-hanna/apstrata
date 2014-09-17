@@ -43,6 +43,7 @@
 		"loginUrl" => "dashboard",
 		"docroot" => $_SERVER["DOCUMENT_ROOT"]."/apstrataCMS",
    		"workbenchUrl" => "http://workbench.apstrata.com",
+   		"wikiUrl" => "http://wiki.apstrata.com",
 		"targetClusterUrl" => "https://sandbox.apstrata.com/apsdb/rest",
 
 		//

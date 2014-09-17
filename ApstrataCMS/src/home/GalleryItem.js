@@ -29,6 +29,6 @@ dojo.declare("apstrata.home.GalleryItem",
 	
 	_click: function() {
 		var self = this
-		new apstrata.home.GalleryItemViewer({iconUrl: self.iconUrl, data: self.data, resultSet: self.resultSet, cursor: self.cursor, gallery: self.gallery})
+		new apstrata.home.GalleryItemViewer({wikiUrl: apstrata.apConfig["apstrata.services"]["wikiUrl"], iconUrl: self.iconUrl, data: self.data, resultSet: self.resultSet, cursor: self.cursor, gallery: self.gallery})
 	}
 })	

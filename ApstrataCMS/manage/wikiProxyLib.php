@@ -1,7 +1,7 @@
 <?php 
 include_once ($config["docroot"]."/lib/simplehtmldom/simple_html_dom.php");
 function fetchContentFromWiki () {
-	$url = "http://wiki.apstrata.com/display/doc/" . urlencode($_GET['api']);
+	$url = $GLOBALS["config"]["wikiUrl"] . "/display/doc/" . urlencode($_GET['api']);
 	$html = file_get_html ($url);
 	$content = $html->find('#apstrata-summary'); 
 	$summary = $content[0];
@@ -19,7 +19,7 @@ function extractSummaryFromWikiNode ($summary) {
 	foreach ($anchors as $link) {
 		$link->target = '_new';
 		if ((strpos($link->href, 'http://') === FALSE ) && (strpos($link->href, 'https://') === FALSE)) {  
-			$link->href = 'http://wiki.apstrata.com' . $link->href;
+			$link->href = $GLOBALS["config"]["wikiUrl"] . $link->href;
 		}
 	}
 
