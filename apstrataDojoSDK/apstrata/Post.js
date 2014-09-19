@@ -44,6 +44,9 @@ dojo.declare("apstrata.Post",
 
 			//Fixing a permission denied error when accessing parent window callback in the hidden iframe domain.com is opened instead of www.domain.com
 			var baseUrl = apstrata.baseUrl;
+			var isAccessControlAllowOrigin = false;
+			if (apstrata.apConfig.config.accessControlAllowOrigin)
+				isAccessControlAllowOrigin = true;
 			if (window.location.href.indexOf("www.") == -1)
 				baseUrl = apstrata.baseUrl.replace("www.","");
 			if (attrs.redirectHref) this.request.apsws.redirectHref = attrs.redirectHref;
@@ -112,7 +115,7 @@ dojo.declare("apstrata.Post",
 			if (dojo.isIE && self.connection.isForce200ResponseStatusOnPOSTRequestsInIE) {
 				isForce200ResponseStatus = true;
 			}
-			self.url = self.buildActionUrl("jsoncdp", isForce200ResponseStatus)
+                        self.url = self.buildActionUrl("json", isForce200ResponseStatus)
 
 			var message = self.url
 
@@ -161,8 +164,22 @@ dojo.declare("apstrata.Post",
 			}
 			
 			self.log.debug("action url", self.url)
-			self.log.debug("request object", self.buildRequestObject())
-
+			var rqObj = self.buildRequestObject();
+			self.log.debug("request object", rqObj)
+			
+			var hasFiles = false;
+			if (isAccessControlAllowOrigin) { 
+				for(var h in formNode) {
+					for (var hh in formNode[h]) {
+						if (hh == "files" && formNode[h][hh] && formNode[h][hh].length > 0) {
+							hasFiles = true;
+							break;
+						}
+					}
+					if (hasFiles) break;
+				}
+			}
+			
 			var callAttrs = {
 				// The target URL on your webserver:
 				url: self.url,
@@ -172,17 +189,15 @@ dojo.declare("apstrata.Post",
 				
 				form: formNode,
 				
-//				content: attrs.fields,
-				
 				// the content to submit:
-				content: self.buildRequestObject(),
-				
-				// The used data format:
-				handleAs: "html",
+				content: rqObj,
 				
 				// Callback on successful call:
 				load: function(response, ioArgs) {
 					// Remove the post form on Safari 6 since we create one on every POST.
+					if (isAccessControlAllowOrigin && !hasFiles) {
+						self.response = response.response;
+					}
 					if (dojo.isSafari && dojo.isSafari >= 6) {
 						formNode.parentNode.removeChild(formNode);
 					}
@@ -221,7 +236,16 @@ dojo.declare("apstrata.Post",
 				}
 			}
 
-			// pass in all of the parameters manually:
-			dojo.io.iframe.send(callAttrs)
+			callAttrs.headers = {"X-Requested-With":null};
+			// form file upload still not supported with xhrPost
+			if (!isAccessControlAllowOrigin || hasFiles) {
+				callAttrs.handleAs = "html";
+				dojo.io.iframe.send(callAttrs);
+			} else {
+				callAttrs.handleAs = "json";
+				delete callAttrs.content["apsws.callback"];
+				delete callAttrs.content["apsws.redirectHref"];
+				dojo.xhrPost(callAttrs);
+			}
 		}
 })
