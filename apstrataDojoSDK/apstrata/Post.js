@@ -45,7 +45,7 @@ dojo.declare("apstrata.Post",
 			//Fixing a permission denied error when accessing parent window callback in the hidden iframe domain.com is opened instead of www.domain.com
 			var baseUrl = apstrata.baseUrl;
 			var isAccessControlAllowOrigin = false;
-			if (apstrata.apConfig.config.accessControlAllowOrigin)
+			if (apstrata.apConfig.config.accessControlAllowOrigin && (!dojo.isIE || dojo.isIE >=10)) // this new header is not supported in older IE versions
 				isAccessControlAllowOrigin = true;
 			if (window.location.href.indexOf("www.") == -1)
 				baseUrl = apstrata.baseUrl.replace("www.","");
