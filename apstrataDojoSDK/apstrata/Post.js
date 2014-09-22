@@ -229,6 +229,9 @@ dojo.declare("apstrata.Post",
 				
 				// Callback on errors. This function will NOT get called on IE since we force the response status to be 200 on IE.
 				error: function(response, ioArgs){
+          if (isAccessControlAllowOrigin && !hasFiles && response.responseText) {
+            self.response = JSON.parse(response.responseText).response;
+          }
 					self.handleError();
 					
 					// return the response for succeeding callbacks
