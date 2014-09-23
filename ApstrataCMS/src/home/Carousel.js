@@ -184,7 +184,7 @@ dojo.declare("apstrata.home.Carousel",
 		dojo.fadeIn({node: this.slideWrapper, duration: 3000}).play();
 
 		
-		var selectedNodes = dojo.query(".selected");
+		var selectedNodes = dojo.query(".selected", this.carouselContent);
 		if (selectedNodes) {
 			for (var x = 0; x < selectedNodes.length; x++) {
 				dojo.toggleClass(selectedNodes[x], "selected");
