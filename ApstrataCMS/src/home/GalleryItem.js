@@ -14,7 +14,7 @@ dojo.declare("apstrata.home.GalleryItem",
 		this.data = options.resultSet[options.cursor]
 		this.cursor = options.cursor
 		this.gallery = options.gallery
-		this.iconUrl = apstrata.apConfig["apstrata.cms"]["baseUrl"] + apstrata.apConfig["apstrata.cms"]["cmsBasePath"] + "/resources/icons/" + this.data.icon;
+		this.iconUrl = apstrata.apConfig["apstrata.cms"]["baseUrl"] + apstrata.apConfig["apstrata.cms"]["cmsBasePath"] + "/resources/icons/";
 	},
 	
 	postCreate: function() {
