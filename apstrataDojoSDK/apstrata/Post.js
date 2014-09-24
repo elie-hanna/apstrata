@@ -168,12 +168,17 @@ dojo.declare("apstrata.Post",
 			self.log.debug("request object", rqObj)
 			
 			var hasFiles = false;
+      // detect if the form being submitted contains files, proceed in the older way cause of xhrPost not passing files sources   
 			if (isAccessControlAllowOrigin) { 
 				for(var h in formNode) {
-					for (var hh in formNode[h]) {
-						if (hh == "files" && formNode[h][hh] && formNode[h][hh].length > 0) {
-							hasFiles = true;
-							break;
+					if (formNode[h] && formNode[h].type == "file") {
+						hasFiles = true;
+					} else { 
+						for (var hh in formNode[h]) {
+							if (hh == "files" && formNode[h][hh] && formNode[h][hh].length > 0) {
+								hasFiles = true;
+								break;
+							}
 						}
 					}
 					if (hasFiles) break;
