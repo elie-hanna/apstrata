@@ -23,6 +23,7 @@ dojo.require("dijit.form.ValidationTextBox");
 
 dojo.require("apstrata.ui.forms.FormGenerator");
 dojo.require("apstrata.horizon.Panel");
+dojo.require("dojox.validate.regexp");
 
 
 
@@ -47,7 +48,7 @@ dojo.declare("apstrata.home.dashboard.Profile",
 									{name: "confirmPassword", label: "Confirm Password", type:"password", readOnly: false, attrs: {invalidMessage: "Passwords don't match"}},
 									{name: "name", label: "Name", type: "string", readOnly: false, required: true},
 									{name: "jobTitle", label: "Job Title", type: "string", readOnly: false},
-									{name: "email", label: "e-Mail", type: "string", readOnly: false, required: true}																							
+									{name: "email", label: "e-Mail", type: "string", readOnly: false, required: true, attrs: {regExpGen: dojox.validate.regexp.emailAddress, invalidMessage: "Enter a valid email address"}}																							
 								]					
 							},
 							{name: "attributes", label: "Company information", type: "subform", style: "form", cssClass:"section",
