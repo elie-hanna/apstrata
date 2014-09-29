@@ -107,7 +107,7 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 			function(e) {
 				dojo.removeClass(self.dvDescription, "waitAnimation")
 				//self.dvDescription.innerHTML = "Error loading text"
-				self.dvDescription.innerHTML = "Coming soon..."
+				self.dvDescription.innerHTML = "The documentation for this API is coming soon."
 				dojo.style(dojo.byId("viewDocumentation"), "display", "none");
 			}
 		)
