@@ -102,10 +102,13 @@ dojo.declare("apstrata.home.GalleryItemViewer",
 			function(text) {
 				dojo.removeClass(self.dvDescription, "waitAnimation")
 				self.dvDescription.innerHTML = text
+				dojo.style(dojo.byId("viewDocumentation"), "display", "");
 			},
 			function(e) {
 				dojo.removeClass(self.dvDescription, "waitAnimation")
-				self.dvDescription.innerHTML = "Error loading text"
+				//self.dvDescription.innerHTML = "Error loading text"
+				self.dvDescription.innerHTML = "Coming soon..."
+				dojo.style(dojo.byId("viewDocumentation"), "display", "none");
 			}
 		)
 
