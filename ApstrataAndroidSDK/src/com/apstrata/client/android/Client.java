@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -96,14 +97,14 @@ public class Client {
 	/**
 	 * Returns a string representing the full URL with the additional necessary query string including the request signature
 	 * 
-	 * @param methodName identifies the API method being invoked
-	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
-	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
-	 * @param mode: identifies the signature type: Simple or complex
-	 * @return String: A request Url duly signed by the current connection
-	 * @throws Exception
+	 * @param methodName 	identifies the API method being invoked
+	 * @param params 		a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param files 		a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode			identifies the signature type: Simple or complex
+	 * @return 				A request Url duly signed by the current connection
+	 * @throws 				Exception
 	 */
-	public String getSignedRequestUrl(String methodName, List<NameValuePair> parameters, Map<String, List<File>> files, AuthMode mode) throws Exception {
+	public String getSignedRequestUrl(String methodName, List<NameValuePair> params, Map<String, List<File>> files, AuthMode mode) throws Exception {
 		if (this.conn == null) {
 			throw new Exception("null connection");
 		}
@@ -113,8 +114,8 @@ public class Client {
 		String url = this.baseUrl + "/" + this.accountKey + "/" + methodName + "?";
 		
 		List<NameValuePair> requestSignatureParams = (mode == AuthMode.SIMPLE? 
-					this.conn.getSimpleRequestSignature(methodName, parameters, files): 
-					this.conn.getComplexRequestSignature(methodName, parameters, files));
+					this.conn.getSimpleRequestSignature(methodName, params, files): 
+					this.conn.getComplexRequestSignature(methodName, params, files));
 		
 		for (Iterator<NameValuePair> iterator = requestSignatureParams.iterator(); iterator.hasNext();) {
 			NameValuePair nameValuePair = (NameValuePair) iterator.next();
@@ -125,15 +126,32 @@ public class Client {
 		return url;
 	}
 	
+	public String getSignedFileUrl(String documentKey, String fieldName, String fileName, AuthMode mode) throws Exception {
+		String url = "";
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("apsdb.documentKey", documentKey));
+		params.add(new BasicNameValuePair("apsdb.fieldName", fieldName));
+		params.add(new BasicNameValuePair("apsdb.fileName", fileName));
+		
+		url =  this.getSignedRequestUrl("GetFile", params, null, mode);
+		for (Iterator<NameValuePair> iterator = params.iterator(); iterator.hasNext();) {
+			NameValuePair nameValuePair = (NameValuePair) iterator.next();
+			url = url + "&" + URLEncoder.encode(nameValuePair.getName(), "utf-8") + "=" + URLEncoder.encode(nameValuePair.getValue(), "utf-8"); 
+		}
+		
+		return url;
+	}
+	
 	/**
 	 * invokes an apstrata api by specifying the api name and parameters
 	 * 
-	 * @param methodName identifies the API method being invoked
-	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
-	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
-	 * @param mode: identifies the signature type: Simple or complex
-	 * @return the String response as received from the apstrata sevice
-	 * @throws Exception
+	 * @param methodName 	identifies the API method being invoked
+	 * @param params 		a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param files 		a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode			identifies the signature type: Simple or complex
+	 * @return 				the String response as received from the apstrata sevice
+	 * @throws 				Exception
 	 */
 	public String callAPI(String methodName, List<NameValuePair> params, Map<String, List<File>> files, AuthMode mode) throws Exception {
 		String apiUrl = this.getSignedRequestUrl(methodName, params, files, mode);
@@ -144,12 +162,12 @@ public class Client {
 	 * invokes an apstrata api by specifying the api name, parameters and an HttpClient object. the calling code is responsible 
 	 * for closing the httpClient upon consuming the stream. This method is used typically to request apstrata file attachments
 	 * 
-	 * @param methodName identifies the API method being invoked
-	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
-	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
-	 * @param mode is the signature type: simple or complex
-	 * @param httpClient is the HttpClient used by the client object. the calling code is expected to close this httpClient (as needed) upon consuming the stream
-	 * @return an input stream that returns the data sent by apstrata in response to the call 
+	 * @param methodName 	identifies the API method being invoked
+	 * @param params 		a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param files 		a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode 			the signature type: simple or complex
+	 * @param httpClient 	the HttpClient used by the client object. the calling code is expected to close this httpClient (as needed) upon consuming the stream
+	 * @return 				an input stream that returns the data sent by apstrata in response to the call 
 	 * @throws Exception
 	 */
 	public InputStream callAPIStream(String methodName, List<NameValuePair> params, Map<String, List<File>> files, AuthMode mode, HttpClient httpClient) throws Exception {
@@ -162,12 +180,12 @@ public class Client {
 	 * this would be the same as calling {@link #callAPI(String, List, Map)} after setting the parameter {@link #RESPONSE_TYPE_PARAM} 
 	 * with the single value {@link #RESPONSE_TYPE_JSON} 
 	 * 
-	 * @param methodName identifies the API method being invoked
-	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
-	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
-	 * @param mode: identifies the signature type: Simple or complex
-	 * @return the String response in JSON format as received from the apstrata sevice
-	 * @throws Exception
+	 * @param methodName	identifies the API method being invoked
+	 * @param params 		a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param files 		a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode			identifies the signature type: Simple or complex
+	 * @return 				the String response in JSON format as received from the apstrata sevice
+	 * @throws 				Exception
 	 */
 	public String callAPIJson(String methodName, List<NameValuePair> params, Map<String, List<File>> files, AuthMode mode) throws Exception {
 		List<NameValuePair> paramsUpdated = setApiParam(params, RESPONSE_TYPE_PARAM, RESPONSE_TYPE_JSON);
@@ -180,12 +198,12 @@ public class Client {
 	 * this would be the same as calling {@link #callAPI(String, List, Map)} after setting the parameter {@link #RESPONSE_TYPE_PARAM} 
 	 * with the single value {@link #RESPONSE_TYPE_XML} 
 	 * 
-	 * @param methodName identifies the API method being invoked
-	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
-	 * @param files is a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
-	 * @param mode: identifies the signature type: Simple or complex
-	 * @return the String response in XML format as received from the apstrata sevice
-	 * @throws Exception
+	 * @param methodName 	identifies the API method being invoked
+	 * @param params 		a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param files 		a map representing file parameters to be sent to the server along with the request. An entry's key is the parameter name, and the value is a list of files representing the [multiple] value[s] for this parameter
+	 * @param mode			identifies the signature type: Simple or complex
+	 * @return 				the String response in XML format as received from the apstrata sevice
+	 * @throws 				Exception
 	 */
 	public String callAPIXml(String methodName, List<NameValuePair> params, Map<String, List<File>> files, AuthMode mode) throws Exception {
 		List<NameValuePair> paramsUpdated = setApiParam(params, RESPONSE_TYPE_PARAM, RESPONSE_TYPE_XML);
@@ -197,12 +215,12 @@ public class Client {
 	 * invokes an apstrata file-returning api by specifying the api name, parameters and the path to the destination file. 
 	 * This method is used typically to request apstrata file attachments
 	 * 
-	 * @param methodName identifies the API method being invoked
-	 * @param params is a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
-	 * @param mode: identifies the signature type: Simple or complex
-	 * @param path is the path to the destination file, where the content of the file attachment is to be stored
-	 * @return a handle to the destination file, where the content is stored
-	 * @throws Exception
+	 * @param methodName 	identifies the API method being invoked
+	 * @param params 		a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
+	 * @param mode			identifies the signature type: Simple or complex
+	 * @param path 			the path to the destination file, where the content of the file attachment is to be stored
+	 * @return 				a handle to the destination file, where the content is stored
+	 * @throws 				Exception
 	 */
 	public File callAPIFile(String methodName, List<NameValuePair> params, AuthMode mode, String path) throws Exception {
 		String apiUrl = getSignedRequestUrl(methodName, params, null, mode);
