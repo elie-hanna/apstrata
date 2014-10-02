@@ -175,7 +175,14 @@ dojo.declare("apstrata.cms.PageEditor",
 		dojo.connect(this.saveBtn, "onClick", saveParts);
 		
 		var closeMe = dojo.hitch(this, this.close);
-		dojo.connect(this.closeBtn, "onClick", closeMe);		
+		dojo.connect(this.closeBtn, "onClick", closeMe);	
+		
+		
+		//This is a workaround for displaying the css and javascript fields values.
+		var cssValue = 	this._formGenerator.value.css;
+		if (cssValue) {
+			this._formGenerator.getField("css").set("value", cssValue);	
+		}
 	},
 	
 	/*
