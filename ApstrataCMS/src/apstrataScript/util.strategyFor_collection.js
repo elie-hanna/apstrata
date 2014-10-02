@@ -35,7 +35,7 @@ function execute(params){
 		}
 		
 		if (pageSelection) {
-			result["pageSelection"] = getPageSelection(pageSelection, apsdb, store).result;
+			result["pageSelection"] = getPageSelection(pageSelection, apsdb, store);
 		}
 			
 	}catch(exception) {
@@ -60,24 +60,28 @@ function getPageSelection(pageSelection, apsdb, store) {
 	
 	try {		
 		
+		pageSelection = [].concat(pageSelection);
+		
 		var results = []; 
 		for (var i = 0; i < pageSelection.length; i++) {
 		
 			var queryRequest = {
-			"apsdb.forceCurrentSnapshot": true,
+			"apsdb.forceCurrentSnapshot": "true",
 			"apsdb.store": "apstrata",
 			"apsdb.query":  "apsdb.documentKey=\"" + pageSelection[i] + "\"",
-			"apsdb.lock": true,
 			"apsdb.queryFields": "*"
 			};
 		
 			apsdb.log.debug("pageSelection request " + i, {params: queryRequest});
 		
-			var result = apsdb.callApi("Query", queryRequest, null);			
-			if (result && result.documents) {
-				results.push(result.documents[0]);
+			var result = apsdb.callApi("Query", queryRequest, null);
+			apsdb.log.debug("Page Selection", {"result": result});
+			if (result && result.result && result.result.documents) {
+				results.push(result.result.documents[0]);
 			}		
-		}		
+		}
+		
+		return results;
 	}catch(exception) {
 	
 		throw exception;
