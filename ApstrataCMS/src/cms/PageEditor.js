@@ -179,9 +179,11 @@ dojo.declare("apstrata.cms.PageEditor",
 		
 		
 		//This is a workaround for displaying the css and javascript fields values.
-		var cssValue = 	this._formGenerator.value.css;
-		if (cssValue) {
-			this._formGenerator.getField("css").set("value", cssValue);	
+		if (this._formGenerator && this._formGenerator.value) {
+			var cssValue = 	this._formGenerator.value.css;
+			if (cssValue) {
+				this._formGenerator.getField("css").set("value", cssValue);	
+			}
 		}
 	},
 	
