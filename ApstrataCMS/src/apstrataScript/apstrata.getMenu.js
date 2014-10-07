@@ -32,8 +32,8 @@ if (queryResult &&
 
 	strOutput = 'array ( "pageFound" => "1",\n'
 	strOutput +=  '"menuPhp" => ' + _phpEscape(document["menuPhp"]) + ",\n"
-	strOutput +=  '"leftFooterPhp" => ' + _phpEscape(document["menuPhp"]) + ",\n"
-	strOutput +=  '"rightFooterPhp" => ' + _phpEscape(document["menuPhp"]) + ");"
+	strOutput +=  '"leftFooterPhp" => ' + _phpEscape(document["leftFooterPhp"]) + ",\n"
+	strOutput +=  '"rightFooterPhp" => ' + _phpEscape(document["rightFooterPhp"]) + ");"
 
 } else {
 	strOutput += 'array ( "pageFound" => "0" )'
