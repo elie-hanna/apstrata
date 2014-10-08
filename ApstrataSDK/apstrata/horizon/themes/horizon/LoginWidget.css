@@ -1,6 +1,6 @@
 .LoginWidget {
 	position: absolute;
-	z-index: 6000;
+	z-index: 200;
 }
 
 .LoginWidget .login {

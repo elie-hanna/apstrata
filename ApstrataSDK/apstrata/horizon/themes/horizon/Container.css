@@ -22,6 +22,6 @@ div.horizon {
 	opacity: .25;
 	background: white;
 	position: absolute;
-	z-index: 4999; 
+	z-index: 100; 
 }
 
