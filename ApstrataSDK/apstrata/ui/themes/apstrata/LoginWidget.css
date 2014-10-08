@@ -74,4 +74,8 @@
 .LoginWidget .login .preferencesLink a:hover {
 	color: #339;	
 }
-
+.LoginWidget .tooltip-wrap {min-width: 290px; font-size: 12px; right: 0; top: 19px; position: absolute; display: none; border-radius: 5px; padding: 8px; color: #fff;}
+.LoginWidget .tooltip {float: right; font-size: 13px; position: relative;}
+.LoginWidget .tooltip a {font-size: 12px; text-decoration: none; color: #999; padding-bottom: 4px;}
+.LoginWidget .tooltip a:hover .tooltip-wrap {display: block; background: rgba(0,0,0,0.75);}
+.LoginWidget .tooltip .link {cursor: pointer; text-decoration: underline;}

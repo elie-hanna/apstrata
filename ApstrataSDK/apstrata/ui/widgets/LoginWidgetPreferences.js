@@ -75,7 +75,11 @@ dojo.declare("apstrata.ui.widgets.LoginWidgetPreferences",
 		try {
 			var prefs = dojo.fromJson(dojo.cookie(this.applicationId + "-prefs"))
 			if (!prefs) {
-				prefs = {};
+				prefs = {
+					serviceURL: apstrata.apConfig["apstrata.sdk"].Connection.serviceURL,
+					//timeout: this._TIMEOUT_VALUES[apstrata.apConfig["apstrata.sdk"].Connection.timeout]
+					timeout: apstrata.apConfig["apstrata.sdk"].Connection.timeout
+				};
 			} else {
 				this.onChange(prefs)
 			}

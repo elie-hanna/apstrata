@@ -1,6 +1,15 @@
 <div class="LoginWidget">{{ }}
+	
 	<div class="login" dojoAttachPoint='dvLogin'>
-		<div dojoAttachPoint='dvLoginWidget'></div>
+		<div dojoAttachPoint='dvLoginWidget'>
+			{%if showHelpLink %}
+				<div class="tooltip">
+					<a target="_blank" href="{{ websiteUrl }}">Help
+						<div class="tooltip-wrap">You can get your application key and secret by logging into the website <span class="link">{{ websiteUrl }}</span></div>
+					</a>
+				</div>
+			{%endif%}
+		</div>
 		<div dojoAttachPoint='dvPreferencesPanel' class='preferencesPanel'></div>
 		<div dojoAttachPoint='dvPreferences' class='preferencesLink'><a href="#" dojoAttachEvent="onclick: _preferences">Preferences</a></div>
 		{%if ShowForgotPass %}
