@@ -178,6 +178,16 @@ dojo.declare("apstrata.horizon.PanelAlert",
 			width: d.w + "px",
 			height: (neededHeight) + "px"
 		})
+		
+		
+		//Check if part of the alert is outside the viewport and adjust accordingly
+		var rect = this.domNode.getBoundingClientRect();
+		var windowInnerWidth = window.innerWidth || document.documentElement.clientWidth; 
+		if (rect.right >= windowInnerWidth) {
+			var diff = rect.right - windowInnerWidth + 10;
+			var left = dojo.style(this.domNode, "left");
+			dojo.style(this.domNode, "left", (left - diff) + "px");
+		}
 	},
  	
  	postCreate: function() {
