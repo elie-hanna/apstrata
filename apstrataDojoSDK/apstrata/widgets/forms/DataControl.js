@@ -296,7 +296,8 @@ dojo.declare("apstrata.widgets.forms.DataControl",
 						self._undimForm()
 						
 						if (self.successMessageHTML) { 
-							dojo.place(self.successMessageHTML, self.bindForm.domNode, "replace");
+							//New safari on OSX Yosemite, breaks with dojo.place ("replace") with a null parentNode.
+							try{dojo.place(self.successMessageHTML, self.bindForm.domNode, "replace");}catch(e){}                      
 						} else {
 							self.bindForm.domNode.innerHTML = "<h1>Successful submission</h1>";
 						}
