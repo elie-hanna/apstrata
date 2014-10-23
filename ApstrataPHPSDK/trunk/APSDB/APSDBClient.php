@@ -25,6 +25,7 @@ class APSDBClient
 {
     private $accountKey;
     private $accountSecret;
+    private $serviceURL;
     private $user;
     private $APS_DB_URL;
 
@@ -38,7 +39,9 @@ class APSDBClient
      * 		This parameter should be the Apstrata authKey of your account.
      * @param string $accountSecret (mandatory)
      * 		This parameter should be the Apstrata secret of your account.
-     *
+     * @param string $serviceURL
+     * 		This parameter should be the serviceURL.
+	 *	
      * User request:
      *
      * @param string $accountKey (mandatory)
@@ -47,13 +50,19 @@ class APSDBClient
      * 		This parameter should be the user's password.
      * @param string $userLogin (mandatory)
      * 		This parameter should be the user's login.
+     * 
+     * @param string $serviceURL
+     * 		This parameter should be the serviceURL.
+
      *
      * Anonymous request:
      *
      * @param string $accountKey (mandatory)
      * 		This parameter should be the Apstrata authKey of your account.
+     * @param string $serviceURL
+     * 		This parameter should be the serviceURL.
      */
-    public function  APSDBClient($accountKey, $accountSecret = null, $userLogin = null)
+    public function  APSDBClient($accountKey, $accountSecret = null, $userLogin = null, $serviceURL = null)
     {
         $this->accountKey = $accountKey;
         $this->userLogin = $userLogin;
@@ -65,11 +74,18 @@ class APSDBClient
             // If this is an owner request then the second parameter $accountSecret is the account's secret
             $this->accountSecret = $accountSecret;
         }
+        
+        if($serviceURL != null){
+	        $this->serviceURL = $serviceURL;
+        }else {
+	        // The rest url will be read from the APSDBConfig.php file (remember to update it before using the client)
+	        $theURL = APSDBConfig::$SERVICE_URL;
+        	$this->serviceURL = $theURL;
+        }        
             
-        // The rest url will be read from the APSDBConfig.php file (remember to update it before using the client)
-        $this->APS_DB_URL = APSDBConfig::$SERVICE_URL;
+        $this->APS_DB_URL = $this->serviceURL;
     }
-
+    
     /**
      * This function makes requests to Apstrata to execute the specified API and returns the response's body and headers.
      * 
@@ -257,7 +273,7 @@ class APSDBClient
 
         $url = parse_url ($fullURL);
         $postReq  = "POST ".$url['path']."?".$url['query']." HTTP/1.0\r\n";
-        $postReq .= "Host: " . $url['host'] . "\r\n";
+        $postReq .= "Host: " . $url['host'] . (empty($url['port']) ? "" : ":".$url['port']) ."\r\n";
         $postReq .= "Content-Type: application/x-www-form-urlencoded; charset=utf-8\r\n";
         $postReq .= "Content-Length: " . strlen($query) . "\r\n";
         $postReq .= "\r\n";
@@ -378,10 +394,10 @@ class APSDBClient
     
     private function buildResponse($response)
     {
-        $tmp = split("\r\n\r\n", $response);
+        $tmp = explode("\r\n\r\n", $response);
 		
         $responseBody = $tmp[1];
-        $headers = split("\r\n", $tmp[0]);
+        $headers = explode("\r\n", $tmp[0]);
                 
         return array("response" => $responseBody,"headers"=>$headers);
     }
