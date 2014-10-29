@@ -48,7 +48,13 @@
 			break;
 
 		case "login":
-			include($GLOBALS["config"]["docroot"] . "/" . "templates/". $config['template'] . "/login.php");
+			$page = array (
+				"template" => $pageId,
+				"title" => "User Login",
+				"apsdb.creationTime" => "",
+				 "apsdb.lastModifiedTime" =>""
+			);
+			include($GLOBALS["config"]["docroot"] . "/" . "templates/". $config['template'] . "/default.php");
 			break;
 			
 		case "processingReg":
