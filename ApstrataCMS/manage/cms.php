@@ -132,7 +132,7 @@
 				}
 			} 
 			
-			if (isset($item['title'])) $link = "<a " . $class . " href='" . $url . "' id='" . strtolower($item['title']). "Link'>" .  $item['title'] . "</a>";
+			if (isset($item['title'])) $link = "<a " . $class . " href='" . $url . "' id='" . strtolower(str_replace(' ','',$item['title'])). "Link'>" .  $item['title'] . "</a>";
 					
 			return $link;
 		}
