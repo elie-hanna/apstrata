@@ -18,7 +18,6 @@
  * *****************************************************************************
  */
 dojo.provide("apstrata.ui.widgets.RegistrationWidget")
-
 dojo.require("dojox.dtl._Templated")
 dojo.require("apstrata.ui.forms.FormGenerator")
 dojo.require("apstrata.ui.FlashAlert")
@@ -44,6 +43,9 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 	apsdbScriptRegisterUser: "widgets.Registration.registerUser",
 	
 	showTermsAndCond: "false",
+	showCaptcha: "false",
+	passwordValidation: "",
+	captchaURL: "",
 	termsAndCondUrl: "",
 
 	definition: {
@@ -104,6 +106,15 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 					if (embedNodeAttrs[attr].name == "showTermsAndCond".toLowerCase()) {
 						this.showTermsAndCond = embedNodeAttrs[attr].value;
 					}
+					if (embedNodeAttrs[attr].name == "showCaptcha".toLowerCase()) {
+						this.showCaptcha = embedNodeAttrs[attr].value;
+					}
+					if (embedNodeAttrs[attr].name == "passwordValidation".toLowerCase()) {
+						this.passwordValidation = embedNodeAttrs[attr].value;
+					}
+					if (embedNodeAttrs[attr].name == "captchaURL".toLowerCase()) {
+						this.captchaURL = embedNodeAttrs[attr].value;
+					}
 					if (embedNodeAttrs[attr].name == "termsAndCondUrl".toLowerCase()) {
 						this.termsAndCondUrl = embedNodeAttrs[attr].value;
 					}
@@ -123,6 +134,31 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		else this.form = new apstrata.ui.forms.FormGenerator({definition: self.definition, save: dojo.hitch(self, "save")}) 
 		
 		dojo.place(this.form.domNode, this.domNode)
+		
+		if(self.showCaptcha=="true"){
+			dojo.place('<div><iframe src="'+self.captchaURL+'" id="captchaIframe" width="400px"/></iframe><div>', this.form._fields.promotionCode.domNode,"after");
+		}
+		
+		if(self.passwordValidation!=""){
+			var passwordField=this.form.getField("password");
+			passwordField.onChange = function(v) {
+				
+				var passwordFilter = new RegExp(self.passwordValidation);
+				if (!passwordFilter.test(v)) {
+						passwordField.invalidMessage = self.nls.ENTER_VALID_PASSWORD
+						passwordField.validator = function(value, constraints) {
+							return false 
+						}
+						passwordField.validate();
+				}else{
+					passwordField.validator = function(value, constraints) {
+						return true 
+					}
+					passwordField.validate();
+				}
+			}
+		}
+		
 		
 		var emailField = this.form.getField("email");
 		emailField.onChange = function(v) {
@@ -211,9 +247,30 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		for (k in values) {
 			request["user."+k] = values[k]
 		} 
-		
+		if(self.showCaptcha=="true"){
+			request["recaptcha_challenge_field"]=dojo.byId("captchaIframe").contentWindow.document.getElementById("recaptcha_challenge_field").value;
+			request["recaptcha_response_field"]=dojo.byId("captchaIframe").contentWindow.document.getElementById("recaptcha_response_field").value;
+		}
 		this.client.call("RunScript", request, null, {method: "get"}).then(
 			function(response) {
+				if (response.result.status == "failure" && response.result.errorDetail.indexOf("INVALID_FIELD_VALUE")!=-1 ) {
+					self.message(self.nls.ENTER_VALID_PASSWORD)					
+					if(self.showCaptcha=="true"){
+						dojo.byId("captchaIframe").contentWindow.document.location.reload();
+					}
+					self.form.getField("password").invalidMessage = self.nls.ENTER_VALID_PASSWORD
+					self.form.getField("password").validator = function(value, constraints) {
+						return false 
+					}
+					self.form.validate();
+				}
+				
+				if (response.result.metadata.errorCode == "WRONG_CAPTCHA") {
+					self.message(self.nls.WRONG_CAPTCHA);
+					dojo.byId("captchaIframe").contentWindow.document.location.reload();
+					return;
+				}
+				
 				if (response.result.metadata.errorCode == "DUPLICATE_USER") {
 					self.message(self.nls.EMAIL_ALREADY_REGISTERED)					
 					self.form.getField("email").invalidMessage = self.nls.EMAIL_ALREADY_REGISTERED +" <a href=''>" + self.nls.LOGIN + "</a>"
