@@ -28,6 +28,33 @@ var widgetsCommon = apsdb.require("widgets.common")
 var configuration = widgetsCommon.getConfiguration()
 
 
+
+if(request.parameters["recaptcha_challenge_field"]){
+	var recaptchaChallengeField = request.parameters["recaptcha_challenge_field"];
+	var recaptchaResponseField = request.parameters["recaptcha_response_field"];
+	 
+	var captchaVerifyURL="http://www.google.com/recaptcha/api/verify";	 
+	var postParams = {
+		"privatekey": "6Lc81vwSAAAAAAoE5sjXNRXTfxfYaj5k9V_t7kl5", 
+		"remoteip": request.headers["x-forwarded-for"], 
+		"challenge": recaptchaChallengeField, 
+		"response": recaptchaResponseField,		
+	};
+	var captchaResponse = apsdb.callHttp(captchaVerifyURL, "POST", postParams);
+	if(captchaResponse.body.indexOf(false)!="-1"){
+		return {
+			metadata : { 
+				status: "failure", 
+				errorDetail: "wrong captcha",
+				errorCode: "WRONG_CAPTCHA" 
+			}
+		};
+	}
+
+	
+
+}
+	
 function generateCode() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

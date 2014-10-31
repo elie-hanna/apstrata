@@ -2,7 +2,9 @@ define({ root:
 //begin v1.x content
 ({
 	ENTER_VALID_EMAIL: "Enter valid email address",
+	ENTER_VALID_PASSWORD: "Password must be 8 characters containing at least one number, one lowercase and one uppercase letter ",
 	EMAIL_ALREADY_REGISTERED: "Email already registered",
+	WRONG_CAPTCHA: "Wrong Captcha",
 	LOGIN: "login?"
 })
 //end v1.x content
