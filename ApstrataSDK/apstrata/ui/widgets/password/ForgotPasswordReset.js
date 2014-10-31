@@ -25,6 +25,19 @@ dojo.declare("apstrata.ui.widgets.password.ForgotPasswordReset",
 	failureClass: "error",
 	
 	/**
+	 * regular expression for password verification
+	 * @field {string}
+	 */
+	passwordValidation: "",
+
+	/**
+	 * password verification Message
+	 * @field {string}
+	 */
+	passwordValidationMessage: "",
+	
+	
+	/**
      * Class name of success messages
      * @field {string}
      * @memberof amc.application.ViewApplication
@@ -83,6 +96,27 @@ dojo.declare("apstrata.ui.widgets.password.ForgotPasswordReset",
 		var newPassword = self.form.getField("newPassword");
 		var confirmPassword = self.form.getField("confirmPassword");
 		
+		
+		if(self.passwordValidation!=""){
+			newPassword.onChange = function(v) {
+				
+				var passwordFilter = new RegExp(self.passwordValidation);
+				if (!passwordFilter.test(v)) {
+						newPassword.invalidMessage = self.passwordValidationMessage
+						newPassword.validator = function(value, constraints) {
+							return false 
+						}
+						newPassword.validate();
+				}else{
+					newPassword.validator = function(value, constraints) {
+						return true 
+					}
+					newPassword.validate();
+				}
+			}
+		}
+		
+		
 		confirmPassword.validator = function(value, constraints) {
 			//console.debug('confirmPassword.validator running now against [' + value + ']');
 			if (newPassword.value != value) {
@@ -94,6 +128,8 @@ dojo.declare("apstrata.ui.widgets.password.ForgotPasswordReset",
 				return passwordValidator.test(value);
 			}
 		};
+		
+		
 	},
 	
 	clearErr: function() {
