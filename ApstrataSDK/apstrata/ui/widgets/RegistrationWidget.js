@@ -136,7 +136,7 @@ dojo.declare("apstrata.ui.widgets.RegistrationWidget",
 		dojo.place(this.form.domNode, this.domNode)
 		
 		if(self.showCaptcha=="true"){
-			dojo.place('<div><iframe src="'+self.captchaURL+'" id="captchaIframe" width="400px"/></iframe><div>', this.form._fields.promotionCode.domNode,"after");
+			dojo.place('<div><iframe src="'+self.captchaURL+'" id="captchaIframe" width="400px"/></iframe><div>', this.form._fields.phone.domNode,"after");
 		}
 		
 		if(self.passwordValidation!=""){
