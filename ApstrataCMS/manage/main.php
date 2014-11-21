@@ -46,7 +46,7 @@
 
 				dojo.require("apstrata.horizon.Container")
 				dojo.require("apstrata.cms.CMS")
-				dojo.require("apstrata.ui.widgets.LoginWidget")
+				dojo.require("apstrata.cms.LoginWidget")
 
 
 				//
@@ -95,7 +95,7 @@
 					"panel.finalAlpha": .95
 				}
 
-				loginWidget = new apstrata.ui.widgets.LoginWidget({type: "user"})
+				loginWidget = new apstrata.cms.LoginWidget({type: "user"})
 				
 				dojo.parser.parse()
 			})
