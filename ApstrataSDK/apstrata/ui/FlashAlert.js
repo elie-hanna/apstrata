@@ -53,7 +53,7 @@ dojo.declare('apstrata.ui.FlashAlert',
 		dojo.animateProperty({
 			node: self.domNode,
 			properties:{
-				transform:{start:'scale(1,1)', end:'scale(5,5)'},
+				MozTransform:{start:'scale(1,1)', end:'scale(5,5)'}, 
 				opacity: 0.1
 			},
 			onEnd: function() {
