@@ -148,10 +148,23 @@ class APSDBClient
 	        for($i=0; $i < count($params); $i++){
 	            array_push($allParam, $params[$i]);
 	        }
-	
-	        $paramString .= "&apsws.authSig=" . $this->getLevel2HashString($allParam, $this->accountSecret, $tmpURL);
+	        
+            $isFile = false;
+	        for($i=0; $i < count($params); $i++){
+	            if($params[$i]->isFile()){
+	                $isFile = true;
+	                break;
+	            }
+	        }
+	        
+	        if($isFile){
+		        $paramString .= "&apsws.authSig=" . $this->getLevel1HashString($this->accountKey, $this->accountSecret, $action, $time);
+	        	$paramString .= "&apsws.authMode=simple";
+	        }else {
+	        	$paramString .= "&apsws.authSig=" . $this->getLevel2HashString($allParam, $this->accountSecret, $tmpURL);
+	        }
+	        
         }
-
         return $tmpURL . $paramString;
     }
 
@@ -183,10 +196,10 @@ class APSDBClient
             if($params[$i]->isFile()){
             
                 if($value != null && $value != "")
-                    $rightHandSide = rawurlencode(strtoupper(md5_file($value)));
+            		$tmp_name = $value["tmp_name"];
+                    $rightHandSide = rawurlencode(strtoupper(md5_file($tmp_name)));
                     
                 $value = rawurlencode($key)."=".$rightHandSide;
-                
                 if($this->contains($arrToSort, $value) == false)
                     array_push($arrToSort, $value);
                     
@@ -324,12 +337,17 @@ class APSDBClient
                     fwrite($sourceFileHandle, $data);
                     
                 } else {
-                
-                    $fileName = basename($parameters[$i]->getValue());
+                	
+	            	$theValue = $parameters[$i]->getValue();
+            	
+	            	$theFilename = $theValue["name"];
+	            	settype($theFilename, "string");
+	
+                    $fileName = basename($theFilename);
                     $data ="Content-Disposition: form-data; name=\"". $parameters[$i]->getKey() ."\"; filename=\"".$fileName."\"\r\n";
                     $data .= "Content-Type: application/octet-stream\r\n\r\n";
                     fwrite($sourceFileHandle, $data);
-                    $filContentHandler = fopen($parameters[$i]->getValue(), "r");
+	                $filContentHandler = fopen($theValue["tmp_name"], "r");
                     if($filContentHandler){
                         while (!feof($filContentHandler)){
 	                        fwrite($sourceFileHandle, fread($filContentHandler, 1024));
@@ -372,15 +390,20 @@ class APSDBClient
         $data = "--". $boundary . "\r\n";
         for($i=0; $i < count($parameters); $i++){
 
-            if($parameters[$i]->isFile() == false){
-                $data .= "Content-Disposition: form-data; name=\"".$parameters[$i]->getKey()."\"\r\n";
-                $data .= "\r\n".$parameters[$i]->getValue()."\r\n";
-            } else {
-                $fileName = basename($parameters[$i]->getValue());
+            if($parameters[$i]->isFile()){
+            	$theValue = $parameters[$i]->getValue();
+            	
+            	$theFilename = $theValue["name"];
+            	settype($theFilename, "string");
+
+                $fileName = basename($theFilename);
                 $data .="Content-Disposition: form-data; name=\"". $parameters[$i]->getKey() ."\"; filename=\"".$fileName."\"\r\n";
                 $data .= "Content-Type: application/octet-stream\r\n\r\n";
-                $filesLength = $filesLength + filesize($parameters[$i]->getValue());
+                $filesLength = $filesLength + filesize($theValue["tmp_name"]);
                 $data .= "\r\n";
+            } else {
+                $data .= "Content-Disposition: form-data; name=\"".$parameters[$i]->getKey()."\"\r\n";
+                $data .= "\r\n".$parameters[$i]->getValue()."\r\n";
             }
             
             if($i < count($parameters) - 1)
@@ -401,6 +424,14 @@ class APSDBClient
                 
         return array("response" => $responseBody,"headers"=>$headers);
     }
+    
+    private function getLevel1HashString($userName, $secret, $action, $timeStamp) 
+	{
+		$valueToHash = $timeStamp . $userName . $action . $secret;
+		$signature = md5($valueToHash, false);
+		return $signature;
+	}			
+    
     
     private function  formatResponse($jsonResponseBody)
     {
