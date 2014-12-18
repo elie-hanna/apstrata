@@ -107,7 +107,7 @@ class APSDBClient
         if($action == Constants::GET_FILE && $destinationPath == null)
         	exit(Constants::GET_FILE_MISSING_PARAM_ERROR_MSG);
         	
-        $fullURL = $this->getFullURL($action, $arrParams);
+        $fullURL = $this->getFullURL($action, $arrParams,"POST");
         $result = $this->sendRequest($fullURL, $arrParams, $destinationPath);
         return array("response" => $this->formatResponse($result['response']), "headers" => $result['headers']);
     }
@@ -122,7 +122,7 @@ class APSDBClient
      
      * @return string containing the REST URL to be sent to Apstrata.
      */
-    private function getFullURL($action, $params)
+    public function getFullURL($action, $params,$method)
     {
         // Adding apsws.responseType and apsws.time parameters
         $time = time();
@@ -161,7 +161,7 @@ class APSDBClient
 		        $paramString .= "&apsws.authSig=" . $this->getLevel1HashString($this->accountKey, $this->accountSecret, $action, $time);
 	        	$paramString .= "&apsws.authMode=simple";
 	        }else {
-	        	$paramString .= "&apsws.authSig=" . $this->getLevel2HashString($allParam, $this->accountSecret, $tmpURL);
+	        	$paramString .= "&apsws.authSig=" . $this->getLevel2HashString($allParam, $this->accountSecret, $tmpURL,$method);
 	        }
 	        
         }
@@ -185,7 +185,7 @@ class APSDBClient
      * @return string containing the Apstrata default signature.
      * 
      */
-    private function getLevel2HashString($params, $secretKey, $url)
+    private function getLevel2HashString($params, $secretKey, $url,$method)
     {
         $arrToSort = array();
         for($i =0; $i < count($params); $i++){
@@ -223,7 +223,7 @@ class APSDBClient
             if($i < count($arrToSort) - 1)
                 $stringToHash .= "&";
         }
-        $stringToHash = "POST" . "\n" . rawurlencode($url) . "\n" . $stringToHash;
+        $stringToHash = $method . "\n" . rawurlencode($url) . "\n" . $stringToHash;
         return hash_hmac("sha1", $stringToHash, $secretKey);
     }
 
