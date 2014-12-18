@@ -26,6 +26,7 @@ public interface Connection {
 	final static String	SIGNATURE				= APSWS_PREFIX + "authSig";
 	
 	final static String	SIGNATURE_MODE_SIMPLE	= "simple";
+	final static String	SIGNATURE_MODE_COMPLEX	= "complex";
 
 	/**
 	 * builds a simple request signature corresponding to the combination of the request's action, text parameters and file parameters (for file upload requests)
@@ -38,7 +39,7 @@ public interface Connection {
 	public List<NameValuePair> getSimpleRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception;
 	
 	/**
-	 * builds a complex request signature corresponding to the combination of the request's action, text parameters and file parameters (for file upload requests)
+	 * builds a complex signature for an HTTP POST request. This signature corresponds to the combination of the request's action, text parameters and file parameters (for file upload requests)
 	 * @param action 		the name of the apstrata endpoint invoked by the request, ie, SaveDocument, RunScript, etc...
 	 * @param parameters 	the list of request parameters, passed as name/value pairs
 	 * @param files 		the list of the request's file parameters
@@ -46,4 +47,14 @@ public interface Connection {
 	 * @throws 				Exception
 	 */
 	public List<NameValuePair> getComplexRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception;
+	
+	/**
+	 * builds a complex signature for an HTTP GET request. This signature corresponds to the combination of the request's action, text parameters and file parameters (for file upload requests)
+	 * @param action 		the name of the apstrata endpoint invoked by the request, ie, SaveDocument, RunScript, etc...
+	 * @param parameters 	the list of request parameters, passed as name/value pairs
+	 * @param files 		the list of the request's file parameters
+	 * @return 				the complex signature, consisting of a list of name/value parameters that should be included in the request
+	 * @throws 				Exception
+	 */
+	public List<NameValuePair> getComplexRequestSignatureHttpGET(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception;
 }

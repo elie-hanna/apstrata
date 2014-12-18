@@ -25,6 +25,8 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 import android.util.Log;
 
@@ -63,6 +65,9 @@ public class Client {
 	    SIMPLE, COMPLEX
 	}
 	
+	public final static String HTTP_GET = "GET";
+	public final static String HTTP_POST = "POST";
+	
 	private Connection conn;
 	private String baseUrl;
 	private String accountKey;
@@ -95,7 +100,7 @@ public class Client {
 	}
 	
 	/**
-	 * Returns a string representing the full URL with the additional necessary query string including the request signature
+	 * Returns a string representing the full URL for an HTTP POST request with the additional necessary query string including the request signature
 	 * 
 	 * @param methodName 	identifies the API method being invoked
 	 * @param params 		a list of NameValuePair objects representing the HTTP text parameters to be sent to the server along with the request
@@ -105,17 +110,27 @@ public class Client {
 	 * @throws 				Exception
 	 */
 	public String getSignedRequestUrl(String methodName, List<NameValuePair> params, Map<String, List<File>> files, AuthMode mode) throws Exception {
+		return getSignedRequestUrl(methodName, params, files, mode, HTTP_POST);
+	}
+	
+	private String getSignedRequestUrl(String methodName, List<NameValuePair> params, Map<String, List<File>> files, AuthMode mode, String httpMethod) throws Exception {
 		if (this.conn == null) {
 			throw new Exception("null connection");
 		}
 		
+		if (httpMethod == null || (!httpMethod.equals(HTTP_GET) && !httpMethod.equals(HTTP_POST))) {
+			throw new Exception("invalid httpMethod parameter");
+		}
 		// TODO: add the run as user option to the call api options	
 		
 		String url = this.baseUrl + "/" + this.accountKey + "/" + methodName + "?";
 		
 		List<NameValuePair> requestSignatureParams = (mode == AuthMode.SIMPLE? 
-					this.conn.getSimpleRequestSignature(methodName, params, files): 
-					this.conn.getComplexRequestSignature(methodName, params, files));
+				this.conn.getSimpleRequestSignature(methodName, params, files):
+				(httpMethod.equals(HTTP_POST)?
+						this.conn.getComplexRequestSignature(methodName, params, files):
+						this.conn.getComplexRequestSignatureHttpGET(methodName, params, files))
+		);
 		
 		for (Iterator<NameValuePair> iterator = requestSignatureParams.iterator(); iterator.hasNext();) {
 			NameValuePair nameValuePair = (NameValuePair) iterator.next();
@@ -126,6 +141,16 @@ public class Client {
 		return url;
 	}
 	
+	/**
+	 * Returns a string representing the full URL for an HTTP GET request to a specific file that constitutes the value (or one of the multiple values) of a file field in a document
+	 * 
+	 * @param documentKey	this is the identifier of the document (the document key)
+	 * @param fieldName		the field name. This field should be of type 'file'. Its value or one of its multiple value should match the parameter fileName
+	 * @param fileName		the name of the specific file that constitutes the value or one of the multiple values of the document field identified by the parameter fieldName   
+	 * @param mode			identifies the signature type: Simple or complex
+	 * @return 				A request Url duly signed by the current connection
+	 * @throws Exception
+	 */
 	public String getSignedFileUrl(String documentKey, String fieldName, String fileName, AuthMode mode) throws Exception {
 		String url = "";
 		
@@ -134,7 +159,7 @@ public class Client {
 		params.add(new BasicNameValuePair("apsdb.fieldName", fieldName));
 		params.add(new BasicNameValuePair("apsdb.fileName", fileName));
 		
-		url =  this.getSignedRequestUrl("GetFile", params, null, mode);
+		url =  this.getSignedRequestUrl("GetFile", params, null, mode, HTTP_GET);
 		for (Iterator<NameValuePair> iterator = params.iterator(); iterator.hasNext();) {
 			NameValuePair nameValuePair = (NameValuePair) iterator.next();
 			url = url + "&" + URLEncoder.encode(nameValuePair.getName(), "utf-8") + "=" + URLEncoder.encode(nameValuePair.getValue(), "utf-8"); 
@@ -227,6 +252,12 @@ public class Client {
 		
 		//AndroidHttpClient httpClient = AndroidHttpClient.newInstance("some-android-user-agent");
 		DefaultHttpClient httpClient = MySSLSocketFactory.getNewHttpClient();
+		
+		final HttpParams httpParameters = httpClient.getParams();
+
+		HttpConnectionParams.setConnectionTimeout(httpParameters, 10 * 1000);
+		HttpConnectionParams.setSoTimeout        (httpParameters, 60 * 1000);
+		
 		File file = new File(path);
 		FileOutputStream f = new FileOutputStream(file);
 		

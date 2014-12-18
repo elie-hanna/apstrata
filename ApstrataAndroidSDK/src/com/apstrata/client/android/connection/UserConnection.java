@@ -24,6 +24,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.util.Log;
 
+import com.apstrata.client.android.Client;
+
 /**
  * this is the Connection implementation that generates request signatures using a user name and password, hence its name, UserConnection. 
  *
@@ -57,7 +59,7 @@ public class UserConnection implements Connection {
 		this.userPassword = hexToString(this.md5.digest(userPassword.getBytes()));
 	}
 
-
+	@Override
 	public List<NameValuePair> getSimpleRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {
 		long timeStamp = System.currentTimeMillis();
 		
@@ -76,7 +78,17 @@ public class UserConnection implements Connection {
 		return reqSignature;
 	}
 
+	@Override
 	public List<NameValuePair> getComplexRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {
+		return getComplexRequestSignature(action, parameters, files, Client.HTTP_POST);
+	}
+	
+	@Override
+	public List<NameValuePair> getComplexRequestSignatureHttpGET(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {
+		return getComplexRequestSignature(action, parameters, files, Client.HTTP_GET);
+	}
+	
+	private List<NameValuePair> getComplexRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files, String httpMethod) throws Exception {
 		String signature = null;
 		long timeStamp = System.currentTimeMillis();
 		
@@ -111,7 +123,7 @@ public class UserConnection implements Connection {
 						this.md5.update(bytes, 0, readPos);
 						readPos = fis.read(bytes);
 					}
-					
+					fis.close();
 					String hashedValue = hexToString(this.md5.digest());
 					String encodedParamValue = encodeValue(hashedValue);
 					treeSet.add(encodedParamName + "=" + encodedParamValue);
@@ -136,7 +148,14 @@ public class UserConnection implements Connection {
 			mac.init(new SecretKeySpec(this.userPassword.getBytes(), algorithm));
 			
 			String url = this.baseUrl + "/" + this.accountKey + "/" + action;
-			String stringToSign = "POST" + "\n" + encodeValue(url) + "\n" + stBuilder.toString();
+			
+			String stringToSign;
+			if (httpMethod != null && (httpMethod.equals(Client.HTTP_GET) || httpMethod.equals(Client.HTTP_POST))) {
+				stringToSign = httpMethod + "\n" + encodeValue(url) + "\n" + stBuilder.toString();
+			}
+			else {
+				throw new Exception("Invalid http method parameter");
+			}
 			signature = hexToString(mac.doFinal(stringToSign.getBytes()));
 			
 			Log.d(this.getClass().getName(), "Level 2 signature of: " + stringToSign + " = " + signature);

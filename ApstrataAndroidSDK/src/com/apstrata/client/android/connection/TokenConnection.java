@@ -239,6 +239,7 @@ public class TokenConnection implements Connection {
 		}
 	}
 	
+	@Override
 	public List<NameValuePair> getSimpleRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {
 		long timeStamp = System.currentTimeMillis();
 		
@@ -250,7 +251,13 @@ public class TokenConnection implements Connection {
 		return reqSignature;
 	}
 
+	@Override
 	public List<NameValuePair> getComplexRequestSignature(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {
+		return getSimpleRequestSignature(action, parameters, files);
+	}
+	
+	@Override
+	public List<NameValuePair> getComplexRequestSignatureHttpGET(String action, List<NameValuePair> parameters, Map<String, List<File>> files) throws Exception {
 		return getSimpleRequestSignature(action, parameters, files);
 	}
 	
