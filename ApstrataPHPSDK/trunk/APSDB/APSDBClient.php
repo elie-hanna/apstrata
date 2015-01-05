@@ -224,6 +224,7 @@ class APSDBClient
                 $stringToHash .= "&";
         }
         $stringToHash = $method . "\n" . rawurlencode($url) . "\n" . $stringToHash;
+        $stringToHash = str_replace("~", "%7E", $stringToHash);
         return hash_hmac("sha1", $stringToHash, $secretKey);
     }
 
